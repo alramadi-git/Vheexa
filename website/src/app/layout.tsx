@@ -1,6 +1,5 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 
 import type { ReactNode } from "react";
@@ -18,7 +17,7 @@ const cairo = Cairo({
 });
 
 export const dynamic = "force-static";
-export const metadata: Metadata = {
+export const metadata = {
   title: {
     default: "Vheexa",
     template: "%s | Vheexa",
