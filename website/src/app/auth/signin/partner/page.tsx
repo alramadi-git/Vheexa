@@ -1,7 +1,7 @@
 import Form from "@/app/auth/signin/partner/_components/form";
 
 import Link from "next/link";
-import { Button } from "@/components/shadcn/button";
+import { Button } from "@/app/_components/shadcn/button";
 import { FaApple, FaGoogle, FaMeta } from "react-icons/fa6";
 
 export const dynamic = "force-static";

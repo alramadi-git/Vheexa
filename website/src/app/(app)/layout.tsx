@@ -1,9 +1,12 @@
-import { Fragment } from "react";
+import { Fragment, ReactNode } from "react";
 
 export const dynamic = "force-static";
 
-function Layout() {
-  return <Fragment></Fragment>;
+interface IProps {
+  children: ReactNode;
+}
+function Layout(props: IProps) {
+  return <Fragment>{props.children}</Fragment>;
 }
 
 export default Layout;

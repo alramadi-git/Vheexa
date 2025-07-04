@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 
 import Image from "next/image";
 
-import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
-import { Card, CardContent } from "@/components/shadcn/card";
+import { AnimatedGridPattern } from "@/app/_components/magicui/animated-grid-pattern";
+import { Card, CardContent } from "@/app/_components/shadcn/card";
 
 export const dynamic = "force-static";
 export const metadata = {
@@ -25,18 +25,17 @@ function Layout(props: IProps) {
         className="[mask-image:radial-gradient(450px_circle_at_center,white,transparent)] skew-y-12"
       />
 
-      <Card className="p-0 overflow-hidden">
-        <CardContent className="w-[750px] h-[450px] grid p-0 md:grid-cols-2">
+      <Card className="p-0 bg-transparent overflow-hidden relative">
+        <CardContent className="w-[850px] h-[550px] grid p-0 md:grid-cols-2">
           {props.children}
 
-          <div className="bg-muted relative hidden md:block">
-            <Image
-              fill
-              src="/assets/placeholder.png"
-              alt="placeholder"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
-          </div>
+          <Image
+            width="375"
+            height="462"
+            src="/assets/placeholder.png"
+            alt="placeholder"
+            className="max-md:hidden size-full object-cover dark:brightness-[0.2] dark:grayscale"
+          />
         </CardContent>
       </Card>
     </main>
