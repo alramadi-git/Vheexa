@@ -1,10 +1,10 @@
-import "./globals.css";
+import "@/app/globals.css";
 
 import { Cairo } from "next/font/google";
 
 import type { ReactNode } from "react";
-import { ThemeProvider } from "@/components/providers/Theme";
-import { TooltipProvider } from "@/components/shadcn/tooltip";
+import { ThemeProvider } from "@/app/_components/providers/Theme";
+import { TooltipProvider } from "@/app/_components/shadcn/tooltip";
 
 const cairo = Cairo({
   adjustFontFallback: true,
@@ -20,8 +20,17 @@ export const dynamic = "force-static";
 export const metadata = {
   title: {
     default: "Vheexa",
+    absolute: "Vheexa",
     template: "%s | Vheexa",
   },
+  description: "",
+
+  authors: [
+    {
+      name: "alramadi",
+      url: "https://www.alramadi.com",
+    },
+  ],
 };
 
 interface IProps {

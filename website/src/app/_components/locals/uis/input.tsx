@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { cn } from "@/utilities";
+import { cn } from "@/app/_utilities";
 
 import type { FieldValues } from "react-hook-form";
-import { Input as ShadcnInput } from "@/components/shadcn/input";
+import { Input as ShadcnInput } from "@/app/_components/shadcn/input";
 import {
   FormControl,
   FormDescription,
@@ -11,13 +11,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/shadcn/form";
+} from "@/app/_components/shadcn/form";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/shadcn/tooltip";
+} from "@/app/_components/shadcn/tooltip";
 
 interface IProps<TFieldValues extends FieldValues> {
   formField: Omit<ComponentProps<typeof FormField<TFieldValues>>, "render">;

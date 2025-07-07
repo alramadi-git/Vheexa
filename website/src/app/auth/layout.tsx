@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 
 import Image from "next/image";
 
-import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
-import { Card, CardContent } from "@/components/shadcn/card";
+import { AnimatedGridPattern } from "@/app/_components/magicui/animated-grid-pattern";
+import { Card, CardContent } from "@/app/_components/shadcn/card";
 
 export const dynamic = "force-static";
 export const metadata = {
