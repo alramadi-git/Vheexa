@@ -3,7 +3,7 @@ import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form as ReactHookForm } from "@/app/_components/shadcn/form";
-import Input from "@/app/_components/locals/uis/input";
+import Input from "@/app/_components/locals/blocks/input";
 import { Button } from "@/app/_components/shadcn/button";
 
 const formSchema = z.object({

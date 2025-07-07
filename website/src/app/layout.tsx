@@ -3,8 +3,12 @@ import "@/app/globals.css";
 import { Cairo } from "next/font/google";
 
 import type { ReactNode } from "react";
-import { ThemeProvider } from "@/app/_components/providers/Theme";
+import { ThemeProvider } from "@/app/_components/locals/providers/Theme";
 import { TooltipProvider } from "@/app/_components/shadcn/tooltip";
+
+interface IProps {
+  children: ReactNode;
+}
 
 const cairo = Cairo({
   adjustFontFallback: true,
@@ -23,7 +27,6 @@ export const metadata = {
     absolute: "Vheexa",
     template: "%s | Vheexa",
   },
-  description: "",
 
   authors: [
     {
@@ -33,10 +36,7 @@ export const metadata = {
   ],
 };
 
-interface IProps {
-  children: ReactNode;
-}
-export default function RootLayout(props: IProps) {
+export default function RootLayout(props: Readonly<IProps>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${cairo.className} antialiased`}>

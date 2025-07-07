@@ -1,9 +1,7 @@
-import { Fragment } from "react";
-
 export const dynamic = "force-static";
 
 function Page() {
-  return <Fragment></Fragment>;
+  return <div className="h-[5000px]"></div>;
 }
 
 export default Page;
