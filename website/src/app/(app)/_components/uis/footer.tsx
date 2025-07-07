@@ -167,9 +167,9 @@ function Footer() {
               </Label>
               <div className="flex gap-2">
                 <Input
-                  type="email"
                   id="mail"
                   name="mail"
+                  type="email"
                   placeholder="Your email"
                   className="h-8 text-sm"
                 />
@@ -193,46 +193,55 @@ function Footer() {
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="X/Twitter"
-              className="text-muted-foreground hover:text-primary block"
+              aria-label="LinkedIn"
+              className="text-muted-foreground hover:text-primary block duration-150"
             >
-              <FaXTwitter />
+              <FaLinkedinIn className="size-4" />
             </Link>
             <Link
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="text-muted-foreground hover:text-primary block"
+              aria-label="X/Twitter"
+              className="text-muted-foreground hover:text-primary block duration-150"
             >
-              <FaLinkedinIn />
+              <FaXTwitter className="size-4" />
             </Link>
             <Link
               href="#"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="text-muted-foreground hover:text-primary block"
+              className="text-muted-foreground hover:text-primary block duration-150"
             >
-              <FaMeta />
+              <FaMeta className="size-4" />
             </Link>
             <Link
               href="#"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="text-muted-foreground hover:text-primary block"
+              className="text-muted-foreground hover:text-primary block duration-150"
             >
-              <FaInstagram />
+              <FaInstagram className="size-4" />
             </Link>
             <Link
               href="#"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="TikTok"
-              className="text-muted-foreground hover:text-primary block"
+              className="text-muted-foreground hover:text-primary block duration-150"
             >
-              <FaTiktok />
+              <FaTiktok className="size-4" />
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Youtube"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaYoutube className="size-4" />
             </Link>
           </div>
         </div>
