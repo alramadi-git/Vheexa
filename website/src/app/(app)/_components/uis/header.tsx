@@ -34,8 +34,10 @@ function Header() {
         <div
           className={cn(
             "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
-            isScrolled &&
-              "bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5",
+            {
+              "bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5":
+                isScrolled,
+            },
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -93,7 +95,7 @@ function Header() {
                   asChild
                   variant="outline"
                   size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
+                  className={cn({ "lg:hidden": isScrolled })}
                 >
                   <Link href="#">
                     <span>Login</span>
@@ -102,7 +104,7 @@ function Header() {
                 <Button
                   asChild
                   size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
+                  className={cn({ "lg:hidden": isScrolled })}
                 >
                   <Link href="#">
                     <span>Sign Up</span>
@@ -111,7 +113,9 @@ function Header() {
                 <Button
                   asChild
                   size="sm"
-                  className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
+                  className={cn("hidden", {
+                    "lg:inline-flex": isScrolled,
+                  })}
                 >
                   <Link href="#">
                     <span>Get Started</span>
