@@ -45,7 +45,7 @@ function Header() {
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
-                <Command />
+                <Command/>
               </Link>
 
               <button

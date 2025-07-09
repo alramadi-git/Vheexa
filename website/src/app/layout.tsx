@@ -1,6 +1,6 @@
 import "@/app/globals.css";
 
-import { Cairo } from "next/font/google";
+import { Zain } from "next/font/google";
 
 import type { ReactNode } from "react";
 import { ThemeProvider } from "@/app/_components/locals/providers/Theme";
@@ -10,14 +10,14 @@ interface IProps {
   children: ReactNode;
 }
 
-const cairo = Cairo({
+const zain = Zain({
   adjustFontFallback: true,
   preload: true,
   display: "swap",
   style: ["normal"],
   subsets: ["latin"],
-  fallback: ["Tahoma", "sans-serif"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  fallback: ["Segoe UI", "sans-serif"],
+  weight: ["200", "300", "400", "700", "800", "900"],
 });
 
 export const dynamic = "force-static";
@@ -39,7 +39,7 @@ export const metadata = {
 export default function RootLayout(props: Readonly<IProps>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${cairo.className} antialiased`}>
+      <body className={`${zain.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

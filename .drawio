@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="7BMRZTZB-yxgocvTYuu_" name="Page-1">
-        <mxGraphModel dx="1966" dy="1007" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1514" dy="1007" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -319,6 +319,12 @@
                 </mxCell>
                 <mxCell id="227" value="&lt;div&gt;&lt;div style=&quot;&quot;&gt;As a Client&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;i want to sign in and when i sign in and produce data it should be valid and if not&amp;nbsp;&lt;br&gt;nothing would happend but when i rent and go if anything was not right the&amp;nbsp;&lt;br&gt;rent is gone but if i got somethign wrong and i&amp;nbsp; knew later i can edit it and just&lt;br&gt;for security i recie a OTP code and if wrong the same process happend i got 3 chanes&amp;nbsp;&lt;br&gt;and 3 tiems for new generated OTP after that the device submiting is blocked&amp;nbsp;&lt;br&gt;and can never send anything to the servce unless chat with customer support&lt;br&gt;and shows them reasonalbe resons&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=default;fontStyle=0;fontSize=18;spacing=2;horizontal=1;" parent="1" vertex="1">
                     <mxGeometry x="651" y="759" width="707" height="185" as="geometry"/>
+                </mxCell>
+                <mxCell id="229" value="&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;text-align: center; text-wrap-mode: nowrap;&quot;&gt;just enough items&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=top;overflow=hidden;fontColor=default;" parent="1" vertex="1">
+                    <mxGeometry x="2115" y="2280" width="152" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="230" value="1.20.1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=0;" parent="1" vertex="1">
+                    <mxGeometry x="2121" y="2245" width="51" height="26" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
