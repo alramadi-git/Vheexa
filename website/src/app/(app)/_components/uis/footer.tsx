@@ -1,12 +1,11 @@
 import Link from "next/link";
+import Logo from "@/app/_components/locals/blocks/logo";
 import { Label } from "@/app/_components/shadcn/label";
 import { Input } from "@/app/_components/shadcn/input";
 import { Button } from "@/app/_components/shadcn/button";
-import { Command } from "lucide-react";
 import {
   FaRegCopyright,
   FaLinkedinIn,
-  FaRegEnvelope,
   FaMeta,
   FaInstagram,
   FaXTwitter,
@@ -138,7 +137,7 @@ function Footer() {
       <div className="mb-8 border-b md:mb-12">
         <div className="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-6 px-6 pb-6">
           <Link href="/" aria-label="go home" className="block size-fit">
-            <Command />
+            <Logo />
           </Link>
         </div>
       </div>
