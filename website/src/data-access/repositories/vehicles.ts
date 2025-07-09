@@ -1,5 +1,5 @@
 import { IVehiclesContext } from "@/data-access/interfaces";
-import { TVehicle } from "@/data-access/modules/vehicles";
+import { TVehicle } from "@/data-access/modules";
 
 class VehiclesContext implements IVehiclesContext {
   GetManyAsync(): Promise<unknown> {
