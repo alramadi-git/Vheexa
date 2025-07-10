@@ -6,8 +6,6 @@ interface IProps {
   children: ReactNode;
 }
 
-export const dynamic = "force-static";
-
 function Layout(props: Readonly<IProps>) {
   return (
     <Fragment>

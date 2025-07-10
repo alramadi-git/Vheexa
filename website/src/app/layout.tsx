@@ -20,7 +20,6 @@ const zain = Zain({
   weight: ["200", "300", "400", "700", "800", "900"],
 });
 
-export const dynamic = "force-static";
 export const metadata = {
   title: {
     default: "Vheexa",
