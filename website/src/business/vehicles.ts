@@ -1,9 +1,9 @@
 import { IVehiclesContext } from "@/data-access/interfaces";
-import { Nullable } from "@/types";
-import { TVehicle } from "../data-access/modules/vehicles";
+import { TNullable } from "@/types";
+import { TVehicle } from "@/data-access/modules";
 
 class Vehicles {
-  private static _Instance: Nullable<Vehicles>;
+  private static _Instance: TNullable<Vehicles>;
   public static Get(context: IVehiclesContext): Vehicles {
     if (Vehicles._Instance === null) Vehicles._Instance = new Vehicles(context);
 
