@@ -26,6 +26,8 @@ export const metadata = {
     absolute: "Vheexa",
     template: "%s | Vheexa",
   },
+  // description: ""
+
   icons: {
     icon: [
       {
@@ -52,6 +54,8 @@ export const metadata = {
     apple: "https://ik.imagekit.io/alramadi/vheexa/logo/apple-touch-icon.png",
     shortcut: "https://ik.imagekit.io/alramadi/vheexa/logo/favicon.ico",
   },
+
+  openGraph: {},
 
   authors: [
     {
