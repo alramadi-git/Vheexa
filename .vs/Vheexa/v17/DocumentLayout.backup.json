@@ -1,12 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\Vheexa\\",
-  "Documents": [],
+  "WorkspaceRootPath": "D:\\alram\\Desktop\\Vheexa\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{53FC3108-5B33-490E-B8D7-171E6847A7A3}|DataAccess\\DataAccess.csproj|d:\\alram\\desktop\\vheexa\\dataaccess\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53FC3108-5B33-490E-B8D7-171E6847A7A3}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppDBContext.cs",
+              "DocumentMoniker": "D:\\alram\\Desktop\\Vheexa\\DataAccess\\AppDBContext.cs",
+              "RelativeDocumentMoniker": "DataAccess\\AppDBContext.cs",
+              "ToolTip": "D:\\alram\\Desktop\\Vheexa\\DataAccess\\AppDBContext.cs",
+              "RelativeToolTip": "DataAccess\\AppDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-13T19:54:54.501Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
