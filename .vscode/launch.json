@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "name": "NextJS",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/website",
+      "command": "npm run dev -- --turbopack"
+    }
+  ]
+}
