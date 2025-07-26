@@ -1,7 +1,7 @@
 enum ENVIRONMENT_MODE {
-  PRODUCTION,
-  DEVELOPMENT,
-  TEST,
+  PRODUCTION = "production",
+  DEVELOPMENT = "development",
+  TEST = "test",
 }
 
 export { ENVIRONMENT_MODE };

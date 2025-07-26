@@ -1,0 +1,106 @@
+{
+  "app": {
+    "metadata": {
+      "title": {
+        "default": "Vheexa",
+        "template": "%s | Vheexa"
+      },
+      "description": "Rent any vehicle you want, boats, cars, vans, helicopters and more.",
+
+      "icons": {
+        "icon": [
+          {
+            "sizes": "16x16",
+            "type": "image/png",
+            "url": "https://ik.imagekit.io/alramadi/vheexa/brand/logo/favicon-16x16.png"
+          },
+          {
+            "sizes": "32x32",
+            "type": "image/png",
+            "url": "https://ik.imagekit.io/alramadi/vheexa/brand/logo/favicon-32x32.png"
+          },
+          {
+            "sizes": "192x192",
+            "type": "image/png",
+            "url": "https://ik.imagekit.io/alramadi/vheexa/brand/logo/android-chrome-192x192.png"
+          },
+          {
+            "type": "image/png",
+            "sizes": "512x512",
+            "url": "https://ik.imagekit.io/alramadi/vheexa/brand/logo/android-chrome-512x512.png"
+          }
+        ],
+        "apple": "https://ik.imagekit.io/alramadi/vheexa/brand/logo/apple-touch-icon.png",
+        "shortcut": "https://ik.imagekit.io/alramadi/vheexa/brand/logo/favicon.ico"
+      },
+
+      "openGraph": {},
+
+      "creator": "alramadi",
+      "authors": [
+        {
+          "name": "alramadi",
+          "url": "https://www.alramadi.com"
+        }
+      ]
+    },
+
+    "page": {
+      "lang": "en",
+
+      "header": {},
+      "hero": {
+        "title": "",
+        "description": ""
+      },
+      "footer": {}
+    }
+  },
+
+  "about": {
+    "metadata": {},
+    "page": {
+      "hero": {
+        "title": "",
+        "description": ""
+      }
+    }
+  },
+
+  "contact": {
+    "metadata": {},
+    "page": {
+      "hero": {
+        "title": "",
+        "description": ""
+      }
+    }
+  },
+
+  "auth": {
+    "metadata": {},
+    "page": {}
+  },
+
+  "partner": {
+    "metadata": {},
+    "page": {}
+  },
+
+  "loading": {
+    "metadata": {},
+    "page": {}
+  },
+
+  "not-found": {
+    "metadata": {},
+    "page": {}
+  },
+
+  "error": {
+    "page": {}
+  },
+  "global-error": {
+    "page": {}
+  }
+}
