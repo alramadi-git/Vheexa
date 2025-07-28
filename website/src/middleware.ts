@@ -1,12 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+import NextIntlMiddleware from "@/middlewares/next-intl";
+import { type NextRequest, NextResponse } from "next/server";
 
 export default function middleware(request: NextRequest) {
+  const redirect = NextIntlMiddleware(request);
+  if (!redirect.ok) return redirect;
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/api/:path*",
-  ],
+  // Match all pathnames except for
+  // - … if they start with `/_next` or `/_vercel`
+  // - … the ones containing a dot (e.g. `favicon.ico`)
+  matcher: "/((?!_next|_vercel|.*\\..*).*)",
 };

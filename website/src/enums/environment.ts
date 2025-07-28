@@ -1,7 +1,7 @@
-enum ENVIRONMENT_MODE {
+enum ENVIRONMENT {
   PRODUCTION = "production",
   DEVELOPMENT = "development",
   TEST = "test",
 }
 
-export { ENVIRONMENT_MODE };
+export { ENVIRONMENT };

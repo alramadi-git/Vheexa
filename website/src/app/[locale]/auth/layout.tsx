@@ -1,7 +1,9 @@
 import Image from "next/image";
-import { type ReactNode } from "react";
+import { type PropsWithChildren } from "react";
 import { Card, CardContent } from "@/components/shadcn/card";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+
+type TLayoutProps = PropsWithChildren & {};
 
 export const dynamic = "force-static";
 export const metadata = {
@@ -11,15 +13,14 @@ export const metadata = {
   },
 };
 
-interface IProps extends Readonly<{ children: ReactNode }> {}
-export default function Layout(props: IProps) {
+export default function Layout(props: TLayoutProps) {
   return (
     <main className="relative flex h-dvh items-center justify-center overflow-hidden">
       <AnimatedGridPattern
-        numSquares={0}
-        maxOpacity={0.1}
         duration={3}
+        numSquares={0}
         repeatDelay={1}
+        maxOpacity={0.1}
         className="skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
       />
 

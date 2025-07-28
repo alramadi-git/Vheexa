@@ -1,8 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Label } from "@/components/shadcn/label";
-import { Input } from "@/components/shadcn/input";
-import { Button } from "@/components/shadcn/button";
 import {
   FaRegCopyright,
   FaLinkedinIn,
@@ -12,6 +7,13 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
+import Link from "next/link";
+// import Image from "next/image";
+import { Label } from "@/components/shadcn/label";
+import { Input } from "@/components/shadcn/input";
+import { Button } from "@/components/shadcn/button";
+import { getTranslations } from "next-intl/server";
+import Time from "@/app/[locale]/()/_components/uis/footer/time";
 
 const LINKS = [
   {
@@ -128,13 +130,15 @@ const LINKS = [
   },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+  const t = await getTranslations("app.page.footer");
+
   return (
     <footer className="border-b bg-white pt-20 dark:bg-transparent">
       <div className="mb-8 border-b md:mb-12">
         <div className="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-6 px-6 pb-6">
           <Link href="/" className="block size-fit">
-            <Image priority width="32" height="32" alt="" src="" />
+            {/* <Image priority width="32" height="32" alt="" src="" /> */}
           </Link>
         </div>
       </div>
@@ -179,10 +183,11 @@ export default function Footer() {
         </div>
         <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6 text-sm">
           <p className="text-muted-foreground flex items-center gap-1.5">
-            <FaRegCopyright className="size-3" />
-            <span>
-              {new Date().getFullYear()} Vheexa LLC, All rights reserved
-            </span>
+            {t.rich("outro", {
+              copyright: () => <FaRegCopyright className="size-3" />,
+              time: () => <Time />,
+              span: (chunk) => <span>{chunk}</span>,
+            })}
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             <Link

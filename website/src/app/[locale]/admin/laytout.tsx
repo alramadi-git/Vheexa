@@ -8,7 +8,7 @@ type TLayoutProps = PropsWithChildren & {};
 export const dynamic = "force-static";
 export async function generateMetadata(props: TGenerateMetadataProps) {
   const { locale } = await props.params;
-  const t = await getTranslations({ locale, namespace: "partner" });
+  const t = await getTranslations({ locale, namespace: "admin" });
 
   return t("metadata");
 }

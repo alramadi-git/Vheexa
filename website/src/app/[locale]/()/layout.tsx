@@ -1,12 +1,16 @@
-import { type ReactNode, Fragment } from "react";
+import { type TParamsLocale } from "@/types/params";
+import { setRequestLocale } from "next-intl/server";
+import { Fragment, type PropsWithChildren } from "react";
 import Header from "@/app/[locale]/()/_components/uis/header/header";
 import Footer from "@/app/[locale]/()/_components/uis/footer/footer";
 
-interface IProps {
-  children: ReactNode;
-}
+type TLayoutProps = TParamsLocale & PropsWithChildren & {};
 
-export default function Layout(props: Readonly<IProps>) {
+export const dynamic = "force-static";
+export default async function Layout(props: TLayoutProps) {
+  const { locale } = await props.params;
+  setRequestLocale(locale);
+
   return (
     <Fragment>
       <Header />
