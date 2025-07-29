@@ -41,7 +41,7 @@ export default async function RootLayout(props: TRootLayoutProps) {
 
   const [t, messages] = await Promise.all([
     getTranslations("app.page"),
-    getMessages(),
+    getMessages({ locale }),
   ]);
 
   return (
@@ -53,7 +53,7 @@ export default async function RootLayout(props: TRootLayoutProps) {
           attribute="class"
           defaultTheme="system"
         >
-          <NextIntlClientProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>{props.children}</TooltipProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
