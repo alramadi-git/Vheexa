@@ -7,15 +7,16 @@ import Input from "@/components/locals/blocks/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form as ReactHookForm } from "@/components/shadcn/form";
 
+type TForm = z.infer<typeof formSchema>;
+
 const formSchema = z.object({
   email: z.email(),
 });
-interface IFormSchema extends z.infer<typeof formSchema> {}
 
 export default function Form() {
-  const form = useForm<IFormSchema>({
+  const form = useForm<TForm>({
     defaultValues: {
-      email: "",
+      email: "user@vheexa.com",
     },
     resolver: zodResolver(formSchema),
   });

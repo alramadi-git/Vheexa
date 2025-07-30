@@ -1,5 +1,5 @@
-type TNullable<TData> = TData | null;
-type TUndefinable<TData> = TData | undefined;
-type TNullish<TData> = TNullable<TData> | TUndefinable<TData>;
+type TUndefinable<GTData> = GTData | undefined;
+type TNullable<GTData> = GTData | null;
+type TNullish<GTData> = TNullable<GTData> | TUndefinable<GTData>;
 
-export type { TNullish, TNullable, TUndefinable };
+export type { TUndefinable, TNullable, TNullish };

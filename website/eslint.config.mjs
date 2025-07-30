@@ -17,6 +17,25 @@ const eslintConfig = [
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
       "prefer-const": "warn",
+
+      /** Next Intl */
+      "no-restricted-imports": [
+        "error",
+        {
+          name: "next/link",
+          message: "Please import from `@/i18n/navigation` instead.",
+        },
+        {
+          name: "next/navigation",
+          importNames: [
+            "redirect",
+            "permanentRedirect",
+            "useRouter",
+            "usePathname",
+          ],
+          message: "Please import from `@/i18n/navigation` instead.",
+        },
+      ],
     },
   },
 ];

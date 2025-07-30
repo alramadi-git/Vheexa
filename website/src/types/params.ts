@@ -1,8 +1,13 @@
-import { type TLocale } from "@/i18n/routing";
+import { LOCALE } from "@/i18n/routing";
 
-type TParams<TType> = {
-  params: Promise<TType>;
+type TParams<GTParams> = {
+  params: Promise<GTParams>;
 };
-type TParamsLocale = TParams<{ locale: TLocale }>;
+
+type TParamsLocale<GTExtraParams = {}> = TParams<
+  GTExtraParams & {
+    locale: LOCALE;
+  }
+>;
 
 export type { TParams, TParamsLocale };

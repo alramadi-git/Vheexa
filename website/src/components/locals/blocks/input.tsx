@@ -1,3 +1,8 @@
+import type { ComponentProps } from "react";
+import type { FieldValues } from "react-hook-form";
+
+import { cn } from "@/utilities/cn";
+
 import {
   FormControl,
   FormDescription,
@@ -6,24 +11,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/form";
-import { cn } from "@/utilities/cn";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/shadcn/tooltip";
-import { type ComponentProps } from "react";
-import { type FieldValues } from "react-hook-form";
 import { Input as ShadcnInput } from "@/components/shadcn/input";
 
-type TProps<TFieldValues extends FieldValues> = {
-  formField: Omit<ComponentProps<typeof FormField<TFieldValues>>, "render">;
-  label?: string;
-  input?: ComponentProps<typeof ShadcnInput>;
-  description?: string;
+type TInput<TFieldValues extends FieldValues>  = {
+  props: {
+    formField: Omit<ComponentProps<typeof FormField<TFieldValues>>, "render">;
+    label?: string;
+    input?: ComponentProps<typeof ShadcnInput>;
+    description?: string;
+  };
 };
 export default function Input<TFieldValues extends FieldValues = FieldValues>(
-  props: TProps<TFieldValues>,
+  props: TInput<TFieldValues>["props"],
 ) {
   return (
     <FormField

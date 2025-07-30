@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import {
   FaRegCopyright,
   FaLinkedinIn,
@@ -7,41 +9,43 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
-import Link from "next/link";
 // import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 import { Label } from "@/components/shadcn/label";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-import { getTranslations } from "next-intl/server";
 import Time from "@/app/[locale]/()/_components/uis/footer/time";
 
-const LINKS = [
+const LINKS: Array<{
+  group: string;
+  items: Array<{ label: string; url: string }>;
+}> = [
   {
     group: "Product",
     items: [
       {
-        title: "Features",
-        href: "#",
+        label: "Features",
+        url: "#",
       },
       {
-        title: "Solution",
-        href: "#",
+        label: "Solution",
+        url: "#",
       },
       {
-        title: "Customers",
-        href: "#",
+        label: "Customers",
+        url: "#",
       },
       {
-        title: "Pricing",
-        href: "#",
+        label: "Pricing",
+        url: "#",
       },
       {
-        title: "Help",
-        href: "#",
+        label: "Help",
+        url: "#",
       },
       {
-        title: "About",
-        href: "#",
+        label: "About",
+        url: "#",
       },
     ],
   },
@@ -49,32 +53,32 @@ const LINKS = [
     group: "Solution",
     items: [
       {
-        title: "Startup",
-        href: "#",
+        label: "Startup",
+        url: "#",
       },
       {
-        title: "Freelancers",
-        href: "#",
+        label: "Freelancers",
+        url: "#",
       },
       {
-        title: "Organizations",
-        href: "#",
+        label: "Organizations",
+        url: "#",
       },
       {
-        title: "Students",
-        href: "#",
+        label: "Students",
+        url: "#",
       },
       {
-        title: "Collaboration",
-        href: "#",
+        label: "Collaboration",
+        url: "#",
       },
       {
-        title: "Design",
-        href: "#",
+        label: "Design",
+        url: "#",
       },
       {
-        title: "Management",
-        href: "#",
+        label: "Management",
+        url: "#",
       },
     ],
   },
@@ -82,28 +86,28 @@ const LINKS = [
     group: "Company",
     items: [
       {
-        title: "About",
-        href: "#",
+        label: "About",
+        url: "#",
       },
       {
-        title: "Careers",
-        href: "#",
+        label: "Careers",
+        url: "#",
       },
       {
-        title: "Blog",
-        href: "#",
+        label: "Blog",
+        url: "#",
       },
       {
-        title: "Press",
-        href: "#",
+        label: "Press",
+        url: "#",
       },
       {
-        title: "Contact",
-        href: "#",
+        label: "Contact",
+        url: "#",
       },
       {
-        title: "Help",
-        href: "#",
+        label: "Help",
+        url: "#",
       },
     ],
   },
@@ -111,20 +115,20 @@ const LINKS = [
     group: "Legal",
     items: [
       {
-        title: "Licence",
-        href: "#",
+        label: "Licence",
+        url: "#",
       },
       {
-        title: "Privacy",
-        href: "#",
+        label: "Privacy",
+        url: "#",
       },
       {
-        title: "Cookies",
-        href: "#",
+        label: "Cookies",
+        url: "#",
       },
       {
-        title: "Security",
-        href: "#",
+        label: "Security",
+        url: "#",
       },
     ],
   },
@@ -151,10 +155,10 @@ export default async function Footer() {
                 {link.items.map((item, index) => (
                   <Link
                     key={index}
-                    href={item.href}
+                    href={item.url}
                     className="text-muted-foreground hover:text-primary block duration-150"
                   >
-                    <span>{item.title}</span>
+                    <span>{item.label}</span>
                   </Link>
                 ))}
               </div>

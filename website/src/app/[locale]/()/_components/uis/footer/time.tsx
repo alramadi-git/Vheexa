@@ -1,6 +1,7 @@
 "use client";
 
 export default function Time() {
-  const date = new Date();
-  return <time dateTime={date.toISOString()}>{date.getFullYear()}</time>;
+  const year = new Date().getFullYear();
+
+  return <time dateTime={`${year}`}>{year}</time>;
 }

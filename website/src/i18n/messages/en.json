@@ -114,15 +114,24 @@
   },
 
   "auth": {
-    "metadata": {},
+    "metadata": {
+      "title": {
+        "default": "Auth",
+        "template": "%s | Vheexa Auth"
+      }
+    },
     "page": {},
 
     "signup": {
-      "metadata": {},
+      "metadata": {
+        "title": "Signup"
+      },
       "page": {}
     },
     "signin": {
-      "metadata": {},
+      "metadata": {
+        "title": "Signin"
+      },
       "page": {}
     }
   },
@@ -156,15 +165,24 @@
     },
 
     "auth": {
-      "metadata": {},
+      "metadata": {
+        "title": {
+          "default": "Partner Auth",
+          "template": "%s | Vheexa Partner Auth"
+        }
+      },
       "page": {},
 
       "signup": {
-        "metadata": {},
+        "metadata": {
+          "title": "Signup"
+        },
         "page": {}
       },
       "signin": {
-        "metadata": {},
+        "metadata": {
+          "title": "Signin"
+        },
         "page": {}
       }
     }
@@ -174,6 +192,7 @@
     "metadata": {},
     "page": {}
   },
+  
   "not-found": {
     "metadata": {},
     "page": {}

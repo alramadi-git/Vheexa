@@ -1,21 +1,30 @@
 import "@/app/globals.css";
 
-import { cn } from "@/utilities/cn";
-import { Zain } from "next/font/google";
-import { type PropsWithChildren } from "react";
 import { ENVIRONMENT } from "@/enums/environment";
-import { NextIntlClientProvider } from "next-intl";
-import { TooltipProvider } from "@/components/shadcn/tooltip";
+
+import type { Metadata } from "next";
+import type { PropsWithChildren } from "react";
+import type { TParamsLocale } from "@/types/params";
+
 import {
   getMessages,
   getTranslations,
   setRequestLocale,
 } from "next-intl/server";
-import ThemeProvider from "@/components/locals/providers/theme-provider";
-import { TParamsLocale } from "@/types/params";
+import { cn } from "@/utilities/cn";
+import { Zain } from "next/font/google";
 
-type TGenerateMetadataProps = TParamsLocale & {};
-type TRootLayoutProps = TParamsLocale & PropsWithChildren & {};
+import { NextIntlClientProvider } from "next-intl";
+import { TooltipProvider } from "@/components/shadcn/tooltip";
+import ThemeProvider from "@/components/locals/providers/theme-provider";
+
+type TGenerateMetadata = {
+  props: TParamsLocale;
+  return: Promise<Metadata>;
+};
+type TRootLayout = {
+  props: TParamsLocale & PropsWithChildren;
+};
 
 const zain = Zain({
   adjustFontFallback: true,
@@ -28,14 +37,16 @@ const zain = Zain({
 });
 
 export const dynamic = "force-static";
-export async function generateMetadata(props: TGenerateMetadataProps) {
+export async function generateMetadata(
+  props: TGenerateMetadata["props"],
+): TGenerateMetadata["return"] {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: "app" });
 
   return t.raw("metadata");
 }
 
-export default async function RootLayout(props: TRootLayoutProps) {
+export default async function RootLayout(props: TRootLayout["props"]) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 
@@ -46,6 +57,16 @@ export default async function RootLayout(props: TRootLayoutProps) {
 
   return (
     <html suppressHydrationWarning dir={t("dir")} lang={t("lang")}>
+      <head>
+        {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
+          process.env.NODE_ENV === ENVIRONMENT.TEST) && (
+          <script
+            defer
+            crossOrigin="anonymous"
+            src="https://unpkg.com/react-scan/dist/auto.global.js"
+          />
+        )}
+      </head>
       <body className={cn(zain.className, "antialiased")}>
         <ThemeProvider
           enableSystem
@@ -57,14 +78,6 @@ export default async function RootLayout(props: TRootLayoutProps) {
             <TooltipProvider>{props.children}</TooltipProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
-
-        {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
-          process.env.NODE_ENV === ENVIRONMENT.TEST) && (
-          <script
-            defer
-            src="https://unpkg.com/react-scan/dist/auto.global.js"
-          />
-        )}
       </body>
     </html>
   );
