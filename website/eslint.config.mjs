@@ -22,9 +22,18 @@ const eslintConfig = [
       "no-restricted-imports": [
         "error",
         {
-          name: "next/link",
-          message: "Please import from `@/i18n/navigation` instead.",
+          name: "@/i18n/navigation",
+          importNames: ["Link"],
+          message:
+            "Please import from `@/components/locals/blocks/next-intl-link` instead.",
         },
+        {
+          name: "next/link",
+
+          message:
+            "Please import from `@/components/locals/blocks/next-intl-link` instead.",
+        },
+
         {
           name: "next/navigation",
           importNames: [

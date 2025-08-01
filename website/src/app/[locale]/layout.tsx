@@ -17,6 +17,7 @@ import { Zain } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import ThemeProvider from "@/components/locals/providers/theme-provider";
+import { routing } from "@/i18n/routing";
 
 type TGenerateMetadata = {
   props: TParamsLocale;
@@ -37,6 +38,9 @@ const zain = Zain({
 });
 
 export const dynamic = "force-static";
+export async function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 export async function generateMetadata(
   props: TGenerateMetadata["props"],
 ): TGenerateMetadata["return"] {
@@ -72,7 +76,7 @@ export default async function RootLayout(props: TRootLayout["props"]) {
           enableSystem
           disableTransitionOnChange
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>{props.children}</TooltipProvider>

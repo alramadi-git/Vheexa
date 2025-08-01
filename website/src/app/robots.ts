@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
+type TSitemap = {
+  return: MetadataRoute.Robots;
+};
+
+export default function Robots(): TSitemap["return"] {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/admin",
     },
   };
 }

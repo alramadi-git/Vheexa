@@ -1,5 +1,9 @@
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+type TSitemap = {
+  return: MetadataRoute.Sitemap;
+};
+
+export default function Sitemap(): TSitemap["return"] {
   return [];
 }

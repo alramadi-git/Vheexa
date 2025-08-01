@@ -3,10 +3,10 @@ import type { TParamsLocale } from "@/types/params";
 
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/shadcn/button";
 import { FaApple, FaGoogle, FaMeta } from "react-icons/fa6";
-import Form from "@/app/[locale]/auth/signin/_components/form";
+import Link from "@/components/locals/blocks/next-intl-link";
+import Form from "@/app/[locale]/_auth/signin/_components/form";
 
 type TGenerateMetadata = {
   props: TParamsLocale;

@@ -44,7 +44,6 @@
         }
       ]
     },
-
     "page": {
       "lang": "en",
       "dir": "ltr",
@@ -56,6 +55,19 @@
         },
 
         "nav": {
+          "language": {
+            "label": "Select your language",
+            "placeholder": "Languages",
+
+            "options": [
+              {
+                "value": "en",
+                "flag": "🇺🇸",
+                "label": "English"
+              }
+            ]
+          },
+
           "links": [
             {
               "url": "/",
@@ -80,58 +92,70 @@
           ]
         }
       },
+
       "hero": {
         "title": "",
         "description": ""
       },
+
       "footer": {
         "title": "",
         "description": "",
 
         "outro": "<copyright></copyright> <time></time> <span>Vheexa LLC, All rights reserved.</span>"
       }
-    }
-  },
+    },
 
-  "about": {
-    "metadata": {},
-    "page": {
-      "hero": {
-        "title": "",
-        "description": ""
-      }
-    }
-  },
-
-  "contact": {
-    "metadata": {},
-    "page": {
-      "hero": {
-        "title": "",
-        "description": ""
-      }
-    }
-  },
-
-  "auth": {
-    "metadata": {
-      "title": {
-        "default": "Auth",
-        "template": "%s | Vheexa Auth"
+    "about": {
+      "metadata": {},
+      "page": {
+        "hero": {
+          "title": "",
+          "description": ""
+        }
       }
     },
-    "page": {},
 
-    "signup": {
+    "contact": {
+      "metadata": {},
+      "page": {
+        "hero": {
+          "title": "",
+          "description": ""
+        }
+      }
+    },
+
+    "auth": {
       "metadata": {
-        "title": "Signup"
+        "title": {
+          "default": "Auth",
+          "template": "%s | Vheexa Auth"
+        }
       },
+      "page": {},
+
+      "signup": {
+        "metadata": {
+          "title": "Signup"
+        },
+        "page": {}
+      },
+      "signin": {
+        "metadata": {
+          "title": "Signin"
+        },
+        "page": {}
+      }
+    },
+
+    "loading": {
       "page": {}
     },
-    "signin": {
-      "metadata": {
-        "title": "Signin"
-      },
+    "not-found": {
+      "page": {}
+    },
+    "error": {
       "page": {}
     }
   },
@@ -188,20 +212,71 @@
     }
   },
 
-  "loading": {
+  "admin": {
     "metadata": {},
-    "page": {}
-  },
-  
-  "not-found": {
-    "metadata": {},
-    "page": {}
-  },
+    "page": {
+      "sidebar": {
+        "header": {},
 
-  "error": {
-    "page": {}
-  },
-  "global-error": {
-    "page": {}
+        "main": {
+          "groups": [
+            {
+              "title": "Overview",
+
+              "folders": [],
+              "files": [
+                {
+                  "href": "/admin/analytics",
+                  "label": "Analytics"
+                }
+              ]
+            }
+          ]
+        },
+
+        "footer": {
+          "label": "Admin",
+          "description": "This is the admin panel.",
+
+          "application": {
+            "label": "Applications",
+
+            "links": [
+              {
+                "href": "/",
+                "label": "Application",
+                "description": "This sends you to the user application."
+              },
+              {
+                "href": "/partner",
+                "label": "Partner",
+                "description": "This sends you to the partner application."
+              }
+            ]
+          }
+        }
+      },
+
+      "header": {},
+      
+      "footer": {}
+    },
+
+    "auth": {
+      "page": {},
+
+      "signup": {
+        "metadata": {
+          "title": "Signup"
+        },
+        "page": {}
+      },
+      "signin": {
+        "metadata": {
+          "title": "Signin"
+        },
+        "page": {}
+      }
+    }
   }
 }

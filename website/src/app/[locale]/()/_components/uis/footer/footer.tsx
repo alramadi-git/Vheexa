@@ -10,10 +10,10 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 // import Image from "next/image";
-import { Link } from "@/i18n/navigation";
 import { Label } from "@/components/shadcn/label";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
+import Link from "@/components/locals/blocks/next-intl-link";
 import Time from "@/app/[locale]/()/_components/uis/footer/time";
 
 const LINKS: Array<{

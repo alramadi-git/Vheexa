@@ -1,3 +1,5 @@
-export const dynamic = "force-static";
+"use client";
 
-export default function NotFound() {}
+export default function NotFound() {
+  return <h1>Not Found Next Intl</h1>;
+}
