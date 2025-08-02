@@ -258,11 +258,12 @@
       },
 
       "header": {},
-      
+
       "footer": {}
     },
 
     "auth": {
+      "metadata": {},
       "page": {},
 
       "signup": {

@@ -6,7 +6,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Button } from "@/components/shadcn/button";
 import { FaApple, FaGoogle, FaMeta } from "react-icons/fa6";
 import Link from "@/components/locals/blocks/next-intl-link";
-import Form from "@/app/[locale]/_auth/signin/_components/form";
+import Form from "@/app/[locale]/(auth)/auth/signin/_components/form";
 
 type TGenerateMetadata = {
   props: TParamsLocale;

@@ -76,7 +76,7 @@ export default async function RootLayout(props: TRootLayout["props"]) {
           enableSystem
           disableTransitionOnChange
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>{props.children}</TooltipProvider>
