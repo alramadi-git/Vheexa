@@ -22,7 +22,7 @@ export async function generateMetadata(
   props: TGenerateMetadata["props"],
 ): TGenerateMetadata["return"] {
   const { locale } = await props.params;
-  const t = await getTranslations({ locale, namespace: "auth.signin" });
+  const t = await getTranslations({ locale, namespace: "page.auth.signin" });
 
   return t.raw("metadata");
 }

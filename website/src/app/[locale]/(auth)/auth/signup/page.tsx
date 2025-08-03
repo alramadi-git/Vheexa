@@ -1,32 +1,61 @@
-import type { Metadata } from "next";
-import type { TParamsLocale } from "@/types/params";
+"use client";
 
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import z4 from "zod/v4";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Fragment } from "react";
+import { Form } from "@/components/shadcn/form";
+import { Button } from "@/components/shadcn/button";
+import Input from "@/components/locals/blocks/input";
 
-type TGenerateMetadata = {
-  props: TParamsLocale;
-  return: Promise<Metadata>;
-};
+const FORM_SCHEMA = z4.object({
+  email: z4.email(),
+  password: z4.string().min(8),
+});
 
-type TPage = {
-  props: TParamsLocale;
-};
+export default function Page() {
+  const form = useForm<z4.infer<typeof FORM_SCHEMA>>({
+    resolver: zodResolver(FORM_SCHEMA),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-export const dynamic = "force-static";
-export async function generateMetadata(
-  props: TGenerateMetadata["props"],
-): TGenerateMetadata["return"] {
-  const { locale } = await props.params;
-  const t = await getTranslations({ locale, namespace: "auth.signin" });
+  function onSubmit(values: z4.infer<typeof FORM_SCHEMA>) {
+    console.log(values);
+  }
 
-  return t.raw("metadata");
-}
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-3">
+        <Input
+          formField={{
+            control: form.control,
+            name: "email",
+          }}
+          label="Email"
+          input={{
+            type: "email",
+            placeholder: "user@vheexa.com",
+          }}
+          description="Description"
+        />
 
-export default async function Page(props: TPage["props"]) {
-  const { locale } = await props.params;
-  setRequestLocale(locale);
-
-  return <Fragment></Fragment>;
+        <Input
+          formField={{
+            control: form.control,
+            name: "password",
+          }}
+          label="Password"
+          input={{
+            type: "password",
+            placeholder: "********",
+          }}
+          description="Description"
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
 }

@@ -41,7 +41,7 @@ export default function Input<TFieldValues extends FieldValues = FieldValues>(
               {...field}
               className={cn(
                 {
-                  "text-destructive": fieldState.invalid,
+                  "text-destructive placeholder:text-destructive": fieldState.invalid,
                 },
                 props.input?.className,
               )}

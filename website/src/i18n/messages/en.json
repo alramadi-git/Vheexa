@@ -133,7 +133,12 @@
           "template": "%s | Vheexa Auth"
         }
       },
-      "page": {},
+      "page": {
+        "image": {
+          "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png?updatedAt=1753742030103",
+          "alt": "Placeholder"
+        }
+      },
 
       "signup": {
         "metadata": {
@@ -141,6 +146,7 @@
         },
         "page": {}
       },
+
       "signin": {
         "metadata": {
           "title": "Signin"
