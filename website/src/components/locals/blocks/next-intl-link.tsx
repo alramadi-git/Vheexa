@@ -9,5 +9,5 @@ type TNextIntlLink = {
   props: ComponentProps<typeof Link>;
 };
 export default function NextIntlLink(props: TNextIntlLink["props"]) {
-  return <Link {...props}></Link>;
+  return <Link {...props} />;
 }
