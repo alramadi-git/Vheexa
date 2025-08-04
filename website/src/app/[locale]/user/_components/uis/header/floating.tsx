@@ -16,7 +16,7 @@ type TFloating = {
   props: PropsWithChildren;
 };
 
-const MAX_Y_SCROLL: number = 50;
+const maxYScroll: number = 50;
 
 export default function Floating(props: TFloating["props"]) {
   const t = useTranslations("app.page.header");
@@ -26,10 +26,10 @@ export default function Floating(props: TFloating["props"]) {
   const [isExceededMaxYScroll, setIsExceededMaxYScroll] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (y) => {
-    const IS_EXCEEDED_MAX_Y_SCROLL = y > MAX_Y_SCROLL;
+    const isExceededMaxYScroll = y > maxYScroll;
 
-    if (isExceededMaxYScroll !== IS_EXCEEDED_MAX_Y_SCROLL)
-      setIsExceededMaxYScroll(IS_EXCEEDED_MAX_Y_SCROLL);
+    if (isExceededMaxYScroll !== isExceededMaxYScroll)
+      setIsExceededMaxYScroll(isExceededMaxYScroll);
   });
 
   return (
