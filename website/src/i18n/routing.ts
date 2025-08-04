@@ -1,7 +1,7 @@
 import { defineRouting } from "next-intl/routing";
 
 export enum LOCALE {
-  ENGLISH = "en",
+  ENGLISH_US = "en-US",
 }
 
 export const routing = defineRouting({
@@ -9,5 +9,5 @@ export const routing = defineRouting({
   locales: Object.values(LOCALE),
 
   // Used when no locale matches
-  defaultLocale: LOCALE.ENGLISH,
+  defaultLocale: LOCALE.ENGLISH_US,
 });
