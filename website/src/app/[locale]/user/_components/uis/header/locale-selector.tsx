@@ -8,14 +8,14 @@ import {
 import { getTranslations, getLocale } from "next-intl/server";
 
 type TOptions = Array<{
-  value: string;
+  locale: string;
   flag: string;
   label: string;
 }>;
 
 const ID = "language-selector";
 
-export default async function Languages() {
+export default async function LocaleSelector() {
   const [t, locale] = await Promise.all([
     getTranslations("app.page.header.nav.language"),
     getLocale(),
@@ -41,8 +41,8 @@ export default async function Languages() {
         <SelectContent>
           {options.map((option) => (
             <SelectItem
-              key={option.value}
-              value={option.value}
+              key={option.locale}
+              value={option.locale}
               className="flex items-center"
             >
               <span className="size-4">{option.flag}</span>

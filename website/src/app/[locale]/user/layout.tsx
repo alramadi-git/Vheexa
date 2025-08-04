@@ -1,8 +1,8 @@
 import { type TParamsLocale } from "@/types/params";
 import { setRequestLocale } from "next-intl/server";
 import { Fragment, type PropsWithChildren } from "react";
-import Header from "@/app/[locale]/()/_components/uis/header/header";
-import Footer from "@/app/[locale]/()/_components/uis/footer/footer";
+import Header from "@/app/[locale]/user/_components/uis/header/header";
+import Footer from "@/app/[locale]/user/_components/uis/footer/footer";
 
 type TLayoutProps = TParamsLocale & PropsWithChildren & {};
 

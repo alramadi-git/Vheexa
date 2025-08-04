@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import Link from "@/components/locals/blocks/next-intl-link";
-import Languages from "@/app/[locale]/()/_components/uis/header/languages";
+import LocaleSelector from "@/app/[locale]/user/_components/uis/header/locale-selector";
 import Floating from "./floating";
 import { Button } from "@/components/shadcn/button";
 import { cn } from "@/utilities/cn";
@@ -55,7 +55,7 @@ export default async function Header() {
           </Link>
         </Button>
 
-        <Languages />
+        <LocaleSelector />
       </nav>
     </Floating>
   );

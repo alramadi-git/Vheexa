@@ -61,9 +61,14 @@
 
             "options": [
               {
-                "value": "en",
+                "locale": "en-US",
                 "flag": "🇺🇸",
                 "label": "English"
+              },
+              {
+                "locale": "ar-SA",
+                "flag": "🇸🇦",
+                "label": "العربية"
               }
             ]
           },
