@@ -1,56 +1,129 @@
+"use client";
+
+import { ComponentProps, Fragment, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/select";
-import { getTranslations, getLocale } from "next-intl/server";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/shadcn/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/shadcn/command";
+import { Button } from "@/components/shadcn/button";
+import { LuCheck, LuChevronDown } from "react-icons/lu";
+import NextIntlLinkLocale from "@/components/locals/blocks/next-intl-link-locale";
+import { LOCALE } from "@/i18n/routing";
+import { TNullable } from "@/types/nullish";
+import { cn } from "@/utilities/cn";
 
-type TOptions = Array<{
-  locale: string;
-  flag: string;
+type TContinent = {
   label: string;
-}>;
+  countries: Array<TCountry>;
+};
+type TCountry = {
+  flag: string;
+  locale: LOCALE;
+  label: string;
+};
 
-const ID = "language-selector";
+type TLocaleSelector = {
+  props: Omit<ComponentProps<"div">, "children">;
+};
 
-export default async function LocaleSelector() {
-  const [t, locale] = await Promise.all([
-    getTranslations("app.page.header.nav.language"),
-    getLocale(),
-  ]);
+export default function LocaleSelector({
+  className,
+  ...props
+}: TLocaleSelector["props"]) {
+  const t = useTranslations("app.page.header.nav");
+  const locale = useLocale();
 
-  const options: TOptions = t.raw("options");
+  const continents: Array<TContinent> = t.raw("continents");
+
+  // const [open, setOpen] = useState<boolean>(false);
+  const selectedLocale = useMemo<TCountry>(() => {
+    let selectedLocale: TNullable<TCountry> = null;
+
+    for (const continent of continents) {
+      if (selectedLocale !== null) break;
+
+      for (const country of continent.countries)
+        if (country.locale === locale) {
+          selectedLocale = country;
+          break;
+        }
+    }
+
+    return selectedLocale!;
+  }, [continents, locale]);
 
   return (
-    <div className="border-input bg-background relative rounded-md border shadow-xs transition-[color,box-shadow]">
-      <label
-        htmlFor={ID}
-        className="text-foreground block px-3 pt-2 font-medium"
-      >
-        {t("label")}
-      </label>
-      <Select defaultValue={locale}>
-        <SelectTrigger
-          id={ID}
-          className="w-full rounded-t-none border-none bg-transparent shadow-none focus:ring-0 focus:ring-offset-0"
+    <div {...props} className={cn("*:not-first:mt-2", className)}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+          >
+            <span className="relative h-[13px] w-[19px] text-lg leading-none">
+              <span className="absolute top-1/2 left-1/2 h-[13px] w-[19px] -translate-1/2">
+                {selectedLocale.flag}
+              </span>
+            </span>
+            {selectedLocale.label}
+
+            <LuChevronDown
+              size={16}
+              className="text-muted-foreground/80 ms-auto shrink-0"
+            />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="border-input w-full min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+          align="start"
         >
-          <SelectValue placeholder={t("placeholder")} />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem
-              key={option.locale}
-              value={option.locale}
-              className="flex items-center"
-            >
-              <span className="size-4">{option.flag}</span>
-              <span>{option.label}</span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+          <Command className="rounded">
+            <CommandInput placeholder="Search your language..." />
+            <CommandList>
+              <CommandEmpty>No such a language found.</CommandEmpty>
+              {continents.map((continent) => (
+                <CommandGroup key={continent.label} heading={continent.label}>
+                  {continent.countries.map((country) => (
+                    <Fragment key={country.label}>
+                      {country.locale !== selectedLocale.locale && (
+                        <CommandItem
+                          asChild
+                          value={country.label}
+                          className="cursor-pointer gap-2.5 rounded"
+                        >
+                          <NextIntlLinkLocale locale={country.locale}>
+                            <span className="relative h-[13px] w-[19px] text-lg leading-none">
+                              <span className="absolute top-1/2 left-1/2 h-[13px] w-[19px] -translate-1/2">
+                                {country.flag}
+                              </span>
+                            </span>
+                            {country.label}
+                            {selectedLocale.locale === country.locale && (
+                              <LuCheck size={16} className="ml-auto" />
+                            )}
+                          </NextIntlLinkLocale>
+                        </CommandItem>
+                      )}
+                    </Fragment>
+                  ))}
+                </CommandGroup>
+              ))}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

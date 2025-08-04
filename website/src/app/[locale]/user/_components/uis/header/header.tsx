@@ -1,10 +1,9 @@
 import { getTranslations } from "next-intl/server";
 
-import Link from "@/components/locals/blocks/next-intl-link";
-import LocaleSelector from "@/app/[locale]/user/_components/uis/header/locale-selector";
-import Floating from "./floating";
 import { Button } from "@/components/shadcn/button";
-import { cn } from "@/utilities/cn";
+import NextIntlLink from "@/components/locals/blocks/next-intl-link";
+import Floating from "@/app/[locale]/user/_components/uis/header/floating";
+import LocaleSelector from "@/app/[locale]/user/_components/uis/header/locale-selector";
 
 type TNavLinks = Array<{
   url: string;
@@ -14,48 +13,58 @@ type TNavLinks = Array<{
 export default async function Header() {
   const t = await getTranslations("app.page.header");
 
-  const NAV_LINKS: TNavLinks = t.raw("nav.links");
+  const links: TNavLinks = t.raw("nav.links");
 
   return (
     <Floating>
-      <nav className="absolute inset-0 top-1.5 m-auto hidden size-fit lg:block">
+      <nav className="hidden w-full justify-between gap-6 lg:flex">
         <ul className="flex items-center gap-8">
-          {NAV_LINKS.map((item, index) => (
+          {links.map((item, index) => (
             <li key={index}>
-              <Link
+              <NextIntlLink
                 href={item.url}
                 className="text-muted-foreground hover:text-primary block duration-150"
               >
                 <span>{item.label}</span>
-              </Link>
+              </NextIntlLink>
             </li>
           ))}
         </ul>
+
+        <div className="flex items-start gap-3.5">
+          <LocaleSelector />
+
+          <Button asChild variant="outline" className="inline-flex">
+            <NextIntlLink href="/auth/signup">
+              <span>Get Started</span>
+            </NextIntlLink>
+          </Button>
+        </div>
       </nav>
 
-      <nav className="bg-background mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none lg:in-data-[state=active]:flex dark:shadow-none dark:lg:bg-transparent">
-        <div className="lg:hidden">
-          <ul className="space-y-3">
-            {NAV_LINKS.map((item, index) => (
-              <li key={index}>
-                <Link
-                  href={item.url}
-                  className="text-muted-foreground hover:text-primary block duration-150"
-                >
-                  <span>{item.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <nav className="bg-background absolute top-18 left-1/2 mb-6 hidden w-full -translate-x-1/2 flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:hidden lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
+        <ul className="w-full space-y-3">
+          {links.map((item, index) => (
+            <li key={index}>
+              <NextIntlLink
+                href={item.url}
+                className="text-muted-foreground hover:text-primary block duration-150"
+              >
+                <span>{item.label}</span>
+              </NextIntlLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-col items-start gap-3.5">
+          <Button asChild variant="outline" className="inline-flex">
+            <NextIntlLink href="/auth/signin">
+              <span>Get Started</span>
+            </NextIntlLink>
+          </Button>
+
+          <LocaleSelector className="w-full" />
         </div>
-
-        <Button asChild size="sm" className="inline-flex">
-          <Link href="/auth/signup">
-            <span>Get Started</span>
-          </Link>
-        </Button>
-
-        <LocaleSelector />
       </nav>
     </Floating>
   );

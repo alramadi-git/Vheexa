@@ -41,14 +41,13 @@ export default function Floating(props: TFloating["props"]) {
         className={cn(
           "mx-auto max-w-6xl rounded-2xl transition-all duration-300",
           {
-            "bg-background/50 mt-2 max-w-4xl border backdrop-blur-lg lg:px-5":
-              isExceededMaxYScroll,
+            "bg-background mt-2 max-w-4xl border lg:px-5": isExceededMaxYScroll,
           },
         )}
       >
-        <div className="relative flex h-16 flex-wrap items-center justify-between gap-6 p-3 lg:gap-0 lg:p-4">
-          <div className="flex w-full items-center justify-between lg:w-auto">
-            <Link href="/" className="flex items-center space-x-2">
+        <div className="relative flex h-16 w-full flex-wrap items-center justify-between gap-6 p-3 lg:gap-0 lg:p-4">
+          <div className="flex w-full items-center">
+            <Link href="/" className="me-6 flex items-center space-x-2">
               <Image
                 priority
                 width="32"
@@ -58,19 +57,19 @@ export default function Floating(props: TFloating["props"]) {
               />
             </Link>
 
+            {props.children}
+
             <Button
               size="icon"
               variant="ghost"
               aria-label={menuState == true ? "Close Menu" : "Open Menu"}
-              className="relative z-20 block cursor-pointer lg:hidden"
-              onClick={() => setMenuState(!menuState)}
+              className="relative z-20 ms-auto block cursor-pointer lg:hidden"
+              onClick={() => setMenuState((oldState) => !oldState)}
             >
               <Menu className="m-auto size-6 duration-200 in-data-[state=active]:scale-0 in-data-[state=active]:rotate-180 in-data-[state=active]:opacity-0" />
               <X className="absolute inset-0 m-auto size-6 scale-0 -rotate-180 opacity-0 duration-200 in-data-[state=active]:scale-100 in-data-[state=active]:rotate-0 in-data-[state=active]:opacity-100" />
             </Button>
           </div>
-
-          {props.children}
         </div>
       </div>
     </header>

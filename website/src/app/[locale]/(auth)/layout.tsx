@@ -19,7 +19,7 @@ export default function Layout(props: TLayout["props"]) {
         maxOpacity={0.1}
         className="skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
       />
-      <Card className="relative overflow-hidden bg-black bg-transparent p-0">
+      <Card className="relative overflow-hidden bg-transparent p-0">
         <CardContent className="grid h-[550px] w-[850px] p-0 md:grid-cols-2">
           {props.children}
         </CardContent>

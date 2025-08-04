@@ -32,6 +32,7 @@
         ],
         "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
         "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
+        
       },
 
       "openGraph": {},
@@ -55,23 +56,108 @@
         },
 
         "nav": {
-          "language": {
-            "label": "Select your language",
-            "placeholder": "Languages",
-
-            "options": [
-              {
-                "locale": "en-US",
-                "flag": "🇺🇸",
-                "label": "English"
-              },
-              {
-                "locale": "ar-SA",
-                "flag": "🇸🇦",
-                "label": "العربية"
-              }
-            ]
-          },
+          "continents": [
+            {
+              "label": "Africa",
+              "countries": [
+                {
+                  "flag": "🇲🇦",
+                  "locale": "ar-MA",
+                  "label": "العربية (المغرب)"
+                },
+                {
+                  "flag": "🇳🇬",
+                  "locale": "en-NG",
+                  "label": "English (Nigeria)"
+                },
+                {
+                  "flag": "🇿🇦",
+                  "locale": "en-ZA",
+                  "label": "English (South Africa)"
+                }
+              ]
+            },
+            {
+              "label": "America",
+              "countries": [
+                {
+                  "flag": "🇨🇦",
+                  "locale": "en-CA",
+                  "label": "English (Canada)"
+                },
+                {
+                  "flag": "🇲🇽",
+                  "locale": "es-MX",
+                  "label": "Español (México)"
+                },
+                {
+                  "flag": "🇺🇸",
+                  "locale": "en-US",
+                  "label": "English (United States)"
+                }
+              ]
+            },
+            {
+              "label": "Asia",
+              "countries": [
+                {
+                  "flag": "🇨🇳",
+                  "locale": "zh-CN",
+                  "label": "中文 (中国)"
+                },
+                {
+                  "flag": "🇮🇳",
+                  "locale": "hi-IN",
+                  "label": "हिन्दी (भारत)"
+                },
+                {
+                  "flag": "🇯🇵",
+                  "locale": "ja-JP",
+                  "label": "日本語 (日本)"
+                },
+                {
+                  "flag": "🇸🇦",
+                  "locale": "ar-SA",
+                  "label": "العربية (المملكة العربية السعودية)"
+                }
+              ]
+            },
+            {
+              "label": "Europe",
+              "countries": [
+                {
+                  "flag": "🇫🇷",
+                  "locale": "fr-FR",
+                  "label": "Français (France)"
+                },
+                {
+                  "flag": "🇩🇪",
+                  "locale": "de-DE",
+                  "label": "Deutsch (Deutschland)"
+                },
+                {
+                  "flag": "🇬🇧",
+                  "locale": "en-GB",
+                  "label": "English (United Kingdom)"
+                }
+              ]
+            },
+            {
+              "label": "Oceania",
+              "countries": [
+                {
+                  "flag": "🇦🇺",
+                  "locale": "en-AU",
+                  "label": "English (Australia)"
+                },
+                {
+                  "flag": "🇳🇿",
+                  "locale": "en-NZ",
+                  "label": "English (New Zealand)"
+                }
+              ]
+            }
+          ],
 
           "links": [
             {
