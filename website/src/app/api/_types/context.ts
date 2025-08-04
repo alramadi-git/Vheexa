@@ -1,5 +1,7 @@
-import type { TParams } from "@/types/params";
+import type { TParams, TParamsLocale } from "@/types/params";
 
 type TContext<GTParams> = TParams<GTParams>;
 
-export type { TContext };
+type TContextLocale<GTParams> = TParamsLocale<GTParams>;
+
+export type { TContext, TContextLocale };
