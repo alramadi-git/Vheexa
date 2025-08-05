@@ -9,130 +9,137 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
-// import Image from "next/image";
 import { Label } from "@/components/shadcn/label";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-import Link from "@/components/locals/blocks/next-intl-link";
 import Time from "@/app/[locale]/user/_components/uis/footer/time";
+import NextIntlLink from "@/components/locals/blocks/next-intl-link";
 
-const LINKS: Array<{
-  group: string;
-  items: Array<{ label: string; url: string }>;
-}> = [
+type TRoute = {
+  label: string;
+  href: string;
+};
+type TLinkGroup = {
+  label: string;
+  routes: Array<TRoute>;
+};
+
+const linkGroups: Array<TLinkGroup> = [
   {
-    group: "Product",
-    items: [
+    label: "Product",
+    routes: [
       {
         label: "Features",
-        url: "#",
+        href: "#",
       },
       {
         label: "Solution",
-        url: "#",
+        href: "#",
       },
       {
         label: "Customers",
-        url: "#",
+        href: "#",
       },
       {
         label: "Pricing",
-        url: "#",
+        href: "#",
       },
       {
         label: "Help",
-        url: "#",
+        href: "#",
       },
       {
         label: "About",
-        url: "#",
+        href: "#",
       },
     ],
   },
   {
-    group: "Solution",
-    items: [
+    label: "Solution",
+    routes: [
       {
         label: "Startup",
-        url: "#",
+        href: "#",
       },
       {
         label: "Freelancers",
-        url: "#",
+        href: "#",
       },
       {
         label: "Organizations",
-        url: "#",
+        href: "#",
       },
       {
         label: "Students",
-        url: "#",
+        href: "#",
       },
       {
         label: "Collaboration",
-        url: "#",
+        href: "#",
       },
       {
         label: "Design",
-        url: "#",
+        href: "#",
       },
       {
         label: "Management",
-        url: "#",
+        href: "#",
       },
     ],
   },
   {
-    group: "Company",
-    items: [
+    label: "Company",
+    routes: [
       {
         label: "About",
-        url: "#",
+        href: "#",
       },
       {
         label: "Careers",
-        url: "#",
+        href: "#",
       },
       {
         label: "Blog",
-        url: "#",
+        href: "#",
       },
       {
         label: "Press",
-        url: "#",
+        href: "#",
       },
       {
         label: "Contact",
-        url: "#",
+        href: "#",
       },
       {
         label: "Help",
-        url: "#",
+        href: "#",
       },
     ],
   },
   {
-    group: "Legal",
-    items: [
+    label: "Legal",
+    routes: [
       {
         label: "Licence",
-        url: "#",
+        href: "#",
       },
       {
         label: "Privacy",
-        url: "#",
+        href: "#",
       },
       {
         label: "Cookies",
-        url: "#",
+        href: "#",
       },
       {
         label: "Security",
-        url: "#",
+        href: "#",
       },
     ],
   },
 ];
+
+const socials = [];
 
 export default async function Footer() {
   const t = await getTranslations("app.page.footer");
@@ -141,25 +148,25 @@ export default async function Footer() {
     <footer className="border-b bg-white pt-20 dark:bg-transparent">
       <div className="mb-8 border-b md:mb-12">
         <div className="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-6 px-6 pb-6">
-          <Link href="/" className="block size-fit">
-            {/* <Image priority width="32" height="32" alt="" src="" /> */}
-          </Link>
+          {/* <NextIntlLink href="/" className="block size-fit">
+            <Image priority width="32" height="32" alt="" src="" />
+          </NextIntlLink> */}
         </div>
       </div>
       <div className="mx-auto max-w-5xl px-6">
         <div className="grid gap-12 md:grid-cols-5 md:gap-0 lg:grid-cols-4">
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 md:col-span-5 md:row-start-1 lg:col-span-3">
-            {LINKS.map((link, index) => (
+            {linkGroups.map((linkGroup, index) => (
               <div key={index} className="space-y-4 text-sm">
-                <span className="block font-medium">{link.group}</span>
-                {link.items.map((item, index) => (
-                  <Link
+                <span className="block font-medium">{linkGroup.label}</span>
+                {linkGroup.routes.map((item, index) => (
+                  <NextIntlLink
                     key={index}
-                    href={item.url}
+                    href={item.href}
                     className="text-muted-foreground hover:text-primary block duration-150"
                   >
                     <span>{item.label}</span>
-                  </Link>
+                  </NextIntlLink>
                 ))}
               </div>
             ))}
@@ -185,6 +192,7 @@ export default async function Footer() {
             </div>
           </form>
         </div>
+
         <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6 text-sm">
           <p className="text-muted-foreground flex items-center gap-1.5">
             {t.rich("outro", {
@@ -193,8 +201,8 @@ export default async function Footer() {
               span: (chunk) => <span>{chunk}</span>,
             })}
           </p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <Link
+          <div className="flex flex-wrap justify-center gap-3.5">
+            <NextIntlLink
               href="#"
               target="_blank"
               rel="noopener noreferrer"
@@ -202,8 +210,8 @@ export default async function Footer() {
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <FaLinkedinIn className="size-4" />
-            </Link>
-            <Link
+            </NextIntlLink>
+            <NextIntlLink
               href="#"
               target="_blank"
               rel="noopener noreferrer"
@@ -211,8 +219,8 @@ export default async function Footer() {
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <FaXTwitter className="size-4" />
-            </Link>
-            <Link
+            </NextIntlLink>
+            <NextIntlLink
               href="#"
               target="_blank"
               rel="noopener noreferrer"
@@ -220,8 +228,8 @@ export default async function Footer() {
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <FaMeta className="size-4" />
-            </Link>
-            <Link
+            </NextIntlLink>
+            <NextIntlLink
               href="#"
               target="_blank"
               rel="noopener noreferrer"
@@ -229,8 +237,8 @@ export default async function Footer() {
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <FaInstagram className="size-4" />
-            </Link>
-            <Link
+            </NextIntlLink>
+            <NextIntlLink
               href="#"
               target="_blank"
               rel="noopener noreferrer"
@@ -238,8 +246,8 @@ export default async function Footer() {
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <FaTiktok className="size-4" />
-            </Link>
-            <Link
+            </NextIntlLink>
+            <NextIntlLink
               href="#"
               target="_blank"
               rel="noopener noreferrer"
@@ -247,7 +255,7 @@ export default async function Footer() {
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <FaYoutube className="size-4" />
-            </Link>
+            </NextIntlLink>
           </div>
         </div>
       </div>

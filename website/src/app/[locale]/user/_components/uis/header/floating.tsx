@@ -23,13 +23,13 @@ export default function Floating(props: TFloating["props"]) {
 
   const { scrollY } = useScroll();
   const [menuState, setMenuState] = useState(false);
-  const [isExceededMaxYScroll, setIsExceededMaxYScroll] = useState(false);
+  const [isUserExceededMaxYScroll, setIsExceededMaxYScroll] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (y) => {
-    const isExceededMaxYScroll = y > maxYScroll;
+    const isYExceededMaxYScroll = y > maxYScroll;
 
-    if (isExceededMaxYScroll !== isExceededMaxYScroll)
-      setIsExceededMaxYScroll(isExceededMaxYScroll);
+    if (isUserExceededMaxYScroll !== isYExceededMaxYScroll)
+      setIsExceededMaxYScroll(isYExceededMaxYScroll);
   });
 
   return (
@@ -41,7 +41,7 @@ export default function Floating(props: TFloating["props"]) {
         className={cn(
           "mx-auto max-w-6xl rounded-2xl transition-all duration-300",
           {
-            "bg-background mt-2 max-w-4xl border lg:px-5": isExceededMaxYScroll,
+            "bg-background mt-2 max-w-4xl border lg:px-5": isUserExceededMaxYScroll,
           },
         )}
       >

@@ -35,7 +35,7 @@ export default async function Header() {
           <LocaleSelector />
 
           <Button asChild variant="outline" className="inline-flex">
-            <NextIntlLink href="/auth/signup">
+            <NextIntlLink href="/auth/signin">
               <span>Get Started</span>
             </NextIntlLink>
           </Button>
