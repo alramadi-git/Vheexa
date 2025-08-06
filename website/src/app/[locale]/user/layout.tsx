@@ -1,10 +1,10 @@
-import { type TParamsLocale } from "@/types/params";
+import { type TLocale } from "@/types/next";
 import { setRequestLocale } from "next-intl/server";
 import { Fragment, type PropsWithChildren } from "react";
 import Header from "@/app/[locale]/user/_components/uis/header/header";
 import Footer from "@/app/[locale]/user/_components/uis/footer/footer";
 
-type TLayoutProps = TParamsLocale & PropsWithChildren & {};
+type TLayoutProps = TLocale & PropsWithChildren & {};
 
 export const dynamic = "force-static";
 export default async function Layout(props: TLayoutProps) {

@@ -14,12 +14,12 @@ import {
 } from "@/components/shadcn/avatar";
 import {
   DropdownMenu,
+  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 import {
   SidebarMenu,
@@ -32,37 +32,36 @@ export default function SidebarHeaderProfile() {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger
+          <SidebarMenuButton
             asChild
+            size="lg"
             className="data-[state=open]:bg-sidebar-accent rounded"
           >
-            <SidebarMenuButton size="lg">
+            <DropdownMenuTrigger>
               <Avatar className="h-8 w-8 rounded">
                 {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
                 <AvatarFallback className="rounded">aLr</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">alramadi</span>
-                <span className="truncate text-xs">alramadi@vheexa.com</span>
+                <h3 className="truncate font-medium">alramadi</h3>
+                <p className="truncate text-xs">alramadi@vheexa.com</p>
               </div>
               <LuChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
+            </DropdownMenuTrigger>
+          </SidebarMenuButton>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) rounded"
             align="start"
             sideOffset={6}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded">
-                  {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                  <AvatarFallback className="rounded">CN</AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">alramadi</span>
-                  <span className="truncate text-xs">alramadi@vheexa.com</span>
-                </div>
+            <DropdownMenuLabel className="flex items-center gap-2 p-0 px-1 py-1.5 text-left text-sm font-normal">
+              <Avatar className="h-8 w-8 rounded">
+                {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
+                <AvatarFallback className="rounded">CN</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <h3 className="truncate font-medium">alramadi</h3>
+                <p className="truncate text-xs">alramadi@vheexa.com</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -88,8 +87,8 @@ export default function SidebarHeaderProfile() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="focus:bg-destructive/25 focus:text-destructive cursor-pointer rounded">
-              <LuLogOut className="focus:text-destructive" />
+            <DropdownMenuItem className="focus:bg-destructive/10 focus:text-destructive text-destructive cursor-pointer rounded">
+              <LuLogOut className="text-destructive" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

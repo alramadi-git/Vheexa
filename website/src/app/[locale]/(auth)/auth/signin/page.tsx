@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { TParamsLocale } from "@/types/params";
+import type { TLocale } from "@/types/next";
 
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -9,12 +9,12 @@ import Link from "@/components/locals/blocks/next-intl-link";
 import Form from "@/app/[locale]/(auth)/auth/signin/_components/form";
 
 type TGenerateMetadata = {
-  props: TParamsLocale;
+  props: TLocale;
   return: Promise<Metadata>;
 };
 
 type TPage = {
-  props: TParamsLocale;
+  props: TLocale;
 };
 
 export const dynamic = "force-static";

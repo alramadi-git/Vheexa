@@ -4,7 +4,7 @@ import { ENVIRONMENT } from "@/enums/environment";
 
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
-import type { TParamsLocale } from "@/types/params";
+import type { TLocale } from "@/types/next";
 
 import {
   getMessages,
@@ -20,11 +20,11 @@ import ThemeProvider from "@/components/locals/providers/theme-provider";
 import { routing } from "@/i18n/routing";
 
 type TGenerateMetadata = {
-  props: TParamsLocale;
+  props: TLocale;
   return: Promise<Metadata>;
 };
 type TRootLayout = {
-  props: TParamsLocale & PropsWithChildren;
+  props: TLocale & PropsWithChildren;
 };
 
 const zain = Zain({

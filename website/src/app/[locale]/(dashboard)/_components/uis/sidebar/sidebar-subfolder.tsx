@@ -14,13 +14,9 @@ import {
 import { LuChevronRight } from "react-icons/lu";
 import NextIntlLink from "@/components/locals/blocks/next-intl-link";
 
-type TSidebarContentMainSubfolder = {
-  props: TFolder;
-};
+type TSidebarFolder = TFolder;
 
-export default function SidebarContentMainSubfolder(
-  props: TSidebarContentMainSubfolder["props"],
-) {
+export default function SidebarSubfolder(props: TSidebarFolder) {
   return (
     <Collapsible asChild>
       <SidebarMenuSubItem>
@@ -33,7 +29,7 @@ export default function SidebarContentMainSubfolder(
         <CollapsibleContent>
           <SidebarMenuSub>
             {props.folders.map((folder) => (
-              <SidebarContentMainSubfolder key={props.label} {...folder} />
+              <SidebarSubfolder key={props.label} {...folder} />
             ))}
 
             {props.files.map((file) => (

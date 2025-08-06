@@ -32,7 +32,6 @@
         ],
         "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
         "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
-        
       },
 
       "openGraph": {},
@@ -374,6 +373,47 @@
           "title": "Signin"
         },
         "page": {}
+      }
+    }
+  },
+
+  "dashboard": {
+    "metadata": {
+      "title": {
+        "template": "%s | Vheexa Dashboard"
+      }
+    },
+
+    "page": {},
+
+    "partner": {
+      "dashboard": {
+        "metadata": {},
+        "page": {
+          "sidebar": {
+            "hero": {},
+            "main": {},
+            "footer": {
+              "label": "Partner",
+              "description": "This sends you to the partner application.",
+              
+              "application": {
+                "label": "Applications",
+
+                "links": [
+                  {
+                    "href": "/",
+                    "label": "Application",
+                    "description": "This sends you to the user application."
+                  }
+                ]
+              }
+            }
+          },
+
+          "hero": {},
+          "main": {}
+        }
       }
     }
   }

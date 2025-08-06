@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
-import type { TParamsLocale } from "@/types/params";
+import type { TLocale } from "@/types/next";
 
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type TGenerateMetadata = {
-  props: TParamsLocale;
+  props: TLocale;
   return: Promise<Metadata>;
 };
 type TLayout = {
-  props: TParamsLocale & PropsWithChildren;
+  props: TLocale & PropsWithChildren;
 };
 
 export const dynamic = "force-static";

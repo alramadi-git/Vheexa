@@ -1,11 +1,11 @@
-import type { TParamsLocale } from "@/types/params";
+import type { TLocale } from "@/types/next";
 
 import { setRequestLocale } from "next-intl/server";
 
 import { Fragment } from "react";
 
 type TPage = {
-  props: TParamsLocale;
+  props: TLocale;
 };
 
 export const dynamic = "force-static";
