@@ -60,18 +60,21 @@
               "label": "Africa",
               "countries": [
                 {
-                  "flag": "🇲🇦",
+                  "dir": "rtl",
                   "locale": "ar-MA",
+                  "flag": "🇲🇦",
                   "label": "العربية (المغرب)"
                 },
                 {
-                  "flag": "🇳🇬",
+                  "dir": "ltr",
                   "locale": "en-NG",
+                  "flag": "🇳🇬",
                   "label": "English (Nigeria)"
                 },
                 {
-                  "flag": "🇿🇦",
+                  "dir": "ltr",
                   "locale": "en-ZA",
+                  "flag": "🇿🇦",
                   "label": "English (South Africa)"
                 }
               ]
@@ -80,18 +83,21 @@
               "label": "America",
               "countries": [
                 {
-                  "flag": "🇨🇦",
+                  "dir": "ltr",
                   "locale": "en-CA",
+                  "flag": "🇨🇦",
                   "label": "English (Canada)"
                 },
                 {
-                  "flag": "🇲🇽",
+                  "dir": "ltr",
                   "locale": "es-MX",
+                  "flag": "🇲🇽",
                   "label": "Español (México)"
                 },
                 {
-                  "flag": "🇺🇸",
+                  "dir": "ltr",
                   "locale": "en-US",
+                  "flag": "🇺🇸",
                   "label": "English (United States)"
                 }
               ]
@@ -100,23 +106,27 @@
               "label": "Asia",
               "countries": [
                 {
-                  "flag": "🇨🇳",
+                  "dir": "ltr",
                   "locale": "zh-CN",
+                  "flag": "🇨🇳",
                   "label": "中文 (中国)"
                 },
                 {
-                  "flag": "🇮🇳",
+                  "dir": "ltr",
                   "locale": "hi-IN",
+                  "flag": "🇮🇳",
                   "label": "हिन्दी (भारत)"
                 },
                 {
-                  "flag": "🇯🇵",
+                  "dir": "ltr",
                   "locale": "ja-JP",
+                  "flag": "🇯🇵",
                   "label": "日本語 (日本)"
                 },
                 {
-                  "flag": "🇸🇦",
+                  "dir": "rtl",
                   "locale": "ar-SA",
+                  "flag": "🇸🇦",
                   "label": "العربية (المملكة العربية السعودية)"
                 }
               ]
@@ -125,18 +135,21 @@
               "label": "Europe",
               "countries": [
                 {
-                  "flag": "🇫🇷",
+                  "dir": "ltr",
                   "locale": "fr-FR",
+                  "flag": "🇫🇷",
                   "label": "Français (France)"
                 },
                 {
-                  "flag": "🇩🇪",
+                  "dir": "ltr",
                   "locale": "de-DE",
+                  "flag": "🇩🇪",
                   "label": "Deutsch (Deutschland)"
                 },
                 {
-                  "flag": "🇬🇧",
+                  "dir": "ltr",
                   "locale": "en-GB",
+                  "flag": "🇬🇧",
                   "label": "English (United Kingdom)"
                 }
               ]
@@ -145,13 +158,15 @@
               "label": "Oceania",
               "countries": [
                 {
-                  "flag": "🇦🇺",
+                  "dir": "ltr",
                   "locale": "en-AU",
+                  "flag": "🇦🇺",
                   "label": "English (Australia)"
                 },
                 {
-                  "flag": "🇳🇿",
+                  "dir": "ltr",
                   "locale": "en-NZ",
+                  "flag": "🇳🇿",
                   "label": "English (New Zealand)"
                 }
               ]
@@ -396,7 +411,7 @@
             "footer": {
               "label": "Partner",
               "description": "This sends you to the partner application.",
-              
+
               "application": {
                 "label": "Applications",
 

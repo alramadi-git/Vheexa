@@ -1,7 +1,12 @@
 "use client";
 
-import { ComponentProps, Fragment, useMemo, useState } from "react";
+import { LOCALE } from "@/i18n/routing";
+
+import type { TNullable } from "@/types/nullish";
+
+import { cn } from "@/utilities/cn";
 import { useLocale, useTranslations } from "next-intl";
+import { ComponentProps, Fragment, useMemo } from "react";
 
 import {
   Popover,
@@ -19,17 +24,15 @@ import {
 import { Button } from "@/components/shadcn/button";
 import { LuCheck, LuChevronDown } from "react-icons/lu";
 import NextIntlLinkLocale from "@/components/locals/blocks/next-intl-link-locale";
-import { LOCALE } from "@/i18n/routing";
-import { TNullable } from "@/types/nullish";
-import { cn } from "@/utilities/cn";
 
 type TContinent = {
   label: string;
   countries: Array<TCountry>;
 };
 type TCountry = {
-  flag: string;
+  dir: string;
   locale: LOCALE;
+  flag: string;
   label: string;
 };
 
@@ -46,7 +49,6 @@ export default function LocaleSelector({
 
   const continents: Array<TContinent> = t.raw("continents");
 
-  // const [open, setOpen] = useState<boolean>(false);
   const selectedLocale = useMemo<TCountry>(() => {
     let selectedLocale: TNullable<TCountry> = null;
 
@@ -109,7 +111,10 @@ export default function LocaleSelector({
                                 {country.flag}
                               </span>
                             </span>
-                            {country.label}
+
+                            <span dir={country.dir} className="line-clamp-1">
+                              {country.label}
+                            </span>
                             {selectedLocale.locale === country.locale && (
                               <LuCheck size={16} className="ml-auto" />
                             )}
