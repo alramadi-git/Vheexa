@@ -37,20 +37,18 @@ export default async function SidebarApplications(props: TSidebarApplication) {
         <DropdownMenu>
           <DropdownMenuTrigger
             asChild
-            className="data-[state=open]:bg-sidebar-accent rounded"
+            className="data-[state=open]:bg-sidebar-accent block rounded"
           >
             <SidebarMenuButton size="lg">
-              <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded border">
+              <div className="flex items-center gap-2">
                 <props.icon className="text-muted-foreground size-4" />
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
                 <h3 className="line-clamp-1 truncate font-medium">
                   {props.label}
                 </h3>
-                <p className="text-muted-foreground line-clamp-1">
-                  {props.description}
-                </p>
               </div>
+              <p className="text-muted-foreground line-clamp-1 text-sm leading-tight">
+                {props.description}
+              </p>
               <LuChevronsUpDown />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -66,11 +64,11 @@ export default async function SidebarApplications(props: TSidebarApplication) {
               <DropdownMenuItem
                 asChild
                 key={index}
-                className="block cursor-pointer rounded"
+                className="block cursor-pointer space-y-0.5 rounded p-2"
               >
                 <Link href={application.href}>
                   <span className="flex items-center gap-2">
-                    <application.icon className="size-6 rounded border p-1" />
+                    <application.icon className="text-muted-foreground size-4" />
                     <h3>{application.label}</h3>
                   </span>
                   <p className="text-muted-foreground">

@@ -20,7 +20,7 @@ export default function SidebarSubfolder(props: TSidebarFolder) {
   return (
     <Collapsible asChild>
       <SidebarMenuSubItem>
-        <CollapsibleTrigger asChild className="sidebar-parent rounded">
+        <CollapsibleTrigger asChild className="sidebar-parent l rounded">
           <SidebarMenuButton tooltip={props.label}>
             <span className="line-clamp-1">{props.label}</span>
             <LuChevronRight className="sidebar-son-rotate-90 ml-auto transition-transform duration-200" />
@@ -34,7 +34,10 @@ export default function SidebarSubfolder(props: TSidebarFolder) {
 
             {props.files.map((file) => (
               <SidebarMenuSubItem key={file.label}>
-                <SidebarMenuSubButton asChild className="line-clamp-1 rounded">
+                <SidebarMenuSubButton
+                  asChild
+                  className="l line-clamp-1 rounded"
+                >
                   <NextIntlLink href={file.href}>{file.label}</NextIntlLink>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>

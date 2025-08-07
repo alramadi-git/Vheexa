@@ -3,8 +3,8 @@ import "@/app/globals.css";
 import { ENVIRONMENT } from "@/enums/environment";
 
 import type { Metadata } from "next";
+import type { TLayoutMetadata, TLayoutComponent } from "@/types/next";
 import type { PropsWithChildren } from "react";
-import type { TLocale } from "@/types/next";
 
 import {
   getMessages,
@@ -19,22 +19,14 @@ import { TooltipProvider } from "@/components/shadcn/tooltip";
 import ThemeProvider from "@/components/locals/providers/theme-provider";
 import { routing } from "@/i18n/routing";
 
-type TGenerateMetadata = {
-  props: TLocale;
-  return: Promise<Metadata>;
-};
-type TRootLayout = {
-  props: TLocale & PropsWithChildren;
-};
-
 const zain = Zain({
-  adjustFontFallback: true,
-  preload: true,
-  display: "swap",
-  style: ["normal"],
-  subsets: ["latin"],
-  fallback: ["Segoe UI", "sans-serif"],
   weight: ["200", "300", "400", "700", "800", "900"],
+  style: ["normal"],
+  display: "swap",
+  preload: true,
+  fallback: ["Segoe UI", "sans-serif"],
+  adjustFontFallback: true,
+  subsets: ["latin"],
 });
 
 export const dynamic = "force-static";
@@ -42,15 +34,15 @@ export async function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 export async function generateMetadata(
-  props: TGenerateMetadata["props"],
-): TGenerateMetadata["return"] {
+  props: TLayoutMetadata,
+): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: "app" });
 
   return t.raw("metadata");
 }
 
-export default async function RootLayout(props: TRootLayout["props"]) {
+export default async function RootLayout(props: TLayoutComponent) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 
@@ -76,7 +68,7 @@ export default async function RootLayout(props: TRootLayout["props"]) {
           enableSystem
           disableTransitionOnChange
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>{props.children}</TooltipProvider>
