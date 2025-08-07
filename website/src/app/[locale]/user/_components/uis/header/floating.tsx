@@ -54,6 +54,7 @@ export default function Floating(props: TFloating["props"]) {
                 height="32"
                 alt={t("logo.alternate")}
                 src={t("logo.url")}
+                className="dark:invert"
               />
             </Link>
 

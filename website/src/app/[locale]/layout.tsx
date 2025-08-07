@@ -4,7 +4,6 @@ import { ENVIRONMENT } from "@/enums/environment";
 
 import type { Metadata } from "next";
 import type { TLayoutMetadata, TLayoutComponent } from "@/types/next";
-import type { PropsWithChildren } from "react";
 
 import {
   getMessages,
@@ -68,7 +67,7 @@ export default async function RootLayout(props: TLayoutComponent) {
           enableSystem
           disableTransitionOnChange
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>{props.children}</TooltipProvider>
