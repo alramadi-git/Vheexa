@@ -7,10 +7,10 @@ public class Discount
     public required string Code;
     public required float DiscountPercentage;
 
+    public required int InStock;
+
     public required bool IsLimitedPerUser;
     public required bool MaximumUsagePerUser;
-
-    public required int InStock;
 
     public required bool IsPublished;
 
