@@ -1,19 +1,14 @@
 namespace DataAccess.Entities;
 
-public class Discount
+public class Partner
 {
     public required int ID;
 
-    public required string Code;
-    public required float DiscountPercentage;
+    public required string Handle;
 
-    public required int InStock;
-
-    public required bool IsLimitedPerUser;
-    public required bool MaximumUsagePerUser;
 
     public required bool IsPublished;
-
+    
     public required bool IsDeleted;
     public required DateTime DeletedAt;
 

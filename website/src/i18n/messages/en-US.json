@@ -320,6 +320,35 @@
         },
         "page": {}
       }
+    },
+
+    "dashboard": {
+      "metadata": {},
+      "page": {
+        "sidebar": {
+          "hero": {},
+          "main": {},
+          "footer": {
+            "label": "Partner",
+            "description": "This sends you to the partner application.",
+
+            "application": {
+              "label": "Applications",
+
+              "links": [
+                {
+                  "href": "/",
+                  "label": "Application",
+                  "description": "This sends you to the user application."
+                }
+              ]
+            }
+          }
+        },
+
+        "hero": {},
+        "main": {}
+      }
     }
   },
 
@@ -389,6 +418,11 @@
         },
         "page": {}
       }
+    },
+
+    "dashboard": {
+      "metadata": {},
+      "page": {}
     }
   },
 
@@ -399,37 +433,6 @@
       }
     },
 
-    "page": {},
-
-    "partner": {
-      "dashboard": {
-        "metadata": {},
-        "page": {
-          "sidebar": {
-            "hero": {},
-            "main": {},
-            "footer": {
-              "label": "Partner",
-              "description": "This sends you to the partner application.",
-
-              "application": {
-                "label": "Applications",
-
-                "links": [
-                  {
-                    "href": "/",
-                    "label": "Application",
-                    "description": "This sends you to the user application."
-                  }
-                ]
-              }
-            }
-          },
-
-          "hero": {},
-          "main": {}
-        }
-      }
-    }
+    "page": {}
   }
 }
