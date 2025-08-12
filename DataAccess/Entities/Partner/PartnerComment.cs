@@ -1,17 +1,17 @@
 namespace DataAccess.Entities;
 
-public class UserComment
+public class PartnerComment
 {
     public required int ID;
-
-    public Partner? Partner;
-    public required int PartnerID;
 
     public User? User;
     public required int UserID;
 
-    public UserRating? UserRating;
-    public required int UserRatingID;
+    public Partner? Partner;
+    public required int PartnerID;
+
+    public PartnerRating? PartnerRating;
+    public required int PartnerRatingID;
 
     public Comment? Comment;
     public required int CommentID;

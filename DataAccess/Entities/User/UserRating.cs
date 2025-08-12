@@ -4,10 +4,13 @@ public class UserRating
 {
     public required int ID;
 
-    public required User User;
+    public Partner? Partner;
+    public required int PartnerID;
+
+    public User? User;
     public required int UserID;
 
-    public required Rating Rating;
+    public Rating? Rating;
     public required int RatingID;
 
     public required bool IsDeleted;

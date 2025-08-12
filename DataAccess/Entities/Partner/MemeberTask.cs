@@ -1,11 +1,11 @@
 namespace DataAccess.Entities;
 
-public class AdminTask
+public class MemberTask
 {
     public required int ID;
 
-    public Admin? Admin;
-    public required int AdminID;
+    public Member? Member;
+    public required int MemberID;
 
     public Task? Task;
     public required int TaskID;

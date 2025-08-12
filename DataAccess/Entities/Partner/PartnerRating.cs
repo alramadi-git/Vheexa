@@ -1,20 +1,17 @@
 namespace DataAccess.Entities;
 
-public class UserComment
+public class PartnerRating
 {
     public required int ID;
-
-    public Partner? Partner;
-    public required int PartnerID;
 
     public User? User;
     public required int UserID;
 
-    public UserRating? UserRating;
-    public required int UserRatingID;
+    public Partner? Partner;
+    public required int PartnerID;
 
-    public Comment? Comment;
-    public required int CommentID;
+    public Rating? Rating;
+    public required int RatingID;
 
     public required bool IsDeleted;
     public required DateTime DeletedAt;

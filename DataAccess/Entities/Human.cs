@@ -3,10 +3,10 @@ namespace DataAccess.Entities;
 public class Human
 {
     public required int ID;
-    public required Image Image;
+    public Image? Image;
     public required int ImageID;
 
-    public required Address Address;
+    public Address? Address;
     public required int AddressID;
 
     public required string FirstName;

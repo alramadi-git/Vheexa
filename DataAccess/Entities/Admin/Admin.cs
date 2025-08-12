@@ -4,7 +4,7 @@ public class Admin
 {
     public required int ID;
 
-    public required Human Human;
+    public Human? Human;
     public required int HumanID;
 
     public required bool IsDeleted;
