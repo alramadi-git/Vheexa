@@ -18,6 +18,8 @@ public class Vehicle
 
     public required string Name;
     public required string Description;
+    
+    public required float AverageRates;
 
     public required CATEGORY Category;
 

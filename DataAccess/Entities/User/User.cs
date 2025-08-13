@@ -7,6 +7,8 @@ public class User
     public Human? Human;
     public required int HumanID;
 
+    public required float AverageRates;
+
     public required bool IsDeleted;
     public required DateTime DeletedAt;
 
