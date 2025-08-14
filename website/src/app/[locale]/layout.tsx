@@ -17,6 +17,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import ThemeProvider from "@/components/locals/providers/theme-provider";
 import { routing } from "@/i18n/routing";
+import Script from "next/script";
 
 const zain = Zain({
   weight: ["200", "300", "400", "700", "800", "900"],
@@ -55,7 +56,7 @@ export default async function RootLayout(props: TLayoutComponent) {
       <head>
         {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
           process.env.NODE_ENV === ENVIRONMENT.TEST) && (
-          <script
+          <Script
             defer
             crossOrigin="anonymous"
             src="https://unpkg.com/react-scan/dist/auto.global.js"
