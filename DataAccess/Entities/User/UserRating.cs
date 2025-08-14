@@ -2,20 +2,20 @@ namespace DataAccess.Entities;
 
 public class UserRating
 {
-    public required int ID;
+    public uint ID;
 
     public Partner? Partner;
-    public required int PartnerID;
+    public uint PartnerID;
 
     public User? User;
-    public required int UserID;
+    public uint UserID;
 
     public Rating? Rating;
-    public required int RatingID;
+    public uint RatingID;
 
-    public required bool IsDeleted;
-    public required DateTime DeletedAt;
+    public bool IsDeleted;
+    public DateTime DeletedAt;
 
-    public required DateTime UpdatedAt;
-    public required DateTime CreatedAt;
+    public DateTime UpdatedAt;
+    public DateTime CreatedAt;
 }

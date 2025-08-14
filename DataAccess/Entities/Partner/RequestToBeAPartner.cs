@@ -9,13 +9,13 @@ public class RequestToBeAPartner
         REJECTED
     }
 
-    public required int ID;
+    public uint ID;
 
     public Partner? Partner;
-    public required int PartnerID;
+    public uint PartnerID;
 
-    public required STATUS Status;
+    public STATUS Status;
 
-    public required DateTime UpdatedAt;
-    public required DateTime CreatedAt;
+    public DateTime UpdatedAt;
+    public DateTime CreatedAt;
 }

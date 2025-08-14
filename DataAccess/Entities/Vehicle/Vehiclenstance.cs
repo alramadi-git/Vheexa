@@ -1,12 +1,17 @@
 namespace DataAccess.Entities;
 
-public class Partner
+public class VehicleInstance
 {
     public uint ID;
 
-    public required string Handle;
+    public Vehicle? Vehicle;
+    public uint VehicleID;
 
-    public float AverageRates;
+    public VehicleColor? VehicleColor;
+    public uint VehicleColorID;
+
+    public uint InStock;
+    public uint InUse;
 
     public bool IsPublished;
 

@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class AdminTask
 {
-    public required int ID;
+    public uint ID;
 
     public Admin? Admin;
-    public required int AdminID;
+    public uint AdminID;
 
     public Task? Task;
-    public required int TaskID;
+    public uint TaskID;
 
-    public required DateTime CreatedAt;
+    public DateTime CreatedAt;
 }

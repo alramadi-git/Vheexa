@@ -2,16 +2,16 @@ namespace DataAccess.Entities;
 
 public class User
 {
-    public required int ID;
+    public uint ID;
 
     public Human? Human;
-    public required int HumanID;
+    public uint HumanID;
 
-    public required float AverageRates;
+    public float AverageRates;
 
-    public required bool IsDeleted;
-    public required DateTime DeletedAt;
+    public bool IsDeleted;
+    public DateTime DeletedAt;
 
-    public required DateTime UpdatedAt;
-    public required DateTime CreatedAt;
+    public DateTime UpdatedAt;
+    public DateTime CreatedAt;
 }

@@ -14,30 +14,30 @@ public class Vehicle
         HELICOPTER,
     }
 
-    public required int ID;
+    public uint ID;
 
     public required string Name;
     public required string Description;
-    
-    public required float AverageRates;
 
-    public required CATEGORY Category;
+    public float AverageRates;
+
+    public CATEGORY Category;
 
     public required string Manufacturer;
-    public required DateOnly ManufacturingYear;
+    public DateOnly ManufacturingYear;
+
+    public ushort Capacity;
 
     public required string[] Tags;
 
-    public required ushort Capacity;
+    public double Price;
+    public float discount;
 
-    public required double Price;
-    public required float discount;
+    public bool IsPublished;
 
-    public required bool IsPublished;
+    public bool IsDeleted;
+    public DateTime DeletedAt;
 
-    public required bool IsDeleted;
-    public required DateTime DeletedAt;
-
-    public required DateTime UpdatedAt;
-    public required DateTime CreatedAt;
+    public DateTime UpdatedAt;
+    public DateTime CreatedAt;
 }

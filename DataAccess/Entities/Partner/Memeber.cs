@@ -2,19 +2,19 @@ namespace DataAccess.Entities;
 
 public class Member
 {
-    public required int ID;
+    public uint ID;
 
     public Partner? Partner;
-    public required int PartnerID;
+    public uint PartnerID;
 
     public Human? Human;
-    public required int HumanID;
+    public uint HumanID;
 
-    public required bool IsPublished;
+    public bool IsPublished;
 
-    public required bool IsDeleted;
-    public required DateTime DeletedAt;
+    public bool IsDeleted;
+    public DateTime DeletedAt;
 
-    public required DateTime UpdatedAt;
-    public required DateTime CreatedAt;
+    public DateTime UpdatedAt;
+    public DateTime CreatedAt;
 }

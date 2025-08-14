@@ -1,12 +1,17 @@
 namespace DataAccess.Entities;
 
-public class Partner
+public class Discount
 {
     public uint ID;
 
-    public required string Handle;
+    public required string Code;
 
-    public float AverageRates;
+    public uint InStock;
+    public uint InUse;
+
+    public bool IsUsageLimitedPerUser;
+    public uint MaxUsagePerUser;
+
 
     public bool IsPublished;
 

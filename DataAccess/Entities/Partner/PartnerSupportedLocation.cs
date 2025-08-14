@@ -3,22 +3,22 @@ namespace DataAccess.Entities;
 public class PartnerSupportedLocation
 {
 
-    public required int ID;
+    public uint ID;
 
     public Partner? Partner;
-    public required int PartnerID;
+    public uint PartnerID;
 
     public Address? Address;
-    public required int AddressID;
+    public uint AddressID;
 
-    public required bool IsPickup;
-    public required bool IsDropoff;
-    
-    public required bool IsPublished;
+    public bool IsPickup;
+    public bool IsDropoff;
 
-    public required bool IsDeleted;
-    public required DateTime DeletedAt;
+    public bool IsPublished;
 
-    public required DateTime UpdatedAt;
-    public required DateTime CreatedAt;
+    public bool IsDeleted;
+    public DateTime DeletedAt;
+
+    public DateTime UpdatedAt;
+    public DateTime CreatedAt;
 }

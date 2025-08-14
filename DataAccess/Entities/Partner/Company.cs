@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class Company
 {
-    public required int ID;
+    public uint ID;
 
     public Partner? Partner;
-    public required int PartnerID;
+    public uint PartnerID;
 
     public Image? Image;
-    public required int ImageID;
+    public uint ImageID;
 
     public required string Name;
 

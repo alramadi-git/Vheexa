@@ -2,7 +2,7 @@ namespace DataAccess.Entities;
 
 public class Rating
 {
-    public required int ID;
+    public uint ID;
 
-    public required float Rate;
+    public float Rate;
 }
