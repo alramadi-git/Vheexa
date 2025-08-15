@@ -5,7 +5,7 @@ public class Human
     public uint ID;
 
     public Image? Image;
-    public uint ImageID;
+    public uint? ImageID;
 
     public Address? Address;
     public uint AddressID;

@@ -10,7 +10,7 @@ public class User
     public float AverageRates;
 
     public bool IsDeleted;
-    public DateTime DeletedAt;
+    public DateTime? DeletedAt;
 
     public DateTime UpdatedAt;
     public DateTime CreatedAt;
