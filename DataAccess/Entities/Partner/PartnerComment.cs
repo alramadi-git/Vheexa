@@ -5,20 +5,20 @@ public class PartnerComment
     public uint ID;
 
     public User? User;
-    public uint UserID;
+    public required uint UserID;
 
     public Partner? Partner;
-    public uint PartnerID;
+    public required uint PartnerID;
 
     public PartnerRating? PartnerRating;
-    public uint PartnerRatingID;
+    public required uint PartnerRatingID;
 
     public Comment? Comment;
-    public uint CommentID;
+    public required uint CommentID;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

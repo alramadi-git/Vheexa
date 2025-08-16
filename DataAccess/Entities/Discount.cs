@@ -6,18 +6,18 @@ public class Discount
 
     public required string Code;
 
-    public uint InStock;
-    public uint InUse;
+    public required uint InStock;
+    public required uint InUse;
 
-    public bool IsUsageLimitedPerUser;
-    public uint MaxUsagePerUser;
+    public required bool IsUsageLimitedPerUser;
+    public required uint MaxUsagePerUser;
 
 
-    public bool IsPublished;
+    public required bool IsPublished;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

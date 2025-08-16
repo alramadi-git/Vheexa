@@ -5,11 +5,11 @@ public class Admin
     public uint ID;
 
     public Human? Human;
-    public uint HumanID;
+    public required uint HumanID;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

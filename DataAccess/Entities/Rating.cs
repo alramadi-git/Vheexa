@@ -4,5 +4,5 @@ public class Rating
 {
     public uint ID;
 
-    public float Rate;
+    public required float Rate;
 }

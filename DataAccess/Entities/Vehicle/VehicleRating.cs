@@ -5,20 +5,20 @@ public class VehicleRating
     public uint ID;
 
     public User? User;
-    public uint UserID;
+    public required uint UserID;
 
     public Vehicle? Vehicle;
-    public uint VehicleID;
+    public required uint VehicleID;
 
     public Checkout? Checkout;
-    public uint CheckoutID;
+    public required uint CheckoutID;
 
     public Rating? Rating;
-    public uint RatingID;
+    public required uint RatingID;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

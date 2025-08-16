@@ -86,6 +86,13 @@ public class User : IRepository
             new Entities.User
             {
                 HumanID = humanID,
+                AverageRates = 0,
+
+                IsDeleted = false,
+                DeletedAt = null,
+
+                UpdatedAt = DateTime.Now,
+                CreatedAt = DateTime.Now,
             }
         );
 

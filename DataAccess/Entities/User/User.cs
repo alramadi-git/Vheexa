@@ -5,13 +5,13 @@ public class User
     public uint ID;
 
     public Human? Human;
-    public uint HumanID;
+    public required uint HumanID;
 
-    public float AverageRates;
+    public required float AverageRates;
 
-    public bool IsDeleted;
+    public required bool IsDeleted;
     public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

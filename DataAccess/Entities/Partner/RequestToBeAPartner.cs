@@ -12,10 +12,10 @@ public class RequestToBeAPartner
     public uint ID;
 
     public Partner? Partner;
-    public uint PartnerID;
+    public required uint PartnerID;
 
-    public STATUS Status;
+    public required STATUS Status;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

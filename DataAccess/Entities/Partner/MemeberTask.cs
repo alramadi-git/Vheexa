@@ -5,10 +5,10 @@ public class MemberTask
     public uint ID;
 
     public Member? Member;
-    public uint MemberID;
+    public required uint MemberID;
 
     public Task? Task;
-    public uint TaskID;
+    public required uint TaskID;
 
-    public DateTime CreatedAt;
+    public required DateTime CreatedAt;
 }

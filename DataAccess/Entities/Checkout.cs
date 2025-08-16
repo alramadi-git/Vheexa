@@ -13,13 +13,13 @@ public class Checkout
     public uint ID;
 
     public Payment? Payment;
-    public uint PaymentID;
+    public required uint PaymentID;
 
     public Discount? Discount;
-    public uint DiscountID;
+    public uint? DiscountID;
 
-    public STATUS Status;
-    public uint InUse;
+    public required STATUS Status;
+    public required uint InUse;
 
-    public DateTime CreatedAt;
+    public required DateTime CreatedAt;
 }

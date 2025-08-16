@@ -5,13 +5,13 @@ public class VehicleImage
     public uint ID;
 
     public Vehicle? Vehicle;
-    public uint VehicleID;
+    public required uint VehicleID;
 
     public Image? Image;
-    public uint ImageID;
+    public required uint ImageID;
 
-    public bool IsPublished;
+    public required bool IsPublished;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 }

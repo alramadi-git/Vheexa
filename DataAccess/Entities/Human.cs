@@ -8,13 +8,13 @@ public class Human
     public uint? ImageID;
 
     public Address? Address;
-    public uint AddressID;
+    public required uint AddressID;
 
     public required string FirstName;
     public required string MidName;
     public required string LastName;
 
-    public DateOnly DateOfBirth;
+    public required DateOnly DateOfBirth;
 
     public required string PhoneNumber;
 

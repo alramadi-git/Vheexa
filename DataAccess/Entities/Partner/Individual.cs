@@ -5,8 +5,8 @@ public class Individual
     public uint ID;
 
     public Partner? Partner;
-    public uint PartnerID;
+    public required uint PartnerID;
 
     public Human? Human;
-    public uint HumanID;
+    public required uint HumanID;
 }

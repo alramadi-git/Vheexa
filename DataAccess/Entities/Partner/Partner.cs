@@ -6,13 +6,13 @@ public class Partner
 
     public required string Handle;
 
-    public float AverageRates;
+    public required float AverageRates;
 
-    public bool IsPublished;
+    public required bool IsPublished;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

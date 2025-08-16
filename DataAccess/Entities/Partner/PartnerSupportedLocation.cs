@@ -6,19 +6,19 @@ public class PartnerSupportedLocation
     public uint ID;
 
     public Partner? Partner;
-    public uint PartnerID;
+    public required uint PartnerID;
 
     public Address? Address;
-    public uint AddressID;
+    public required uint AddressID;
 
-    public bool IsPickup;
-    public bool IsDropoff;
+    public required bool IsPickup;
+    public required bool IsDropoff;
 
-    public bool IsPublished;
+    public required bool IsPublished;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

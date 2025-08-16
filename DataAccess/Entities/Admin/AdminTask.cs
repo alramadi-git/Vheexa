@@ -5,10 +5,10 @@ public class AdminTask
     public uint ID;
 
     public Admin? Admin;
-    public uint AdminID;
+    public required uint AdminID;
 
     public Task? Task;
-    public uint TaskID;
+    public required uint TaskID;
 
-    public DateTime CreatedAt;
+    public required DateTime CreatedAt;
 }

@@ -19,25 +19,25 @@ public class Vehicle
     public required string Name;
     public required string Description;
 
-    public float AverageRates;
+    public required float AverageRates;
 
-    public CATEGORY Category;
+    public required CATEGORY Category;
 
     public required string Manufacturer;
-    public DateOnly ManufacturingYear;
+    public required DateOnly ManufacturingYear;
 
-    public ushort Capacity;
+    public required ushort Capacity;
 
     public required string[] Tags;
 
-    public double Price;
-    public float discount;
+    public required double Price;
+    public required float discount;
 
-    public bool IsPublished;
+    public required bool IsPublished;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }

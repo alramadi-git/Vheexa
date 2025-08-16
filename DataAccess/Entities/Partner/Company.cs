@@ -5,7 +5,7 @@ public class Company
     public uint ID;
 
     public Partner? Partner;
-    public uint PartnerID;
+    public required uint PartnerID;
 
     public Image? Image;
     public uint ImageID;

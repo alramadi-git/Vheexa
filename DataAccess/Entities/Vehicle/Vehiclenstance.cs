@@ -5,19 +5,19 @@ public class VehicleInstance
     public uint ID;
 
     public Vehicle? Vehicle;
-    public uint VehicleID;
+    public required uint VehicleID;
 
     public VehicleColor? VehicleColor;
-    public uint VehicleColorID;
+    public required uint VehicleColorID;
 
-    public uint InStock;
-    public uint InUse;
+    public required uint InStock;
+    public required uint InUse;
 
-    public bool IsPublished;
+    public required bool IsPublished;
 
-    public bool IsDeleted;
-    public DateTime DeletedAt;
+    public required bool IsDeleted;
+    public DateTime? DeletedAt;
 
-    public DateTime UpdatedAt;
-    public DateTime CreatedAt;
+    public required DateTime UpdatedAt;
+    public required DateTime CreatedAt;
 }
