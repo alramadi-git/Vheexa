@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
 using DataAccess.Repositories.Interfaces;
-using System.Data;
+using DataAccess.helpers;
 
 namespace DataAccess.Repositories;
 
@@ -23,8 +23,9 @@ public class User : IRepository
 
 
     /** One */
-    public async Task<bool> AddOneAsync()
+    public async Task<bool> AddOneAsync(Additions.User newUser)
     {
+          /** TODO: Remove human and do it static here */
         var human = await _General.AddOneHumanAsync();
 
         /** User */
@@ -61,7 +62,12 @@ public class User : IRepository
     }
     public async Task<Entities.User> GetOneAsync(string email, string password)
     {
-        var human = await _General.GetOneHumanAsNoTrackingAsync(email, password);
+        var human = await _AppDBContext.Humans
+       .Include(user => user.Address)
+       .Include(user => user.Image)
+       .FirstOrDefaultAsync((user) => user.Email == email && user.Password == password);
+
+        if (human == null) throw new Exception("Email or Password is Incorrect");
 
         var user = await _AppDBContext.Users
         .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
@@ -100,12 +106,78 @@ public class User : IRepository
     }
 
     /** Many */
-    // public async Task<Entities.User> AddManyAsync() { }
+    public async Task<IEnumerable<Entities.User>> GetManyAsNoTrackingAsync(
+        Filters.User filter
+    )
+    {
+        var users = _AppDBContext.Users
+        .Include(user => user.Human)
+        .ThenInclude(human => human!.Address)
+        .AsNoTracking();
 
-    // public async Task<Entities.User> GetManyAsync() { }
+        if (filter.FirstName != null) users = users.Where(user => user.Human!.FirstName.Contains(filter.FirstName));
+        if (filter.MidName != null) users = users.Where(user => user.Human!.MidName.Contains(filter.MidName));
+        if (filter.LastName != null) users = users.Where(user => user.Human!.LastName.Contains(filter.LastName));
 
-    // public async Task<Entities.User> UpdateManyAsync() { }
+        if (filter.Address != null)
+        {
+            if (filter.Address.Country != null) users = users.Where(user => user.Human!.Address!.Country.Contains(filter.Address.Country));
+            if (filter.Address.City != null) users = users.Where(user => user.Human!.Address!.City.Contains(filter.Address.City));
+            if (filter.Address.Street != null) users = users.Where(user => user.Human!.Address!.Street.Contains(filter.Address.Street));
+        }
+        ;
 
-    // public async Task<Entities.User> DeleteManyAsync() { }
+        if (filter.MinAverageRates != null) users = users.Where(user => user.AverageRates >= filter.MinAverageRates);
+        if (filter.MaxAverageRates != null) users = users.Where(user => user.AverageRates <= filter.MaxAverageRates);
 
+        if (filter.MinDateOfBirth != null) users = users.Where(user => user.Human!.DateOfBirth >= filter.MinDateOfBirth);
+        if (filter.MaxDateOfBirth != null) users = users.Where(user => user.Human!.DateOfBirth <= filter.MaxDateOfBirth);
+
+        if (filter.PhoneNumber != null) users = users.Where(user => user.Human!.PhoneNumber.Contains(filter.PhoneNumber));
+
+        if (filter.Email != null) users = users.Where(user => user.Human!.Email.Contains(filter.Email));
+
+        users = users.Where(user => user.IsDeleted == filter.IsDeleted);
+        if (filter.IsDeleted == true)
+        {
+            if (filter.DeletedAt != null) users = users.Where(user => user.DeletedAt == filter.DeletedAt);
+            else
+            {
+                if (filter.DeletedBefore != null) users = users.Where(user => user.DeletedAt <= filter.DeletedBefore);
+                if (filter.DeletedAfter != null) users = users.Where(user => user.DeletedAt >= filter.DeletedAfter);
+            }
+            ;
+        }
+        ;
+
+        if (filter.UpdatedAt != null) users = users.Where(user => user.UpdatedAt == filter.UpdatedAt);
+        else
+        {
+            if (filter.UpdatedBefore != null) users = users.Where(user => user.UpdatedAt <= filter.UpdatedBefore);
+            if (filter.UpdatedAfter != null) users = users.Where(user => user.UpdatedAt >= filter.UpdatedAfter);
+        }
+        ;
+
+        if (filter.CreatedAt != null) users = users.Where(user => user.CreatedAt == filter.CreatedAt);
+        else
+        {
+            if (filter.CreatedBefore != null) users = users.Where(user => user.CreatedAt <= filter.CreatedBefore);
+            if (filter.CreatedAfter != null) users = users.Where(user => user.CreatedAt >= filter.CreatedAfter);
+        }
+        ;
+
+        var usersTotalFoundRecords = await users.CountAsync();
+        users = users.Skip(filter.pagination.Skip).Take((int)filter.pagination.Take);
+
+
+        /** TODO: Return
+            - Pagination
+                Return object with {
+                TotalFoundRecords,
+                RecordsPerPage,
+                CurrentPage,
+                }    
+        */
+        return users;
+    }
 };

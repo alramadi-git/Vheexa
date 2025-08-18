@@ -154,5 +154,13 @@ public class General : IRepository
 
         return true;
     }
+
     /** Many */
+    public async Task<bool> UpdateHumanManyAsync(IEnumerable<uint> id)
+    {
+        // var human = await GetOneHumanAsync(id);
+        // TODO: UpdateLogic
+
+        return true;
+    }
 };
