@@ -1,3 +1,5 @@
+using DataAccess.Repositories.Interfaces;
+
 namespace DataAccess.Repositories;
 
-public class Partner;
+public class PartnerRepository : IRepository;

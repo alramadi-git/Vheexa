@@ -7,7 +7,7 @@ using DataAccess.Responses;
 
 namespace DataAccess.Repositories;
 
-public class User : IRepository
+public class UserRepository : IRepository
 {
     public class Filter : Filters.Human
     {
@@ -47,7 +47,7 @@ public class User : IRepository
     private readonly ILogger _Logger;
     private readonly AppDBContext _AppDBContext;
 
-    public User(ILogger logger, AppDBContext appDBContext)
+    public UserRepository(ILogger logger, AppDBContext appDBContext)
     {
         _Logger = logger;
         _AppDBContext = appDBContext;
@@ -58,7 +58,7 @@ public class User : IRepository
     {
         /** Human */
         var human = await _AppDBContext.Humans.FirstOrDefaultAsync(human => human.Email == newUser.Email);
-        if (human != null) throw new Error("Email is already in use.");
+        if (human != null) throw new Error(Error.STATUS.CONFLICT, "Email is already in use.");
 
         Entities.Image? image = null;
         if (newUser.Image != null)
@@ -128,7 +128,7 @@ public class User : IRepository
         .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.ID == id);
 
-        if (user == null) throw new Error("Not such user.");
+        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
         return user;
     }
     public async Task<Entities.User> GetOneAsync(string phoneNumber)
@@ -139,13 +139,13 @@ public class User : IRepository
         .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.PhoneNumber == phoneNumber);
 
-        if (human == null) throw new Error("Phone number is incorrect.");
+        if (human == null) throw new Error(Error.STATUS.NOT_FOUND, "No such phone number.");
 
         var user = await _AppDBContext.Users
         .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
 
-        if (user == null) throw new Error("Not such user.");
+        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
         return user;
     }
@@ -157,13 +157,13 @@ public class User : IRepository
         .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.Email == email && user.Password == password);
 
-        if (human == null) throw new Error("Email or password is incorrect.");
+        if (human == null) throw new Error(Error.STATUS.NOT_FOUND, "Email or password is incorrect.");
 
         var user = await _AppDBContext.Users
         .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
 
-        if (user == null) throw new Error("Not such user.");
+        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
         return user;
     }
@@ -177,7 +177,7 @@ public class User : IRepository
             .ThenInclude(human => human!.Address);
 
         var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
-        if (user == null) throw new Error("Not such user.");
+        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
         user.Human!.Image!.URL = updatedData.Image.URL;
         user.Human.Image.Alternate = updatedData.Image.Alternate;
@@ -208,7 +208,7 @@ public class User : IRepository
         var user = await _AppDBContext.Users
         .FirstOrDefaultAsync((user) => user.ID == id);
 
-        if (user == null) throw new Error("Not such user.");
+        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
         user.IsDeleted = true;
         user.DeletedAt = DateTime.UtcNow;

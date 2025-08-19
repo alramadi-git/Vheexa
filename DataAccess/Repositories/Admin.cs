@@ -1,3 +1,5 @@
+using DataAccess.Repositories.Interfaces;
+
 namespace DataAccess.Repositories;
 
-public class Admin;
+public class AdminRepository : IRepository;
