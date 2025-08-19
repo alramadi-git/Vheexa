@@ -2,10 +2,10 @@ namespace DataAccess.Entities;
 
 public class VehicleColor
 {
-    public uint ID;
+    public int ID;
 
     public Vehicle? Vehicle;
-    public required uint VehicleID;
+    public int VehicleID;
 
     public required string Name;
     public required string HexCode;

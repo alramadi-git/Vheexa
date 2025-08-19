@@ -3,118 +3,233 @@ using Microsoft.EntityFrameworkCore;
 
 using DataAccess.Repositories.Interfaces;
 using DataAccess.helpers;
+using DataAccess.Responses;
 
 namespace DataAccess.Repositories;
 
 public class User : IRepository
 {
-    private readonly General _General;
+    public class Filter : Filters.Human
+    {
+        public bool IsDeleted = false;
+        public DateTime? DeletedBefore;
+        public DateTime? DeletedAt;
+        public DateTime? DeletedAfter;
+
+        public DateTime? UpdatedBefore;
+        public DateTime? UpdatedAt;
+        public DateTime? UpdatedAfter;
+
+        public DateTime? CreatedBefore;
+        public DateTime? CreatedAt;
+        public DateTime? CreatedAfter;
+    }
+    public class Ordering
+    {
+        public enum OPTIONS
+        {
+            NON,
+            FULL_NAME,
+            AVERAGE_RATES,
+            DATE_OF_BIRTH,
+            MODIFICATION,
+            CREATION,
+        }
+
+        public OPTIONS By = OPTIONS.NON;
+        public bool ascending = true;
+    }
+
+    public class Add : Adds.Human;
+    public class Update : Updates.Human;
+
 
     private readonly ILogger _Logger;
     private readonly AppDBContext _AppDBContext;
 
-    public User(ILogger logger, AppDBContext appDBContext, General general)
+    public User(ILogger logger, AppDBContext appDBContext)
     {
-        _General = general;
-
         _Logger = logger;
         _AppDBContext = appDBContext;
     }
 
-
     /** One */
-    public async Task<bool> AddOneAsync(Additions.User newUser)
+    public async Task AddOneAsync(Add newUser)
     {
-          /** TODO: Remove human and do it static here */
-        var human = await _General.AddOneHumanAsync();
+        /** Human */
+        var human = await _AppDBContext.Humans.FirstOrDefaultAsync(human => human.Email == newUser.Email);
+        if (human != null) throw new Error("Email is already in use.");
+
+        Entities.Image? image = null;
+        if (newUser.Image != null)
+        {
+            var imageEntityEntry = _AppDBContext.Images.Add(
+                new Entities.Image
+                {
+                    URL = newUser.Image.URL,
+                    Alternate = newUser.Image.Alternate,
+                });
+
+            image = imageEntityEntry.Entity;
+        }
+        ;
+
+        var AddressEntityEntry = _AppDBContext.Addresses.Add(
+            new Entities.Address
+            {
+                URL = newUser.Address.URL,
+
+                Country = newUser.Address.Country,
+                City = newUser.Address.City,
+                Street = newUser.Address.Street,
+            });
+        var HumanEntityEntry = _AppDBContext.Humans.Add(
+            new Entities.Human
+            {
+                Image = image,
+                Address = AddressEntityEntry.Entity,
+
+                FirstName = newUser.FirstName,
+                MidName = newUser.MidName,
+                LastName = newUser.LastName,
+
+                DateOfBirth = newUser.DateOfBirth,
+                PhoneNumber = newUser.PhoneNumber,
+                Email = newUser.Email,
+                Password = newUser.Password,
+            });
 
         /** User */
-        var user = await _AppDBContext.Users
-        .AddAsync(
+        var UserEntityEntry = _AppDBContext.Users
+        .Add(
             new Entities.User
             {
-                HumanID = human.ID,
+                Human = HumanEntityEntry.Entity,
                 AverageRates = 0,
 
                 IsDeleted = false,
                 DeletedAt = null,
 
-                UpdatedAt = DateTime.Now,
-                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
             }
         );
 
-        _Logger.LogInformation($"User With ID {{ {user.Entity.ID} }} Was Added");
-
         await _AppDBContext.SaveChangesAsync();
-        return true;
     }
 
-    public async Task<Entities.User> GetOneAsync(uint id)
+    public async Task<Entities.User> GetOneAsync(int id)
     {
         var user = await _AppDBContext.Users
+        .Include(user => user.Human)
+        .ThenInclude(human => human!.Image)
+        .Include(user => user.Human)
+        .ThenInclude(human => human!.Address)
         .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.ID == id);
 
-        if (user == null) throw new Exception("Not such user.");
+        if (user == null) throw new Error("Not such user.");
+        return user;
+    }
+    public async Task<Entities.User> GetOneAsync(string phoneNumber)
+    {
+        var human = await _AppDBContext.Humans
+        .Include(user => user.Image)
+        .Include(user => user.Address)
+        .AsNoTracking()
+        .FirstOrDefaultAsync((user) => user.PhoneNumber == phoneNumber);
+
+        if (human == null) throw new Error("Phone number is incorrect.");
+
+        var user = await _AppDBContext.Users
+        .AsNoTracking()
+        .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
+
+        if (user == null) throw new Error("Not such user.");
 
         return user;
     }
     public async Task<Entities.User> GetOneAsync(string email, string password)
     {
         var human = await _AppDBContext.Humans
-       .Include(user => user.Address)
-       .Include(user => user.Image)
-       .FirstOrDefaultAsync((user) => user.Email == email && user.Password == password);
+        .Include(user => user.Image)
+        .Include(user => user.Address)
+        .AsNoTracking()
+        .FirstOrDefaultAsync((user) => user.Email == email && user.Password == password);
 
-        if (human == null) throw new Exception("Email or Password is Incorrect");
+        if (human == null) throw new Error("Email or password is incorrect.");
 
         var user = await _AppDBContext.Users
+        .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
 
-        if (user == null) throw new Exception("Not such user.");
+        if (user == null) throw new Error("Not such user.");
 
         return user;
     }
 
-    public async Task<bool> UpdateOneAsync(uint id)
+    public async Task UpdateOneAsync(int id, Update updatedData)
     {
-        var user = await _AppDBContext.Users
-        .FirstOrDefaultAsync((user) => user.ID == id);
+        var userQuery = _AppDBContext.Users
+            .Include(user => user.Human)
+            .ThenInclude(human => human!.Image)
+            .Include(user => user.Human)
+            .ThenInclude(human => human!.Address);
 
-        if (user == null) throw new Exception("Not such user.");
+        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
+        if (user == null) throw new Error("Not such user.");
 
-        await _General.UpdateHumanOneAsync(user.HumanID);
-        user.UpdatedAt = DateTime.Now;
+        user.Human!.Image!.URL = updatedData.Image.URL;
+        user.Human.Image.Alternate = updatedData.Image.Alternate;
+
+        user.Human.Address!.URL = updatedData.Address.URL;
+        user.Human.Address.Country = updatedData.Address.Country;
+        user.Human.Address.City = updatedData.Address.City;
+        user.Human.Address.Street = updatedData.Address.Street;
+
+        user.Human.FirstName = updatedData.FirstName;
+        user.Human.MidName = updatedData.MidName;
+        user.Human.LastName = updatedData.LastName;
+
+        user.Human.DateOfBirth = updatedData.DateOfBirth;
+
+        user.Human.PhoneNumber = updatedData.PhoneNumber;
+
+        user.Human.Email = updatedData.Email;
+        user.Human.Password = updatedData.Password;
+
+        user.UpdatedAt = DateTime.UtcNow;
 
         await _AppDBContext.SaveChangesAsync();
-        return true;
     }
 
-    public async Task<bool> DeleteOneAsync(uint id)
+    public async Task DeleteOneAsync(int id)
     {
         var user = await _AppDBContext.Users
         .FirstOrDefaultAsync((user) => user.ID == id);
 
-        if (user == null) throw new Exception("Not such user.");
+        if (user == null) throw new Error("Not such user.");
 
         user.IsDeleted = true;
-        user.DeletedAt = DateTime.Now;
+        user.DeletedAt = DateTime.UtcNow;
 
         await _AppDBContext.SaveChangesAsync();
-        return true;
     }
 
     /** Many */
-    public async Task<IEnumerable<Entities.User>> GetManyAsNoTrackingAsync(
-        Filters.User filter
+    public async Task<SuccessMany<Entities.User>> GetManyAsNoTrackingAsync(
+        Filter filter,
+        Ordering ordering
     )
     {
         var users = _AppDBContext.Users
         .Include(user => user.Human)
+        .ThenInclude(human => human!.Image)
+        .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
         .AsNoTracking();
 
+        /** Filters */
         if (filter.FirstName != null) users = users.Where(user => user.Human!.FirstName.Contains(filter.FirstName));
         if (filter.MidName != null) users = users.Where(user => user.Human!.MidName.Contains(filter.MidName));
         if (filter.LastName != null) users = users.Where(user => user.Human!.LastName.Contains(filter.LastName));
@@ -167,17 +282,65 @@ public class User : IRepository
         ;
 
         var usersTotalFoundRecords = await users.CountAsync();
-        users = users.Skip(filter.pagination.Skip).Take((int)filter.pagination.Take);
 
+        if (ordering.ascending == true)
+        {
+            switch (ordering.By)
+            {
+                case Ordering.OPTIONS.FULL_NAME:
+                    users.OrderBy(user => $"{user.Human!.FirstName} {user.Human!.MidName} {user.Human!.LastName}");
+                    break;
 
-        /** TODO: Return
-            - Pagination
-                Return object with {
-                TotalFoundRecords,
-                RecordsPerPage,
-                CurrentPage,
-                }    
-        */
-        return users;
+                case Ordering.OPTIONS.AVERAGE_RATES:
+                    users.OrderBy(user => user.AverageRates);
+                    break;
+
+                case Ordering.OPTIONS.DATE_OF_BIRTH:
+                    users.OrderBy(user => user.Human!.DateOfBirth);
+                    break;
+
+                case Ordering.OPTIONS.MODIFICATION:
+                    users.OrderBy(user => user.UpdatedAt);
+                    break;
+
+                case Ordering.OPTIONS.CREATION:
+                    users.OrderBy(user => user.UpdatedAt);
+                    break;
+            }
+
+        }
+        else
+        {
+            switch (ordering.By)
+            {
+                case Ordering.OPTIONS.FULL_NAME:
+                    users.OrderByDescending(user => $"{user.Human!.FirstName} {user.Human!.MidName} {user.Human!.LastName}");
+                    break;
+
+                case Ordering.OPTIONS.AVERAGE_RATES:
+                    users.OrderByDescending(user => user.AverageRates);
+                    break;
+
+                case Ordering.OPTIONS.DATE_OF_BIRTH:
+                    users.OrderByDescending(user => user.Human!.DateOfBirth);
+                    break;
+
+                case Ordering.OPTIONS.MODIFICATION:
+                    users.OrderByDescending(user => user.UpdatedAt);
+                    break;
+
+                case Ordering.OPTIONS.CREATION:
+                    users.OrderByDescending(user => user.UpdatedAt);
+                    break;
+            }
+        }
+        ;
+
+        users = users.Skip(filter.pagination.Skip).Take(filter.pagination.Take);
+
+        return new(
+            await users.ToListAsync(),
+            new(usersTotalFoundRecords, filter.pagination.Take, filter.pagination.Skip)
+        );
     }
 };

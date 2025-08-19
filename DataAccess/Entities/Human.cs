@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class Human
 {
-    public uint ID;
+    public int ID;
 
     public Image? Image;
-    public uint? ImageID;
+    public int? ImageID;
 
     public Address? Address;
-    public required uint AddressID;
+    public int AddressID;
 
     public required string FirstName;
     public required string MidName;

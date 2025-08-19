@@ -9,10 +9,10 @@ public class RequestToBeAPartner
         REJECTED
     }
 
-    public uint ID;
+    public int ID;
 
     public Partner? Partner;
-    public required uint PartnerID;
+    public int PartnerID;
 
     public required STATUS Status;
 

@@ -2,16 +2,16 @@ namespace DataAccess.Entities;
 
 public class PartnerRating
 {
-    public uint ID;
+    public int ID;
 
     public User? User;
-    public required uint UserID;
+    public int UserID;
 
     public Partner? Partner;
-    public required uint PartnerID;
+    public int PartnerID;
 
     public Rating? Rating;
-    public required uint RatingID;
+    public int RatingID;
 
     public required bool IsDeleted;
     public DateTime? DeletedAt;

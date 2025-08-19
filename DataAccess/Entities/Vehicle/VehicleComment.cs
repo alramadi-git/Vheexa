@@ -2,19 +2,19 @@ namespace DataAccess.Entities;
 
 public class VehicleComment
 {
-    public uint ID;
+    public int ID;
 
     public Vehicle? Vehicle;
-    public required uint VehicleID;
+    public int VehicleID;
 
     public Partner? Partner;
-    public required uint PartnerID;
+    public int PartnerID;
 
     public VehicleRating? VehicleRating;
-    public required uint VehicleRatingID;
+    public int VehicleRatingID;
 
     public Comment? Comment;
-    public required uint CommentID;
+    public int CommentID;
 
     public required bool IsDeleted;
     public DateTime? DeletedAt;

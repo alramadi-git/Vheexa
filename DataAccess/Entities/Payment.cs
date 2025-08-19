@@ -2,10 +2,10 @@ namespace DataAccess.Entities;
 
 public class Payment
 {
-    public uint ID;
+    public int ID;
 
     public User? User;
-    public required uint UserID;
+    public int UserID;
 
 
     public required string StripePaymentIntentID;

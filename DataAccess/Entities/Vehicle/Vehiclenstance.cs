@@ -2,16 +2,16 @@ namespace DataAccess.Entities;
 
 public class VehicleInstance
 {
-    public uint ID;
+    public int ID;
 
     public Vehicle? Vehicle;
-    public required uint VehicleID;
+    public int VehicleID;
 
     public VehicleColor? VehicleColor;
-    public required uint VehicleColorID;
+    public int VehicleColorID;
 
-    public required uint InStock;
-    public required uint InUse;
+    public required int InStock;
+    public required int InUse;
 
     public required bool IsPublished;
 

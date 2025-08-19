@@ -3,13 +3,13 @@ namespace DataAccess.Entities;
 public class PartnerSupportedLocation
 {
 
-    public uint ID;
+    public int ID;
 
     public Partner? Partner;
-    public required uint PartnerID;
+    public int PartnerID;
 
     public Address? Address;
-    public required uint AddressID;
+    public int AddressID;
 
     public required bool IsPickup;
     public required bool IsDropoff;

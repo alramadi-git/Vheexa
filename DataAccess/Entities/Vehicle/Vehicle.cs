@@ -14,7 +14,7 @@ public class Vehicle
         HELICOPTER,
     }
 
-    public uint ID;
+    public int ID;
 
     public required string Name;
     public required string Description;

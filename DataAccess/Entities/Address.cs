@@ -2,7 +2,7 @@ namespace DataAccess.Entities;
 
 public class Address
 {
-    public uint ID;
+    public int ID;
 
     public required string URL;
 

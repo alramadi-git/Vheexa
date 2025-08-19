@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class VehicleImage
 {
-    public uint ID;
+    public int ID;
 
     public Vehicle? Vehicle;
-    public required uint VehicleID;
+    public int VehicleID;
 
     public Image? Image;
-    public required uint ImageID;
+    public int ImageID;
 
     public required bool IsPublished;
 

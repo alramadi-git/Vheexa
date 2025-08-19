@@ -2,10 +2,10 @@ namespace DataAccess.Entities;
 
 public class Admin
 {
-    public uint ID;
+    public int ID;
 
     public Human? Human;
-    public required uint HumanID;
+    public int HumanID;
 
     public required bool IsDeleted;
     public DateTime? DeletedAt;

@@ -9,11 +9,11 @@ public class Task
         DELETE,
     }
 
-    public required uint ID;
+    public required int ID;
 
     public required ACTION Action;
 
-    public required uint EntityID;
+    public required int EntityID;
     public required string EntityName;
 }
 

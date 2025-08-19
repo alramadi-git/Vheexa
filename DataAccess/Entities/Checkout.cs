@@ -10,16 +10,16 @@ public class Checkout
         CANCELLED
     }
 
-    public uint ID;
+    public int ID;
 
     public Payment? Payment;
-    public required uint PaymentID;
+    public int PaymentID;
 
     public Discount? Discount;
-    public uint? DiscountID;
+    public int? DiscountID;
 
     public required STATUS Status;
-    public required uint InUse;
+    public required int InUse;
 
     public required DateTime CreatedAt;
 }

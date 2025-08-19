@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class Member
 {
-    public uint ID;
+    public int ID;
 
     public Partner? Partner;
-    public required uint PartnerID;
+    public int PartnerID;
 
     public Human? Human;
-    public required uint HumanID;
+    public int HumanID;
 
     public required bool IsPublished;
 

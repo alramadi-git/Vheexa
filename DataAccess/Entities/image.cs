@@ -2,7 +2,7 @@ namespace DataAccess.Entities;
 
 public class Image
 {
-    public  uint ID;
+    public int ID;
 
     public required string URL;
     public required string Alternate;

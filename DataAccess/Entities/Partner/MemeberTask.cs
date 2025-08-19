@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class MemberTask
 {
-    public uint ID;
+    public int ID;
 
     public Member? Member;
-    public required uint MemberID;
+    public int MemberID;
 
     public Task? Task;
-    public required uint TaskID;
+    public int TaskID;
 
     public required DateTime CreatedAt;
 }

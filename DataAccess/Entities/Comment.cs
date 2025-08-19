@@ -2,7 +2,7 @@ namespace DataAccess.Entities;
 
 public class Comment
 {
-    public uint ID;
+    public int ID;
 
     public required string Label;
     public required string Description;

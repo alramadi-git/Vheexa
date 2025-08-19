@@ -2,19 +2,19 @@ namespace DataAccess.Entities;
 
 public class VehicleRating
 {
-    public uint ID;
+    public int ID;
 
     public User? User;
-    public required uint UserID;
+    public int UserID;
 
     public Vehicle? Vehicle;
-    public required uint VehicleID;
+    public int VehicleID;
 
     public Checkout? Checkout;
-    public required uint CheckoutID;
+    public int CheckoutID;
 
     public Rating? Rating;
-    public required uint RatingID;
+    public int RatingID;
 
     public required bool IsDeleted;
     public DateTime? DeletedAt;

@@ -2,10 +2,10 @@ namespace DataAccess.Entities;
 
 public class User
 {
-    public uint ID;
+    public int ID;
 
     public Human? Human;
-    public required uint HumanID;
+    public int HumanID;
 
     public required float AverageRates;
 

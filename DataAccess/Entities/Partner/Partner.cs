@@ -2,7 +2,7 @@ namespace DataAccess.Entities;
 
 public class Partner
 {
-    public uint ID;
+    public int ID;
 
     public required string Handle;
 

@@ -2,15 +2,15 @@ namespace DataAccess.Entities;
 
 public class Discount
 {
-    public uint ID;
+    public int ID;
 
     public required string Code;
 
-    public required uint InStock;
-    public required uint InUse;
+    public required int InStock;
+    public required int InUse;
 
     public required bool IsUsageLimitedPerUser;
-    public required uint MaxUsagePerUser;
+    public required int MaxUsagePerUser;
 
 
     public required bool IsPublished;
