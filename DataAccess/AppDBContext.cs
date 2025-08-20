@@ -5,23 +5,23 @@ namespace DataAccess;
 
 public class AppDBContext : DbContext
 {
-    public DbSet<Address> Addresses;
-    public DbSet<Image> Images;
-    public DbSet<Human> Humans;
+    public DbSet<AddressEntity> Addresses;
+    public DbSet<ImageEntity> Images;
+    public DbSet<HumanEntity> Humans;
 
-    public DbSet<Entities.Task> Tasks;
+    public DbSet<Entities.TaskEntity> Tasks;
 
     /** Admin */
-    public DbSet<Admin> Admins;
-    public DbSet<AdminTask> AdminTasks;
+    public DbSet<AdminEntity> Admins;
+    public DbSet<AdminTaskEntity> AdminTasks;
 
-    public DbSet<Rating> Ratings;
-    public DbSet<Comment> Comments;
+    public DbSet<RatingEntity> Ratings;
+    public DbSet<CommentEntity> Comments;
 
     /** User */
-    public DbSet<User> Users;
-    public DbSet<UserRating> UserRatings;
-    public DbSet<UserComment> UserComments;
+    public DbSet<UserEntity> Users;
+    public DbSet<UserRatingEntity> UserRatings;
+    public DbSet<UserCommentEntity> UserComments;
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
     {
