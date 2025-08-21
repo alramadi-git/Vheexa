@@ -256,7 +256,7 @@ public class UserService : IService
         validator.ValidateAndThrow(phoneNumber);
         return await _UserRepository.GetOneAsync(phoneNumber);
     }
-    public async Task<DataAccess.Entities.UserEntity> GetOneAsync(string email, string password)
+    public async Task<DataAccess.Entities.UserEntity> GetOneAsync((string email, string password) credentials)
     {
         var validator = new InlineValidator<(string email, string password)>();
 
@@ -269,8 +269,8 @@ public class UserService : IService
         .MinimumLength(8)
         .MaximumLength(32);
 
-        validator.ValidateAndThrow((email, password));
-        return await _UserRepository.GetOneAsync(email, password);
+        validator.ValidateAndThrow((credentials.email, credentials.password));
+        return await _UserRepository.GetOneAsync(credentials.email, credentials.password);
     }
 
     public async Task UpdateOneAsync(int id, DataAccess.Repositories.UserRepository.Update updatedData)
