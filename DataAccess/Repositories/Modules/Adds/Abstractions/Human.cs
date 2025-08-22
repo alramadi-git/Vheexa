@@ -1,14 +1,9 @@
-namespace DataAccess.Entities;
+namespace DataAccess.Repositories.Modules.Adds.Abstractions;
 
-public class HumanEntity
+public abstract class Human
 {
-    public int ID { get; set; }
-
-    public ImageEntity? Image { get; set; }
-    public int? ImageID { get; set; }
-
-    public AddressEntity? Address { get; set; }
-    public int AddressID { get; set; }
+    public Image? Image { get; set; }
+    public required Address Address { get; set; }
 
     public required string FirstName { get; set; }
     public required string MidName { get; set; }

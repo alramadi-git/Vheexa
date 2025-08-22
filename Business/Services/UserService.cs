@@ -241,11 +241,11 @@ public class UserService : IService
         await _UserRepository.AddOneAsync(newUser);
     }
 
-    public async Task<DataAccess.Entities.UserEntity> GetOneAsync(int id)
+    public async Task<DataAccess.Entities.HumanEntity> GetOneAsync(int id)
     {
         return await _UserRepository.GetOneAsync(id);
     }
-    public async Task<DataAccess.Entities.UserEntity> GetOneAsync(string phoneNumber)
+    public async Task<DataAccess.Entities.HumanEntity> GetOneAsync(string phoneNumber)
     {
         var validator = new InlineValidator<string>();
 
@@ -256,7 +256,7 @@ public class UserService : IService
         validator.ValidateAndThrow(phoneNumber);
         return await _UserRepository.GetOneAsync(phoneNumber);
     }
-    public async Task<DataAccess.Entities.UserEntity> GetOneAsync((string email, string password) credentials)
+    public async Task<DataAccess.Entities.HumanEntity> GetOneAsync((string email, string password) credentials)
     {
         var validator = new InlineValidator<(string email, string password)>();
 
@@ -284,7 +284,7 @@ public class UserService : IService
         await _UserRepository.DeleteOneAsync(id);
     }
 
-    public async Task<DataAccess.Responses.SuccessMany<DataAccess.Entities.UserEntity>> GetManyAsync(DataAccess.Repositories.UserRepository.Filter filter, DataAccess.Repositories.UserRepository.Ordering ordering)
+    public async Task<DataAccess.Responses.SuccessMany<DataAccess.Entities.HumanEntity>> GetManyAsync(DataAccess.Repositories.UserRepository.Filter filter, DataAccess.Repositories.UserRepository.Ordering ordering)
     {
         _FilterValidator.ValidateAndThrow(filter);
         return await _UserRepository.GetManyAsync(filter, ordering);

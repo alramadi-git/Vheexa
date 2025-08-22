@@ -1,9 +1,7 @@
-namespace DataAccess.Entities;
+namespace DataAccess.Repositories.Modules.Updates.Abstractions;
 
-public class ImageEntity
+public class Image
 {
-    public int ID { get; set; }
-
     public required string URL { get; set; }
     public required string Alternate { get; set; }
 }

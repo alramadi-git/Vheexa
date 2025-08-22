@@ -4,7 +4,7 @@ public class VehicleRatingEntity
 {
     public int ID;
 
-    public UserEntity? User;
+    public HumanEntity? User;
     public int UserID;
 
     public VehicleEntity? Vehicle;

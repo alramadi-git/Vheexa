@@ -4,32 +4,32 @@ public static class Update
 {
     public class Image
     {
-        public required string URL;
-        public required string Alternate;
+        public required string URL { get; set; }
+        public required string Alternate { get; set; }
     }
 
     public class Address
     {
-        public required string URL;
+        public required string URL { get; set; }
 
-        public required string Country;
-        public required string City;
-        public required string Street;
+        public required string Country { get; set; }
+        public required string City { get; set; }
+        public required string Street { get; set; }
     }
 
     public class Human
     {
-        public Image? Image;
-        public required Address Address;
+        public Image? Image { get; set; }
+        public required Address Address { get; set; }
 
-        public required string FirstName;
-        public required string MidName;
-        public required string LastName;
+        public required string FirstName { get; set; }
+        public required string MidName { get; set; }
+        public required string LastName { get; set; }
 
-        public required DateOnly DateOfBirth;
+        public required DateOnly DateOfBirth { get; set; }
 
-        public required string PhoneNumber;
+        public required string PhoneNumber { get; set; }
 
-        public required string Email;
+        public required string Email { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace DataAccess.Responses;
 
 public class SuccessOne<TData> : IResponse
 {
-    public readonly TData Data;
+    public TData Data { get; set; }
 
     public SuccessOne(TData data)
     {
@@ -14,10 +14,24 @@ public class SuccessOne<TData> : IResponse
 
 public class SuccessMany<TData> : IResponse
 {
-    public readonly IList<TData> Data;
-    public readonly Pagination Pagination;
+    public class Paginate
+    {
+        public int TotalFoundRecords { get; set; }
+        public int RecordsPerPage { get; set; }
+        public int CurrentPage { get; set; }
 
-    public SuccessMany(IList<TData> data, Pagination pagination)
+        public Paginate(int totalFoundRecords, int recordsPerPage, int currentPage)
+        {
+            TotalFoundRecords = totalFoundRecords;
+            RecordsPerPage = recordsPerPage;
+            CurrentPage = currentPage;
+        }
+    }
+
+    public IList<TData> Data { get; set; }
+    public Paginate Pagination { get; set; }
+
+    public SuccessMany(IList<TData> data, Paginate pagination)
     {
         Data = data;
         Pagination = pagination;

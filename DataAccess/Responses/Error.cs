@@ -13,7 +13,7 @@ public class Error : Exception, IResponse
         CONFLICT = 409
     }
 
-    public STATUS Status;
+    public STATUS Status { get; set; }
 
     public Error(STATUS status, string message)
     : base(message)

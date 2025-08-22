@@ -1,9 +1,7 @@
-namespace DataAccess.Entities;
+namespace DataAccess.Repositories.Modules.Adds;
 
-public class AddressEntity
+public class Address
 {
-    public int ID { get; set; }
-
     public required string URL { get; set; }
 
     public required string Country { get; set; }

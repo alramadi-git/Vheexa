@@ -21,7 +21,7 @@ CREATE TABLE "Addresses" (
     "URL" TEXT NOT NULL,
     "Country" TEXT NOT NULL,
     "City" TEXT NOT NULL,
-    "Street" TEXT NOT NULL,
+    "Street" TEXT NOT NULL
 );
 
 -- Fake Data for Addresses
@@ -47,7 +47,7 @@ CREATE TABLE "Humans" (
     "DateOfBirth" DATE NOT NULL,
     "PhoneNumber" TEXT NOT NULL UNIQUE,
     "Email" TEXT NOT NULL UNIQUE,
-    "Password" TEXT NOT NULL,
+    "Password" TEXT NOT NULL
 );
 
 -- Partial unique index for optional ImageID

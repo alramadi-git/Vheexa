@@ -5,9 +5,9 @@ namespace DataAccess;
 
 public class AppDBContext : DbContext
 {
-    public DbSet<AddressEntity> Addresses;
-    public DbSet<ImageEntity> Images;
-    public DbSet<HumanEntity> Humans;
+    public DbSet<AddressEntity> Addresses { get; set; }
+    public DbSet<ImageEntity> Images { get; set; }
+    public DbSet<HumanEntity> Humans { get; set; }
 
     // public DbSet<Entities.TaskEntity> Tasks;
 
@@ -19,7 +19,7 @@ public class AppDBContext : DbContext
     // public DbSet<CommentEntity> Comments;
 
     // /** User */
-    public DbSet<UserEntity> Users;
+    public DbSet<UserEntity> Users { get; set; }
     // public DbSet<UserRatingEntity> UserRatings;
     // public DbSet<UserCommentEntity> UserComments;
 

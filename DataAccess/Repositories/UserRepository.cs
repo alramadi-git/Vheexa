@@ -1,62 +1,24 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 
-using DataAccess.Repositories.Interfaces;
 using DataAccess.Responses;
+
+using DataAccess.Repositories.Interfaces;
+using DataAccess.Repositories.Modules;
 
 namespace DataAccess.Repositories;
 
 public class UserRepository : IRepository
 {
-    public class Filter : helpers.Filter.Human
-    {
-        public bool IsDeleted = false;
-        public DateTime? DeletedBefore;
-        public DateTime? DeletedAt;
-        public DateTime? DeletedAfter;
-
-        public DateTime? UpdatedBefore;
-        public DateTime? UpdatedAt;
-        public DateTime? UpdatedAfter;
-
-        public DateTime? CreatedBefore;
-        public DateTime? CreatedAt;
-        public DateTime? CreatedAfter;
-    }
-    public class Ordering
-    {
-        public enum OPTIONS
-        {
-            NON,
-            FULL_NAME,
-            AVERAGE_RATES,
-            DATE_OF_BIRTH,
-            MODIFICATION,
-            CREATION,
-        }
-
-        public OPTIONS By = OPTIONS.NON;
-        public bool Ascending = true;
-    }
-
-    public class Add : helpers.Add.Human;
-    public class Update : helpers.Update.Human;
-
-
-    private readonly ILogger _Logger;
     private readonly AppDBContext _AppDBContext;
 
-    public UserRepository(ILogger logger, AppDBContext appDBContext)
+    public UserRepository(AppDBContext appDBContext)
     {
-        _Logger = logger;
         _AppDBContext = appDBContext;
     }
 
-    /** One */
-    public async Task AddOneAsync(Add newUser)
+    public async Task AddOneAsync(Modules.Adds.User newUser)
     {
-        /** Human */
         var human = await _AppDBContext.Humans.FirstOrDefaultAsync(human => human.Email == newUser.Email);
         if (human != null) throw new Error(Error.STATUS.CONFLICT, "Email is already in use.");
 
@@ -101,7 +63,6 @@ public class UserRepository : IRepository
                 Password = new PasswordHasher<object?>().HashPassword(null, newUser.Password),
             });
 
-        /** User */
         var UserEntityEntry = _AppDBContext.Users
         .Add(
             new Entities.UserEntity
@@ -131,6 +92,7 @@ public class UserRepository : IRepository
         .FirstOrDefaultAsync((user) => user.ID == id);
 
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
+
         return user;
     }
     public async Task<Entities.UserEntity> GetOneAsync(string phoneNumber)
@@ -173,7 +135,7 @@ public class UserRepository : IRepository
         return user;
     }
 
-    public async Task UpdateOneAsync(int id, Update updatedData)
+    public async Task UpdateOneAsync(int id, Modules.Updates.User updatedUser)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
@@ -184,26 +146,37 @@ public class UserRepository : IRepository
         var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
-        if (user.Human!.Image != null)
+        var image = user.Human!.Image;
+        var address = user.Human.Address!;
+
+        if (image != null)
         {
-            user.Human.Image.URL = updatedData.Image.URL;
-            user.Human.Image.Alternate = updatedData.Image.Alternate;
+            if (updatedUser.Image == null)
+            {
+                _AppDBContext.Images.Remove(image);
+                user.Human.Image = null;
+            }
+            else
+            {
+                image.URL = updatedUser.Image.URL;
+                image.Alternate = updatedUser.Image.Alternate;
+            }
         }
 
-        user.Human!.Address!.URL = updatedData.Address.URL;
-        user.Human.Address.Country = updatedData.Address.Country;
-        user.Human.Address.City = updatedData.Address.City;
-        user.Human.Address.Street = updatedData.Address.Street;
+        address.URL = updatedUser.Address.URL;
+        address.Country = updatedUser.Address.Country;
+        address.City = updatedUser.Address.City;
+        address.Street = updatedUser.Address.Street;
 
-        user.Human.FirstName = updatedData.FirstName;
-        user.Human.MidName = updatedData.MidName;
-        user.Human.LastName = updatedData.LastName;
+        user.Human.FirstName = updatedUser.FirstName;
+        user.Human.MidName = updatedUser.MidName;
+        user.Human.LastName = updatedUser.LastName;
 
-        user.Human.DateOfBirth = updatedData.DateOfBirth;
+        user.Human.DateOfBirth = updatedUser.DateOfBirth;
 
-        user.Human.PhoneNumber = updatedData.PhoneNumber;
+        user.Human.PhoneNumber = updatedUser.PhoneNumber;
 
-        user.Human.Email = updatedData.Email;
+        user.Human.Email = updatedUser.Email;
 
         user.UpdatedAt = DateTime.UtcNow;
 
@@ -223,10 +196,10 @@ public class UserRepository : IRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    /** Many */
     public async Task<SuccessMany<Entities.UserEntity>> GetManyAsync(
-        Filter filter,
-        Ordering ordering
+        Modules.Filters.User filter,
+        Modules.Sorting.User sorting,
+        Modules.Filters.Pagination pagination
     )
     {
         var users = _AppDBContext.Users
@@ -290,30 +263,34 @@ public class UserRepository : IRepository
 
         var usersTotalFoundRecords = await users.CountAsync();
 
-        if (ordering.Ascending == true)
+        if (sorting.Ascending == true)
         {
-            switch (ordering.By)
+            switch (sorting.By)
             {
-                case Ordering.OPTIONS.FULL_NAME:
+                case Modules.Sorting.USER_OPTION.FULL_NAME:
                     users = users
                     .OrderBy(user => user.Human!.FirstName)
                     .ThenBy(user => user.Human!.MidName)
                     .ThenBy(user => user.Human!.LastName);
                     break;
 
-                case Ordering.OPTIONS.AVERAGE_RATES:
+                case Modules.Sorting.USER_OPTION.AVERAGE_RATES:
                     users = users.OrderBy(user => user.AverageRates);
                     break;
 
-                case Ordering.OPTIONS.DATE_OF_BIRTH:
+                case Modules.Sorting.USER_OPTION.DATE_OF_BIRTH:
                     users = users.OrderBy(user => user.Human!.DateOfBirth);
                     break;
 
-                case Ordering.OPTIONS.MODIFICATION:
+                case Modules.Sorting.USER_OPTION.MODIFICATION:
                     users = users.OrderBy(user => user.UpdatedAt);
                     break;
 
-                case Ordering.OPTIONS.CREATION:
+                case Modules.Sorting.USER_OPTION.DELETION:
+                    users = users.OrderBy(user => user.UpdatedAt);
+                    break;
+
+                case Modules.Sorting.USER_OPTION.CREATION:
                     users = users.OrderBy(user => user.CreatedAt);
                     break;
             }
@@ -321,39 +298,43 @@ public class UserRepository : IRepository
         }
         else
         {
-            switch (ordering.By)
+            switch (sorting.By)
             {
-                case Ordering.OPTIONS.FULL_NAME:
+                case Modules.Sorting.USER_OPTION.FULL_NAME:
                     users = users
                     .OrderByDescending(user => user.Human!.FirstName)
                     .ThenByDescending(user => user.Human!.MidName)
                     .ThenByDescending(user => user.Human!.LastName);
                     break;
 
-                case Ordering.OPTIONS.AVERAGE_RATES:
+                case Modules.Sorting.USER_OPTION.AVERAGE_RATES:
                     users = users.OrderByDescending(user => user.AverageRates);
                     break;
 
-                case Ordering.OPTIONS.DATE_OF_BIRTH:
+                case Modules.Sorting.USER_OPTION.DATE_OF_BIRTH:
                     users = users.OrderByDescending(user => user.Human!.DateOfBirth);
                     break;
 
-                case Ordering.OPTIONS.MODIFICATION:
+                case Modules.Sorting.USER_OPTION.DELETION:
                     users = users.OrderByDescending(user => user.UpdatedAt);
                     break;
 
-                case Ordering.OPTIONS.CREATION:
+                case Modules.Sorting.USER_OPTION.MODIFICATION:
+                    users = users.OrderByDescending(user => user.UpdatedAt);
+                    break;
+
+                case Modules.Sorting.USER_OPTION.CREATION:
                     users = users.OrderByDescending(user => user.CreatedAt);
                     break;
             }
         }
         ;
 
-        users = users.Skip(filter.pagination.Skip).Take(filter.pagination.Take);
+        users = users.Skip(pagination.Skip).Take(pagination.Take);
 
         return new(
             await users.ToListAsync(),
-            new(usersTotalFoundRecords, filter.pagination.Take, filter.pagination.Skip)
+            new(usersTotalFoundRecords, pagination.Take, pagination.Skip)
         );
     }
 };

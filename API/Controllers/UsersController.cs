@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using API.DTOs;
+using Business.Services;
 
 namespace API.Controllers;
 
@@ -10,39 +11,45 @@ public class UsersController : Controller
 {
 
     private readonly ILogger<UsersController> _Logger;
+    private readonly UserService _UserService;
 
-    public UsersController(ILogger<UsersController> logger)
+    public UsersController(ILogger<UsersController> logger, UserService userService)
     {
         _Logger = logger;
+        _UserService = userService;
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddOneAsync([FromBody] UserAddDTO newUser)
+    public async Task<ActionResult<bool>> AddOneAsync([FromBody] UserAddDTO newUser)
     {
+        await _UserService.AddOneAsync(UserAddDTO.ToDataAccessUserAddEntity(newUser));
         return Ok();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetOneAsync(int id)
+    public async Task<ActionResult<UserDTO>> GetOneAsync(int id)
     {
-        return Ok();
+        var user = new UserDTO(await _UserService.GetOneAsync(id));
+        return Ok(user);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateOneAsync(int id, UserUpdateDTO updatedData)
+    public async Task<ActionResult<bool>> UpdateOneAsync(int id, [FromBody] UserUpdateDTO updatedData)
     {
+        await _UserService.UpdateOneAsync(id, UserUpdateDTO.ToDataAccessUserUpdateEntity(updatedData));
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteOneAsync(int id)
+    public async Task<ActionResult<bool>> DeleteOneAsync(int id)
     {
-        return Ok();
+        await _UserService.DeleteOneAsync(id);
+        return Ok(true);
     }
 
-    [HttpGet]
-    public async Task<ActionResult> GetManyAsync(float fake)
-    {
-        return Ok();
-    }
+    // [HttpGet]
+    // public async Task<ActionResult> GetManyAsync()
+    // {
+    //     return Ok();
+    // }
 }
