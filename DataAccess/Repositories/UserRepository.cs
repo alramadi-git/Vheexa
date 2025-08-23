@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using DataAccess.Responses;
 
 using DataAccess.Repositories.Interfaces;
-using DataAccess.Repositories.Modules;
 
 namespace DataAccess.Repositories;
 
@@ -17,10 +16,10 @@ public class UserRepository : IRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task AddOneAsync(Modules.Adds.User newUser)
+    public async Task AddOneAsync(Modules.Adds.UserAdd newUser)
     {
-        var human = await _AppDBContext.Humans.FirstOrDefaultAsync(human => human.Email == newUser.Email);
-        if (human != null) throw new Error(Error.STATUS.CONFLICT, "Email is already in use.");
+        var isEmailOrPhoneNumberInUse = await _AppDBContext.Humans.AnyAsync(human => human.Email == newUser.Email || human.PhoneNumber == newUser.PhoneNumber);
+        if (isEmailOrPhoneNumberInUse == true) throw new Error(Error.STATUS.CONFLICT, "Email or phone number is already in use.");
 
         Entities.ImageEntity? image = null;
         if (newUser.Image != null)
@@ -81,27 +80,27 @@ public class UserRepository : IRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<Entities.UserEntity> GetOneAsync(int id)
+    public async Task<Modules.DTOs.UserDTO> GetOneAsync(int id)
     {
         var user = await _AppDBContext.Users
+        .AsNoTracking()
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .AsNoTracking()
         .FirstOrDefaultAsync((user) => user.ID == id);
 
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
-        return user;
+        return new(user);
     }
-    public async Task<Entities.UserEntity> GetOneAsync(string phoneNumber)
+    public async Task<Modules.DTOs.UserDTO> GetOneAsync(string phoneNumber)
     {
         var human = await _AppDBContext.Humans
+        .AsNoTracking()
         .Include(user => user.Image)
         .Include(user => user.Address)
-        .AsNoTracking()
-        .FirstOrDefaultAsync((user) => user.PhoneNumber == phoneNumber);
+        .FirstOrDefaultAsync((human) => human.PhoneNumber == phoneNumber);
 
         if (human == null) throw new Error(Error.STATUS.NOT_FOUND, "No such phone number.");
 
@@ -111,15 +110,15 @@ public class UserRepository : IRepository
 
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
-        return user;
+        return new(user);
     }
-    public async Task<Entities.UserEntity> GetOneAsync(string email, string password)
+    public async Task<Modules.DTOs.UserDTO> GetOneAsync(string email, string password)
     {
         var human = await _AppDBContext.Humans
+        .AsNoTracking()
         .Include(user => user.Image)
         .Include(user => user.Address)
-        .AsNoTracking()
-        .FirstOrDefaultAsync((user) => user.Email == email);
+        .FirstOrDefaultAsync((human) => human.Email == email);
 
         if (human == null) throw new Error(Error.STATUS.UNAUTHORIZED, $"No such user with {email} email.");
 
@@ -132,18 +131,18 @@ public class UserRepository : IRepository
 
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
-        return user;
+        return new(user);
     }
 
-    public async Task UpdateOneAsync(int id, Modules.Updates.User updatedUser)
+    public async Task UpdateOneAsync(int id, Modules.Updates.UserUpdate updatedUser)
     {
-        var userQuery = _AppDBContext.Users
+        var user = await _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
-        .ThenInclude(human => human!.Address);
+        .ThenInclude(human => human!.Address)
+        .FirstOrDefaultAsync((user) => user.ID == id);
 
-        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
         var image = user.Human!.Image;
@@ -196,10 +195,10 @@ public class UserRepository : IRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessMany<Entities.UserEntity>> GetManyAsync(
-        Modules.Filters.User filter,
-        Modules.Sorting.User sorting,
-        Modules.Filters.Pagination pagination
+    public async Task<SuccessMany<Modules.DTOs.UserDTO>> GetManyAsync(
+        Modules.Filters.UserFilter filter,
+        Modules.Sorting.UserSorting sorting,
+        Modules.Filters.PaginationFilter pagination
     )
     {
         var users = _AppDBContext.Users
@@ -333,7 +332,7 @@ public class UserRepository : IRepository
         users = users.Skip(pagination.Skip).Take(pagination.Take);
 
         return new(
-            await users.ToListAsync(),
+            await users.Select(user => new Modules.DTOs.UserDTO(user)).ToListAsync(),
             new(usersTotalFoundRecords, pagination.Take, pagination.Skip)
         );
     }

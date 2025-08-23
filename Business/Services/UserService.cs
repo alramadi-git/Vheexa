@@ -1,232 +1,13 @@
 using FluentValidation;
-
 using Business.Services.Interfaces;
 
 namespace Business.Services;
 
 public class UserService : IService
 {
-    private static readonly int _MIN_ACCEPTED_AGE = 18;
-
-    private class AddValidator : AbstractValidator<DataAccess.Repositories.UserRepository.Add>
-    {
-        public AddValidator()
-        {
-            /** Image */
-            RuleFor(user => user.Image!.URL)
-            .NotEmpty()
-            .When(user => user.Image != null);
-
-            RuleFor(user => user.Image!.Alternate)
-            .NotEmpty()
-            .When(user => user.Image != null);
-
-            /** Address */
-            RuleFor(user => user.Address)
-            .NotNull();
-
-            RuleFor(user => user.Address.URL)
-            .NotEmpty();
-
-            RuleFor(user => user.Address.Country)
-            .NotEmpty();
-
-            RuleFor(user => user.Address.City)
-            .NotEmpty();
-
-            RuleFor(user => user.Address.Street)
-            .NotEmpty();
-
-            /** User */
-            RuleFor(user => user.FirstName)
-            .NotNull()
-            .MinimumLength(3)
-            .MaximumLength(25);
-
-            RuleFor(user => user.MidName)
-            .NotNull()
-            .MinimumLength(3)
-            .MaximumLength(25);
-
-            RuleFor(user => user.LastName)
-            .NotNull()
-            .MinimumLength(3)
-            .MaximumLength(25);
-
-            RuleFor(user => user.DateOfBirth)
-            .Must(dateOfBirth =>
-            {
-                var today = DateTime.Today;
-                var age = today.Year - dateOfBirth.Year;
-
-                if (age < _MIN_ACCEPTED_AGE) return false;
-                if (age == _MIN_ACCEPTED_AGE && dateOfBirth.Month > today.Month) return false;
-                if (age == _MIN_ACCEPTED_AGE && dateOfBirth.Month == today.Month && dateOfBirth.Day > today.Day) return false;
-
-                return true;
-            });
-
-            RuleFor(user => user.PhoneNumber)
-            .NotNull()
-            .MinimumLength(8)
-            .MaximumLength(32);
-
-            RuleFor(user => user.Email)
-           .NotNull()
-           .EmailAddress();
-
-            RuleFor(user => user.Password)
-            .NotNull()
-            .MinimumLength(8)
-            .MaximumLength(32);
-        }
-    };
-
-    private class FilterValidator : AbstractValidator<DataAccess.Repositories.UserRepository.Filter>
-    {
-        public FilterValidator()
-        {
-            /** Address */
-            RuleFor(filter => filter.Address.Country)
-            .NotEmpty()
-            .When(filter => filter.Address?.Country != null);
-
-            RuleFor(filter => filter.Address.City)
-            .NotEmpty()
-            .When(filter => filter.Address?.City != null);
-
-            RuleFor(filter => filter.Address.Street)
-            .NotEmpty()
-            .When(filter => filter.Address?.Street != null);
-
-            /** Name */
-            RuleFor(filter => filter.FirstName)
-            .NotEmpty()
-            .When(filter => filter.FirstName != null);
-
-            RuleFor(filter => filter.MidName)
-            .NotEmpty()
-            .When(filter => filter.MidName != null);
-
-            RuleFor(filter => filter.LastName)
-            .NotEmpty()
-            .When(filter => filter.LastName != null);
-
-            /** Average Rates */
-            RuleFor(filter => filter.MinAverageRates)
-            .GreaterThanOrEqualTo(0)
-            .When(filter => filter.MinAverageRates != null);
-
-            RuleFor(filter => filter.MaxAverageRates)
-            .LessThanOrEqualTo(5)
-            .When(filter => filter.MaxAverageRates != null);
-
-            RuleFor(filter => filter)
-            .Must(filter => filter.MinAverageRates <= filter.MaxAverageRates)
-            .When(filter => filter.MinAverageRates != null && filter.MaxAverageRates != null);
-
-            /** Date Of Birth */
-            RuleFor(filter => filter)
-            .Must(filter => filter.MinDateOfBirth <= filter.MaxDateOfBirth)
-            .When(filter => filter.MinDateOfBirth != null && filter.MaxDateOfBirth != null);
-
-            /** Phone Number */
-            RuleFor(filter => filter.PhoneNumber)
-            .NotEmpty()
-            .When(filter => filter.PhoneNumber != null);
-
-            /** Email */
-            RuleFor(filter => filter.Email)
-            .NotEmpty()
-            .When(filter => filter.Email != null);
-
-            /** Deleted */
-            RuleFor(filter => filter)
-            .Must(filter => filter.DeletedBefore <= filter.DeletedAfter)
-            .When(filter => filter.DeletedBefore != null && filter.DeletedAfter != null && filter.IsDeleted == true);
-
-            /** Updated */
-            RuleFor(filter => filter)
-            .Must(filter => filter.UpdatedBefore <= filter.UpdatedAfter)
-            .When(filter => filter.UpdatedBefore != null && filter.UpdatedAfter != null);
-
-            /** Created */
-            RuleFor(filter => filter)
-            .Must(filter => filter.CreatedBefore <= filter.CreatedAfter)
-            .When(filter => filter.CreatedBefore != null && filter.CreatedAfter != null);
-        }
-    };
-
-    private class UpdateValidator : AbstractValidator<DataAccess.Repositories.UserRepository.Update>
-    {
-        public UpdateValidator()
-        {
-            /** Image */
-            RuleFor(user => user.Image!.URL)
-            .NotEmpty()
-            .When(user => user.Image != null);
-
-            RuleFor(user => user.Image!.Alternate)
-            .NotEmpty()
-            .When(user => user.Image != null);
-
-            /** Address */
-            RuleFor(user => user.Address)
-            .NotNull();
-
-            RuleFor(user => user.Address.URL)
-            .NotEmpty();
-
-            RuleFor(user => user.Address.Country)
-            .NotEmpty();
-
-            RuleFor(user => user.Address.City)
-            .NotEmpty();
-
-            RuleFor(user => user.Address.Street)
-            .NotEmpty();
-
-            /** User */
-            RuleFor(user => user.FirstName)
-            .NotNull()
-            .MinimumLength(3)
-            .MaximumLength(25);
-
-            RuleFor(user => user.MidName)
-            .NotNull()
-            .MinimumLength(3)
-            .MaximumLength(25);
-
-            RuleFor(user => user.LastName)
-            .NotNull()
-            .MinimumLength(3)
-            .MaximumLength(25);
-
-            RuleFor(user => user.DateOfBirth)
-            .Must(dateOfBirth =>
-            {
-                var today = DateTime.Today;
-                var age = today.Year - dateOfBirth.Year;
-
-                if (age < _MIN_ACCEPTED_AGE) return false;
-                if (age == _MIN_ACCEPTED_AGE && dateOfBirth.Month > today.Month) return false;
-                if (age == _MIN_ACCEPTED_AGE && dateOfBirth.Month == today.Month && dateOfBirth.Day > today.Day) return false;
-
-                return true;
-            });
-
-            RuleFor(user => user.PhoneNumber)
-            .MinimumLength(8)
-            .MaximumLength(32);
-
-            RuleFor(user => user.Email)
-           .EmailAddress();
-        }
-    };
-
-    private static readonly AddValidator _AddValidator = new();
-    private static readonly FilterValidator _FilterValidator = new();
-    private static readonly UpdateValidator _UpdateValidator = new();
+    private static readonly Validations.User.UserAddValidation _AddValidator = new();
+    private static readonly Validations.User.UserFilterValidation _FilterValidator = new();
+    private static readonly Validations.User.UserUpdateValidation _UpdateValidator = new();
 
     private readonly DataAccess.Repositories.UserRepository _UserRepository;
 
@@ -235,17 +16,17 @@ public class UserService : IService
         _UserRepository = userRepository;
     }
 
-    public async Task AddOneAsync(DataAccess.Repositories.UserRepository.Add newUser)
+    public async Task AddOneAsync(DataAccess.Modules.Adds.UserAdd newUser)
     {
         _AddValidator.ValidateAndThrow(newUser);
         await _UserRepository.AddOneAsync(newUser);
     }
 
-    public async Task<DataAccess.Entities.HumanEntity> GetOneAsync(int id)
+    public async Task<DataAccess.Modules.DTOs.UserDTO> GetOneAsync(int id)
     {
         return await _UserRepository.GetOneAsync(id);
     }
-    public async Task<DataAccess.Entities.HumanEntity> GetOneAsync(string phoneNumber)
+    public async Task<DataAccess.Modules.DTOs.UserDTO> GetOneAsync(string phoneNumber)
     {
         var validator = new InlineValidator<string>();
 
@@ -256,7 +37,7 @@ public class UserService : IService
         validator.ValidateAndThrow(phoneNumber);
         return await _UserRepository.GetOneAsync(phoneNumber);
     }
-    public async Task<DataAccess.Entities.HumanEntity> GetOneAsync((string email, string password) credentials)
+    public async Task<DataAccess.Modules.DTOs.UserDTO> GetOneAsync((string email, string password) credentials)
     {
         var validator = new InlineValidator<(string email, string password)>();
 
@@ -273,7 +54,7 @@ public class UserService : IService
         return await _UserRepository.GetOneAsync(credentials.email, credentials.password);
     }
 
-    public async Task UpdateOneAsync(int id, DataAccess.Repositories.UserRepository.Update updatedData)
+    public async Task UpdateOneAsync(int id, DataAccess.Modules.Updates.UserUpdate updatedData)
     {
         _UpdateValidator.ValidateAndThrow(updatedData);
         await _UserRepository.UpdateOneAsync(id, updatedData);
@@ -284,9 +65,13 @@ public class UserService : IService
         await _UserRepository.DeleteOneAsync(id);
     }
 
-    public async Task<DataAccess.Responses.SuccessMany<DataAccess.Entities.HumanEntity>> GetManyAsync(DataAccess.Repositories.UserRepository.Filter filter, DataAccess.Repositories.UserRepository.Ordering ordering)
+    public async Task<DataAccess.Responses.SuccessMany<DataAccess.Modules.DTOs.UserDTO>> GetManyAsync(
+        DataAccess.Modules.Filters.UserFilter filter,
+        DataAccess.Modules.Sorting.UserSorting sorting,
+        DataAccess.Modules.Filters.PaginationFilter pagination
+    )
     {
         _FilterValidator.ValidateAndThrow(filter);
-        return await _UserRepository.GetManyAsync(filter, ordering);
+        return await _UserRepository.GetManyAsync(filter, sorting, pagination);
     }
 }

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 
-using API.DTOs;
 using Business.Services;
 
 namespace API.Controllers;
@@ -20,31 +19,63 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult<bool>> AddOneAsync([FromBody] UserAddDTO newUser)
+    public async Task<ActionResult> AddOneAsync([FromBody] DataAccess.Modules.Adds.UserAdd newUser)
     {
-        await _UserService.AddOneAsync(UserAddDTO.ToDataAccessUserAddEntity(newUser));
-        return Ok();
+        try
+        {
+            await _UserService.AddOneAsync(newUser);
+
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserDTO>> GetOneAsync(int id)
+    public async Task<ActionResult<DataAccess.Modules.DTOs.UserDTO>> GetOneAsync(int id)
     {
-        var user = new UserDTO(await _UserService.GetOneAsync(id));
-        return Ok(user);
+        try
+        {
+            var user = await _UserService.GetOneAsync(id);
+
+            return Ok(user);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<bool>> UpdateOneAsync(int id, [FromBody] UserUpdateDTO updatedData)
+    public async Task<ActionResult<bool>> UpdateOneAsync(int id, [FromBody] DataAccess.Modules.Updates.UserUpdate updatedData)
     {
-        await _UserService.UpdateOneAsync(id, UserUpdateDTO.ToDataAccessUserUpdateEntity(updatedData));
-        return Ok();
+        try
+        {
+            await _UserService.UpdateOneAsync(id, updatedData);
+
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<bool>> DeleteOneAsync(int id)
     {
-        await _UserService.DeleteOneAsync(id);
-        return Ok(true);
+        try
+        {
+            await _UserService.DeleteOneAsync(id);
+
+            return Ok(true);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
     // [HttpGet]
