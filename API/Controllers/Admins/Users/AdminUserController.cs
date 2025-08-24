@@ -2,17 +2,21 @@ using Microsoft.AspNetCore.Mvc;
 
 using Business.Services;
 
+using DataAccess.Responses;
+using DataAccess.Modules.DTOs;
+using DataAccess.Modules.Filters;
+using DataAccess.Modules.Sorting;
+
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/users")]
-public class UsersController : Controller
+[Route("api/admins/users")]
+public class AdminUserController : Controller
 {
-
-    private readonly ILogger<UsersController> _Logger;
+    private readonly ILogger<AdminUserController> _Logger;
     private readonly UserService _UserService;
 
-    public UsersController(ILogger<UsersController> logger, UserService userService)
+    public AdminUserController(ILogger<AdminUserController> logger, UserService userService)
     {
         _Logger = logger;
         _UserService = userService;
@@ -25,7 +29,7 @@ public class UsersController : Controller
         {
             await _UserService.AddOneAsync(newUser);
 
-            return Ok();
+            return Created();
         }
         catch (Exception)
         {
@@ -34,7 +38,7 @@ public class UsersController : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<DataAccess.Modules.DTOs.UserDTO>> GetOneAsync(int id)
+    public async Task<ActionResult<UserDTO>> GetOneAsync(int id)
     {
         try
         {
@@ -49,7 +53,7 @@ public class UsersController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<bool>> UpdateOneAsync(int id, [FromBody] DataAccess.Modules.Updates.UserUpdate updatedData)
+    public async Task<ActionResult> UpdateOneAsync(int id, [FromBody] DataAccess.Modules.Updates.UserUpdate updatedData)
     {
         try
         {
@@ -64,13 +68,13 @@ public class UsersController : Controller
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<bool>> DeleteOneAsync(int id)
+    public async Task<ActionResult> DeleteOneAsync(int id)
     {
         try
         {
             await _UserService.DeleteOneAsync(id);
 
-            return Ok(true);
+            return Ok();
         }
         catch (Exception)
         {
@@ -78,9 +82,18 @@ public class UsersController : Controller
         }
     }
 
-    // [HttpGet]
-    // public async Task<ActionResult> GetManyAsync()
-    // {
-    //     return Ok();
-    // }
+    [HttpGet]
+    public async Task<ActionResult<SuccessMany<UserDTO>>> GetManyAsync([FromQuery] UserFilters filters, [FromQuery] UserSorting sorting, [FromQuery] PaginationFilters pagination)
+    {
+        try
+        {
+            var users = await _UserService.GetManyAsync(filters, sorting, pagination);
+
+            return Ok(users);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+    }
 }

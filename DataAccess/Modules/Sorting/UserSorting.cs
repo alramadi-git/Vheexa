@@ -4,7 +4,6 @@ namespace DataAccess.Modules.Sorting;
 
 public enum USER_OPTION
 {
-    NON,
     FULL_NAME,
     AVERAGE_RATES,
     DATE_OF_BIRTH,
@@ -13,7 +12,4 @@ public enum USER_OPTION
     CREATION,
 }
 
-public class UserSorting : BaseSorting<USER_OPTION>
-{
-    public UserSorting(USER_OPTION by = USER_OPTION.NON, bool ascending = true) : base(by, ascending) { }
-}
+public class UserSorting : BaseSorting<USER_OPTION>;

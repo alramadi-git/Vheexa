@@ -1,57 +1,39 @@
 using FluentValidation;
+
 using Business.Services.Interfaces;
+using Business.Validations.User;
+
+using DataAccess.Modules.Adds;
+using DataAccess.Modules.DTOs;
+using DataAccess.Repositories;
+using DataAccess.Responses;
+using Business.Validations;
 
 namespace Business.Services;
 
 public class UserService : IService
 {
-    private static readonly Validations.User.UserAddValidation _AddValidator = new();
-    private static readonly Validations.User.UserFilterValidation _FilterValidator = new();
-    private static readonly Validations.User.UserUpdateValidation _UpdateValidator = new();
+    private static readonly UserAddValidation _AddValidator = new();
+    private static readonly UserFilterValidation _FilterValidator = new();
+    private static readonly PaginationValidation _PaginationValidator = new();
+    private static readonly UserUpdateValidation _UpdateValidator = new();
 
-    private readonly DataAccess.Repositories.UserRepository _UserRepository;
+    private readonly UserRepository _UserRepository;
 
-    public UserService(DataAccess.Repositories.UserRepository userRepository)
+    public UserService(UserRepository userRepository)
     {
         _UserRepository = userRepository;
     }
 
-    public async Task AddOneAsync(DataAccess.Modules.Adds.UserAdd newUser)
+    public async Task AddOneAsync(UserAdd newUser)
     {
         _AddValidator.ValidateAndThrow(newUser);
         await _UserRepository.AddOneAsync(newUser);
     }
 
-    public async Task<DataAccess.Modules.DTOs.UserDTO> GetOneAsync(int id)
+    public async Task<SuccessOne<UserDTO>> GetOneAsync(int id)
     {
         return await _UserRepository.GetOneAsync(id);
-    }
-    public async Task<DataAccess.Modules.DTOs.UserDTO> GetOneAsync(string phoneNumber)
-    {
-        var validator = new InlineValidator<string>();
-
-        validator
-        .RuleFor(phoneNumber => phoneNumber)
-        .NotEmpty();
-
-        validator.ValidateAndThrow(phoneNumber);
-        return await _UserRepository.GetOneAsync(phoneNumber);
-    }
-    public async Task<DataAccess.Modules.DTOs.UserDTO> GetOneAsync((string email, string password) credentials)
-    {
-        var validator = new InlineValidator<(string email, string password)>();
-
-        validator
-        .RuleFor(credentials => credentials.email)
-        .EmailAddress();
-
-        validator
-        .RuleFor(credentials => credentials.password)
-        .MinimumLength(8)
-        .MaximumLength(32);
-
-        validator.ValidateAndThrow((credentials.email, credentials.password));
-        return await _UserRepository.GetOneAsync(credentials.email, credentials.password);
     }
 
     public async Task UpdateOneAsync(int id, DataAccess.Modules.Updates.UserUpdate updatedData)
@@ -65,13 +47,15 @@ public class UserService : IService
         await _UserRepository.DeleteOneAsync(id);
     }
 
-    public async Task<DataAccess.Responses.SuccessMany<DataAccess.Modules.DTOs.UserDTO>> GetManyAsync(
-        DataAccess.Modules.Filters.UserFilter filter,
+    public async Task<SuccessMany<UserDTO>> GetManyAsync(
+        DataAccess.Modules.Filters.UserFilters filter,
         DataAccess.Modules.Sorting.UserSorting sorting,
-        DataAccess.Modules.Filters.PaginationFilter pagination
+        DataAccess.Modules.Filters.PaginationFilters pagination
     )
     {
         _FilterValidator.ValidateAndThrow(filter);
+        _PaginationValidator.ValidateAndThrow(pagination);
+
         return await _UserRepository.GetManyAsync(filter, sorting, pagination);
     }
 }

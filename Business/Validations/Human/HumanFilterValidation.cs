@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Business.Validations.Human;
 
-public abstract class HumanFilterValidation<T> : AbstractValidator<T> where T : DataAccess.Modules.Filters.Abstractions.HumanFilter
+public abstract class HumanFilterValidation<T> : AbstractValidator<T> where T : DataAccess.Modules.Filters.Abstractions.HumanFilters
 {
     public HumanFilterValidation()
     {

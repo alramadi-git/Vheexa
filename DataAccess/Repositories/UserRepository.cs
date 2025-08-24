@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
-using DataAccess.Responses;
-
 using DataAccess.Repositories.Interfaces;
+using DataAccess.Responses;
+using DataAccess.Modules.DTOs;
+using DataAccess.Modules.Updates;
+using DataAccess.Modules.Filters;
+using DataAccess.Modules.Sorting;
 
 namespace DataAccess.Repositories;
 
@@ -80,7 +83,7 @@ public class UserRepository : IRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<Modules.DTOs.UserDTO> GetOneAsync(int id)
+    public async Task<SuccessOne<UserDTO>> GetOneAsync(int id)
     {
         var user = await _AppDBContext.Users
         .AsNoTracking()
@@ -92,49 +95,10 @@ public class UserRepository : IRepository
 
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
 
-        return new(user);
+        return new(new(user));
     }
-    public async Task<Modules.DTOs.UserDTO> GetOneAsync(string phoneNumber)
-    {
-        var human = await _AppDBContext.Humans
-        .AsNoTracking()
-        .Include(user => user.Image)
-        .Include(user => user.Address)
-        .FirstOrDefaultAsync((human) => human.PhoneNumber == phoneNumber);
-
-        if (human == null) throw new Error(Error.STATUS.NOT_FOUND, "No such phone number.");
-
-        var user = await _AppDBContext.Users
-        .AsNoTracking()
-        .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
-
-        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
-
-        return new(user);
-    }
-    public async Task<Modules.DTOs.UserDTO> GetOneAsync(string email, string password)
-    {
-        var human = await _AppDBContext.Humans
-        .AsNoTracking()
-        .Include(user => user.Image)
-        .Include(user => user.Address)
-        .FirstOrDefaultAsync((human) => human.Email == email);
-
-        if (human == null) throw new Error(Error.STATUS.UNAUTHORIZED, $"No such user with {email} email.");
-
-        var verifiedPassword = new PasswordHasher<object?>().VerifyHashedPassword(null, human.Password, password);
-        if (verifiedPassword == PasswordVerificationResult.Failed) throw new Error(Error.STATUS.UNAUTHORIZED, "Password is incorrect.");
-
-        var user = await _AppDBContext.Users
-        .AsNoTracking()
-        .FirstOrDefaultAsync((user) => user.HumanID == human.ID);
-
-        if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
-
-        return new(user);
-    }
-
-    public async Task UpdateOneAsync(int id, Modules.Updates.UserUpdate updatedUser)
+   
+    public async Task UpdateOneAsync(int id, UserUpdate updatedUser)
     {
         var user = await _AppDBContext.Users
         .Include(user => user.Human)
@@ -188,6 +152,7 @@ public class UserRepository : IRepository
         .FirstOrDefaultAsync((user) => user.ID == id);
 
         if (user == null) throw new Error(Error.STATUS.NOT_FOUND, "No such user.");
+        if (user.IsDeleted == true) throw new Error(Error.STATUS.CONFLICT, "User is already deleted.");
 
         user.IsDeleted = true;
         user.DeletedAt = DateTime.UtcNow;
@@ -195,10 +160,10 @@ public class UserRepository : IRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessMany<Modules.DTOs.UserDTO>> GetManyAsync(
-        Modules.Filters.UserFilter filter,
-        Modules.Sorting.UserSorting sorting,
-        Modules.Filters.PaginationFilter pagination
+    public async Task<SuccessMany<UserDTO>> GetManyAsync(
+        UserFilters? filter,
+        UserSorting? sorting,
+        PaginationFilters? pagination
     )
     {
         var users = _AppDBContext.Users
@@ -209,130 +174,139 @@ public class UserRepository : IRepository
         .AsNoTracking();
 
         /** Filters */
-        if (filter.FirstName != null) users = users.Where(user => user.Human!.FirstName.Contains(filter.FirstName));
-        if (filter.MidName != null) users = users.Where(user => user.Human!.MidName.Contains(filter.MidName));
-        if (filter.LastName != null) users = users.Where(user => user.Human!.LastName.Contains(filter.LastName));
-
-        if (filter.Address != null)
+        if (filter != null)
         {
-            if (filter.Address.Country != null) users = users.Where(user => user.Human!.Address!.Country.Contains(filter.Address.Country));
-            if (filter.Address.City != null) users = users.Where(user => user.Human!.Address!.City.Contains(filter.Address.City));
-            if (filter.Address.Street != null) users = users.Where(user => user.Human!.Address!.Street.Contains(filter.Address.Street));
-        }
+            if (filter.FirstName != null) users = users.Where(user => user.Human!.FirstName.Contains(filter.FirstName));
+            if (filter.MidName != null) users = users.Where(user => user.Human!.MidName.Contains(filter.MidName));
+            if (filter.LastName != null) users = users.Where(user => user.Human!.LastName.Contains(filter.LastName));
+
+            if (filter.Address != null)
+            {
+                if (filter.Address.Country != null) users = users.Where(user => user.Human!.Address!.Country.Contains(filter.Address.Country));
+                if (filter.Address.City != null) users = users.Where(user => user.Human!.Address!.City.Contains(filter.Address.City));
+                if (filter.Address.Street != null) users = users.Where(user => user.Human!.Address!.Street.Contains(filter.Address.Street));
+            }
         ;
 
-        if (filter.MinAverageRates != null) users = users.Where(user => user.AverageRates >= filter.MinAverageRates);
-        if (filter.MaxAverageRates != null) users = users.Where(user => user.AverageRates <= filter.MaxAverageRates);
+            if (filter.MinAverageRates != null) users = users.Where(user => user.AverageRates >= filter.MinAverageRates);
+            if (filter.MaxAverageRates != null) users = users.Where(user => user.AverageRates <= filter.MaxAverageRates);
 
-        if (filter.MinDateOfBirth != null) users = users.Where(user => user.Human!.DateOfBirth >= filter.MinDateOfBirth);
-        if (filter.MaxDateOfBirth != null) users = users.Where(user => user.Human!.DateOfBirth <= filter.MaxDateOfBirth);
+            if (filter.MinDateOfBirth != null) users = users.Where(user => user.Human!.DateOfBirth >= filter.MinDateOfBirth);
+            if (filter.MaxDateOfBirth != null) users = users.Where(user => user.Human!.DateOfBirth <= filter.MaxDateOfBirth);
 
-        if (filter.PhoneNumber != null) users = users.Where(user => user.Human!.PhoneNumber.Contains(filter.PhoneNumber));
+            if (filter.PhoneNumber != null) users = users.Where(user => user.Human!.PhoneNumber.Contains(filter.PhoneNumber));
 
-        if (filter.Email != null) users = users.Where(user => user.Human!.Email.Contains(filter.Email));
+            if (filter.Email != null) users = users.Where(user => user.Human!.Email.Contains(filter.Email));
 
-        users = users.Where(user => user.IsDeleted == filter.IsDeleted);
-        if (filter.IsDeleted == true)
-        {
-            if (filter.DeletedAt != null) users = users.Where(user => user.DeletedAt == filter.DeletedAt);
+            users = users.Where(user => user.IsDeleted == filter.IsDeleted);
+            if (filter.IsDeleted == true)
+            {
+                if (filter.DeletedAt != null) users = users.Where(user => user.DeletedAt == filter.DeletedAt);
+                else
+                {
+                    if (filter.DeletedBefore != null) users = users.Where(user => user.DeletedAt <= filter.DeletedBefore);
+                    if (filter.DeletedAfter != null) users = users.Where(user => user.DeletedAt >= filter.DeletedAfter);
+                }
+                ;
+            }
+        ;
+
+            if (filter.UpdatedAt != null) users = users.Where(user => user.UpdatedAt == filter.UpdatedAt);
             else
             {
-                if (filter.DeletedBefore != null) users = users.Where(user => user.DeletedAt <= filter.DeletedBefore);
-                if (filter.DeletedAfter != null) users = users.Where(user => user.DeletedAt >= filter.DeletedAfter);
+                if (filter.UpdatedBefore != null) users = users.Where(user => user.UpdatedAt <= filter.UpdatedBefore);
+                if (filter.UpdatedAfter != null) users = users.Where(user => user.UpdatedAt >= filter.UpdatedAfter);
             }
-            ;
-        }
         ;
 
-        if (filter.UpdatedAt != null) users = users.Where(user => user.UpdatedAt == filter.UpdatedAt);
-        else
-        {
-            if (filter.UpdatedBefore != null) users = users.Where(user => user.UpdatedAt <= filter.UpdatedBefore);
-            if (filter.UpdatedAfter != null) users = users.Where(user => user.UpdatedAt >= filter.UpdatedAfter);
-        }
+            if (filter.CreatedAt != null) users = users.Where(user => user.CreatedAt == filter.CreatedAt);
+            else
+            {
+                if (filter.CreatedBefore != null) users = users.Where(user => user.CreatedAt <= filter.CreatedBefore);
+                if (filter.CreatedAfter != null) users = users.Where(user => user.CreatedAt >= filter.CreatedAfter);
+            }
         ;
-
-        if (filter.CreatedAt != null) users = users.Where(user => user.CreatedAt == filter.CreatedAt);
-        else
-        {
-            if (filter.CreatedBefore != null) users = users.Where(user => user.CreatedAt <= filter.CreatedBefore);
-            if (filter.CreatedAfter != null) users = users.Where(user => user.CreatedAt >= filter.CreatedAfter);
         }
         ;
 
         var usersTotalFoundRecords = await users.CountAsync();
 
-        if (sorting.Ascending == true)
+        if (sorting != null)
         {
-            switch (sorting.By)
+            if (sorting.Ascending == true)
             {
-                case Modules.Sorting.USER_OPTION.FULL_NAME:
-                    users = users
-                    .OrderBy(user => user.Human!.FirstName)
-                    .ThenBy(user => user.Human!.MidName)
-                    .ThenBy(user => user.Human!.LastName);
-                    break;
+                switch (sorting.By)
+                {
+                    case USER_OPTION.FULL_NAME:
+                        users = users
+                        .OrderBy(user => user.Human!.FirstName)
+                        .ThenBy(user => user.Human!.MidName)
+                        .ThenBy(user => user.Human!.LastName);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.AVERAGE_RATES:
-                    users = users.OrderBy(user => user.AverageRates);
-                    break;
+                    case USER_OPTION.AVERAGE_RATES:
+                        users = users.OrderBy(user => user.AverageRates);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.DATE_OF_BIRTH:
-                    users = users.OrderBy(user => user.Human!.DateOfBirth);
-                    break;
+                    case USER_OPTION.DATE_OF_BIRTH:
+                        users = users.OrderBy(user => user.Human!.DateOfBirth);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.MODIFICATION:
-                    users = users.OrderBy(user => user.UpdatedAt);
-                    break;
+                    case USER_OPTION.MODIFICATION:
+                        users = users.OrderBy(user => user.UpdatedAt);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.DELETION:
-                    users = users.OrderBy(user => user.UpdatedAt);
-                    break;
+                    case USER_OPTION.DELETION:
+                        users = users.OrderBy(user => user.UpdatedAt);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.CREATION:
-                    users = users.OrderBy(user => user.CreatedAt);
-                    break;
+                    case USER_OPTION.CREATION:
+                        users = users.OrderBy(user => user.CreatedAt);
+                        break;
+                }
+
             }
-
-        }
-        else
-        {
-            switch (sorting.By)
+            else
             {
-                case Modules.Sorting.USER_OPTION.FULL_NAME:
-                    users = users
-                    .OrderByDescending(user => user.Human!.FirstName)
-                    .ThenByDescending(user => user.Human!.MidName)
-                    .ThenByDescending(user => user.Human!.LastName);
-                    break;
+                switch (sorting.By)
+                {
+                    case USER_OPTION.FULL_NAME:
+                        users = users
+                        .OrderByDescending(user => user.Human!.FirstName)
+                        .ThenByDescending(user => user.Human!.MidName)
+                        .ThenByDescending(user => user.Human!.LastName);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.AVERAGE_RATES:
-                    users = users.OrderByDescending(user => user.AverageRates);
-                    break;
+                    case USER_OPTION.AVERAGE_RATES:
+                        users = users.OrderByDescending(user => user.AverageRates);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.DATE_OF_BIRTH:
-                    users = users.OrderByDescending(user => user.Human!.DateOfBirth);
-                    break;
+                    case USER_OPTION.DATE_OF_BIRTH:
+                        users = users.OrderByDescending(user => user.Human!.DateOfBirth);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.DELETION:
-                    users = users.OrderByDescending(user => user.UpdatedAt);
-                    break;
+                    case USER_OPTION.DELETION:
+                        users = users.OrderByDescending(user => user.UpdatedAt);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.MODIFICATION:
-                    users = users.OrderByDescending(user => user.UpdatedAt);
-                    break;
+                    case USER_OPTION.MODIFICATION:
+                        users = users.OrderByDescending(user => user.UpdatedAt);
+                        break;
 
-                case Modules.Sorting.USER_OPTION.CREATION:
-                    users = users.OrderByDescending(user => user.CreatedAt);
-                    break;
+                    case USER_OPTION.CREATION:
+                        users = users.OrderByDescending(user => user.CreatedAt);
+                        break;
+                }
             }
+            ;
         }
         ;
 
+        if (pagination == null) pagination = new();
         users = users.Skip(pagination.Skip).Take(pagination.Take);
 
         return new(
-            await users.Select(user => new Modules.DTOs.UserDTO(user)).ToListAsync(),
+            await users.Select(user => new UserDTO(user)).ToListAsync(),
             new(usersTotalFoundRecords, pagination.Take, pagination.Skip)
         );
     }

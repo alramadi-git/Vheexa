@@ -1,12 +1,12 @@
 namespace DataAccess.Modules.Filters.Abstractions;
 
-public abstract class HumanFilter
+public abstract class HumanFilters
 {
     public string? FirstName { get; set; }
     public string? MidName { get; set; }
     public string? LastName { get; set; }
 
-    public AddressFilter? Address { get; set; }
+    public AddressFilters? Address { get; set; }
 
 
     public DateOnly? MinDateOfBirth { get; set; }

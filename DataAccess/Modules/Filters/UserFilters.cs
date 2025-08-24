@@ -2,7 +2,7 @@ using DataAccess.Modules.Filters.Abstractions;
 
 namespace DataAccess.Modules.Filters;
 
-public class UserFilter : HumanFilter
+public class UserFilters : HumanFilters
 {
     public float? MinAverageRates { get; set; }
     public float? MaxAverageRates { get; set; }
