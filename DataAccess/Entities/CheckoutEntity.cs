@@ -1,25 +1,25 @@
 namespace DataAccess.Entities;
 
+public enum CHECKOUT_STATUS_OPTION_ENTITY
+{
+    ACCEPTED,
+    REFUNDED,
+    REJECTED,
+    CANCELLED
+}
+
 public class CheckoutEntity
 {
-    public enum STATUS
-    {
-        ACCEPTED,
-        REFUNDED,
-        REJECTED,
-        CANCELLED
-    }
+    public int ID { get; set; }
 
-    public int ID;
+    public PaymentEntity? Payment { get; set; }
+    public int PaymentID { get; set; }
 
-    public PaymentEntity? Payment;
-    public int PaymentID;
+    public DiscountEntity? Discount { get; set; }
+    public int? DiscountID { get; set; }
 
-    public DiscountEntity? Discount;
-    public int? DiscountID;
+    public CHECKOUT_STATUS_OPTION_ENTITY Status { get; set; }
+    public int InUse { get; set; }
 
-    public required STATUS Status;
-    public required int InUse;
-
-    public required DateTime CreatedAt;
+    public DateTime CreatedAt { get; set; }
 }

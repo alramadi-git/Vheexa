@@ -1,19 +1,20 @@
 namespace DataAccess.Entities;
 
+public enum TASK_ACTION_OPTION_ENTITY
+{
+    CREATE,
+    UPDATE,
+    DELETE,
+}
+
+
 public class TaskEntity
 {
-    public enum ACTION
-    {
-        CREATE,
-        UPDATE,
-        DELETE,
-    }
+    public int ID { get; set; }
 
-    public required int ID;
+    public TASK_ACTION_OPTION_ENTITY Action { get; set; }
 
-    public required ACTION Action;
-
-    public required int EntityID;
-    public required string EntityName;
+    public int EntityID { get; set; }
+    public required string EntityName { get; set; }
 }
 

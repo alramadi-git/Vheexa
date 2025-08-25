@@ -1,17 +1,14 @@
 namespace DataAccess.Entities;
 
-public class DiscountEntity
+public class MemberEntity
 {
     public int ID { get; set; }
 
-    public required string Code { get; set; }
+    public PartnerEntity? Partner { get; set; }
+    public int PartnerID { get; set; }
 
-    public int InStock { get; set; }
-    public int InUse { get; set; }
-
-    public bool IsUsageLimitedPerUser { get; set; }
-    public int MaxUsagePerUser { get; set; }
-
+    public HumanEntity? Human { get; set; }
+    public int HumanID { get; set; }
 
     public bool IsPublished { get; set; }
 

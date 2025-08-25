@@ -7,11 +7,11 @@ public class UserEntity
     public HumanEntity? Human { get; set; }
     public int HumanID { get; set; }
 
-    public required float AverageRates { get; set; }
+    public float AverageRates { get; set; }
 
-    public required bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public required DateTime UpdatedAt { get; set; }
-    public required DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

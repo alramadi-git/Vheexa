@@ -9,19 +9,18 @@ public class AppDBContext : DbContext
     public DbSet<ImageEntity> Images { get; set; }
     public DbSet<HumanEntity> Humans { get; set; }
 
-    // public DbSet<Entities.TaskEntity> Tasks;
-
+    // public DbSet<Entities.TaskEntity> Tasks; { get; set; }
     // /** Admin */
-    // public DbSet<AdminEntity> Admins;
-    // public DbSet<AdminTaskEntity> AdminTasks;
+    public DbSet<AdminEntity> Admins { get; set; }
+    // public DbSet<AdminTaskEntity> AdminTasks { get; set; }
 
-    // public DbSet<RatingEntity> Ratings;
-    // public DbSet<CommentEntity> Comments;
+    // public DbSet<RatingEntity> Ratings { get; set; }
+    // public DbSet<CommentEntity> Comments { get; set; }
 
     // /** User */
     public DbSet<UserEntity> Users { get; set; }
-    // public DbSet<UserRatingEntity> UserRatings;
-    // public DbSet<UserCommentEntity> UserComments;
+    // public DbSet<UserRatingEntity> UserRatings { get; set; }
+    // public DbSet<UserCommentEntity> UserComments { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
     {

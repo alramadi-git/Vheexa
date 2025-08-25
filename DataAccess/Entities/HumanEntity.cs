@@ -14,7 +14,7 @@ public class HumanEntity
     public required string MidName { get; set; }
     public required string LastName { get; set; }
 
-    public required DateOnly DateOfBirth { get; set; }
+    public DateOnly DateOfBirth { get; set; }
 
     public required string PhoneNumber { get; set; }
 
