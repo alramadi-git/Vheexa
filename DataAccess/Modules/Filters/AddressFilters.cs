@@ -1,8 +1,0 @@
-namespace DataAccess.Modules.Filters;
-
-public class AddressFilters
-{
-    public string? Country { get; set; }
-    public string? City { get; set; }
-    public string? Street { get; set; }
-}

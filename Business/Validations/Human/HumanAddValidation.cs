@@ -1,8 +1,9 @@
+using DataAccess.RequestDTOs;
 using FluentValidation;
 
 namespace Business.Validations.Human;
 
-public abstract class HumanAddValidation<T> : AbstractValidator<T> where T : DataAccess.Modules.Adds.Abstractions.HumanAdd
+public abstract class HumanAddValidation<T> : AbstractValidator<T> where T : AbstractHumanAddRequestDTO
 {
     public HumanAddValidation()
     {

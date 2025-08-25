@@ -1,11 +1,11 @@
 using FluentValidation;
 
 using Business.Validations.Human;
-using DataAccess.Modules.Filters;
+using DataAccess.RequestDTOs;
 
 namespace Business.Validations.User;
 
-public class UserFilterValidation : HumanFilterValidation<UserFilters>
+public class UserFilterValidation : HumanFilterValidation<UserFiltersRequestDTO>
 {
     public UserFilterValidation() : base()
     {

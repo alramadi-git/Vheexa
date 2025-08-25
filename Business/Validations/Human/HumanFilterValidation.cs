@@ -1,8 +1,9 @@
+using DataAccess.RequestDTOs;
 using FluentValidation;
 
 namespace Business.Validations.Human;
 
-public abstract class HumanFilterValidation<T> : AbstractValidator<T> where T : DataAccess.Modules.Filters.Abstractions.HumanFilters
+public abstract class HumanFilterValidation<T> : AbstractValidator<T> where T : AbstractHumanFiltersRequestDTO
 {
     public HumanFilterValidation()
     {
