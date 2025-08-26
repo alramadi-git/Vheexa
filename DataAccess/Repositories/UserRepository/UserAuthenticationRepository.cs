@@ -17,21 +17,12 @@ public class UserAuthenticationRepository
     public async Task<SuccessOneResponseDTO<UserEntityDTO>> SignupAsync(UserAddRequestDTO signedupUserData)
     {
         var isEmailOrPhoneNumberInUse = await _AppDBContext.Humans.AnyAsync(human => human.Email == signedupUserData.Email || human.PhoneNumber == signedupUserData.PhoneNumber);
-        if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ErrorResponseDTO.StatusCode.CONFLICT, "Email or phone number is already in use | If you deleted your account with those credentials, please contact us to restore your account.");
+        if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Email or phone number is already in use | If you deleted your account with those credentials, please contact us to restore your account.");
 
-        Entities.ImageEntity? image = null;
-        if (signedupUserData.Image != null)
-        {
-            var imageEntityEntry = _AppDBContext.Images.Add(
-                new Entities.ImageEntity
-                {
-                    URL = signedupUserData.Image.URL,
-                    Alternate = signedupUserData.Image.Alternate,
-                });
-
-            image = imageEntityEntry.Entity;
-        }
-        ;
+        var imageEntityEntry = signedupUserData.Image == null
+        ? null
+        : _AppDBContext.Images
+        .Add(new Entities.ImageEntity { URL = signedupUserData.Image.URL, Alternate = signedupUserData.Image.Alternate });
 
         var AddressEntityEntry = _AppDBContext.Addresses.Add(
         new Entities.AddressEntity
@@ -45,7 +36,7 @@ public class UserAuthenticationRepository
         var HumanEntityEntry = _AppDBContext.Humans.Add(
         new Entities.HumanEntity
         {
-            Image = image,
+            Image = imageEntityEntry?.Entity,
             Address = AddressEntityEntry.Entity,
 
             FirstName = signedupUserData.FirstName,
@@ -90,8 +81,7 @@ public class UserAuthenticationRepository
         .AsNoTracking();
 
         var user = await userQuery.FirstOrDefaultAsync();
-
-        if (user == null) throw new ErrorResponseDTO(ErrorResponseDTO.StatusCode.NOT_FOUND, "No such user.");
+        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         return new(new(user));
     }

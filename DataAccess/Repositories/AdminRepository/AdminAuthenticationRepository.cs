@@ -1,8 +1,9 @@
-using DataAccess.EntityDTOs;
-using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
+using DataAccess.RequestDTOs;
+using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -52,7 +53,6 @@ public class AdminAuthenticationRepository
         return new(new(admin));
     }
 
-
     public async Task ResetPassword(string email, string newPassword)
     {
         var humanQuery = _AppDBContext.Humans
@@ -64,11 +64,9 @@ public class AdminAuthenticationRepository
         var adminQuery = _AppDBContext.Admins
         .Where((admin) => admin.HumanID == human.ID && admin.IsDeleted == false)
         .AsNoTracking();
-
+        
         var isAdmin = await adminQuery.AnyAsync();
         if (isAdmin == false) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such admin.");
-
-        /** TODO: Logic for making sure the email is verified and the email owner wants to reset password */
 
         var hasher = new PasswordHasher<object?>();
         human.Password = hasher.HashPassword(null, newPassword);

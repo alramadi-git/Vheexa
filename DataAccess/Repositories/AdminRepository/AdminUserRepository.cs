@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using DataAccess.ResponseDTOs;
+
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -14,94 +15,32 @@ public class AdminUserRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task AddOneAsync(UserAddRequestDTO newUser)
-    {
-        var isEmailOrPhoneNumberInUse = await _AppDBContext.Humans.AnyAsync(human => human.Email == newUser.Email || human.PhoneNumber == newUser.PhoneNumber);
-        if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Email or phone number is already in use.");
-
-        Entities.ImageEntity? image = null;
-        if (newUser.Image != null)
-        {
-            var imageEntityEntry = _AppDBContext.Images.Add(
-                new Entities.ImageEntity
-                {
-                    URL = newUser.Image.URL,
-                    Alternate = newUser.Image.Alternate,
-                });
-
-            image = imageEntityEntry.Entity;
-        }
-        ;
-
-        var AddressEntityEntry = _AppDBContext.Addresses.Add(
-            new Entities.AddressEntity
-            {
-                URL = newUser.Address.URL,
-
-                Country = newUser.Address.Country,
-                City = newUser.Address.City,
-                Street = newUser.Address.Street,
-            });
-        var HumanEntityEntry = _AppDBContext.Humans.Add(
-            new Entities.HumanEntity
-            {
-                Image = image,
-                Address = AddressEntityEntry.Entity,
-
-                FirstName = newUser.FirstName,
-                MidName = newUser.MidName,
-                LastName = newUser.LastName,
-
-                DateOfBirth = newUser.DateOfBirth,
-
-                PhoneNumber = newUser.PhoneNumber,
-
-                Email = newUser.Email,
-                Password = newUser.Password,
-            });
-
-        var UserEntityEntry = _AppDBContext.Users
-        .Add(
-            new Entities.UserEntity
-            {
-                Human = HumanEntityEntry.Entity,
-                AverageRates = 0,
-
-                IsDeleted = false,
-                DeletedAt = null,
-
-                UpdatedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow,
-            }
-        );
-
-        await _AppDBContext.SaveChangesAsync();
-    }
-
     public async Task<SuccessOneResponseDTO<UserEntityDTO>> GetOneAsync(int id)
     {
-        var user = await _AppDBContext.Users
-        .AsNoTracking()
+        var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .FirstOrDefaultAsync((user) => user.ID == id);
+        .AsNoTracking();
+
+        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
 
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
         return new(new(user));
     }
 
-    public async Task UpdateOneAsync(int id, UserUpdateRequestDTO userUpdatedData)
+    public async Task UpdateOneAsync(int adminID, int userID, UserUpdateRequestDTO userUpdatedData)
     {
-        var user = await _AppDBContext.Users
+        var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .FirstOrDefaultAsync((user) => user.ID == id);
+        .Where((user) => user.ID == userID);
 
+        var user = await userQuery.FirstOrDefaultAsync();
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
         var image = user.Human!.Image;
@@ -138,13 +77,39 @@ public class AdminUserRepository
 
         user.UpdatedAt = DateTime.UtcNow;
 
+        var adminQuery = _AppDBContext.Admins
+        .Where((admin) => admin.ID == adminID);
+
+        var admin = await adminQuery.FirstOrDefaultAsync();
+        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
+
+        var taskEntityEntry = _AppDBContext.Tasks
+        .Add(
+        new Entities.TaskEntity
+        {
+            Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
+
+            Table = Entities.TASK_TABLE_OPTION_ENTITY.USERS,
+            RowID = userID,
+        });
+
+        var adminTaskEntityEntry = _AppDBContext.AdminTasks
+        .Add(
+        new Entities.AdminTaskEntity
+        {
+            Admin = admin,
+            Task = taskEntityEntry.Entity,
+
+            CreatedAt = DateTime.UtcNow,
+        });
+
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task DeleteOneAsync(int id)
+    public async Task DeleteOneAsync(int adminID, int userID)
     {
         var user = await _AppDBContext.Users
-        .FirstOrDefaultAsync((user) => user.ID == id);
+        .FirstOrDefaultAsync((user) => user.ID == userID);
 
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
         if (user.IsDeleted == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "User is already deleted.");
@@ -152,14 +117,36 @@ public class AdminUserRepository
         user.IsDeleted = true;
         user.DeletedAt = DateTime.UtcNow;
 
+        var adminQuery = _AppDBContext.Admins
+        .Where((admin) => admin.ID == adminID);
+
+        var admin = await adminQuery.FirstOrDefaultAsync();
+        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
+
+        var taskEntityEntry = _AppDBContext.Tasks
+        .Add(
+        new Entities.TaskEntity
+        {
+            Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
+
+            Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
+            RowID = userID,
+        });
+
+        var adminTaskEntityEntry = _AppDBContext.AdminTasks
+        .Add(
+        new Entities.AdminTaskEntity
+        {
+            Admin = admin,
+            Task = taskEntityEntry.Entity,
+
+            CreatedAt = DateTime.UtcNow,
+        });
+
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(
-        UserFiltersRequestDTO filter,
-        UserSortingRequestDTO sorting,
-        PaginationRequestDTO pagination
-    )
+    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(GetManyUsersSettingsDTO usersSettings)
     {
         var usersQuery = _AppDBContext.Users
         .Include(user => user.Human)
@@ -169,67 +156,59 @@ public class AdminUserRepository
         .AsNoTracking();
 
         /** Filters */
-        if (filter != null)
+        if (usersSettings.Filters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(usersSettings.Filters.FirstName));
+        if (usersSettings.Filters.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(usersSettings.Filters.MidName));
+        if (usersSettings.Filters.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(usersSettings.Filters.LastName));
+
+        if (usersSettings.Filters.Address != null)
         {
-            if (filter.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(filter.FirstName));
-            if (filter.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(filter.MidName));
-            if (filter.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(filter.LastName));
-
-            if (filter.Address != null)
-            {
-                if (filter.Address.Country != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Country.Contains(filter.Address.Country));
-                if (filter.Address.City != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.City.Contains(filter.Address.City));
-                if (filter.Address.Street != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Street.Contains(filter.Address.Street));
-            }
-        ;
-
-            if (filter.MinAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates >= filter.MinAverageRates);
-            if (filter.MaxAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates <= filter.MaxAverageRates);
-
-            if (filter.MinDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth >= filter.MinDateOfBirth);
-            if (filter.MaxDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth <= filter.MaxDateOfBirth);
-
-            if (filter.PhoneNumber != null) usersQuery = usersQuery.Where(user => user.Human!.PhoneNumber.Contains(filter.PhoneNumber));
-
-            if (filter.Email != null) usersQuery = usersQuery.Where(user => user.Human!.Email.Contains(filter.Email));
-
-            usersQuery = usersQuery.Where(user => user.IsDeleted == filter.IsDeleted);
-            if (filter.IsDeleted == true)
-            {
-                if (filter.DeletedAt != null) usersQuery = usersQuery.Where(user => user.DeletedAt == filter.DeletedAt);
-                else
-                {
-                    if (filter.DeletedBefore != null) usersQuery = usersQuery.Where(user => user.DeletedAt <= filter.DeletedBefore);
-                    if (filter.DeletedAfter != null) usersQuery = usersQuery.Where(user => user.DeletedAt >= filter.DeletedAfter);
-                }
-                ;
-            }
-        ;
-
-            if (filter.UpdatedAt != null) usersQuery = usersQuery.Where(user => user.UpdatedAt == filter.UpdatedAt);
-            else
-            {
-                if (filter.UpdatedBefore != null) usersQuery = usersQuery.Where(user => user.UpdatedAt <= filter.UpdatedBefore);
-                if (filter.UpdatedAfter != null) usersQuery = usersQuery.Where(user => user.UpdatedAt >= filter.UpdatedAfter);
-            }
-        ;
-
-            if (filter.CreatedAt != null) usersQuery = usersQuery.Where(user => user.CreatedAt == filter.CreatedAt);
-            else
-            {
-                if (filter.CreatedBefore != null) usersQuery = usersQuery.Where(user => user.CreatedAt <= filter.CreatedBefore);
-                if (filter.CreatedAfter != null) usersQuery = usersQuery.Where(user => user.CreatedAt >= filter.CreatedAfter);
-            }
-        ;
+            if (usersSettings.Filters.Address.Country != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Country.Contains(usersSettings.Filters.Address.Country));
+            if (usersSettings.Filters.Address.City != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.City.Contains(usersSettings.Filters.Address.City));
+            if (usersSettings.Filters.Address.Street != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Street.Contains(usersSettings.Filters.Address.Street));
         }
-        ;
+
+        if (usersSettings.Filters.MinAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates >= usersSettings.Filters.MinAverageRates);
+        if (usersSettings.Filters.MaxAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates <= usersSettings.Filters.MaxAverageRates);
+
+        if (usersSettings.Filters.MinDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth >= usersSettings.Filters.MinDateOfBirth);
+        if (usersSettings.Filters.MaxDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth <= usersSettings.Filters.MaxDateOfBirth);
+
+        if (usersSettings.Filters.PhoneNumber != null) usersQuery = usersQuery.Where(user => user.Human!.PhoneNumber.Contains(usersSettings.Filters.PhoneNumber));
+
+        if (usersSettings.Filters.Email != null) usersQuery = usersQuery.Where(user => user.Human!.Email.Contains(usersSettings.Filters.Email));
+
+        usersQuery = usersQuery
+        .Where(user => user.IsDeleted == usersSettings.Filters.IsDeleted);
+
+        if (usersSettings.Filters.IsDeleted == true)
+        {
+            if (usersSettings.Filters.DeletedAt != null) usersQuery = usersQuery.Where(user => user.DeletedAt == usersSettings.Filters.DeletedAt);
+            else
+            {
+                if (usersSettings.Filters.DeletedBefore != null) usersQuery = usersQuery.Where(user => user.DeletedAt <= usersSettings.Filters.DeletedBefore);
+                if (usersSettings.Filters.DeletedAfter != null) usersQuery = usersQuery.Where(user => user.DeletedAt >= usersSettings.Filters.DeletedAfter);
+            }
+        }
+
+        if (usersSettings.Filters.UpdatedAt != null) usersQuery = usersQuery.Where(user => user.UpdatedAt == usersSettings.Filters.UpdatedAt);
+        else
+        {
+            if (usersSettings.Filters.UpdatedBefore != null) usersQuery = usersQuery.Where(user => user.UpdatedAt <= usersSettings.Filters.UpdatedBefore);
+            if (usersSettings.Filters.UpdatedAfter != null) usersQuery = usersQuery.Where(user => user.UpdatedAt >= usersSettings.Filters.UpdatedAfter);
+        }
+
+        if (usersSettings.Filters.CreatedAt != null) usersQuery = usersQuery.Where(user => user.CreatedAt == usersSettings.Filters.CreatedAt);
+        else
+        {
+            if (usersSettings.Filters.CreatedBefore != null) usersQuery = usersQuery.Where(user => user.CreatedAt <= usersSettings.Filters.CreatedBefore);
+            if (usersSettings.Filters.CreatedAfter != null) usersQuery = usersQuery.Where(user => user.CreatedAt >= usersSettings.Filters.CreatedAfter);
+        }
 
         var usersTotalFoundRecords = await usersQuery.CountAsync();
 
-
-        if (sorting.Ascending == true)
+        if (usersSettings.Sorting.Ascending == true)
         {
-            switch (sorting.By)
+            switch (usersSettings.Sorting.By)
             {
                 case USER_SORTING_OPTION_REQUEST_DTO.FULL_NAME:
                     usersQuery = usersQuery
@@ -258,11 +237,10 @@ public class AdminUserRepository
                     usersQuery = usersQuery.OrderBy(user => user.CreatedAt);
                     break;
             }
-            ;
         }
         else
         {
-            switch (sorting.By)
+            switch (usersSettings.Sorting.By)
             {
                 case USER_SORTING_OPTION_REQUEST_DTO.FULL_NAME:
                     usersQuery = usersQuery
@@ -291,21 +269,19 @@ public class AdminUserRepository
                     usersQuery = usersQuery.OrderByDescending(user => user.CreatedAt);
                     break;
             }
-            ;
         }
-        ;
 
         usersQuery = usersQuery
-        .Skip(pagination.RequestedPage)
-        .Take((int)pagination.RecordsPerRequest);
+        .Skip(usersSettings.Pagination.RequestedPage)
+        .Take((int)usersSettings.Pagination.RecordsPerRequest);
 
         var users = await usersQuery
         .Select(user => new UserEntityDTO(user))
         .ToArrayAsync();
 
-        return new SuccessManyResponseDTO<UserEntityDTO>(
+        return new(
             users,
-            new PaginationResponseDTO(usersTotalFoundRecords, pagination.RecordsPerRequest, pagination.RequestedPage)
+            new(usersTotalFoundRecords, usersSettings.Pagination.RecordsPerRequest, usersSettings.Pagination.RequestedPage)
         );
     }
 };

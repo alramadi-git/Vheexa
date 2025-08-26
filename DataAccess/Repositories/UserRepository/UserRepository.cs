@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DataAccess.RequestDTOs;
+using Microsoft.AspNetCore.Identity;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.UserRepository;
 
@@ -11,31 +13,46 @@ public class UserRepository
     {
         _AppDBContext = appDBContext;
     }
+    public async Task ResetPasswordAsync(int id, string newPassword)
+    {
+        var userQuery = _AppDBContext.Users
+        .Include(user => user.Human)
+        .Where((user) => user.ID == id);
+
+        var user = await userQuery.FirstOrDefaultAsync();
+        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
+
+        var passwordHasher = new PasswordHasher<object?>();
+        user.Human!.Password = passwordHasher.HashPassword(null, newPassword);
+
+        await _AppDBContext.SaveChangesAsync();
+    }
 
     public async Task UpdateOneAsync(int id, UserUpdateRequestDTO userUpdatedData)
     {
-        var user = await _AppDBContext.Users
+        var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .FirstOrDefaultAsync((user) => user.ID == id);
+        .Where((user) => user.ID == id);
 
-        var image = user!.Human!.Image;
-        var address = user.Human.Address!;
+        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
+        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
+
+        user.UpdatedAt = DateTime.UtcNow;
 
         if (userUpdatedData.Image == null)
         {
-            if (image != null)
+            if (user.Human!.Image != null)
             {
-                _AppDBContext.Images.Remove(image);
-                image = null;
+                _AppDBContext.Images.Remove(user.Human!.Image);
+                user.Human!.Image = null;
             }
-            ;
         }
         else
         {
-            if (image == null)
+            if (user.Human!.Image == null)
             {
                 var imageEntityEntry = _AppDBContext.Images.Add(
                     new Entities.ImageEntity
@@ -44,20 +61,19 @@ public class UserRepository
                         Alternate = userUpdatedData.Image.Alternate,
                     });
 
-                image = imageEntityEntry.Entity;
+                user.Human!.Image = imageEntityEntry.Entity;
             }
             else
             {
-                image.URL = userUpdatedData.Image.URL;
-                image.Alternate = userUpdatedData.Image.Alternate;
+                user.Human!.Image.URL = userUpdatedData.Image.URL;
+                user.Human!.Image.Alternate = userUpdatedData.Image.Alternate;
             }
-            ;
         }
 
-        address.URL = userUpdatedData.Address.URL;
-        address.Country = userUpdatedData.Address.Country;
-        address.City = userUpdatedData.Address.City;
-        address.Street = userUpdatedData.Address.Street;
+        user.Human.Address!.URL = userUpdatedData.Address.URL;
+        user.Human.Address.Country = userUpdatedData.Address.Country;
+        user.Human.Address.City = userUpdatedData.Address.City;
+        user.Human.Address.Street = userUpdatedData.Address.Street;
 
         user.Human.FirstName = userUpdatedData.FirstName;
         user.Human.MidName = userUpdatedData.MidName;
@@ -69,17 +85,20 @@ public class UserRepository
 
         user.Human.Email = userUpdatedData.Email;
 
-        user.UpdatedAt = DateTime.UtcNow;
-
         await _AppDBContext.SaveChangesAsync();
     }
 
     public async Task DeleteOneAsync(int id)
     {
-        var user = await _AppDBContext.Users
-        .FirstOrDefaultAsync((user) => user.ID == id);
+        var userQuery = _AppDBContext.Users
+        .Where((user) => user.ID == id);
 
-        user!.IsDeleted = true;
+        var user = await userQuery
+        .FirstOrDefaultAsync();
+
+        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
+
+        user.IsDeleted = true;
         user.DeletedAt = DateTime.UtcNow;
 
         await _AppDBContext.SaveChangesAsync();
