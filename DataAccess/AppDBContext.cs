@@ -25,9 +25,6 @@ public class AppDBContext : DbContext
     public DbSet<RequestToBeAPartnerEntity> RequestsToBeAPartner { get; set; }
     public DbSet<PartnerSupportedLocationEntity> PartnerSupportedLocations { get; set; }
 
-    public DbSet<IndividualEntity> Individuals { get; set; }
-    public DbSet<CompanyEntity> Companies { get; set; }
-
     public DbSet<MemberEntity> Members { get; set; }
     public DbSet<MemberTaskEntity> MemberTasks { get; set; }
 

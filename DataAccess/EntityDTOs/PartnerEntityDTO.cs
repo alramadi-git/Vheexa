@@ -4,7 +4,17 @@ namespace DataAccess.EntityDTOs;
 
 public class PartnerEntityDTO
 {
+    public int ID { get; set; }
+
     public string Handle { get; set; }
+
+    public string Name { get; set; }
+
+    public string PhoneNumber { get; set; }
+
+    public string Email { get; set; }
+    public string Password { get; set; }
+
     public float AverageRates { get; set; }
 
     public bool IsPublished { get; set; }
@@ -17,7 +27,16 @@ public class PartnerEntityDTO
 
     public PartnerEntityDTO(PartnerEntity partner)
     {
+        ID = partner.ID;
+
         Handle = partner.Handle;
+
+        Name = partner.Name;
+
+        PhoneNumber = partner.PhoneNumber;
+
+        Email = partner.Email;
+        Password = partner.Password;
 
         AverageRates = partner.AverageRates;
 
