@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
 using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -15,10 +15,23 @@ public class AdminRequestToBeAPartnerRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task UpdateRequestToBeAPartnerAsync(int adminID, UpdateRequestToBeAPartnerDTO updatedRequestToBeAPartnerData)
+    public async Task GetAsync(int requestToBeAPartnerID)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
-        .Where(requestToBeAPartner => requestToBeAPartner.ID == updatedRequestToBeAPartnerData.ID && requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
+        .Include(requestToBeAPartner => requestToBeAPartner.Partner)
+        .ThenInclude(partner => partner!.Image)
+        .Where(requestToBeAPartner => requestToBeAPartner.ID == requestToBeAPartnerID);
+
+        var requestToBeAPartner = await requestToBeAPartnerQuery.AsNoTracking().FirstOrDefaultAsync();
+        if (requestToBeAPartner == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
+    }
+
+    public async Task UpdateAsync(int adminID, UpdateRequestToBeAPartnerDTO updatedRequestToBeAPartnerData)
+    {
+        var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
+        .Where(requestToBeAPartner =>
+        requestToBeAPartner.ID == updatedRequestToBeAPartnerData.ID &&
+        requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
 
         var requestToBeAPartner = await requestToBeAPartnerQuery.FirstOrDefaultAsync();
         if (requestToBeAPartner == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
@@ -54,10 +67,10 @@ public class AdminRequestToBeAPartnerRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyRequestToBeAPartnerAsync(GetManyRequestsToBeAPartnerSettingsDTO requestsToBeAPartnerSettings)
+    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(GetManyRequestsToBeAPartnerSettingsDTO requestsToBeAPartnerSettings)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
-        .AsNoTracking();
+        .AsQueryable();
 
         if (requestsToBeAPartnerSettings.Filters.PartnerID != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.PartnerID == requestsToBeAPartnerSettings.Filters.PartnerID);
 
@@ -135,8 +148,8 @@ public class AdminRequestToBeAPartnerRepository
         .Take((int)requestsToBeAPartnerSettings.Pagination.RecordsPerRequest);
 
         var requestToBeAPartners = await requestToBeAPartnerQuery
-        .Select(requestToBeAPartner => new RequestToBeAPartnerEntityDTO(requestToBeAPartner))
-        .ToArrayAsync();
+        .AsNoTracking()
+        .Select(requestToBeAPartner => new RequestToBeAPartnerEntityDTO(requestToBeAPartner)).ToArrayAsync();
 
         return new(
             requestToBeAPartners,

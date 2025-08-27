@@ -15,23 +15,22 @@ public class AdminUserRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<UserEntityDTO>> GetOneAsync(int id)
+    public async Task<SuccessOneResponseDTO<UserEntityDTO>> GetAsync(int userID)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .AsNoTracking();
+        .Where((user) => user.ID == userID && user.IsDeleted == false);
 
-        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
-
+        var user = await userQuery.AsNoTracking().FirstOrDefaultAsync();
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
         return new(new(user));
     }
 
-    public async Task UpdateOneAsync(int adminID, int userID, UserUpdateRequestDTO userUpdatedData)
+    public async Task UpdateAsync(int adminID, int userID, UserUpdateRequestDTO userUpdatedData)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
@@ -106,10 +105,12 @@ public class AdminUserRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task DeleteOneAsync(int adminID, int userID)
+    public async Task DeleteAsync(int adminID, int userID)
     {
-        var user = await _AppDBContext.Users
-        .FirstOrDefaultAsync((user) => user.ID == userID);
+        var userQuery = _AppDBContext.Users
+        .Where((user) => user.ID == userID && user.IsDeleted == false);
+
+        var user = await userQuery.FirstOrDefaultAsync();
 
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
         if (user.IsDeleted == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "User is already deleted.");
@@ -153,7 +154,7 @@ public class AdminUserRepository
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .AsNoTracking();
+        .AsQueryable();
 
         /** Filters */
         if (usersSettings.Filters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(usersSettings.Filters.FirstName));
@@ -276,8 +277,8 @@ public class AdminUserRepository
         .Take((int)usersSettings.Pagination.RecordsPerRequest);
 
         var users = await usersQuery
-        .Select(user => new UserEntityDTO(user))
-        .ToArrayAsync();
+        .AsNoTracking()
+        .Select(user => new UserEntityDTO(user)).ToArrayAsync();
 
         return new(
             users,

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
-using Business.Services;
-using DataAccess.ResponseDTOs;
+using Business.Services.AdminServices;
+
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace API.Controllers.AdminControllers.UserControllers;
 
@@ -20,27 +21,12 @@ public class AdminUserController : Controller
         _UserService = userService;
     }
 
-    [HttpPost]
-    public async Task<ActionResult> AddOneAsync([FromBody] UserAddRequestDTO newUser)
+    [HttpGet("{userID}")]
+    public async Task<ActionResult<UserEntityDTO>> GetAsync(int userID)
     {
         try
         {
-            await _UserService.AddOneAsync(newUser);
-
-            return Created();
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<UserEntityDTO>> GetOneAsync(int id)
-    {
-        try
-        {
-            var user = await _UserService.GetOneAsync(id);
+            var user = await _UserService.GetAsync(userID);
 
             return Ok(user);
         }
@@ -50,27 +36,12 @@ public class AdminUserController : Controller
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateOneAsync(int id, [FromBody] UserUpdateRequestDTO updatedData)
+    [HttpDelete("{userID}")]
+    public async Task<ActionResult> DeleteAsync(int userID)
     {
         try
         {
-            await _UserService.UpdateOneAsync(id, updatedData);
-
-            return Ok();
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteOneAsync(int id)
-    {
-        try
-        {
-            await _UserService.DeleteOneAsync(id);
+            await _UserService.DeleteAsync(1, userID);
 
             return Ok();
         }
@@ -81,11 +52,11 @@ public class AdminUserController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<SuccessManyResponseDTO<UserEntityDTO>>> GetManyAsync([FromQuery] UserFiltersRequestDTO filters, [FromQuery] UserSortingRequestDTO sorting, [FromQuery] PaginationRequestDTO pagination)
+    public async Task<ActionResult<SuccessManyResponseDTO<UserEntityDTO>>> GetManyAsync([FromQuery] GetManyUsersSettingsDTO usersSettings)
     {
         try
         {
-            var users = await _UserService.GetManyAsync(filters, sorting, pagination);
+            var users = await _UserService.GetManyAsync(usersSettings);
 
             return Ok(users);
         }

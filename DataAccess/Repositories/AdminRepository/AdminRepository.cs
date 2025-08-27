@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 using DataAccess.RequestDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -14,32 +14,17 @@ public class AdminRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task ResetPasswordAsync(int id, string newPassword)
-    {
-        var adminQuery = _AppDBContext.Admins
-        .Include(admin => admin.Human)
-        .Where((admin) => admin.ID == id);
-
-        var admin = await adminQuery.FirstOrDefaultAsync();
-        var passwordHasher = new PasswordHasher<object?>();
-
-        admin!.Human!.Password = passwordHasher.HashPassword(null, newPassword);
-
-        await _AppDBContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(int id, AdminUpdateRequestDTO adminUpdatedData)
+    public async Task UpdateAsync(int adminID, AdminUpdateRequestDTO adminUpdatedData)
     {
         var adminQuery = _AppDBContext.Admins
         .Include(admin => admin.Human)
         .ThenInclude(human => human!.Image)
         .Include(admin => admin.Human)
         .ThenInclude(human => human!.Address)
-        .Where((admin) => admin.ID == id);
+        .Where((admin) => admin.ID == adminID && admin.IsDeleted == false);
 
         var admin = await adminQuery.FirstOrDefaultAsync();
-
-        admin!.UpdatedAt = DateTime.UtcNow;
+        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
 
         if (adminUpdatedData.Image == null)
         {
@@ -84,17 +69,20 @@ public class AdminRepository
 
         admin.Human.Email = adminUpdatedData.Email;
 
+        admin.UpdatedAt = DateTime.UtcNow;
+
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int adminID)
     {
         var adminQuery = _AppDBContext.Admins
-        .Where((admin) => admin.ID == id);
+        .Where((admin) => admin.ID == adminID && admin.IsDeleted == false);
 
         var admin = await adminQuery.FirstOrDefaultAsync();
+        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
 
-        admin!.IsDeleted = true;
+        admin.IsDeleted = true;
         admin.DeletedAt = DateTime.UtcNow;
 
         await _AppDBContext.SaveChangesAsync();

@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using DataAccess.ResponseDTOs;
+
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.UserRepository;
 
@@ -16,7 +17,10 @@ public class UserAuthenticationRepository
 
     public async Task<SuccessOneResponseDTO<UserEntityDTO>> SignupAsync(UserAddRequestDTO signedupUserData)
     {
-        var isEmailOrPhoneNumberInUse = await _AppDBContext.Humans.AnyAsync(human => human.Email == signedupUserData.Email || human.PhoneNumber == signedupUserData.PhoneNumber);
+        var isEmailOrPhoneNumberInUseQuery = _AppDBContext.Humans
+        .Where(human => human.Email == signedupUserData.Email || human.PhoneNumber == signedupUserData.PhoneNumber);
+        
+        var isEmailOrPhoneNumberInUse = await isEmailOrPhoneNumberInUseQuery.AnyAsync();
         if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Email or phone number is already in use | If you deleted your account with those credentials, please contact us to restore your account.");
 
         var imageEntityEntry = signedupUserData.Image == null
@@ -77,10 +81,12 @@ public class UserAuthenticationRepository
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .Where((user) => user.Human!.Email == credentials.Email && user.Human.Password == credentials.Password && user.IsDeleted == false)
-        .AsNoTracking();
+        .Where((user) => user.Human!.Email == credentials.Email && user.Human.Password == credentials.Password && user.IsDeleted == false);
 
-        var user = await userQuery.FirstOrDefaultAsync();
+        var user = await userQuery
+        .AsNoTracking()
+        .FirstOrDefaultAsync();
+
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         return new(new(user));

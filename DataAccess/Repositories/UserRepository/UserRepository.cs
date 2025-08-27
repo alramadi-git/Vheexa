@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+
 using DataAccess.RequestDTOs;
-using Microsoft.AspNetCore.Identity;
 using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.UserRepository;
@@ -13,34 +13,18 @@ public class UserRepository
     {
         _AppDBContext = appDBContext;
     }
-    public async Task ResetPasswordAsync(int id, string newPassword)
-    {
-        var userQuery = _AppDBContext.Users
-        .Include(user => user.Human)
-        .Where((user) => user.ID == id);
 
-        var user = await userQuery.FirstOrDefaultAsync();
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
-
-        var passwordHasher = new PasswordHasher<object?>();
-        user.Human!.Password = passwordHasher.HashPassword(null, newPassword);
-
-        await _AppDBContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateOneAsync(int id, UserUpdateRequestDTO userUpdatedData)
+    public async Task UpdateAsync(int userID, UserUpdateRequestDTO userUpdatedData)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
         .ThenInclude(human => human!.Address)
-        .Where((user) => user.ID == id);
+        .Where((user) => user.ID == userID);
 
-        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == id);
+        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == userID);
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
-
-        user.UpdatedAt = DateTime.UtcNow;
 
         if (userUpdatedData.Image == null)
         {
@@ -85,17 +69,16 @@ public class UserRepository
 
         user.Human.Email = userUpdatedData.Email;
 
+        user.UpdatedAt = DateTime.UtcNow;
+
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task DeleteOneAsync(int id)
+    public async Task DeleteAsync(int userID)
     {
-        var userQuery = _AppDBContext.Users
-        .Where((user) => user.ID == id);
+        var userQuery = _AppDBContext.Users.Where((user) => user.ID == userID);
 
-        var user = await userQuery
-        .FirstOrDefaultAsync();
-
+        var user = await userQuery.FirstOrDefaultAsync();
         if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
         user.IsDeleted = true;

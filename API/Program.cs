@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
-using Business.Services;
+using Business.Services.AdminServices;
+
 using DataAccess;
+using DataAccess.Repositories.AdminRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 builder

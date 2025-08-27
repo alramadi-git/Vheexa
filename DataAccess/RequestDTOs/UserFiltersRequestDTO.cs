@@ -5,8 +5,8 @@ public class UserFiltersRequestDTO : AbstractHumanFiltersRequestDTO
     public float? MinAverageRates { get; set; }
     public float? MaxAverageRates { get; set; }
 
-    public bool IsDeleted { get; set; } = false;
-    
+    public required bool IsDeleted { get; set; }
+
     public DateTime? DeletedBefore { get; set; }
     public DateTime? DeletedAt { get; set; }
     public DateTime? DeletedAfter { get; set; }

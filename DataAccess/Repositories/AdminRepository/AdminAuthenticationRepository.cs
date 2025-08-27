@@ -21,17 +21,16 @@ public class AdminAuthenticationRepository
         var humanQuery = _AppDBContext.Humans
         .Include(human => human.Image)
         .Include(human => human.Address)
-        .Where((human) => human.Email == credentials.Email)
-        .AsNoTracking();
+        .Where((human) => human.Email == credentials.Email);
 
-        var human = await humanQuery.FirstOrDefaultAsync();
+        var human = await humanQuery.AsNoTracking().FirstOrDefaultAsync();
         if (human == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such email.");
 
         var hasher = new PasswordHasher<object?>();
-        var verifyPassword = hasher.VerifyHashedPassword(null, human.Password, credentials.Password);
+        var PasswordVerifyResult = hasher.VerifyHashedPassword(null, human.Password, credentials.Password);
 
-        if (verifyPassword == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
-        if (verifyPassword == PasswordVerificationResult.SuccessRehashNeeded)
+        if (PasswordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (PasswordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             var humanUpdateQuery = _AppDBContext.Humans
             .Where((human) => human.Email == credentials.Email);
@@ -43,34 +42,12 @@ public class AdminAuthenticationRepository
         }
 
         var adminQuery = _AppDBContext.Admins
-        .Where((admin) => admin.HumanID == human.ID && admin.IsDeleted == false)
-        .AsNoTracking();
+        .Where((admin) => admin.HumanID == human.ID && admin.IsDeleted == false);
 
-        var admin = await adminQuery.FirstOrDefaultAsync();
+        var admin = await adminQuery.AsNoTracking().FirstOrDefaultAsync();
         if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such admin.");
 
         admin.Human = human;
         return new(new(admin));
-    }
-
-    public async Task ResetPassword(string email, string newPassword)
-    {
-        var humanQuery = _AppDBContext.Humans
-        .Where((human) => human.Email == email);
-
-        var human = await humanQuery.FirstOrDefaultAsync();
-        if (human == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such email.");
-
-        var adminQuery = _AppDBContext.Admins
-        .Where((admin) => admin.HumanID == human.ID && admin.IsDeleted == false)
-        .AsNoTracking();
-        
-        var isAdmin = await adminQuery.AnyAsync();
-        if (isAdmin == false) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such admin.");
-
-        var hasher = new PasswordHasher<object?>();
-        human.Password = hasher.HashPassword(null, newPassword);
-
-        await _AppDBContext.SaveChangesAsync();
     }
 };

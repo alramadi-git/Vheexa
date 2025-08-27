@@ -1,4 +1,12 @@
 -- =========================
+-- ENUMS
+-- =========================
+CREATE TYPE task_action_option_entity AS ENUM ('CREATE', 'UPDATE', 'DELETE');
+CREATE TYPE task_table_option_entity AS ENUM ('USERS', 'REQUESTS_TO_BE_A_PARTNER');
+CREATE TYPE request_to_be_a_partner_status AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED');
+
+
+-- =========================
 -- Images Table
 -- =========================
 CREATE TABLE "Images" (
@@ -7,11 +15,6 @@ CREATE TABLE "Images" (
     "Alternate" TEXT NOT NULL
 );
 
--- Fake Data for Images
-INSERT INTO "Images" ("URL", "Alternate") VALUES
-('https://cdn.example.com/profiles/john.jpg', 'Profile picture of John Doe'),
-('https://cdn.example.com/profiles/mary.jpg', 'Profile picture of Mary Smith'),
-('https://cdn.example.com/profiles/alex.jpg', 'Profile picture of Alex Johnson');
 
 -- =========================
 -- Addresses Table
@@ -24,15 +27,9 @@ CREATE TABLE "Addresses" (
     "Street" TEXT NOT NULL
 );
 
--- Fake Data for Addresses
-INSERT INTO "Addresses" ("URL", "Country", "City", "Street") VALUES
-('https://maps.example.com/jeddah-kingfahd', 'Saudi Arabia', 'Jeddah', 'King Fahd Street'),
-('https://maps.example.com/riyadh-olaya', 'Saudi Arabia', 'Riyadh', 'Olaya Street'),
-('https://maps.example.com/dammam-khalid', 'Saudi Arabia', 'Dammam', 'Khalid Street');
+CREATE INDEX idx_addresses_country ON "Addresses" ("Country");
+CREATE INDEX idx_addresses_city ON "Addresses" ("City");
 
--- Index on Country
-CREATE INDEX idx_addresses_country
-ON "Addresses" ("Country");
 
 -- =========================
 -- Humans Table
@@ -50,23 +47,13 @@ CREATE TABLE "Humans" (
     "Password" TEXT NOT NULL
 );
 
--- Partial unique index for optional ImageID
 CREATE UNIQUE INDEX unique_image_id_not_null
 ON "Humans" ("ImageID")
 WHERE "ImageID" IS NOT NULL;
 
--- Indexes on PhoneNumber and Email (optional because UNIQUE already creates index)
-CREATE INDEX idx_humans_phone
-ON "Humans" ("PhoneNumber");
+CREATE INDEX idx_humans_phone ON "Humans" ("PhoneNumber");
+CREATE INDEX idx_humans_email ON "Humans" ("Email");
 
-CREATE INDEX idx_humans_email
-ON "Humans" ("Email");
-
--- Fake Data for Humans
-INSERT INTO "Humans" ("ImageID", "AddressID", "FirstName", "MidName", "LastName", "DateOfBirth", "PhoneNumber", "Email", "Password") VALUES
-(1, 1, 'John', 'Ali', 'Doe', '1990-05-14', '+966500000001', 'john.doe@example.com', 'hashedpassword1'),
-(2, 2, 'Mary', 'Saleh', 'Smith', '1995-08-22', '+966500000002', 'mary.smith@example.com', 'hashedpassword2'),
-(NULL, 3, 'Alex', 'Hassan', 'Johnson', '1988-12-01', '+966500000003', 'alex.johnson@example.com', 'hashedpassword3');
 
 -- =========================
 -- Users Table
@@ -81,15 +68,129 @@ CREATE TABLE "Users" (
     "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Indexes on Users
-CREATE INDEX idx_users_isdeleted
-ON "Users" ("IsDeleted");
+CREATE INDEX idx_users_isdeleted ON "Users" ("IsDeleted");
 
-CREATE INDEX idx_users_averagerates
-ON "Users" ("AverageRates");
+-- =========================
+-- Tasks Table
+-- =========================
+CREATE TABLE "Tasks" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "Action" task_action_option_entity NOT NULL,
+    "Table" task_table_option_entity NOT NULL,
+    "RowID" INT NOT NULL
+);
 
--- Fake Data for Users
-INSERT INTO "Users" ("HumanID", "AverageRates", "IsDeleted") VALUES
-(1, 4.5, FALSE),
-(2, 5.0, FALSE),
-(3, 3.8, FALSE);
+CREATE INDEX idx_tasks_action ON "Tasks" ("Action");
+
+-- =========================
+-- Admins Table
+-- =========================
+CREATE TABLE "Admins" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "HumanID" INT NOT NULL UNIQUE REFERENCES "Humans"("ID") ON DELETE CASCADE,
+    "IsDeleted" BOOLEAN NOT NULL DEFAULT FALSE,
+    "DeletedAt" TIMESTAMPTZ,
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_admins_isdeleted ON "Admins" ("IsDeleted");
+
+-- =========================
+-- AdminTasks Table
+-- =========================
+CREATE TABLE "AdminTasks" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "AdminID" INT NOT NULL REFERENCES "Admins"("ID") ON DELETE CASCADE,
+    "TaskID" INT NOT NULL UNIQUE REFERENCES "Tasks"("ID") ON DELETE CASCADE,
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- =========================
+-- Partners Table
+-- =========================
+CREATE TABLE "Partners" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "ImageID" INT NOT NULL REFERENCES "Images"("ID") ON DELETE CASCADE,
+    "Handle" TEXT NOT NULL UNIQUE,
+    "Name" TEXT NOT NULL,
+    "PhoneNumber" TEXT NOT NULL UNIQUE,
+    "Email" TEXT NOT NULL UNIQUE,
+    "Password" TEXT NOT NULL,
+    "AverageRates" FLOAT NOT NULL DEFAULT 0,
+    "IsPublished" BOOLEAN NOT NULL DEFAULT FALSE,
+    "IsDeleted" BOOLEAN NOT NULL DEFAULT FALSE,
+    "DeletedAt" TIMESTAMPTZ,
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_partners_ispublished ON "Partners" ("IsPublished");
+CREATE INDEX idx_partners_isdeleted ON "Partners" ("IsDeleted");
+CREATE INDEX idx_partners_averagerates ON "Partners" ("AverageRates");
+
+
+-- =========================
+-- RequestsToBeAPartner Table
+-- =========================
+CREATE TABLE "RequestsToBeAPartner" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "PartnerID" INT NOT NULL REFERENCES "Partners"("ID") ON DELETE CASCADE,
+    "Status" request_to_be_a_partner_status NOT NULL,
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_requeststobeapartner_partnerid ON "RequestsToBeAPartner" ("PartnerID");
+CREATE INDEX idx_requeststobeapartner_status ON "RequestsToBeAPartner" ("Status");
+
+-- =========================
+-- PartnerSupportedLocations Table
+-- =========================
+CREATE TABLE "PartnerSupportedLocations" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "PartnerID" INT NOT NULL REFERENCES "Partners"("ID") ON DELETE CASCADE,
+    "AddressID" INT NOT NULL REFERENCES "Addresses"("ID") ON DELETE CASCADE,
+    "IsPickup" BOOLEAN NOT NULL DEFAULT FALSE,
+    "IsDropoff" BOOLEAN NOT NULL DEFAULT FALSE,
+    "IsPublished" BOOLEAN NOT NULL DEFAULT FALSE,
+    "IsDeleted" BOOLEAN NOT NULL DEFAULT FALSE,
+    "DeletedAt" TIMESTAMPTZ,
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_partnersupportedlocations_partnerid ON "PartnerSupportedLocations" ("PartnerID");
+CREATE INDEX idx_partnersupportedlocations_ispickup ON "PartnerSupportedLocations" ("IsPickup");
+CREATE INDEX idx_partnersupportedlocations_isdropoff ON "PartnerSupportedLocations" ("IsDropoff");
+CREATE INDEX idx_partnersupportedlocations_ispublished ON "PartnerSupportedLocations" ("IsPublished");
+CREATE INDEX idx_partnersupportedlocations_isdeleted ON "PartnerSupportedLocations" ("IsDeleted");
+
+
+-- =========================
+-- Members Table
+-- =========================
+CREATE TABLE "Members" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "PartnerID" INT NOT NULL REFERENCES "Partners"("ID") ON DELETE CASCADE,
+    "HumanID" INT NOT NULL UNIQUE REFERENCES "Humans"("ID") ON DELETE CASCADE,
+    "IsPublished" BOOLEAN NOT NULL DEFAULT FALSE,
+    "IsDeleted" BOOLEAN NOT NULL DEFAULT FALSE,
+    "DeletedAt" TIMESTAMPTZ,
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_members_ispublished ON "Members" ("IsPublished");
+CREATE INDEX idx_members_isdeleted ON "Members" ("IsDeleted");
+
+
+-- =========================
+-- MemberTasks Table
+-- =========================
+CREATE TABLE "MemberTasks" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "MemberID" INT NOT NULL REFERENCES "Members"("ID") ON DELETE CASCADE,
+    "TaskID" INT NOT NULL UNIQUE REFERENCES "Tasks"("ID") ON DELETE CASCADE,
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

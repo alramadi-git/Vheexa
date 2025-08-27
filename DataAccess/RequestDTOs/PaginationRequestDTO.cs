@@ -11,6 +11,6 @@ public enum RECORDS_PER_REQUEST_OPTION_REQUEST_DTO : int
 
 public class PaginationRequestDTO
 {
-    public int RequestedPage { get; set; } = 1;
-    public RECORDS_PER_REQUEST_OPTION_REQUEST_DTO RecordsPerRequest { get; set; } = RECORDS_PER_REQUEST_OPTION_REQUEST_DTO._10;
+    public required int RequestedPage { get; set; }
+    public required RECORDS_PER_REQUEST_OPTION_REQUEST_DTO RecordsPerRequest { get; set; }
 }
