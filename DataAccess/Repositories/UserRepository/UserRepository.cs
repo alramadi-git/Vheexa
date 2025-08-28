@@ -17,14 +17,12 @@ public class UserRepository
     public async Task UpdateAsync(int userID, UserUpdateRequestDTO userUpdatedData)
     {
         var userQuery = _AppDBContext.Users
-        .Include(user => user.Human)
-        .ThenInclude(human => human!.Image)
-        .Include(user => user.Human)
-        .ThenInclude(human => human!.Address)
+        .Include(user => user.Human).ThenInclude(human => human!.Image)
+        .Include(user => user.Human).ThenInclude(human => human!.Address)
         .Where((user) => user.ID == userID);
 
-        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == userID);
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
+        var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == userID) ??
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
         if (userUpdatedData.Image == null)
         {
@@ -70,19 +68,6 @@ public class UserRepository
         user.Human.Email = userUpdatedData.Email;
 
         user.UpdatedAt = DateTime.UtcNow;
-
-        await _AppDBContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(int userID)
-    {
-        var userQuery = _AppDBContext.Users.Where((user) => user.ID == userID);
-
-        var user = await userQuery.FirstOrDefaultAsync();
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
-
-        user.IsDeleted = true;
-        user.DeletedAt = DateTime.UtcNow;
 
         await _AppDBContext.SaveChangesAsync();
     }

@@ -1,7 +1,7 @@
 -- =========================
 -- ENUMS
 -- =========================
-CREATE TYPE task_action_option_entity AS ENUM ('CREATE', 'UPDATE', 'DELETE');
+CREATE TYPE task_action_option_entity AS ENUM ('CREATE', 'UPDATE', 'RESTORE','DELETE');
 CREATE TYPE task_table_option_entity AS ENUM ('USERS', 'REQUESTS_TO_BE_A_PARTNER');
 CREATE TYPE request_to_be_a_partner_status AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED');
 

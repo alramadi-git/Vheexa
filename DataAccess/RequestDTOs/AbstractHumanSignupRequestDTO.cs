@@ -1,6 +1,6 @@
 namespace DataAccess.RequestDTOs;
 
-public abstract class AbstractHumanAddRequestDTO
+public abstract class AbstractHumanSignupRequestDTO
 {
     public ImageAddRequestDTO? Image { get; set; }
     public required AddressAddRequestDTO Address { get; set; }

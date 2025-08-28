@@ -74,17 +74,17 @@ public class AdminRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int adminID)
-    {
-        var adminQuery = _AppDBContext.Admins
-        .Where((admin) => admin.ID == adminID && admin.IsDeleted == false);
+    // public async Task DeleteAsync(int adminID)
+    // {
+    //     var adminQuery = _AppDBContext.Admins
+    //     .Where((admin) => admin.ID == adminID && admin.IsDeleted == false);
 
-        var admin = await adminQuery.FirstOrDefaultAsync();
-        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
+    //     var admin = await adminQuery.FirstOrDefaultAsync();
+    //     if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
 
-        admin.IsDeleted = true;
-        admin.DeletedAt = DateTime.UtcNow;
+    //     admin.IsDeleted = true;
+    //     admin.DeletedAt = DateTime.UtcNow;
 
-        await _AppDBContext.SaveChangesAsync();
-    }
+    //     await _AppDBContext.SaveChangesAsync();
+    // }
 };

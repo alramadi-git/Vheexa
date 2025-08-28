@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
-using Business.Services.AdminServices;
+using Business.Services.UserServices;
 
 using DataAccess;
-using DataAccess.Repositories.AdminRepository;
+using DataAccess.Repositories.UserRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 builder
@@ -13,8 +13,13 @@ builder
 .AddEnvironmentVariables();
 
 builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
-builder.Services.AddScoped<AdminUserRepository>();
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserAuthenticationRepository>();
+
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<UserAuthenticationService>();
+
 
 builder.Services.AddControllers();
 

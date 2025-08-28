@@ -30,122 +30,85 @@ public class AdminUserRepository
         return new(new(user));
     }
 
-    public async Task UpdateAsync(int adminID, int userID, UserUpdateRequestDTO userUpdatedData)
-    {
-        var userQuery = _AppDBContext.Users
-        .Include(user => user.Human)
-        .ThenInclude(human => human!.Image)
-        .Include(user => user.Human)
-        .ThenInclude(human => human!.Address)
-        .Where((user) => user.ID == userID);
+    // public async Task RestoreAsync(int adminID, int userID)
+    // {
+    //     var userQuery = _AppDBContext.Users
+    //     .Where((user) => user.ID == userID && user.IsDeleted == true);
 
-        var user = await userQuery.FirstOrDefaultAsync();
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
+    //     var user = await userQuery.FirstOrDefaultAsync();
+    //     if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
-        var image = user.Human!.Image;
-        var address = user.Human.Address!;
+    //     user.IsDeleted = false;
+    //     user.DeletedAt = null;
 
-        if (image != null)
-        {
-            if (userUpdatedData.Image == null)
-            {
-                _AppDBContext.Images.Remove(image);
-                user.Human.Image = null;
-            }
-            else
-            {
-                image.URL = userUpdatedData.Image.URL;
-                image.Alternate = userUpdatedData.Image.Alternate;
-            }
-        }
+    //     var adminQuery = _AppDBContext.Admins
+    //     .Where((admin) => admin.ID == adminID);
 
-        address.URL = userUpdatedData.Address.URL;
-        address.Country = userUpdatedData.Address.Country;
-        address.City = userUpdatedData.Address.City;
-        address.Street = userUpdatedData.Address.Street;
+    //     var admin = await adminQuery.FirstOrDefaultAsync();
+    //     if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
 
-        user.Human.FirstName = userUpdatedData.FirstName;
-        user.Human.MidName = userUpdatedData.MidName;
-        user.Human.LastName = userUpdatedData.LastName;
+    //     var taskEntityEntry = _AppDBContext.Tasks
+    //     .Add(
+    //     new Entities.TaskEntity
+    //     {
+    //         Action = Entities.TASK_ACTION_OPTION_ENTITY.RESTORE,
 
-        user.Human.DateOfBirth = userUpdatedData.DateOfBirth;
+    //         Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
+    //         RowID = userID,
+    //     });
 
-        user.Human.PhoneNumber = userUpdatedData.PhoneNumber;
+    //     var adminTaskEntityEntry = _AppDBContext.AdminTasks
+    //     .Add(
+    //     new Entities.AdminTaskEntity
+    //     {
+    //         Admin = admin,
+    //         Task = taskEntityEntry.Entity,
 
-        user.Human.Email = userUpdatedData.Email;
+    //         CreatedAt = DateTime.UtcNow,
+    //     });
 
-        user.UpdatedAt = DateTime.UtcNow;
+    //     await _AppDBContext.SaveChangesAsync();
+    // }
 
-        var adminQuery = _AppDBContext.Admins
-        .Where((admin) => admin.ID == adminID);
+    // public async Task DeleteAsync(int adminID, int userID)
+    // {
+    //     var userQuery = _AppDBContext.Users
+    //     .Where((user) => user.ID == userID && user.IsDeleted == false);
 
-        var admin = await adminQuery.FirstOrDefaultAsync();
-        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
+    //     var user = await userQuery.FirstOrDefaultAsync();
+    //     if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
-        var taskEntityEntry = _AppDBContext.Tasks
-        .Add(
-        new Entities.TaskEntity
-        {
-            Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
+    //     user.IsDeleted = true;
+    //     user.DeletedAt = DateTime.UtcNow;
 
-            Table = Entities.TASK_TABLE_OPTION_ENTITY.USERS,
-            RowID = userID,
-        });
+    //     var adminQuery = _AppDBContext.Admins
+    //     .Where((admin) => admin.ID == adminID);
 
-        var adminTaskEntityEntry = _AppDBContext.AdminTasks
-        .Add(
-        new Entities.AdminTaskEntity
-        {
-            Admin = admin,
-            Task = taskEntityEntry.Entity,
+    //     var admin = await adminQuery.FirstOrDefaultAsync();
+    //     if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
 
-            CreatedAt = DateTime.UtcNow,
-        });
+    //     var taskEntityEntry = _AppDBContext.Tasks
+    //     .Add(
+    //     new Entities.TaskEntity
+    //     {
+    //         Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
 
-        await _AppDBContext.SaveChangesAsync();
-    }
+    //         Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
+    //         RowID = userID,
+    //     });
 
-    public async Task DeleteAsync(int adminID, int userID)
-    {
-        var userQuery = _AppDBContext.Users
-        .Where((user) => user.ID == userID && user.IsDeleted == false);
+    //     var adminTaskEntityEntry = _AppDBContext.AdminTasks
+    //     .Add(
+    //     new Entities.AdminTaskEntity
+    //     {
+    //         Admin = admin,
+    //         Task = taskEntityEntry.Entity,
 
-        var user = await userQuery.FirstOrDefaultAsync();
+    //         CreatedAt = DateTime.UtcNow,
+    //     });
 
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
-        if (user.IsDeleted == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "User is already deleted.");
-
-        user.IsDeleted = true;
-        user.DeletedAt = DateTime.UtcNow;
-
-        var adminQuery = _AppDBContext.Admins
-        .Where((admin) => admin.ID == adminID);
-
-        var admin = await adminQuery.FirstOrDefaultAsync();
-        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
-
-        var taskEntityEntry = _AppDBContext.Tasks
-        .Add(
-        new Entities.TaskEntity
-        {
-            Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
-
-            Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
-            RowID = userID,
-        });
-
-        var adminTaskEntityEntry = _AppDBContext.AdminTasks
-        .Add(
-        new Entities.AdminTaskEntity
-        {
-            Admin = admin,
-            Task = taskEntityEntry.Entity,
-
-            CreatedAt = DateTime.UtcNow,
-        });
-
-        await _AppDBContext.SaveChangesAsync();
-    }
+    //     await _AppDBContext.SaveChangesAsync();
+    // }
 
     public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(GetManyUsersSettingsDTO usersSettings)
     {

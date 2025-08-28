@@ -1,20 +1,19 @@
-using DataAccess.RequestDTOs;
 using FluentValidation;
 
-namespace Business.Validations.Human;
+using DataAccess.RequestDTOs;
 
-public abstract class HumanAddValidation<T> : AbstractValidator<T> where T : AbstractHumanAddRequestDTO
+namespace Business.Validations.UserValidations;
+
+public class UserUpdateValidation : AbstractValidator<UserUpdateRequestDTO>
 {
-    public HumanAddValidation()
+    public UserUpdateValidation() : base()
     {
         /** Image */
-        RuleFor(user => user.Image!.URL)
-        .NotEmpty()
-        .When(user => user.Image != null);
+        RuleFor(user => user.Image.URL)
+        .NotEmpty().When(user => user.Image != null);
 
-        RuleFor(user => user.Image!.Alternate)
-        .NotEmpty()
-        .When(user => user.Image != null);
+        RuleFor(user => user.Image.Alternate)
+        .NotEmpty().When(user => user.Image != null);
 
         /** Address */
         RuleFor(user => user.Address.URL)
@@ -31,16 +30,13 @@ public abstract class HumanAddValidation<T> : AbstractValidator<T> where T : Abs
 
         /** User */
         RuleFor(user => user.FirstName)
-        .MinimumLength(3)
-        .MaximumLength(25);
+        .Name();
 
         RuleFor(user => user.MidName)
-        .MinimumLength(3)
-        .MaximumLength(25);
+        .Name();
 
         RuleFor(user => user.LastName)
-        .MinimumLength(3)
-        .MaximumLength(25);
+        .Name();
 
         RuleFor(user => user.DateOfBirth)
         .OlderThanX();
@@ -50,8 +46,5 @@ public abstract class HumanAddValidation<T> : AbstractValidator<T> where T : Abs
 
         RuleFor(user => user.Email)
        .EmailAddress();
-
-        RuleFor(user => user.Password)
-        .Password();
     }
 }

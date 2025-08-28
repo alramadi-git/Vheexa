@@ -1,11 +1,12 @@
-using DataAccess.RequestDTOs;
 using FluentValidation;
 
-namespace Business.Validations.Human;
+using DataAccess.RequestDTOs;
 
-public abstract class HumanUpdateValidation<T> : AbstractValidator<T> where T : AbstractHumanUpdateRequestDTO
+namespace Business.Validations.UserValidations;
+
+public class UserSignupValidation : AbstractValidator<UserSignupRequestDTO>
 {
-    public HumanUpdateValidation()
+    public UserSignupValidation()
     {
         /** Image */
         RuleFor(user => user.Image.URL)
@@ -31,16 +32,13 @@ public abstract class HumanUpdateValidation<T> : AbstractValidator<T> where T : 
 
         /** User */
         RuleFor(user => user.FirstName)
-        .MinimumLength(3)
-        .MaximumLength(25);
+        .Name();
 
         RuleFor(user => user.MidName)
-        .MinimumLength(3)
-        .MaximumLength(25);
+        .Name();
 
         RuleFor(user => user.LastName)
-        .MinimumLength(3)
-        .MaximumLength(25);
+        .Name();
 
         RuleFor(user => user.DateOfBirth)
         .OlderThanX();
@@ -50,5 +48,8 @@ public abstract class HumanUpdateValidation<T> : AbstractValidator<T> where T : 
 
         RuleFor(user => user.Email)
        .EmailAddress();
+
+        RuleFor(user => user.Password)
+        .Password();
     }
 }

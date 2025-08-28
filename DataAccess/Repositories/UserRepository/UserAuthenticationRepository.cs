@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
+using Microsoft.AspNetCore.Identity;
+
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
@@ -15,13 +17,13 @@ public class UserAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<UserEntityDTO>> SignupAsync(UserAddRequestDTO signedupUserData)
+    public async Task SignupAsync(UserSignupRequestDTO signedupUserData)
     {
         var isEmailOrPhoneNumberInUseQuery = _AppDBContext.Humans
         .Where(human => human.Email == signedupUserData.Email || human.PhoneNumber == signedupUserData.PhoneNumber);
-        
+
         var isEmailOrPhoneNumberInUse = await isEmailOrPhoneNumberInUseQuery.AnyAsync();
-        if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Email or phone number is already in use | If you deleted your account with those credentials, please contact us to restore your account.");
+        if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Email or phone number is already in use | If you deleted your account with those credentials, please contact us to restore your account.");
 
         var imageEntityEntry = signedupUserData.Image == null
         ? null
@@ -37,6 +39,8 @@ public class UserAuthenticationRepository
             City = signedupUserData.Address.City,
             Street = signedupUserData.Address.Street,
         });
+
+        var passwordHasher = new PasswordHasher<object?>();
         var HumanEntityEntry = _AppDBContext.Humans.Add(
         new Entities.HumanEntity
         {
@@ -52,7 +56,7 @@ public class UserAuthenticationRepository
             PhoneNumber = signedupUserData.PhoneNumber,
 
             Email = signedupUserData.Email,
-            Password = signedupUserData.Password,
+            Password = passwordHasher.HashPassword(null, signedupUserData.Password),
         });
 
         var UserEntityEntry = _AppDBContext.Users
@@ -71,23 +75,27 @@ public class UserAuthenticationRepository
         );
 
         await _AppDBContext.SaveChangesAsync();
-        return new(new(UserEntityEntry.Entity));
     }
 
     public async Task<SuccessOneResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         var userQuery = _AppDBContext.Users
-        .Include(user => user.Human)
-        .ThenInclude(human => human!.Image)
-        .Include(user => user.Human)
-        .ThenInclude(human => human!.Address)
-        .Where((user) => user.Human!.Email == credentials.Email && user.Human.Password == credentials.Password && user.IsDeleted == false);
+        .Include(user => user.Human).ThenInclude(human => human!.Image)
+        .Include(user => user.Human).ThenInclude(human => human!.Address)
+        .Where((user) => user.Human!.Email == credentials.Email);
 
-        var user = await userQuery
-        .AsNoTracking()
-        .FirstOrDefaultAsync();
+        var user = await userQuery.FirstOrDefaultAsync() ??
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such email.");
 
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
+        var passwordHasher = new PasswordHasher<object?>();
+        var PasswordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human!.Password, credentials.Password);
+
+        if (PasswordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (PasswordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            user.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
+            await _AppDBContext.SaveChangesAsync();
+        }
 
         return new(new(user));
     }

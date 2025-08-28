@@ -24,14 +24,14 @@ public class AdminRequestToBeAPartnerRepository
 
         var requestToBeAPartner = await requestToBeAPartnerQuery.AsNoTracking().FirstOrDefaultAsync();
         if (requestToBeAPartner == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
+
+        // return new(new(requestToBeAPartner));   
     }
 
     public async Task UpdateAsync(int adminID, UpdateRequestToBeAPartnerDTO updatedRequestToBeAPartnerData)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
-        .Where(requestToBeAPartner =>
-        requestToBeAPartner.ID == updatedRequestToBeAPartnerData.ID &&
-        requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
+        .Where(requestToBeAPartner => requestToBeAPartner.ID == updatedRequestToBeAPartnerData.ID && requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
 
         var requestToBeAPartner = await requestToBeAPartnerQuery.FirstOrDefaultAsync();
         if (requestToBeAPartner == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");

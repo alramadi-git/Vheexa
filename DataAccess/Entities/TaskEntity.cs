@@ -4,6 +4,7 @@ public enum TASK_ACTION_OPTION_ENTITY
 {
     CREATE,
     UPDATE,
+    RESTORE,
     DELETE,
 }
 
