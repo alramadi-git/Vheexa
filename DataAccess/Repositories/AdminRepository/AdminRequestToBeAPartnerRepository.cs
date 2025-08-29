@@ -15,17 +15,16 @@ public class AdminRequestToBeAPartnerRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task GetAsync(int requestToBeAPartnerID)
+    public async Task<SuccessOneResponseDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
-        .Include(requestToBeAPartner => requestToBeAPartner.Partner)
-        .ThenInclude(partner => partner!.Image)
+        .Include(requestToBeAPartner => requestToBeAPartner.Partner).ThenInclude(partner => partner!.Image)
         .Where(requestToBeAPartner => requestToBeAPartner.ID == requestToBeAPartnerID);
 
-        var requestToBeAPartner = await requestToBeAPartnerQuery.AsNoTracking().FirstOrDefaultAsync();
-        if (requestToBeAPartner == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
+        var requestToBeAPartner = await requestToBeAPartnerQuery.AsNoTracking().FirstOrDefaultAsync() ??
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
 
-        // return new(new(requestToBeAPartner));   
+        return new(new(requestToBeAPartner));
     }
 
     public async Task UpdateAsync(int adminID, UpdateRequestToBeAPartnerDTO updatedRequestToBeAPartnerData)
@@ -33,16 +32,16 @@ public class AdminRequestToBeAPartnerRepository
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
         .Where(requestToBeAPartner => requestToBeAPartner.ID == updatedRequestToBeAPartnerData.ID && requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
 
-        var requestToBeAPartner = await requestToBeAPartnerQuery.FirstOrDefaultAsync();
-        if (requestToBeAPartner == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
+        var requestToBeAPartner = await requestToBeAPartnerQuery.FirstOrDefaultAsync() ??
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
 
         requestToBeAPartner.Status = updatedRequestToBeAPartnerData.Status;
 
         var adminQuery = _AppDBContext.Admins
         .Where((admin) => admin.ID == adminID);
 
-        var admin = await adminQuery.FirstOrDefaultAsync();
-        if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
+        var admin = await adminQuery.FirstOrDefaultAsync() ??
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
 
         var taskEntityEntry = _AppDBContext.Tasks
         .Add(

@@ -24,91 +24,11 @@ public class AdminUserRepository
         .ThenInclude(human => human!.Address)
         .Where((user) => user.ID == userID && user.IsDeleted == false);
 
-        var user = await userQuery.AsNoTracking().FirstOrDefaultAsync();
-        if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
+        var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
 
         return new(new(user));
     }
-
-    // public async Task RestoreAsync(int adminID, int userID)
-    // {
-    //     var userQuery = _AppDBContext.Users
-    //     .Where((user) => user.ID == userID && user.IsDeleted == true);
-
-    //     var user = await userQuery.FirstOrDefaultAsync();
-    //     if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
-
-    //     user.IsDeleted = false;
-    //     user.DeletedAt = null;
-
-    //     var adminQuery = _AppDBContext.Admins
-    //     .Where((admin) => admin.ID == adminID);
-
-    //     var admin = await adminQuery.FirstOrDefaultAsync();
-    //     if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
-
-    //     var taskEntityEntry = _AppDBContext.Tasks
-    //     .Add(
-    //     new Entities.TaskEntity
-    //     {
-    //         Action = Entities.TASK_ACTION_OPTION_ENTITY.RESTORE,
-
-    //         Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
-    //         RowID = userID,
-    //     });
-
-    //     var adminTaskEntityEntry = _AppDBContext.AdminTasks
-    //     .Add(
-    //     new Entities.AdminTaskEntity
-    //     {
-    //         Admin = admin,
-    //         Task = taskEntityEntry.Entity,
-
-    //         CreatedAt = DateTime.UtcNow,
-    //     });
-
-    //     await _AppDBContext.SaveChangesAsync();
-    // }
-
-    // public async Task DeleteAsync(int adminID, int userID)
-    // {
-    //     var userQuery = _AppDBContext.Users
-    //     .Where((user) => user.ID == userID && user.IsDeleted == false);
-
-    //     var user = await userQuery.FirstOrDefaultAsync();
-    //     if (user == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such user.");
-
-    //     user.IsDeleted = true;
-    //     user.DeletedAt = DateTime.UtcNow;
-
-    //     var adminQuery = _AppDBContext.Admins
-    //     .Where((admin) => admin.ID == adminID);
-
-    //     var admin = await adminQuery.FirstOrDefaultAsync();
-    //     if (admin == null) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such admin.");
-
-    //     var taskEntityEntry = _AppDBContext.Tasks
-    //     .Add(
-    //     new Entities.TaskEntity
-    //     {
-    //         Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
-
-    //         Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
-    //         RowID = userID,
-    //     });
-
-    //     var adminTaskEntityEntry = _AppDBContext.AdminTasks
-    //     .Add(
-    //     new Entities.AdminTaskEntity
-    //     {
-    //         Admin = admin,
-    //         Task = taskEntityEntry.Entity,
-
-    //         CreatedAt = DateTime.UtcNow,
-    //     });
-
-    //     await _AppDBContext.SaveChangesAsync();
-    // }
 
     public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(GetManyUsersSettingsDTO usersSettings)
     {
@@ -119,7 +39,6 @@ public class AdminUserRepository
         .ThenInclude(human => human!.Address)
         .AsQueryable();
 
-        /** Filters */
         if (usersSettings.Filters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(usersSettings.Filters.FirstName));
         if (usersSettings.Filters.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(usersSettings.Filters.MidName));
         if (usersSettings.Filters.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(usersSettings.Filters.LastName));

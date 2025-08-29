@@ -85,13 +85,13 @@ public class UserAuthenticationRepository
         .Where((user) => user.Human!.Email == credentials.Email);
 
         var user = await userQuery.FirstOrDefaultAsync() ??
-        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such email.");
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         var passwordHasher = new PasswordHasher<object?>();
-        var PasswordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human!.Password, credentials.Password);
+        var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human!.Password, credentials.Password);
 
-        if (PasswordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
-        if (PasswordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
+        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             user.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
             await _AppDBContext.SaveChangesAsync();
