@@ -2,18 +2,23 @@ using FluentValidation;
 
 using DataAccess.RequestDTOs;
 
-namespace Business.Validations.UserValidations;
+namespace Business.Validations;
 
-public class UserUpdateValidation : AbstractValidator<UserUpdateRequestDTO>
+public class UserSignupValidation : AbstractValidator<UserSignupRequestDTO>
 {
-    public UserUpdateValidation() : base()
+    private static Lazy<UserSignupValidation> _Instance = new(() => new());
+    public static UserSignupValidation Instance => _Instance.Value;
+
+    private UserSignupValidation()
     {
         /** Image */
         RuleFor(user => user.Image.URL)
-        .NotEmpty().When(user => user.Image != null);
+        .NotEmpty()
+        .When(user => user.Image != null);
 
         RuleFor(user => user.Image.Alternate)
-        .NotEmpty().When(user => user.Image != null);
+        .NotEmpty()
+        .When(user => user.Image != null);
 
         /** Address */
         RuleFor(user => user.Address.URL)
@@ -46,5 +51,8 @@ public class UserUpdateValidation : AbstractValidator<UserUpdateRequestDTO>
 
         RuleFor(user => user.Email)
        .EmailAddress();
+
+        RuleFor(user => user.Password)
+        .Password();
     }
 }

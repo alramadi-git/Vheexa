@@ -4,6 +4,7 @@ using Business.Services.UserServices;
 
 using DataAccess;
 using DataAccess.Repositories.UserRepository;
+using DataAccess.Repositories.MemberRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 builder

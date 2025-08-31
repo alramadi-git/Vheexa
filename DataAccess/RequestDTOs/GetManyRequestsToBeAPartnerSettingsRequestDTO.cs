@@ -1,0 +1,3 @@
+namespace DataAccess.RequestDTOs;
+
+public class GetManyRequestsToBeAPartnerSettingsRequestDTO : AbstractGetManySettingsDTO<RequestToBeAPartnerFiltersRequestDTO, RequestToBeAPartnerSortingRequestDTO>;

@@ -1,16 +1,13 @@
 using FluentValidation;
 
-using Business.Validations.UserValidations;
-
 using DataAccess.RequestDTOs;
 using DataAccess.Repositories.UserRepository;
+using Business.Validations;
 
 namespace Business.Services.UserServices;
 
 public class UserService
 {
-    private static readonly UserUpdateValidation _UserUpdateValidator = new();
-
     private readonly UserRepository _UserRepository;
 
     public UserService(UserRepository userRepository)
@@ -20,7 +17,7 @@ public class UserService
 
     public async Task UpdateAsync(int userID, UserUpdateRequestDTO userUpdatedData)
     {
-        _UserUpdateValidator.ValidateAndThrow(userUpdatedData);
+        UserUpdateValidation.Instance.ValidateAndThrow(userUpdatedData);
         await _UserRepository.UpdateAsync(userID, userUpdatedData);
     }
 }

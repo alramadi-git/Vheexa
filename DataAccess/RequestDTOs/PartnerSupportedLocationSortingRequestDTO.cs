@@ -1,0 +1,15 @@
+namespace DataAccess.RequestDTOs;
+
+public enum PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO
+{
+    CREATION,
+    MODIFICATION,
+    DELETION,
+    PUBLICATION,
+    PARTNER_ID,
+    ADDRESS,
+    DROPOFF,
+    PICKUP,
+}
+
+public class PartnerSupportedLocationSortingRequestDTO : AbstractSortingRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>;

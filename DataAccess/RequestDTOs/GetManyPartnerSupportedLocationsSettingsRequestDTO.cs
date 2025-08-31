@@ -1,0 +1,3 @@
+namespace DataAccess.RequestDTOs;
+
+public class GetManyPartnerSupportedLocationsSettingsRequestDTO : AbstractGetManySettingsDTO<PartnerSupportedLocationFiltersRequestDTO, PartnerSupportedLocationSortingRequestDTO>;

@@ -28,7 +28,10 @@ public class UserAuthenticationRepository
         var imageEntityEntry = signedupUserData.Image == null
         ? null
         : _AppDBContext.Images
-        .Add(new Entities.ImageEntity { URL = signedupUserData.Image.URL, Alternate = signedupUserData.Image.Alternate });
+        .Add(new Entities.ImageEntity
+        {
+            URL = signedupUserData.Image.URL
+        });
 
         var AddressEntityEntry = _AppDBContext.Addresses.Add(
         new Entities.AddressEntity

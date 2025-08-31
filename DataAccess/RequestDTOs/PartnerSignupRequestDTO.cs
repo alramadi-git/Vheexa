@@ -1,8 +1,8 @@
 namespace DataAccess.RequestDTOs;
 
-public class PartnerUpdateRequestDTO
+public class PartnerSignupRequestDTO
 {
-    public ImageUpdateRequestDTO? Image { get; set; }
+    public ImageAddRequestDTO? Image { get; set; }
 
     public required string Handle { get; set; }
 
@@ -11,4 +11,5 @@ public class PartnerUpdateRequestDTO
     public required string PhoneNumber { get; set; }
 
     public required string Email { get; set; }
+    public required string Password { get; set; }
 }

@@ -30,7 +30,7 @@ public class AdminUserRepository
         return new(new(user));
     }
 
-    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(GetManyUsersSettingsDTO usersSettings)
+    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(GetManyUsersSettingsRequestDTO userFilters)
     {
         var usersQuery = _AppDBContext.Users
         .Include(user => user.Human)
@@ -39,59 +39,59 @@ public class AdminUserRepository
         .ThenInclude(human => human!.Address)
         .AsQueryable();
 
-        if (usersSettings.Filters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(usersSettings.Filters.FirstName));
-        if (usersSettings.Filters.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(usersSettings.Filters.MidName));
-        if (usersSettings.Filters.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(usersSettings.Filters.LastName));
+        if (userFilters.Filters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(userFilters.Filters.FirstName));
+        if (userFilters.Filters.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(userFilters.Filters.MidName));
+        if (userFilters.Filters.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(userFilters.Filters.LastName));
 
-        if (usersSettings.Filters.Address != null)
+        if (userFilters.Filters.Address != null)
         {
-            if (usersSettings.Filters.Address.Country != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Country.Contains(usersSettings.Filters.Address.Country));
-            if (usersSettings.Filters.Address.City != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.City.Contains(usersSettings.Filters.Address.City));
-            if (usersSettings.Filters.Address.Street != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Street.Contains(usersSettings.Filters.Address.Street));
+            if (userFilters.Filters.Address.Country != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Country.Contains(userFilters.Filters.Address.Country));
+            if (userFilters.Filters.Address.City != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.City.Contains(userFilters.Filters.Address.City));
+            if (userFilters.Filters.Address.Street != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Street.Contains(userFilters.Filters.Address.Street));
         }
 
-        if (usersSettings.Filters.MinAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates >= usersSettings.Filters.MinAverageRates);
-        if (usersSettings.Filters.MaxAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates <= usersSettings.Filters.MaxAverageRates);
+        if (userFilters.Filters.MinAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates >= userFilters.Filters.MinAverageRates);
+        if (userFilters.Filters.MaxAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates <= userFilters.Filters.MaxAverageRates);
 
-        if (usersSettings.Filters.MinDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth >= usersSettings.Filters.MinDateOfBirth);
-        if (usersSettings.Filters.MaxDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth <= usersSettings.Filters.MaxDateOfBirth);
+        if (userFilters.Filters.MinDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth >= userFilters.Filters.MinDateOfBirth);
+        if (userFilters.Filters.MaxDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth <= userFilters.Filters.MaxDateOfBirth);
 
-        if (usersSettings.Filters.PhoneNumber != null) usersQuery = usersQuery.Where(user => user.Human!.PhoneNumber.Contains(usersSettings.Filters.PhoneNumber));
+        if (userFilters.Filters.PhoneNumber != null) usersQuery = usersQuery.Where(user => user.Human!.PhoneNumber.Contains(userFilters.Filters.PhoneNumber));
 
-        if (usersSettings.Filters.Email != null) usersQuery = usersQuery.Where(user => user.Human!.Email.Contains(usersSettings.Filters.Email));
+        if (userFilters.Filters.Email != null) usersQuery = usersQuery.Where(user => user.Human!.Email.Contains(userFilters.Filters.Email));
 
         usersQuery = usersQuery
-        .Where(user => user.IsDeleted == usersSettings.Filters.IsDeleted);
+        .Where(user => user.IsDeleted == userFilters.Filters.IsDeleted);
 
-        if (usersSettings.Filters.IsDeleted == true)
+        if (userFilters.Filters.IsDeleted == true)
         {
-            if (usersSettings.Filters.DeletedAt != null) usersQuery = usersQuery.Where(user => user.DeletedAt == usersSettings.Filters.DeletedAt);
+            if (userFilters.Filters.DeletedAt != null) usersQuery = usersQuery.Where(user => user.DeletedAt == userFilters.Filters.DeletedAt);
             else
             {
-                if (usersSettings.Filters.DeletedBefore != null) usersQuery = usersQuery.Where(user => user.DeletedAt <= usersSettings.Filters.DeletedBefore);
-                if (usersSettings.Filters.DeletedAfter != null) usersQuery = usersQuery.Where(user => user.DeletedAt >= usersSettings.Filters.DeletedAfter);
+                if (userFilters.Filters.DeletedBefore != null) usersQuery = usersQuery.Where(user => user.DeletedAt <= userFilters.Filters.DeletedBefore);
+                if (userFilters.Filters.DeletedAfter != null) usersQuery = usersQuery.Where(user => user.DeletedAt >= userFilters.Filters.DeletedAfter);
             }
         }
 
-        if (usersSettings.Filters.UpdatedAt != null) usersQuery = usersQuery.Where(user => user.UpdatedAt == usersSettings.Filters.UpdatedAt);
+        if (userFilters.Filters.UpdatedAt != null) usersQuery = usersQuery.Where(user => user.UpdatedAt == userFilters.Filters.UpdatedAt);
         else
         {
-            if (usersSettings.Filters.UpdatedBefore != null) usersQuery = usersQuery.Where(user => user.UpdatedAt <= usersSettings.Filters.UpdatedBefore);
-            if (usersSettings.Filters.UpdatedAfter != null) usersQuery = usersQuery.Where(user => user.UpdatedAt >= usersSettings.Filters.UpdatedAfter);
+            if (userFilters.Filters.UpdatedBefore != null) usersQuery = usersQuery.Where(user => user.UpdatedAt <= userFilters.Filters.UpdatedBefore);
+            if (userFilters.Filters.UpdatedAfter != null) usersQuery = usersQuery.Where(user => user.UpdatedAt >= userFilters.Filters.UpdatedAfter);
         }
 
-        if (usersSettings.Filters.CreatedAt != null) usersQuery = usersQuery.Where(user => user.CreatedAt == usersSettings.Filters.CreatedAt);
+        if (userFilters.Filters.CreatedAt != null) usersQuery = usersQuery.Where(user => user.CreatedAt == userFilters.Filters.CreatedAt);
         else
         {
-            if (usersSettings.Filters.CreatedBefore != null) usersQuery = usersQuery.Where(user => user.CreatedAt <= usersSettings.Filters.CreatedBefore);
-            if (usersSettings.Filters.CreatedAfter != null) usersQuery = usersQuery.Where(user => user.CreatedAt >= usersSettings.Filters.CreatedAfter);
+            if (userFilters.Filters.CreatedBefore != null) usersQuery = usersQuery.Where(user => user.CreatedAt <= userFilters.Filters.CreatedBefore);
+            if (userFilters.Filters.CreatedAfter != null) usersQuery = usersQuery.Where(user => user.CreatedAt >= userFilters.Filters.CreatedAfter);
         }
 
         var usersTotalFoundRecords = await usersQuery.CountAsync();
 
-        if (usersSettings.Sorting.Ascending == true)
+        if (userFilters.Sorting.Ascending == true)
         {
-            switch (usersSettings.Sorting.By)
+            switch (userFilters.Sorting.By)
             {
                 case USER_SORTING_OPTION_REQUEST_DTO.FULL_NAME:
                     usersQuery = usersQuery
@@ -123,7 +123,7 @@ public class AdminUserRepository
         }
         else
         {
-            switch (usersSettings.Sorting.By)
+            switch (userFilters.Sorting.By)
             {
                 case USER_SORTING_OPTION_REQUEST_DTO.FULL_NAME:
                     usersQuery = usersQuery
@@ -155,8 +155,8 @@ public class AdminUserRepository
         }
 
         usersQuery = usersQuery
-        .Skip(usersSettings.Pagination.RequestedPage)
-        .Take((int)usersSettings.Pagination.RecordsPerRequest);
+        .Skip(userFilters.Pagination.RequestedPage)
+        .Take((int)userFilters.Pagination.RecordsPerRequest);
 
         var users = await usersQuery
         .AsNoTracking()
@@ -164,7 +164,7 @@ public class AdminUserRepository
 
         return new(
             users,
-            new(usersTotalFoundRecords, usersSettings.Pagination.RecordsPerRequest, usersSettings.Pagination.RequestedPage)
+            new(usersTotalFoundRecords, userFilters.Pagination.RecordsPerRequest, userFilters.Pagination.RequestedPage)
         );
     }
 };

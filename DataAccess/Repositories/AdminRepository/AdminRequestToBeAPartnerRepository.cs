@@ -66,7 +66,7 @@ public class AdminRequestToBeAPartnerRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(GetManyRequestsToBeAPartnerSettingsDTO requestsToBeAPartnerSettings)
+    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(GetManyRequestsToBeAPartnerSettingsRequestDTO requestsToBeAPartnerSettings)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
         .AsQueryable();

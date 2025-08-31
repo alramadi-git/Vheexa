@@ -40,7 +40,6 @@ public class UserRepository
                     new Entities.ImageEntity
                     {
                         URL = userUpdatedData.Image.URL,
-                        Alternate = userUpdatedData.Image.Alternate,
                     });
 
                 user.Human!.Image = imageEntityEntry.Entity;
@@ -48,7 +47,6 @@ public class UserRepository
             else
             {
                 user.Human!.Image.URL = userUpdatedData.Image.URL;
-                user.Human!.Image.Alternate = userUpdatedData.Image.Alternate;
             }
         }
 
