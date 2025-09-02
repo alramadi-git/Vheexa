@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.RequestDTOs.UpdateRequestDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 

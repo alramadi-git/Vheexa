@@ -6,6 +6,7 @@ using DataAccess.RequestDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.Entities;
 using DataAccess.EntityDTOs;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace DataAccess.Repositories.PartnerRepository;
 
@@ -18,7 +19,7 @@ public class PartnerAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task SignupAsync(PartnerSignupRequestDTO partnerSignedupData)
+    public async Task SignupAsync(PartnerCreateRequestDTO partnerSignedupData)
     {
         var isHandle_EmailOrPhoneNumberInUseQuery = _AppDBContext.Partners
         .Where((partner) =>
@@ -82,7 +83,7 @@ public class PartnerAuthenticationRepository
             partner.IsDeleted == false
         );
 
-        var partner = await partnerQuery.FirstOrDefaultAsync() ??
+        var partner = await partnerQuery.AsNoTracking().FirstOrDefaultAsync() ??
         throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such partner.");
 
         var passwordHasher = new PasswordHasher<object?>();
@@ -91,7 +92,9 @@ public class PartnerAuthenticationRepository
         if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
-            partner.Password = passwordHasher.HashPassword(null, credentials.Password);
+            var updatablePartner = await partnerQuery.FirstAsync();
+
+            updatablePartner.Password = passwordHasher.HashPassword(null, credentials.Password);
             await _AppDBContext.SaveChangesAsync();
         }
 

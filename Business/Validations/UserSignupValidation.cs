@@ -1,10 +1,9 @@
 using FluentValidation;
-
-using DataAccess.RequestDTOs;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace Business.Validations;
 
-public class UserSignupValidation : AbstractValidator<UserSignupRequestDTO>
+public class UserSignupValidation : AbstractValidator<UserCreateRequestDTO>
 {
     private static Lazy<UserSignupValidation> _Instance = new(() => new());
     public static UserSignupValidation Instance => _Instance.Value;

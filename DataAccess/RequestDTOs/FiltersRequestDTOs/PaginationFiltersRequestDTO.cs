@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs;
+namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 public enum RECORDS_PER_REQUEST_OPTION_REQUEST_DTO : int
 {
@@ -9,7 +9,7 @@ public enum RECORDS_PER_REQUEST_OPTION_REQUEST_DTO : int
     _100 = 100,
 }
 
-public class PaginationRequestDTO
+public class PaginationFiltersRequestDTO
 {
     public required int RequestedPage { get; set; }
     public required RECORDS_PER_REQUEST_OPTION_REQUEST_DTO RecordsPerRequest { get; set; }

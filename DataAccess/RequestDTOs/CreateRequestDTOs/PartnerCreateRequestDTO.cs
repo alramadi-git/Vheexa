@@ -1,8 +1,8 @@
-namespace DataAccess.RequestDTOs;
+namespace DataAccess.RequestDTOs.CreateRequestDTOs;
 
-public class PartnerSignupRequestDTO
+public class PartnerCreateRequestDTO
 {
-    public ImageAddRequestDTO? Image { get; set; }
+    public ImageCreateRequestDTO? Image { get; set; }
 
     public required string Handle { get; set; }
 

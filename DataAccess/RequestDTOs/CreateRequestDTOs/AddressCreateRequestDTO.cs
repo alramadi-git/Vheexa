@@ -1,10 +1,7 @@
-namespace DataAccess.Entities;
+namespace DataAccess.RequestDTOs.CreateRequestDTOs;
 
-public class AddressEntity
+public class AddressCreateRequestDTO
 {
-    public int ID { get; set; }
-
-
     public required string Country { get; set; }
     public required string City { get; set; }
     public required string Street { get; set; }

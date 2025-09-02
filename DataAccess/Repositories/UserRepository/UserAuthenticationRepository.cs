@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace DataAccess.Repositories.UserRepository;
 
@@ -17,7 +18,7 @@ public class UserAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task SignupAsync(UserSignupRequestDTO signedupUserData)
+    public async Task SignupAsync(UserCreateRequestDTO signedupUserData)
     {
         var isEmailOrPhoneNumberInUseQuery = _AppDBContext.Humans
         .Where(human => human.Email == signedupUserData.Email || human.PhoneNumber == signedupUserData.PhoneNumber);
@@ -36,11 +37,11 @@ public class UserAuthenticationRepository
         var AddressEntityEntry = _AppDBContext.Addresses.Add(
         new Entities.AddressEntity
         {
-            URL = signedupUserData.Address.URL,
-
             Country = signedupUserData.Address.Country,
             City = signedupUserData.Address.City,
             Street = signedupUserData.Address.Street,
+            Latitude = signedupUserData.Address.Latitude,
+            Longitude = signedupUserData.Address.Longitude,
         });
 
         var passwordHasher = new PasswordHasher<object?>();
@@ -87,7 +88,7 @@ public class UserAuthenticationRepository
         .Include(user => user.Human).ThenInclude(human => human!.Address)
         .Where((user) => user.Human!.Email == credentials.Email);
 
-        var user = await userQuery.FirstOrDefaultAsync() ??
+        var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
         throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         var passwordHasher = new PasswordHasher<object?>();
@@ -96,7 +97,9 @@ public class UserAuthenticationRepository
         if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
-            user.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
+            var updatableUser = await userQuery.FirstAsync();
+            
+            updatableUser.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
             await _AppDBContext.SaveChangesAsync();
         }
 

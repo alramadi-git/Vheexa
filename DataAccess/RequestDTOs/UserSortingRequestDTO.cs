@@ -1,3 +1,5 @@
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
+
 namespace DataAccess.RequestDTOs;
 
 public enum USER_SORTING_OPTION_REQUEST_DTO
@@ -10,4 +12,4 @@ public enum USER_SORTING_OPTION_REQUEST_DTO
     FULL_NAME,
 }
 
-public class UserSortingRequestDTO : AbstractSortingRequestDTO<USER_SORTING_OPTION_REQUEST_DTO>;
+public class UserSortingRequestDTO : AbstractSortingFiltersRequestDTO<USER_SORTING_OPTION_REQUEST_DTO>;

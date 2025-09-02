@@ -1,3 +1,5 @@
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
+
 namespace DataAccess.RequestDTOs;
 
 public enum REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO
@@ -8,4 +10,4 @@ public enum REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO
     PARTNER_ID
 }
 
-public class RequestToBeAPartnerSortingRequestDTO : AbstractSortingRequestDTO<REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO>;
+public class RequestToBeAPartnerSortingRequestDTO : AbstractSortingFiltersRequestDTO<REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO>;

@@ -5,6 +5,7 @@ using Business.Services.UserServices;
 using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace API.Controllers.UserControllers;
 
@@ -22,7 +23,7 @@ public class UserAuthenticationController : Controller
     }
 
     [HttpPost("signup")]
-    public async Task<ActionResult> SignupAsync([FromBody] UserSignupRequestDTO userSignedupData)
+    public async Task<ActionResult> SignupAsync([FromBody] UserCreateRequestDTO userSignedupData)
     {
         try
         {

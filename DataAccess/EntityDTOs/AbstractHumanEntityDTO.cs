@@ -7,7 +7,7 @@ public abstract class AbstractHumanEntityDTO
     public int ID { get; set; }
 
     public ImageEntityDTO? Image { get; set; }
-    public AddressDTOEntity Address { get; set; }
+    public AddressEntityDTO Address { get; set; }
 
     public string FirstName { get; set; }
     public string MidName { get; set; }
@@ -25,7 +25,7 @@ public abstract class AbstractHumanEntityDTO
 
         Image = human.Image == null ? null : new ImageEntityDTO(human.Image);
 
-        Address = new AddressDTOEntity(human!.Address!);
+        Address = new AddressEntityDTO(human!.Address!);
 
         FirstName = human.FirstName;
         MidName = human.MidName;

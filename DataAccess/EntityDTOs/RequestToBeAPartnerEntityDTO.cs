@@ -1,5 +1,5 @@
 using DataAccess.Entities;
-using DataAccess.RequestDTOs;
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 namespace DataAccess.EntityDTOs;
 

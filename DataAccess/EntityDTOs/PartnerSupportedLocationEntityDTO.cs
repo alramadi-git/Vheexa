@@ -5,8 +5,7 @@ namespace DataAccess.EntityDTOs;
 public class PartnerSupportedLocationEntityDTO
 {
     public int ID { get; set; }
-    public int PartnerID { get; set; }
-    public int AddressID { get; set; }
+    public AddressEntityDTO Address { get; set; }
 
     public bool IsPickup { get; set; }
     public bool IsDropoff { get; set; }
@@ -22,8 +21,8 @@ public class PartnerSupportedLocationEntityDTO
     public PartnerSupportedLocationEntityDTO(PartnerSupportedLocationEntity partnerSupportedLocationEntity)
     {
         ID = partnerSupportedLocationEntity.ID;
-        PartnerID = partnerSupportedLocationEntity.PartnerID;
-        AddressID = partnerSupportedLocationEntity.AddressID;
+        
+        Address = new(partnerSupportedLocationEntity.Address!);
 
         IsPickup = partnerSupportedLocationEntity.IsPickup;
         IsDropoff = partnerSupportedLocationEntity.IsDropoff;

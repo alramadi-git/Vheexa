@@ -1,6 +1,6 @@
-namespace DataAccess.RequestDTOs;
+namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
 
-public class UserFiltersRequestDTO : AbstractHumanFiltersRequestDTO
+public class UserFiltersRequestDTO<TSortingOption> : AbstractHumanFiltersRequestDTO<TSortingOption> where TSortingOption : Enum
 {
     public float? MinAverageRates { get; set; }
     public float? MaxAverageRates { get; set; }

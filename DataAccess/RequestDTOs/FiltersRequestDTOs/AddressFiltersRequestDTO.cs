@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs;
+namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 public class AddressFiltersRequestDTO
 {

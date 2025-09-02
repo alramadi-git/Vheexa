@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs;
+namespace DataAccess.RequestDTOs.UpdateRequestDTOs;
 
 public abstract class AbstractHumanUpdateRequestDTO
 {

@@ -1,9 +1,9 @@
-namespace DataAccess.RequestDTOs;
+namespace DataAccess.RequestDTOs.CreateRequestDTOs;
 
-public abstract class AbstractHumanSignupRequestDTO
+public abstract class AbstractHumanCreateRequestDTO
 {
-    public ImageAddRequestDTO? Image { get; set; }
-    public required AddressAddRequestDTO Address { get; set; }
+    public ImageCreateRequestDTO? Image { get; set; }
+    public required AddressCreateRequestDTO Address { get; set; }
 
     public required string FirstName { get; set; }
     public required string MidName { get; set; }

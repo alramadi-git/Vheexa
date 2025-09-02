@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Business.Services.UserServices;
-
-using DataAccess.RequestDTOs;
+using DataAccess.RequestDTOs.UpdateRequestDTOs;
 
 namespace API.Controllers.UserControllers;
 

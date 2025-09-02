@@ -1,6 +1,5 @@
 using FluentValidation;
-
-using DataAccess.RequestDTOs;
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 namespace Business.Validations.AdminValidations;
 

@@ -6,6 +6,7 @@ using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.Repositories.UserRepository;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace Business.Services.UserServices;
 
@@ -18,7 +19,7 @@ public class UserAuthenticationService
         _UserAuthenticationRepository = userRepository;
     }
 
-    public async Task SignupAsync(UserSignupRequestDTO userSignup)
+    public async Task SignupAsync(UserCreateRequestDTO userSignup)
     {
         UserSignupValidation.Instance.ValidateAndThrow(userSignup);
         await _UserAuthenticationRepository.SignupAsync(userSignup);

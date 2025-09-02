@@ -1,3 +1,5 @@
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
+
 namespace DataAccess.RequestDTOs;
 
 public class PartnerSupportedLocationFiltersRequestDTO

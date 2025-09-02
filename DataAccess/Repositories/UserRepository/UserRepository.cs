@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-
-using DataAccess.RequestDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.RequestDTOs.UpdateRequestDTOs;
 
 namespace DataAccess.Repositories.UserRepository;
 
@@ -50,10 +49,12 @@ public class UserRepository
             }
         }
 
-        user.Human.Address!.URL = userUpdatedData.Address.URL;
-        user.Human.Address.Country = userUpdatedData.Address.Country;
+        user.Human.Address!.Country = userUpdatedData.Address.Country;
         user.Human.Address.City = userUpdatedData.Address.City;
         user.Human.Address.Street = userUpdatedData.Address.Street;
+        
+        user.Human.Address.Latitude = userUpdatedData.Address.Latitude;
+        user.Human.Address.Longitude = userUpdatedData.Address.Longitude;
 
         user.Human.FirstName = userUpdatedData.FirstName;
         user.Human.MidName = userUpdatedData.MidName;
