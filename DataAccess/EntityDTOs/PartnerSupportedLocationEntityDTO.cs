@@ -5,7 +5,7 @@ namespace DataAccess.EntityDTOs;
 public class PartnerSupportedLocationEntityDTO
 {
     public int ID { get; set; }
-    public AddressEntityDTO Address { get; set; }
+    public LocationEntityDTO Address { get; set; }
 
     public bool IsPickup { get; set; }
     public bool IsDropoff { get; set; }

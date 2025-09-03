@@ -10,8 +10,6 @@ public class MemberEntity
     public HumanEntity? Human { get; set; }
     public int HumanID { get; set; }
 
-    public bool IsPublished { get; set; }
-
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 

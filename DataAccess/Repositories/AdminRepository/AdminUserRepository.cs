@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-
-using DataAccess.RequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -21,7 +20,7 @@ public class AdminUserRepository
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
-        .ThenInclude(human => human!.Address)
+        .ThenInclude(human => human!.Location)
         .Where((user) => user.ID == userID && user.IsDeleted == false);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
@@ -30,61 +29,62 @@ public class AdminUserRepository
         return new(new(user));
     }
 
-    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(GetManyUsersSettingsRequestDTO userFilters)
+    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(UsersFiltersRequestDTO userFilters)
     {
         var usersQuery = _AppDBContext.Users
         .Include(user => user.Human)
         .ThenInclude(human => human!.Image)
         .Include(user => user.Human)
-        .ThenInclude(human => human!.Address)
+        .ThenInclude(human => human!.Location)
         .AsQueryable();
 
-        if (userFilters.Filters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(userFilters.Filters.FirstName));
-        if (userFilters.Filters.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(userFilters.Filters.MidName));
-        if (userFilters.Filters.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(userFilters.Filters.LastName));
+        if (userFilters.FirstName != null) usersQuery = usersQuery.Where(user => user.Human!.FirstName.Contains(userFilters.FirstName));
+        if (userFilters.MidName != null) usersQuery = usersQuery.Where(user => user.Human!.MidName.Contains(userFilters.MidName));
+        if (userFilters.LastName != null) usersQuery = usersQuery.Where(user => user.Human!.LastName.Contains(userFilters.LastName));
 
-        if (userFilters.Filters.Address != null)
+        if (userFilters.Location != null)
         {
-            if (userFilters.Filters.Address.Country != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Country.Contains(userFilters.Filters.Address.Country));
-            if (userFilters.Filters.Address.City != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.City.Contains(userFilters.Filters.Address.City));
-            if (userFilters.Filters.Address.Street != null) usersQuery = usersQuery.Where(user => user.Human!.Address!.Street.Contains(userFilters.Filters.Address.Street));
+            if (userFilters.Location.Country != null) usersQuery = usersQuery.Where(user => user.Human!.Location!.Country.Contains(userFilters.Location.Country));
+            if (userFilters.Location.City != null) usersQuery = usersQuery.Where(user => user.Human!.Location!.City.Contains(userFilters.Location.City));
+            if (userFilters.Location.Street != null) usersQuery = usersQuery.Where(user => user.Human!.Location!.Street.Contains(userFilters.Location.Street));
         }
 
-        if (userFilters.Filters.MinAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates >= userFilters.Filters.MinAverageRates);
-        if (userFilters.Filters.MaxAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates <= userFilters.Filters.MaxAverageRates);
+        if (userFilters.MinAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates >= userFilters.MinAverageRates);
+        if (userFilters.MaxAverageRates != null) usersQuery = usersQuery.Where(user => user.AverageRates <= userFilters.MaxAverageRates);
 
-        if (userFilters.Filters.MinDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth >= userFilters.Filters.MinDateOfBirth);
-        if (userFilters.Filters.MaxDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth <= userFilters.Filters.MaxDateOfBirth);
+        if (userFilters.MinDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth >= userFilters.MinDateOfBirth);
+        if (userFilters.MaxDateOfBirth != null) usersQuery = usersQuery.Where(user => user.Human!.DateOfBirth <= userFilters.MaxDateOfBirth);
 
-        if (userFilters.Filters.PhoneNumber != null) usersQuery = usersQuery.Where(user => user.Human!.PhoneNumber.Contains(userFilters.Filters.PhoneNumber));
+        if (userFilters.PhoneNumber != null) usersQuery = usersQuery.Where(user => user.Human!.PhoneNumber.Contains(userFilters.PhoneNumber));
 
-        if (userFilters.Filters.Email != null) usersQuery = usersQuery.Where(user => user.Human!.Email.Contains(userFilters.Filters.Email));
+        if (userFilters.Email != null) usersQuery = usersQuery.Where(user => user.Human!.Email.Contains(userFilters.Email));
 
-        usersQuery = usersQuery
-        .Where(user => user.IsDeleted == userFilters.Filters.IsDeleted);
 
-        if (userFilters.Filters.IsDeleted == true)
+        if (userFilters.IsDeleted == true)
         {
-            if (userFilters.Filters.DeletedAt != null) usersQuery = usersQuery.Where(user => user.DeletedAt == userFilters.Filters.DeletedAt);
+            usersQuery = usersQuery
+            .Where(user => user.IsDeleted == userFilters.IsDeleted);
+    
+            if (userFilters.DeletedAt != null) usersQuery = usersQuery.Where(user => user.DeletedAt == userFilters.DeletedAt);
             else
             {
-                if (userFilters.Filters.DeletedBefore != null) usersQuery = usersQuery.Where(user => user.DeletedAt <= userFilters.Filters.DeletedBefore);
-                if (userFilters.Filters.DeletedAfter != null) usersQuery = usersQuery.Where(user => user.DeletedAt >= userFilters.Filters.DeletedAfter);
+                if (userFilters.DeletedBefore != null) usersQuery = usersQuery.Where(user => user.DeletedAt <= userFilters.DeletedBefore);
+                if (userFilters.DeletedAfter != null) usersQuery = usersQuery.Where(user => user.DeletedAt >= userFilters.DeletedAfter);
             }
         }
 
-        if (userFilters.Filters.UpdatedAt != null) usersQuery = usersQuery.Where(user => user.UpdatedAt == userFilters.Filters.UpdatedAt);
+        if (userFilters.UpdatedAt != null) usersQuery = usersQuery.Where(user => user.UpdatedAt == userFilters.UpdatedAt);
         else
         {
-            if (userFilters.Filters.UpdatedBefore != null) usersQuery = usersQuery.Where(user => user.UpdatedAt <= userFilters.Filters.UpdatedBefore);
-            if (userFilters.Filters.UpdatedAfter != null) usersQuery = usersQuery.Where(user => user.UpdatedAt >= userFilters.Filters.UpdatedAfter);
+            if (userFilters.UpdatedBefore != null) usersQuery = usersQuery.Where(user => user.UpdatedAt <= userFilters.UpdatedBefore);
+            if (userFilters.UpdatedAfter != null) usersQuery = usersQuery.Where(user => user.UpdatedAt >= userFilters.UpdatedAfter);
         }
 
-        if (userFilters.Filters.CreatedAt != null) usersQuery = usersQuery.Where(user => user.CreatedAt == userFilters.Filters.CreatedAt);
+        if (userFilters.CreatedAt != null) usersQuery = usersQuery.Where(user => user.CreatedAt == userFilters.CreatedAt);
         else
         {
-            if (userFilters.Filters.CreatedBefore != null) usersQuery = usersQuery.Where(user => user.CreatedAt <= userFilters.Filters.CreatedBefore);
-            if (userFilters.Filters.CreatedAfter != null) usersQuery = usersQuery.Where(user => user.CreatedAt >= userFilters.Filters.CreatedAfter);
+            if (userFilters.CreatedBefore != null) usersQuery = usersQuery.Where(user => user.CreatedAt <= userFilters.CreatedBefore);
+            if (userFilters.CreatedAfter != null) usersQuery = usersQuery.Where(user => user.CreatedAt >= userFilters.CreatedAfter);
         }
 
         var usersTotalFoundRecords = await usersQuery.CountAsync();

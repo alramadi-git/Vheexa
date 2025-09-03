@@ -20,7 +20,7 @@ public class AdminAuthenticationRepository
     {
         var adminQuery = _AppDBContext.Admins
         .Include(admin => admin.Human).ThenInclude(human => human!.Image)
-        .Include(admin => admin.Human).ThenInclude(human => human!.Address)
+        .Include(admin => admin.Human).ThenInclude(human => human!.Location)
         .Where((admin) => admin.Human!.Email == credentials.Email);
 
         var admin = await adminQuery.FirstOrDefaultAsync() ??

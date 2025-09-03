@@ -3,7 +3,7 @@ namespace DataAccess.RequestDTOs.CreateRequestDTOs;
 public abstract class AbstractHumanCreateRequestDTO
 {
     public ImageCreateRequestDTO? Image { get; set; }
-    public required AddressCreateRequestDTO Address { get; set; }
+    public required LocationCreateRequestDTO Address { get; set; }
 
     public required string FirstName { get; set; }
     public required string MidName { get; set; }

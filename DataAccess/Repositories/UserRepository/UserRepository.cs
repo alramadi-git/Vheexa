@@ -17,7 +17,7 @@ public class UserRepository
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human).ThenInclude(human => human!.Image)
-        .Include(user => user.Human).ThenInclude(human => human!.Address)
+        .Include(user => user.Human).ThenInclude(human => human!.Location)
         .Where((user) => user.ID == userID);
 
         var user = await userQuery.FirstOrDefaultAsync((user) => user.ID == userID) ??
@@ -49,12 +49,12 @@ public class UserRepository
             }
         }
 
-        user.Human.Address!.Country = userUpdatedData.Address.Country;
-        user.Human.Address.City = userUpdatedData.Address.City;
-        user.Human.Address.Street = userUpdatedData.Address.Street;
+        user.Human.Location!.Country = userUpdatedData.Address.Country;
+        user.Human.Location.City = userUpdatedData.Address.City;
+        user.Human.Location.Street = userUpdatedData.Address.Street;
         
-        user.Human.Address.Latitude = userUpdatedData.Address.Latitude;
-        user.Human.Address.Longitude = userUpdatedData.Address.Longitude;
+        user.Human.Location.Latitude = userUpdatedData.Address.Latitude;
+        user.Human.Location.Longitude = userUpdatedData.Address.Longitude;
 
         user.Human.FirstName = userUpdatedData.FirstName;
         user.Human.MidName = userUpdatedData.MidName;

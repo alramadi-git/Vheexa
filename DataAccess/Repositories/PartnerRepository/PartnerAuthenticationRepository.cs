@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.AspNetCore.Identity;
 
-using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
 using DataAccess.Entities;
-using DataAccess.EntityDTOs;
+using DataAccess.RequestDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
+using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.PartnerRepository;
 

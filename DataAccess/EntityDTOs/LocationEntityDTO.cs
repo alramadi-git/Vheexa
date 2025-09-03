@@ -2,7 +2,7 @@ using DataAccess.Entities;
 
 namespace DataAccess.EntityDTOs;
 
-public class AddressEntityDTO
+public class LocationEntityDTO
 {
     public int ID { get; set; }
 
@@ -13,7 +13,7 @@ public class AddressEntityDTO
     public float Latitude { get; set; }
     public float Longitude { get; set; }
 
-    public AddressEntityDTO(AddressEntity address)
+    public LocationEntityDTO(LocationEntity address)
     {
         ID = address.ID;
 

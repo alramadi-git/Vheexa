@@ -7,7 +7,7 @@ public class HumanEntity
     public ImageEntity? Image { get; set; }
     public int? ImageID { get; set; }
 
-    public AddressEntity? Address { get; set; }
+    public LocationEntity? Location { get; set; }
     public int AddressID { get; set; }
 
     public required string FirstName { get; set; }

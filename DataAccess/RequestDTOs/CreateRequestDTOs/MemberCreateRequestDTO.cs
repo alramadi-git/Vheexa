@@ -1,0 +1,3 @@
+namespace DataAccess.RequestDTOs.CreateRequestDTOs;
+
+public class MemberCreateRequestDTO : AbstractHumanCreateRequestDTO;

@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-
-using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
+using DataAccess.RequestDTOs.FiltersRequestDTOs;
 using DataAccess.EntityDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.PartnerRepository;
 
@@ -29,30 +28,61 @@ public class PartnerSupportedLocationRepository
         return new(new(partnerSupportedLocation));
     }
 
-    public async Task<SuccessManyResponseDTO<PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerID, GetManyPartnerSupportedLocationsSettingsRequestDTO partnerSupportedLocationsSettings)
+    public async Task<SuccessManyResponseDTO<PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerID, PartnerSupportedLocationsFiltersRequestDTO partnerSupportedLocationsFilters)
     {
         var partnerSupportedLocationsQuery = _AppDBContext.PartnerSupportedLocations
         .Include(partnerSupportedLocation => partnerSupportedLocation.Address)
-        .Where(partnerSupportedLocation => partnerSupportedLocation.PartnerID == partnerID)
-        .AsQueryable();
+        .Where(partnerSupportedLocation => partnerSupportedLocation.PartnerID == partnerID);
 
-        // Filtering
+        if (partnerSupportedLocationsFilters.IsPickup != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.IsPickup == partnerSupportedLocationsFilters.IsPickup);
+        if (partnerSupportedLocationsFilters.IsDropoff != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.IsDropoff == partnerSupportedLocationsFilters.IsDropoff);
+
+        if (partnerSupportedLocationsFilters.IsPublished == true) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.IsPublished == partnerSupportedLocationsFilters.IsPublished);
+        else partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.IsPublished == partnerSupportedLocationsFilters.IsPublished);
+
+        if (partnerSupportedLocationsFilters.IsDeleted == true)
+        {
+            partnerSupportedLocationsQuery = partnerSupportedLocationsQuery
+            .Where(partnerSupportedLocations => partnerSupportedLocations.IsDeleted == partnerSupportedLocationsFilters.IsDeleted);
+
+            if (partnerSupportedLocationsFilters.DeletedAt != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.DeletedAt == partnerSupportedLocationsFilters.DeletedAt);
+            else
+            {
+                if (partnerSupportedLocationsFilters.DeletedBefore != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.DeletedAt <= partnerSupportedLocationsFilters.DeletedBefore);
+                if (partnerSupportedLocationsFilters.DeletedAfter != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.DeletedAt >= partnerSupportedLocationsFilters.DeletedAfter);
+            }
+        }
+
+        if (partnerSupportedLocationsFilters.UpdatedAt != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.UpdatedAt == partnerSupportedLocationsFilters.UpdatedAt);
+        else
+        {
+            if (partnerSupportedLocationsFilters.UpdatedBefore != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.UpdatedAt <= partnerSupportedLocationsFilters.UpdatedBefore);
+            if (partnerSupportedLocationsFilters.UpdatedAfter != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.UpdatedAt >= partnerSupportedLocationsFilters.UpdatedAfter);
+        }
+
+        if (partnerSupportedLocationsFilters.CreatedAt != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.CreatedAt == partnerSupportedLocationsFilters.CreatedAt);
+        else
+        {
+            if (partnerSupportedLocationsFilters.CreatedBefore != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.CreatedAt <= partnerSupportedLocationsFilters.CreatedBefore);
+            if (partnerSupportedLocationsFilters.CreatedAfter != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.CreatedAt >= partnerSupportedLocationsFilters.CreatedAfter);
+        }
+
 
         var partnerSupportedLocationTotalRecords = await partnerSupportedLocationsQuery.CountAsync();
 
-        if (partnerSupportedLocationsSettings.Sorting.Ascending == true)
+        if (partnerSupportedLocationsFilters.Sorting.Ascending == true)
         {
-            switch (partnerSupportedLocationsSettings.Sorting.By)
+            switch (partnerSupportedLocationsFilters.Sorting.By)
             {
-                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.ADDRESS:
+                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PARTNER_ID:
+                    partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.OrderBy(partnerSupportedLocation => partnerSupportedLocation.PartnerID);
+                    break;
+
+                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.LOCATION:
                     partnerSupportedLocationsQuery = partnerSupportedLocationsQuery
                     .OrderBy(partnerSupportedLocation => partnerSupportedLocation.Address!.Country)
                     .ThenBy(partnerSupportedLocation => partnerSupportedLocation.Address!.City)
                     .ThenBy(partnerSupportedLocation => partnerSupportedLocation.Address!.Street);
-                    break;
-
-                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PARTNER_ID:
-                    partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.OrderBy(partnerSupportedLocation => partnerSupportedLocation.PartnerID);
                     break;
 
                 case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PICKUP:
@@ -78,17 +108,17 @@ public class PartnerSupportedLocationRepository
         }
         else
         {
-            switch (partnerSupportedLocationsSettings.Sorting.By)
+            switch (partnerSupportedLocationsFilters.Sorting.By)
             {
-                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.ADDRESS:
+                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PARTNER_ID:
+                    partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.OrderByDescending(partnerSupportedLocation => partnerSupportedLocation.PartnerID);
+                    break;
+
+                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.LOCATION:
                     partnerSupportedLocationsQuery = partnerSupportedLocationsQuery
                     .OrderByDescending(partnerSupportedLocation => partnerSupportedLocation.Address!.Country)
                     .ThenByDescending(partnerSupportedLocation => partnerSupportedLocation.Address!.City)
                     .ThenByDescending(partnerSupportedLocation => partnerSupportedLocation.Address!.Street);
-                    break;
-
-                case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PARTNER_ID:
-                    partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.OrderByDescending(partnerSupportedLocation => partnerSupportedLocation.PartnerID);
                     break;
 
                 case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PICKUP:
@@ -114,8 +144,8 @@ public class PartnerSupportedLocationRepository
         }
 
         partnerSupportedLocationsQuery = partnerSupportedLocationsQuery
-        .Skip(partnerSupportedLocationsSettings.Pagination.RequestedPage)
-        .Take((int)partnerSupportedLocationsSettings.Pagination.RecordsPerRequest);
+        .Skip(partnerSupportedLocationsFilters.Pagination.RequestedPage)
+        .Take((int)partnerSupportedLocationsFilters.Pagination.RecordsPerRequest);
 
         var partnerSupportedLocations = await partnerSupportedLocationsQuery
         .AsNoTracking()
@@ -124,7 +154,7 @@ public class PartnerSupportedLocationRepository
 
         return new(
             partnerSupportedLocations,
-            new(partnerSupportedLocationTotalRecords, partnerSupportedLocationsSettings.Pagination.RecordsPerRequest, partnerSupportedLocationsSettings.Pagination.RequestedPage)
+            new(partnerSupportedLocationTotalRecords, partnerSupportedLocationsFilters.Pagination.RecordsPerRequest, partnerSupportedLocationsFilters.Pagination.RequestedPage)
         );
     }
 };

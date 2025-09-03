@@ -8,7 +8,7 @@ public class PartnerSupportedLocationEntity
     public PartnerEntity? Partner { get; set; }
     public int PartnerID { get; set; }
 
-    public AddressEntity? Address { get; set; }
+    public LocationEntity? Address { get; set; }
     public int AddressID { get; set; }
 
     public bool IsPickup { get; set; }

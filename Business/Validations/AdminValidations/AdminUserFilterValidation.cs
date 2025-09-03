@@ -3,22 +3,22 @@ using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 namespace Business.Validations.AdminValidations;
 
-public class AdminUserFilterValidation : AbstractValidator<UserFiltersRequestDTO>
+public class AdminUserFilterValidation : AbstractValidator<UsersFiltersRequestDTO>
 {
     public AdminUserFilterValidation()
     {
         /** Address */
-        RuleFor(filter => filter.Address.Country)
+        RuleFor(filter => filter.Location.Country)
         .NotEmpty()
-        .When(filter => filter.Address?.Country != null);
+        .When(filter => filter.Location?.Country != null);
 
-        RuleFor(filter => filter.Address.City)
+        RuleFor(filter => filter.Location.City)
         .NotEmpty()
-        .When(filter => filter.Address?.City != null);
+        .When(filter => filter.Location?.City != null);
 
-        RuleFor(filter => filter.Address.Street)
+        RuleFor(filter => filter.Location.Street)
         .NotEmpty()
-        .When(filter => filter.Address?.Street != null);
+        .When(filter => filter.Location?.Street != null);
 
         /** Name */
         RuleFor(filter => filter.FirstName)

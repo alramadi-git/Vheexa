@@ -17,7 +17,7 @@ public class MemberRepository
     {
         var memberQuery = _AppDBContext.Members
         .Include(member => member.Human).ThenInclude(human => human!.Image)
-        .Include(member => member.Human).ThenInclude(human => human!.Address)
+        .Include(member => member.Human).ThenInclude(human => human!.Location)
         .Where((member) => member.ID == memberID);
 
         var member = await memberQuery.FirstOrDefaultAsync((member) => member.ID == memberID) ??
@@ -39,7 +39,6 @@ public class MemberRepository
                     new Entities.ImageEntity
                     {
                         URL = memberUpdatedData.Image.URL,
-                        Alternate = memberUpdatedData.Image.Alternate,
                     });
 
                 member.Human!.Image = imageEntityEntry.Entity;
@@ -47,14 +46,15 @@ public class MemberRepository
             else
             {
                 member.Human!.Image.URL = memberUpdatedData.Image.URL;
-                member.Human!.Image.Alternate = memberUpdatedData.Image.Alternate;
             }
         }
 
-        member.Human.Address!.URL = memberUpdatedData.Address.URL;
-        member.Human.Address.Country = memberUpdatedData.Address.Country;
-        member.Human.Address.City = memberUpdatedData.Address.City;
-        member.Human.Address.Street = memberUpdatedData.Address.Street;
+        member.Human.Location!.Country = memberUpdatedData.Address.Country;
+        member.Human.Location.City = memberUpdatedData.Address.City;
+        member.Human.Location.Street = memberUpdatedData.Address.Street;
+
+        member.Human.Location.Latitude = memberUpdatedData.Address.Latitude;
+        member.Human.Location.Longitude = memberUpdatedData.Address.Longitude;
 
         member.Human.FirstName = memberUpdatedData.FirstName;
         member.Human.MidName = memberUpdatedData.MidName;

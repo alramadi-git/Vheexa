@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using DataAccess.ResponseDTOs;
+
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
+using DataAccess.ResponseDTOs;
 
 namespace DataAccess.Repositories.PartnerRepository;
 

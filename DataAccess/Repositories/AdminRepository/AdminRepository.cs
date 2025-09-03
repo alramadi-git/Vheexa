@@ -17,7 +17,7 @@ public class AdminRepository
     {
         var adminQuery = _AppDBContext.Admins
         .Include(admin => admin.Human).ThenInclude(human => human!.Image)
-        .Include(admin => admin.Human).ThenInclude(human => human!.Address)
+        .Include(admin => admin.Human).ThenInclude(human => human!.Location)
         .Where((admin) => admin.ID == adminID && admin.IsDeleted == false);
 
         var admin = await adminQuery.FirstOrDefaultAsync() ??
@@ -51,10 +51,10 @@ public class AdminRepository
             }
         }
 
-        admin.Human.Address!.URL = adminUpdatedData.Address.URL;
-        admin.Human.Address.Country = adminUpdatedData.Address.Country;
-        admin.Human.Address.City = adminUpdatedData.Address.City;
-        admin.Human.Address.Street = adminUpdatedData.Address.Street;
+        admin.Human.Location!.URL = adminUpdatedData.Address.URL;
+        admin.Human.Location.Country = adminUpdatedData.Address.Country;
+        admin.Human.Location.City = adminUpdatedData.Address.City;
+        admin.Human.Location.Street = adminUpdatedData.Address.Street;
 
         admin.Human.FirstName = adminUpdatedData.FirstName;
         admin.Human.MidName = adminUpdatedData.MidName;

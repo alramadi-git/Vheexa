@@ -35,7 +35,7 @@ public class UserAuthenticationRepository
         });
 
         var AddressEntityEntry = _AppDBContext.Addresses.Add(
-        new Entities.AddressEntity
+        new Entities.LocationEntity
         {
             Country = signedupUserData.Address.Country,
             City = signedupUserData.Address.City,
@@ -49,7 +49,7 @@ public class UserAuthenticationRepository
         new Entities.HumanEntity
         {
             Image = imageEntityEntry?.Entity,
-            Address = AddressEntityEntry.Entity,
+            Location = AddressEntityEntry.Entity,
 
             FirstName = signedupUserData.FirstName,
             MidName = signedupUserData.MidName,
@@ -85,7 +85,7 @@ public class UserAuthenticationRepository
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human).ThenInclude(human => human!.Image)
-        .Include(user => user.Human).ThenInclude(human => human!.Address)
+        .Include(user => user.Human).ThenInclude(human => human!.Location)
         .Where((user) => user.Human!.Email == credentials.Email);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??

@@ -1,17 +1,18 @@
-using DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
 
-namespace DataAccess.RequestDTOs;
-
-public class PartnerSupportedLocationFiltersRequestDTO
+public enum MEMBER_SORTING_OPTION_REQUEST_DTO
 {
-    public int? PartnerID { get; set; }
+    CREATION,
+    MODIFICATION,
+    DELETION,
+    DATE_OF_BIRTH,
+    FULL_NAME,
+}
 
-    public AddressFiltersRequestDTO? AddressID { get; set; }
+public class MemberSortingRequestDTO : AbstractSortingFiltersRequestDTO<MEMBER_SORTING_OPTION_REQUEST_DTO>;
 
-    public required bool IsPickup { get; set; }
-    public required bool IsDropoff { get; set; }
-    
-    public required bool IsPublished { get; set; }
+public class MembersFiltersRequestDTO : AbstractHumansFiltersRequestDTO<MEMBER_SORTING_OPTION_REQUEST_DTO>
+{
     public required bool IsDeleted { get; set; }
 
     public DateTime? DeletedBefore { get; set; }

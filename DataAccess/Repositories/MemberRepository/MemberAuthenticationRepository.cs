@@ -21,10 +21,10 @@ public class MemberAuthenticationRepository
     {
         var memberQuery = _AppDBContext.Members
         .Include(member => member.Human).ThenInclude(human => human!.Image)
-        .Include(member => member.Human).ThenInclude(human => human!.Address)
+        .Include(member => member.Human).ThenInclude(human => human!.Location)
         .Where((member) => member.Human!.Email == credentials.Email);
 
-        var member = await memberQuery.FirstOrDefaultAsync() ??
+        var member = await memberQuery.AsNoTracking().FirstOrDefaultAsync() ??
         throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such member.");
 
         var passwordHasher = new PasswordHasher<object?>();
@@ -33,7 +33,9 @@ public class MemberAuthenticationRepository
         if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
-            member.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
+            var updatableMember = await memberQuery.FirstAsync();
+
+            updatableMember.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
             await _AppDBContext.SaveChangesAsync();
         }
 

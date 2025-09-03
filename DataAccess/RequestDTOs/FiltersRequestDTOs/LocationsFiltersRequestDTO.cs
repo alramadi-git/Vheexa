@@ -1,6 +1,6 @@
 namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
 
-public class AddressFiltersRequestDTO
+public class LocationsFiltersRequestDTO
 {
     public string? Country { get; set; }
     public string? City { get; set; }

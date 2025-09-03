@@ -7,7 +7,7 @@ public class AppDBContext : DbContext
 {
     public DbSet<ImageEntity> Images { get; set; }
 
-    public DbSet<AddressEntity> Addresses { get; set; }
+    public DbSet<LocationEntity> Addresses { get; set; }
 
     public DbSet<HumanEntity> Humans { get; set; }
 
