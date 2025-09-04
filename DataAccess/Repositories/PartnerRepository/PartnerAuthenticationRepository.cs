@@ -22,17 +22,14 @@ public class PartnerAuthenticationRepository
     {
         var isHandle_EmailOrPhoneNumberInUseQuery = _AppDBContext.Partners
         .Where((partner) =>
-            (
-                partner.Handle == partnerSignedupData.Handle ||
-                partner.Email == partnerSignedupData.Email ||
-                partner.PhoneNumber == partnerSignedupData.PhoneNumber
-            ) &&
-            partner.IsDeleted == false
+            partner.Handle == partnerSignedupData.Handle ||
+            partner.Email == partnerSignedupData.Email ||
+            partner.PhoneNumber == partnerSignedupData.PhoneNumber
         );
 
-        var isHandle_EmailOrPhoneNumberInUse = await isHandle_EmailOrPhoneNumberInUseQuery.AnyAsync();
-        if (isHandle_EmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Handle, email or phone number already in use.");
-
+        var isHandleOrEmailOrPhoneNumberInUse = await isHandle_EmailOrPhoneNumberInUseQuery.AnyAsync();
+        if (isHandleOrEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Handle, email or phone number already in use.");
+        
         var imageEntityEntry = partnerSignedupData.Image == null
         ? null
         : _AppDBContext.Images
@@ -77,13 +74,14 @@ public class PartnerAuthenticationRepository
         var partnerQuery = _AppDBContext.Partners
         .Include(partner => partner.Image)
         .Where((partner) =>
-            partner.Email == credentials.Email &&
-            partner.IsPublished == true &&
-            partner.IsDeleted == false
+            partner.Email == credentials.Email
         );
 
         var partner = await partnerQuery.AsNoTracking().FirstOrDefaultAsync() ??
-        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such partner.");
+        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such partner email.");
+
+        if (partner.IsPublished == false) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Partner is not published yet.");
+        if (partner.IsDeleted == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Partner is deleted — contact admin to retrieve your account.");
 
         var passwordHasher = new PasswordHasher<object?>();
         var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, partner.Password, credentials.Password);

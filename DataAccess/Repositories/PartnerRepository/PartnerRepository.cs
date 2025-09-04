@@ -18,11 +18,7 @@ public class PartnerRepository
     {
         var partnerQuery = _AppDBContext.Partners
         .Include(partner => partner.Image)
-        .Where((partner) =>
-            partner.ID == partnerID &&
-            partner.IsPublished == true &&
-            partner.IsDeleted == false
-        );
+        .Where((partner) => partner.ID == partnerID);
 
         var partner = await partnerQuery.FirstOrDefaultAsync((user) => user.ID == partnerID) ??
         throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such partner.");
