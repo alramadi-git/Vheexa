@@ -51,10 +51,10 @@ public class AdminRepository
             }
         }
 
-        admin.Human.Location!.URL = adminUpdatedData.Address.URL;
-        admin.Human.Location.Country = adminUpdatedData.Address.Country;
-        admin.Human.Location.City = adminUpdatedData.Address.City;
-        admin.Human.Location.Street = adminUpdatedData.Address.Street;
+        admin.Human.Location!.URL = adminUpdatedData.Location.URL;
+        admin.Human.Location.Country = adminUpdatedData.Location.Country;
+        admin.Human.Location.City = adminUpdatedData.Location.City;
+        admin.Human.Location.Street = adminUpdatedData.Location.Street;
 
         admin.Human.FirstName = adminUpdatedData.FirstName;
         admin.Human.MidName = adminUpdatedData.MidName;

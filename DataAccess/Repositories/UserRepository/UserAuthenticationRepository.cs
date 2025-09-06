@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
 using DataAccess.RequestDTOs;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
-using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace DataAccess.Repositories.UserRepository;
 
@@ -37,11 +37,11 @@ public class UserAuthenticationRepository
         var AddressEntityEntry = _AppDBContext.Addresses.Add(
         new Entities.LocationEntity
         {
-            Country = signedupUserData.Address.Country,
-            City = signedupUserData.Address.City,
-            Street = signedupUserData.Address.Street,
-            Latitude = signedupUserData.Address.Latitude,
-            Longitude = signedupUserData.Address.Longitude,
+            Country = signedupUserData.Location.Country,
+            City = signedupUserData.Location.City,
+            Street = signedupUserData.Location.Street,
+            Latitude = signedupUserData.Location.Latitude,
+            Longitude = signedupUserData.Location.Longitude,
         });
 
         var passwordHasher = new PasswordHasher<object?>();

@@ -3,7 +3,7 @@ namespace DataAccess.RequestDTOs.UpdateRequestDTOs;
 public abstract class AbstractHumanUpdateRequestDTO
 {
     public ImageUpdateRequestDTO? Image { get; set; }
-    public required AddressUpdateRequestDTO Address { get; set; }
+    public required LocationUpdateRequestDTO Location { get; set; }
 
     public required string FirstName { get; set; }
     public required string MidName { get; set; }

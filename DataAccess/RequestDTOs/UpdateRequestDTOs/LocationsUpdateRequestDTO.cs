@@ -1,6 +1,6 @@
 namespace DataAccess.RequestDTOs.UpdateRequestDTOs;
 
-public class AddressUpdateRequestDTO
+public class LocationUpdateRequestDTO
 {
     public required string Country { get; set; }
     public required string City { get; set; }

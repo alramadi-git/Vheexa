@@ -1,12 +1,13 @@
 using FluentValidation;
 
 using Business.Validations;
+using Business.Validations.UserValidations;
 
+using DataAccess.Repositories.UserRepository;
 using DataAccess.RequestDTOs;
+using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
-using DataAccess.Repositories.UserRepository;
-using DataAccess.RequestDTOs.CreateRequestDTOs;
 
 namespace Business.Services.UserServices;
 
@@ -21,7 +22,7 @@ public class UserAuthenticationService
 
     public async Task SignupAsync(UserCreateRequestDTO userSignup)
     {
-        UserSignupValidation.Instance.ValidateAndThrow(userSignup);
+        UserCreateValidation.Instance.ValidateAndThrow(userSignup);
         await _UserAuthenticationRepository.SignupAsync(userSignup);
     }
 

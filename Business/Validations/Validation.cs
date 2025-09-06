@@ -1,16 +1,11 @@
 using FluentValidation;
 
+using DataAccess.RequestDTOs.CreateRequestDTOs;
+
 namespace Business.Validations;
 
 public static class Validation
 {
-    public static IRuleBuilderOptions<T, string> Name<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder
-        .MinimumLength(3).WithMessage("Name must be at least 3 characters.")
-        .MaximumLength(25).WithMessage("Name must be at most 25 characters.");
-    }
-
 
     public static IRuleBuilderOptions<T, string> PhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
@@ -31,12 +26,20 @@ public static class Validation
         .Matches(@"^[^ ]+$").WithMessage("Password must not contain any white spaces.");
     }
 
-    public static IRuleBuilderOptions<T, DateOnly> OlderThanX<T>(this IRuleBuilder<T, DateOnly> ruleBuilder, int olderThanX = 18)
+    public static IRuleBuilderOptions<T, DateOnly> OlderThanX<T>(this IRuleBuilder<T, DateOnly> ruleBuilder, int olderThanX)
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
 
         return ruleBuilder
         .LessThanOrEqualTo(today.AddYears(-olderThanX))
-        .WithMessage($"Age must be at least {olderThanX} years old.");
+        .WithMessage($"Date must be at least {olderThanX} years old.");
+    }
+    public static IRuleBuilderOptions<T, DateOnly> YoungerThanX<T>(this IRuleBuilder<T, DateOnly> ruleBuilder, int youngerThanX)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+
+        return ruleBuilder
+        .GreaterThanOrEqualTo(today.AddYears(-youngerThanX))
+        .WithMessage($"Date must be at most {youngerThanX} years old.");
     }
 }

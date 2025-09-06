@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Page-1" id="c7acuwJ6e7UkxPXnuQJT">
-        <mxGraphModel dx="2435" dy="2318" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2452" dy="2014" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -1468,7 +1468,7 @@
                         <mxRectangle width="145.5" height="53" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7pHEhIIPUzXmdBcEqhHl-331" value="&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;Location&lt;/span&gt;ID" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;strokeWidth=2;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;" parent="7pHEhIIPUzXmdBcEqhHl-329" vertex="1">
+                <mxCell id="7pHEhIIPUzXmdBcEqhHl-331" value="&lt;span style=&quot;&quot;&gt;Location&lt;/span&gt;ID" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;strokeWidth=2;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" parent="7pHEhIIPUzXmdBcEqhHl-329" vertex="1">
                     <mxGeometry x="145.5" width="184.5" height="53" as="geometry">
                         <mxRectangle width="184.5" height="53" as="alternateBounds"/>
                     </mxGeometry>
@@ -1619,15 +1619,15 @@
                         <mxRectangle width="148.5" height="53" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="21" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;rounded=1;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" vertex="1" parent="7pHEhIIPUzXmdBcEqhHl-353">
+                <mxCell id="21" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;rounded=1;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" parent="7pHEhIIPUzXmdBcEqhHl-353" vertex="1">
                     <mxGeometry y="224" width="294" height="42" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" vertex="1" parent="21">
+                <mxCell id="22" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" parent="21" vertex="1">
                     <mxGeometry width="145.5" height="42" as="geometry">
                         <mxRectangle width="145.5" height="42" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="23" value="Permission" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" vertex="1" parent="21">
+                <mxCell id="23" value="Status" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;fontColor=default;" parent="21" vertex="1">
                     <mxGeometry x="145.5" width="148.5" height="42" as="geometry">
                         <mxRectangle width="148.5" height="42" as="alternateBounds"/>
                     </mxGeometry>
@@ -3256,8 +3256,8 @@
                         <mxRectangle width="310.5" height="42" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="20" value="PERMISSION:&lt;div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(192, 192, 192); background-color: transparent;&quot;&gt;&amp;nbsp; - Active&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(192, 192, 192); background-color: transparent;&quot;&gt;&amp;nbsp; - InActive&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=32;fontStyle=1;fontColor=default;" vertex="1" parent="1">
-                    <mxGeometry x="4679" y="223" width="228" height="127" as="geometry"/>
+                <mxCell id="20" value="STATUS:&lt;div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(192, 192, 192); background-color: transparent;&quot;&gt;&amp;nbsp; - Active&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(192, 192, 192); background-color: transparent;&quot;&gt;&amp;nbsp; - InActive&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=32;fontStyle=1;fontColor=default;" parent="1" vertex="1">
+                    <mxGeometry x="4668" width="169" height="127" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

@@ -49,12 +49,12 @@ public class MemberRepository
             }
         }
 
-        member.Human.Location!.Country = memberUpdatedData.Address.Country;
-        member.Human.Location.City = memberUpdatedData.Address.City;
-        member.Human.Location.Street = memberUpdatedData.Address.Street;
+        member.Human.Location!.Country = memberUpdatedData.Location.Country;
+        member.Human.Location.City = memberUpdatedData.Location.City;
+        member.Human.Location.Street = memberUpdatedData.Location.Street;
 
-        member.Human.Location.Latitude = memberUpdatedData.Address.Latitude;
-        member.Human.Location.Longitude = memberUpdatedData.Address.Longitude;
+        member.Human.Location.Latitude = memberUpdatedData.Location.Latitude;
+        member.Human.Location.Longitude = memberUpdatedData.Location.Longitude;
 
         member.Human.FirstName = memberUpdatedData.FirstName;
         member.Human.MidName = memberUpdatedData.MidName;

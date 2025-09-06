@@ -11,34 +11,36 @@ public class MemberUpdateValidation : AbstractValidator<MemberUpdateRequestDTO>
     private MemberUpdateValidation() : base()
     {
         /** Image */
-        RuleFor(member => member.Image.URL)
-        .NotEmpty().When(member => member.Image != null);
-
-        RuleFor(member => member.Image.Alternate)
+        RuleFor(member => member.Image!.URL)
         .NotEmpty().When(member => member.Image != null);
 
         /** Address */
-        RuleFor(member => member.Address.URL)
+        RuleFor(member => member.Location.Country)
         .NotEmpty();
 
-        RuleFor(member => member.Address.Country)
+        RuleFor(member => member.Location.City)
         .NotEmpty();
 
-        RuleFor(member => member.Address.City)
+        RuleFor(member => member.Location.Street)
         .NotEmpty();
 
-        RuleFor(member => member.Address.Street)
-        .NotEmpty();
+        RuleFor(user => user.Location.Latitude)
+        .InclusiveBetween(-90, 90)
+        .WithMessage("Latitude must be between -90 and 90.");
+
+        RuleFor(user => user.Location.Longitude)
+        .InclusiveBetween(-180, 180)
+        .WithMessage("Longitude must be between -180 and 180.");
 
         /** Member */
         RuleFor(member => member.FirstName)
-        .Name();
+        .Username();
 
         RuleFor(member => member.MidName)
-        .Name();
+        .Username();
 
         RuleFor(member => member.LastName)
-        .Name();
+        .Username();
 
         RuleFor(member => member.DateOfBirth)
         .OlderThanX();

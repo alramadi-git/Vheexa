@@ -36,11 +36,11 @@ public class PartnerMemberRepository
         var locationEntityEntry = _AppDBContext.Addresses.Add(
         new Entities.LocationEntity
         {
-            Country = memberAddData.Address.Country,
-            City = memberAddData.Address.City,
-            Street = memberAddData.Address.Street,
-            Latitude = memberAddData.Address.Latitude,
-            Longitude = memberAddData.Address.Longitude,
+            Country = memberAddData.Location.Country,
+            City = memberAddData.Location.City,
+            Street = memberAddData.Location.Street,
+            Latitude = memberAddData.Location.Latitude,
+            Longitude = memberAddData.Location.Longitude,
         });
 
         var passwordHasher = new PasswordHasher<object?>();

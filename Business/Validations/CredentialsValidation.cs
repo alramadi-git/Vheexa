@@ -4,17 +4,18 @@ using DataAccess.RequestDTOs;
 
 namespace Business.Validations;
 
-public class CredentialsValidation : AbstractValidator<CredentialsRequestDTO>
+public static class CredentialsValidation
 {
-    private static Lazy<CredentialsValidation> _Instance = new(() => new());
-    public static CredentialsValidation Instance => _Instance.Value;
-
-    private CredentialsValidation()
+    public static IRuleBuilderOptions<T, CredentialsRequestDTO> Credentials<T>(this IRuleBuilder<T, CredentialsRequestDTO> ruleBuilder)
     {
-        RuleFor(credentials => credentials.Email)
-        .EmailAddress();
-
-        RuleFor(credentials => credentials.Password)
-        .Password();
+        return ruleBuilder
+        .ChildRules(credentials => credentials
+            .RuleFor(credentials => credentials.Email)
+            .EmailAddress()
+        )
+        .ChildRules(credentials => credentials
+            .RuleFor(credentials => credentials.Password)
+            .Password()
+        );
     }
 }

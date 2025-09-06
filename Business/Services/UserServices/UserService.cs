@@ -1,6 +1,8 @@
 using FluentValidation;
+
+using Business.Validations.UserValidations;
+
 using DataAccess.Repositories.UserRepository;
-using Business.Validations;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
 
 namespace Business.Services.UserServices;
