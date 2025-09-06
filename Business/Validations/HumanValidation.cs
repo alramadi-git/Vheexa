@@ -2,6 +2,8 @@ using FluentValidation;
 
 using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
+using DataAccess.RequestDTOs;
+using System.Dynamic;
 
 namespace Business.Validations;
 
@@ -47,6 +49,13 @@ public static class HumanValidation
             .Password()
         );
     }
+
+    // public static IRuleBuilderOptions<T, AbstractHumansFiltersRequestDTO<TSortingOption>> HumansFilters<T, TSortingOption>(this IRuleBuilder<T, AbstractHumansFiltersRequestDTO<TSortingOption>> ruleBuilder)
+    // where TSortingOption : Enum
+    // {
+    //     return ruleBuilder
+    // }
+
     public static IRuleBuilderOptions<T, AbstractHumanUpdateRequestDTO> HumanUpdate<T>(this IRuleBuilder<T, AbstractHumanUpdateRequestDTO> ruleBuilder)
     {
         return ruleBuilder
