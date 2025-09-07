@@ -33,25 +33,6 @@ public static class LocationValidation
         );
     }
 
-    public static IRuleBuilderOptions<T, LocationsFiltersRequestDTO> LocationsFilters<T>(this IRuleBuilder<T, LocationsFiltersRequestDTO> ruleBuilder)
-    {
-        return ruleBuilder
-        .ChildRules(location => location
-            .RuleFor(location => location.Country)
-            .NotEmpty().When(a => a.Country != null).WithMessage("Country is invalid.")
-        )
-        .ChildRules(location => location
-            .RuleFor(location => location.City)
-            .NotEmpty()
-            .When(a => a.City != null).WithMessage("City is invalid.")
-        )
-        .ChildRules(location => location
-            .RuleFor(location => location.Street)
-            .NotEmpty()
-            .When(a => a.Street != null).WithMessage("Street is invalid.")
-        );
-    }
-
     public static IRuleBuilderOptions<T, LocationUpdateRequestDTO> LocationUpdate<T>(this IRuleBuilder<T, LocationUpdateRequestDTO> ruleBuilder)
     {
         return ruleBuilder

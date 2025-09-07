@@ -50,12 +50,6 @@ public static class HumanValidation
         );
     }
 
-    // public static IRuleBuilderOptions<T, AbstractHumansFiltersRequestDTO<TSortingOption>> HumansFilters<T, TSortingOption>(this IRuleBuilder<T, AbstractHumansFiltersRequestDTO<TSortingOption>> ruleBuilder)
-    // where TSortingOption : Enum
-    // {
-    //     return ruleBuilder
-    // }
-
     public static IRuleBuilderOptions<T, AbstractHumanUpdateRequestDTO> HumanUpdate<T>(this IRuleBuilder<T, AbstractHumanUpdateRequestDTO> ruleBuilder)
     {
         return ruleBuilder
