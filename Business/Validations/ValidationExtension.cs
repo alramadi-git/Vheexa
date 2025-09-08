@@ -1,10 +1,8 @@
 using FluentValidation;
 
-using DataAccess.RequestDTOs.CreateRequestDTOs;
-
 namespace Business.Validations;
 
-public static class Validation
+public static class ValidationExtension
 {
 
     public static IRuleBuilderOptions<T, string> PhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)

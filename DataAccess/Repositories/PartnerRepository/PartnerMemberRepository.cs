@@ -95,7 +95,7 @@ public class PartnerMemberRepository
         return new(new(member));
     }
 
-    public async Task<SuccessManyResponseDTO<MemberEntityDTO>> GetManyAsync(int partnerID, MembersFiltersRequestDTO memberFilters)
+    public async Task<SuccessManyResponseDTO<MemberEntityDTO>> GetManyAsync(int partnerID, MemberFiltrationRequestDTO memberFilters)
     {
         var membersQuery = _AppDBContext.Members
         .Include(member => member.Human)

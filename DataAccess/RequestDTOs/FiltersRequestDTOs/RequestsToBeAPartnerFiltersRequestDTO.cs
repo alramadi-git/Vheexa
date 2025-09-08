@@ -12,7 +12,7 @@ public enum REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO
 
 public class RequestToBeAPartnerSortingRequestDTO : AbstractSortingFiltersRequestDTO<REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO>;
 
-public class RequestsToBeAPartnerFiltersRequestDTO : AbstractHumansFiltersRequestDTO<REQUEST_TO_BE_A_PARTNER_STATUS>
+public class RequestsToBeAPartnerFiltersRequestDTO : AbstractHumanFiltrationRequestDTO<REQUEST_TO_BE_A_PARTNER_STATUS>
 {
 
     public int? PartnerID { get; set; }

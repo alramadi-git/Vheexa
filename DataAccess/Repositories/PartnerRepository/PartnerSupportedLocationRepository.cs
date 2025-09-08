@@ -29,7 +29,7 @@ public class PartnerSupportedLocationRepository
         return new(new(partnerSupportedLocation));
     }
 
-    public async Task<SuccessManyResponseDTO<PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerID, PartnerSupportedLocationsFiltersRequestDTO partnerSupportedLocationsFilters)
+    public async Task<SuccessManyResponseDTO<PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerID, PartnerSupportedLocationFiltrationRequestDTO partnerSupportedLocationsFilters)
     {
         var partnerSupportedLocationsQuery = _AppDBContext.PartnerSupportedLocations
         .Include(partnerSupportedLocation => partnerSupportedLocation.Address)

@@ -4,9 +4,12 @@ using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 namespace Business.Validations.UserValidations;
 
-public class UserFilterValidation : AbstractValidator<UsersFiltersRequestDTO>
+public class UserFiltrationValidation : AbstractHumanFiltrationValidation<UsersFiltersRequestDTO, USER_SORTING_OPTION_REQUEST_DTO>
 {
-    public UserFilterValidation()
+    private static readonly Lazy<UserFiltrationValidation> _Instance = new(() => new());
+    public static UserFiltrationValidation Instance => _Instance.Value;
+
+    public UserFiltrationValidation()
     {
         /** Average Rates */
         RuleFor(filter => filter.MinAverageRates)

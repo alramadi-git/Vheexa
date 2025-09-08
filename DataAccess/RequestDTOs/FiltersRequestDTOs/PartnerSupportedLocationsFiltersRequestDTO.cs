@@ -12,7 +12,7 @@ public enum PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO
 
 public class PartnerSupportedLocationsSortingRequestDTO : AbstractSortingFiltersRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>;
 
-public class PartnerSupportedLocationsFiltersRequestDTO
+public class PartnerSupportedLocationFiltrationRequestDTO
 : AbstractFiltersRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>
 {
     public bool? IsPickup { get; set; }

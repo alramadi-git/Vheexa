@@ -1,12 +1,11 @@
 using FluentValidation;
 
 using DataAccess.RequestDTOs.CreateRequestDTOs;
-using DataAccess.RequestDTOs.FiltersRequestDTOs;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
 
 namespace Business.Validations;
 
-public static class LocationValidation
+public static class LocationValidationExtension
 {
     public static IRuleBuilderOptions<T, LocationCreateRequestDTO> LocationCreate<T>(this IRuleBuilder<T, LocationCreateRequestDTO> ruleBuilder)
     {

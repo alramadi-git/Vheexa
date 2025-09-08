@@ -2,7 +2,7 @@ using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
 namespace DataAccess.RequestDTOs;
 
-public abstract class AbstractHumansFiltersRequestDTO<TSortingOption> : AbstractFiltersRequestDTO<TSortingOption> where TSortingOption : Enum
+public abstract class AbstractHumanFiltrationRequestDTO<TSortingOption> : AbstractFiltersRequestDTO<TSortingOption> where TSortingOption : Enum
 {
     public string? FirstName { get; set; }
     public string? MidName { get; set; }
