@@ -2,7 +2,7 @@ using FluentValidation;
 
 using DataAccess.RequestDTOs;
 
-namespace Business.Validations;
+namespace Business.Validations.HumanValidations;
 
 public abstract class AbstractHumanFiltrationValidation<T, T_SORTING_OPTION> : AbstractFiltrationValidation<T, T_SORTING_OPTION>
 where T : AbstractHumanFiltrationRequestDTO<T_SORTING_OPTION>
