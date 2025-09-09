@@ -1,7 +1,7 @@
 using DataAccess.Entities;
 using DataAccess.RequestDTOs.FiltersRequestDTOs;
 
-namespace DataAccess.EntityDTOs;
+namespace DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 public class RequestToBeAPartnerEntityDTO
 {

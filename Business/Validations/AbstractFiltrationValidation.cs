@@ -5,7 +5,7 @@ using DataAccess.RequestDTOs.FiltersRequestDTOs;
 namespace Business.Validations;
 
 public abstract class AbstractFiltrationValidation<T, T_SORTING_OPTION> : AbstractValidator<T>
-where T : AbstractFiltersRequestDTO<T_SORTING_OPTION>
+where T : AbstractFiltrationRequestDTO<T_SORTING_OPTION>
 where T_SORTING_OPTION : Enum
 {
     public AbstractFiltrationValidation()

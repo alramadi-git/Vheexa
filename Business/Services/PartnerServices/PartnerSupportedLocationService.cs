@@ -4,6 +4,7 @@ using Business.Validations.PartnerSupportedLocationValidations;
 
 using DataAccess.Repositories.PartnerRepository;
 using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace Business.Services.PartnerServices;
 
@@ -16,7 +17,7 @@ public class PartnerSupportedLocationService
         _PartnerSupportedLocationRepository = partnerSupportedLocationRepository;
     }
 
-    public async Task<DataAccess.ResponseDTOs.SuccessOneResponseDTO<DataAccess.EntityDTOs.PartnerSupportedLocationEntityDTO>> GetAsync(int partnerID, int supportedLocationID)
+    public async Task<DataAccess.ResponseDTOs.SuccessOneResponseDTO<PartnerSupportedLocationEntityDTO>> GetAsync(int partnerID, int supportedLocationID)
     {
         var supportedLocationIDValidation = new InlineValidator<int>();
 
@@ -28,7 +29,7 @@ public class PartnerSupportedLocationService
         return await _PartnerSupportedLocationRepository.GetAsync(partnerID, supportedLocationID);
     }
 
-    public async Task<DataAccess.ResponseDTOs.SuccessManyResponseDTO<DataAccess.EntityDTOs.PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerSupportedLocationID, PartnerSupportedLocationFiltrationRequestDTO partnerSupportedLocationFiltration)
+    public async Task<DataAccess.ResponseDTOs.SuccessManyResponseDTO<PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerSupportedLocationID, PartnerSupportedLocationFiltrationRequestDTO partnerSupportedLocationFiltration)
     {
         PartnerSupportedLocationFiltrationValidation.Instance.ValidateAndThrow(partnerSupportedLocationFiltration);
         return await _PartnerSupportedLocationRepository.GetManyAsync(partnerSupportedLocationID, partnerSupportedLocationFiltration);

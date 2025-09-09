@@ -1,6 +1,6 @@
 using DataAccess.Entities;
 
-namespace DataAccess.EntityDTOs;
+namespace DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 public class PartnerEntityDTO
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -29,7 +29,7 @@ public class AdminUserRepository
         return new(new(user));
     }
 
-    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(UsersFiltersRequestDTO userFilters)
+    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(UserFiltrationRequestDTO userFilters)
     {
         var usersQuery = _AppDBContext.Users
         .Include(user => user.Human)

@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
 using DataAccess.RequestDTOs;
-using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace DataAccess.Repositories.MemberRepository;
 

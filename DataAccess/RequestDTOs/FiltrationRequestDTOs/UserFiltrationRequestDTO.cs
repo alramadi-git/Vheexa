@@ -10,9 +10,9 @@ public enum USER_SORTING_OPTION_REQUEST_DTO
     FULL_NAME,
 }
 
-public class UserSortingRequestDTO : AbstractSortingFiltersRequestDTO<USER_SORTING_OPTION_REQUEST_DTO>;
+public class UserSortingRequestDTO : AbstractSortingFiltrationRequestDTO<USER_SORTING_OPTION_REQUEST_DTO>;
 
-public class UsersFiltersRequestDTO : AbstractHumanFiltrationRequestDTO<USER_SORTING_OPTION_REQUEST_DTO>
+public class UserFiltrationRequestDTO : AbstractHumanFiltrationRequestDTO<USER_SORTING_OPTION_REQUEST_DTO>
 {
     public float? MinAverageRates { get; set; }
     public float? MaxAverageRates { get; set; }

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using DataAccess.RequestDTOs.FiltersRequestDTOs;
-using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace DataAccess.Repositories.PartnerRepository;
 

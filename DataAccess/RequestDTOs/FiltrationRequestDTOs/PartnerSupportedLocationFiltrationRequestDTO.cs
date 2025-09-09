@@ -10,10 +10,10 @@ public enum PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO
     PARTNER_ID,
 }
 
-public class PartnerSupportedLocationsSortingRequestDTO : AbstractSortingFiltersRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>;
+public class PartnerSupportedLocationsSortingRequestDTO : AbstractSortingFiltrationRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>;
 
 public class PartnerSupportedLocationFiltrationRequestDTO
-: AbstractFiltersRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>
+: AbstractFiltrationRequestDTO<PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO>
 {
     public bool? IsPickup { get; set; }
     public bool? IsDropoff { get; set; }

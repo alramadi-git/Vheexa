@@ -10,9 +10,9 @@ public enum REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO
     PARTNER_ID
 }
 
-public class RequestToBeAPartnerSortingRequestDTO : AbstractSortingFiltersRequestDTO<REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO>;
+public class RequestToBeAPartnerSortingRequestDTO : AbstractSortingFiltrationRequestDTO<REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO>;
 
-public class RequestsToBeAPartnerFiltersRequestDTO : AbstractHumanFiltrationRequestDTO<REQUEST_TO_BE_A_PARTNER_STATUS>
+public class RequestToBeAPartnerFiltrationRequestDTO : AbstractFiltrationRequestDTO<REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO>
 {
 
     public int? PartnerID { get; set; }

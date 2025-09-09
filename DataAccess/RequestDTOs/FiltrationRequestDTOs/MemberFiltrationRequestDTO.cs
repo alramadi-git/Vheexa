@@ -9,7 +9,7 @@ public enum MEMBER_SORTING_OPTION_REQUEST_DTO
     FULL_NAME,
 }
 
-public class MemberSortingRequestDTO : AbstractSortingFiltersRequestDTO<MEMBER_SORTING_OPTION_REQUEST_DTO>;
+public class MemberSortingRequestDTO : AbstractSortingFiltrationRequestDTO<MEMBER_SORTING_OPTION_REQUEST_DTO>;
 
 public class MemberFiltrationRequestDTO : AbstractHumanFiltrationRequestDTO<MEMBER_SORTING_OPTION_REQUEST_DTO>
 {

@@ -5,7 +5,7 @@ using Business.Validations.HumanValidations;
 
 namespace Business.Validations.UserValidations;
 
-public class UserFiltrationValidation : AbstractHumanFiltrationValidation<UsersFiltersRequestDTO, USER_SORTING_OPTION_REQUEST_DTO>
+public class UserFiltrationValidation : AbstractHumanFiltrationValidation<UserFiltrationRequestDTO, USER_SORTING_OPTION_REQUEST_DTO>
 {
     private static readonly Lazy<UserFiltrationValidation> _Instance = new(() => new());
     public static UserFiltrationValidation Instance => _Instance.Value;

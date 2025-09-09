@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using DataAccess.EntityDTOs;
+
 using DataAccess.ResponseDTOs;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
 using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;
 
@@ -27,10 +28,10 @@ public class AdminRequestToBeAPartnerRepository
         return new(new(requestToBeAPartner));
     }
 
-    public async Task UpdateAsync(int adminID, UpdateRequestToBeAPartnerDTO updatedRequestToBeAPartnerData)
+    public async Task UpdateAsync(int adminID, int requestToBeAPartnerID, UpdateRequestToBeAPartnerDTO updatedRequestToBeAPartnerData)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
-        .Where(requestToBeAPartner => requestToBeAPartner.ID == updatedRequestToBeAPartnerData.ID && requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
+        .Where(requestToBeAPartner => requestToBeAPartner.ID == requestToBeAPartnerID && requestToBeAPartner.Status == Entities.REQUEST_TO_BE_A_PARTNER_STATUS.PENDING);
 
         var requestToBeAPartner = await requestToBeAPartnerQuery.FirstOrDefaultAsync() ??
         throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such request to be a partner.");
@@ -50,7 +51,7 @@ public class AdminRequestToBeAPartnerRepository
             Action = Entities.TASK_ACTION_OPTION_ENTITY.UPDATE,
 
             Table = Entities.TASK_TABLE_OPTION_ENTITY.REQUESTS_TO_BE_A_PARTNER,
-            RowID = updatedRequestToBeAPartnerData.ID,
+            RowID = requestToBeAPartnerID,
         });
 
         var adminTaskEntityEntry = _AppDBContext.AdminTasks
@@ -66,27 +67,27 @@ public class AdminRequestToBeAPartnerRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(GetManyRequestsToBeAPartnerSettingsRequestDTO requestsToBeAPartnerSettings)
+    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(RequestToBeAPartnerFiltrationRequestDTO requestsToBeAPartnerSettings)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
         .AsQueryable();
 
-        if (requestsToBeAPartnerSettings.Filters.PartnerID != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.PartnerID == requestsToBeAPartnerSettings.Filters.PartnerID);
+        if (requestsToBeAPartnerSettings.PartnerID != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.PartnerID == requestsToBeAPartnerSettings.PartnerID);
 
-        if (requestsToBeAPartnerSettings.Filters.Status != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.Status == requestsToBeAPartnerSettings.Filters.Status);
+        if (requestsToBeAPartnerSettings.Status != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.Status == requestsToBeAPartnerSettings.Status);
 
-        if (requestsToBeAPartnerSettings.Filters.UpdatedAt != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.UpdatedAt == requestsToBeAPartnerSettings.Filters.UpdatedAt);
+        if (requestsToBeAPartnerSettings.UpdatedAt != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.UpdatedAt == requestsToBeAPartnerSettings.UpdatedAt);
         else
         {
-            if (requestsToBeAPartnerSettings.Filters.UpdatedBefore != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.UpdatedAt <= requestsToBeAPartnerSettings.Filters.UpdatedBefore);
-            if (requestsToBeAPartnerSettings.Filters.UpdatedAfter != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.UpdatedAt >= requestsToBeAPartnerSettings.Filters.UpdatedAfter);
+            if (requestsToBeAPartnerSettings.UpdatedBefore != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.UpdatedAt <= requestsToBeAPartnerSettings.UpdatedBefore);
+            if (requestsToBeAPartnerSettings.UpdatedAfter != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.UpdatedAt >= requestsToBeAPartnerSettings.UpdatedAfter);
         }
 
-        if (requestsToBeAPartnerSettings.Filters.CreatedAt != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.CreatedAt == requestsToBeAPartnerSettings.Filters.CreatedAt);
+        if (requestsToBeAPartnerSettings.CreatedAt != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.CreatedAt == requestsToBeAPartnerSettings.CreatedAt);
         else
         {
-            if (requestsToBeAPartnerSettings.Filters.CreatedBefore != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.CreatedAt <= requestsToBeAPartnerSettings.Filters.CreatedBefore);
-            if (requestsToBeAPartnerSettings.Filters.CreatedAfter != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.CreatedAt >= requestsToBeAPartnerSettings.Filters.CreatedAfter);
+            if (requestsToBeAPartnerSettings.CreatedBefore != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.CreatedAt <= requestsToBeAPartnerSettings.CreatedBefore);
+            if (requestsToBeAPartnerSettings.CreatedAfter != null) requestToBeAPartnerQuery = requestToBeAPartnerQuery.Where(requestToBeAPartner => requestToBeAPartner.CreatedAt >= requestsToBeAPartnerSettings.CreatedAfter);
         }
 
         var requestToBeAPartnerTotalFoundRecords = await requestToBeAPartnerQuery.CountAsync();

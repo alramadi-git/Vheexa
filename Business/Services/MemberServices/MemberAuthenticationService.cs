@@ -4,8 +4,8 @@ using Business.Validations;
 
 using DataAccess.Repositories.MemberRepository;
 using DataAccess.RequestDTOs;
-using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace Business.Services.MemberServices;
 

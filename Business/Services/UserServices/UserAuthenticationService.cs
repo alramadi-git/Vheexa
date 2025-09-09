@@ -6,8 +6,8 @@ using Business.Validations.UserValidations;
 using DataAccess.Repositories.UserRepository;
 using DataAccess.RequestDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
-using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace Business.Services.UserServices;
 

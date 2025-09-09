@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Business.Services.UserServices;
 
 using DataAccess.RequestDTOs;
-using DataAccess.EntityDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using Business.Services.AdminServices;
 
 namespace API.Controllers.UserControllers;
 

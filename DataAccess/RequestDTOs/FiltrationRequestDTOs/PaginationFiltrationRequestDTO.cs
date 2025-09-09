@@ -9,7 +9,7 @@ public enum RECORDS_PER_REQUEST_OPTION_REQUEST_DTO : int
     _100 = 100,
 }
 
-public class PaginationFiltersRequestDTO
+public class PaginationFiltrationRequestDTO
 {
     public required int RequestedPage { get; set; }
     public required RECORDS_PER_REQUEST_OPTION_REQUEST_DTO RecordsPerRequest { get; set; }
