@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 public enum USER_SORTING_OPTION_REQUEST_DTO
 {

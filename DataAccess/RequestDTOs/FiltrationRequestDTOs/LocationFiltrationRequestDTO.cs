@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 public class LocationFiltrationRequestDTO
 {

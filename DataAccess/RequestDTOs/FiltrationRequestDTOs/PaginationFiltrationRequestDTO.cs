@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 public enum RECORDS_PER_REQUEST_OPTION_REQUEST_DTO : int
 {

@@ -3,7 +3,7 @@ using FluentValidation;
 using Business.Validations.PartnerSupportedLocationValidations;
 
 using DataAccess.Repositories.PartnerRepository;
-using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.RequestDTOs.FiltrationRequestDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace Business.Services.PartnerServices;

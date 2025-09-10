@@ -4,7 +4,7 @@ using Business.Validations.MemberValidations;
 
 using DataAccess.Repositories.PartnerRepository;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
-using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.RequestDTOs.FiltrationRequestDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace Business.Services.PartnerServices;

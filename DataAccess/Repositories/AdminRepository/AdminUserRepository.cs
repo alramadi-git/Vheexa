@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using DataAccess.ResponseDTOs;
-using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.RequestDTOs.FiltrationRequestDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
 namespace DataAccess.Repositories.AdminRepository;

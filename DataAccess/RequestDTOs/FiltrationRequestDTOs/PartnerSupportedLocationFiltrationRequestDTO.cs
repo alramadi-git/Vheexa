@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltrationRequestDTOs;
 public enum PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO
 {
     CREATION,

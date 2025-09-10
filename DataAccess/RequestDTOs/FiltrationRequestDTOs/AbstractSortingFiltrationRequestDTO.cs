@@ -1,4 +1,4 @@
-namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 public abstract class AbstractSortingFiltrationRequestDTO<TOption> where TOption : Enum
 {

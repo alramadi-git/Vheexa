@@ -1,6 +1,6 @@
 using DataAccess.Entities;
 
-namespace DataAccess.RequestDTOs.FiltersRequestDTOs;
+namespace DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 public enum REQUEST_TO_BE_A_PARTNER_SORTING_OPTION_REQUEST_DTO
 {

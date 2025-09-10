@@ -1,4 +1,4 @@
-using DataAccess.RequestDTOs.FiltersRequestDTOs;
+using DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 namespace DataAccess.ResponseDTOs;
 
