@@ -7,8 +7,6 @@ public class UserEntity
     public HumanEntity? Human { get; set; }
     public int HumanID { get; set; }
 
-    public float AverageRates { get; set; }
-
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 

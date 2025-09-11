@@ -16,8 +16,6 @@ public class PartnerEntity
     public required string Email { get; set; }
     public required string Password { get; set; }
 
-    public float AverageRates { get; set; }
-
     public bool IsPublished { get; set; }
 
     public bool IsDeleted { get; set; }

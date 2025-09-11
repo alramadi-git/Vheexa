@@ -3,9 +3,7 @@ namespace DataAccess.Entities;
 public enum CHECKOUT_STATUS_OPTION_ENTITY
 {
     ACCEPTED,
-    REFUNDED,
     REJECTED,
-    CANCELLED
 }
 
 public class CheckoutEntity

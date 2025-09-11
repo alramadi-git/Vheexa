@@ -10,8 +10,6 @@ public class VehicleColorEntity
     public required string Name { get; set; }
     public required string HexCode { get; set; }
 
-    public bool IsPublished { get; set; }
-
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 }

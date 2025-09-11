@@ -17,18 +17,19 @@ CREATE TABLE "Images" (
 
 
 -- =========================
--- Addresses Table
+-- Locations Table
 -- =========================
-CREATE TABLE "Addresses" (
+CREATE TABLE "Locations" (
     "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "URL" TEXT NOT NULL,
     "Country" TEXT NOT NULL,
     "City" TEXT NOT NULL,
-    "Street" TEXT NOT NULL
+    "Street" TEXT NOT NULL,
+    "Latitude" FLOAT NOT NULL,
+    "Longitude" FLOAT NOT NULL
 );
 
-CREATE INDEX idx_addresses_country ON "Addresses" ("Country");
-CREATE INDEX idx_addresses_city ON "Addresses" ("City");
+CREATE INDEX idx_locations_country ON "Locations" ("Country");
+CREATE INDEX idx_locations_city ON "Locations" ("City");
 
 
 -- =========================
@@ -37,7 +38,7 @@ CREATE INDEX idx_addresses_city ON "Addresses" ("City");
 CREATE TABLE "Humans" (
     "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "ImageID" INT REFERENCES "Images"("ID") ON DELETE SET NULL,
-    "AddressID" INT NOT NULL UNIQUE REFERENCES "Addresses"("ID") ON DELETE CASCADE,
+    "LocationID" INT NOT NULL UNIQUE REFERENCES "Locations"("ID") ON DELETE CASCADE,
     "FirstName" TEXT NOT NULL,
     "MidName" TEXT NOT NULL,
     "LastName" TEXT NOT NULL,
@@ -53,22 +54,6 @@ WHERE "ImageID" IS NOT NULL;
 
 CREATE INDEX idx_humans_phone ON "Humans" ("PhoneNumber");
 CREATE INDEX idx_humans_email ON "Humans" ("Email");
-
-
--- =========================
--- Users Table
--- =========================
-CREATE TABLE "Users" (
-    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "HumanID" INT NOT NULL UNIQUE REFERENCES "Humans"("ID") ON DELETE CASCADE,
-    "AverageRates" FLOAT NOT NULL DEFAULT 0,
-    "IsDeleted" BOOLEAN NOT NULL DEFAULT FALSE,
-    "DeletedAt" TIMESTAMPTZ,
-    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX idx_users_isdeleted ON "Users" ("IsDeleted");
 
 -- =========================
 -- Tasks Table
@@ -105,6 +90,22 @@ CREATE TABLE "AdminTasks" (
     "TaskID" INT NOT NULL UNIQUE REFERENCES "Tasks"("ID") ON DELETE CASCADE,
     "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- =========================
+-- Users Table
+-- =========================
+CREATE TABLE "Users" (
+    "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "HumanID" INT NOT NULL UNIQUE REFERENCES "Humans"("ID") ON DELETE CASCADE,
+    "AverageRates" FLOAT NOT NULL DEFAULT 0,
+    "IsDeleted" BOOLEAN NOT NULL DEFAULT FALSE,
+    "DeletedAt" TIMESTAMPTZ,
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_users_isdeleted ON "Users" ("IsDeleted");
+
 
 -- =========================
 -- Partners Table
@@ -150,7 +151,7 @@ CREATE INDEX idx_requeststobeapartner_status ON "RequestsToBeAPartner" ("Status"
 CREATE TABLE "PartnerSupportedLocations" (
     "ID" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "PartnerID" INT NOT NULL REFERENCES "Partners"("ID") ON DELETE CASCADE,
-    "AddressID" INT NOT NULL REFERENCES "Addresses"("ID") ON DELETE CASCADE,
+    "LocationID" INT NOT NULL REFERENCES "Locations"("ID") ON DELETE CASCADE,
     "IsPickup" BOOLEAN NOT NULL DEFAULT FALSE,
     "IsDropoff" BOOLEAN NOT NULL DEFAULT FALSE,
     "IsPublished" BOOLEAN NOT NULL DEFAULT FALSE,
