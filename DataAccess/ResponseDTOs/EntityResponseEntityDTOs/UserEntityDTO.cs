@@ -14,8 +14,6 @@ public class UserEntityDTO : AbstractHumanEntityDTO
 
     public UserEntityDTO(UserEntity user) : base(user.Human!)
     {
-        AverageRates = user.AverageRates;
-
         IsDeleted = user.IsDeleted;
         DeletedAt = user.DeletedAt;
 

@@ -30,6 +30,8 @@ public class AppDBContext : DbContext
 
     /** Vehicle */
     public DbSet<VehicleEntity> Vehicles { get; set; }
+    public DbSet<VehicleImageEntity> VehicleImages { get; set; }
+    public DbSet<VehicleColorEntity> VehicleColors { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 };

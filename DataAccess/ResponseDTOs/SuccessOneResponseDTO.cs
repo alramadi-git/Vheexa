@@ -1,10 +1,10 @@
 namespace DataAccess.ResponseDTOs;
 
-public class SuccessOneResponseDTO<TData>
+public class SuccessResponseDTO<TData>
 {
     public TData Data { get; set; }
 
-    public SuccessOneResponseDTO(TData data)
+    public SuccessResponseDTO(TData data)
     {
         Data = data;
     }

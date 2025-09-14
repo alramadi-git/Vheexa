@@ -17,7 +17,7 @@ public class PartnerSupportedLocationService
         _PartnerSupportedLocationRepository = partnerSupportedLocationRepository;
     }
 
-    public async Task<DataAccess.ResponseDTOs.SuccessOneResponseDTO<PartnerSupportedLocationEntityDTO>> GetAsync(int partnerID, int supportedLocationID)
+    public async Task<DataAccess.ResponseDTOs.SuccessResponseDTO<PartnerSupportedLocationEntityDTO>> GetAsync(int partnerID, int supportedLocationID)
     {
         var supportedLocationIDValidation = new InlineValidator<int>();
 

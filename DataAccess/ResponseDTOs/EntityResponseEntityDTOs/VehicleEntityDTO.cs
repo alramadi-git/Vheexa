@@ -7,7 +7,10 @@ public class VehicleEntityDTO
     public int ID { get; set; }
     public int PartnerID { get; set; }
 
+    public VehicleColorEntityDTO[] Colors { get; set; }
+
     public ImageEntityDTO? Thumbnail { get; set; }
+    public VehicleImageEntityDTO[]? Images { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }
@@ -32,10 +35,12 @@ public class VehicleEntityDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public VehicleEntityDTO(VehicleEntity vehicle)
+    public VehicleEntityDTO(VehicleEntity vehicle, VehicleColorEntity[] colors, VehicleImageEntity[] images)
     {
         ID = vehicle.ID;
         PartnerID = vehicle.PartnerID;
+
+        Colors = colors.Select(color => new VehicleColorEntityDTO(color)).ToArray();
 
         Thumbnail = vehicle.Thumbnail != null ? new ImageEntityDTO(vehicle.Thumbnail) : null;
 

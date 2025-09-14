@@ -19,7 +19,7 @@ public class AdminRequestToBeAPartnerService
         _AdminRequestToBeAPartnerRepository = adminRequestToBeAPartnerRepository;
     }
 
-    public async Task<SuccessOneResponseDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
+    public async Task<SuccessResponseDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
     {
         var IDValidation = new InlineValidator<int>();
 

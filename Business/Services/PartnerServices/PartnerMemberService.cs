@@ -24,7 +24,7 @@ public class PartnerMemberService
         await _PartnerMemberRepository.AddAsync(partnerMemberID, partnerMemberAddData);
     }
 
-    public async Task<DataAccess.ResponseDTOs.SuccessOneResponseDTO<MemberEntityDTO>> GetAsync(int partnerID, int memberID)
+    public async Task<DataAccess.ResponseDTOs.SuccessResponseDTO<MemberEntityDTO>> GetAsync(int partnerID, int memberID)
     {
         var memberIDValidation = new InlineValidator<int>();
 

@@ -6,6 +6,8 @@ public class PartnerEntityDTO
 {
     public int ID { get; set; }
 
+    public ImageEntityDTO? Image { get; set; }
+
     public string Handle { get; set; }
 
     public string Name { get; set; }
@@ -13,9 +15,6 @@ public class PartnerEntityDTO
     public string PhoneNumber { get; set; }
 
     public string Email { get; set; }
-    public string Password { get; set; }
-
-    public float AverageRates { get; set; }
 
     public bool IsPublished { get; set; }
 
@@ -29,6 +28,10 @@ public class PartnerEntityDTO
     {
         ID = partner.ID;
 
+        Image = partner.Image != null
+        ? new(partner.Image)
+        : null;
+
         Handle = partner.Handle;
 
         Name = partner.Name;
@@ -36,9 +39,6 @@ public class PartnerEntityDTO
         PhoneNumber = partner.PhoneNumber;
 
         Email = partner.Email;
-        Password = partner.Password;
-
-        AverageRates = partner.AverageRates;
 
         IsPublished = partner.IsPublished;
 

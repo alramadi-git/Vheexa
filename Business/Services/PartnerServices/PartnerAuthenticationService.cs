@@ -26,7 +26,7 @@ public class PartnerAuthenticationService
         await _PartnerAuthenticationRepository.SignupAsync(partnerSignup);
     }
 
-    public async Task<SuccessOneResponseDTO<PartnerEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<PartnerEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _PartnerAuthenticationRepository.SigninAsync(credentials);

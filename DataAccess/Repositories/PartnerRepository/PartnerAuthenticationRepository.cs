@@ -68,7 +68,7 @@ public class PartnerAuthenticationRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessOneResponseDTO<PartnerEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<PartnerEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         var partnerQuery = _AppDBContext.Partners
         .Include(partner => partner.Image)

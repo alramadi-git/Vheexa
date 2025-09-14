@@ -39,7 +39,7 @@ public class UserAuthenticationController : Controller
     }
 
     [HttpPost("signin")]
-    public async Task<ActionResult<SuccessOneResponseDTO<UserEntityDTO>>> SigninAsync([FromBody] CredentialsRequestDTO userSignedupData)
+    public async Task<ActionResult<SuccessResponseDTO<UserEntityDTO>>> SigninAsync([FromBody] CredentialsRequestDTO userSignedupData)
     {
         try
         {

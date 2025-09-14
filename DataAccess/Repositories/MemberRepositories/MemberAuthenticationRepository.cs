@@ -17,7 +17,7 @@ public class MemberAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<MemberEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<MemberEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         var memberQuery = _AppDBContext.Members
         .Include(member => member.Human).ThenInclude(human => human!.Image)

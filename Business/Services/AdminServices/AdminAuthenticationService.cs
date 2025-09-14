@@ -18,7 +18,7 @@ public class AdminAuthenticationService
         _AdminAuthenticationRepository = adminRepository;
     }
 
-    public async Task<SuccessOneResponseDTO<AdminEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<AdminEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _AdminAuthenticationRepository.SigninAsync(credentials);

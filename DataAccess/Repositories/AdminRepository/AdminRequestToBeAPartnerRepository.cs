@@ -16,7 +16,7 @@ public class AdminRequestToBeAPartnerRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
+    public async Task<SuccessResponseDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
     {
         var requestToBeAPartnerQuery = _AppDBContext.RequestsToBeAPartner
         .Include(requestToBeAPartner => requestToBeAPartner.Partner).ThenInclude(partner => partner!.Image)

@@ -15,7 +15,7 @@ public class PartnerSupportedLocationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<PartnerSupportedLocationEntityDTO>> GetAsync(int partnerID, int partnerSupportedLocationID)
+    public async Task<SuccessResponseDTO<PartnerSupportedLocationEntityDTO>> GetAsync(int partnerID, int partnerSupportedLocationID)
     {
         var partnerSupportedLocationQuery = _AppDBContext.PartnerSupportedLocations
         .Where(partnerSupportedLocation =>
@@ -32,7 +32,7 @@ public class PartnerSupportedLocationRepository
     public async Task<SuccessManyResponseDTO<PartnerSupportedLocationEntityDTO>> GetManyAsync(int partnerID, PartnerSupportedLocationFiltrationRequestDTO partnerSupportedLocationsFilters)
     {
         var partnerSupportedLocationsQuery = _AppDBContext.PartnerSupportedLocations
-        .Include(partnerSupportedLocation => partnerSupportedLocation.Address)
+        .Include(partnerSupportedLocation => partnerSupportedLocation.Location)
         .Where(partnerSupportedLocation => partnerSupportedLocation.PartnerID == partnerID);
 
         if (partnerSupportedLocationsFilters.IsPickup != null) partnerSupportedLocationsQuery = partnerSupportedLocationsQuery.Where(partnerSupportedLocations => partnerSupportedLocations.IsPickup == partnerSupportedLocationsFilters.IsPickup);
@@ -81,9 +81,9 @@ public class PartnerSupportedLocationRepository
 
                 case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.LOCATION:
                     partnerSupportedLocationsQuery = partnerSupportedLocationsQuery
-                    .OrderBy(partnerSupportedLocation => partnerSupportedLocation.Address!.Country)
-                    .ThenBy(partnerSupportedLocation => partnerSupportedLocation.Address!.City)
-                    .ThenBy(partnerSupportedLocation => partnerSupportedLocation.Address!.Street);
+                    .OrderBy(partnerSupportedLocation => partnerSupportedLocation.Location!.Country)
+                    .ThenBy(partnerSupportedLocation => partnerSupportedLocation.Location!.City)
+                    .ThenBy(partnerSupportedLocation => partnerSupportedLocation.Location!.Street);
                     break;
 
                 case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PICKUP:
@@ -117,9 +117,9 @@ public class PartnerSupportedLocationRepository
 
                 case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.LOCATION:
                     partnerSupportedLocationsQuery = partnerSupportedLocationsQuery
-                    .OrderByDescending(partnerSupportedLocation => partnerSupportedLocation.Address!.Country)
-                    .ThenByDescending(partnerSupportedLocation => partnerSupportedLocation.Address!.City)
-                    .ThenByDescending(partnerSupportedLocation => partnerSupportedLocation.Address!.Street);
+                    .OrderByDescending(partnerSupportedLocation => partnerSupportedLocation.Location!.Country)
+                    .ThenByDescending(partnerSupportedLocation => partnerSupportedLocation.Location!.City)
+                    .ThenByDescending(partnerSupportedLocation => partnerSupportedLocation.Location!.Street);
                     break;
 
                 case PARTNER_SUPPORTED_LOCATION_SORTING_OPTION_REQUEST_DTO.PICKUP:

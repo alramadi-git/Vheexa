@@ -14,7 +14,7 @@ public class AdminUserRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<UserEntityDTO>> GetAsync(int userID)
+    public async Task<SuccessResponseDTO<UserEntityDTO>> GetAsync(int userID)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human)

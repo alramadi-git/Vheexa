@@ -26,7 +26,7 @@ public class UserAuthenticationService
         await _UserAuthenticationRepository.SignupAsync(userSignup);
     }
 
-    public async Task<SuccessOneResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _UserAuthenticationRepository.SigninAsync(credentials);

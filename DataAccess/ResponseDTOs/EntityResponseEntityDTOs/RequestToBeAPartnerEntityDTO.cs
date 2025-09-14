@@ -1,5 +1,4 @@
 using DataAccess.Entities;
-using DataAccess.RequestDTOs.FiltrationRequestDTOs;
 
 namespace DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
@@ -8,7 +7,7 @@ public class RequestToBeAPartnerEntityDTO
     public int ID { get; set; }
     public int PartnerID { get; set; }
 
-    public RECORDS_PER_REQUEST_OPTION_REQUEST_DTO Status { get; set; }
+    public REQUEST_TO_BE_A_PARTNER_STATUS  Status { get; set; }
 
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -18,7 +17,7 @@ public class RequestToBeAPartnerEntityDTO
         ID = requestToBeAPartner.ID;
         PartnerID = requestToBeAPartner.PartnerID;
         
-        Status = (RECORDS_PER_REQUEST_OPTION_REQUEST_DTO)requestToBeAPartner.Status;
+        Status = requestToBeAPartner.Status;
 
         UpdatedAt = requestToBeAPartner.UpdatedAt;
         CreatedAt = requestToBeAPartner.CreatedAt;

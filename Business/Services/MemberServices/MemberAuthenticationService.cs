@@ -17,7 +17,7 @@ public class MemberAuthenticationService
         _MemberAuthenticationRepository = memberRepository;
     }
 
-    public async Task<SuccessOneResponseDTO<MemberEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<MemberEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _MemberAuthenticationRepository.SigninAsync(credentials);

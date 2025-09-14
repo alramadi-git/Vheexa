@@ -13,15 +13,15 @@ public class LocationEntityDTO
     public float Latitude { get; set; }
     public float Longitude { get; set; }
 
-    public LocationEntityDTO(LocationEntity address)
+    public LocationEntityDTO(LocationEntity location)
     {
-        ID = address.ID;
+        ID = location.ID;
 
-        Country = address.Country;
-        City = address.City;
-        Street = address.Street;
+        Country = location.Country;
+        City = location.City;
+        Street = location.Street;
 
-        Latitude = address.Latitude;
-        Longitude = address.Longitude;
+        Latitude = location.Latitude;
+        Longitude = location.Longitude;
     }
 }

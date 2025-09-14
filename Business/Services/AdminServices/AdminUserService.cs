@@ -18,7 +18,7 @@ public class AdminUserService
         _AdminUserRepository = adminUserRepository;
     }
 
-    public async Task<SuccessOneResponseDTO<UserEntityDTO>> GetAsync(int userID)
+    public async Task<SuccessResponseDTO<UserEntityDTO>> GetAsync(int userID)
     {
         var IDValidation = new InlineValidator<int>();
 

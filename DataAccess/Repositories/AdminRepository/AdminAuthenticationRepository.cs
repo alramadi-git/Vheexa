@@ -16,7 +16,7 @@ public class AdminAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneResponseDTO<AdminEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<AdminEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         var adminQuery = _AppDBContext.Admins
         .Include(admin => admin.Human).ThenInclude(human => human!.Image)

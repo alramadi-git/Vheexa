@@ -80,7 +80,7 @@ public class PartnerMemberRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessOneResponseDTO<MemberEntityDTO>> GetAsync(int partnerID, int memberID)
+    public async Task<SuccessResponseDTO<MemberEntityDTO>> GetAsync(int partnerID, int memberID)
     {
         var memberQuery = _AppDBContext.Members
         .Include(member => member.Human)

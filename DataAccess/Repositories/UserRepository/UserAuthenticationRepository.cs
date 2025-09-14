@@ -81,7 +81,7 @@ public class UserAuthenticationRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessOneResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human).ThenInclude(human => human!.Image)
