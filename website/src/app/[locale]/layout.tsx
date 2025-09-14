@@ -53,27 +53,25 @@ export default async function RootLayout(props: TLayoutComponent) {
 
   return (
     <html suppressHydrationWarning dir={t("dir")} lang={t("lang")}>
-      <head>
-        {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
-          process.env.NODE_ENV === ENVIRONMENT.TEST) && (
-          <Script
-            defer
-            crossOrigin="anonymous"
-            src="https://unpkg.com/react-scan/dist/auto.global.js"
-          />
-        )}
-      </head>
       <body className={cn(zain.className, "antialiased")}>
         <ThemeProvider
           enableSystem
           disableTransitionOnChange
-          attribute="class"
           defaultTheme="system"
+          attribute="class"
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>{props.children}</TooltipProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
+
+        {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
+          process.env.NODE_ENV === ENVIRONMENT.TEST) && (
+          <Script
+            crossOrigin="anonymous"
+            src="https://unpkg.com/react-scan/dist/auto.global.js"
+          />
+        )}
       </body>
     </html>
   );
