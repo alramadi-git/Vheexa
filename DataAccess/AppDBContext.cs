@@ -29,6 +29,7 @@ public class AppDBContext : DbContext
     public DbSet<MemberTaskEntity> MemberTasks { get; set; }
 
     /** Vehicle */
+    public DbSet<VehicleEntity> Vehicles { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 };

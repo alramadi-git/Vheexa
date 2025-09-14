@@ -6,7 +6,7 @@ using DataAccess.RequestDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
-namespace DataAccess.Repositories.MemberRepository;
+namespace DataAccess.Repositories.MemberRepositories;
 
 public class MemberAuthenticationRepository
 {

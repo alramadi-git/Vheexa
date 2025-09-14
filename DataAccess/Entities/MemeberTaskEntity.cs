@@ -10,5 +10,5 @@ public class MemberTaskEntity
     public TaskEntity? Task { get; set; }
     public int TaskID { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }

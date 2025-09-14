@@ -1,9 +1,8 @@
 using FluentValidation;
 
 using Business.Validations.MemberValidations;
-
-using DataAccess.Repositories.MemberRepository;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
+using DataAccess.Repositories.MemberRepositories;
 
 namespace Business.Services.MemberServices;
 

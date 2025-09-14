@@ -17,7 +17,8 @@ public class CheckoutEntity
     public int? DiscountID { get; set; }
 
     public CHECKOUT_STATUS_OPTION_ENTITY Status { get; set; }
-    public int InUse { get; set; }
+
+    public string? Notes { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }

@@ -1,11 +1,10 @@
 using FluentValidation;
 
 using Business.Validations;
-
-using DataAccess.Repositories.MemberRepository;
 using DataAccess.RequestDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.Repositories.MemberRepositories;
 
 namespace Business.Services.MemberServices;
 

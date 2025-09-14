@@ -50,7 +50,6 @@ public class PartnerAuthenticationRepository
             PhoneNumber = partnerSignedupData.PhoneNumber,
             Email = partnerSignedupData.Email,
             Password = hashedPassword,
-            AverageRates = 0,
             IsPublished = false,
             IsDeleted = false,
             UpdatedAt = DateTime.UtcNow,

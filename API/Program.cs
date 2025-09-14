@@ -9,7 +9,7 @@ using DataAccess;
 using DataAccess.Repositories.AdminRepository;
 using DataAccess.Repositories.UserRepository;
 using DataAccess.Repositories.PartnerRepository;
-using DataAccess.Repositories.MemberRepository;
+using DataAccess.Repositories.MemberRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder

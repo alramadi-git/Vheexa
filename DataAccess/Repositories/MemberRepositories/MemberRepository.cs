@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.ResponseDTOs;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
 
-namespace DataAccess.Repositories.MemberRepository;
+namespace DataAccess.Repositories.MemberRepositories;
 
 public class MemberRepository
 {
