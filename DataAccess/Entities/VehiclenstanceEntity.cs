@@ -7,8 +7,8 @@ public class VehicleInstanceEntity
     public VehicleEntity? Vehicle { get; set; }
     public int VehicleID { get; set; }
 
-    public VehicleColorEntity? VehicleColor { get; set; }
-    public int VehicleColorID { get; set; }
+    public ColorEntity? Color { get; set; }
+    public int ColorID { get; set; }
 
     public int InStock { get; set; }
     public int InUse { get; set; }

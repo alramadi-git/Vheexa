@@ -43,12 +43,6 @@ public class VehicleFiltrationRequestDTO
 
     public required bool IsPublished { get; set; }
 
-    public required bool IsDeleted { get; set; }
-
-    public DateTime? DeletedBefore { get; set; }
-    public DateTime? DeletedAt { get; set; }
-    public DateTime? DeletedAfter { get; set; }
-
     public DateTime? UpdatedBefore { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public DateTime? UpdatedAfter { get; set; }

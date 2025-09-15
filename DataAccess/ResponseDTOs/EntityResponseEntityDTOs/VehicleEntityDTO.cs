@@ -7,8 +7,10 @@ public class VehicleEntityDTO
     public int ID { get; set; }
     public int PartnerID { get; set; }
 
-
     public ImageEntityDTO? Thumbnail { get; set; }
+    public IEnumerable<VehicleImageEntityDTO>? Images { get; set; }
+
+    public IEnumerable<VehicleInstanceEntityDTO>? Instances { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }
@@ -33,12 +35,19 @@ public class VehicleEntityDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public VehicleEntityDTO(VehicleEntity vehicle)
+    public VehicleEntityDTO(VehicleEntity vehicle, IEnumerable<VehicleImageEntity> images, IEnumerable<VehicleInstanceEntity> instances)
     {
         ID = vehicle.ID;
         PartnerID = vehicle.PartnerID;
 
         Thumbnail = vehicle.Thumbnail != null ? new ImageEntityDTO(vehicle.Thumbnail) : null;
+        Images = images != null && images.Any()
+            ? images.Select(image => new VehicleImageEntityDTO(image)).ToArray()
+            : null;
+
+        Instances = instances != null && instances.Any()
+            ? instances.Select(instance => new VehicleInstanceEntityDTO(instance)).ToArray()
+            : null;
 
         Name = vehicle.Name;
         Description = vehicle.Description;
@@ -63,20 +72,4 @@ public class VehicleEntityDTO
         UpdatedAt = vehicle.UpdatedAt;
         CreatedAt = vehicle.CreatedAt;
     }
-}
-
-public class DetailedVehicleEntityDTO : VehicleEntityDTO
-{
-    public IEnumerable<VehicleImageEntityDTO>? Images { get; set; }
-    public IEnumerable<VehicleColorEntityDTO> Colors { get; set; }
-
-    public DetailedVehicleEntityDTO(VehicleEntity vehicle, IEnumerable<VehicleImageEntity> images, IEnumerable<VehicleColorEntity> colors) : base(vehicle)
-    {
-        Images = images != null && images.Any()
-        ? images.Select(image => new VehicleImageEntityDTO(image)).ToArray()
-        : null;
-
-        Colors = colors.Select(color => new VehicleColorEntityDTO(color)).ToArray();
-    }
-
 }

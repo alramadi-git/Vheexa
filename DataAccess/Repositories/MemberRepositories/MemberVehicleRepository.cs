@@ -17,6 +17,7 @@ public class MemberVehicleRepository
         _AppDBContext = appDBContext;
     }
 
+    // TODO: if with out instance it should be unpublished
     public async Task AddAsync(int partnerID, int memberID, VehicleCreateRequestDTO vehicleData)
     {
         var IsVehicleExist = await _AppDBContext.Vehicles
@@ -92,21 +93,19 @@ public class MemberVehicleRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessResponseDTO<DetailedVehicleEntityDTO>> GetAsync(int partnerID, int vehicleID)
+    public async Task<SuccessResponseDTO<VehicleEntityDTO>> GetAsync(int partnerID, int vehicleID)
     {
         var vehicleQuery = _AppDBContext.Vehicles
         .Include(vehicle => vehicle.Thumbnail)
         .Where(vehicle =>
             vehicle.ID == vehicleID
             && vehicle.PartnerID == partnerID
-            && vehicle.IsPublished == true
             && vehicle.IsDeleted == false
         )
         .GroupJoin(
             _AppDBContext.VehicleImages
-            .Where(i =>
-                i.IsPublished == true
-                && !i.IsDeleted == false
+            .Where(vehicleImage =>
+                 vehicleImage.IsDeleted == false
             ),
             vehicle => vehicle.ID,
             vehicleImage => vehicleImage.VehicleID,
@@ -115,22 +114,21 @@ public class MemberVehicleRepository
 
         )
         .GroupJoin(
-            _AppDBContext.VehicleColors
-            .Where(i =>
-                i.IsPublished == true
-                && !i.IsDeleted == false
+            _AppDBContext.VehicleInstances
+            .Where(vehicleInstance =>
+                vehicleInstance.IsDeleted == false
             ),
             tuple => tuple.Item1.ID,
-            vehicleColor => vehicleColor.VehicleID,
-            (tuple, vehicleColor) =>
-            new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>, IEnumerable<VehicleColorEntity>>(tuple.Item1, tuple.Item2, vehicleColor)
+            vehicleInstance => vehicleInstance.VehicleID,
+            (tuple, vehicleInstance) =>
+            new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>, IEnumerable<VehicleInstanceEntity>>(tuple.Item1, tuple.Item2, vehicleInstance)
 
         );
 
         var vehicleTuple = await vehicleQuery
         .AsNoTracking()
         .FirstOrDefaultAsync() ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
-        
+
         return new(new(vehicleTuple.Item1, vehicleTuple.Item2, vehicleTuple.Item3));
     }
 
@@ -311,22 +309,7 @@ public class MemberVehicleRepository
         if (vehicleFiltration.MinDiscount != null) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.Discount >= vehicleFiltration.MinDiscount);
         if (vehicleFiltration.MaxDiscount != null) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.Discount <= vehicleFiltration.MaxDiscount);
 
-
-        if (vehicleFiltration.IsPublished == true) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.IsPublished == vehicleFiltration.IsPublished);
-        else vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.IsPublished == vehicleFiltration.IsPublished);
-
-        if (vehicleFiltration.IsDeleted == true)
-        {
-            vehiclesQuery = vehiclesQuery
-            .Where(vehicles => vehicles.IsDeleted == vehicleFiltration.IsDeleted);
-
-            if (vehicleFiltration.DeletedAt != null) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.DeletedAt == vehicleFiltration.DeletedAt);
-            else
-            {
-                if (vehicleFiltration.DeletedBefore != null) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.DeletedAt <= vehicleFiltration.DeletedBefore);
-                if (vehicleFiltration.DeletedAfter != null) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.DeletedAt >= vehicleFiltration.DeletedAfter);
-            }
-        }
+        vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.IsPublished == vehicleFiltration.IsPublished);
 
         if (vehicleFiltration.UpdatedAt != null) vehiclesQuery = vehiclesQuery.Where(vehicles => vehicles.UpdatedAt == vehicleFiltration.UpdatedAt);
         else
@@ -350,7 +333,7 @@ public class MemberVehicleRepository
             switch (vehicleFiltration.Sorting.By)
             {
                 case VEHICLE_SORTING_OPTION_REQUEST_DTO.NAME:
-                    vehiclesQuery = vehiclesQuery.OrderBy(vehicle => vehicle.PartnerID);
+                    vehiclesQuery = vehiclesQuery.OrderBy(vehicle => vehicle.Name);
                     break;
 
                 case VEHICLE_SORTING_OPTION_REQUEST_DTO.CATEGORY:
@@ -395,7 +378,7 @@ public class MemberVehicleRepository
             switch (vehicleFiltration.Sorting.By)
             {
                 case VEHICLE_SORTING_OPTION_REQUEST_DTO.NAME:
-                    vehiclesQuery = vehiclesQuery.OrderByDescending(vehicle => vehicle.PartnerID);
+                    vehiclesQuery = vehiclesQuery.OrderByDescending(vehicle => vehicle.Name);
                     break;
 
                 case VEHICLE_SORTING_OPTION_REQUEST_DTO.CATEGORY:
@@ -440,7 +423,28 @@ public class MemberVehicleRepository
         .Skip(vehicleFiltration.Pagination.RequestedPage)
         .Take((int)vehicleFiltration.Pagination.RecordsPerRequest);
 
-        var vehicles = await vehiclesQuery.AsNoTracking().Select(vehicle => new VehicleEntityDTO(vehicle)).ToArrayAsync();
+        var vehicles = await vehiclesQuery
+        .AsNoTracking()
+        .GroupJoin(
+            _AppDBContext.VehicleImages
+            .Where(vehicleImage =>
+                vehicleImage.IsPublished == true
+                && vehicleImage.IsDeleted == false
+            ),
+            vehicle => vehicle.ID,
+            vehicleImage => vehicleImage.VehicleID,
+            (vehicle, vehicleImages) => new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>>(vehicle, vehicleImages)
+        )
+        .GroupJoin(
+            _AppDBContext.VehicleInstances
+            .Where(vehicleInstance =>
+                 vehicleInstance.IsDeleted == false
+            ),
+            tuple => tuple.Item1.ID,
+            vehicleInstance => vehicleInstance.VehicleID,
+            (tuple, vehicleInstances) => new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>, IEnumerable<VehicleInstanceEntity>>(tuple.Item1, tuple.Item2, vehicleInstances)
+        )
+        .Select(tuple => new VehicleEntityDTO(tuple.Item1, tuple.Item2, tuple.Item3)).ToArrayAsync();
 
         return new(
             vehicles,
