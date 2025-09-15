@@ -92,7 +92,7 @@ public class MemberVehicleRepository
         await _AppDBContext.SaveChangesAsync();
     }
 
-    public async Task<SuccessResponseDTO<VehicleEntityDTO>> GetAsync(int partnerID, int vehicleID)
+    public async Task<SuccessResponseDTO<DetailedVehicleEntityDTO>> GetAsync(int partnerID, int vehicleID)
     {
         var vehicleQuery = _AppDBContext.Vehicles
         .Include(vehicle => vehicle.Thumbnail)
@@ -101,47 +101,37 @@ public class MemberVehicleRepository
             && vehicle.PartnerID == partnerID
             && vehicle.IsPublished == true
             && vehicle.IsDeleted == false
+        )
+        .GroupJoin(
+            _AppDBContext.VehicleImages
+            .Where(i =>
+                i.IsPublished == true
+                && !i.IsDeleted == false
+            ),
+            vehicle => vehicle.ID,
+            vehicleImage => vehicleImage.VehicleID,
+            (vehicle, vehicleImages) =>
+            new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>>(vehicle, vehicleImages)
+
+        )
+        .GroupJoin(
+            _AppDBContext.VehicleColors
+            .Where(i =>
+                i.IsPublished == true
+                && !i.IsDeleted == false
+            ),
+            tuple => tuple.Item1.ID,
+            vehicleColor => vehicleColor.VehicleID,
+            (tuple, vehicleColor) =>
+            new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>, IEnumerable<VehicleColorEntity>>(tuple.Item1, tuple.Item2, vehicleColor)
+
         );
 
-        var vehicleImagesQuery = _AppDBContext.VehicleImages
-        .Where(vehicleImage =>
-            vehicleImage.VehicleID == vehicleID
-            && vehicleImage.IsPublished == true
-            && vehicleImage.IsDeleted == false
-        );
-
-        var vehicleColorsQuery = _AppDBContext.VehicleColors
-        .Where(vehicleColor =>
-            vehicleColor.VehicleID == vehicleID
-            && vehicleColor.IsPublished == true
-            && vehicleColor.IsDeleted == false
-        );
-
-
-        var vehicleTask = vehicleQuery
+        var vehicleTuple = await vehicleQuery
         .AsNoTracking()
-        .FirstOrDefaultAsync();
-
-        var vehicleImagesTask = vehicleImagesQuery
-        .AsNoTracking()
-        .Select(vehicleImage => vehicleImage)
-        .ToArrayAsync();
-
-        var vehicleColorsTask = vehicleColorsQuery
-        .AsNoTracking()
-        .Select(vehicleColor => vehicleColor)
-        .ToArrayAsync();
-
-
-        await Task.WhenAll(vehicleTask, vehicleImagesTask, vehicleColorsTask);
-
-        var vehicle = vehicleTask.Result
-        ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
-
-        var vehicleImages = vehicleImagesTask.Result;
-        var vehicleColors = vehicleColorsTask.Result;
-
-        return new(new(vehicle, vehicleColors, vehicleImages));
+        .FirstOrDefaultAsync() ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
+        
+        return new(new(vehicleTuple.Item1, vehicleTuple.Item2, vehicleTuple.Item3));
     }
 
     public async Task UpdateAsync(int partnerID, int memberID, int vehicleID, VehicleUpdateRequestDTO vehicleData)
@@ -450,11 +440,11 @@ public class MemberVehicleRepository
         .Skip(vehicleFiltration.Pagination.RequestedPage)
         .Take((int)vehicleFiltration.Pagination.RecordsPerRequest);
 
-        // TODO: Join Logic...
+        var vehicles = await vehiclesQuery.AsNoTracking().Select(vehicle => new VehicleEntityDTO(vehicle)).ToArrayAsync();
 
-        // return new(
-        //     vehicles,
-        //     new(vehicleTotalRecords, vehicleFiltration.Pagination.RecordsPerRequest, vehicleFiltration.Pagination.RequestedPage)
-        // );
+        return new(
+            vehicles,
+            new(vehicleTotalRecords, vehicleFiltration.Pagination.RecordsPerRequest, vehicleFiltration.Pagination.RequestedPage)
+        );
     }
 };
