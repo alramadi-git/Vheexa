@@ -5,7 +5,7 @@ namespace DataAccess.RequestDTOs.CreateRequestDTOs;
 public class VehicleCreateRequestDTO
 {
     public ImageCreateRequestDTO? Thumbnail { get; set; }
-    public IEnumerable<ImageCreateRequestDTO>? Images { get; set; }
+    public IEnumerable<VehicleImageCreateRequestDTO>? Images { get; set; }
 
     public IEnumerable<VehicleInstanceCreateRequestDTO>? Instances { get; set; }
 

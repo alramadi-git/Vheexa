@@ -17,7 +17,6 @@ public class MemberVehicleRepository
         _AppDBContext = appDBContext;
     }
 
-    // TODO: if with out instance it should be unpublished
     public async Task AddAsync(int partnerID, int memberID, VehicleCreateRequestDTO vehicleData)
     {
         var doesVehicleExist = await _AppDBContext.Vehicles
@@ -70,59 +69,7 @@ public class MemberVehicleRepository
             UpdatedAt = DateTime.UtcNow,
             CreatedAt = DateTime.UtcNow
         });
-
-        if (vehicleData.Images != null)
-        {
-            foreach (var image in vehicleData.Images)
-            {
-                var imageEntityEntry = _AppDBContext.Images
-                .Add(new ImageEntity
-                {
-                    URL = image.URL,
-                });
-
-                var vehicleImageEntityEntry = _AppDBContext.VehicleImages
-                .Add(new VehicleImageEntity
-                {
-                    Vehicle = vehicleEntityEntry.Entity,
-                    Image = imageEntityEntry.Entity,
-
-                    IsPublished = true,
-                    IsDeleted = false,
-
-                });
-            }
-        }
-
-        if (vehicleData.Instances != null)
-        {
-            foreach (var instance in vehicleData.Instances)
-            {
-                var colorEntityEntry = _AppDBContext.Colors
-                .Add(new ColorEntity
-                {
-                    Name = instance.Color.Name,
-                    HexCode = instance.Color.HexCode,
-                });
-
-                var vehicleInstanceEntityEntry = _AppDBContext.VehicleInstances
-                .Add(new VehicleInstanceEntity
-                {
-                    Vehicle = vehicleEntityEntry.Entity,
-                    Color = colorEntityEntry.Entity,
-
-                    InStock = instance.InStock,
-                    InUse = instance.InUse,
-
-                    IsPublished = true,
-                    IsDeleted = false,
-
-                    UpdatedAt = DateTime.UtcNow,
-                    CreatedAt = DateTime.UtcNow
-                });
-            }
-        }
-
+    
         var taskEntityEntry = _AppDBContext.Tasks
         .Add(new TaskEntity
         {
@@ -163,7 +110,6 @@ public class MemberVehicleRepository
             vehicleImage => vehicleImage.VehicleID,
             (vehicle, vehicleImages) =>
             new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>>(vehicle, vehicleImages)
-
         )
         .GroupJoin(
             _AppDBContext.VehicleInstances
@@ -174,7 +120,6 @@ public class MemberVehicleRepository
             vehicleInstance => vehicleInstance.VehicleID,
             (tuple, vehicleInstance) =>
             new Tuple<VehicleEntity, IEnumerable<VehicleImageEntity>, IEnumerable<VehicleInstanceEntity>>(tuple.Item1, tuple.Item2, vehicleInstance)
-
         );
 
         var vehicleTuple = await vehicleQuery
@@ -208,6 +153,7 @@ public class MemberVehicleRepository
             vehicle.IsDeleted == false
         );
 
+
         var vehicle = await vehicleQuery
         .FirstOrDefaultAsync() ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
@@ -221,7 +167,20 @@ public class MemberVehicleRepository
         }
         else
         {
-            vehicle.Thumbnail!.URL = vehicleData.Thumbnail.URL;
+            if (vehicle.Thumbnail == null)
+            {
+                var thumbnailEntityEntry = _AppDBContext.Images
+                 .Add(new ImageEntity
+                 {
+                     URL = vehicleData.Thumbnail.URL,
+                 });
+
+                vehicle.Thumbnail = thumbnailEntityEntry.Entity;
+            }
+            else
+            {
+                vehicle.Thumbnail!.URL = vehicleData.Thumbnail.URL;
+            }
         }
 
         vehicle.Name = vehicleData.Name;

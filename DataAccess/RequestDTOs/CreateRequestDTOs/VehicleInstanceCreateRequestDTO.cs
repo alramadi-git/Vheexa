@@ -1,13 +1,10 @@
-using DataAccess.Entities;
-
 namespace DataAccess.RequestDTOs.CreateRequestDTOs;
-
 
 public class VehicleInstanceCreateRequestDTO
 {
     public int ID { get; set; }
 
-    public required ColorEntity Color { get; set; }
+    public required ColorCreateRequestDTO Color { get; set; }
 
     public int InStock { get; set; }
     public int InUse { get; set; }

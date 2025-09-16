@@ -7,7 +7,9 @@ namespace DataAccess.RequestDTOs.UpdateRequestDTOs;
 public class VehicleUpdateRequestDTO
 {
     public ImageUpdateRequestDTO? Thumbnail { get; set; }
+    public IEnumerable<VehicleImageUpdateRequestDTO>? Images { get; set; }
 
+    public IEnumerable<VehicleInstanceUpdateRequestDTO>? Instances { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
 
