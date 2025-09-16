@@ -2,11 +2,12 @@ using DataAccess.Entities;
 
 namespace DataAccess.RequestDTOs.CreateRequestDTOs;
 
-
-
 public class VehicleCreateRequestDTO
 {
     public ImageCreateRequestDTO? Thumbnail { get; set; }
+    public IEnumerable<ImageCreateRequestDTO>? Images { get; set; }
+
+    public IEnumerable<VehicleInstanceCreateRequestDTO>? Instances { get; set; }
 
     public required string Name { get; set; }
     public required string Description { get; set; }

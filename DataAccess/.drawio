@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Page-1" id="c7acuwJ6e7UkxPXnuQJT">
-        <mxGraphModel dx="833" dy="1579" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1554" dy="2534" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -573,7 +573,7 @@
                         <mxRectangle width="145.5" height="53" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7pHEhIIPUzXmdBcEqhHl-131" value="VehicleColorID" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;strokeWidth=2;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;verticalAlign=middle;fontColor=default;" parent="7pHEhIIPUzXmdBcEqhHl-129" vertex="1">
+                <mxCell id="7pHEhIIPUzXmdBcEqhHl-131" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;ColorID&lt;/span&gt;&lt;/div&gt;" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;rounded=1;fontSize=24;strokeWidth=2;fontFamily=Comic Sans MS;sketch=1;curveFitting=1;jiggle=2;verticalAlign=middle;fontColor=default;" parent="7pHEhIIPUzXmdBcEqhHl-129" vertex="1">
                     <mxGeometry x="145.5" width="301.25" height="53" as="geometry">
                         <mxRectangle width="301.25" height="53" as="alternateBounds"/>
                     </mxGeometry>

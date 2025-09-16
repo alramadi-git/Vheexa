@@ -31,7 +31,7 @@ public class AppDBContext : DbContext
     /** Vehicle */
     public DbSet<VehicleEntity> Vehicles { get; set; }
     public DbSet<VehicleImageEntity> VehicleImages { get; set; }
-    public DbSet<ColorEntity> VehicleColors { get; set; }
+    public DbSet<ColorEntity> Colors { get; set; }
     public DbSet<VehicleInstanceEntity> VehicleInstances { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }

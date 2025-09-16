@@ -20,7 +20,7 @@ public class MemberVehicleRepository
     // TODO: if with out instance it should be unpublished
     public async Task AddAsync(int partnerID, int memberID, VehicleCreateRequestDTO vehicleData)
     {
-        var IsVehicleExist = await _AppDBContext.Vehicles
+        var doesVehicleExist = await _AppDBContext.Vehicles
         .AnyAsync(vehicle =>
             vehicle.PartnerID == partnerID
             && vehicle.Name == vehicleData.Name
@@ -30,7 +30,7 @@ public class MemberVehicleRepository
             && vehicle.IsDeleted == false
         );
 
-        if (IsVehicleExist == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Vehicle already exist.");
+        if (doesVehicleExist) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Vehicle already exist.");
 
         var thumbnailEntityEntry = vehicleData.Thumbnail != null
         ? _AppDBContext.Images
@@ -67,9 +67,61 @@ public class MemberVehicleRepository
             IsDeleted = false,
             DeletedAt = null,
 
-            UpdatedAt = DateTime.Now,
-            CreatedAt = DateTime.Now
+            UpdatedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow
         });
+
+        if (vehicleData.Images != null)
+        {
+            foreach (var image in vehicleData.Images)
+            {
+                var imageEntityEntry = _AppDBContext.Images
+                .Add(new ImageEntity
+                {
+                    URL = image.URL,
+                });
+
+                var vehicleImageEntityEntry = _AppDBContext.VehicleImages
+                .Add(new VehicleImageEntity
+                {
+                    Vehicle = vehicleEntityEntry.Entity,
+                    Image = imageEntityEntry.Entity,
+
+                    IsPublished = true,
+                    IsDeleted = false,
+
+                });
+            }
+        }
+
+        if (vehicleData.Instances != null)
+        {
+            foreach (var instance in vehicleData.Instances)
+            {
+                var colorEntityEntry = _AppDBContext.Colors
+                .Add(new ColorEntity
+                {
+                    Name = instance.Color.Name,
+                    HexCode = instance.Color.HexCode,
+                });
+
+                var vehicleInstanceEntityEntry = _AppDBContext.VehicleInstances
+                .Add(new VehicleInstanceEntity
+                {
+                    Vehicle = vehicleEntityEntry.Entity,
+                    Color = colorEntityEntry.Entity,
+
+                    InStock = instance.InStock,
+                    InUse = instance.InUse,
+
+                    IsPublished = true,
+                    IsDeleted = false,
+
+                    UpdatedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow
+                });
+            }
+        }
 
         var taskEntityEntry = _AppDBContext.Tasks
         .Add(new TaskEntity
@@ -87,7 +139,7 @@ public class MemberVehicleRepository
 
             Task = taskEntityEntry.Entity,
 
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
         });
 
         await _AppDBContext.SaveChangesAsync();
@@ -187,7 +239,7 @@ public class MemberVehicleRepository
         vehicle.Price = vehicleData.Price;
         vehicle.Discount = vehicleData.Discount;
 
-        vehicle.UpdatedAt = DateTime.Now;
+        vehicle.UpdatedAt = DateTime.UtcNow;
 
         var taskEntityEntry = _AppDBContext.Tasks
         .Add(new TaskEntity
@@ -205,7 +257,7 @@ public class MemberVehicleRepository
 
             Task = taskEntityEntry.Entity,
 
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
         });
 
         await _AppDBContext.SaveChangesAsync();
@@ -240,7 +292,7 @@ public class MemberVehicleRepository
 
             Task = taskEntityEntry.Entity,
 
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
         });
 
         vehicle.IsPublished = true;
@@ -275,7 +327,7 @@ public class MemberVehicleRepository
 
             Task = taskEntityEntry.Entity,
 
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
         });
 
         vehicle.IsPublished = false;
