@@ -6,6 +6,6 @@ public class LocationUpdateRequestDTO
     public required string City { get; set; }
     public required string Street { get; set; }
 
-    public required float Latitude { get; set; }
-    public required float Longitude { get; set; }
+    public  float Latitude { get; set; }
+    public  float Longitude { get; set; }
 }

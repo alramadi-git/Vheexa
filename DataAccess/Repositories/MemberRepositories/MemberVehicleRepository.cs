@@ -69,7 +69,7 @@ public class MemberVehicleRepository
             UpdatedAt = DateTime.UtcNow,
             CreatedAt = DateTime.UtcNow
         });
-    
+
         var taskEntityEntry = _AppDBContext.Tasks
         .Add(new TaskEntity
         {
@@ -157,29 +157,28 @@ public class MemberVehicleRepository
         var vehicle = await vehicleQuery
         .FirstOrDefaultAsync() ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
-        if (vehicleData.Thumbnail == null)
+        if (vehicleData.Thumbnail != null)
         {
             if (vehicle.Thumbnail != null)
             {
-                _AppDBContext.Images.Remove(vehicle.Thumbnail);
-                vehicle.Thumbnail = null;
+                vehicle.Thumbnail!.URL = vehicleData.Thumbnail.URL;
             }
-        }
-        else
-        {
-            if (vehicle.Thumbnail == null)
+            else
             {
-                var thumbnailEntityEntry = _AppDBContext.Images
+                var imageEntityEntry = _AppDBContext.Images
                  .Add(new ImageEntity
                  {
                      URL = vehicleData.Thumbnail.URL,
                  });
 
-                vehicle.Thumbnail = thumbnailEntityEntry.Entity;
+                vehicle.Thumbnail = imageEntityEntry.Entity;
             }
-            else
+        }
+        else
+        {
+            if (vehicle.Thumbnail != null)
             {
-                vehicle.Thumbnail!.URL = vehicleData.Thumbnail.URL;
+                _AppDBContext.Images.Remove(vehicle.Thumbnail);
             }
         }
 

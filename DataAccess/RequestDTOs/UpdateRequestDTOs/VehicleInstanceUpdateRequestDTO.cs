@@ -9,7 +9,4 @@ public class VehicleInstanceUpdateRequestDTO
 
     public int InStock { get; set; }
     public int InUse { get; set; }
-    
-    public DateTime UpdatedAt { get; set; }
-    public DateTime CreatedAt { get; set; }
 }
