@@ -129,16 +129,16 @@ public class MemberVehicleRepository
         return new(new(vehicleTuple.Item1, vehicleTuple.Item2, vehicleTuple.Item3));
     }
 
-    public async Task UpdateAsync(int partnerID, int memberID, int vehicleID, VehicleUpdateRequestDTO vehicleData)
+    public async Task UpdateAsync(int partnerID, int memberID, int vehicleID, VehicleUpdateRequestDTO vehicleUpdatedData)
     {
         var IsVehicleExistQuery = _AppDBContext.Vehicles
         .Where(vehicle =>
             vehicle.ID != vehicleID
             && vehicle.PartnerID == partnerID
-            && vehicle.Name == vehicleData.Name
-            && vehicle.Category == vehicleData.Category
-            && vehicle.Manufacturer == vehicleData.Manufacturer
-            && vehicle.ManufacturingYear == vehicleData.ManufacturingYear
+            && vehicle.Name == vehicleUpdatedData.Name
+            && vehicle.Category == vehicleUpdatedData.Category
+            && vehicle.Manufacturer == vehicleUpdatedData.Manufacturer
+            && vehicle.ManufacturingYear == vehicleUpdatedData.ManufacturingYear
             && vehicle.IsDeleted == false
         );
 
@@ -157,18 +157,18 @@ public class MemberVehicleRepository
         var vehicle = await vehicleQuery
         .FirstOrDefaultAsync() ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
-        if (vehicleData.Thumbnail != null)
+        if (vehicleUpdatedData.Thumbnail != null)
         {
             if (vehicle.Thumbnail != null)
             {
-                vehicle.Thumbnail!.URL = vehicleData.Thumbnail.URL;
+                vehicle.Thumbnail!.URL = vehicleUpdatedData.Thumbnail.URL;
             }
             else
             {
                 var imageEntityEntry = _AppDBContext.Images
                  .Add(new ImageEntity
                  {
-                     URL = vehicleData.Thumbnail.URL,
+                     URL = vehicleUpdatedData.Thumbnail.URL,
                  });
 
                 vehicle.Thumbnail = imageEntityEntry.Entity;
@@ -182,20 +182,20 @@ public class MemberVehicleRepository
             }
         }
 
-        vehicle.Name = vehicleData.Name;
-        vehicle.Description = vehicleData.Description;
+        vehicle.Name = vehicleUpdatedData.Name;
+        vehicle.Description = vehicleUpdatedData.Description;
 
-        vehicle.Category = vehicleData.Category;
+        vehicle.Category = vehicleUpdatedData.Category;
 
-        vehicle.Manufacturer = vehicleData.Manufacturer;
-        vehicle.ManufacturingYear = vehicleData.ManufacturingYear;
+        vehicle.Manufacturer = vehicleUpdatedData.Manufacturer;
+        vehicle.ManufacturingYear = vehicleUpdatedData.ManufacturingYear;
 
-        vehicle.Capacity = vehicleData.Capacity;
+        vehicle.Capacity = vehicleUpdatedData.Capacity;
 
-        vehicle.Tags = vehicleData.Tags;
+        vehicle.Tags = vehicleUpdatedData.Tags;
 
-        vehicle.Price = vehicleData.Price;
-        vehicle.Discount = vehicleData.Discount;
+        vehicle.Price = vehicleUpdatedData.Price;
+        vehicle.Discount = vehicleUpdatedData.Discount;
 
         vehicle.UpdatedAt = DateTime.UtcNow;
 

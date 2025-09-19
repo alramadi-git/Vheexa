@@ -6,6 +6,7 @@ using DataAccess.RequestDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.Entities;
 
 namespace DataAccess.Repositories.UserRepository;
 
@@ -29,13 +30,13 @@ public class UserAuthenticationRepository
         var imageEntityEntry = signedupUserData.Image == null
         ? null
         : _AppDBContext.Images
-        .Add(new Entities.ImageEntity
+        .Add(new ImageEntity
         {
             URL = signedupUserData.Image.URL
         });
 
         var AddressEntityEntry = _AppDBContext.Addresses.Add(
-        new Entities.LocationEntity
+        new LocationEntity
         {
             Country = signedupUserData.Location.Country,
             City = signedupUserData.Location.City,
@@ -46,7 +47,7 @@ public class UserAuthenticationRepository
 
         var passwordHasher = new PasswordHasher<object?>();
         var HumanEntityEntry = _AppDBContext.Humans.Add(
-        new Entities.HumanEntity
+        new HumanEntity
         {
             Image = imageEntityEntry?.Entity,
             Location = AddressEntityEntry.Entity,
@@ -65,11 +66,10 @@ public class UserAuthenticationRepository
 
         var UserEntityEntry = _AppDBContext.Users
         .Add(
-            new Entities.UserEntity
+            new UserEntity
             {
                 Human = HumanEntityEntry.Entity,
-                AverageRates = 0,
-
+                
                 IsDeleted = false,
                 DeletedAt = null,
 
