@@ -11,8 +11,8 @@ public class ReturnEntity
 {
     public int ID { get; set; }
 
-    public RequestToReturnEntity? RequestToReturn { get; set; }
-    public int RequestToReturnID { get; set; }
+    public RentEntity? Rent { get; set; }
+    public int RentID { get; set; }
 
     public DateTime DropoffTimestamp { get; set; }
 

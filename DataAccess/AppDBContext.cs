@@ -35,5 +35,16 @@ public class AppDBContext : DbContext
     public DbSet<ColorEntity> Colors { get; set; }
     public DbSet<VehicleInstanceEntity> VehicleInstances { get; set; }
 
+    /** Bookings, Rents & Returns */
+    public DbSet<BookingEntity> Bookings { get; set; }
+    public DbSet<RentEntity> Rents { get; set; }
+    public DbSet<ReturnEntity> Returns { get; set; }
+
+    /** Payments, Discounts & Checkouts */
+    public DbSet<PaymentEntity> Payments { get; set; }
+    public DbSet<DiscountEntity> Discounts { get; set; }
+    public DbSet<CheckoutEntity> Checkouts { get; set; }
+
+
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 };

@@ -8,9 +8,9 @@ public class VehicleEntityDTO
     public int PartnerID { get; set; }
 
     public ImageEntityDTO? Thumbnail { get; set; }
-    public IEnumerable<VehicleImageEntityDTO>? Images { get; set; }
+    public IEnumerable<VehicleImageEntityDTO> Images { get; set; }
 
-    public IEnumerable<VehicleInstanceEntityDTO>? Instances { get; set; }
+    public IEnumerable<VehicleInstanceEntityDTO> Instances { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }
@@ -41,13 +41,10 @@ public class VehicleEntityDTO
         PartnerID = vehicle.PartnerID;
 
         Thumbnail = vehicle.Thumbnail != null ? new ImageEntityDTO(vehicle.Thumbnail) : null;
-        Images = images != null && images.Any()
-            ? images.Select(image => new VehicleImageEntityDTO(image)).ToArray()
-            : null;
 
-        Instances = instances != null && instances.Any()
-            ? instances.Select(instance => new VehicleInstanceEntityDTO(instance)).ToArray()
-            : null;
+        Images = images.Select(image => new VehicleImageEntityDTO(image)).ToArray();
+
+        Instances = instances.Select(instance => new VehicleInstanceEntityDTO(instance)).ToArray();
 
         Name = vehicle.Name;
         Description = vehicle.Description;

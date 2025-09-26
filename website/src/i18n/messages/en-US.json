@@ -1,53 +1,56 @@
 {
   "app": {
-    "metadata": {
-      "title": {
-        "default": "Vheexa",
-        "template": "%s | Vheexa"
-      },
-      "description": "Rent any vehicle you want, boats, cars, vans, helicopters and more.",
+    "layout": {
+      "metadata": {
+        "title": {
+          "default": "Vheexa",
+          "template": "%s | Vheexa"
+        },
+        "description": "Rent any vehicle you want, boats, cars, vans, helicopters and more.",
 
-      "icons": {
-        "icon": [
+        "icons": {
+          "icon": [
+            {
+              "sizes": "16x16",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-16x16.png"
+            },
+            {
+              "sizes": "32x32",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-32x32.png"
+            },
+            {
+              "sizes": "192x192",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-192x192.png"
+            },
+            {
+              "type": "image/png",
+              "sizes": "512x512",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-512x512.png"
+            }
+          ],
+          "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
+          "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
+        },
+
+        "openGraph": {},
+
+        "creator": "alramadi",
+        "authors": [
           {
-            "sizes": "16x16",
-            "type": "image/png",
-            "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-16x16.png"
-          },
-          {
-            "sizes": "32x32",
-            "type": "image/png",
-            "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-32x32.png"
-          },
-          {
-            "sizes": "192x192",
-            "type": "image/png",
-            "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-192x192.png"
-          },
-          {
-            "type": "image/png",
-            "sizes": "512x512",
-            "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-512x512.png"
+            "name": "alramadi",
+            "url": "https://www.alramadi.com"
           }
-        ],
-        "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
-        "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
+        ]
       },
-
-      "openGraph": {},
-
-      "creator": "alramadi",
-      "authors": [
-        {
-          "name": "alramadi",
-          "url": "https://www.alramadi.com"
-        }
-      ]
-    },
-    "page": {
+      
       "lang": "en",
-      "dir": "ltr",
-
+      "dir": "ltr"
+    },
+    
+    "page": {
       "header": {
         "logo": {
           "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",

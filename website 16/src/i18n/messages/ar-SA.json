@@ -1,0 +1,367 @@
+{
+  "app": {
+    "layout": {
+      "metadata": {
+        "title": "ڤيكسا",
+        "description": "",
+
+        "icons": {
+          "icon": [
+            {
+              "sizes": "16x16",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-16x16.png"
+            },
+            {
+              "sizes": "32x32",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-32x32.png"
+            },
+            {
+              "sizes": "192x192",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-192x192.png"
+            },
+            {
+              "type": "image/png",
+              "sizes": "512x512",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-512x512.png"
+            }
+          ],
+          "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
+          "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
+        },
+
+        "openGraph": {},
+
+        "creator": "ڤيكسا",
+        "authors": [
+          {
+            "name": "نواف الرمادي",
+            "url": "https://www.alramadi.me"
+          }
+        ]
+      },
+
+      "lang": "ar-SA",
+      "dir": "rtl"
+    },
+
+    "user": {
+      "layout": {
+        "metadata": {
+          "title": "مستخدم عادي | ڤيكسا",
+          "description": "ڤيكسا هو منصة مبتكرة لتأجير جميع أنواع المركبات، من السيارات إلى الدراجات والشاحنات، بأسعار تنافسية وتجربة سهلة وسريعة لحجز ما يناسب احتياجاتك."
+        },
+
+        "header": {
+          "logo": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+            "alt": "شعار شركة ڤيكسا"
+          },
+
+          "nav": {
+            "continents": [
+              {
+                "label": "Africa",
+                "countries": [
+                  {
+                    "dir": "rtl",
+                    "locale": "ar-MA",
+                    "flag": "🇲🇦",
+                    "label": "العربية (المغرب)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-NG",
+                    "flag": "🇳🇬",
+                    "label": "English (Nigeria)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-ZA",
+                    "flag": "🇿🇦",
+                    "label": "English (South Africa)"
+                  }
+                ]
+              },
+              {
+                "label": "America",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "en-CA",
+                    "flag": "🇨🇦",
+                    "label": "English (Canada)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "es-MX",
+                    "flag": "🇲🇽",
+                    "label": "Español (México)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-US",
+                    "flag": "🇺🇸",
+                    "label": "English (United States)"
+                  }
+                ]
+              },
+              {
+                "label": "Asia",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "zh-CN",
+                    "flag": "🇨🇳",
+                    "label": "中文 (中国)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "hi-IN",
+                    "flag": "🇮🇳",
+                    "label": "हिन्दी (भारत)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "ja-JP",
+                    "flag": "🇯🇵",
+                    "label": "日本語 (日本)"
+                  },
+                  {
+                    "dir": "rtl",
+                    "locale": "ar-SA",
+                    "flag": "🇸🇦",
+                    "label": "العربية (السعودية)"
+                  }
+                ]
+              },
+              {
+                "label": "Europe",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "fr-FR",
+                    "flag": "🇫🇷",
+                    "label": "Français (France)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "de-DE",
+                    "flag": "🇩🇪",
+                    "label": "Deutsch (Deutschland)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-GB",
+                    "flag": "🇬🇧",
+                    "label": "English (United Kingdom)"
+                  }
+                ]
+              },
+              {
+                "label": "Oceania",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "en-AU",
+                    "flag": "🇦🇺",
+                    "label": "English (Australia)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-NZ",
+                    "flag": "🇳🇿",
+                    "label": "English (New Zealand)"
+                  }
+                ]
+              }
+            ],
+
+            "links": [
+              {
+                "href": "/user",
+                "label": "الرئيسية"
+              },
+              {
+                "href": "/vehicles",
+                "label": "المركبات"
+              },
+              {
+                "href": "/blogs",
+                "label": "المنتدى"
+              },
+              {
+                "href": "/about",
+                "label": "من نحن"
+              },
+              {
+                "href": "/contact",
+                "label": "اتصل بنا"
+              }
+            ]
+          }
+        },
+
+        "footer": {
+          "logo": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+            "alt": "شعار شركة ڤيكسا"
+          },
+          "title": "ڤيكسا",
+          "description": "منصة لتأجير جميع أنواع المركبات بسهولة وسرعة، توفر لك خيارات متنوعة بأسعار تنافسية، مع تجربة حجز مريحة وآمنة.",
+
+          "quick-links": [
+            {
+              "label": "خدماتنا",
+              "routes": [
+                {
+                  "label": "مميزات المنصة",
+                  "href": "#"
+                },
+                {
+                  "label": "الحلول المتوفرة",
+                  "href": "#"
+                },
+                {
+                  "label": "عملاؤنا",
+                  "href": "#"
+                },
+                {
+                  "label": "خطط الأسعار",
+                  "href": "#"
+                },
+                {
+                  "label": "الدعم",
+                  "href": "#"
+                },
+                {
+                  "label": "من نحن",
+                  "href": "#"
+                }
+              ]
+            },
+            {
+              "label": "خياراتنا",
+              "routes": [
+                {
+                  "label": "للشركات الناشئة",
+                  "href": "#"
+                },
+                {
+                  "label": "للمستقلين",
+                  "href": "#"
+                },
+                {
+                  "label": "للمؤسسات",
+                  "href": "#"
+                },
+                {
+                  "label": "للطلاب",
+                  "href": "#"
+                },
+                {
+                  "label": "التعاون والعمل الجماعي",
+                  "href": "#"
+                },
+                {
+                  "label": "التصميم والإبداع",
+                  "href": "#"
+                },
+                {
+                  "label": "إدارة الموارد",
+                  "href": "#"
+                }
+              ]
+            },
+            {
+              "label": "عن الشركة",
+              "routes": [
+                {
+                  "label": "من نحن",
+                  "href": "#"
+                },
+                {
+                  "label": "فرص العمل",
+                  "href": "#"
+                },
+                {
+                  "label": "المدونة",
+                  "href": "#"
+                },
+                {
+                  "label": "الأخبار الصحفية",
+                  "href": "#"
+                },
+                {
+                  "label": "اتصل بنا",
+                  "href": "#"
+                },
+                {
+                  "label": "الدعم الفني",
+                  "href": "#"
+                }
+              ]
+            },
+            {
+              "label": "القوانين والسياسات",
+              "routes": [
+                {
+                  "label": "شروط الاستخدام",
+                  "href": "#"
+                },
+                {
+                  "label": "سياسة الخصوصية",
+                  "href": "#"
+                },
+                {
+                  "label": "سياسة الكوكيز",
+                  "href": "#"
+                },
+                {
+                  "label": "الأمان والخصوصية",
+                  "href": "#"
+                }
+              ]
+            }
+          ],
+
+          "outro": "<copyright></copyright> <time></time> <span>شركة Vheexa ذ.م.م، جميع الحقوق محفوظة.</span>"
+        }
+      },
+
+      "page": {
+        "hero": {
+          "title": "",
+          "description": ""
+        }
+      }
+    },
+
+    "auth": {
+      "layout": {
+        "metadata": {
+          "title": "عنوان",
+          "description": "وصف."
+        }
+      },
+
+      "page": {
+        "image": {
+          "src": "https://ik.imagekit.io/alramadi/erp/website/assets/placeholder.png",
+          "alt": "صورة"
+        }
+      },
+
+      "signin": {
+        "layout": {
+          "metadata": {
+            "title": "عنوان",
+            "description": "وصف."
+          }
+        }
+      }
+    }
+  }
+}

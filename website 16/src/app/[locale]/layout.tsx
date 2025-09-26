@@ -1,26 +1,28 @@
-import "@/app/globals.css";
+import "./../globals.css";
 
 import { ENVIRONMENT } from "@/enums/environment";
-
-import type { Metadata } from "next";
-import type { TLayoutMetadata, TLayoutComponent } from "@/types/next";
-
-import { Zain } from "next/font/google";
+import { type Metadata } from "next";
+import { Cairo } from "next/font/google";
 import {
   getMessages,
   getTranslations,
   setRequestLocale,
 } from "next-intl/server";
-import { routing } from "@/i18n/routing";
 import { cn } from "@/utilities/cn";
-
+import { routing } from "@/i18n/routing";
 import ThemeProvider from "@/components/locals/providers/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import Script from "next/script";
 
-const zain = Zain({
-  weight: ["200", "300", "400", "700", "800", "900"],
+const cairo = Cairo({
+  weight: [
+    "300" /** light   */,
+    "400" /** normal  */,
+    "500" /** medium  */,
+    "700" /** bold    */,
+    "900" /** black   */,
+  ],
   style: ["normal"],
   display: "swap",
   preload: true,
@@ -33,17 +35,21 @@ export const dynamic = "force-static";
 export async function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
 export async function generateMetadata(
-  props: TLayoutMetadata,
+  props: LayoutProps<"/[locale]">,
 ): Promise<Metadata> {
   const { locale } = await props.params;
-  const t = await getTranslations({ locale, namespace: "app" });
+  const t = await getTranslations({ locale, namespace: "app.layout" });
 
   return t.raw("metadata");
 }
 
-export default async function RootLayout(props: TLayoutComponent) {
-  const { locale } = await props.params;
+export default async function Layout({
+  children,
+  params,
+}: LayoutProps<"/[locale]">) {
+  const { locale } = await params;
   setRequestLocale(locale);
 
   const [t, messages] = await Promise.all([
@@ -53,15 +59,15 @@ export default async function RootLayout(props: TLayoutComponent) {
 
   return (
     <html suppressHydrationWarning lang={t("lang")} dir={t("dir")}>
-      <body className={cn(zain.className, "antialiased")}>
+      <body className={cn(cairo.className, "antialiased")}>
         <ThemeProvider
           enableSystem
           disableTransitionOnChange
-          defaultTheme="system"
+          defaultTheme="light"
           attribute="class"
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <TooltipProvider>{props.children}</TooltipProvider>
+            <TooltipProvider>{children}</TooltipProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
 

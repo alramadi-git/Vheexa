@@ -11,8 +11,8 @@ public class RentEntity
 {
     public int ID { get; set; }
 
-    public RequestToRentEntity? RequestToRent { get; set; }
-    public int RequestToRentID { get; set; }
+    public BookingEntity? Booking { get; set; }
+    public int BookingID { get; set; }
 
     public DateTime PickupTimestamp { get; set; }
 
