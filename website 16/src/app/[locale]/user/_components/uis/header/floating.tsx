@@ -36,7 +36,8 @@ export default function Floating(props: TFloatingProps) {
         className={cn(
           "relative mx-auto max-w-full rounded-2xl transition-all duration-300",
           {
-            "bg-background mt-2 max-w-6xl border lg:px-5 shadow-lg outline-2 outline-primary": isUserExceededMaxYScroll,
+            "bg-background mt-2 max-w-6xl shadow-2xl lg:px-5":
+              isUserExceededMaxYScroll,
           },
         )}
       >

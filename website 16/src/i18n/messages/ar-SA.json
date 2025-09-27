@@ -355,6 +355,35 @@
           "slider": {
             "label": "موثوقية في كل رحلة"
           }
+        },
+
+        "features": {
+          "title": "مميزات ڤيكسا",
+          "description": "ڤيكسا منصة متكاملة لتأجير جميع أنواع المركبات بسهولة وسرعة، توفر لك تجربة حجز سلسة وآمنة مع خيارات متنوعة تناسب احتياجاتك وميزانيتك، مع دعم كامل وخدمة عملاء مميزة.",
+
+          "illustration": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+            "alt": "نص بديل"
+          },
+
+          "highlights": [
+            {
+              "label": "سهولة الاستخدام",
+              "description": "واجهة بسيطة وسريعة تتيح لك الحجز في دقائق."
+            },
+            {
+              "label": "أسعار تنافسية",
+              "description": "خيارات متعددة تناسب جميع الميزانيات."
+            },
+            {
+              "label": "موثوقية وأمان",
+              "description": "شركاء معتمدون ووسائل دفع آمنة."
+            },
+            {
+              "label": "تنوع وتغطية",
+              "description": "مركبات متاحة في مختلف المدن والدول."
+            }
+          ]
         }
       }
     },
@@ -369,8 +398,8 @@
 
       "page": {
         "image": {
-          "src": "https://ik.imagekit.io/alramadi/erp/website/assets/placeholder.png",
-          "alt": "صورة"
+          "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+          "alt": "نص بديل"
         }
       },
 
