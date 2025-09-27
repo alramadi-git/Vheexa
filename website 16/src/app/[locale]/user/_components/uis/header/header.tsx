@@ -12,9 +12,9 @@ type TNavLinks = Array<{
 }>;
 
 export default async function Header() {
-  const t = await getTranslations("app.user.layout.header");
+  const t = await getTranslations("app.user.layout.header.nav");
 
-  const links: TNavLinks = t.raw("nav.links");
+  const links: TNavLinks = t.raw("links");
 
   return (
     <Floating>
@@ -35,15 +35,15 @@ export default async function Header() {
         <div className="flex items-start gap-3.5">
           <Languages />
 
-          <Button asChild variant="outline" className="inline-flex">
-            <Link href="/auth/signin">
-              <span>Get Started</span>
+          <Button asChild className="inline-flex">
+            <Link href={t("signin.href")}>
+              <span>{t("signin.label")}</span>
             </Link>
           </Button>
         </div>
       </nav>
 
-      <nav className="bg-background absolute top-18 left-1/2 mb-6 hidden w-full -translate-x-1/2 flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:hidden lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
+      <nav className="bg-background outline-primary absolute top-18 left-1/2 mb-6 hidden w-full -translate-x-1/2 flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 outline-2 in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:hidden lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
         <ul className="w-full space-y-3">
           {links.map((item, index) => (
             <li key={index}>
@@ -58,9 +58,9 @@ export default async function Header() {
         </ul>
 
         <div className="flex flex-col items-start gap-3.5">
-          <Button asChild variant="outline" className="inline-flex">
-            <Link href="/auth/signin">
-              <span>Get Started</span>
+          <Button asChild className="inline-flex">
+            <Link href={t("signin.href")}>
+              <span>{t("signin.label")}</span>
             </Link>
           </Button>
 

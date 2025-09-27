@@ -29,15 +29,14 @@ export default function Floating(props: TFloatingProps) {
 
   return (
     <header
-      className="fixed z-20 w-full px-2"
+      className="fixed top-10 left-1/2 z-20 container mx-auto -translate-1/2"
       data-state={menuState && "active"}
     >
       <div
         className={cn(
-          "mx-auto max-w-6xl rounded-2xl transition-all duration-300",
+          "relative mx-auto max-w-full rounded-2xl transition-all duration-300",
           {
-            "bg-background mt-2 max-w-4xl border lg:px-5":
-              isUserExceededMaxYScroll,
+            "bg-background mt-2 max-w-6xl border lg:px-5 shadow-lg outline-2 outline-primary": isUserExceededMaxYScroll,
           },
         )}
       >

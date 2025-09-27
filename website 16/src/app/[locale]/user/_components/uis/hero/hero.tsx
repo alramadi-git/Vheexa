@@ -1,11 +1,10 @@
-import { FullHDImage } from "@/components/locals/blocks/image";
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/link";
 import { ChevronLeft } from "lucide-react";
-
+import { getTranslations } from "next-intl/server";
+import { FullHDImage } from "@/components/locals/blocks/image";
 import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
-import { getTranslations } from "next-intl/server";
 
 export default async function Hero() {
   const t = await getTranslations("app.user.page.hero");
@@ -18,14 +17,14 @@ export default async function Hero() {
             <h1 className="mt-8 max-w-2xl text-5xl text-balance md:text-6xl lg:mt-16 xl:text-7xl">
               {t("title")}
             </h1>
-            <p className="mt-8 max-w-2xl text-lg">{t("description")}</p>
+            <p className="text-muted-foreground mt-8 max-w-2xl text-lg">{t("description")}</p>
 
             <div className="mt-12 flex flex-col items-center justify-center gap-2 sm:flex-row lg:justify-start">
               <Button
                 key={1}
                 asChild
                 size="lg"
-                className="h-12 rounded-full pr-3 pl-5 text-base"
+                className="h-12 pr-3 pl-5 text-base"
               >
                 <Link href={t("actions.book-now.href")}>
                   <span className="text-nowrap">
@@ -39,7 +38,7 @@ export default async function Hero() {
                 asChild
                 size="lg"
                 variant="ghost"
-                className="h-12 rounded-full px-5 text-base hover:bg-zinc-950/5 dark:hover:bg-white/5"
+                className="h-12 px-5 text-base hover:bg-zinc-950/5 dark:hover:bg-white/5"
               >
                 <Link href={t("actions.learn-more.href")}>
                   <span className="text-nowrap">
@@ -57,84 +56,52 @@ export default async function Hero() {
           <div className="md:max-w-44 md:border-l md:pl-6">
             <p className="text-end text-sm">{t("slider.label")}</p>
           </div>
-          <div dir="ltr" className="relative py-6 md:w-[calc(100%-11rem)]">
+          <div className="relative py-6 md:w-[calc(100%-11rem)]">
+            {/** Blur */}
             <InfiniteSlider speedOnHover={20} speed={40} gap={112}>
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                  alt="Nvidia Logo"
-                  height="20"
-                  width="auto"
-                />
-              </div>
-
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/column.svg"
-                  alt="Column Logo"
-                  height="16"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/github.svg"
-                  alt="GitHub Logo"
-                  height="16"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/nike.svg"
-                  alt="Nike Logo"
-                  height="20"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
-                  alt="Lemon Squeezy Logo"
-                  height="20"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/laravel.svg"
-                  alt="Laravel Logo"
-                  height="16"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-7 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/lilly.svg"
-                  alt="Lilly Logo"
-                  height="28"
-                  width="auto"
-                />
-              </div>
-
-              <div className="flex">
-                <FullHDImage
-                  className="mx-auto h-6 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/openai.svg"
-                  alt="OpenAI Logo"
-                  height="24"
-                  width="auto"
-                />
-              </div>
+              <FullHDImage
+                className="mx-auto h-5 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/nvidia.svg"
+                alt="Nvidia Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-4 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/column.svg"
+                alt="Column Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-4 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/github.svg"
+                alt="GitHub Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-5 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/nike.svg"
+                alt="Nike Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-5 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
+                alt="Lemon Squeezy Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-4 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/laravel.svg"
+                alt="Laravel Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-7 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/lilly.svg"
+                alt="Lilly Logo"
+              />
+              <FullHDImage
+                className="mx-auto h-6 w-fit dark:invert"
+                src="https://html.tailus.io/blocks/customers/openai.svg"
+                alt="OpenAI Logo"
+              />
             </InfiniteSlider>
 
+            {/** Blur */}
             <div className="from-background absolute inset-y-0 left-0 w-20 bg-linear-to-r"></div>
             <div className="from-background absolute inset-y-0 right-0 w-20 bg-linear-to-l"></div>
             <ProgressiveBlur

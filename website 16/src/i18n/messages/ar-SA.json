@@ -61,6 +61,34 @@
           },
 
           "nav": {
+            "links": [
+              {
+                "href": "/user",
+                "label": "الرئيسية"
+              },
+              {
+                "href": "/vehicles",
+                "label": "المركبات"
+              },
+              {
+                "href": "/blogs",
+                "label": "المنتدى"
+              },
+              {
+                "href": "/about",
+                "label": "من نحن"
+              },
+              {
+                "href": "/contact",
+                "label": "اتصل بنا"
+              }
+            ],
+
+            "signin": {
+              "href": "/user/auth/signin",
+              "label": "سجل دخولك الآن"
+            },
+
             "continents": [
               {
                 "label": "Africa",
@@ -133,7 +161,7 @@
                     "dir": "rtl",
                     "locale": "ar-SA",
                     "flag": "🇸🇦",
-                    "label": "العربية (السعودية)"
+                    "label": "العربية (المملكة العربية السعودية)"
                   }
                 ]
               },
@@ -176,29 +204,6 @@
                     "label": "English (New Zealand)"
                   }
                 ]
-              }
-            ],
-
-            "links": [
-              {
-                "href": "/user",
-                "label": "الرئيسية"
-              },
-              {
-                "href": "/vehicles",
-                "label": "المركبات"
-              },
-              {
-                "href": "/blogs",
-                "label": "المنتدى"
-              },
-              {
-                "href": "/about",
-                "label": "من نحن"
-              },
-              {
-                "href": "/contact",
-                "label": "اتصل بنا"
               }
             ]
           }

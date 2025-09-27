@@ -91,7 +91,7 @@ export function InfiniteSlider({
     : {};
 
   return (
-    <div className={cn('overflow-hidden', className)}>
+    <div dir="ltr" className={cn('overflow-hidden', className)}>
       <motion.div
         className='flex w-max'
         style={{
