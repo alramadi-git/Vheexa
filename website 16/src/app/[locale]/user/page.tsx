@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import Hero from "./_components/uis/hero/hero";
+import Stats from "./_components/uis/stats/stats";
 import Features from "./_components/uis/features/features";
 
 export const dynamic = "force-static";
@@ -11,6 +12,7 @@ export default async function Page(props: PageProps<"/[locale]/user">) {
   return (
     <main className="h-[5000px]">
       <Hero />
+      <Stats />
       <Features />
     </main>
   );

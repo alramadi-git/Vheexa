@@ -23,12 +23,7 @@ export default async function Hero() {
               </p>
 
               <div className="mt-12 flex flex-col items-center justify-center gap-2 sm:flex-row lg:justify-start">
-                <Button
-                  key={1}
-                  asChild
-                  size="lg"
-                  className="h-12 pr-3 pl-5 text-base"
-                >
+                <Button asChild size="lg" className="h-12 pr-3 pl-5 text-base">
                   <Link href={t("actions.book-now.href")}>
                     <span className="text-nowrap">
                       {t("actions.book-now.label")}
@@ -37,7 +32,6 @@ export default async function Hero() {
                   </Link>
                 </Button>
                 <Button
-                  key={2}
                   asChild
                   size="lg"
                   variant="ghost"
