@@ -1,4 +1,5 @@
 import { FullHDImage } from "@/components/locals/blocks/image";
+import { AnimatedNumber } from "@/components/motion-primitives/animated-number";
 import { getTranslations } from "next-intl/server";
 
 type TItem = {
@@ -25,9 +26,14 @@ export default async function Stats() {
             <div className="my-12 grid grid-cols-2 gap-2 md:mb-0">
               {items.map((item, index) => (
                 <div key={index} className="space-y-4">
-                  <div className="bg-linear-to-r from-zinc-950 to-zinc-600 bg-clip-text text-5xl font-bold text-transparent dark:from-white dark:to-zinc-800">
-                    {item.value}
-                  </div>
+                  <AnimatedNumber
+                    className="bg-linear-to-r from-zinc-950 to-zinc-600 bg-clip-text text-3xl font-medium text-transparent dark:from-white dark:to-zinc-800"
+                    springOptions={{
+                      bounce: 2,
+                      duration: 10000,
+                    }}
+                    value={item.value}
+                  />
                   <p>{item.label}</p>
                 </div>
               ))}
@@ -35,22 +41,18 @@ export default async function Stats() {
           </div>
           <div className="relative">
             <blockquote className="border-s-4 ps-4">
-              <p>
-                Using TailsUI has been like unlocking a secret design
-                superpower. {"It's"} the perfect fusion of simplicity and
-                versatility, enabling us to create UIs that are as stunning as
-                they are user-friendly.
-              </p>
-
-              <div className="mt-6 space-y-3">
-                <cite className="block font-medium">John Doe, CEO</cite>
-                <FullHDImage
-                  src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                  alt="Nvidia Logo"
-                  className="h-5 w-fit dark:invert"
-                />
-              </div>
+              {t("testimonial.quote")}
             </blockquote>
+            <div className="mt-6 flex gap-3">
+              <FullHDImage
+                src={t("testimonial.author.avatar.src")}
+                alt={t("testimonial.author.avatar.alt")}
+                className="size-6 rounded-sm"
+              />
+              <cite className="block font-medium">
+                {t("testimonial.author.name")}, {t("testimonial.author.role")}
+              </cite>
+            </div>
           </div>
         </div>
       </div>

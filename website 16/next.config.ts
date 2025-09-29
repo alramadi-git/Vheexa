@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
         hostname: "ik.imagekit.io",
         pathname: "/alramadi/vheexa/website/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.simpleicons.org",
+        pathname: "/**",
+      },
     ],
   },
 };
