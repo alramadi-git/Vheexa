@@ -357,40 +357,36 @@
 
             "items": [
               {
-                "src": "https://cdn.simpleicons.org/toyota/000000",
-                "alt": "شعار تويوتا"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/ford/000000",
-                "alt": "شعار فورد"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/honda/000000",
-                "alt": "شعار هوندا"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/volkswagen/000000",
-                "alt": "شعار فولكس فاجن"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/audi/000000",
-                "alt": "شعار أودي"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/shell/000000",
-                "alt": "شعار شل"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/visa/000000",
-                "alt": "شعار فيزا"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               },
               {
-                "src": "https://cdn.simpleicons.org/mastercard/000000",
-                "alt": "شعار ماستر كارد"
-              },
-              {
-                "src": "https://cdn.simpleicons.org/stripe/000000",
-                "alt": "شعار سترايب"
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "شعار"
               }
             ]
           }
@@ -455,7 +451,43 @@
               "description": "مركبات متاحة في مختلف المدن والدول."
             }
           ]
-        }
+        },
+        
+        "how-it-works": {
+          "title": "كيف تعمل ڤيكسا؟",
+          "description": "خطوات بسيطة وسريعة لاستئجار أي مركبة عبر منصتنا، بدون تعقيد.",
+
+          "items": [
+            {
+              "label": "احجز",
+              "description": "اختر المركبة المناسبة من بين السيارات، الدراجات أو الشاحنات، وحدد الوقت والمكان بكل سهولة.",
+              "illustration": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "نص بديل"
+              }
+            },
+            {
+              "label": "استلم",
+              "description": "توجه لنقطة التسليم المحددة أو استلم المركبة حيثما كنت، بسرعة وأمان.",
+              "illustration": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "نص بديل"
+              }
+            },
+            {
+              "label": "أعد",
+              "description": "بعد انتهاء رحلتك، قم بإرجاع المركبة بكل سهولة أو اطلب استلامها من موقعك.",
+              "illustration": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "نص بديل"
+              }
+            }
+          ]
+        },
+
+        "faqs": {},
+
+        "call-to-action": {}
       }
     },
 

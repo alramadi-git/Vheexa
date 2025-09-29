@@ -1,5 +1,10 @@
 import { FullHDImage } from "@/components/locals/blocks/image";
 import {
+  Description,
+  Section,
+  Title,
+} from "@/components/locals/blocks/typography";
+import {
   type LucideProps,
   Zap,
   DollarSign,
@@ -7,9 +12,10 @@ import {
   Earth,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { ComponentType } from "react";
 
 type THighlight = {
-  icon: LucideProps;
+  icon: ComponentType<LucideProps>;
   label: string;
   description: string;
 };
@@ -21,6 +27,8 @@ export default async function Features() {
 
   const highlights: Array<THighlight> = t
     .raw("highlights")
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     .map((highlight, index) => ({
       icon: icons[index],
       label: highlight.label,
@@ -28,13 +36,11 @@ export default async function Features() {
     }));
 
   return (
-    <section className="overflow-hidden py-16 md:py-32">
+    <Section>
       <div className="container space-y-8 px-6 md:space-y-12">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-semibold lg:text-5xl">{t("title")}</h2>
-          <p className="text-muted-foreground mt-6 text-lg">
-            {t("description")}
-          </p>
+        <div className="max-w-2xl">
+          <Title>{t("title")}</Title>
+          <Description>{t("description")}</Description>
         </div>
         <div className="relative -mx-4 mask-b-from-75% mask-b-to-95% mask-l-from-75% mask-l-to-95% pt-3 pr-3 md:-mx-12">
           <div className="perspective-midrange">
@@ -63,6 +69,6 @@ export default async function Features() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

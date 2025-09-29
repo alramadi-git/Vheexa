@@ -17,7 +17,7 @@ export default async function Stats() {
       <div className="container space-y-8 px-6 md:space-y-12">
         <div className="relative z-10 max-w-xl space-y-6">
           <h2 className="text-4xl font-medium lg:text-5xl">{t("title")}</h2>
-          <p>{t("description")}</p>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24">
           <div>
