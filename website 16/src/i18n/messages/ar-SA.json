@@ -352,15 +352,54 @@
             }
           },
 
-          "slider": {
-            "label": "موثوقية في كل رحلة"
+          "credibility": {
+            "label": "موثوقية في كل رحلة",
+
+            "items": [
+              {
+                "src": "https://cdn.simpleicons.org/toyota/000000",
+                "alt": "شعار تويوتا"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/ford/000000",
+                "alt": "شعار فورد"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/honda/000000",
+                "alt": "شعار هوندا"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/volkswagen/000000",
+                "alt": "شعار فولكس فاجن"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/audi/000000",
+                "alt": "شعار أودي"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/shell/000000",
+                "alt": "شعار شل"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/visa/000000",
+                "alt": "شعار فيزا"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/mastercard/000000",
+                "alt": "شعار ماستر كارد"
+              },
+              {
+                "src": "https://cdn.simpleicons.org/stripe/000000",
+                "alt": "شعار سترايب"
+              }
+            ]
           }
         },
 
         "stats": {
           "title": "ڤيكسا تجمع بين جميع حلول تأجير المركبات في مكان واحد",
           "description": "ڤيكسا ليست مجرد منصة لتأجير المركبات، بل منظومة متكاملة تضم خدمات متنوعة، من السيارات إلى الدراجات والشاحنات، مدعومة بواجهات وتقنيات حديثة تساعد الأفراد والشركات على الابتكار وتبسيط التنقل.",
-          
+
           "metrics": {
             "description": "منظومة متكاملة مدعومة بأرقام تعكس ثقة عملائنا وشركائنا.",
 
@@ -381,7 +420,10 @@
             "author": {
               "name": "نواف الرمادي",
               "role": "الرئيس التنفيذي",
-              "avatar": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+              "avatar": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png",
+                "alt": "صورة شخصية"
+              }
             }
           }
         },

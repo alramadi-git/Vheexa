@@ -6,8 +6,14 @@ import { FullHDImage } from "@/components/locals/blocks/image";
 import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
 
+type TCredibility = {
+  src: string;
+  alt: string;
+};
+
 export default async function Hero() {
   const t = await getTranslations("app.user.page.hero");
+  const partners: Array<TCredibility> = t.raw("credibility.items");
 
   return (
     <section>
@@ -51,51 +57,20 @@ export default async function Hero() {
         <div className="group relative px-6">
           <div className="flex flex-col items-center md:flex-row">
             <div className="md:max-w-44 md:border-l md:pl-6">
-              <p className="text-end">{t("slider.label")}</p>
+              <p className="text-end">{t("credibility.label")}</p>
             </div>
             <div className="relative py-6 md:w-[calc(100%-11rem)]">
-              {/** Blur */}
-              <InfiniteSlider speedOnHover={20} speed={40} gap={112}>
-                <FullHDImage
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                  alt="Nvidia Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/column.svg"
-                  alt="Column Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/github.svg"
-                  alt="GitHub Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/nike.svg"
-                  alt="Nike Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
-                  alt="Lemon Squeezy Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/laravel.svg"
-                  alt="Laravel Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-7 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/lilly.svg"
-                  alt="Lilly Logo"
-                />
-                <FullHDImage
-                  className="mx-auto h-6 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/openai.svg"
-                  alt="OpenAI Logo"
-                />
+              {/** Credibility */}
+              <InfiniteSlider speedOnHover={20} speed={64} gap={128}>
+                {partners.map((item, index) => (
+                  <FullHDImage
+                    key={index}
+                    unoptimized
+                    className="mx-auto size-12 dark:invert"
+                    src={item.src}
+                    alt={item.alt}
+                  />
+                ))}
               </InfiniteSlider>
 
               {/** Blur */}
