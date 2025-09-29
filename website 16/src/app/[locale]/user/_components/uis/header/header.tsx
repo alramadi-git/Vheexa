@@ -43,7 +43,7 @@ export default async function Header() {
         </div>
       </nav>
 
-      <nav className="bg-background outline-primary absolute top-18 left-1/2 mb-6 hidden w-full -translate-x-1/2 flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 outline-2 in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:hidden lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
+      <nav className="bg-background absolute top-18 left-1/2 mb-6 hidden w-full -translate-x-1/2 flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:hidden lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
         <ul className="w-full space-y-3">
           {links.map((item, index) => (
             <li key={index}>
