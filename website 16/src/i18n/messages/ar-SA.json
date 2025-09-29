@@ -393,7 +393,7 @@
         },
 
         "stats": {
-          "title": "ڤيكسا تجمع بين جميع حلول تأجير المركبات في مكان واحد",
+          "title": "ڤيكسا لتأجير المركبات",
           "description": "ڤيكسا ليست مجرد منصة لتأجير المركبات، بل منظومة متكاملة تضم خدمات متنوعة، من السيارات إلى الدراجات والشاحنات، مدعومة بواجهات وتقنيات حديثة تساعد الأفراد والشركات على الابتكار وتبسيط التنقل.",
 
           "metrics": {
@@ -407,6 +407,14 @@
               {
                 "label": "عملاء سعيدون",
                 "value": 250000
+              },
+              {
+                "label": "رحلات مكتملة",
+                "value": 540000
+              },
+              {
+                "label": "مدن مغطاة",
+                "value": 75
               }
             ]
           },
@@ -452,14 +460,14 @@
             }
           ]
         },
-        
+
         "how-it-works": {
           "title": "كيف تعمل ڤيكسا؟",
           "description": "خطوات بسيطة وسريعة لاستئجار أي مركبة عبر منصتنا، بدون تعقيد.",
 
-          "items": [
+          "steps": [
             {
-              "label": "احجز",
+              "label": "إحجز",
               "description": "اختر المركبة المناسبة من بين السيارات، الدراجات أو الشاحنات، وحدد الوقت والمكان بكل سهولة.",
               "illustration": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
@@ -467,8 +475,8 @@
               }
             },
             {
-              "label": "استلم",
-              "description": "توجه لنقطة التسليم المحددة أو استلم المركبة حيثما كنت، بسرعة وأمان.",
+              "label": "أستلم",
+              "description": "توجه لنقطة التسليم المحددة واستلم المركبة ، بسرعة وأمان.",
               "illustration": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
                 "alt": "نص بديل"
@@ -476,7 +484,7 @@
             },
             {
               "label": "أعد",
-              "description": "بعد انتهاء رحلتك، قم بإرجاع المركبة بكل سهولة أو اطلب استلامها من موقعك.",
+              "description": "بعد انتهاء رحلتك، قم بإرجاع المركبة بكل سهولة.",
               "illustration": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
                 "alt": "نص بديل"
@@ -485,9 +493,29 @@
           ]
         },
 
-        "faqs": {},
+        "faqs": {
+          "title": "",
+          "description": "",
 
-        "call-to-action": {}
+          "questions": [
+            {
+              "question": "",
+              "answer": ""
+            }
+          ],
+
+          "help": ""
+        },
+
+        "call-to-action": {
+          "title": "",
+          "description": "",
+
+          "action": {
+            "href": "",
+            "label": ""
+          }
+        }
       }
     },
 

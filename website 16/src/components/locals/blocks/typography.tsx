@@ -1,4 +1,4 @@
-import { type ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
 
 export function Section({
@@ -26,9 +26,25 @@ export function Container({
     </div>
   );
 }
+
+export function Intro({
+  className,
+  children,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div className={cn("space-y-4", className)} {...props}>
+      {children}
+    </div>
+  );
+}
+
 export function Title({ className, children, ...props }: ComponentProps<"h2">) {
   return (
-    <h2 className={cn("text-6xl font-bold", className)} {...props}>
+    <h2
+      className={cn("text-5xl leading-18 font-bold text-balance", className)}
+      {...props}
+    >
       {children}
     </h2>
   );
@@ -39,10 +55,7 @@ export function Description({
   ...props
 }: ComponentProps<"p">) {
   return (
-    <p
-      className={cn("text-muted-foreground mt-6 text-lg", className)}
-      {...props}
-    >
+    <p className={cn("text-muted-foreground text-lg", className)} {...props}>
       {children}
     </p>
   );
@@ -54,8 +67,8 @@ export function Blockquote({
   ...props
 }: ComponentProps<"blockquote">) {
   return (
-    <blockquote className={cn(className)} {...props}>
-      {children}
+    <blockquote className={cn("border-s-2 ps-6 italic", className)} {...props}>
+      &ldquo;{children}&rdquo;
     </blockquote>
   );
 }
