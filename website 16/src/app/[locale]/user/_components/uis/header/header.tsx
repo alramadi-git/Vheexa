@@ -1,72 +1,51 @@
 import { getTranslations } from "next-intl/server";
 
-import { Button } from "@/components/shadcn/button";
+import { Container } from "@/components/locals/blocks/typography";
+import { FullHDImage } from "@/components/locals/blocks/image";
 import { Link } from "@/components/locals/blocks/link";
-
-import Floating from "@/app/[locale]/user/_components/uis/header/floating";
+import { Button } from "@/components/shadcn/button";
+import Search from "@/app/[locale]/user/_components/uis/header/search";
+import MobileNavigation from "@/app/[locale]/user/_components/uis/header/mobile-navigation";
+import Navigation from "@/app/[locale]/user/_components/uis/header/navigation";
 import Languages from "@/app/[locale]/user/_components/uis/header/languages";
 
-type TNavLinks = Array<{
-  href: string;
-  label: string;
-}>;
-
-export default async function Header() {
-  const t = await getTranslations("app.user.layout.header.nav");
-
-  const links: TNavLinks = t.raw("links");
+export default async function Component() {
+  const t = await getTranslations("app.user.layout.header");
 
   return (
-    <Floating>
-      <nav className="hidden w-full justify-between gap-6 lg:flex">
-        <ul className="flex items-center gap-8">
-          {links.map((item, index) => (
-            <li key={index}>
-              <Link
-                href={item.href}
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+    <header className="bg-background fixed top-0 left-0 z-50 w-full border-b shadow-lg">
+      <Container>
+        {/** Top navigation */}
+        <div className="flex h-16 items-center justify-between gap-4">
+          {/** Logo */}
+          <Link href="/user" className="border-e pe-3">
+            <FullHDImage
+              src={t("logo.src")}
+              alt={t("logo.alt")}
+              className="size-6"
+            />
+          </Link>
 
-        <div className="flex items-start gap-3.5">
-          <Languages />
+          {/** Top Middle */}
+          <div>
+            <Search />
+          </div>
 
-          <Button asChild className="inline-flex">
-            <Link href={t("signin.href")}>
-              <span>{t("signin.label")}</span>
-            </Link>
-          </Button>
+          {/** Top End */}
+          <div className="flex w-full items-center justify-end gap-2">
+            <Button asChild>
+              <Link href="/user/auth/signin">{t("signin-label")}</Link>
+            </Button>
+            <Languages />
+            <MobileNavigation />
+          </div>
         </div>
-      </nav>
 
-      <nav className="bg-background absolute top-18 left-1/2 mb-6 hidden w-full -translate-x-1/2 flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl in-data-[state=active]:block md:flex-nowrap lg:m-0 lg:hidden lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-        <ul className="w-full space-y-3">
-          {links.map((item, index) => (
-            <li key={index}>
-              <Link
-                href={item.href}
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex flex-col items-start gap-3.5">
-          <Button asChild className="inline-flex">
-            <Link href={t("signin.href")}>
-              <span>{t("signin.label")}</span>
-            </Link>
-          </Button>
-
-          <Languages className="w-full" />
+        {/** Bottom navigation */}
+        <div className="border-t py-2 max-md:hidden">
+          <Navigation />
         </div>
-      </nav>
-    </Floating>
+      </Container>
+    </header>
   );
 }

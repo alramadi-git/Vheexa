@@ -21,7 +21,7 @@ export function Container({
   ...props
 }: ComponentProps<"div">) {
   return (
-    <div className={cn("container", className)} {...props}>
+    <div {...props} className={cn("container", className)}>
       {children}
     </div>
   );
@@ -33,7 +33,7 @@ export function Intro({
   ...props
 }: ComponentProps<"div">) {
   return (
-    <div className={cn("space-y-4", className)} {...props}>
+    <div {...props} className={cn("space-y-4", className)}>
       {children}
     </div>
   );
@@ -55,9 +55,28 @@ export function Description({
   ...props
 }: ComponentProps<"p">) {
   return (
-    <p className={cn("text-muted-foreground text-lg", className)} {...props}>
+    <p {...props} className={cn("text-muted-foreground text-lg", className)}>
       {children}
     </p>
+  );
+}
+
+export function Kbd({
+  className,
+  children,
+  ...props
+}: Omit<ComponentProps<"kbd">, "dir">) {
+  return (
+    <kbd
+      {...props}
+      dir="ltr"
+      className={cn(
+        "text-muted-foreground/70 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium",
+        className,
+      )}
+    >
+      {children}
+    </kbd>
   );
 }
 
@@ -67,7 +86,7 @@ export function Blockquote({
   ...props
 }: ComponentProps<"blockquote">) {
   return (
-    <blockquote className={cn("border-s-2 ps-6 italic", className)} {...props}>
+    <blockquote {...props} className={cn("border-s-2 ps-6 italic", className)}>
       &ldquo;{children}&rdquo;
     </blockquote>
   );

@@ -44,7 +44,7 @@ export default function Languages({
   className,
   ...props
 }: TLocaleSelector["props"]) {
-  const t = useTranslations("app.user.layout.header.nav");
+  const t = useTranslations("app.user.layout.header.languages");
   const locale = useLocale();
 
   const continents: Array<TContinent> = t.raw("continents");
@@ -92,9 +92,9 @@ export default function Languages({
           align="start"
         >
           <Command className="rounded">
-            <CommandInput placeholder="Search your language..." />
+            <CommandInput placeholder={t("placeholder")} />
             <CommandList>
-              <CommandEmpty>No such a language found.</CommandEmpty>
+              <CommandEmpty>{t("when-empty")}</CommandEmpty>
               {continents.map((continent) => (
                 <CommandGroup key={continent.label} heading={continent.label}>
                   {continent.countries.map((country) => (

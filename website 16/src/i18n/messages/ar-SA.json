@@ -60,38 +60,17 @@
             "alt": "شعار شركة ڤيكسا"
           },
 
-          "nav": {
-            "links": [
-              {
-                "href": "/user",
-                "label": "الرئيسية"
-              },
-              {
-                "href": "/vehicles",
-                "label": "المركبات"
-              },
-              {
-                "href": "/blogs",
-                "label": "المنتدى"
-              },
-              {
-                "href": "/about",
-                "label": "من نحن"
-              },
-              {
-                "href": "/contact",
-                "label": "اتصل بنا"
-              }
-            ],
+          "search-placeholder": "البحث...",
 
-            "signin": {
-              "href": "/user/auth/signin",
-              "label": "سجل دخولك الآن"
-            },
+          "signin-label": "سجل دخول الآن",
+
+          "languages": {
+            "placeholder": "ابحث عن لغتك...",
+            "when-empty": "لم يتم العثور على لغات مطابقة",
 
             "continents": [
               {
-                "label": "Africa",
+                "label": "أفريقيا",
                 "countries": [
                   {
                     "dir": "rtl",
@@ -114,7 +93,7 @@
                 ]
               },
               {
-                "label": "America",
+                "label": "أمريكا",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -137,7 +116,7 @@
                 ]
               },
               {
-                "label": "Asia",
+                "label": "آسيا",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -166,7 +145,7 @@
                 ]
               },
               {
-                "label": "Europe",
+                "label": "أوروبا",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -189,7 +168,7 @@
                 ]
               },
               {
-                "label": "Oceania",
+                "label": "أوقيانوسيا",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -206,7 +185,35 @@
                 ]
               }
             ]
-          }
+          },
+
+          "navigation": [
+            {
+              "id": 1,
+              "href": "/user",
+              "label": "الرئيسية"
+            },
+            {
+              "id": 2,
+              "href": "/user/vehicles",
+              "label": "المركبات"
+            },
+            {
+              "id": 3,
+              "href": "/user/blogs",
+              "label": "المنتدى"
+            },
+            {
+              "id": 4,
+              "href": "/user/about",
+              "label": "من نحن"
+            },
+            {
+              "id": 5,
+              "href": "/user/contact",
+              "label": "اتصل بنا"
+            }
+          ]
         },
 
         "footer": {
@@ -522,18 +529,10 @@
           ],
 
           "help": "لم تجد إجابتك هنا؟ <link>اذهب إلى صفحة الأسئلة الأكثر شيوعًا</link>، وإذا لم تجد ما تبحث عنه، تواصل مع فريق الدعم عبر صفحة اتصل بنا وسنكون سعداء بمساعدتك."
-        },
-
-        "call-to-action": {
-          "title": "",
-          "description": "",
-
-          "action": {
-            "href": "",
-            "label": ""
-          }
         }
-      }
+      },
+
+      "vehicles": {}
     },
 
     "auth": {

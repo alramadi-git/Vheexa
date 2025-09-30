@@ -6,7 +6,7 @@ import Footer from "@/app/[locale]/user/_components/uis/footer/footer";
 
 export const dynamic = "force-static";
 export async function generateMetadata(
-  props: LayoutProps<"/[locale]">,
+  props: LayoutProps<"/[locale]/user">,
 ): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: "app.user.layout" });
