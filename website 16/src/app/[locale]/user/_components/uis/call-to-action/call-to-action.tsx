@@ -17,6 +17,7 @@ export default async function CallToAction() {
           <Title>{t("title")}</Title>
           <Description>{t("description")}</Description>
         </Intro>
+      
       </Container>
     </Section>
   );

@@ -15,7 +15,7 @@ export default async function Testimonial() {
           alt={t("author.avatar.alt")}
           className="size-6 rounded-sm"
         />
-        <cite className="block font-medium">
+        <cite className="block font-medium not-italic">
           {t("author.name")}, {t("author.role")}
         </cite>
       </div>
