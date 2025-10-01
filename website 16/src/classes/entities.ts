@@ -1,14 +1,18 @@
-class Image_ {
+class Image {
+  public ID: string;
+
   public URL: string;
 
-  constructor(URL: string) {
-    this.URL = URL;
+  constructor(id: string, url: string) {
+    this.ID = id;
+
+    this.URL = url;
   }
 }
 
-class Location_ {
-  public ID: number;
-  
+class Location {
+  public ID: string;
+
   public Country: string;
   public City: string;
   public Street: string;
@@ -17,14 +21,14 @@ class Location_ {
   public Longitude: number;
 
   constructor(
-    ID: number,
+    id: string,
     country: string,
     city: string,
     street: string,
     latitude: number,
     longitude: number,
   ) {
-    this.ID = ID;
+    this.ID = id;
 
     this.Country = country;
     this.City = city;
@@ -34,3 +38,5 @@ class Location_ {
     this.Longitude = longitude;
   }
 }
+
+export { Image, Location };

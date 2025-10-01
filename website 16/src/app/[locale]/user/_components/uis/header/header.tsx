@@ -13,7 +13,9 @@ export default async function Component() {
   const t = await getTranslations("app.user.layout.header");
 
   return (
-    <header className="bg-background fixed top-0 left-0 z-50 w-full border-b shadow-lg">
+    <header
+      className="bg-background fixed top-0 left-0 z-50 w-full border-b shadow-lg"
+    >
       <Container>
         {/** Top navigation */}
         <div className="flex h-16 items-center justify-between gap-4">

@@ -21,7 +21,7 @@ type TLink = {
 
 export default async function MobileNavigation() {
   const t = await getTranslations("app.user.layout.header");
-  const navigation: Array<TLink> = t.raw("navigation");
+  const navigation: Array<TLink> = t.raw("navigation.links");
 
   return (
     <Popover>
