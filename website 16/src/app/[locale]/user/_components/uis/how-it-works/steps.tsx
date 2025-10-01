@@ -34,7 +34,7 @@ export default async function Steps() {
               />
             </CardContent>
             <CardHeader className="block h-18 space-y-2">
-              <CardTitle className="text-xl">{step.label}</CardTitle>
+              <CardTitle className="text-xl font-medium">{step.label}</CardTitle>
               <CardDescription>{step.description} </CardDescription>
             </CardHeader>
           </Card>

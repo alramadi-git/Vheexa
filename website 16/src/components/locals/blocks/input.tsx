@@ -18,7 +18,7 @@ import {
 } from "@/components/shadcn/tooltip";
 import { Input as ShadcnInput } from "@/components/shadcn/input";
 
-type TInput<TFieldValues extends FieldValues>  = {
+type TInput<TFieldValues extends FieldValues> = {
   props: {
     formField: Omit<ComponentProps<typeof FormField<TFieldValues>>, "render">;
     label?: string;
@@ -26,7 +26,8 @@ type TInput<TFieldValues extends FieldValues>  = {
     description?: string;
   };
 };
-export default function Input<TFieldValues extends FieldValues = FieldValues>(
+
+function Input<TFieldValues extends FieldValues = FieldValues>(
   props: TInput<TFieldValues>["props"],
 ) {
   return (
@@ -41,7 +42,8 @@ export default function Input<TFieldValues extends FieldValues = FieldValues>(
               {...field}
               className={cn(
                 {
-                  "text-destructive placeholder:text-destructive": fieldState.invalid,
+                  "text-destructive placeholder:text-destructive":
+                    fieldState.invalid,
                 },
                 props.input?.className,
               )}
@@ -69,3 +71,5 @@ export default function Input<TFieldValues extends FieldValues = FieldValues>(
     />
   );
 }
+
+export { Input };

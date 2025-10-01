@@ -1,11 +1,7 @@
 import type { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
 
-export function Section({
-  className,
-  children,
-  ...props
-}: ComponentProps<"section">) {
+function Section({ className, children, ...props }: ComponentProps<"section">) {
   return (
     <section
       className={cn("px-8 py-16 md:px-16 md:py-32", className)}
@@ -15,11 +11,7 @@ export function Section({
     </section>
   );
 }
-export function Container({
-  className,
-  children,
-  ...props
-}: ComponentProps<"div">) {
+function Container({ className, children, ...props }: ComponentProps<"div">) {
   return (
     <div {...props} className={cn("container", className)}>
       {children}
@@ -27,11 +19,7 @@ export function Container({
   );
 }
 
-export function Intro({
-  className,
-  children,
-  ...props
-}: ComponentProps<"div">) {
+function Intro({ className, children, ...props }: ComponentProps<"div">) {
   return (
     <div {...props} className={cn("space-y-4", className)}>
       {children}
@@ -39,7 +27,7 @@ export function Intro({
   );
 }
 
-export function Title({ className, children, ...props }: ComponentProps<"h2">) {
+function Title({ className, children, ...props }: ComponentProps<"h2">) {
   return (
     <h2
       className={cn("text-5xl leading-18 font-bold text-balance", className)}
@@ -49,11 +37,7 @@ export function Title({ className, children, ...props }: ComponentProps<"h2">) {
     </h2>
   );
 }
-export function Description({
-  className,
-  children,
-  ...props
-}: ComponentProps<"p">) {
+function Description({ className, children, ...props }: ComponentProps<"p">) {
   return (
     <p {...props} className={cn("text-muted-foreground text-lg", className)}>
       {children}
@@ -61,7 +45,7 @@ export function Description({
   );
 }
 
-export function Kbd({
+function Kbd({
   className,
   children,
   ...props
@@ -80,7 +64,7 @@ export function Kbd({
   );
 }
 
-export function Blockquote({
+function Blockquote({
   className,
   children,
   ...props
@@ -91,3 +75,5 @@ export function Blockquote({
     </blockquote>
   );
 }
+
+export { Section, Container, Intro, Title, Description, Kbd, Blockquote };

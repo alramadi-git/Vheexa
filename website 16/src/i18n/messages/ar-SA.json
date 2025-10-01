@@ -2,7 +2,7 @@
   "app": {
     "layout": {
       "metadata": {
-        "title": "ڤيكسا",
+        "title": "",
         "description": "",
 
         "icons": {
@@ -190,28 +190,40 @@
           "navigation": [
             {
               "id": 1,
-              "href": "/user",
-              "label": "الرئيسية"
-            },
-            {
-              "id": 2,
-              "href": "/user/vehicles",
-              "label": "المركبات"
-            },
-            {
-              "id": 3,
-              "href": "/user/blogs",
-              "label": "المنتدى"
-            },
-            {
-              "id": 4,
-              "href": "/user/about",
-              "label": "من نحن"
-            },
-            {
-              "id": 5,
-              "href": "/user/contact",
-              "label": "اتصل بنا"
+              "label": "روابط سريعة",
+
+              "submenu": [
+                {
+                  "id": 1,
+                  "href": "/user",
+                  "label": "الرئيسية",
+                  "description": "الصفحة الرئيسية التي تضم أحدث الأخبار والمميزات."
+                },
+                {
+                  "id": 2,
+                  "href": "/user/vehicles",
+                  "label": "المركبات",
+                  "description": "تصفح جميع المركبات المتاحة للإيجار مع خيارات البحث والتصفية."
+                },
+                {
+                  "id": 3,
+                  "href": "/user/blogs",
+                  "label": "المنتدى",
+                  "description": "مقالات ونصائح ومحتوى متجدد حول عالم المركبات والتنقل."
+                },
+                {
+                  "id": 4,
+                  "href": "/user/about",
+                  "label": "من نحن",
+                  "description": "تعرف على رؤيتنا ورسالتنا والفريق الذي يقف خلف ڤيكسا."
+                },
+                {
+                  "id": 5,
+                  "href": "/user/contact",
+                  "label": "اتصل بنا",
+                  "description": "تواصل معنا عبر النماذج أو البريد الإلكتروني أو الهاتف."
+                }
+              ]
             }
           ]
         },
@@ -532,7 +544,14 @@
         }
       },
 
-      "vehicles": {}
+      "vehicles": {
+        "layout": {
+          "metadata": {
+            "title": "",
+            "description": ""
+          }
+        }
+      }
     },
 
     "auth": {
