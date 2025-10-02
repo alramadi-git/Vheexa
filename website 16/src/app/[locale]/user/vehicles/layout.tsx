@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-static";
 
-export async function generateMetadata(
-  props: LayoutProps<"/[locale]/user/vehicles">,
-): Promise<Metadata> {
-  const { locale } = await props.params;
+export async function generateMetadata({
+  params,
+}: Omit<
+  LayoutProps<"/[locale]/user/vehicles">,
+  "children"
+>): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({
     locale,
     namespace: "app.user.vehicles.layout",
@@ -15,11 +18,8 @@ export async function generateMetadata(
   return t.raw("metadata");
 }
 
-export default async function LayoutLayout(
-  props: LayoutProps<"/[locale]/user/vehicles">,
-) {
-  const { locale } = await props.params;
-  setRequestLocale(locale);
-
-  return;
+export default async function LayoutLayout({
+  children,
+}: LayoutProps<"/[locale]/user/vehicles">) {
+  return children;
 }
