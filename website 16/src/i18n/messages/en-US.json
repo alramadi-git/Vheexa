@@ -1,9 +1,14 @@
 {
   "app": {
+    "settings": {
+      "lang": "en-US",
+      "dir": "ltr"
+    },
+
     "layout": {
       "metadata": {
-        "title": "",
-        "description": "",
+        "title": "Vheexa | Rent Any Vehicle Easily and Quickly",
+        "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — with competitive prices and a seamless booking experience in minutes.",
 
         "icons": {
           "icon": [
@@ -34,43 +39,40 @@
 
         "openGraph": {},
 
-        "creator": "ڤيكسا",
+        "creator": "vheexa",
         "authors": [
           {
-            "name": "نواف الرمادي",
+            "name": "nawaf alramadi",
             "url": "https://www.alramadi.me"
           }
         ]
-      },
-
-      "lang": "ar-SA",
-      "dir": "rtl"
+      }
     },
 
     "user": {
       "layout": {
         "metadata": {
-          "title": "مستخدم عادي | ڤيكسا",
-          "description": "ڤيكسا هو منصة مبتكرة لتأجير جميع أنواع المركبات، من السيارات إلى الدراجات والشاحنات، بأسعار تنافسية وتجربة سهلة وسريعة لحجز ما يناسب احتياجاتك."
+          "title": "Regular User | Vheexa",
+          "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
         },
 
         "header": {
           "logo": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-            "alt": "شعار شركة ڤيكسا"
+            "alt": "Vheexa Company Logo"
           },
 
-          "search-placeholder": "البحث...",
+          "search-placeholder": "Search...",
 
-          "signin-label": "سجل دخول الآن",
+          "signin-label": "Sign in now",
 
           "languages": {
-            "placeholder": "ابحث عن لغتك...",
-            "when-empty": "لم يتم العثور على لغات مطابقة",
+            "placeholder": "Search your language...",
+            "when-empty": "No matching languages found",
 
             "continents": [
               {
-                "label": "أفريقيا",
+                "label": "Africa",
                 "countries": [
                   {
                     "dir": "rtl",
@@ -93,7 +95,7 @@
                 ]
               },
               {
-                "label": "أمريكا",
+                "label": "America",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -116,7 +118,7 @@
                 ]
               },
               {
-                "label": "آسيا",
+                "label": "Asia",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -145,7 +147,7 @@
                 ]
               },
               {
-                "label": "أوروبا",
+                "label": "Europe",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -168,7 +170,7 @@
                 ]
               },
               {
-                "label": "أوقيانوسيا",
+                "label": "Oceania",
                 "countries": [
                   {
                     "dir": "ltr",
@@ -188,43 +190,41 @@
           },
 
           "navigation": {
-            "dir": "rtl",
-
             "links": [
               {
                 "id": 1,
-                "label": "روابط سريعة",
+                "label": "Quick Links",
 
                 "submenu": [
                   {
                     "id": 1,
                     "href": "/user",
-                    "label": "الرئيسية",
-                    "description": "الصفحة الرئيسية التي تضم أحدث الأخبار والمميزات."
+                    "label": "Home",
+                    "description": "The main page featuring the latest news and highlights."
                   },
                   {
                     "id": 2,
                     "href": "/user/vehicles",
-                    "label": "المركبات",
-                    "description": "تصفح جميع المركبات المتاحة للإيجار مع خيارات البحث والتصفية."
+                    "label": "Vehicles",
+                    "description": "Browse all available vehicles for rent with search and filter options."
                   },
                   {
                     "id": 3,
                     "href": "/user/blogs",
-                    "label": "المنتدى",
-                    "description": "مقالات ونصائح ومحتوى متجدد حول عالم المركبات والتنقل."
+                    "label": "Blogs",
+                    "description": "Articles, tips, and fresh content about the world of vehicles and mobility."
                   },
                   {
                     "id": 4,
                     "href": "/user/about",
-                    "label": "من نحن",
-                    "description": "تعرف على رؤيتنا ورسالتنا والفريق الذي يقف خلف ڤيكسا."
+                    "label": "About Us",
+                    "description": "Learn about our vision, mission, and the team behind Vheexa."
                   },
                   {
                     "id": 5,
                     "href": "/user/contact",
-                    "label": "اتصل بنا",
-                    "description": "تواصل معنا عبر النماذج أو البريد الإلكتروني أو الهاتف."
+                    "label": "Contact Us",
+                    "description": "Get in touch with us via forms, email, or phone."
                   }
                 ]
               }
@@ -235,362 +235,366 @@
         "footer": {
           "logo": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-            "alt": "شعار شركة ڤيكسا"
+            "alt": "Vheexa Company Logo"
           },
-          "title": "ڤيكسا",
-          "description": "منصة لتأجير جميع أنواع المركبات بسهولة وسرعة، توفر لك خيارات متنوعة بأسعار تنافسية، مع تجربة حجز مريحة وآمنة.",
+          "title": "Vheexa",
+          "description": "A platform for renting all types of vehicles easily and quickly, offering you diverse options at competitive prices, with a safe and comfortable booking experience.",
 
           "quick-links": [
             {
-              "label": "خدماتنا",
+              "label": "Our Services",
               "routes": [
                 {
-                  "label": "مميزات المنصة",
+                  "label": "Platform Features",
                   "href": "#"
                 },
                 {
-                  "label": "الحلول المتوفرة",
+                  "label": "Available Solutions",
                   "href": "#"
                 },
                 {
-                  "label": "عملاؤنا",
+                  "label": "Our Clients",
                   "href": "#"
                 },
                 {
-                  "label": "خطط الأسعار",
+                  "label": "Pricing Plans",
                   "href": "#"
                 },
                 {
-                  "label": "الدعم",
+                  "label": "Support",
                   "href": "#"
                 }
               ]
             },
             {
-              "label": "خياراتنا",
+              "label": "Our Options",
               "routes": [
                 {
-                  "label": "للشركات الناشئة",
+                  "label": "For Startups",
                   "href": "#"
                 },
                 {
-                  "label": "للمستقلين",
+                  "label": "For Freelancers",
                   "href": "#"
                 },
                 {
-                  "label": "للمؤسسات",
+                  "label": "For Enterprises",
                   "href": "#"
                 },
                 {
-                  "label": "للطلاب",
+                  "label": "For Students",
                   "href": "#"
                 },
                 {
-                  "label": "التعاون والعمل الجماعي",
+                  "label": "Collaboration & Teamwork",
                   "href": "#"
                 },
                 {
-                  "label": "التصميم والإبداع",
+                  "label": "Design & Creativity",
                   "href": "#"
                 },
                 {
-                  "label": "إدارة الموارد",
+                  "label": "Resource Management",
                   "href": "#"
                 }
               ]
             },
             {
-              "label": "عن الشركة",
+              "label": "About the Company",
               "routes": [
                 {
-                  "label": "من نحن",
+                  "label": "About Us",
                   "href": "#"
                 },
                 {
-                  "label": "فرص العمل",
+                  "label": "Careers",
                   "href": "#"
                 },
                 {
-                  "label": "المدونة",
+                  "label": "Blog",
                   "href": "#"
                 },
                 {
-                  "label": "الأخبار الصحفية",
+                  "label": "Press Releases",
                   "href": "#"
                 },
                 {
-                  "label": "اتصل بنا",
+                  "label": "Contact Us",
                   "href": "#"
                 },
                 {
-                  "label": "الدعم الفني",
+                  "label": "Technical Support",
                   "href": "#"
                 }
               ]
             },
             {
-              "label": "القوانين والسياسات",
+              "label": "Policies & Terms",
               "routes": [
                 {
-                  "label": "شروط الاستخدام",
+                  "label": "Terms of Use",
                   "href": "#"
                 },
                 {
-                  "label": "سياسة الخصوصية",
+                  "label": "Privacy Policy",
                   "href": "#"
                 },
                 {
-                  "label": "سياسة الكوكيز",
+                  "label": "Cookie Policy",
                   "href": "#"
                 },
                 {
-                  "label": "الأمان والخصوصية",
+                  "label": "Security & Privacy",
                   "href": "#"
                 }
               ]
             }
           ],
 
-          "outro": "<copyright></copyright> <time></time> <span>شركة Vheexa ذ.م.م، جميع الحقوق محفوظة.</span>"
+          "outro": "<copyright></copyright> <time></time> <span>Vheexa LLC, All rights reserved.</span>"
         }
       },
 
       "page": {
         "hero": {
-          "title": "استأجر أي مركبة، بسهولة وسرعة",
-          "description": "ڤيكسا منصة رائدة لتأجير جميع أنواع المركبات، من السيارات إلى الشاحنات والدراجات، بأسعار تنافسية وتجربة حجز سلسة في دقائق.",
+          "title": "Rent Any Vehicle, Quickly and Easily",
+          "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — at competitive prices with a smooth booking experience in just minutes.",
 
           "actions": {
             "book-now": {
               "href": "/user/vehicles",
-              "label": "ابدأ الحجز"
+              "label": "Start Booking"
             },
             "learn-more": {
               "href": "/user/about",
-              "label": "تعرف أكثر"
+              "label": "Learn More"
             }
           },
 
           "credibility": {
-            "label": "موثوقية في كل رحلة",
+            "label": "Trusted for Every Journey",
 
             "items": [
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               },
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-                "alt": "شعار"
+                "alt": "Logo"
               }
             ]
           }
         },
 
         "stats": {
-          "title": "ڤيكسا لتأجير المركبات",
-          "description": "ڤيكسا ليست مجرد منصة لتأجير المركبات، بل منظومة متكاملة تضم خدمات متنوعة، من السيارات إلى الدراجات والشاحنات، مدعومة بواجهات وتقنيات حديثة تساعد الأفراد والشركات على الابتكار وتبسيط التنقل.",
+          "title": "Vheexa Vehicle Rentals",
+          "description": "Vheexa is more than just a vehicle rental platform — it’s a complete ecosystem of services. From cars to bikes and trucks, backed by modern technologies that help individuals and businesses innovate and simplify mobility.",
 
           "metrics": {
-            "description": "منظومة متكاملة مدعومة بأرقام تعكس ثقة عملائنا وشركائنا.",
+            "description": "A complete ecosystem backed by numbers that reflect the trust of our clients and partners.",
 
             "items": [
               {
-                "label": "شركاء",
+                "label": "Partners",
                 "value": 1200
               },
               {
-                "label": "عملاء سعيدون",
+                "label": "Happy Clients",
                 "value": 250000
               },
               {
-                "label": "رحلات مكتملة",
+                "label": "Completed Trips",
                 "value": 540000
               },
               {
-                "label": "مدن مغطاة",
+                "label": "Cities Covered",
                 "value": 75
               }
             ]
           },
 
           "testimonial": {
-            "quote": "استخدام ڤيكسا كان بمثابة اكتشاف قوة جديدة في إدارة التنقل. المنصة تجمع بين السهولة والمرونة، مما يتيح لنا توفير حلول عملية وآمنة للمستخدمين.",
+            "quote": "Using Vheexa was like discovering a new power in mobility management. The platform combines simplicity and flexibility, enabling us to deliver safe and practical solutions to users.",
             "author": {
-              "name": "نواف الرمادي",
-              "role": "الرئيس التنفيذي",
+              "name": "Nawaf Alramadi",
+              "role": "CEO",
               "avatar": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png",
-                "alt": "صورة شخصية"
+                "alt": "Profile picture"
               }
             }
           }
         },
 
         "features": {
-          "title": "مميزات ڤيكسا",
-          "description": "ڤيكسا منصة متكاملة لتأجير جميع أنواع المركبات بسهولة وسرعة، توفر لك تجربة حجز سلسة وآمنة مع خيارات متنوعة تناسب احتياجاتك وميزانيتك، مع دعم كامل وخدمة عملاء مميزة.",
+          "title": "Vheexa Features",
+          "description": "Vheexa is an all-in-one platform for renting any type of vehicle quickly and easily. It offers a seamless and secure booking experience with diverse options tailored to your needs and budget, plus full support and premium customer service.",
 
           "illustration": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-            "alt": "نص بديل"
+            "alt": "Placeholder illustration"
           },
 
           "highlights": [
             {
-              "label": "سهولة الاستخدام",
-              "description": "واجهة بسيطة وسريعة تتيح لك الحجز في دقائق."
+              "label": "Ease of Use",
+              "description": "A simple and fast interface lets you book in minutes."
             },
             {
-              "label": "أسعار تنافسية",
-              "description": "خيارات متعددة تناسب جميع الميزانيات."
+              "label": "Competitive Prices",
+              "description": "Multiple options to fit every budget."
             },
             {
-              "label": "موثوقية وأمان",
-              "description": "شركاء معتمدون ووسائل دفع آمنة."
+              "label": "Trust & Security",
+              "description": "Verified partners and secure payment methods."
             },
             {
-              "label": "تنوع وتغطية",
-              "description": "مركبات متاحة في مختلف المدن والدول."
+              "label": "Variety & Coverage",
+              "description": "Vehicles available across multiple cities and countries."
             }
           ]
         },
 
         "how-it-works": {
-          "title": "كيف تعمل ڤيكسا؟",
-          "description": "خطوات بسيطة وسريعة لاستئجار أي مركبة عبر منصتنا، بدون تعقيد.",
+          "title": "How Does Vheexa Work?",
+          "description": "Simple and quick steps to rent any vehicle through our platform — no hassle.",
 
           "steps": [
             {
-              "label": "احجز",
-              "description": "اختر المركبة المناسبة من بين السيارات، الدراجات أو الشاحنات، وحدد الوقت والمكان بكل سهولة.",
+              "label": "Book",
+              "description": "Choose the right vehicle — cars, bikes, or trucks — and set your preferred time and location easily.",
               "illustration": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-                "alt": "حجز مركبة بسهولة"
+                "alt": "Book a vehicle easily"
               }
             },
             {
-              "label": "استلم",
-              "description": "توجه لنقطة التسليم المحددة أو استلم المركبة حيثما كنت، بسرعة وأمان.",
+              "label": "Pick Up",
+              "description": "Head to the pickup point or get the vehicle delivered to you — fast and secure.",
               "illustration": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-                "alt": "استلام المركبة"
+                "alt": "Vehicle pickup"
               }
             },
             {
-              "label": "أعد",
-              "description": "بعد انتهاء رحلتك، قم بإرجاع المركبة بكل سهولة أو اطلب استلامها من موقعك.",
+              "label": "Return",
+              "description": "After your trip, return the vehicle easily or request pickup from your location.",
               "illustration": {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-                "alt": "إرجاع المركبة"
+                "alt": "Vehicle return"
               }
             }
           ]
         },
 
         "faqs": {
-          "title": "الأسئلة الشائعة",
-          "description": "إجابات على أكثر الأسئلة المطروحة حول ڤيكسا وخدمات تأجير المركبات.",
+          "title": "Frequently Asked Questions",
+          "description": "Answers to the most common questions about Vheexa and vehicle rentals.",
 
           "questions": [
             {
               "id": "faq-booking",
-              "question": "كيف أستأجر مركبة عبر ڤيكسا؟",
-              "answer": "كل ما عليك فعله هو التسجيل في المنصة، اختيار المركبة المناسبة، ثم تحديد وقت ومكان الاستلام والدفع الإلكتروني لإتمام الحجز."
+              "question": "How do I rent a vehicle through Vheexa?",
+              "answer": "Simply sign up on the platform, choose your preferred vehicle, select the time and pickup location, then complete your booking with online payment."
             },
             {
               "id": "faq-vehicles",
-              "question": "ما أنواع المركبات المتاحة؟",
-              "answer": "نوفر مجموعة واسعة من المركبات تشمل السيارات، الدراجات النارية، الشاحنات وحتى المركبات الفاخرة، لتلبية مختلف الاحتياجات."
+              "question": "What types of vehicles are available?",
+              "answer": "We provide a wide range of vehicles including cars, motorcycles, trucks, and even luxury vehicles to meet various needs."
             },
             {
               "id": "faq-cancellation",
-              "question": "هل يمكن إلغاء الحجز؟",
-              "answer": "نعم، يمكنك إلغاء الحجز قبل وقت الاستلام المحدد وفقًا لشروط الإلغاء الموضحة في المنصة."
+              "question": "Can I cancel my booking?",
+              "answer": "Yes, you can cancel your booking before the scheduled pickup time according to the cancellation policy listed on the platform."
             },
             {
               "id": "faq-insurance",
-              "question": "هل الأسعار شاملة للتأمين؟",
-              "answer": "تتضمن معظم المركبات تأمينًا أساسيًا، كما يمكنك إضافة خيارات تأمين إضافية عند إتمام الحجز."
+              "question": "Are prices inclusive of insurance?",
+              "answer": "Most vehicles include basic insurance, with optional add-ons available at checkout."
             },
             {
               "id": "faq-delivery-return",
-              "question": "كيف يتم تسليم وإرجاع المركبة؟",
-              "answer": "يمكنك استلام المركبة من نقطة التسليم المحددة أو طلب توصيلها، وبعد انتهاء الحجز يمكنك إعادتها لنفس النقطة أو طلب استلامها من موقعك."
+              "question": "How are vehicles delivered and returned?",
+              "answer": "You can pick up the vehicle at the designated point or request delivery. After your booking, return it to the same point or request pickup from your location."
             }
           ],
 
-          "help": "لم تجد إجابتك هنا؟ <link>اذهب إلى صفحة الأسئلة الأكثر شيوعًا</link>، وإذا لم تجد ما تبحث عنه، تواصل مع فريق الدعم عبر صفحة اتصل بنا وسنكون سعداء بمساعدتك."
+          "help": "Didn’t find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we’ll be happy to assist you."
         }
       },
 
       "vehicles": {
         "layout": {
           "metadata": {
-            "title": "المركبات | ڤيكسا",
-            "description": "تصفح جميع أنواع المركبات المتاحة على ڤيكسا، من السيارات والدراجات إلى الشاحنات والمركبات الفاخرة، مع خيارات بحث وتصفية تناسب احتياجاتك."
+            "title": "Vehicles | Vheexa",
+            "description": "Browse all vehicle types available on Vheexa — from cars and bikes to trucks and luxury vehicles — with search and filter options to match your needs."
           }
         },
 
         "page": {
           "hero": {
-            "badge": "جميع الخيارات بين يديك <ar-SA></ar-SA>",
+            "badge": "All options at your fingertips <ArrowUpRight></ArrowUpRight>",
 
-            "title": "اختر المركبة المثالية لرحلتك",
-            "description": "اكتشف مجموعتنا الواسعة من المركبات المتاحة للإيجار. سواء كنت تبحث عن سيارة اقتصادية، دراجة نارية للمتعة، شاحنة للعمل أو مركبة فاخرة للتجارب الخاصة — ڤيكسا توفر لك كل ما تحتاجه بسهولة وسرعة.",
+            "title": "Choose Your Perfect Vehicle",
+            "description": "Explore our wide selection of vehicles for rent. Whether you’re looking for an affordable car, a motorcycle for fun, a truck for work, or a luxury vehicle for special occasions — Vheexa has everything you need, quickly and easily.",
 
             "image": {
               "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-              "alt": "نص بديل"
+              "alt": "Placeholder image"
             }
           }
         }
       }
     },
+
     "auth": {
       "layout": {
         "metadata": {
-          "title": "عنوان",
-          "description": "وصف."
+          "title": {
+            "absolute": "Auth | Vheexa",
+            "template": "%s | Vheexa Auth"
+          },
+          "description": "Access your Vheexa account to manage bookings and vehicles easily and securely."
         }
       },
 
       "page": {
         "image": {
           "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-          "alt": "نص بديل"
+          "alt": "placeholder"
         }
       },
 
       "signin": {
         "layout": {
           "metadata": {
-            "title": "عنوان",
-            "description": "وصف."
+            "title": "Sign In",
+            "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
           }
         }
       }

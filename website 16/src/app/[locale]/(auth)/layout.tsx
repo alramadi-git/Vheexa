@@ -1,11 +1,5 @@
-import type { PropsWithChildren } from "react";
-
 import { Card, CardContent } from "@/components/shadcn/card";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
-
-type TLayout = {
-  props: PropsWithChildren;
-};
 
 export const dynamic = "force-static";
 

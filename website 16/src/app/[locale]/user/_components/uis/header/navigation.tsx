@@ -35,10 +35,8 @@ export default async function NavigationMenuWithDropdown() {
   const navigation: Array<TNavigationItem | TSubNavigationItem> =
     t.raw("navigation.links");
 
-  const dir: Direction = t("navigation.dir") as Direction;
-
   return (
-    <NavigationMenu dir={dir} className="z-20">
+    <NavigationMenu className="z-20">
       <NavigationMenuList>
         {navigation.map((navigationItem) => {
           if ("submenu" in navigationItem)

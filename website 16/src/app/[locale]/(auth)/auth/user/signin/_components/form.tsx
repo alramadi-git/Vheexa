@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Form as ReactHookForm } from "@/components/shadcn/form";
-import Input from "@/components/locals/blocks/input";
+import { Input } from "@/components/locals/blocks/input";
 import { Button } from "@/components/shadcn/button";
 
 type TForm = z.infer<typeof formSchema>;

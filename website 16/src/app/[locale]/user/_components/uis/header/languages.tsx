@@ -89,7 +89,7 @@ export default function Languages({
         </PopoverTrigger>
         <PopoverContent
           className="border-input w-full min-w-[var(--radix-popper-anchor-width)] rounded p-0"
-          align="start"
+          align="end"
         >
           <Command className="rounded">
             <CommandInput placeholder={t("placeholder")} />

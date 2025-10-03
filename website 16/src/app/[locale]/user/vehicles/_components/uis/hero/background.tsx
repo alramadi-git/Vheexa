@@ -21,11 +21,11 @@ export default function Background() {
         cr={1}
         className={cn(
           "mask-[radial-gradient(ellipse,rgba(0,0,0,0.3)_30%,black_50%)]",
-          "dark:fill-slate-700",
+          "-z-50 dark:fill-slate-700",
         )}
       />
       <Particles
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 -z-50"
         quantity={100}
         ease={80}
         color={isLightTheme ? "#000" : "#fff"}

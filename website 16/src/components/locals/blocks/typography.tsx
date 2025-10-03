@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, JSX } from "react";
 import { cn } from "@/utilities/cn";
 
 function Section({ className, children, ...props }: ComponentProps<"section">) {
@@ -27,14 +27,25 @@ function Intro({ className, children, ...props }: ComponentProps<"div">) {
   );
 }
 
-function Title({ className, children, ...props }: ComponentProps<"h2">) {
+enum TITLE {
+  H1 = "h1",
+  H2 = "h2",
+}
+function Title({
+  level = TITLE.H2,
+  className,
+  children,
+  ...props
+}: (ComponentProps<"h1"> | ComponentProps<"h2">) & { level?: TITLE }) {
+  const H = level;
+
   return (
-    <h2
-      className={cn("text-5xl leading-18 font-bold text-balance", className)}
+    <H
+      className={cn("text-5xl leading-18 font-bold text-pretty", className)}
       {...props}
     >
       {children}
-    </h2>
+    </H>
   );
 }
 function Description({ className, children, ...props }: ComponentProps<"p">) {
@@ -76,4 +87,5 @@ function Blockquote({
   );
 }
 
+export { TITLE };
 export { Section, Container, Intro, Title, Description, Kbd, Blockquote };

@@ -1,4 +1,4 @@
-import { Image } from "./entities";
+import { Image } from "./image";
 
 class Partner {
   ID: string;

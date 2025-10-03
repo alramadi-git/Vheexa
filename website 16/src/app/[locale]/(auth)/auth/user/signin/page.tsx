@@ -2,22 +2,27 @@ import type { Metadata } from "next";
 
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import Form from "@/app/[locale]/(auth)/auth/signin/_components/form";
+import Form from "@/app/[locale]/(auth)/auth/user/signin/_components/form";
 import { FaApple, FaGoogle, FaMeta } from "react-icons/fa6";
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/link";
 
 export const dynamic = "force-static";
 export async function generateMetadata(
-  props: PageProps<"/[locale]/auth/signin">,
+  props: PageProps<"/[locale]/auth/user/signin">,
 ): Promise<Metadata> {
   const { locale } = await props.params;
-  const t = await getTranslations({ locale, namespace: "app.auth.signin.layout" });
+  const t = await getTranslations({
+    locale,
+    namespace: "app.auth.signin.layout",
+  });
 
   return t.raw("metadata");
 }
 
-export default async function Page(props: PageProps<"/[locale]/auth/signin">) {
+export default async function Page(
+  props: PageProps<"/[locale]/auth/user/signin">,
+) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 

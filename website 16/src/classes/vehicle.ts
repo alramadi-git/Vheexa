@@ -1,5 +1,5 @@
 import { Partner } from "./partner";
-import { Image } from "./entities";
+import { Image } from "./image";
 
 class Manufacturer {
   public ID: string;
@@ -114,6 +114,7 @@ class Vehicle {
 
 enum VEHICLE_INSTANCE_STATUS {
   AVAILABLE = "available",
+  IN_RENT = "in_rent",
   UNAVAILABLE = "unavailable",
 }
 class VehicleInstance {
@@ -147,4 +148,4 @@ class VehicleInstance {
   }
 }
 
-export { Vehicle, VehicleInstance };
+export { Manufacturer, Color, Category, Vehicle, VehicleInstance };

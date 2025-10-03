@@ -53,7 +53,7 @@ export default async function Layout({
   setRequestLocale(locale);
 
   const [t, messages] = await Promise.all([
-    getTranslations("app.layout"),
+    getTranslations("app.settings"),
     getMessages({ locale }),
   ]);
 

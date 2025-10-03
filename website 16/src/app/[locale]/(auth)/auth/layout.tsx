@@ -35,9 +35,7 @@ export async function generateMetadata(
   return t.raw("metadata");
 }
 
-export default async function Layout(
-  props: LayoutProps<"/[locale]/auth">,
-) {
+export default async function Layout(props: LayoutProps<"/[locale]/auth">) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 

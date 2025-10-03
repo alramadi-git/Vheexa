@@ -1,15 +1,3 @@
-class Image {
-  public ID: string;
-
-  public URL: string;
-
-  constructor(id: string, url: string) {
-    this.ID = id;
-
-    this.URL = url;
-  }
-}
-
 class Location {
   public ID: string;
 
@@ -39,4 +27,4 @@ class Location {
   }
 }
 
-export { Image, Location };
+export { Location };

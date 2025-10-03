@@ -131,4 +131,8 @@
   a {
     @apply cursor-pointer;
   }
+
+  .h-hero {
+    @apply h-[calc(100vh-118px)]
+  }
 }

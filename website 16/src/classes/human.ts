@@ -1,4 +1,5 @@
-import { Image, Location } from "./entities";
+import { Image } from "./image";
+import { Location } from "./location";
 
 abstract class Human {
   public ID: string;
