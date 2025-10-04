@@ -1,11 +1,15 @@
-import { Partner } from "./partner";
-import { Image } from "./image";
+import "reflect-metadata";
+
+import { Expose, Type } from "class-transformer";
+
+import { Partner } from "@/classes/partner";
+import { Image } from "@/classes/image";
 
 class Manufacturer {
-  public ID: string;
-  public Logo: Image;
+  @Expose() public readonly ID: string;
+  @Expose() @Type(() => Image) public readonly Logo: Image;
 
-  public Name: string;
+  @Expose() public readonly Name: string;
 
   public constructor(id: string, logo: Image, name: string) {
     this.ID = id;
@@ -16,10 +20,10 @@ class Manufacturer {
 }
 
 class Color {
-  public ID: string;
+  @Expose() public readonly ID: string;
 
-  public Name: string;
-  public HexCode: string;
+  @Expose() public readonly Name: string;
+  @Expose() public readonly HexCode: string;
 
   public constructor(id: string, name: string, hexCode: string) {
     this.ID = id;
@@ -30,8 +34,8 @@ class Color {
 }
 
 class Category {
-  public ID: string;
-  public Name: string;
+  @Expose() public readonly ID: string;
+  @Expose() public readonly Name: string;
 
   public constructor(id: string, name: string) {
     this.ID = id;
@@ -40,31 +44,34 @@ class Category {
 }
 
 class Vehicle {
-  public ID: string;
-  public Partner: Partner;
+  @Expose() public readonly ID: string;
+  @Expose() @Type(() => Partner) public readonly Partner: Partner;
 
-  public Thumbnail: Image;
-  public Images: Array<Image>;
+  @Expose() @Type(() => Image) public readonly Thumbnail: Image;
 
-  public Manufacturer: Manufacturer;
-  public ManufacturingYear: Date;
+  @Expose() @Type(() => Image) public readonly Images: Array<Image>;
 
-  public Name: string;
-  public Description: string;
+  @Expose()
+  @Type(() => Manufacturer)
+  public readonly Manufacturer: Manufacturer;
+  @Expose() @Type(() => Date) public readonly ManufacturingYear: Date;
 
-  public Colors: Array<Color>;
+  @Expose() public readonly Name: string;
+  @Expose() public readonly Description: string;
 
-  public Category: Category;
+  @Expose() @Type(() => Color) public readonly Colors: Array<Color>;
 
-  public Capacity: number;
+  @Expose() @Type(() => Category) public readonly Category: Category;
 
-  public Price: number;
-  public Discount: number;
+  @Expose() public readonly Capacity: number;
 
-  public Tags: Array<string>;
+  @Expose() public readonly Price: number;
+  @Expose() public readonly Discount: number;
 
-  public UpdatedAt: Date;
-  public CreatedAt: Date;
+  @Expose() public readonly Tags: Array<string>;
+
+  @Expose() @Type(() => Date) public readonly UpdatedAt: Date;
+  @Expose() @Type(() => Date) public readonly CreatedAt: Date;
 
   public constructor(
     id: string,
@@ -112,27 +119,19 @@ class Vehicle {
   }
 }
 
-enum VEHICLE_INSTANCE_STATUS {
-  AVAILABLE = "available",
-  IN_RENT = "in_rent",
-  UNAVAILABLE = "unavailable",
-}
 class VehicleInstance {
-  public ID: string;
-  public Vehicle: Vehicle;
+  @Expose() public readonly ID: string;
+  @Expose() @Type(() => Vehicle) public readonly Vehicle: Vehicle;
 
-  public Color: Color;
+  @Expose() @Type(() => Color) public readonly Color: Color;
 
-  public Status: VEHICLE_INSTANCE_STATUS;
-
-  public UpdateAt: Date;
-  public CreatedAt: Date;
+  @Expose() @Type(() => Date) public readonly UpdateAt: Date;
+  @Expose() @Type(() => Date) public readonly CreatedAt: Date;
 
   public constructor(
     id: string,
     vehicle: Vehicle,
     color: Color,
-    status: VEHICLE_INSTANCE_STATUS,
     updateAt: Date,
     createdAt: Date,
   ) {
@@ -140,8 +139,6 @@ class VehicleInstance {
     this.Vehicle = vehicle;
 
     this.Color = color;
-
-    this.Status = status;
 
     this.UpdateAt = updateAt;
     this.CreatedAt = createdAt;

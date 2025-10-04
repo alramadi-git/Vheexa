@@ -1,4 +1,4 @@
-import { Human } from "./human";
+import { Human } from "@/classes/human";
 
 class User extends Human {}
 

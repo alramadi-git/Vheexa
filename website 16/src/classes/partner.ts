@@ -1,19 +1,22 @@
-import { Image } from "./image";
+import "reflect-metadata";
+
+import { Expose, Type } from "class-transformer";
+import { Image } from "@/classes/image";
 
 class Partner {
-  ID: string;
+  @Expose() public readonly ID: string;
 
-  Banner: Image;
-  Logo: Image;
+  @Expose() @Type(() => Image) public readonly Banner: Image;
+  @Expose() @Type(() => Image) public readonly Logo: Image;
 
-  Handle: string;
-  Name: string;
+  @Expose() public readonly Handle: string;
+  @Expose() public readonly Name: string;
 
-  PhoneNumber: string;
-  Email: string;
+  @Expose() public readonly PhoneNumber: string;
+  @Expose() public readonly Email: string;
 
-  UpdatedAt: Date;
-  CreatedAt: Date;
+  @Expose() @Type(() => Date) public readonly UpdatedAt: Date;
+  @Expose() @Type(() => Date) public readonly CreatedAt: Date;
 
   constructor(
     id: string,

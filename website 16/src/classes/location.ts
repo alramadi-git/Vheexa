@@ -1,15 +1,23 @@
+import "reflect-metadata";
+
+import { Expose } from "class-transformer";
+
 class Location {
-  public ID: string;
+  @Expose() public readonly ID: string;
 
-  public Country: string;
-  public City: string;
-  public Street: string;
+  
+  @Expose() public readonly CountryCode: string;
+  @Expose() public readonly Country: string;
+  
+  @Expose() public readonly City: string;
+  @Expose() public readonly Street: string;
 
-  public Latitude: number;
-  public Longitude: number;
+  @Expose() public readonly Latitude: number;
+  @Expose() public readonly Longitude: number;
 
   constructor(
     id: string,
+    countryCode: string,
     country: string,
     city: string,
     street: string,
@@ -18,7 +26,9 @@ class Location {
   ) {
     this.ID = id;
 
+    this.CountryCode = countryCode;
     this.Country = country;
+
     this.City = city;
     this.Street = street;
 

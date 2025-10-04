@@ -1,25 +1,29 @@
-import { Image } from "./image";
-import { Location } from "./location";
+import "reflect-metadata";
+
+import { Expose, Type } from "class-transformer";
+
+import { Image } from "@/classes/image";
+import { Location } from "@/classes/location";
 
 abstract class Human {
-  public ID: string;
+  @Expose() public readonly ID: string;
 
-  public Avatar: Image;
+  @Expose() @Type(() => Image) public readonly Avatar: Image;
 
-  public Location: Location;
+  @Expose() @Type(() => Location) public readonly Location: Location;
 
-  public FirstName: string;
-  public MidName: string;
-  public LastName: string;
+  @Expose() public readonly FirstName: string;
+  @Expose() public readonly MidName: string;
+  @Expose() public readonly LastName: string;
 
-  public DateOfBirth: Date;
+  @Expose() public readonly DateOfBirth: Date;
 
-  public PhoneNumber: string;
+  @Expose() public readonly PhoneNumber: string;
 
-  public Email: string;
+  @Expose() public readonly Email: string;
 
-  public UpdatedAt: Date;
-  public CreatedAt: Date;
+  @Expose() @Type(() => Date) public readonly UpdatedAt: Date;
+  @Expose() @Type(() => Date) public readonly CreatedAt: Date;
 
   constructor(
     id: string,

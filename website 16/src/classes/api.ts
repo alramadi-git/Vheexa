@@ -1,23 +1,24 @@
+import "reflect-metadata";
+
+import { Expose } from "class-transformer";
+
 interface IResponse {}
 
-abstract class Success implements IResponse {}
+interface ISuccess extends IResponse {}
 
-class SuccessOne<TData> extends Success {
-  public Data: TData;
+class SuccessOne<TData> implements ISuccess {
+  public readonly Data: TData;
 
   constructor(data: TData) {
-    super();
     this.Data = data;
   }
 }
 
-class SuccessMany<TData> extends Success {
-  public Data: Array<TData>;
-  public Pagination: Pagination;
+class SuccessMany<TData> implements ISuccess {
+  public readonly Data: Array<TData>;
+  public readonly Pagination: Pagination;
 
   constructor(data: Array<TData>, pagination: Pagination) {
-    super();
-
     this.Data = data;
     this.Pagination = pagination;
   }
@@ -32,8 +33,8 @@ enum ERROR_CODE {
   SERVER_ERROR = 500,
 }
 class Error implements IResponse {
-  public Code: ERROR_CODE;
-  public Message: string;
+  public readonly Code: ERROR_CODE;
+  public readonly Message: string;
 
   constructor(code: ERROR_CODE, message: string) {
     this.Code = code;
@@ -42,11 +43,11 @@ class Error implements IResponse {
 }
 
 class Pagination {
-  public readonly Page: number;
-  public readonly PageSize: number;
-  public readonly TotalItems: number;
+  @Expose() public readonly Page: number;
+  @Expose() public readonly PageSize: number;
+  @Expose() public readonly TotalItems: number;
 
-  public readonly TotalPages: number;
+  @Expose() public readonly TotalPages: number;
 
   constructor(page: number, pageSize: number, totalItems: number) {
     this.Page = page;
@@ -71,5 +72,5 @@ class Pagination {
   }
 }
 
-export type { IResponse };
-export { Success, SuccessOne, SuccessMany, ERROR_CODE, Error, Pagination };
+export type { IResponse, ISuccess };
+export { SuccessOne, SuccessMany, ERROR_CODE, Error, Pagination };

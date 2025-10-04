@@ -1,0 +1,666 @@
+[
+  {
+    "ID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "Partner": {
+      "ID": "b8b9a2d6-3e1d-4f2f-bb48-2c1b7d7e9c9e",
+      "Banner": {
+        "ID": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "AHMED_QAHTANI",
+      "Name": "Ahmed Al-Qahtani",
+      "PhoneNumber": "+966 501 200 3001",
+      "Email": "ahmed@riyadhmobility.sa",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
+      "Logo": {
+        "ID": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Toyota"
+    },
+    "ManufacturingYear": "2018-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+        "Name": "White",
+        "HexCode": "#FFFFFF"
+      },
+      {
+        "ID": "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+        "Name": "Black",
+        "HexCode": "#000000"
+      }
+    ],
+    "Category": {
+      "ID": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+      "Name": "Sedan"
+    },
+    "Name": "Toyota Model 2018",
+    "Description": "A Sedan vehicle from Toyota manufactured in 2018.",
+    "Capacity": 5,
+    "Price": 65000,
+    "Discount": 0,
+    "Tags": ["Eco", "Family"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "c56a4180-65aa-42ec-a945-5fd21dec0538",
+    "Partner": {
+      "ID": "d9b8c1a7-4f2d-4c1a-8b8f-1a1b2c3d4e5f",
+      "Banner": {
+        "ID": "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "FATIMAH_HARBI",
+      "Name": "Fatimah Al-Harbi",
+      "PhoneNumber": "+966 502 201 3002",
+      "Email": "fatimah.gulf@gmail.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
+      "Logo": {
+        "ID": "7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Honda"
+    },
+    "ManufacturingYear": "2019-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
+        "Name": "Blue",
+        "HexCode": "#00F000"
+      },
+      {
+        "ID": "9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
+        "Name": "Silver",
+        "HexCode": "#C0C111"
+      }
+    ],
+    "Category": { "ID": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e", "Name": "SUV" },
+    "Name": "Honda Model 2019",
+    "Description": "A SUV vehicle from Honda manufactured in 2019.",
+    "Capacity": 7,
+    "Price": 74000,
+    "Discount": 0,
+    "Tags": ["Comfort", "Modern"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "Partner": {
+      "ID": "b8b9a2d6-3e1d-4f2f-bb48-2c1b7d7e9c9e",
+      "Banner": {
+        "ID": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "AHMED_QAHTANI",
+      "Name": "Ahmed Al-Qahtani",
+      "PhoneNumber": "+966 501 200 3001",
+      "Email": "ahmed@riyadhmobility.sa",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "5e6f7a8b-9c0d-1c2d-3e4f-5a6b7c8d9e0f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
+      "Logo": {
+        "ID": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Toyota"
+    },
+    "ManufacturingYear": "2018-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+        "Name": "White",
+        "HexCode": "#FFFFFF"
+      },
+      {
+        "ID": "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+        "Name": "Black",
+        "HexCode": "#000000"
+      }
+    ],
+    "Category": {
+      "ID": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+      "Name": "Sedan"
+    },
+    "Name": "Toyota Model 2018",
+    "Description": "A Sedan vehicle from Toyota manufactured in 2018.",
+    "Capacity": 5,
+    "Price": 65000,
+    "Discount": 0,
+    "Tags": ["Eco", "Family"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "c56a4180-65aa-42ec-a945-5fd21dec0538",
+    "Partner": {
+      "ID": "d9b8c1a7-4f2d-4c1a-8b8f-1a1b2c3d4e5f",
+      "Banner": {
+        "ID": "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "FATIMAH_HARBI",
+      "Name": "Fatimah Al-Harbi",
+      "PhoneNumber": "+966 502 201 3002",
+      "Email": "fatimah.gulf@gmail.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
+      "Logo": {
+        "ID": "7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Honda"
+    },
+    "ManufacturingYear": "2019-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
+        "Name": "Blue",
+        "HexCode": "#00F000"
+      },
+      {
+        "ID": "9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
+        "Name": "Silver",
+        "HexCode": "#C0C111"
+      }
+    ],
+    "Category": { "ID": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e", "Name": "SUV" },
+    "Name": "Honda Model 2019",
+    "Description": "A SUV vehicle from Honda manufactured in 2019.",
+    "Capacity": 7,
+    "Price": 74000,
+    "Discount": 0,
+    "Tags": ["Comfort", "Modern"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "d23f2c60-8b1f-4bcd-9c0f-4f2a2c7d3e1a",
+    "Partner": {
+      "ID": "e2f3a4b5-c6d7-8f9a-0b1c-2d3e4f5a6b7c",
+      "Banner": {
+        "ID": "2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8g",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "MOHAMMED_AL_OTAIBI",
+      "Name": "Mohammed Al-Otaibi",
+      "PhoneNumber": "+966 503 202 3003",
+      "Email": "m.otaibi@najdrent.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8g9h",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8g9h0i",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "6a7b8c9d-0e1f-2a3b-4c5d-6e7f8g9h0i1j",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "7b8c9d0e-1f2a-3b4c-5d6e-7f8g9h0i1j2k",
+      "Logo": {
+        "ID": "8c9d0e1f-2a3b-4c5d-6e7f-8g9h0i1j2k3l",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Nissan"
+    },
+    "ManufacturingYear": "2020-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "9d0e1f2a-3b4c-5d6e-7f8g-9h0i1j2k3l4m",
+        "Name": "Red",
+        "HexCode": "#FF0000"
+      },
+      {
+        "ID": "0e1f2a3b-4c5d-6e7f-8g9h-0i1j2k3l4m5n",
+        "Name": "Gray",
+        "HexCode": "#808080"
+      }
+    ],
+    "Category": {
+      "ID": "1f2a3b4c-5d6e-7f8g-9h0i-1j2k3l4m5n6o",
+      "Name": "Hatchback"
+    },
+    "Name": "Nissan Model 2020",
+    "Description": "A Hatchback vehicle from Nissan manufactured in 2020.",
+    "Capacity": 5,
+    "Price": 58000,
+    "Discount": 0,
+    "Tags": ["Sport", "Compact"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "a7d9b8c1-4f2d-4c1a-8b8f-1a1b2c3d4e5f",
+    "Partner": {
+      "ID": "b6c7d8e9-1f2a-3b4c-5d6e-7f8g9h0i1j2k",
+      "Banner": {
+        "ID": "c8d9e0f1-2a3b-4c5d-6e7f-8g9h0i1j2k3l",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "d9e0f1a2-3b4c-5d6e-7f8g-9h0i1j2k3l4m",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "SAEED_ALMUTAIRY",
+      "Name": "Saeed Al-Mutairy",
+      "PhoneNumber": "+966 504 203 3004",
+      "Email": "saeed.mutairy@hotmail.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "e0f1a2b3-4c5d-6e7f-8g9h-0i1j2k3l4m5n",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "f1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "a2b3c4d5-6e7f-8g9h-0i1j-2k3l4m5n6o7p",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "b3c4d5e6-7f8g-9h0i-1j2k-3l4m5n6o7p8q",
+      "Logo": {
+        "ID": "c4d5e6f7-8g9h-0i1j-2k3l-4m5n6o7p8q9r",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Ford"
+    },
+    "ManufacturingYear": "2021-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "d5e6f7a8-9g0h-1i2j-3k4l-5m6n7o8p9q0r",
+        "Name": "Green",
+        "HexCode": "#00FF00"
+      },
+      {
+        "ID": "e6f7a8b9-0g1h-2i3j-4k5l-6m7n8o9p0q1r",
+        "Name": "Yellow",
+        "HexCode": "#FFFF00"
+      }
+    ],
+    "Category": {
+      "ID": "f7a8b9c0-1g2h-3i4j-5k6l-7m8n9o0p1q2r",
+      "Name": "Convertible"
+    },
+    "Name": "Ford Mustang 2021",
+    "Description": "A Convertible vehicle from Ford manufactured in 2021.",
+    "Capacity": 4,
+    "Price": 85000,
+    "Discount": 0,
+    "Tags": ["Sport", "Luxury"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "b8c9d0e1-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+    "Partner": {
+      "ID": "c9d0e1f2-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+      "Banner": {
+        "ID": "d0e1f2a3-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "e1f2a3b4-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "LAYLA_ALHARRAS",
+      "Name": "Layla Al-Harras",
+      "PhoneNumber": "+966 505 204 3005",
+      "Email": "layla@dubairentals.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "f2a3b4c5-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "a3b4c5d6-7e8f-9a0b-1c2d-3e4f5a6b7c8d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "b4c5d6e7-8f9a-0b1c-2d3e-4f5a6b7c8d9e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "c5d6e7f8-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
+      "Logo": {
+        "ID": "d6e7f8a9-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "BMW"
+    },
+    "ManufacturingYear": "2022-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+        "Name": "Black",
+        "HexCode": "#000000"
+      },
+      {
+        "ID": "f8a9b0c1-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
+        "Name": "White",
+        "HexCode": "#FFFFFF"
+      }
+    ],
+    "Category": {
+      "ID": "a9b0c1d2-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
+      "Name": "Coupe"
+    },
+    "Name": "BMW Series 4 2022",
+    "Description": "A Coupe vehicle from BMW manufactured in 2022.",
+    "Capacity": 4,
+    "Price": 90000,
+    "Discount": 0,
+    "Tags": ["Luxury", "Sport"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "c9d0e1f2-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+    "Partner": {
+      "ID": "d0e1f2a3-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+      "Banner": {
+        "ID": "e1f2a3b4-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "f2a3b4c5-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "OMAR_ALZAMIL",
+      "Name": "Omar Al-Zamil",
+      "PhoneNumber": "+966 506 205 3006",
+      "Email": "omar.zamil@ksaauto.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "a4b5c6d7-8f9a-0b1c-2d3e-4f5a6b7c8d9e",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "b5c6d7e8-9f0a-1b2c-3d4e-5f6a7b8c9d0e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "c6d7e8f9-0a1b-2c3d-4e5f-6a7b8c9d0e1f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "d7e8f9a0-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "Logo": {
+        "ID": "e8f9a0b1-2c3d-4e5f-6a7b-8c9d0e1f2a3b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Mercedes-Benz"
+    },
+    "ManufacturingYear": "2023-01-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "f9a0b1c2-3d4e-5f6a-7b8c-9d0e1f2a3b4c",
+        "Name": "Silver",
+        "HexCode": "#C0C0C0"
+      },
+      {
+        "ID": "a0b1c2d3-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
+        "Name": "Black",
+        "HexCode": "#000000"
+      }
+    ],
+    "Category": {
+      "ID": "b1c2d3e4-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+      "Name": "Luxury Sedan"
+    },
+    "Name": "Mercedes-Benz S-Class 2023",
+    "Description": "A Luxury Sedan vehicle from Mercedes-Benz manufactured in 2023.",
+    "Capacity": 5,
+    "Price": 120000,
+    "Discount": 0,
+    "Tags": ["Luxury", "Premium"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "f1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o",
+    "Partner": {
+      "ID": "g2h3i4j5-6k7l-8m9n-0o1p-2q3r4s5t6u7v",
+      "Banner": {
+        "ID": "h3i4j5k6-7l8m-9n0o-1p2q-3r4s5t6u7v8w",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "i4j5k6l7-8m9n-0o1p-2q3r-4s5t6u7v8w9x",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "KHALED_ALMANSOUR",
+      "Name": "Khaled Al-Mansour",
+      "PhoneNumber": "+966 507 206 3007",
+      "Email": "khaled.mansour@saudimotors.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "j5k6l7m8-9n0o-1p2q-3r4s-5t6u7v8w9x0y",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "k6l7m8n9-0o1p-2q3r-4s5t-6u7v8w9x0y1z",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "l7m8n9o0-1p2q-3r4s-5t6u-7v8w9x0y1z2a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "m8n9o0p1-2q3r-4s5t-6u7v-8w9x0y1z2a3b",
+      "Logo": {
+        "ID": "n9o0p1q2-3r4s-5t6u-7v8w-9x0y1z2a3b4c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Kia"
+    },
+    "ManufacturingYear": "2020-06-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "o0p1q2r3-4s5t-6u7v-8w9x-0y1z2a3b4c5d",
+        "Name": "Orange",
+        "HexCode": "#FFA500"
+      },
+      {
+        "ID": "p1q2r3s4-5t6u-7v8w-9x0y-1z2a3b4c5d6e",
+        "Name": "Blue",
+        "HexCode": "#0000FF"
+      }
+    ],
+    "Category": {
+      "ID": "q2r3s4t5-6u7v-8w9x-0y1z-2a3b4c5d6e7f",
+      "Name": "Crossover"
+    },
+    "Name": "Kia Sportage 2020",
+    "Description": "A Crossover vehicle from Kia manufactured in 2020.",
+    "Capacity": 5,
+    "Price": 67000,
+    "Discount": 0,
+    "Tags": ["Comfort", "Affordable"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "g2h3i4j5-6k7l-8m9n-0o1p-2q3r4s5t6u7v",
+    "Partner": {
+      "ID": "h3i4j5k6-7l8m-9n0o-1p2q-3r4s5t6u7v8w",
+      "Banner": {
+        "ID": "i4j5k6l7-8m9n-0o1p-2q3r-4s5t6u7v8w9x",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "j5k6l7m8-9n0o-1p2q-3r4s-5t6u7v8w9x0y",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "NORA_ALFAHAD",
+      "Name": "Nora Al-Fahad",
+      "PhoneNumber": "+966 508 207 3008",
+      "Email": "nora.fahad@yahoo.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "k6l7m8n9-0o1p-2q3r-4s5t-6u7v8w9x0y1z",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "l7m8n9o0-1p2q-3r4s-5t6u-7v8w9x0y1z2a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "m8n9o0p1-2q3r-4s5t-6u7v-8w9x0y1z2a3b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "n9o0p1q2-3r4s-5t6u-7v8w-9x0y1z2a3b4c",
+      "Logo": {
+        "ID": "o0p1q2r3-4s5t-6u7v-8w9x-0y1z2a3b4c5d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Mazda"
+    },
+    "ManufacturingYear": "2021-03-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "p1q2r3s4-5t6u-7v8w-9x0y-1z2a3b4c5d6e",
+        "Name": "Red",
+        "HexCode": "#FF0000"
+      },
+      {
+        "ID": "q2r3s4t5-6u7v-8w9x-0y1z-2a3b4c5d6e7f",
+        "Name": "Black",
+        "HexCode": "#000000"
+      }
+    ],
+    "Category": {
+      "ID": "r3s4t5u6-7v8w-9x0y-1z2a-3b4c5d6e7f8g",
+      "Name": "Sedan"
+    },
+    "Name": "Mazda 6 2021",
+    "Description": "A Sedan vehicle from Mazda manufactured in 2021.",
+    "Capacity": 5,
+    "Price": 72000,
+    "Discount": 0,
+    "Tags": ["Comfort", "Style"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  }
+]
