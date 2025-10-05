@@ -6,9 +6,9 @@ import type { IService } from "@/services/interfaces/iservice";
 import { Pagination, SuccessMany } from "@/classes/api";
 import { Location } from "@/classes/location";
 import { Category } from "@/classes/vehicle";
-import { Filtration, PaginationQuery } from "@/services/classes/filtration";
+import { FiltrationQuery, PaginationQuery } from "@/services/classes/filtration";
 
-class VehicleFiltration extends Filtration {
+class VehicleFiltrationQuery extends FiltrationQuery {
   public readonly Search: TUndefinable<string>;
   public readonly Category: TUndefinable<Category>;
 
@@ -45,9 +45,9 @@ class VehicleService implements IService {
     return vehicles.find((vehicle) => vehicle.ID === id);
   }
 
-  public static GetMany(filtration: VehicleFiltration) {
+  public static GetMany(filtration: VehicleFiltrationQuery) {
     return new SuccessMany(vehicles, new Pagination(1, 10, 10));
   }
 }
 
-export { VehicleFiltration, VehicleService };
+export { VehicleFiltrationQuery, VehicleService };

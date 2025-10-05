@@ -42,6 +42,7 @@ export default async function Hero() {
 
         <div className="relative size-full">
           <FullHDImage
+            priority
             src={t("image.src")}
             alt={t("image.alt")}
             className="absolute size-full rounded-lg"

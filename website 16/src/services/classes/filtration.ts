@@ -17,7 +17,7 @@ class PaginationQuery {
   }
 }
 
-abstract class Filtration {
+abstract class FiltrationQuery {
   public readonly Pagination: PaginationQuery;
 
   public constructor(pagination: PaginationQuery) {
@@ -26,4 +26,4 @@ abstract class Filtration {
 }
 
 export { PAGE_SIZE };
-export { Filtration, PaginationQuery };
+export { FiltrationQuery, PaginationQuery };

@@ -57,8 +57,8 @@
       "ID": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
       "Name": "Sedan"
     },
-    "Name": "Toyota Model 2018",
-    "Description": "A Sedan vehicle from Toyota manufactured in 2018.",
+    "Name": "Toyota Camry 2018",
+    "Description": "A reliable Sedan from Toyota, perfect for families.",
     "Capacity": 5,
     "Price": 65000,
     "Discount": 0,
@@ -112,17 +112,17 @@
       {
         "ID": "8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
         "Name": "Blue",
-        "HexCode": "#00F000"
+        "HexCode": "#0000FF"
       },
       {
         "ID": "9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
         "Name": "Silver",
-        "HexCode": "#C0C111"
+        "HexCode": "#C0C0C0"
       }
     ],
     "Category": { "ID": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e", "Name": "SUV" },
-    "Name": "Honda Model 2019",
-    "Description": "A SUV vehicle from Honda manufactured in 2019.",
+    "Name": "Honda CR-V 2019",
+    "Description": "Spacious SUV with modern features and great fuel economy.",
     "Capacity": 7,
     "Price": 74000,
     "Discount": 0,
@@ -131,138 +131,7 @@
     "CreatedAt": "2025-10-04T00:00:00Z"
   },
   {
-    "ID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-    "Partner": {
-      "ID": "b8b9a2d6-3e1d-4f2f-bb48-2c1b7d7e9c9e",
-      "Banner": {
-        "ID": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
-      },
-      "Logo": {
-        "ID": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
-      },
-      "Handle": "AHMED_QAHTANI",
-      "Name": "Ahmed Al-Qahtani",
-      "PhoneNumber": "+966 501 200 3001",
-      "Email": "ahmed@riyadhmobility.sa",
-      "UpdatedAt": "2025-10-04T00:00:00Z",
-      "CreatedAt": "2025-10-04T00:00:00Z"
-    },
-    "Thumbnail": {
-      "ID": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
-      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
-    },
-    "Images": [
-      {
-        "ID": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
-      },
-      {
-        "ID": "5e6f7a8b-9c0d-1c2d-3e4f-5a6b7c8d9e0f",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
-      }
-    ],
-    "Manufacturer": {
-      "ID": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
-      "Logo": {
-        "ID": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
-      },
-      "Name": "Toyota"
-    },
-    "ManufacturingYear": "2018-01-01T00:00:00Z",
-    "Colors": [
-      {
-        "ID": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
-        "Name": "White",
-        "HexCode": "#FFFFFF"
-      },
-      {
-        "ID": "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
-        "Name": "Black",
-        "HexCode": "#000000"
-      }
-    ],
-    "Category": {
-      "ID": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
-      "Name": "Sedan"
-    },
-    "Name": "Toyota Model 2018",
-    "Description": "A Sedan vehicle from Toyota manufactured in 2018.",
-    "Capacity": 5,
-    "Price": 65000,
-    "Discount": 0,
-    "Tags": ["Eco", "Family"],
-    "UpdatedAt": "2025-10-04T00:00:00Z",
-    "CreatedAt": "2025-10-04T00:00:00Z"
-  },
-  {
-    "ID": "c56a4180-65aa-42ec-a945-5fd21dec0538",
-    "Partner": {
-      "ID": "d9b8c1a7-4f2d-4c1a-8b8f-1a1b2c3d4e5f",
-      "Banner": {
-        "ID": "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
-      },
-      "Logo": {
-        "ID": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
-      },
-      "Handle": "FATIMAH_HARBI",
-      "Name": "Fatimah Al-Harbi",
-      "PhoneNumber": "+966 502 201 3002",
-      "Email": "fatimah.gulf@gmail.com",
-      "UpdatedAt": "2025-10-04T00:00:00Z",
-      "CreatedAt": "2025-10-04T00:00:00Z"
-    },
-    "Thumbnail": {
-      "ID": "3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d",
-      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
-    },
-    "Images": [
-      {
-        "ID": "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
-      },
-      {
-        "ID": "5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
-      }
-    ],
-    "Manufacturer": {
-      "ID": "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
-      "Logo": {
-        "ID": "7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
-      },
-      "Name": "Honda"
-    },
-    "ManufacturingYear": "2019-01-01T00:00:00Z",
-    "Colors": [
-      {
-        "ID": "8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
-        "Name": "Blue",
-        "HexCode": "#00F000"
-      },
-      {
-        "ID": "9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
-        "Name": "Silver",
-        "HexCode": "#C0C111"
-      }
-    ],
-    "Category": { "ID": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e", "Name": "SUV" },
-    "Name": "Honda Model 2019",
-    "Description": "A SUV vehicle from Honda manufactured in 2019.",
-    "Capacity": 7,
-    "Price": 74000,
-    "Discount": 0,
-    "Tags": ["Comfort", "Modern"],
-    "UpdatedAt": "2025-10-04T00:00:00Z",
-    "CreatedAt": "2025-10-04T00:00:00Z"
-  },
-  {
-    "ID": "d23f2c60-8b1f-4bcd-9c0f-4f2a2c7d3e1a",
+    "ID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
     "Partner": {
       "ID": "e2f3a4b5-c6d7-8f9a-0b1c-2d3e4f5a6b7c",
       "Banner": {
@@ -270,7 +139,7 @@
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
       },
       "Logo": {
-        "ID": "3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8g",
+        "ID": "3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
       },
       "Handle": "MOHAMMED_AL_OTAIBI",
@@ -281,23 +150,23 @@
       "CreatedAt": "2025-10-04T00:00:00Z"
     },
     "Thumbnail": {
-      "ID": "4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8g9h",
+      "ID": "4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b",
       "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
     },
     "Images": [
       {
-        "ID": "5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8g9h0i",
+        "ID": "5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b0c",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
       },
       {
-        "ID": "6a7b8c9d-0e1f-2a3b-4c5d-6e7f8g9h0i1j",
+        "ID": "6a7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
       }
     ],
     "Manufacturer": {
-      "ID": "7b8c9d0e-1f2a-3b4c-5d6e-7f8g9h0i1j2k",
+      "ID": "7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e",
       "Logo": {
-        "ID": "8c9d0e1f-2a3b-4c5d-6e7f-8g9h0i1j2k3l",
+        "ID": "8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
       },
       "Name": "Nissan"
@@ -305,22 +174,22 @@
     "ManufacturingYear": "2020-01-01T00:00:00Z",
     "Colors": [
       {
-        "ID": "9d0e1f2a-3b4c-5d6e-7f8g-9h0i1j2k3l4m",
+        "ID": "9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a",
         "Name": "Red",
         "HexCode": "#FF0000"
       },
       {
-        "ID": "0e1f2a3b-4c5d-6e7f-8g9h-0i1j2k3l4m5n",
+        "ID": "0e1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
         "Name": "Gray",
         "HexCode": "#808080"
       }
     ],
     "Category": {
-      "ID": "1f2a3b4c-5d6e-7f8g-9h0i-1j2k3l4m5n6o",
+      "ID": "1f2a3b4c-5d6e-7f8a-9b0c-1d2e3f4a5b6c",
       "Name": "Hatchback"
     },
-    "Name": "Nissan Model 2020",
-    "Description": "A Hatchback vehicle from Nissan manufactured in 2020.",
+    "Name": "Nissan Versa 2020",
+    "Description": "Compact and efficient hatchback for city driving.",
     "Capacity": 5,
     "Price": 58000,
     "Discount": 0,
@@ -329,15 +198,15 @@
     "CreatedAt": "2025-10-04T00:00:00Z"
   },
   {
-    "ID": "a7d9b8c1-4f2d-4c1a-8b8f-1a1b2c3d4e5f",
+    "ID": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
     "Partner": {
-      "ID": "b6c7d8e9-1f2a-3b4c-5d6e-7f8g9h0i1j2k",
+      "ID": "b6c7d8e9-1f2a-3b4c-5d6e-7f8a9b0c1d2e",
       "Banner": {
-        "ID": "c8d9e0f1-2a3b-4c5d-6e7f-8g9h0i1j2k3l",
+        "ID": "c8d9e0f1-2a3b-4c5d-6e7f-8a9b0c1d2e3f",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
       },
       "Logo": {
-        "ID": "d9e0f1a2-3b4c-5d6e-7f8g-9h0i1j2k3l4m",
+        "ID": "d9e0f1a2-3b4c-5d6e-7f8a-9b0c1d2e3f4a",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
       },
       "Handle": "SAEED_ALMUTAIRY",
@@ -348,23 +217,23 @@
       "CreatedAt": "2025-10-04T00:00:00Z"
     },
     "Thumbnail": {
-      "ID": "e0f1a2b3-4c5d-6e7f-8g9h-0i1j2k3l4m5n",
+      "ID": "e0f1a2b3-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
       "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
     },
     "Images": [
       {
-        "ID": "f1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o",
+        "ID": "f1a2b3c4-5d6e-7f8a-9b0c-1d2e3f4a5b6c",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
       },
       {
-        "ID": "a2b3c4d5-6e7f-8g9h-0i1j-2k3l4m5n6o7p",
+        "ID": "a2b3c4d5-6e7f-8a9b-0c1d-2e3f4a5b6c7d",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
       }
     ],
     "Manufacturer": {
-      "ID": "b3c4d5e6-7f8g-9h0i-1j2k-3l4m5n6o7p8q",
+      "ID": "b3c4d5e6-7f8a-9b0c-1d2e-3f4a5b6c7d8e",
       "Logo": {
-        "ID": "c4d5e6f7-8g9h-0i1j-2k3l-4m5n6o7p8q9r",
+        "ID": "c4d5e6f7-8a9b-0c1d-2e3f-4a5b6c7d8e9f",
         "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
       },
       "Name": "Ford"
@@ -372,22 +241,22 @@
     "ManufacturingYear": "2021-01-01T00:00:00Z",
     "Colors": [
       {
-        "ID": "d5e6f7a8-9g0h-1i2j-3k4l-5m6n7o8p9q0r",
+        "ID": "d5e6f7a8-9b0c-1d2e-3f4a-5b6c7d8e9f0a",
         "Name": "Green",
-        "HexCode": "#00FF00"
+        "HexCode": "#008000"
       },
       {
-        "ID": "e6f7a8b9-0g1h-2i3j-4k5l-6m7n8o9p0q1r",
+        "ID": "e6f7a8b9-0c1d-2e3f-4a5b-6c7d8e9f0a1b",
         "Name": "Yellow",
         "HexCode": "#FFFF00"
       }
     ],
     "Category": {
-      "ID": "f7a8b9c0-1g2h-3i4j-5k6l-7m8n9o0p1q2r",
+      "ID": "f7a8b9c0-1d2e-3f4a-5b6c-7d8e9f0a1b2c",
       "Name": "Convertible"
     },
-    "Name": "Ford Mustang 2021",
-    "Description": "A Convertible vehicle from Ford manufactured in 2021.",
+    "Name": "Ford Mustang Convertible 2021",
+    "Description": "Iconic American muscle car with open-top driving.",
     "Capacity": 4,
     "Price": 85000,
     "Discount": 0,
@@ -396,7 +265,7 @@
     "CreatedAt": "2025-10-04T00:00:00Z"
   },
   {
-    "ID": "b8c9d0e1-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+    "ID": "c3d4e5f6-a7b8-9012-cdef-123456789012",
     "Partner": {
       "ID": "c9d0e1f2-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
       "Banner": {
@@ -453,8 +322,8 @@
       "ID": "a9b0c1d2-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
       "Name": "Coupe"
     },
-    "Name": "BMW Series 4 2022",
-    "Description": "A Coupe vehicle from BMW manufactured in 2022.",
+    "Name": "BMW 4 Series Coupe 2022",
+    "Description": "Elegant and powerful luxury coupe with cutting-edge tech.",
     "Capacity": 4,
     "Price": 90000,
     "Discount": 0,
@@ -463,7 +332,7 @@
     "CreatedAt": "2025-10-04T00:00:00Z"
   },
   {
-    "ID": "c9d0e1f2-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+    "ID": "d4e5f6a7-b8c9-0123-def0-234567890123",
     "Partner": {
       "ID": "d0e1f2a3-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
       "Banner": {
@@ -521,7 +390,7 @@
       "Name": "Luxury Sedan"
     },
     "Name": "Mercedes-Benz S-Class 2023",
-    "Description": "A Luxury Sedan vehicle from Mercedes-Benz manufactured in 2023.",
+    "Description": "Flagship luxury sedan with unparalleled comfort and tech.",
     "Capacity": 5,
     "Price": 120000,
     "Discount": 0,
@@ -530,7 +399,7 @@
     "CreatedAt": "2025-10-04T00:00:00Z"
   },
   {
-    "ID": "f1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o",
+    "ID": "e5f6a7b8-c9d0-1234-ef01-345678901234",
     "Partner": {
       "ID": "g2h3i4j5-6k7l-8m9n-0o1p-2q3r4s5t6u7v",
       "Banner": {
@@ -588,7 +457,7 @@
       "Name": "Crossover"
     },
     "Name": "Kia Sportage 2020",
-    "Description": "A Crossover vehicle from Kia manufactured in 2020.",
+    "Description": "Versatile crossover with bold design and smart features.",
     "Capacity": 5,
     "Price": 67000,
     "Discount": 0,
@@ -597,7 +466,7 @@
     "CreatedAt": "2025-10-04T00:00:00Z"
   },
   {
-    "ID": "g2h3i4j5-6k7l-8m9n-0o1p-2q3r4s5t6u7v",
+    "ID": "f6a7b8c9-d0e1-2345-f012-456789012345",
     "Partner": {
       "ID": "h3i4j5k6-7l8m-9n0o-1p2q-3r4s5t6u7v8w",
       "Banner": {
@@ -655,11 +524,142 @@
       "Name": "Sedan"
     },
     "Name": "Mazda 6 2021",
-    "Description": "A Sedan vehicle from Mazda manufactured in 2021.",
+    "Description": "Stylish sedan with premium interior and smooth handling.",
     "Capacity": 5,
     "Price": 72000,
     "Discount": 0,
     "Tags": ["Comfort", "Style"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "a7b8c9d0-e1f2-3456-0123-567890123456",
+    "Partner": {
+      "ID": "b8b9a2d6-3e1d-4f2f-bb48-2c1b7d7e9c9e",
+      "Banner": {
+        "ID": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "AHMED_QAHTANI",
+      "Name": "Ahmed Al-Qahtani",
+      "PhoneNumber": "+966 501 200 3001",
+      "Email": "ahmed@riyadhmobility.sa",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "b8c9d0e1-f2a3-4b5c-6d7e-8f9a0b1c2d3e",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "c9d0e1f2-a3b4-5c6d-7e8f-9a0b1c2d3e4f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "d0e1f2a3-b4c5-6d7e-8f9a-0b1c2d3e4f5a",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+      "Logo": {
+        "ID": "f2a3b4c5-d6e7-8f9a-0b1c-2d3e4f5a6b7c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Hyundai"
+    },
+    "ManufacturingYear": "2022-05-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "a3b4c5d6-e7f8-9a0b-1c2d-3e4f5a6b7c8d",
+        "Name": "White",
+        "HexCode": "#FFFFFF"
+      },
+      {
+        "ID": "b4c5d6e7-f8a9-0b1c-2d3e-4f5a6b7c8d9e",
+        "Name": "Blue",
+        "HexCode": "#0000FF"
+      }
+    ],
+    "Category": { "ID": "c5d6e7f8-a9b0-1c2d-3e4f-5a6b7c8d9e0f", "Name": "SUV" },
+    "Name": "Hyundai Tucson 2022",
+    "Description": "Modern SUV with advanced safety and tech features.",
+    "Capacity": 5,
+    "Price": 78000,
+    "Discount": 0,
+    "Tags": ["Tech", "Family"],
+    "UpdatedAt": "2025-10-04T00:00:00Z",
+    "CreatedAt": "2025-10-04T00:00:00Z"
+  },
+  {
+    "ID": "b8c9d0e1-f2a3-4567-1234-678901234567",
+    "Partner": {
+      "ID": "d9b8c1a7-4f2d-4c1a-8b8f-1a1b2c3d4e5f",
+      "Banner": {
+        "ID": "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png"
+      },
+      "Logo": {
+        "ID": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Handle": "FATIMAH_HARBI",
+      "Name": "Fatimah Al-Harbi",
+      "PhoneNumber": "+966 502 201 3002",
+      "Email": "fatimah.gulf@gmail.com",
+      "UpdatedAt": "2025-10-04T00:00:00Z",
+      "CreatedAt": "2025-10-04T00:00:00Z"
+    },
+    "Thumbnail": {
+      "ID": "e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+      "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
+    "Images": [
+      {
+        "ID": "f2a3b4c5-d6e7-8f9a-0b1c-2d3e4f5a6b7c",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      },
+      {
+        "ID": "a3b4c5d6-e7f8-9a0b-1c2d-3e4f5a6b7c8d",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+      }
+    ],
+    "Manufacturer": {
+      "ID": "b4c5d6e7-f8a9-0b1c-2d3e-4f5a6b7c8d9e",
+      "Logo": {
+        "ID": "c5d6e7f8-a9b0-1c2d-3e4f-5a6b7c8d9e0f",
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+      },
+      "Name": "Chevrolet"
+    },
+    "ManufacturingYear": "2023-02-01T00:00:00Z",
+    "Colors": [
+      {
+        "ID": "d6e7f8a9-b0c1-2d3e-4f5a-6b7c8d9e0f1a",
+        "Name": "Red",
+        "HexCode": "#FF0000"
+      },
+      {
+        "ID": "e7f8a9b0-c1d2-3e4f-5a6b-7c8d9e0f1a2b",
+        "Name": "Black",
+        "HexCode": "#000000"
+      }
+    ],
+    "Category": {
+      "ID": "f8a9b0c1-d2e3-4f5a-6b7c-8d9e0f1a2b3c",
+      "Name": "Pickup"
+    },
+    "Name": "Chevrolet Silverado 2023",
+    "Description": "Powerful and rugged pickup truck for work and adventure.",
+    "Capacity": 6,
+    "Price": 95000,
+    "Discount": 0,
+    "Tags": ["Power", "Utility"],
     "UpdatedAt": "2025-10-04T00:00:00Z",
     "CreatedAt": "2025-10-04T00:00:00Z"
   }

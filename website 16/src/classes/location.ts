@@ -6,9 +6,7 @@ class Location {
   @Expose() public readonly ID: string;
 
   
-  @Expose() public readonly CountryCode: string;
   @Expose() public readonly Country: string;
-  
   @Expose() public readonly City: string;
   @Expose() public readonly Street: string;
 
@@ -17,7 +15,6 @@ class Location {
 
   constructor(
     id: string,
-    countryCode: string,
     country: string,
     city: string,
     street: string,
@@ -26,9 +23,7 @@ class Location {
   ) {
     this.ID = id;
 
-    this.CountryCode = countryCode;
     this.Country = country;
-
     this.City = city;
     this.Street = street;
 

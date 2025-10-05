@@ -1,6 +1,6 @@
 "use client";
 
-import type { TNullable, TUndefinable } from "@/types/nullish";
+import type { TUndefinable } from "@/types/nullish";
 
 import { format } from "date-fns";
 import { cn } from "@/utilities/cn";
@@ -24,10 +24,10 @@ import {
   SelectValue,
 } from "@/components/shadcn/select";
 import { DropdownNavProps, DropdownProps } from "react-day-picker";
-import { Card, CardContent } from "@/components/shadcn/card";
 import { Input } from "@/components/shadcn/input";
+import { Category } from "@/classes/vehicle";
 
-export function Search() {
+export function SearchFilter() {
   return (
     <div className="*:not-first:mt-2">
       <div className="relative">
@@ -51,7 +51,25 @@ export function Search() {
   );
 }
 
-export function PickupCalendar() {
+const categories: Array<Category> = [
+  new Category("00a1b2c3-d4e5-4f6a-b7c8-d9e0f1a2b3c4", "All"),
+  new Category("1a2b3c4d-5e6f-4789-a0b1-c2d3e4f5a6b7", "Car"),
+  new Category("2b3c4d5e-6f7a-4bcd-b1c2-d3e4f5a6b7c8", "Truck"),
+  new Category("3c4d5e6f-7a8b-4def-c2d3-e4f5a6b7c8d9", "Bus"),
+  new Category("4d5e6f7a-8b9c-4f01-d3e4-f5a6b7c8d9e0", "Motorcycle"),
+  new Category("5e6f7a8b-9c0d-4abc-e4f5-a6b7c8d9e0f1", "Bicycle"),
+  new Category("6f7a8b9c-0d1e-4fed-f5a6-b7c8d9e0f1a2", "Boat"),
+  new Category("7a8b9c0d-1e2f-40bc-a6b7-c8d9e0f1a2b3", "Yacht"),
+];
+export function CategoryFilter() {
+  return "";
+}
+
+export function SortingFilter() {
+  return "";
+}
+
+export function PickupCalendarFilter() {
   const id = useId();
   const [date, setDate] = useState<TUndefinable<Date>>();
 
@@ -145,7 +163,7 @@ export function PickupCalendar() {
     </div>
   );
 }
-export function DropoffCalendar() {
+export function DropoffCalendarFilter() {
   const id = useId();
   const [date, setDate] = useState<TUndefinable<Date>>();
 
@@ -240,22 +258,15 @@ export function DropoffCalendar() {
   );
 }
 
-export function Category() {}
-export function Sort() {}
-
 export default function Filtration() {
   return (
-    <div className="space-y-3">
-      <Search />
-      <Card>
-        <CardContent className="grid grid-cols-4 gap-6">
-          {/* <Search /> */}
-          <PickupCalendar />
-          <DropoffCalendar />
-          {/* <Category />
-      <Sort /> */}
-        </CardContent>
-      </Card>
+    <div className="grid grid-cols-2 gap-6">
+      <div></div>
+      <div className="flex gap-3">
+        <SearchFilter />
+        <CategoryFilter />
+        <SortingFilter />
+      </div>
     </div>
   );
 }
