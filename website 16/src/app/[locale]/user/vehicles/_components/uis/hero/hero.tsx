@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/shadcn/badge";
 import { ArrowUpRight } from "lucide-react";
 import { FullHDImage } from "@/components/locals/blocks/image";
+import Image from "next/image";
 
 export default async function Hero() {
   const t = await getTranslations("app.user.vehicles.page.hero");
@@ -45,7 +46,7 @@ export default async function Hero() {
             priority
             src={t("image.src")}
             alt={t("image.alt")}
-            className="absolute size-full rounded-lg"
+            className="absolute z-10 size-full rounded-lg backdrop-brightness-50!"
           />
         </div>
       </Container>

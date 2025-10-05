@@ -9,7 +9,7 @@
       },
       "Logo": {
         "ID": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "AHMED_QAHTANI",
       "Name": "Ahmed Al-Qahtani",
@@ -36,7 +36,7 @@
       "ID": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
       "Logo": {
         "ID": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Toyota"
     },
@@ -53,10 +53,7 @@
         "HexCode": "#000000"
       }
     ],
-    "Category": {
-      "ID": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
-      "Name": "Sedan"
-    },
+    "Category": "Sedan",
     "Name": "Toyota Camry 2018",
     "Description": "A reliable Sedan from Toyota, perfect for families.",
     "Capacity": 5,
@@ -76,7 +73,7 @@
       },
       "Logo": {
         "ID": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "FATIMAH_HARBI",
       "Name": "Fatimah Al-Harbi",
@@ -103,7 +100,7 @@
       "ID": "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
       "Logo": {
         "ID": "7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Honda"
     },
@@ -120,7 +117,7 @@
         "HexCode": "#C0C0C0"
       }
     ],
-    "Category": { "ID": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e", "Name": "SUV" },
+    "Category": "SUV",
     "Name": "Honda CR-V 2019",
     "Description": "Spacious SUV with modern features and great fuel economy.",
     "Capacity": 7,
@@ -140,7 +137,7 @@
       },
       "Logo": {
         "ID": "3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "MOHAMMED_AL_OTAIBI",
       "Name": "Mohammed Al-Otaibi",
@@ -167,7 +164,7 @@
       "ID": "7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e",
       "Logo": {
         "ID": "8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Nissan"
     },
@@ -184,10 +181,7 @@
         "HexCode": "#808080"
       }
     ],
-    "Category": {
-      "ID": "1f2a3b4c-5d6e-7f8a-9b0c-1d2e3f4a5b6c",
-      "Name": "Hatchback"
-    },
+    "Category": "Hatchback",
     "Name": "Nissan Versa 2020",
     "Description": "Compact and efficient hatchback for city driving.",
     "Capacity": 5,
@@ -207,7 +201,7 @@
       },
       "Logo": {
         "ID": "d9e0f1a2-3b4c-5d6e-7f8a-9b0c1d2e3f4a",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "SAEED_ALMUTAIRY",
       "Name": "Saeed Al-Mutairy",
@@ -234,7 +228,7 @@
       "ID": "b3c4d5e6-7f8a-9b0c-1d2e-3f4a5b6c7d8e",
       "Logo": {
         "ID": "c4d5e6f7-8a9b-0c1d-2e3f-4a5b6c7d8e9f",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Ford"
     },
@@ -251,10 +245,7 @@
         "HexCode": "#FFFF00"
       }
     ],
-    "Category": {
-      "ID": "f7a8b9c0-1d2e-3f4a-5b6c-7d8e9f0a1b2c",
-      "Name": "Convertible"
-    },
+    "Category": "Convertible",
     "Name": "Ford Mustang Convertible 2021",
     "Description": "Iconic American muscle car with open-top driving.",
     "Capacity": 4,
@@ -274,7 +265,7 @@
       },
       "Logo": {
         "ID": "e1f2a3b4-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "LAYLA_ALHARRAS",
       "Name": "Layla Al-Harras",
@@ -301,7 +292,7 @@
       "ID": "c5d6e7f8-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
       "Logo": {
         "ID": "d6e7f8a9-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "BMW"
     },
@@ -318,10 +309,7 @@
         "HexCode": "#FFFFFF"
       }
     ],
-    "Category": {
-      "ID": "a9b0c1d2-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
-      "Name": "Coupe"
-    },
+    "Category": "Coupe",
     "Name": "BMW 4 Series Coupe 2022",
     "Description": "Elegant and powerful luxury coupe with cutting-edge tech.",
     "Capacity": 4,
@@ -341,7 +329,7 @@
       },
       "Logo": {
         "ID": "f2a3b4c5-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "OMAR_ALZAMIL",
       "Name": "Omar Al-Zamil",
@@ -368,7 +356,7 @@
       "ID": "d7e8f9a0-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
       "Logo": {
         "ID": "e8f9a0b1-2c3d-4e5f-6a7b-8c9d0e1f2a3b",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Mercedes-Benz"
     },
@@ -385,10 +373,7 @@
         "HexCode": "#000000"
       }
     ],
-    "Category": {
-      "ID": "b1c2d3e4-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
-      "Name": "Luxury Sedan"
-    },
+    "Category": "Luxury Sedan",
     "Name": "Mercedes-Benz S-Class 2023",
     "Description": "Flagship luxury sedan with unparalleled comfort and tech.",
     "Capacity": 5,
@@ -408,7 +393,7 @@
       },
       "Logo": {
         "ID": "i4j5k6l7-8m9n-0o1p-2q3r-4s5t6u7v8w9x",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "KHALED_ALMANSOUR",
       "Name": "Khaled Al-Mansour",
@@ -435,7 +420,7 @@
       "ID": "m8n9o0p1-2q3r-4s5t-6u7v-8w9x0y1z2a3b",
       "Logo": {
         "ID": "n9o0p1q2-3r4s-5t6u-7v8w-9x0y1z2a3b4c",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Kia"
     },
@@ -452,10 +437,7 @@
         "HexCode": "#0000FF"
       }
     ],
-    "Category": {
-      "ID": "q2r3s4t5-6u7v-8w9x-0y1z-2a3b4c5d6e7f",
-      "Name": "Crossover"
-    },
+    "Category": "Crossover",
     "Name": "Kia Sportage 2020",
     "Description": "Versatile crossover with bold design and smart features.",
     "Capacity": 5,
@@ -475,7 +457,7 @@
       },
       "Logo": {
         "ID": "j5k6l7m8-9n0o-1p2q-3r4s-5t6u7v8w9x0y",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "NORA_ALFAHAD",
       "Name": "Nora Al-Fahad",
@@ -502,7 +484,7 @@
       "ID": "n9o0p1q2-3r4s-5t6u-7v8w-9x0y1z2a3b4c",
       "Logo": {
         "ID": "o0p1q2r3-4s5t-6u7v-8w9x-0y1z2a3b4c5d",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Mazda"
     },
@@ -519,10 +501,7 @@
         "HexCode": "#000000"
       }
     ],
-    "Category": {
-      "ID": "r3s4t5u6-7v8w-9x0y-1z2a-3b4c5d6e7f8g",
-      "Name": "Sedan"
-    },
+    "Category": "Sedan",
     "Name": "Mazda 6 2021",
     "Description": "Stylish sedan with premium interior and smooth handling.",
     "Capacity": 5,
@@ -542,7 +521,7 @@
       },
       "Logo": {
         "ID": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "AHMED_QAHTANI",
       "Name": "Ahmed Al-Qahtani",
@@ -569,7 +548,7 @@
       "ID": "e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
       "Logo": {
         "ID": "f2a3b4c5-d6e7-8f9a-0b1c-2d3e4f5a6b7c",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Hyundai"
     },
@@ -586,7 +565,7 @@
         "HexCode": "#0000FF"
       }
     ],
-    "Category": { "ID": "c5d6e7f8-a9b0-1c2d-3e4f-5a6b7c8d9e0f", "Name": "SUV" },
+    "Category": "SUV",
     "Name": "Hyundai Tucson 2022",
     "Description": "Modern SUV with advanced safety and tech features.",
     "Capacity": 5,
@@ -606,7 +585,7 @@
       },
       "Logo": {
         "ID": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Handle": "FATIMAH_HARBI",
       "Name": "Fatimah Al-Harbi",
@@ -633,7 +612,7 @@
       "ID": "b4c5d6e7-f8a9-0b1c-2d3e-4f5a6b7c8d9e",
       "Logo": {
         "ID": "c5d6e7f8-a9b0-1c2d-3e4f-5a6b7c8d9e0f",
-        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/assets/brand/logo.png"
+        "URL": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png"
       },
       "Name": "Chevrolet"
     },
@@ -650,10 +629,7 @@
         "HexCode": "#000000"
       }
     ],
-    "Category": {
-      "ID": "f8a9b0c1-d2e3-4f5a-6b7c-8d9e0f1a2b3c",
-      "Name": "Pickup"
-    },
+    "Category": "Pickup",
     "Name": "Chevrolet Silverado 2023",
     "Description": "Powerful and rugged pickup truck for work and adventure.",
     "Capacity": 6,

@@ -5,12 +5,35 @@ import type { IService } from "@/services/interfaces/iservice";
 
 import { Pagination, SuccessMany } from "@/classes/api";
 import { Location } from "@/classes/location";
-import { Category } from "@/classes/vehicle";
-import { FiltrationQuery, PaginationQuery } from "@/services/classes/filtration";
+import {
+  FiltrationQuery,
+  PaginationQuery,
+} from "@/services/classes/filtration";
+
+class CategoryQuery {
+  public readonly ID: string;
+  public readonly Label: string;
+
+  public constructor(id: string, label: string) {
+    this.ID = id;
+    this.Label = label;
+  }
+}
+
+class SortingQuery {
+  public readonly ID: string;
+  public readonly Label: string;
+
+  public constructor(id: string, label: string) {
+    this.ID = id;
+    this.Label = label;
+  }
+}
 
 class VehicleFiltrationQuery extends FiltrationQuery {
   public readonly Search: TUndefinable<string>;
-  public readonly Category: TUndefinable<Category>;
+  public readonly Category: TUndefinable<CategoryQuery>;
+  public readonly Sorting: TUndefinable<SortingQuery>;
 
   public readonly PickupDate: TUndefinable<Date>;
   public readonly DropoffDate: TUndefinable<Date>;
@@ -21,7 +44,7 @@ class VehicleFiltrationQuery extends FiltrationQuery {
   public constructor(
     pagination: PaginationQuery,
     search?: TUndefinable<string>,
-    category?: TUndefinable<Category>,
+    category?: TUndefinable<CategoryQuery>,
     pickupDate?: TUndefinable<Date>,
     dropoffDate?: TUndefinable<Date>,
     pickUpLocation?: TUndefinable<Location>,
@@ -50,4 +73,4 @@ class VehicleService implements IService {
   }
 }
 
-export { VehicleFiltrationQuery, VehicleService };
+export { CategoryQuery, SortingQuery, VehicleFiltrationQuery, VehicleService };

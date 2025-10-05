@@ -33,16 +33,6 @@ class Color {
   }
 }
 
-class Category {
-  @Expose() public readonly ID: string;
-  @Expose() public readonly Name: string;
-
-  public constructor(id: string, name: string) {
-    this.ID = id;
-    this.Name = name;
-  }
-}
-
 class Vehicle {
   @Expose() public readonly ID: string;
   @Expose() @Type(() => Partner) public readonly Partner: Partner;
@@ -61,7 +51,7 @@ class Vehicle {
 
   @Expose() @Type(() => Color) public readonly Colors: Array<Color>;
 
-  @Expose() @Type(() => Category) public readonly Category: Category;
+  @Expose() public readonly Category: string;
 
   @Expose() public readonly Capacity: number;
 
@@ -81,7 +71,7 @@ class Vehicle {
     manufacturer: Manufacturer,
     manufacturingYear: Date,
     colors: Array<Color>,
-    category: Category,
+    category: string,
     name: string,
     description: string,
     capacity: number,
@@ -145,4 +135,4 @@ class VehicleInstance {
   }
 }
 
-export { Manufacturer, Color, Category, Vehicle, VehicleInstance };
+export { Manufacturer, Color, Vehicle, VehicleInstance };
