@@ -1,7 +1,6 @@
 import vehicles from "@/services/vehicle/vehicles.json";
 
 import type { TUndefinable } from "@/types/nullish";
-import type { IService } from "@/services/interfaces/iservice";
 import { Pagination, SuccessMany, SuccessOne } from "@/classes/api";
 import {
   PaginationQuery,
@@ -63,7 +62,7 @@ class VehicleFiltrationQuery extends FiltrationQuery {
   }
 }
 
-class VehicleService implements IService {
+class VehicleService {
   public static GetOne(id: string) {
     const vehicle = vehicles.find((vehicle) => vehicle.ID === id);
 
@@ -71,7 +70,7 @@ class VehicleService implements IService {
   }
 
   public static GetMany(filtration: VehicleFiltrationQuery) {
-    return new SuccessMany(vehicles, new Pagination(1, 10, 10000));
+    return new SuccessMany(vehicles, new Pagination(1, 10, 10));
   }
 }
 

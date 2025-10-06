@@ -49,6 +49,7 @@ import {
 } from "@/components/shadcn/select";
 
 import PaginationFilter from "@/components/locals/blocks/pagination";
+import { useSearchParams } from "@/hooks/useSearchParams";
 
 function SearchFilter() {
   return (
@@ -112,7 +113,7 @@ function CategoryFilter() {
         </PopoverTrigger>
         <PopoverContent
           className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
-          align="start"
+          align="end"
         >
           <Command>
             <CommandInput placeholder="Find organization" />
@@ -193,7 +194,7 @@ function SortingFilter() {
         </PopoverTrigger>
         <PopoverContent
           className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
-          align="start"
+          align="end"
         >
           <Command>
             <CommandInput placeholder="Find organization" />
@@ -434,6 +435,8 @@ type TFiltrationProps = {
   pagination: Pagination;
 };
 export default function Filtration(props: TFiltrationProps) {
+  const searchParams = useSearchParams();
+
   return (
     <div className="space-y-3.5">
       <div className="flex gap-3.5">

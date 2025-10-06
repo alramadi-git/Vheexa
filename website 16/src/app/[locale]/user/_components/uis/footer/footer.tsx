@@ -28,7 +28,7 @@ export default async function Footer() {
   const quickLinks: Array<TLinkGroup> = t.raw("quick-links");
   return (
     <footer>
-      <Section className="border-t pt-20">
+      <Section className="border-t py-12">
         <Container>
           <div className="grid gap-12 md:grid-cols-5 md:gap-6 lg:grid-cols-4">
             <div className="space-y-3">

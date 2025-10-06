@@ -62,7 +62,6 @@ export default function Item({ data }: TItemProps) {
           </div>
         </div>
 
-        {/** When the vehicle was created */}
         <ul className="absolute bottom-0 left-0 z-10 flex flex-wrap gap-1 p-3">
           {vehicle.Colors.map((color, index) => (
             <li
@@ -76,8 +75,8 @@ export default function Item({ data }: TItemProps) {
         </ul>
       </CardHeader>
       <CardContent className="space-y-2">
-        <Carousel className="mx-2 w-full max-w-xs">
-          <CarouselContent className="px-2">
+        <Carousel className="w-full max-w-xs">
+          <CarouselContent className="p-2">
             {vehicle.Tags.map((tag, index) => (
               <CarouselItem key={index} className="basis-auto ps-2 select-none">
                 <Badge variant="outline">#{tag}</Badge>
@@ -93,11 +92,13 @@ export default function Item({ data }: TItemProps) {
             {vehicle.ManufacturingYear.getFullYear()}
           </Badge>
         </div>
+
         <CardDescription className="line-clamp-2">
           {vehicle.Description}
         </CardDescription>
 
         <Separator />
+
         <div className="grid grid-cols-2 gap-3">
           <div className="flex items-center gap-1">
             <RiSteeringFill className="size-4" />
@@ -128,10 +129,10 @@ export default function Item({ data }: TItemProps) {
                   {monyFormatter.format(vehicle.Price.Value)}
                 </del>
 
-                <span className="">/</span>
+                <span>/</span>
               </Fragment>
             )}
-            <p className="">A day</p>
+            <p>A day</p>
           </div>
         </div>
 
