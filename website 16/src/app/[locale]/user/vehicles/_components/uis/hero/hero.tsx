@@ -41,12 +41,12 @@ export default async function Hero() {
           </Intro>
         </div>
 
-        <div className="relative size-full">
+        <div className="relative size-full overflow-hidden rounded-lg">
           <FullHDImage
             priority
             src={t("image.src")}
             alt={t("image.alt")}
-            className="absolute z-10 size-full rounded-lg backdrop-brightness-50!"
+            className="absolute z-10 size-full"
           />
         </div>
       </Container>

@@ -1,6 +1,10 @@
 import * as Serialization from "class-transformer";
 
 import { Vehicle } from "@/classes/vehicle";
+
+import { UsersRound, Fuel } from "lucide-react";
+import { RiSteeringFill } from "react-icons/ri";
+
 import {
   Card,
   CardHeader,
@@ -15,14 +19,21 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/shadcn/carousel";
 
 import { Badge } from "@/components/shadcn/badge";
+import { Separator } from "@/components/shadcn/separator";
+import { Button } from "@/components/shadcn/button";
+import { Link } from "@/components/locals/blocks/link";
+import { Mony } from "@/libraries/mony";
+import { Fragment } from "react";
 
-export default function Item(props: unknown) {
-  const vehicle = Serialization.plainToInstance(Vehicle, props);
+type TItemProps = {
+  data: unknown;
+};
+export default function Item({ data }: TItemProps) {
+  const monyFormatter = new Mony();
+  const vehicle = Serialization.plainToInstance(Vehicle, data);
 
   return (
     <Card className="overflow-hidden rounded-md pt-0">
@@ -34,15 +45,15 @@ export default function Item(props: unknown) {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 to-transparent"></div>
 
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-3">
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-1">
           <FullHDImage
             src={vehicle.Partner.Logo.URL}
             alt={vehicle.Partner.Name}
-            className="bg-muted-foreground size-12 rounded-lg p-0.5"
+            className="size-10 rounded-lg"
           />
 
           <div>
-            <h4 className="text-foreground text-lg font-bold">
+            <h4 className="text-foreground text-lg leading-5 font-bold">
               {vehicle.Partner.Name}
             </h4>
             <p className="text-muted-foreground text-sm font-medium">
@@ -85,8 +96,51 @@ export default function Item(props: unknown) {
         <CardDescription className="line-clamp-2">
           {vehicle.Description}
         </CardDescription>
+
+        <Separator />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center gap-1">
+            <RiSteeringFill className="size-4" />
+            <span className="text-sm font-medium">{vehicle.Transmission}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Fuel className="size-4" />
+            <span className="text-sm font-medium">{vehicle.Fuel}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <UsersRound className="size-4" />
+            <span className="text-sm font-medium">
+              {vehicle.Capacity} Capacity
+            </span>
+          </div>
+        </div>
       </CardContent>
-      <CardFooter></CardFooter>
+      <CardFooter className="mt-auto flex items-end gap-3 pb-0">
+        <div>
+          <p className="text-lg leading-normal font-medium">
+            {monyFormatter.format(vehicle.Price.Total())}
+          </p>
+
+          <div className="flex items-center gap-0.5 text-xs">
+            {vehicle.Price.IsDiscounted() && (
+              <Fragment>
+                <del className="leading-normal">
+                  {monyFormatter.format(vehicle.Price.Value)}
+                </del>
+
+                <span className="">/</span>
+              </Fragment>
+            )}
+            <p className="">A day</p>
+          </div>
+        </div>
+
+        <Separator orientation="vertical" />
+
+        <Button asChild className="grow">
+          <Link href={`/user/vehicles/${vehicle.ID}`}>View Details</Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

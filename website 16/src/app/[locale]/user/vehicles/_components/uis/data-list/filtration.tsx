@@ -1,12 +1,13 @@
 "use client";
 
 import type { TUndefinable } from "@/types/nullish";
+
+import { Pagination } from "@/classes/api";
 import { CategoryQuery, SortingQuery } from "@/services/vehicle/vehicle";
 
 import { cn } from "@/utilities/cn";
 
-import { ComponentProps, JSX, useId, useState } from "react";
-
+import { JSX, useId, useState } from "react";
 import {
   ArrowRightIcon,
   CalendarIcon,
@@ -19,8 +20,7 @@ import {
 import { Label } from "@/components/shadcn/label";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-
-import List from "@/components/locals/blocks/list";
+import { Card } from "@/components/shadcn/card";
 
 import { format } from "date-fns";
 import { Calendar } from "@/components/shadcn/calendar";
@@ -47,9 +47,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/select";
-import { Card } from "@/components/shadcn/card";
 
-export function SearchFilter() {
+import PaginationFilter from "@/components/locals/blocks/pagination";
+
+function SearchFilter() {
   return (
     <div className="w-full *:not-first:mt-2">
       <div className="relative">
@@ -83,7 +84,7 @@ const categories: Array<CategoryQuery> = [
   new CategoryQuery("6f7a8b9c-0d1e-4fed-f5a6-b7c8d9e0f1a2", "Boat"),
   new CategoryQuery("7a8b9c0d-1e2f-40bc-a6b7-c8d9e0f1a2b3", "Yacht"),
 ];
-export function CategoryFilter() {
+function CategoryFilter() {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<CategoryQuery["ID"]>(categories[0].ID);
 
@@ -164,7 +165,7 @@ const sortingOptions = [
   new SortingQuery("f6d2c90e-3a6f-4c47-8ab1-0d34b87f21c5", "Nearest"),
   new SortingQuery("1a2b3c4d-5e6f-4789-a0b1-c2d3e4f5a6b7", "Newest"),
 ];
-export function SortingFilter() {
+function SortingFilter() {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<SortingQuery["ID"]>(sortingOptions[0].ID);
 
@@ -239,7 +240,7 @@ export function SortingFilter() {
   );
 }
 
-export function PickupCalendarFilter() {
+function PickupCalendarFilter() {
   const id = useId();
   const [date, setDate] = useState<TUndefinable<Date>>();
 
@@ -333,7 +334,7 @@ export function PickupCalendarFilter() {
     </div>
   );
 }
-export function DropoffCalendarFilter() {
+function DropoffCalendarFilter() {
   const id = useId();
   const [date, setDate] = useState<TUndefinable<Date>>();
 
@@ -428,25 +429,30 @@ export function DropoffCalendarFilter() {
   );
 }
 
-type TProps = {
-  List: JSX.Element;
+type TFiltrationProps = {
+  list: JSX.Element;
+  pagination: Pagination;
 };
-export default function Filtration(props: TProps) {
+export default function Filtration(props: TFiltrationProps) {
   return (
-    <div className="flex gap-3.5">
-      <Card className="relative min-h-full w-[35%] rounded-md">
-        <div className="sticky top-[125px] left-0"></div>
-      </Card>
+    <div className="space-y-3.5">
+      <div className="flex gap-3.5">
+        <Card className="relative min-h-full w-1/4 rounded-md">
+          <div className="sticky top-[125px] left-0"></div>
+        </Card>
 
-      <div className="w-full space-y-3.5">
-        <div className="flex gap-3.5">
-          <SearchFilter />
-          <CategoryFilter />
-          <SortingFilter />
+        <div className="w-full space-y-3.5">
+          <div className="flex gap-3.5">
+            <SearchFilter />
+            <CategoryFilter />
+            <SortingFilter />
+          </div>
+
+          {props.list}
         </div>
-
-        {props.List}
       </div>
+
+      <PaginationFilter pagination={props.pagination} />
     </div>
   );
 }

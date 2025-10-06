@@ -57,11 +57,11 @@ class Pagination {
     this.TotalPages = Math.ceil(this.TotalItems / this.PageSize);
   }
 
-  public Next(): number {
-    let next = this.Page;
-
-    if (this.Page !== this.TotalPages) next++;
-    return next;
+  public IsFirst(): boolean {
+    return this.Page === 1;
+  }
+  public First(): number {
+    return 1;
   }
 
   public Prev(): number {
@@ -69,6 +69,20 @@ class Pagination {
 
     if (this.Page !== 1) prev--;
     return prev;
+  }
+  public Next(): number {
+    let next = this.Page;
+
+    if (this.Page !== this.TotalPages) next++;
+    return next;
+  }
+
+  public IsLast(): boolean {
+    return this.Page === this.TotalPages;
+  }
+
+  public Last(): number {
+    return this.TotalPages;
   }
 }
 

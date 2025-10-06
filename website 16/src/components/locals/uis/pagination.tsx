@@ -5,7 +5,7 @@ import {
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
+  PaginationButton,
 } from "@/components/shadcn/pagination";
 import {
   Select,
@@ -34,7 +34,7 @@ export default function Pagination(props: ClsPagination) {
           <PaginationContent>
             {/* Previous page button */}
             <PaginationItem>
-              <PaginationLink
+              <PaginationButton
                 className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
                 href={props.Page === 1 ? undefined : `#/page/${props.Page - 1}`}
                 aria-label="Go to previous page"
@@ -42,7 +42,7 @@ export default function Pagination(props: ClsPagination) {
                 role={props.Page === 1 ? "link" : undefined}
               >
                 <ChevronLeftIcon size={16} aria-hidden="true" />
-              </PaginationLink>
+              </PaginationButton>
             </PaginationItem>
 
             {/* Left ellipsis (...) */}
@@ -73,7 +73,7 @@ export default function Pagination(props: ClsPagination) {
 
             {/* Next page button */}
             <PaginationItem>
-              <PaginationLink
+              <PaginationButton
                 className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
                 href={
                   props.Page === props.TotalPages
@@ -87,7 +87,7 @@ export default function Pagination(props: ClsPagination) {
                 role={props.Page === props.TotalPages ? "link" : undefined}
               >
                 <ChevronRightIcon size={16} aria-hidden="true" />
-              </PaginationLink>
+              </PaginationButton>
             </PaginationItem>
           </PaginationContent>
         </ShadcnPagination>

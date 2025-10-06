@@ -1,11 +1,13 @@
+"use client";
+
 import {
-  VehicleFiltrationQuery,
   VehicleService,
+  VehicleFiltrationQuery,
 } from "@/services/vehicle/vehicle";
+import { PaginationQuery } from "@/services/classes/filtration";
 
 import { Section, Container } from "@/components/locals/blocks/typography";
 import Filtration from "@/app/[locale]/user/vehicles/_components/uis/data-list/filtration";
-import { PaginationQuery } from "@/services/classes/filtration";
 import List from "@/components/locals/blocks/list";
 import Item from "@/app/[locale]/user/vehicles/_components/uis/data-list/item";
 
@@ -18,16 +20,15 @@ export default function DataList() {
     <Section>
       <Container className="space-y-8">
         <Filtration
-          List={
+          list={
             <List
               items={result.Data}
-              render={(item) => <Item key={item.ID} {...item} />}
+              render={(item) => <Item key={item.ID} data={item} />}
               className="grid grid-cols-3 gap-3.5"
             />
           }
+          pagination={result.Pagination}
         />
-
-        {/* <Pagination /> */}
       </Container>
     </Section>
   );

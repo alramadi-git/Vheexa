@@ -2,13 +2,13 @@ import vehicles from "@/services/vehicle/vehicles.json";
 
 import type { TUndefinable } from "@/types/nullish";
 import type { IService } from "@/services/interfaces/iservice";
-
-import { Pagination, SuccessMany } from "@/classes/api";
-import { Location } from "@/classes/location";
+import { Pagination, SuccessMany, SuccessOne } from "@/classes/api";
 import {
-  FiltrationQuery,
   PaginationQuery,
+  FiltrationQuery,
 } from "@/services/classes/filtration";
+
+import { Location } from "@/classes/location";
 
 class CategoryQuery {
   public readonly ID: string;
@@ -65,11 +65,13 @@ class VehicleFiltrationQuery extends FiltrationQuery {
 
 class VehicleService implements IService {
   public static GetOne(id: string) {
-    return vehicles.find((vehicle) => vehicle.ID === id);
+    const vehicle = vehicles.find((vehicle) => vehicle.ID === id);
+
+    return new SuccessOne(vehicle);
   }
 
   public static GetMany(filtration: VehicleFiltrationQuery) {
-    return new SuccessMany(vehicles, new Pagination(1, 10, 10));
+    return new SuccessMany(vehicles, new Pagination(1, 10, 10000));
   }
 }
 

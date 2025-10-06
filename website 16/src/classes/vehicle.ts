@@ -1,7 +1,8 @@
 import "reflect-metadata";
 
-import { Expose, Type } from "class-transformer";
+import { Expose, Type, Transform } from "class-transformer";
 
+import z4 from "zod/v4";
 import { Partner } from "@/classes/partner";
 import { Image } from "@/classes/image";
 
@@ -33,6 +34,42 @@ class Color {
   }
 }
 
+class Discount extends Number {
+  private static _Validator = z4.number().min(0.0).max(1.0).default(0.0);
+  public readonly Percentage: number;
+
+  public constructor(value: number) {
+    const result = Discount._Validator.safeParse(value);
+    if (result.success === false) throw new Error(result.error.message);
+
+    super(result.data);
+    this.Percentage = 100 * result.data;
+  }
+}
+
+class Price extends Number {
+  public Discount: Discount;
+
+  public constructor(value: number, discount: Discount) {
+    super(value);
+    this.Discount = discount;
+  }
+
+  public IsDiscounted(): boolean {
+    return this.Discount.valueOf() !== 0.0;
+  }
+
+  public get Value(): number {
+    return this.valueOf();
+  }
+  public Total(): number {
+    if (this.IsDiscounted() === false) return this.valueOf();
+
+    const discount = this.valueOf() * this.Discount.valueOf();
+    return this.valueOf() - discount;
+  }
+}
+
 class Vehicle {
   @Expose() public readonly ID: string;
   @Expose() @Type(() => Partner) public readonly Partner: Partner;
@@ -53,10 +90,13 @@ class Vehicle {
 
   @Expose() public readonly Category: string;
 
+  @Expose() public readonly Transmission: string;
+  @Expose() public readonly Fuel: string;
   @Expose() public readonly Capacity: number;
 
-  @Expose() public readonly Price: number;
-  @Expose() public readonly Discount: number;
+  @Expose()
+  @Transform(({ obj }) => new Price(obj.Price, new Discount(obj.Discount)))
+  public readonly Price: Price;
 
   @Expose() public readonly Tags: Array<string>;
 
@@ -74,9 +114,10 @@ class Vehicle {
     category: string,
     name: string,
     description: string,
+    transmission: string,
+    fuel: string,
     capacity: number,
-    price: number,
-    discount: number,
+    price: Price,
     tags: Array<string>,
     updatedAt: Date,
     createdAt: Date,
@@ -97,10 +138,11 @@ class Vehicle {
     this.Name = name;
     this.Description = description;
 
+    this.Transmission = transmission;
+    this.Fuel = fuel;
     this.Capacity = capacity;
 
     this.Price = price;
-    this.Discount = discount;
 
     this.Tags = tags;
 

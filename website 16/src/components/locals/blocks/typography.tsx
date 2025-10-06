@@ -1,4 +1,4 @@
-import type { ComponentProps, JSX } from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
 
 function Section({ className, children, ...props }: ComponentProps<"section">) {

@@ -1,0 +1,110 @@
+"use client";
+
+import { Pagination } from "@/classes/api";
+
+import {
+  ChevronFirstIcon,
+  ChevronLastIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "lucide-react";
+
+import {
+  Pagination as ShadcnPagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationButton,
+} from "@/components/shadcn/pagination";
+
+type TPaginationFilterProps = {
+  pagination: Pagination;
+};
+
+export default function PaginationFilter({
+  pagination,
+}: TPaginationFilterProps) {
+  return (
+    <ShadcnPagination>
+      <PaginationContent>
+        {/* First page button */}
+        <PaginationItem>
+          <PaginationButton
+            variant="outline"
+            aria-label="Go to first page"
+            aria-disabled={pagination.IsFirst() ? true : undefined}
+            role={pagination.IsFirst() ? "link" : undefined}
+            className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
+          >
+            <ChevronFirstIcon size={16} aria-hidden="true" />
+          </PaginationButton>
+        </PaginationItem>
+
+        {/* Previous page button */}
+        <PaginationItem>
+          <PaginationButton
+            variant="outline"
+            aria-label="Go to previous page"
+            aria-disabled={pagination.IsFirst() ? true : undefined}
+            role={pagination.IsFirst() ? "link" : undefined}
+            className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
+          >
+            <ChevronLeftIcon size={16} aria-hidden="true" />
+          </PaginationButton>
+        </PaginationItem>
+
+        {/* Left ellipsis (...) */}
+        {/* {showLeftEllipsis && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )} */}
+
+        {/* Page number links */}
+        {/* {pagination.Pages().map((page) => (
+          <PaginationItem key={page}>
+            <PaginationButton
+              variant="outline"
+              isActive={page === pagination.Page}
+            >
+              {page}
+            </PaginationButton>
+          </PaginationItem>
+        ))} */}
+
+        {/* Right ellipsis (...) */}
+        {/* {showRightEllipsis && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )} */}
+
+        {/* Next page button */}
+        <PaginationItem>
+          <PaginationButton
+            variant="outline"
+            aria-label="Go to next page"
+            aria-disabled={pagination.IsLast() ? true : undefined}
+            role={pagination.IsLast() ? "link" : undefined}
+            className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
+          >
+            <ChevronRightIcon size={16} aria-hidden="true" />
+          </PaginationButton>
+        </PaginationItem>
+
+        {/* Last page button */}
+        <PaginationItem>
+          <PaginationButton
+            variant="outline"
+            aria-label="Go to last page"
+            aria-disabled={pagination.IsLast() ? true : undefined}
+            role={pagination.IsLast() ? "link" : undefined}
+            className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
+          >
+            <ChevronLastIcon size={16} aria-hidden="true" />
+          </PaginationButton>
+        </PaginationItem>
+      </PaginationContent>
+    </ShadcnPagination>
+  );
+}
