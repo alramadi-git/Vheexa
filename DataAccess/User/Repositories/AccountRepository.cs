@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
 using DataAccess.ResponseDTOs;
 
-namespace DataAccess.Repositories.UserRepository;
+namespace DataAccess.User.Repositories;
 
-public class UserRepository
+public class AccountRepository
 {
     private readonly AppDBContext _AppDBContext;
 
-    public UserRepository(AppDBContext appDBContext)
+    public AccountRepository(AppDBContext appDBContext)
     {
         _AppDBContext = appDBContext;
     }
@@ -17,7 +17,7 @@ public class UserRepository
     public async Task UpdateAsync(int userID, UserUpdateRequestDTO userUpdatedData)
     {
         var userQuery = _AppDBContext.Users
-        .Include(user => user.Human).ThenInclude(human => human!.Image)
+        .Include(user => user.Human).ThenInclude(human => human!.Avatar)
         .Include(user => user.Human).ThenInclude(human => human!.Location)
         .Where((user) => user.ID == userID);
 
@@ -26,15 +26,15 @@ public class UserRepository
 
         if (userUpdatedData.Image == null)
         {
-            if (user.Human!.Image != null)
+            if (user.Human!.Avatar != null)
             {
-                _AppDBContext.Images.Remove(user.Human!.Image);
-                user.Human!.Image = null;
+                _AppDBContext.Images.Remove(user.Human!.Avatar);
+                user.Human!.Avatar = null;
             }
         }
         else
         {
-            if (user.Human!.Image == null)
+            if (user.Human!.Avatar == null)
             {
                 var imageEntityEntry = _AppDBContext.Images.Add(
                     new Entities.ImageEntity
@@ -42,18 +42,18 @@ public class UserRepository
                         URL = userUpdatedData.Image.URL,
                     });
 
-                user.Human!.Image = imageEntityEntry.Entity;
+                user.Human!.Avatar = imageEntityEntry.Entity;
             }
             else
             {
-                user.Human!.Image.URL = userUpdatedData.Image.URL;
+                user.Human!.Avatar.URL = userUpdatedData.Image.URL;
             }
         }
 
         user.Human.Location!.Country = userUpdatedData.Location.Country;
         user.Human.Location.City = userUpdatedData.Location.City;
         user.Human.Location.Street = userUpdatedData.Location.Street;
-        
+
         user.Human.Location.Latitude = userUpdatedData.Location.Latitude;
         user.Human.Location.Longitude = userUpdatedData.Location.Longitude;
 

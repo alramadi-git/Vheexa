@@ -6,8 +6,8 @@ import { Image } from "@/classes/image";
 class Partner {
   @Expose() public readonly ID: string;
 
-  @Expose() @Type(() => Image) public readonly Banner: Image;
   @Expose() @Type(() => Image) public readonly Logo: Image;
+  @Expose() @Type(() => Image) public readonly Banner: Image;
 
   @Expose() public readonly Handle: string;
   @Expose() public readonly Name: string;
@@ -20,8 +20,8 @@ class Partner {
 
   constructor(
     id: string,
-    banner: Image,
     logo: Image,
+    banner: Image,
     handle: string,
     name: string,
     phoneNumber: string,
@@ -31,8 +31,8 @@ class Partner {
   ) {
     this.ID = id;
 
-    this.Banner = banner;
     this.Logo = logo;
+    this.Banner = banner;
 
     this.Handle = handle;
     this.Name = name;

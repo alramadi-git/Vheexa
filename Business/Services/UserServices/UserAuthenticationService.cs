@@ -2,20 +2,19 @@ using FluentValidation;
 
 using Business.Validations;
 using Business.Validations.UserValidations;
-
-using DataAccess.Repositories.UserRepository;
 using DataAccess.RequestDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.Repositories;
 
 namespace Business.Services.UserServices;
 
 public class UserAuthenticationService
 {
-    private readonly UserAuthenticationRepository _UserAuthenticationRepository;
+    private readonly AuthenticationRepository _UserAuthenticationRepository;
 
-    public UserAuthenticationService(UserAuthenticationRepository userRepository)
+    public UserAuthenticationService(AuthenticationRepository userRepository)
     {
         _UserAuthenticationRepository = userRepository;
     }

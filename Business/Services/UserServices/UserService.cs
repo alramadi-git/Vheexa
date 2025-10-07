@@ -1,17 +1,16 @@
 using FluentValidation;
 
 using Business.Validations.UserValidations;
-
-using DataAccess.Repositories.UserRepository;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
+using DataAccess.User.Repositories;
 
 namespace Business.Services.UserServices;
 
 public class UserService
 {
-    private readonly UserRepository _UserRepository;
+    private readonly AccountRepository _UserRepository;
 
-    public UserService(UserRepository userRepository)
+    public UserService(AccountRepository userRepository)
     {
         _UserRepository = userRepository;
     }

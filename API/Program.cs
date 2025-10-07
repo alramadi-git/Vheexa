@@ -7,9 +7,9 @@ using Business.Services.MemberServices;
 
 using DataAccess;
 using DataAccess.Repositories.AdminRepository;
-using DataAccess.Repositories.UserRepository;
 using DataAccess.Repositories.PartnerRepository;
 using DataAccess.Repositories.MemberRepositories;
+using DataAccess.User.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder
@@ -33,8 +33,8 @@ builder.Services.AddScoped<AdminRequestToBeAPartnerRepository>();
 builder.Services.AddScoped<UserAuthenticationService>();
 builder.Services.AddScoped<UserService>();
 
-builder.Services.AddScoped<UserAuthenticationRepository>();
-builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<AuthenticationRepository>();
+builder.Services.AddScoped<AccountRepository>();
 
 
 builder.Services.AddScoped<PartnerAuthenticationService>();

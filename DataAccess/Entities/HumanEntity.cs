@@ -2,22 +2,22 @@ namespace DataAccess.Entities;
 
 public class HumanEntity
 {
-    public int ID { get; set; }
+    public string UUID { get; set; }
 
-    public ImageEntity? Image { get; set; }
-    public int? ImageID { get; set; }
+    public ImageEntity? Avatar { get; set; }
+    public int? AvatarUUID { get; set; }
 
-    public LocationEntity? Location { get; set; }
-    public int AddressID { get; set; }
+    public LocationEntity Location { get; set; }
+    public int LocationID { get; set; }
 
-    public required string FirstName { get; set; }
-    public required string MidName { get; set; }
-    public required string LastName { get; set; }
+    public string FirstName { get; set; }
+    public string MidName { get; set; }
+    public string LastName { get; set; }
 
     public DateOnly DateOfBirth { get; set; }
 
-    public required string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public required string Email { get; set; }
-    public required string Password { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
 }

@@ -1,20 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.AspNetCore.Identity;
 
+using DataAccess.Entities;
 using DataAccess.RequestDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
-using DataAccess.Entities;
 
-namespace DataAccess.Repositories.UserRepository;
+namespace DataAccess.User.Repositories;
 
-public class UserAuthenticationRepository
+public class AuthenticationRepository
 {
     private readonly AppDBContext _AppDBContext;
 
-    public UserAuthenticationRepository(AppDBContext appDBContext)
+    public AuthenticationRepository(AppDBContext appDBContext)
     {
         _AppDBContext = appDBContext;
     }
@@ -49,7 +48,7 @@ public class UserAuthenticationRepository
         var HumanEntityEntry = _AppDBContext.Humans.Add(
         new HumanEntity
         {
-            Image = imageEntityEntry?.Entity,
+            Avatar = imageEntityEntry?.Entity,
             Location = AddressEntityEntry.Entity,
 
             FirstName = signedupUserData.FirstName,
@@ -69,7 +68,7 @@ public class UserAuthenticationRepository
             new UserEntity
             {
                 Human = HumanEntityEntry.Entity,
-                
+
                 IsDeleted = false,
                 DeletedAt = null,
 
@@ -84,9 +83,9 @@ public class UserAuthenticationRepository
     public async Task<SuccessResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
     {
         var userQuery = _AppDBContext.Users
-        .Include(user => user.Human).ThenInclude(human => human!.Image)
-        .Include(user => user.Human).ThenInclude(human => human!.Location)
-        .Where((user) => user.Human!.Email == credentials.Email);
+        .Include(user => user.Human).ThenInclude(human => human.Avatar)
+        .Include(user => user.Human).ThenInclude(human => human.Location)
+        .Where((user) => user.Human.Email == credentials.Email);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
         throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
@@ -98,7 +97,7 @@ public class UserAuthenticationRepository
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             var updatableUser = await userQuery.FirstAsync();
-            
+
             updatableUser.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
             await _AppDBContext.SaveChangesAsync();
         }

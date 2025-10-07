@@ -1,19 +1,20 @@
-using DataAccess.ResponseDTOs;
-using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Repositories.UserRepository;
+using DataAccess.ResponseDTOs;
+using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 
-public class UserVehicleRepository
+namespace DataAccess.User.Repositories;
+
+public class VehicleRepository
 {
     private readonly AppDBContext _AppDBContext;
 
-    public UserVehicleRepository(AppDBContext appDBContext)
+    public VehicleRepository(AppDBContext appDBContext)
     {
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessResponseDTO<VehicleEntityDTO>> GetAsync(int vehicleID)
+    public async Task<SuccessResponseDTO<VehicleEntityDTO>> GetOneAsync(int vehicleID)
     {
         var query = _AppDBContext.Vehicles
         .AsNoTracking()
@@ -51,4 +52,6 @@ public class UserVehicleRepository
         var vehicle = new VehicleEntityDTO(data.v_vI.vehicle, data.v_vI.vehicleImages, data.vehicleInstances);
         return new(vehicle);
     }
+
+    public async Task GetManyAsync() { }
 };

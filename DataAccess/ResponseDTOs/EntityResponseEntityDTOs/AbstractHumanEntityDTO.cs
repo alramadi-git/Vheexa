@@ -23,7 +23,7 @@ public abstract class AbstractHumanEntityDTO
     {
         ID = human.ID;
 
-        Image = human.Image == null ? null : new ImageEntityDTO(human.Image);
+        Image = human.Avatar == null ? null : new ImageEntityDTO(human.Avatar);
 
         Location = new LocationEntityDTO(human!.Location!);
 

@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class LocationEntity
 {
-    public int ID { get; set; }
+    public string UUID { get; set; }
 
 
-    public required string Country { get; set; }
-    public required string City { get; set; }
-    public required string Street { get; set; }
+    public string Country { get; set; }
+    public string City { get; set; }
+    public string Street { get; set; }
 
-    public required float Latitude { get; set; }
-    public required float Longitude { get; set; }
+    public float Latitude { get; set; }
+    public float Longitude { get; set; }
 }
