@@ -7,7 +7,10 @@
 
     "layout": {
       "metadata": {
-        "title": "Vheexa | Rent Any Vehicle Easily and Quickly",
+        "title": {
+          "default": "Vheexa | Rent Any Vehicle Easily and Quickly",
+          "template": "%s | Vheexa"
+        },
         "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — with competitive prices and a seamless booking experience in minutes.",
 
         "icons": {
@@ -52,7 +55,11 @@
     "user": {
       "layout": {
         "metadata": {
-          "title": "Regular User | Vheexa",
+          "title": {
+            "default": "User",
+            "template": "%s | User — Vheexa"
+          },
+          
           "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
         },
 
@@ -551,7 +558,7 @@
       "vehicles": {
         "layout": {
           "metadata": {
-            "title": "Vehicles | Vheexa",
+            "title": "Vehicles",
             "description": "Browse all vehicle types available on Vheexa — from cars and bikes to trucks and luxury vehicles — with search and filter options to match your needs."
           }
         },

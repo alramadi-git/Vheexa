@@ -63,9 +63,8 @@ class VehicleFiltrationQuery extends FiltrationQuery {
 }
 
 class VehicleService {
-  public static GetOne(id: string) {
-    const vehicle = vehicles.find((vehicle) => vehicle.ID === id);
-
+  public static GetOne(uuid: string) {
+    const vehicle = vehicles.find((vehicle) => vehicle.ID === uuid)!;
     return new SuccessOne(vehicle);
   }
 

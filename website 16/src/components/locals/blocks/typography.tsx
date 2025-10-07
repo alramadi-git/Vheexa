@@ -24,16 +24,16 @@ function Intro({ className, children, ...props }: ComponentProps<"div">) {
   );
 }
 
-enum TITLE {
+enum LEVEL {
   H1 = "h1",
   H2 = "h2",
 }
 function Title({
-  level = TITLE.H2,
+  level = LEVEL.H2,
   className,
   children,
   ...props
-}: (ComponentProps<"h1"> | ComponentProps<"h2">) & { level?: TITLE }) {
+}: (ComponentProps<"h1"> | ComponentProps<"h2">) & { level?: LEVEL }) {
   const H = level;
 
   return (
@@ -84,5 +84,5 @@ function Blockquote({
   );
 }
 
-export { TITLE };
+export { LEVEL };
 export { Section, Container, Intro, Title, Description, Kbd, Blockquote };

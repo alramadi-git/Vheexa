@@ -6,7 +6,7 @@ import {
   Intro,
   Title,
   Description,
-  TITLE,
+  LEVEL,
 } from "@/components/locals/blocks/typography";
 // import Background from "@/app/[locale]/user/vehicles/_components/uis/hero/background";
 import { Badge } from "@/components/shadcn/badge";
@@ -33,7 +33,7 @@ export default async function Hero() {
           </Badge>
 
           <Intro>
-            <Title level={TITLE.H1} className="text-6xl">
+            <Title level={LEVEL.H1} className="text-6xl">
               {t("title")}
             </Title>
 
