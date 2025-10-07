@@ -34,7 +34,10 @@ export default function PaginationFilter({
 }: TPaginationFilterProps) {
   return (
     <div className="flex items-center justify-start gap-3">
-      <Select defaultValue="10" aria-label="Results per page">
+      <Select
+        defaultValue={pageSizes[1].toString()}
+        aria-label="Results per page"
+      >
         <SelectTrigger
           id="results-per-page"
           className="w-fit whitespace-nowrap"

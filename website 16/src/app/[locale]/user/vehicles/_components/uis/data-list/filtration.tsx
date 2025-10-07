@@ -7,7 +7,9 @@ import { CategoryQuery, SortingQuery } from "@/services/vehicle/vehicle";
 
 import { cn } from "@/utilities/cn";
 
-import { JSX, useId, useState } from "react";
+import { useSearchParams } from "@/hooks/useSearchParams";
+ import { JSX, useId, useState } from "react";
+
 import {
   ArrowRightIcon,
   CalendarIcon,
@@ -49,7 +51,6 @@ import {
 } from "@/components/shadcn/select";
 
 import PaginationFilter from "@/components/locals/blocks/pagination";
-import { useSearchParams } from "@/hooks/useSearchParams";
 
 function SearchFilter() {
   return (
