@@ -1,12 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\alram\\Desktop\\Vheexa\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\Vheexa\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3E1FD410-7CE5-406E-9F6B-5FC501059657}|API\\API.csproj|c:\\users\\dell\\desktop\\vheexa\\api\\controllers\\usercontrollers\\userauthenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E1FD410-7CE5-406E-9F6B-5FC501059657}|API\\API.csproj|solutionrelative:api\\controllers\\usercontrollers\\userauthenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E1FD410-7CE5-406E-9F6B-5FC501059657}|API\\API.csproj|c:\\users\\dell\\desktop\\vheexa\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E1FD410-7CE5-406E-9F6B-5FC501059657}|API\\API.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\Vheexa\\API\\Program.cs",
+              "RelativeDocumentMoniker": "API\\Program.cs",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\Vheexa\\API\\Program.cs",
+              "RelativeToolTip": "API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-28T12:29:54.145Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserAuthenticationController.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\Vheexa\\API\\Controllers\\UserControllers\\UserAuthenticationController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\UserControllers\\UserAuthenticationController.cs",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\Vheexa\\API\\Controllers\\UserControllers\\UserAuthenticationController.cs",
+              "RelativeToolTip": "API\\Controllers\\UserControllers\\UserAuthenticationController.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAowDMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-28T12:28:58.364Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
