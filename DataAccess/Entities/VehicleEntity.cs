@@ -13,34 +13,34 @@ public enum VEHICLE_CATEGORY_OPTION_ENTITY
 
 public class VehicleEntity
 {
-    public int ID { get; set; }
+    public string UUID { get; set; }
 
-    public PartnerEntity? Partner { get; set; }
-    public int PartnerID { get; set; }
+    public PartnerEntity Partner { get; set; }
+    public string PartnerUUID { get; set; }
 
     public ImageEntity? Thumbnail { get; set; }
-    public int? ThumbnailID { get; set; }
+    public string? ThumbnailUUID { get; set; }
 
-    public required string Name { get; set; }
-    public required string Description { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
 
-    public required VEHICLE_CATEGORY_OPTION_ENTITY Category { get; set; }
-    
-    public required string Manufacturer { get; set; }
-    public required DateOnly ManufacturingYear { get; set; }
+    public string Manufacturer { get; set; }
+    public DateOnly ManufacturingYear { get; set; }
 
-    public required short Capacity { get; set; }
+    public string Transmission { get; set; }
+    public short Capacity { get; set; }
+    public string Fuel { get; set; }
 
-    public required string[] Tags { get; set; }
+    public decimal Price { get; set; }
+    public float Discount { get; set; }
 
-    public required decimal Price { get; set; }
-    public required float Discount { get; set; }
+    public string[] Tags { get; set; }
 
-    public required bool IsPublished { get; set; }
+    public bool IsPublished { get; set; }
 
-    public required bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public required DateTime UpdatedAt { get; set; }
-    public required DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

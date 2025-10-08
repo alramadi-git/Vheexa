@@ -1,14 +1,14 @@
 namespace DataAccess.Entities;
 
-public class VehicleImageEntity
+public class VehicleColorEntity
 {
     public string UUID { get; set; }
 
     public VehicleEntity Vehicle { get; set; }
     public string VehicleUUID { get; set; }
 
-    public ImageEntity Image { get; set; }
-    public string ImageUUID { get; set; }
+    public string Name { get; set; }
+    public string HexCode { get; set; }
 
     public bool IsPublished { get; set; }
 

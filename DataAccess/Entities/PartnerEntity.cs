@@ -4,11 +4,11 @@ public class PartnerEntity
 {
     public string UUID { get; set; }
 
-    public ImageEntity Logo { get; set; }
-    public int LogoUUID { get; set; }
+    public ImageEntity? Logo { get; set; }
+    public string? LogoUUID { get; set; }
 
-    public ImageEntity Banner { get; set; }
-    public int BannerUUID { get; set; }
+    public ImageEntity? Banner { get; set; }
+    public string? BannerUUID { get; set; }
 
     public string Handle { get; set; }
 

@@ -2,16 +2,17 @@ namespace DataAccess.Entities;
 
 public class VehicleInstanceEntity
 {
-    public int ID { get; set; }
+    public string UUID { get; set; }
 
-    public VehicleEntity? Vehicle { get; set; }
-    public int VehicleID { get; set; }
+    public VehicleEntity Vehicle { get; set; }
+    public string VehicleUUID { get; set; }
 
-    public ColorEntity? Color { get; set; }
-    public int ColorID { get; set; }
+    public VehicleColorEntity VehicleColor { get; set; }
+    public string VehicleColorUUID { get; set; }
 
-    public int InStock { get; set; }
-    public int InUse { get; set; }
+    public string Plate { get; set; }
+
+    public string Status { get; set; }
 
     public bool IsPublished { get; set; }
 
