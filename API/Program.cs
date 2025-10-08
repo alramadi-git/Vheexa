@@ -1,14 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 
-using Business.Services.AdminServices;
-using Business.Services.UserServices;
-using Business.Services.PartnerServices;
-using Business.Services.MemberServices;
+using API.Models;
+
+using Business.User.Services;
 
 using DataAccess;
-using DataAccess.Repositories.AdminRepository;
-using DataAccess.Repositories.PartnerRepository;
-using DataAccess.Repositories.MemberRepositories;
 using DataAccess.User.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,39 +15,11 @@ builder
 .AddEnvironmentVariables();
 
 builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 
-builder.Services.AddScoped<AdminAuthenticationService>();
-builder.Services.AddScoped<AdminService>();
-builder.Services.AddScoped<AdminUserService>();
-builder.Services.AddScoped<AdminRequestToBeAPartnerService>();
-
-builder.Services.AddScoped<AdminAuthenticationRepository>();
-builder.Services.AddScoped<AdminRepository>();
-builder.Services.AddScoped<AdminUserRepository>();
-builder.Services.AddScoped<AdminRequestToBeAPartnerRepository>();
-
-builder.Services.AddScoped<UserAuthenticationService>();
-builder.Services.AddScoped<UserService>();
-
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AuthenticationRepository>();
-builder.Services.AddScoped<AccountRepository>();
 
-
-builder.Services.AddScoped<PartnerAuthenticationService>();
-builder.Services.AddScoped<PartnerService>();
-builder.Services.AddScoped<PartnerMemberService>();
-builder.Services.AddScoped<PartnerSupportedLocationService>();
-
-builder.Services.AddScoped<PartnerAuthenticationRepository>();
-builder.Services.AddScoped<PartnerRepository>();
-builder.Services.AddScoped<PartnerMemberRepository>();
-builder.Services.AddScoped<PartnerSupportedLocationRepository>();
-
-builder.Services.AddScoped<MemberAuthenticationService>();
-builder.Services.AddScoped<MemberService>();
-
-builder.Services.AddScoped<MemberAuthenticationRepository>();
-builder.Services.AddScoped<MemberRepository>();
 
 
 

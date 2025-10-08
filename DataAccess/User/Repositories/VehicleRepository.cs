@@ -52,7 +52,7 @@ public class VehicleRepository
         var vehicle = await vehicleQuery
         .AsNoTracking()
         .Select(vehicle => new VehicleDTO(vehicle.entity, vehicle.images, vehicle.colors)).FirstOrDefaultAsync()
-        ?? throw new ErrorDTO(STATUS_CODE.NOT_FOUND, "No such vehicle.");
+        ?? throw new ExceptionDTO(STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
         return new SuccessOneDTO<VehicleDTO>(vehicle);
     }
