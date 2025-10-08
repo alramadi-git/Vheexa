@@ -3,13 +3,13 @@ namespace DataAccess.Entities;
 public class PartnerSupportedLocationEntity
 {
 
-    public string UUID { get; set; }
+    public Guid UUID { get; set; }
 
     public PartnerEntity Partner { get; set; }
-    public string PartnerUUID { get; set; }
+    public Guid PartnerUUID { get; set; }
 
     public LocationEntity Location { get; set; }
-    public string LocationUUID { get; set; }
+    public Guid LocationUUID { get; set; }
 
     public bool IsPublished { get; set; }
 

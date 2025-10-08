@@ -6,6 +6,7 @@ using DataAccess.Repositories.PartnerRepository;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
 using DataAccess.RequestDTOs.FiltrationRequestDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.DTOs.Responses;
 
 namespace Business.Services.PartnerServices;
 
@@ -24,7 +25,7 @@ public class PartnerMemberService
         await _PartnerMemberRepository.AddAsync(partnerMemberID, partnerMemberAddData);
     }
 
-    public async Task<DataAccess.ResponseDTOs.SuccessResponseDTO<MemberEntityDTO>> GetAsync(int partnerID, int memberID)
+    public async Task<SuccessOneDTO<MemberEntityDTO>> GetAsync(int partnerID, int memberID)
     {
         var memberIDValidation = new InlineValidator<int>();
 
@@ -36,7 +37,7 @@ public class PartnerMemberService
         return await _PartnerMemberRepository.GetAsync(partnerID, memberID);
     }
 
-    public async Task<DataAccess.ResponseDTOs.SuccessManyResponseDTO<MemberEntityDTO>> GetManyAsync(int partnerMemberID, MemberFiltrationRequestDTO MemberFiltration)
+    public async Task<SuccessManyDTO<MemberEntityDTO>> GetManyAsync(int partnerMemberID, MemberFiltrationRequestDTO MemberFiltration)
     {
         MemberFiltrationValidation.Instance.ValidateAndThrow(MemberFiltration);
         return await _PartnerMemberRepository.GetManyAsync(partnerMemberID, MemberFiltration);

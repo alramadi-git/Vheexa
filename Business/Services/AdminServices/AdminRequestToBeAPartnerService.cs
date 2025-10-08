@@ -5,8 +5,8 @@ using Business.Validations.RequestToBeAPartnerValidations;
 using DataAccess.Repositories.AdminRepository;
 using DataAccess.RequestDTOs.UpdateRequestDTOs;
 using DataAccess.RequestDTOs.FiltrationRequestDTOs;
-using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.DTOs.Responses;
 
 namespace Business.Services.AdminServices;
 
@@ -19,7 +19,7 @@ public class AdminRequestToBeAPartnerService
         _AdminRequestToBeAPartnerRepository = adminRequestToBeAPartnerRepository;
     }
 
-    public async Task<SuccessResponseDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
+    public async Task<SuccessOneDTO<RequestToBeAPartnerEntityDTO>> GetAsync(int requestToBeAPartnerID)
     {
         var IDValidation = new InlineValidator<int>();
 
@@ -34,7 +34,7 @@ public class AdminRequestToBeAPartnerService
         await _AdminRequestToBeAPartnerRepository.UpdateAsync(adminID, requestToBeAPartnerID, requestToBeAPartnerUpdatedData);
     }
 
-    public async Task<SuccessManyResponseDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(RequestToBeAPartnerFiltrationRequestDTO requestsToBeAPartnerFiltration)
+    public async Task<SuccessManyDTO<RequestToBeAPartnerEntityDTO>> GetManyAsync(RequestToBeAPartnerFiltrationRequestDTO requestsToBeAPartnerFiltration)
     {
         RequestToBeAPartnerFiltrationValidation.Instance.ValidateAndThrow(requestsToBeAPartnerFiltration);
         return await _AdminRequestToBeAPartnerRepository.GetManyAsync(requestsToBeAPartnerFiltration);

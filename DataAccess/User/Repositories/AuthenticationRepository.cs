@@ -1,11 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-
-using DataAccess.Entities;
-using DataAccess.RequestDTOs;
-using DataAccess.RequestDTOs.CreateRequestDTOs;
-using DataAccess.ResponseDTOs;
-using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.DTOs.Requests;
+using DataAccess.User.DTOs.Responses;
 
 namespace DataAccess.User.Repositories;
 
@@ -18,90 +14,29 @@ public class AuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task SignupAsync(UserCreateRequestDTO signedupUserData)
-    {
-        var isEmailOrPhoneNumberInUseQuery = _AppDBContext.Humans
-        .Where(human => human.Email == signedupUserData.Email || human.PhoneNumber == signedupUserData.PhoneNumber);
-
-        var isEmailOrPhoneNumberInUse = await isEmailOrPhoneNumberInUseQuery.AnyAsync();
-        if (isEmailOrPhoneNumberInUse == true) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.CONFLICT, "Email or phone number is already in use | If you deleted your account with those credentials, please contact us to restore your account.");
-
-        var imageEntityEntry = signedupUserData.Image == null
-        ? null
-        : _AppDBContext.Images
-        .Add(new ImageEntity
-        {
-            URL = signedupUserData.Image.URL
-        });
-
-        var AddressEntityEntry = _AppDBContext.Addresses.Add(
-        new LocationEntity
-        {
-            Country = signedupUserData.Location.Country,
-            City = signedupUserData.Location.City,
-            Street = signedupUserData.Location.Street,
-            Latitude = signedupUserData.Location.Latitude,
-            Longitude = signedupUserData.Location.Longitude,
-        });
-
-        var passwordHasher = new PasswordHasher<object?>();
-        var HumanEntityEntry = _AppDBContext.Humans.Add(
-        new HumanEntity
-        {
-            Avatar = imageEntityEntry?.Entity,
-            Location = AddressEntityEntry.Entity,
-
-            FirstName = signedupUserData.FirstName,
-            MidName = signedupUserData.MidName,
-            LastName = signedupUserData.LastName,
-
-            DateOfBirth = signedupUserData.DateOfBirth,
-
-            PhoneNumber = signedupUserData.PhoneNumber,
-
-            Email = signedupUserData.Email,
-            Password = passwordHasher.HashPassword(null, signedupUserData.Password),
-        });
-
-        var UserEntityEntry = _AppDBContext.Users
-        .Add(
-            new UserEntity
-            {
-                Human = HumanEntityEntry.Entity,
-
-                IsDeleted = false,
-                DeletedAt = null,
-
-                UpdatedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow,
-            }
-        );
-
-        await _AppDBContext.SaveChangesAsync();
-    }
-
-    public async Task<SuccessResponseDTO<UserEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessOneDTO<UserDTO>> SigninAsync(CredentialsDTO credentials)
     {
         var userQuery = _AppDBContext.Users
         .Include(user => user.Human).ThenInclude(human => human.Avatar)
         .Include(user => user.Human).ThenInclude(human => human.Location)
+        .Where((user) => user.IsDeleted == false)
         .Where((user) => user.Human.Email == credentials.Email);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
-        throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "No such user.");
+        throw new ErrorDTO(STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         var passwordHasher = new PasswordHasher<object?>();
-        var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human!.Password, credentials.Password);
+        var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human.Password, credentials.Password);
 
-        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorDTO(STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
-            var updatableUser = await userQuery.FirstAsync();
+            var trackingUser = await userQuery.FirstAsync();
 
-            updatableUser.Human!.Password = passwordHasher.HashPassword(null, credentials.Password);
+            trackingUser.Human.Password = passwordHasher.HashPassword(null, credentials.Password);
             await _AppDBContext.SaveChangesAsync();
         }
 
-        return new(new(user));
+        return new SuccessOneDTO<UserDTO>(new UserDTO(user));
     }
 };

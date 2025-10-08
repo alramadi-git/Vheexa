@@ -1,10 +1,10 @@
 using FluentValidation;
 
 using Business.Validations;
-using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 using DataAccess.Repositories.MemberRepositories;
+using DataAccess.User.DTOs.Requests;
+using DataAccess.User.DTOs.Responses;
 
 namespace Business.Services.MemberServices;
 
@@ -17,7 +17,7 @@ public class MemberAuthenticationService
         _MemberAuthenticationRepository = memberRepository;
     }
 
-    public async Task<SuccessResponseDTO<MemberEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessOneDTO<MemberEntityDTO>> SigninAsync(CredentialsDTO credentials)
     {
         CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _MemberAuthenticationRepository.SigninAsync(credentials);

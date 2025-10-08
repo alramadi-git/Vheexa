@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class VehicleInstanceEntity
 {
-    public string UUID { get; set; }
+    public Guid UUID { get; set; }
 
     public VehicleEntity Vehicle { get; set; }
-    public string VehicleUUID { get; set; }
+    public Guid VehicleUUID { get; set; }
 
     public VehicleColorEntity VehicleColor { get; set; }
-    public string VehicleColorUUID { get; set; }
+    public Guid VehicleColorUUID { get; set; }
 
     public string Plate { get; set; }
 

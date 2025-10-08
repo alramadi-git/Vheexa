@@ -1,10 +1,9 @@
 using FluentValidation;
-
-using DataAccess.RequestDTOs;
+using DataAccess.User.DTOs.Requests;
 
 namespace Business.Validations;
 
-public class CredentialsValidation : AbstractValidator<CredentialsRequestDTO>
+public class CredentialsValidation : AbstractValidator<CredentialsDTO>
 {
     private static readonly Lazy<CredentialsValidation> _Instance = new(() => new());
     public static CredentialsValidation Instance => _Instance.Value;

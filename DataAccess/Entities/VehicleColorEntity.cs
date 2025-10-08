@@ -2,10 +2,10 @@ namespace DataAccess.Entities;
 
 public class VehicleColorEntity
 {
-    public string UUID { get; set; }
+    public Guid UUID { get; set; }
 
     public VehicleEntity Vehicle { get; set; }
-    public string VehicleUUID { get; set; }
+    public Guid VehicleUUID { get; set; }
 
     public string Name { get; set; }
     public string HexCode { get; set; }

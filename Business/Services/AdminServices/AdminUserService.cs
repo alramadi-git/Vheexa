@@ -4,8 +4,7 @@ using Business.Validations.UserValidations;
 
 using DataAccess.Repositories.AdminRepository;
 using DataAccess.RequestDTOs.FiltrationRequestDTOs;
-using DataAccess.ResponseDTOs;
-using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.DTOs.Responses;
 
 namespace Business.Services.AdminServices;
 
@@ -18,7 +17,7 @@ public class AdminUserService
         _AdminUserRepository = adminUserRepository;
     }
 
-    public async Task<SuccessResponseDTO<UserEntityDTO>> GetAsync(int userID)
+    public async Task<SuccessOneDTO<UserDTO>> GetAsync(int userID)
     {
         var IDValidation = new InlineValidator<int>();
 
@@ -27,7 +26,7 @@ public class AdminUserService
 
         return await _AdminUserRepository.GetAsync(userID);
     }
-    public async Task<SuccessManyResponseDTO<UserEntityDTO>> GetManyAsync(UserFiltrationRequestDTO userFilters)
+    public async Task<SuccessManyDTO<UserDTO>> GetManyAsync(UserFiltrationRequestDTO userFilters)
     {
         UserFiltrationValidation.Instance.ValidateAndThrow(userFilters);
         return await _AdminUserRepository.GetManyAsync(userFilters);

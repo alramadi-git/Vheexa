@@ -2,10 +2,10 @@ namespace DataAccess.Entities;
 
 public class UserEntity
 {
-    public string ID { get; set; }
+    public Guid ID { get; set; }
 
     public HumanEntity Human { get; set; }
-    public string HumanID { get; set; }
+    public Guid HumanID { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }

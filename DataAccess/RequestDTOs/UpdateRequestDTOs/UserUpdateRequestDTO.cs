@@ -1,3 +1,0 @@
-namespace DataAccess.RequestDTOs.UpdateRequestDTOs;
-
-public class UserUpdateRequestDTO : AbstractHumanUpdateRequestDTO;

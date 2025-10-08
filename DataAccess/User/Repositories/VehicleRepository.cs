@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
-using DataAccess.ResponseDTOs;
-using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.DTOs.Responses;
 
 namespace DataAccess.User.Repositories;
 
@@ -14,15 +12,15 @@ public class VehicleRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessResponseDTO<VehicleEntityDTO>> GetOneAsync(int vehicleID)
+    public async Task<SuccessOneDTO<VehicleDTO>> GetOneAsync(Guid vehicleUUID)
     {
-        var query = _AppDBContext.Vehicles
-        .AsNoTracking()
-        .Where(vehicle =>
-            vehicle.ID == vehicleID
-            && vehicle.IsPublished == true
-            && vehicle.IsDeleted == false
-        )
+        var vehicleQuery = _AppDBContext.Vehicles
+        .Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo)
+        .Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner)
+        .Where(vehicle => vehicle.Partner.IsDeleted == false)
+        .Include(vehicle => vehicle.Thumbnail)
+        .Where(vehicle => vehicle.IsPublished == true && vehicle.IsDeleted == false)
+        .Where(vehicle => vehicle.UUID == vehicleUUID)
         .GroupJoin(
             _AppDBContext.VehicleImages
             .Include(vehicleImage => vehicleImage.Image)
@@ -30,27 +28,33 @@ public class VehicleRepository
                 vehicleImage.IsPublished == true
                 && vehicleImage.IsDeleted == false
             ),
-            vehicle => vehicle.ID,
-            vehicleImage => vehicleImage.VehicleID,
-            (vehicle, vehicleImages) => new { vehicle, vehicleImages }
+            vehicle => vehicle.UUID,
+            vehicleImages => vehicleImages.UUID,
+            (vehicle, vehicleImages) => new
+            {
+                entity = vehicle,
+                images = vehicleImages
+            }
         )
         .GroupJoin(
-            _AppDBContext.VehicleInstances
-            .Include(vehicleInstance => vehicleInstance.Color)
-            .Where(vehicleInstance =>
-                vehicleInstance.IsPublished == true
-                && vehicleInstance.IsDeleted == false
-            ),
-            v_vI => v_vI.vehicle.ID,
-            vehicleInstance => vehicleInstance.VehicleID,
-            (v_vI, vehicleInstances) => new { v_vI, vehicleInstances }
+            _AppDBContext.VehicleColors
+            .Where(vehicleInstance => vehicleInstance.IsPublished == true && vehicleInstance.IsDeleted == false),
+            vehicle => vehicle.entity.UUID,
+            vehicleColor => vehicleColor.UUID,
+            (vehicle, vehicleColors) => new
+            {
+                entity = vehicle.entity,
+                images = vehicle.images,
+                colors = vehicleColors
+            }
         );
 
-        var data = await query.FirstOrDefaultAsync()
-        ?? throw new ErrorResponseDTO(ERROR_RESPONSE_DTO_STATUS_CODE.NOT_FOUND, "No such vehicle.");
+        var vehicle = await vehicleQuery
+        .AsNoTracking()
+        .Select(vehicle => new VehicleDTO(vehicle.entity, vehicle.images, vehicle.colors)).FirstOrDefaultAsync()
+        ?? throw new ErrorDTO(STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
-        var vehicle = new VehicleEntityDTO(data.v_vI.vehicle, data.v_vI.vehicleImages, data.vehicleInstances);
-        return new(vehicle);
+        return new SuccessOneDTO<VehicleDTO>(vehicle);
     }
 
     public async Task GetManyAsync() { }

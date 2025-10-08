@@ -3,9 +3,9 @@ using FluentValidation;
 using Business.Validations;
 
 using DataAccess.Repositories.AdminRepository;
-using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
 using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
+using DataAccess.User.DTOs.Requests;
+using DataAccess.User.DTOs.Responses;
 
 namespace Business.Services.AdminServices;
 
@@ -18,7 +18,7 @@ public class AdminAuthenticationService
         _AdminAuthenticationRepository = adminRepository;
     }
 
-    public async Task<SuccessResponseDTO<AdminEntityDTO>> SigninAsync(CredentialsRequestDTO credentials)
+    public async Task<SuccessOneDTO<AdminEntityDTO>> SigninAsync(CredentialsDTO credentials)
     {
         CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _AdminAuthenticationRepository.SigninAsync(credentials);

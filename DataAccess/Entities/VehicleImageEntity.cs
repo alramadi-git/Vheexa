@@ -2,13 +2,13 @@ namespace DataAccess.Entities;
 
 public class VehicleImageEntity
 {
-    public string UUID { get; set; }
+    public Guid UUID { get; set; }
 
     public VehicleEntity Vehicle { get; set; }
-    public string VehicleUUID { get; set; }
+    public Guid VehicleUUID { get; set; }
 
     public ImageEntity Image { get; set; }
-    public string ImageUUID { get; set; }
+    public Guid ImageUUID { get; set; }
 
     public bool IsPublished { get; set; }
 

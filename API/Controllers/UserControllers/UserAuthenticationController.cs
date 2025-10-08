@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Business.Services.UserServices;
-
-using DataAccess.RequestDTOs;
-using DataAccess.ResponseDTOs;
 using DataAccess.RequestDTOs.CreateRequestDTOs;
-using DataAccess.ResponseDTOs.EntityResponseEntityDTOs;
 using Business.Services.AdminServices;
+using DataAccess.User.DTOs.Requests;
+using DataAccess.User.DTOs.Responses;
 
 namespace API.Controllers.UserControllers;
 
@@ -39,7 +37,7 @@ public class UserAuthenticationController : Controller
     }
 
     [HttpPost("signin")]
-    public async Task<ActionResult<SuccessResponseDTO<UserEntityDTO>>> SigninAsync([FromBody] CredentialsRequestDTO userSignedupData)
+    public async Task<ActionResult<SuccessOneDTO<UserDTO>>> SigninAsync([FromBody] CredentialsDTO userSignedupData)
     {
         try
         {

@@ -1,14 +1,14 @@
 using DataAccess.Entities;
-namespace DataAccess.User.DTOs;
+namespace DataAccess.User.DTOs.Responses;
 
 public class ImageDTO
 {
-    public string UUID { get; set; }
+    public Guid UUID { get; set; }
     public string URL { get; set; }
 
     public ImageDTO(ImageEntity imageEntity)
     {
-        this.UUID = imageEntity.UUID;
-        this.URL = imageEntity.URL;
+        UUID = imageEntity.UUID;
+        URL = imageEntity.URL;
     }
 }
