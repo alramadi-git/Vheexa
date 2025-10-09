@@ -24,7 +24,7 @@ public class VehicleController : Controller
     [ProducesResponseType(typeof(SuccessOneDTO<VehicleDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionDTO), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionDTO), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<SuccessOneDTO<VehicleDTO>>> GetOneAsync(Guid uuid)
+    public async Task<ActionResult<SuccessOneDTO<VehicleDTO>>> GetOneAsync([FromRoute] Guid uuid)
     {
         try
         {
