@@ -1,6 +1,3 @@
-using FluentValidation;
-
-using Business.Validations;
 using DataAccess.User.Repositories;
 using DataAccess.User.DTOs.Requests;
 using DataAccess.User.DTOs.Responses;
@@ -18,7 +15,6 @@ public class AuthenticationService
 
     public async Task<SuccessOneDTO<UserDTO>> SigninAsync(CredentialsDTO credentials)
     {
-        CredentialsValidation.Instance.ValidateAndThrow(credentials);
         return await _AuthenticationRepository.SigninAsync(credentials);
     }
 }

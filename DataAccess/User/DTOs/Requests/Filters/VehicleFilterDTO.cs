@@ -1,0 +1,94 @@
+using DataAccess.Entities;
+namespace DataAccess.User.DTOs.Requests.Filters;
+
+public class NameFilterDTO : AbstractFilterDTO<string, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities
+        .Where(ent =>
+            ent.Name.Contains(Value)
+            || ent.Description.Contains(Value)
+            || ent.Tags.Contains(Value)
+        );
+    }
+}
+
+public class TransmissionFilterDTO : AbstractFilterDTO<string, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Transmission.Contains(Value));
+    }
+}
+
+public class MinCapacityFilterDTO : AbstractFilterDTO<short, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Capacity >= Value);
+    }
+}
+public class MaxCapacityFilterDTO : AbstractFilterDTO<short, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Capacity <= Value);
+    }
+}
+
+public class FuelFilterDTO : AbstractFilterDTO<string, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Fuel.Contains(Value));
+    }
+}
+
+public class MinPriceFilterDTO : AbstractFilterDTO<double, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Price >= Value);
+    }
+}
+public class MaxPriceFilterDTO : AbstractFilterDTO<double, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Price <= Value);
+    }
+}
+
+
+public class VehicleFiltersDTO
+{
+    public NameFilterDTO? Name { get; set; }
+
+    public TransmissionFilterDTO? Transmission { get; set; }
+    public MinCapacityFilterDTO? MinCapacity { get; set; }
+    public MaxCapacityFilterDTO? MaxCapacity { get; set; }
+    public FuelFilterDTO? Fuel { get; set; }
+
+    public MinPriceFilterDTO? MinPrice { get; set; }
+    public MaxPriceFilterDTO? MaxPrice { get; set; }
+
+    public IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        var filters = entities;
+
+        if (Name != null) filters = Name.Apply(filters);
+
+        if (Transmission != null) filters = Transmission.Apply(filters);
+
+        if (MinCapacity != null) filters = MinCapacity.Apply(filters);
+        if (MaxCapacity != null) filters = MaxCapacity.Apply(filters);
+
+        if (Fuel != null) filters = Fuel.Apply(filters);
+
+        if (MinPrice != null) filters = MinPrice.Apply(filters);
+        if (MaxPrice != null) filters = MaxPrice.Apply(filters);
+
+        return filters;
+    }
+};

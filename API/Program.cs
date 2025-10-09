@@ -8,20 +8,12 @@ using DataAccess;
 using DataAccess.User.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder
-.Configuration
-.SetBasePath(Directory.GetCurrentDirectory())
-.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
-.AddEnvironmentVariables();
 
 builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AuthenticationRepository>();
-
-
-
 
 builder.Services.AddControllers();
 

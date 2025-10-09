@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
+using FluentValidation;
+
 using Business.User.Services;
 using DataAccess.User.DTOs.Requests;
 using DataAccess.User.DTOs.Responses;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.User.Controllers;
 

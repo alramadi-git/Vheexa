@@ -55,4 +55,4 @@ nunit-*.xml
 
 
 # Secrets
-appsettings.Local.json
+appsettings*.json
