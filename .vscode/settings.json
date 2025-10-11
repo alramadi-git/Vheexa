@@ -1,8 +1,8 @@
  {
     "cSpell.words": [
         "appsettings",
-        "Dropoff",
-        "Dropoffs",
+        "dropoff",
+        "dropoffs",
         "imagekit",
         "magicui",
         "nawaf",
@@ -13,9 +13,9 @@
         "signup",
         "Tiktok",
         "turbopack",
-        "TUUID",
+        "tuuid",
         "vercel",
-        "Vheexa",
+        "vheexa",
         "zain"
     ],
     "typescript.tsdk": "website\\node_modules\\typescript\\lib"
