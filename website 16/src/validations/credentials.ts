@@ -1,14 +1,14 @@
 import { z } from "zod/v4";
 
 type TCredentials = {
-  email: string;
-  password: string;
+  Email: string;
+  Password: string;
 };
 
 const zCredentials = z
   .object({
-    email: z.email(),
-    password: z
+    Email: z.email(),
+    Password: z
       .string()
       .min(8, "Password must be at least 8 characters")
       .max(32, "Password must not exceed 32 characters")

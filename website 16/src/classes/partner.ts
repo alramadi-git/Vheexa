@@ -4,7 +4,7 @@ import { Expose, Type } from "class-transformer";
 import { Image } from "@/classes/image";
 
 class Partner {
-  @Expose() public readonly ID: string;
+  @Expose() public readonly UUID: string;
 
   @Expose() @Type(() => Image) public readonly Logo: Image;
   @Expose() @Type(() => Image) public readonly Banner: Image;
@@ -19,7 +19,7 @@ class Partner {
   @Expose() @Type(() => Date) public readonly CreatedAt: Date;
 
   constructor(
-    id: string,
+    uuid: string,
     logo: Image,
     banner: Image,
     handle: string,
@@ -29,7 +29,7 @@ class Partner {
     updatedAt: Date,
     createdAt: Date,
   ) {
-    this.ID = id;
+    this.UUID = uuid;
 
     this.Logo = logo;
     this.Banner = banner;

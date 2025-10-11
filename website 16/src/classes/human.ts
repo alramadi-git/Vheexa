@@ -6,7 +6,7 @@ import { Image } from "@/classes/image";
 import { Location } from "@/classes/location";
 
 abstract class Human {
-  @Expose() public readonly ID: string;
+  @Expose() public readonly UUID: string;
 
   @Expose() @Type(() => Image) public readonly Avatar: Image;
 
@@ -26,7 +26,7 @@ abstract class Human {
   @Expose() @Type(() => Date) public readonly CreatedAt: Date;
 
   constructor(
-    id: string,
+    uuid: string,
     avatar: Image,
     location: Location,
     firstName: string,
@@ -38,7 +38,7 @@ abstract class Human {
     updatedAt: Date,
     createdAt: Date,
   ) {
-    this.ID = id;
+    this.UUID = uuid;
 
     this.Location = location;
 

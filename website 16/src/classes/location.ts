@@ -3,7 +3,7 @@ import "reflect-metadata";
 import { Expose } from "class-transformer";
 
 class Location {
-  @Expose() public readonly ID: string;
+  @Expose() public readonly UUID: string;
 
   
   @Expose() public readonly Country: string;
@@ -14,14 +14,14 @@ class Location {
   @Expose() public readonly Longitude: number;
 
   constructor(
-    id: string,
+    uuid: string,
     country: string,
     city: string,
     street: string,
     latitude: number,
     longitude: number,
   ) {
-    this.ID = id;
+    this.UUID = uuid;
 
     this.Country = country;
     this.City = city;

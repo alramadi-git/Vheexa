@@ -23,7 +23,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   const apiResponse = await fetch(api, {
     method: "POST",
     headers: {
-      "API-Key": `${process.env.API_KEY}`,
+      "Api-Key": `${process.env.API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),

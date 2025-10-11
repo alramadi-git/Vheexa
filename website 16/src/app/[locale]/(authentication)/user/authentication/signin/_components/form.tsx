@@ -13,8 +13,8 @@ import { Authentication } from "@/services/authentication/authentication";
 export default function Form() {
   const form = useForm<TCredentials>({
     defaultValues: {
-      email: "",
-      password: "",
+      Email: "",
+      Password: "",
     },
     resolver: zodResolver(zCredentials),
   });
