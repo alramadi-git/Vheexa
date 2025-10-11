@@ -23,19 +23,19 @@ public class Error
     }
 }
 
-public class ExceptionDTO : Exception
+public class ErrorDTO : Exception
 {
     public STATUS_CODE StatusCode { get; set; }
     public IEnumerable<Error> Errors { get; set; }
 
-    public ExceptionDTO(STATUS_CODE statusCode, string message)
+    public ErrorDTO(STATUS_CODE statusCode, string message)
     : base(message)
     {
         StatusCode = statusCode;
         Errors = [];
     }
 
-    public ExceptionDTO(STATUS_CODE statusCode, IEnumerable<Error> errors, string message)
+    public ErrorDTO(STATUS_CODE statusCode, IEnumerable<Error> errors, string message)
     : base(message)
     {
         StatusCode = statusCode;

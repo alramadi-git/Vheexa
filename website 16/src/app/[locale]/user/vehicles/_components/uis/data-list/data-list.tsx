@@ -4,7 +4,7 @@ import {
   VehicleService,
   VehicleFiltrationQuery,
 } from "@/services/vehicle/vehicle";
-import { PaginationQuery } from "@/services/classes/filtration";
+import { PaginationQuery } from "@/services/queries/filter";
 
 import { Section, Container } from "@/components/locals/blocks/typography";
 import Filtration from "@/app/[locale]/user/vehicles/_components/uis/data-list/filtration";

@@ -59,7 +59,7 @@
             "default": "User",
             "template": "%s | User — Vheexa"
           },
-          
+
           "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
         },
 
@@ -576,33 +576,51 @@
             }
           }
         }
-      }
-    },
-
-    "auth": {
-      "layout": {
-        "metadata": {
-          "title": {
-            "absolute": "Auth | Vheexa",
-            "template": "%s | Vheexa Auth"
-          },
-          "description": "Access your Vheexa account to manage bookings and vehicles easily and securely."
-        }
       },
 
-      "page": {
-        "image": {
-          "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-          "alt": "placeholder"
-        }
-      },
-
-      "signin": {
+      "authentication": {
         "layout": {
           "metadata": {
-            "title": "Sign In",
-            "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
+            "title": {
+              "absolute": "Auth | Vheexa",
+              "template": "%s | Vheexa Auth"
+            },
+            "description": "Access your Vheexa account to manage bookings and vehicles easily and securely."
+          },
+
+          "image": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+            "alt": "placeholder"
           }
+        },
+
+        "signin": {
+          "layout": {
+            "metadata": {
+              "title": "Sign In",
+              "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
+            }
+          },
+
+          "page": {
+            "title": "Welcome back",
+            "description": "Sign in to your Vheexa account",
+
+            "form": {
+              "email": {
+                "label": "Email",
+                "placeholder": "user@vheexa.com",
+                "description": "Enter your email address"
+              },
+              "password": {
+                "label": "Password",
+                "placeholder": "********",
+                "description": "Enter your password"
+              }
+            }
+          },
+
+          "providers": {}
         }
       }
     }

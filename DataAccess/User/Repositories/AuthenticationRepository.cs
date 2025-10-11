@@ -24,12 +24,12 @@ public class AuthenticationRepository
         .Where((user) => user.Human.Email == credentials.Email);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
-        throw new ExceptionDTO(STATUS_CODE.UNAUTHORIZED, "No such user.");
+        throw new ErrorDTO(STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         var passwordHasher = new PasswordHasher<object?>();
         var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human.Password, credentials.Password);
 
-        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ExceptionDTO(STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ErrorDTO(STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             var trackingUser = await userQuery.FirstAsync();

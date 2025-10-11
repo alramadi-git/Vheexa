@@ -21,9 +21,6 @@ public class VehicleController : Controller
     }
 
     [HttpGet("{uuid:guid}")]
-    [ProducesResponseType(typeof(SuccessOneDTO<VehicleDTO>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionDTO), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionDTO), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<SuccessOneDTO<VehicleDTO>>> GetOneAsync([FromRoute] Guid uuid)
     {
         try
@@ -35,24 +32,21 @@ public class VehicleController : Controller
         catch (ValidationException ex)
         {
             var errors = ex.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage)).ToArray();
-            return BadRequest(new ExceptionDTO(STATUS_CODE.BAD_REQUEST, errors, ex.Message));
+            return BadRequest(new ErrorDTO(STATUS_CODE.BAD_REQUEST, errors, ex.Message));
         }
-        catch (ExceptionDTO ex)
+        catch (ErrorDTO ex)
         {
             return StatusCode((int)ex.StatusCode, ex);
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return StatusCode((int)STATUS_CODE.INTERNAL_SERVER_ERROR, new ExceptionDTO(STATUS_CODE.INTERNAL_SERVER_ERROR, message));
+            return StatusCode((int)STATUS_CODE.INTERNAL_SERVER_ERROR, new ErrorDTO(STATUS_CODE.INTERNAL_SERVER_ERROR, message));
         }
     }
 
 
     [HttpGet]
-    [ProducesResponseType(typeof(SuccessManyDTO<VehicleDTO>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionDTO), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionDTO), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<SuccessManyDTO<VehicleDTO>>> GetManyAsync([FromQuery] VehicleFiltersDTO filters, [FromQuery] PaginationFilterDTO pagination)
     {
         try
@@ -64,16 +58,16 @@ public class VehicleController : Controller
         catch (ValidationException ex)
         {
             var errors = ex.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage)).ToArray();
-            return BadRequest(new ExceptionDTO(STATUS_CODE.BAD_REQUEST, errors, ex.Message));
+            return BadRequest(new ErrorDTO(STATUS_CODE.BAD_REQUEST, errors, ex.Message));
         }
-        catch (ExceptionDTO ex)
+        catch (ErrorDTO ex)
         {
             return StatusCode((int)ex.StatusCode, ex);
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return StatusCode((int)STATUS_CODE.INTERNAL_SERVER_ERROR, new ExceptionDTO(STATUS_CODE.INTERNAL_SERVER_ERROR, message));
+            return StatusCode((int)STATUS_CODE.INTERNAL_SERVER_ERROR, new ErrorDTO(STATUS_CODE.INTERNAL_SERVER_ERROR, message));
         }
     }
 

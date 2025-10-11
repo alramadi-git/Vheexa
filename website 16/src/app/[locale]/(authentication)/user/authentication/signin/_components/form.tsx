@@ -2,28 +2,26 @@
 
 import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { TCredentials, zCredentials } from "@/validations/credentials";
 import { useForm } from "react-hook-form";
 
 import { Form as ReactHookForm } from "@/components/shadcn/form";
 import { Input } from "@/components/locals/blocks/input";
 import { Button } from "@/components/shadcn/button";
-
-type TForm = z.infer<typeof formSchema>;
-
-const formSchema = z.object({
-  email: z.email(),
-});
+import { Authentication } from "@/services/authentication/authentication";
 
 export default function Form() {
-  const form = useForm<TForm>({
+  const form = useForm<TCredentials>({
     defaultValues: {
-      email: "user@vheexa.com",
+      email: "",
+      password: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(zCredentials),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  function onSubmit(credentials: z.infer<typeof zCredentials>) {
+    Authentication.signin(credentials);
+  }
 
   return (
     <ReactHookForm {...form}>
@@ -35,8 +33,21 @@ export default function Form() {
           }}
           label="Email"
           input={{
-            placeholder: "example@gmail.com",
+            placeholder: "user@vheexa.com",
             type: "email",
+          }}
+          description="Description"
+        />
+
+        <Input
+          formField={{
+            control: form.control,
+            name: "password",
+          }}
+          label="Password"
+          input={{
+            placeholder: "********",
+            type: "password",
           }}
           description="Description"
         />

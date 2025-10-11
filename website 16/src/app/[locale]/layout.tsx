@@ -14,6 +14,7 @@ import ThemeProvider from "@/components/locals/providers/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import Script from "next/script";
+import { Toaster } from "@/components/shadcn/sonner";
 
 const cairo = Cairo({
   weight: [
@@ -60,16 +61,19 @@ export default async function Layout({
   return (
     <html suppressHydrationWarning lang={t("lang")} dir={t("dir")}>
       <body className={cn(cairo.className, "antialiased")}>
-        <ThemeProvider
-          enableSystem
-          disableTransitionOnChange
-          defaultTheme="light"
-          attribute="class"
-        >
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <TooltipProvider>{children}</TooltipProvider>
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeProvider
+            enableSystem
+            disableTransitionOnChange
+            defaultTheme="light"
+            attribute="class"
+          >
+            <TooltipProvider>
+              {children}
+              <Toaster position="bottom-right" />
+            </TooltipProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
 
         {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
           process.env.NODE_ENV === ENVIRONMENT.TEST) && (

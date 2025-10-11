@@ -2,7 +2,7 @@ namespace DataAccess.Entities;
 
 public class UserEntity
 {
-    public Guid ID { get; set; }
+    public Guid UUID { get; set; }
 
     public HumanEntity Human { get; set; }
     public Guid HumanID { get; set; }

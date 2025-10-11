@@ -9,21 +9,14 @@ class PaginationQuery {
   public readonly Page: number;
   public readonly PageSize: PAGE_SIZE;
 
+  constructor();
   constructor(page: number);
   constructor(page: number, pageSize: PAGE_SIZE);
-  public constructor(page: number, pageSize: PAGE_SIZE = PAGE_SIZE._5) {
+  public constructor(page: number = 1, pageSize: PAGE_SIZE = PAGE_SIZE._5) {
     this.Page = page;
     this.PageSize = pageSize;
   }
 }
 
-abstract class FiltrationQuery {
-  public readonly Pagination: PaginationQuery;
-
-  public constructor(pagination: PaginationQuery) {
-    this.Pagination = pagination;
-  }
-}
-
 export { PAGE_SIZE };
-export { FiltrationQuery, PaginationQuery };
+export { PaginationQuery };

@@ -34,7 +34,7 @@ export default async function Component() {
           {/** Top End */}
           <div className="flex w-full items-center justify-end gap-2">
             <Button asChild>
-              <Link href="/user/auth/signin">{t("signin-label")}</Link>
+              <Link href="/user/authentication/signin">{t("signin-label")}</Link>
             </Button>
             <Languages />
             <MobileNavigation />

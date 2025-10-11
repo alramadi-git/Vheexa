@@ -8,7 +8,7 @@ public class HumanEntity
     public Guid? AvatarUUID { get; set; }
 
     public LocationEntity Location { get; set; }
-    public Guid LocationID { get; set; }
+    public Guid LocationUUID { get; set; }
 
     public string Username { get; set; }
     public DateOnly DateOfBirth { get; set; }

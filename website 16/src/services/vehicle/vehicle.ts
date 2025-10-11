@@ -4,8 +4,8 @@ import type { TUndefinable } from "@/types/nullish";
 import { Pagination, SuccessMany, SuccessOne } from "@/classes/api";
 import {
   PaginationQuery,
-  FiltrationQuery,
-} from "@/services/classes/filtration";
+  FilterQuery,
+} from "@/services/queries/filter";
 
 import { Location } from "@/classes/location";
 
@@ -29,7 +29,7 @@ class SortingQuery {
   }
 }
 
-class VehicleFiltrationQuery extends FiltrationQuery {
+class VehicleFiltrationQuery extends FilterQuery {
   public readonly Search: TUndefinable<string>;
   public readonly Category: TUndefinable<CategoryQuery>;
   public readonly Sorting: TUndefinable<SortingQuery>;

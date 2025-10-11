@@ -1,7 +1,14 @@
 namespace DataAccess.Entities;
 
+
 public class VehicleInstanceEntity
 {
+    public enum STATUS
+    {
+        AVAILABLE,
+        UNAVAILABLE
+    }
+    
     public Guid UUID { get; set; }
 
     public VehicleEntity Vehicle { get; set; }
@@ -12,7 +19,7 @@ public class VehicleInstanceEntity
 
     public string Plate { get; set; }
 
-    public string Status { get; set; }
+    public STATUS Status { get; set; }
 
     public bool IsPublished { get; set; }
 
