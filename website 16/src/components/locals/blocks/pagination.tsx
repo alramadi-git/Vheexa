@@ -1,6 +1,6 @@
 "use client";
 
-import { Pagination } from "@/classes/api";
+import { Pagination } from "@/services/classes/api";
 
 import {
   ChevronFirstIcon,

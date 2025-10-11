@@ -2,7 +2,7 @@
 
 import type { TUndefinable } from "@/types/nullish";
 
-import { Pagination } from "@/classes/api";
+import { Pagination } from "@/services/classes/api";
 import { CategoryQuery, SortingQuery } from "@/services/vehicle/vehicle";
 
 import { cn } from "@/utilities/cn";

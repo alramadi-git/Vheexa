@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/select";
-import { Pagination as ClsPagination } from "@/classes/api";
+import { Pagination as ClsPagination } from "@/services/classes/api";
 
 export default function Pagination(props: ClsPagination) {
   return (
