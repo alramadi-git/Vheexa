@@ -29,7 +29,7 @@ export default function Form() {
         <Input
           formField={{
             control: form.control,
-            name: "email",
+            name: "Email",
           }}
           label="Email"
           input={{
@@ -42,7 +42,7 @@ export default function Form() {
         <Input
           formField={{
             control: form.control,
-            name: "password",
+            name: "Password",
           }}
           label="Password"
           input={{

@@ -119,14 +119,14 @@ export default function Item({ data }: TItemProps) {
       <CardFooter className="mt-auto flex items-end gap-3 pb-0">
         <div>
           <p className="text-lg leading-normal font-medium">
-            {monyFormatter.format(vehicle.Price.Total())}
+            {monyFormatter.format(vehicle.DiscountedPrice())}
           </p>
 
           <div className="flex items-center gap-0.5 text-xs">
-            {vehicle.Price.IsDiscounted() && (
+            {vehicle.HasDiscount() && (
               <Fragment>
                 <del className="leading-normal">
-                  {monyFormatter.format(vehicle.Price.Value)}
+                  {monyFormatter.format(vehicle.Price)}
                 </del>
 
                 <span>/</span>

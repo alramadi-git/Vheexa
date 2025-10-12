@@ -114,6 +114,14 @@ class Vehicle {
     this.UpdatedAt = updatedAt;
     this.CreatedAt = createdAt;
   }
+
+  public HasDiscount(): boolean {
+    return this.Discount > 0;
+  }
+  public DiscountedPrice(): number {
+    const discountAmount = this.Price * this.Discount;
+    return this.Price - discountAmount;
+  }
 }
 
 class VehicleInstance {

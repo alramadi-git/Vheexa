@@ -1,7 +1,7 @@
 using DataAccess.Entities;
 namespace DataAccess.User.DTOs.Requests.Filters;
 
-public class NameFilterDTO : AbstractFilterDTO<string, VehicleEntity>
+public class SearchFilterDTO : AbstractFilterDTO<string, VehicleEntity>
 {
     public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
     {
@@ -60,24 +60,36 @@ public class MaxPriceFilterDTO : AbstractFilterDTO<double, VehicleEntity>
     }
 }
 
+public class HasDiscountFilterDTO : AbstractFilterDTO<bool, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Discount > 0 == Value);
+    }
+}
+
 
 public class VehicleFiltersDTO
 {
-    public NameFilterDTO? Name { get; set; }
+    public SearchFilterDTO? Search { get; set; }
 
     public TransmissionFilterDTO? Transmission { get; set; }
+
     public MinCapacityFilterDTO? MinCapacity { get; set; }
     public MaxCapacityFilterDTO? MaxCapacity { get; set; }
+    
     public FuelFilterDTO? Fuel { get; set; }
 
     public MinPriceFilterDTO? MinPrice { get; set; }
     public MaxPriceFilterDTO? MaxPrice { get; set; }
 
+    public HasDiscountFilterDTO? HasDiscount { get; set; }
+
     public IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
     {
         var filters = entities;
 
-        if (Name != null) filters = Name.Apply(filters);
+        if (Search != null) filters = Search.Apply(filters);
 
         if (Transmission != null) filters = Transmission.Apply(filters);
 
@@ -88,6 +100,8 @@ public class VehicleFiltersDTO
 
         if (MinPrice != null) filters = MinPrice.Apply(filters);
         if (MaxPrice != null) filters = MaxPrice.Apply(filters);
+
+        if (HasDiscount != null) filters = HasDiscount.Apply(filters);
 
         return filters;
     }

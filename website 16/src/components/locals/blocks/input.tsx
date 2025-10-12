@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, JSX } from "react";
 import type { FieldValues } from "react-hook-form";
 
 import { cn } from "@/utilities/cn";
@@ -38,7 +38,6 @@ function Input<TFieldValues extends FieldValues = FieldValues>(
           {!!props.label && <FormLabel>{props.label}</FormLabel>}
           <FormControl>
             <ShadcnInput
-              {...props.input}
               {...field}
               className={cn(
                 {
@@ -54,18 +53,18 @@ function Input<TFieldValues extends FieldValues = FieldValues>(
             <FormDescription>{props.description}</FormDescription>
           )}
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <FormMessage className="w-fit" />
-            </TooltipTrigger>
-            <TooltipContent
+          {/* <Tooltip> */}
+          {/* <TooltipTrigger asChild> */}
+          <FormMessage className="w-fit" />
+          {/* </TooltipTrigger> */}
+          {/* <TooltipContent
               sideOffset={-1}
               side="bottom"
               className="bg-card text-foreground border px-2"
             >
               {fieldState.error?.message}
-            </TooltipContent>
-          </Tooltip>
+            </TooltipContent> */}
+          {/* </Tooltip> */}
         </FormItem>
       )}
     />
