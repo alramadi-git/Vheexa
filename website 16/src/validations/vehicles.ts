@@ -28,20 +28,20 @@ type TSorting = z.infer<typeof zSorting>;
 
 const zVehicles = z
   .object({
-    Search: z.nullable(z.string()),
-    Transmission: z.nullable(z.string()),
-    MinCapacity: z.nullable(z.number()),
-    MaxCapacity: z.nullable(z.number()),
-    Fuel: z.nullable(z.string()),
-    MinPrice: z.nullable(z.number()),
-    MaxPrice: z.nullable(z.number()),
-    HasDiscount: z.nullable(z.boolean()),
+    Search: z.string().optional(),
+    Transmission: z.string().optional(),
+    MinCapacity: z.number().optional(),
+    MaxCapacity: z.number().optional(),
+    Fuel: z.string().optional(),
+    MinPrice: z.number().optional(),
+    MaxPrice: z.number().optional(),
+    HasDiscount: z.boolean().optional(),
   })
   .refine(
     (data) => {
-      if (data.MinCapacity != null && data.MaxCapacity != null)
-        return data.MinCapacity < data.MaxCapacity;
-      return false;
+      if (data.MinCapacity !== undefined && data.MaxCapacity !== undefined)
+        return data.MinCapacity <= data.MaxCapacity;
+      return true;
     },
     {
       path: ["MinCapacity"],
@@ -50,9 +50,9 @@ const zVehicles = z
   )
   .refine(
     (data) => {
-      if (data.MinPrice != null && data.MaxPrice != null)
-        return data.MinPrice < data.MaxPrice;
-      return false;
+      if (data.MinPrice !== undefined && data.MaxPrice !== undefined)
+        return data.MinPrice <= data.MaxPrice;
+      return true;
     },
     {
       path: ["MinPrice"],
