@@ -3,31 +3,8 @@ import { TVehiclesFilter, zVehiclesFilter } from "@/validations/vehicles";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { cn } from "@/utilities/cn";
 
-import {
-  ArrowRightIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  PlusIcon,
-  SearchIcon,
-} from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/shadcn/command";
 import {
   FormControl,
   FormDescription,
