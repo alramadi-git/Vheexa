@@ -1,9 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Entities;
 
 public class VehicleInstanceSupportedLocationEntity
 {
+    [Key]
     public Guid UUID { get; set; }
-
+   
     public VehicleInstanceEntity VehicleInstance { get; set; }
     public Guid VehicleInstanceUUID { get; set; }
 

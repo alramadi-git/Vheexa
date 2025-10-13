@@ -5,6 +5,7 @@ using FluentValidation;
 using Business.User.Services;
 using DataAccess.User.DTOs.Requests;
 using DataAccess.User.DTOs.Responses;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.User.Controllers;
 

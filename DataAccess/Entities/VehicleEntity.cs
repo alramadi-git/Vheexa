@@ -1,18 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Entities;
 
-public enum VEHICLE_CATEGORY_OPTION_ENTITY
-{
-    CAR,
-    BUS,
-    TRUCK,
-    MOTORCYCLE,
-    BICYCLE,
-    BOAT,
-    YACHT,
-}
 
 public class VehicleEntity
 {
+    [Key]
     public Guid UUID { get; set; }
 
     public PartnerEntity Partner { get; set; }

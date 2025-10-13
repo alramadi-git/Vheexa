@@ -16,52 +16,9 @@ public class VehicleRepository
 
     public async Task<SuccessOneDTO<VehicleDTO>> GetOneAsync(Guid vehicleUUID)
     {
-        var vehicleQuery = _AppDBContext.Vehicles
-        .Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo)
-        .Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner)
-        .Where(vehicle => vehicle.Partner.IsDeleted == false)
-        .Include(vehicle => vehicle.Thumbnail)
-        .Where(vehicle => vehicle.IsPublished == true && vehicle.IsDeleted == false)
-        .Where(vehicle => vehicle.UUID == vehicleUUID)
-        .GroupJoin(
-            _AppDBContext.VehicleImages
-            .Include(vehicleImage => vehicleImage.Image)
-            .Where(vehicleImage =>
-                vehicleImage.IsPublished == true
-                && vehicleImage.IsDeleted == false
-            ),
-            vehicle => vehicle.UUID,
-            vehicleImages => vehicleImages.UUID,
-            (vehicle, vehicleImages) => new
-            {
-                entity = vehicle,
-                images = vehicleImages
-            }
-        )
-        .GroupJoin(
-            _AppDBContext.VehicleColors
-            .Where(vehicleInstance => vehicleInstance.IsPublished == true && vehicleInstance.IsDeleted == false),
-            vehicle => vehicle.entity.UUID,
-            vehicleColor => vehicleColor.UUID,
-            (vehicle, vehicleColors) => new
-            {
-                entity = vehicle.entity,
-                images = vehicle.images,
-                colors = vehicleColors
-            }
-        );
-
-        var vehicle = await vehicleQuery
-        .AsNoTracking()
-        .Select(vehicle => new VehicleDTO(vehicle.entity, vehicle.images, vehicle.colors)).FirstOrDefaultAsync()
-        ?? throw new ErrorDTO(STATUS_CODE.NOT_FOUND, "No such vehicle.");
-
-        return new SuccessOneDTO<VehicleDTO>(vehicle);
-    }
-
-    public async Task<SuccessManyDTO<VehicleDTO>> GetManyAsync(VehicleFiltersDTO filters, PaginationFilterDTO pagination)
-    {
         var vehicleQuery = _AppDBContext.Vehicles.AsQueryable();
+        vehicleQuery = vehicleQuery.Where(vehicle => vehicle.UUID == vehicleUUID);
+
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo);
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner);
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.Partner.IsDeleted == false);
@@ -69,43 +26,77 @@ public class VehicleRepository
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Thumbnail);
 
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.IsPublished == true && vehicle.IsDeleted == false);
-        vehicleQuery = filters.Apply(vehicleQuery);
+        var vehicle = await vehicleQuery
+        .AsNoTracking()
+        .FirstOrDefaultAsync()
+        ?? throw new ErrorDTO(STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
-        var vehicleGroupJoinQuery = vehicleQuery
-        .GroupJoin(
-            _AppDBContext.VehicleImages
-            .Include(vehicleImage => vehicleImage.Image)
-            .Where(vehicleImage =>
-                vehicleImage.IsPublished == true
-                && vehicleImage.IsDeleted == false
-            ),
-            vehicle => vehicle.UUID,
-            vehicleImages => vehicleImages.UUID,
-            (vehicle, vehicleImages) => new
-            {
-                entity = vehicle,
-                images = vehicleImages
-            }
-        )
-        .GroupJoin(
-            _AppDBContext.VehicleColors
-            .Where(vehicleInstance => vehicleInstance.IsPublished == true && vehicleInstance.IsDeleted == false),
-            vehicle => vehicle.entity.UUID,
-            vehicleColor => vehicleColor.UUID,
-            (vehicle, vehicleColors) => new
-            {
-                entity = vehicle.entity,
-                images = vehicle.images,
-                colors = vehicleColors
-            }
+        var vehicleImagesQuery = _AppDBContext.VehicleImages.AsQueryable();
+        vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleUUID == vehicleUUID);
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsPublished == true && vehicleImage.IsDeleted == false);
+
+        var vehicleImages = await vehicleImagesQuery.AsNoTracking().ToArrayAsync();
+
+        var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
+        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.VehicleUUID == vehicleUUID);
+        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.IsPublished == true && vehicleColor.IsDeleted == false);
+
+        var vehicleColors = await vehicleColorsQuery.AsNoTracking().ToArrayAsync();
+
+        var vehicleDTO = new VehicleDTO(
+            vehicle,
+            vehicleImages,
+            vehicleColors
         );
 
-        vehicleGroupJoinQuery = pagination.Apply(vehicleGroupJoinQuery);
-        var totalItems = await vehicleGroupJoinQuery.CountAsync();
+        return new SuccessOneDTO<VehicleDTO>(vehicleDTO);
+    }
 
-        var vehicles = await vehicleGroupJoinQuery.AsNoTracking()
-        .Select(vehicle => new VehicleDTO(vehicle.entity, vehicle.images, vehicle.colors)).ToArrayAsync();
+    public async Task<SuccessManyDTO<VehicleDTO>> GetManyAsync(VehicleFiltersDTO filters, PaginationFilterDTO pagination)
+    {
+        var vehiclesQuery = _AppDBContext.Vehicles.AsQueryable();
+        vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo);
+        vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner);
+        vehiclesQuery = vehiclesQuery.Where(vehicle => vehicle.Partner.IsDeleted == false);
 
-        return new SuccessManyDTO<VehicleDTO>(vehicles, new PaginationDTO(pagination.Page.Value, (int)pagination.PageSize.Value, totalItems));
+        vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Thumbnail);
+
+        vehiclesQuery = vehiclesQuery.Where(vehicle => vehicle.IsPublished == true && vehicle.IsDeleted == false);
+        vehiclesQuery = filters.Apply(vehiclesQuery);
+
+        var totalItems = await vehiclesQuery.CountAsync();
+        vehiclesQuery = vehiclesQuery
+        .Skip(pagination.Skip())
+        .Take(pagination.Take());
+
+        var vehicles = await vehiclesQuery.AsNoTracking().ToArrayAsync();
+        var vehicleUUIDs =
+        new HashSet<Guid>(vehicles.Select(vehicle => vehicle.UUID));
+
+        var vehicleImagesQuery = _AppDBContext.VehicleImages.AsQueryable();
+        vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
+
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleUUID));
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsPublished == true && vehicleImage.IsDeleted == false);
+
+        var vehicleUUIDsImages = new Dictionary<Guid, VehicleImageEntity>();
+        var vehicleImages = await vehicleImagesQuery.AsNoTracking()
+        .ToArrayAsync();
+
+        var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
+
+        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleUUIDs.Contains(vehicleColor.VehicleUUID));
+        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.IsPublished == true && vehicleColor.IsDeleted == false);
+
+        var vehicleColors = await vehicleColorsQuery.AsNoTracking().ToArrayAsync();
+
+        var vehiclesDTO = vehicles.Select(vehicle => new VehicleDTO(
+        vehicle,
+        vehicleImages.Where(vehicleImage => vehicleImage.VehicleUUID == vehicle.UUID),
+        vehicleColors.Where(vehicleColor => vehicleColor.VehicleUUID == vehicle.UUID)
+        )).ToArray();
+
+        return new SuccessManyDTO<VehicleDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.PageSize, totalItems));
     }
 };

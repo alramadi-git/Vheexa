@@ -47,13 +47,16 @@ public class VehicleController : Controller
 
 
     [HttpGet]
-    public async Task<ActionResult<SuccessManyDTO<VehicleDTO>>> GetManyAsync([FromQuery] VehicleFiltersDTO filters, [FromQuery] PaginationFilterDTO pagination)
+    public async Task<ActionResult<SuccessManyDTO<VehicleDTO>>> GetManyAsync(
+        [FromQuery] VehicleFiltersDTO filters,
+        [FromQuery] PaginationFilterDTO pagination
+    )
     {
+        var user = await _VehicleService.GetManyAsync(filters, pagination);
+        return Ok(user);
+
         try
         {
-            var user = await _VehicleService.GetManyAsync(filters, pagination);
-
-            return Ok(user);
         }
         catch (ValidationException ex)
         {
@@ -70,5 +73,4 @@ public class VehicleController : Controller
             return StatusCode((int)STATUS_CODE.INTERNAL_SERVER_ERROR, new ErrorDTO(STATUS_CODE.INTERNAL_SERVER_ERROR, message));
         }
     }
-
 }

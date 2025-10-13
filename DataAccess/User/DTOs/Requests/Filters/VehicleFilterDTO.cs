@@ -74,11 +74,10 @@ public class VehicleFiltersDTO
     public SearchFilterDTO? Search { get; set; }
 
     public TransmissionFilterDTO? Transmission { get; set; }
+    public FuelFilterDTO? Fuel { get; set; }
 
     public MinCapacityFilterDTO? MinCapacity { get; set; }
     public MaxCapacityFilterDTO? MaxCapacity { get; set; }
-    
-    public FuelFilterDTO? Fuel { get; set; }
 
     public MinPriceFilterDTO? MinPrice { get; set; }
     public MaxPriceFilterDTO? MaxPrice { get; set; }

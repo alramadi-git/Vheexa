@@ -7,7 +7,7 @@ public interface IFilterDTO<TEntity>
 
 public abstract class AbstractFilterDTO<TValue, TEntity> : IFilterDTO<TEntity>
 {
-    public required TValue Value { get; set; }
+    public TValue Value { get; set; }
 
     public abstract IQueryable<TEntity> Apply(IQueryable<TEntity> entities);
 }

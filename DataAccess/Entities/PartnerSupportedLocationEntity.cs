@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Entities;
 
 public class PartnerSupportedLocationEntity
 {
-
+    [Key]
     public Guid UUID { get; set; }
 
     public PartnerEntity Partner { get; set; }

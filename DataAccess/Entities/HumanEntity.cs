@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Entities;
 
 public class HumanEntity
 {
+    [Key]
     public Guid UUID { get; set; }
 
     public ImageEntity? Avatar { get; set; }

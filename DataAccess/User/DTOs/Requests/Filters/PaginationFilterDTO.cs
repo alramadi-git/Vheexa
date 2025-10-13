@@ -11,35 +11,11 @@ public enum PAGE_SIZE
     _100 = 100
 }
 
-public class PageFilterDTO : AbstractFilterDTO<int, object>
-{
-    public override IQueryable<object> Apply(IQueryable<object> entities)
-    {
-        return entities.Skip(Value - 1);
-    }
-}
-
-public class PageSizeFilterDTO : AbstractFilterDTO<PAGE_SIZE, object>
-{
-    public override IQueryable<object> Apply(IQueryable<object> entities)
-    {
-        return entities.Take((int)Value);
-    }
-}
-
-
 public class PaginationFilterDTO
 {
-    public PageFilterDTO Page { get; set; } = new PageFilterDTO { Value = 1 };
-    public PageSizeFilterDTO PageSize { get; set; } = new PageSizeFilterDTO { Value = PAGE_SIZE._10 };
+    public int Page { get; set; } = 1;
+    public PAGE_SIZE PageSize { get; set; } = PAGE_SIZE._10;
 
-    public IQueryable<TEntity> Apply<TEntity>(IQueryable<TEntity> entities)
-    {
-        var filters = (IQueryable<object>)entities;
-
-        filters = Page.Apply(filters);
-        filters = PageSize.Apply(filters);
-
-        return (IQueryable<TEntity>)filters;
-    }
+    public int Skip() { return Page - 1; }
+    public int Take() { return (int)PageSize; }
 }

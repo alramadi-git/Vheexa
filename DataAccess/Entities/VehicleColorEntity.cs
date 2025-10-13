@@ -1,9 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Entities;
 
 public class VehicleColorEntity
 {
+    [Key]
     public Guid UUID { get; set; }
-
+    
     public VehicleEntity Vehicle { get; set; }
     public Guid VehicleUUID { get; set; }
 

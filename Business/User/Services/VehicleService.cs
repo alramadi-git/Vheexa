@@ -1,9 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-using DataAccess.User.DTOs.Responses;
-using DataAccess.User.DTOs.Requests.Filters;
-using DataAccess.Entities;
-using DataAccess;
 using DataAccess.User.Repositories;
+using DataAccess.User.DTOs.Requests.Filters;
+using DataAccess.User.DTOs.Responses;
 
 namespace Business.User.Services;
 
