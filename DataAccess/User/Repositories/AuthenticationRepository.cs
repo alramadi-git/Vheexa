@@ -17,11 +17,12 @@ public class AuthenticationRepository
 
     public async Task<SuccessOneDTO<UserDTO>> SigninAsync(CredentialsDTO credentials)
     {
-        var userQuery = _AppDBContext.Users
-        .Include(user => user.Human).ThenInclude(human => human.Avatar)
-        .Include(user => user.Human).ThenInclude(human => human.Location)
-        .Where((user) => user.IsDeleted == false)
-        .Where((user) => user.Human.Email == credentials.Email);
+        var userQuery = _AppDBContext.Users.AsQueryable();
+        userQuery = userQuery.Include(user => user.Human).ThenInclude(human => human.Avatar);
+        userQuery = userQuery.Include(user => user.Human).ThenInclude(human => human.Location);
+
+        userQuery = userQuery.Where((user) => user.Human.Email == credentials.Email);
+        userQuery = userQuery.Where((user) => user.IsDeleted == false);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync() ??
         throw new ErrorDTO(STATUS_CODE.UNAUTHORIZED, "No such user.");
