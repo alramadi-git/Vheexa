@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { TCredentials, zCredentials } from "@/validations/credentials";
+import { tCredentials, zCredentials } from "@/validations/credentials";
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body: TCredentials = await request.json();
+  const body: tCredentials = await request.json();
 
   const zCredentialsResult = zCredentials.safeParse(body);
   if (zCredentialsResult.success === false) {

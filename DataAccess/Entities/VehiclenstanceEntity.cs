@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace DataAccess.Entities;
 
 
@@ -11,7 +9,6 @@ public class VehicleInstanceEntity
         UNAVAILABLE
     }
     
-    [Key]
     public Guid UUID { get; set; }
    
     public VehicleEntity Vehicle { get; set; }

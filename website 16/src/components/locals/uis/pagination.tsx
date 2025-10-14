@@ -33,7 +33,7 @@ export default function Pagination(props: ClsPagination) {
         <ShadcnPagination>
           <PaginationContent>
             {/* Previous page button */}
-            <PaginationItem>
+            {/* <PaginationItem>
               <PaginationButton
                 className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
                 href={props.Page === 1 ? undefined : `#/page/${props.Page - 1}`}
@@ -43,7 +43,7 @@ export default function Pagination(props: ClsPagination) {
               >
                 <ChevronLeftIcon size={16} aria-hidden="true" />
               </PaginationButton>
-            </PaginationItem>
+            </PaginationItem> */}
 
             {/* Left ellipsis (...) */}
             {/* {showLeftEllipsis && (
@@ -72,7 +72,7 @@ export default function Pagination(props: ClsPagination) {
             )} */}
 
             {/* Next page button */}
-            <PaginationItem>
+            {/* <PaginationItem>
               <PaginationButton
                 className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
                 href={
@@ -88,13 +88,13 @@ export default function Pagination(props: ClsPagination) {
               >
                 <ChevronRightIcon size={16} aria-hidden="true" />
               </PaginationButton>
-            </PaginationItem>
+            </PaginationItem> */}
           </PaginationContent>
         </ShadcnPagination>
       </div>
 
       {/* Results per page */}
-      <div className="flex flex-1 justify-end">
+      {/* <div className="flex flex-1 justify-end">
         <Select defaultValue="10" aria-label="Results per page">
           <SelectTrigger
             id="results-per-page"
@@ -109,7 +109,7 @@ export default function Pagination(props: ClsPagination) {
             <SelectItem value="100">100 / page</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
     </div>
   );
 }

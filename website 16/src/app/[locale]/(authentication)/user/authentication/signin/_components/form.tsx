@@ -2,16 +2,16 @@
 
 import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TCredentials, zCredentials } from "@/validations/credentials";
+import { tCredentials, zCredentials } from "@/validations/credentials";
 import { useForm } from "react-hook-form";
 
 import { Form as ReactHookForm } from "@/components/shadcn/form";
 import { Input } from "@/components/locals/blocks/input";
 import { Button } from "@/components/shadcn/button";
-import { Authentication } from "@/services/authentication/authentication";
+import { AuthenticationService } from "@/services/authentication/authentication";
 
 export default function Form() {
-  const form = useForm<TCredentials>({
+  const form = useForm<tCredentials>({
     defaultValues: {
       Email: "",
       Password: "",
@@ -20,7 +20,7 @@ export default function Form() {
   });
 
   function onSubmit(credentials: z.infer<typeof zCredentials>) {
-    Authentication.signin(credentials);
+    AuthenticationService.signin(credentials);
   }
 
   return (

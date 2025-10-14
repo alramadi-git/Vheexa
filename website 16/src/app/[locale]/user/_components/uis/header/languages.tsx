@@ -49,7 +49,7 @@ export default function Languages({
 
   const continents: Array<TContinent> = t.raw("continents");
 
-  const selectedLocale = useMemo<TCountry>(() => {
+  const selectedLocale = useMemo<TNullable<TCountry>>(() => {
     let selectedLocale: TNullable<TCountry> = null;
 
     for (const continent of continents) {
@@ -76,10 +76,10 @@ export default function Languages({
           >
             <span className="relative h-[13px] w-[19px] text-lg leading-none">
               <span className="absolute top-1/2 left-1/2 h-[13px] w-[19px] -translate-1/2">
-                {selectedLocale.flag}
+                {selectedLocale?.flag}
               </span>
             </span>
-            <p>{selectedLocale.label}</p>
+            <p>{selectedLocale?.label}</p>
 
             <LuChevronDown
               size={16}
@@ -99,7 +99,7 @@ export default function Languages({
                 <CommandGroup key={continent.label} heading={continent.label}>
                   {continent.countries.map((country) => (
                     <Fragment key={country.label}>
-                      {country.locale !== selectedLocale.locale && (
+                      {country.locale !== selectedLocale?.locale && (
                         <CommandItem
                           asChild
                           value={country.label}
@@ -115,7 +115,7 @@ export default function Languages({
                             <span dir={country.dir} className="line-clamp-1">
                               {country.label}
                             </span>
-                            {selectedLocale.locale === country.locale && (
+                            {selectedLocale?.locale === country.locale && (
                               <LuCheck size={16} className="ml-auto" />
                             )}
                           </LinkLocale>

@@ -1,3 +1,4 @@
+"use client";
 import { TVehiclesFilter, zVehiclesFilter } from "@/validations/vehicles";
 
 import { z } from "zod";

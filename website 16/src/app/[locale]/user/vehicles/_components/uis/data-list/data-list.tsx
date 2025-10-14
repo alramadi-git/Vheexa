@@ -1,12 +1,10 @@
-"use client";
+import { VehicleService } from "@/services/vehicle/vehicle";
 
 import { Section, Container } from "@/components/locals/blocks/typography";
 import Filters from "./filters";
 
-export default function DataList() {
-  // const result = VehicleService.GetMany(
-  //   new VehicleFiltrationQuery(new PaginationQuery(1)),
-  // );
+export default async function DataList() {
+  const response = await VehicleService.GetMany();
 
   return (
     <Section>

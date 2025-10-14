@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace DataAccess.Entities;
 
 public class PartnerEntity
 {
-    [Key]
     public Guid UUID { get; set; }
     
     public ImageEntity? Logo { get; set; }

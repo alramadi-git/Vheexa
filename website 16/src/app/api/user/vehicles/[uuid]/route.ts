@@ -2,13 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  context: any,
+  context: RouteContext<"/api/user/vehicles/[uuid]">,
 ): Promise<NextResponse> {
-  console.log(context);
+  const { uuid } = await context.params;
 
-  return NextResponse.json({});
-  
-  const api = `${process.env.API}/user/vehicles/{request.params.uuid}`;
+  const api = `${process.env.API}/user/vehicles/${uuid}`;
   const apiResponse = await fetch(api, {
     method: "GET",
     headers: {

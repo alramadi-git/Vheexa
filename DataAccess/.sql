@@ -245,7 +245,7 @@ INSERT INTO "Users" ("HumanUUID", "IsDeleted", "DeletedAt", "UpdatedAt", "Create
 -- PARTNER
 -- =============================================================
 INSERT INTO "Partners" ("LogoUUID", "BannerUUID", "Handle", "Name", "PhoneNumber", "Email", "Password", "IsDeleted", "DeletedAt", "UpdatedAt", "CreatedAt") VALUES
-((SELECT "UUID" FROM "Images" OFFSET 1 LIMIT 1), (SELECT "UUID" FROM "Images" OFFSET 2 LIMIT 1), 'single_partner', 'Single Partner Co.', '+19999999999', 'partner@vheexa.com', 'partnerpass', FALSE, NULL, NOW(), NOW());
+((SELECT "UUID" FROM "Images" OFFSET 1 LIMIT 1), (SELECT "UUID" FROM "Images" OFFSET 2 LIMIT 1), 'partner', 'vheexa.', '+19999999999', 'partner@vheexa.com', 'AQAAAAIAAYagAAAAEE110qdoPdFA56+/BhahkESGi1susGSrN/oMVDGuSLctPVm0jWuG0kHaZwVB9XcHVw==', FALSE, NULL, NOW(), NOW());
 
 -- =============================================================
 -- Partner Supported Location

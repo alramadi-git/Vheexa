@@ -18,9 +18,20 @@ public class AppDBContext : DbContext
     public DbSet<VehicleEntity> Vehicles { get; set; }
     public DbSet<VehicleImageEntity> VehicleImages { get; set; }
     public DbSet<VehicleColorEntity> VehicleColors { get; set; }
-    
+
     public DbSet<VehicleInstanceEntity> VehicleInstances { get; set; }
     public DbSet<VehicleInstanceSupportedLocationEntity> VehicleInstanceSupportedLocations { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var uuidProp = entityType.FindProperty("UUID");
+            if (uuidProp != null) modelBuilder.Entity(entityType.ClrType).HasKey("UUID");
+        }
+
+        base.OnModelCreating(modelBuilder);
+    }
 };

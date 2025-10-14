@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace DataAccess.Entities;
 
 public class LocationEntity
 {
-    [Key]
     public Guid UUID { get; set; }
 
     public string Country { get; set; }

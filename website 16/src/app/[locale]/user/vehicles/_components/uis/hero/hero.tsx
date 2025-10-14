@@ -1,5 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
+// import Background from "@/app/[locale]/user/vehicles/_components/uis/hero/background";
+
+import { ArrowUpRight } from "lucide-react";
 import {
   Section,
   Container,
@@ -8,11 +11,8 @@ import {
   Description,
   LEVEL,
 } from "@/components/locals/blocks/typography";
-// import Background from "@/app/[locale]/user/vehicles/_components/uis/hero/background";
 import { Badge } from "@/components/shadcn/badge";
-import { ArrowUpRight } from "lucide-react";
 import { FullHDImage } from "@/components/locals/blocks/image";
-import Image from "next/image";
 
 export default async function Hero() {
   const t = await getTranslations("app.user.vehicles.page.hero");

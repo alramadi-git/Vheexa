@@ -26,12 +26,12 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { uuid } = await props.params;
 
-  const result = VehicleService.GetOne(uuid);
-  const vehicle = result.Data;
+  // const result = VehicleService.GetOne(uuid);
+  // const vehicle = result.Data;
 
   return {
-    title: vehicle.Name,
-    description: vehicle.Description,
+    // title: vehicle.Name,
+    // description: vehicle.Description,
   };
 }
 
@@ -42,11 +42,11 @@ export default async function Page(
   setRequestLocale(locale);
 
   const result = VehicleService.GetOne(uuid);
-  const vehicle = Serialization.plainToInstance(Vehicle, result.Data);
+  // const vehicle = Serialization.plainToInstance(Vehicle, result.Data);
 
   return (
     <Fragment>
-      <Section className="h-hero">
+      {/* <Section className="h-hero">
         <Container className="grid h-full grid-cols-2 gap-6">
           <div className="relative size-full overflow-hidden rounded-md">
             <FullHDImage
@@ -67,7 +67,7 @@ export default async function Page(
             </Intro>
           </div>
         </Container>
-      </Section>
+      </Section> */}
     </Fragment>
   );
 }

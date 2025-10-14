@@ -1,7 +1,7 @@
-import { TCredentials } from "@/validations/credentials";
+import { tCredentials } from "@/validations/credentials";
 
-class Authentication {
-  public static async signin(credentials: TCredentials) {
+class AuthenticationService {
+  public static async signin(credentials: tCredentials) {
     return await fetch("/api/user/authentication/signin", {
       method: "POST",
       headers: {
@@ -12,4 +12,4 @@ class Authentication {
   }
 }
 
-export { Authentication };
+export { AuthenticationService };
