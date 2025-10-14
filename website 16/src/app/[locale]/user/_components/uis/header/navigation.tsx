@@ -1,4 +1,4 @@
-import type { Direction } from "@radix-ui/react-navigation-menu";
+import { getTranslations } from "next-intl/server";
 
 import {
   NavigationMenu,
@@ -9,30 +9,29 @@ import {
   NavigationMenuTrigger,
 } from "@/components/shadcn/navigation-menu";
 import { Link } from "@/components/locals/blocks/link";
-import { getTranslations } from "next-intl/server";
 
-type TNavigationItem = {
+type tNavigationLink = {
   id: number;
   href: string;
   label: string;
 };
 
-type TSubNavigationItem2 = {
+type tSubNavigationLink = {
   id: number;
   href: string;
   label: string;
   description: string;
 };
 
-type TSubNavigationItem = {
+type tNavigationMenu = {
   id: number;
   label: string;
-  submenu?: Array<TSubNavigationItem2>;
+  submenu?: Array<tSubNavigationLink>;
 };
 
 export default async function NavigationMenuWithDropdown() {
   const t = await getTranslations("app.user.layout.header");
-  const navigation: Array<TNavigationItem | TSubNavigationItem> =
+  const navigation: Array<tNavigationLink | tNavigationMenu> =
     t.raw("navigation.links");
 
   return (

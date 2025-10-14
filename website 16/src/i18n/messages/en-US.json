@@ -595,32 +595,35 @@
         },
 
         "signin": {
-          "layout": {
+          "page": {
             "metadata": {
               "title": "Sign In",
               "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
-            }
-          },
+            },
 
-          "page": {
-            "title": "Welcome back",
-            "description": "Sign in to your Vheexa account",
+            "card": {
+              "title": "Welcome back",
+              "description": "Sign in to your Vheexa account",
 
-            "form": {
-              "email": {
-                "label": "Email",
-                "placeholder": "user@vheexa.com",
-                "description": "Enter your email address"
+              "form": {
+                "email": {
+                  "label": "Email",
+                  "placeholder": "user@vheexa.com",
+                  "description": "Enter your email address"
+                },
+                "password": {
+                  "label": "Password",
+                  "placeholder": "********",
+                  "description": "Enter your password"
+                }
               },
-              "password": {
-                "label": "Password",
-                "placeholder": "********",
-                "description": "Enter your password"
+
+              "alternate-sign-in": {
+                "label": "OR CONTINUE WITH",
+                "providers": []
               }
             }
-          },
-
-          "providers": {}
+          }
         }
       }
     }

@@ -13,7 +13,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   });
 
   const apiBody = await apiResponse.json();
-
   if (apiResponse.ok === false) {
     const response = new NextResponse(JSON.stringify(apiBody), {
       status: apiResponse.status,
