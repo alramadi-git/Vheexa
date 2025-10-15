@@ -1,8 +1,14 @@
+using System.Text
+;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
+using API.Models;
 using Business.User.Services;
 using DataAccess;
 using DataAccess.User.Repositories;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API;
 
@@ -14,6 +20,27 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
+
+        var jwtOptions = builder.Configuration.GetSection("JWTOptions").Get<JWTOptions>()!;
+        builder.Services.AddSingleton(jwtOptions);
+
+        builder.Services.AddAuthentication()
+        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateLifetime = true,
+
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtOptions.Issuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = jwtOptions.Audience,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = jwtOptions.SymmetricSecurityKey()
+                };
+            });
 
         builder.Services.AddScoped<AuthenticationService>();
         builder.Services.AddScoped<AuthenticationRepository>();

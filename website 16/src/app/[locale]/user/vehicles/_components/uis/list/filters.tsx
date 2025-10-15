@@ -118,22 +118,22 @@ import { Checkbox } from "@/components/shadcn/checkbox";
 // }
 
 export default function Filters() {
-  // const form = useForm<TVehiclesFilter>({
-  //   defaultValues: {
-  //     Vehicles: {
-  //       Search: undefined,
-  //       Transmission: undefined,
-  //       MinCapacity: undefined,
-  //       MaxCapacity: undefined,
-  //       Fuel: undefined,
-  //       MinPrice: undefined,
-  //       MaxPrice: undefined,
-  //       HasDiscount: undefined,
-  //     },
-  //   },
-  //   resolver: zodResolver(zVehiclesFilter),
-  // });
-  // function onSubmit(vehilczVehiclesFilter: z.infer<typeof zVehiclesFilter>) {}
+  const form = useForm<tVehiclesFilter>({
+    defaultValues: {
+      Vehicles: {
+        Search: undefined,
+        Transmission: undefined,
+        MinCapacity: undefined,
+        MaxCapacity: undefined,
+        Fuel: undefined,
+        MinPrice: undefined,
+        MaxPrice: undefined,
+        HasDiscount: undefined,
+      },
+    },
+    resolver: zodResolver(zVehiclesFilter),
+  });
+  function onSubmit(vehilczVehiclesFilter: z.infer<typeof zVehiclesFilter>) {}
 
   return <Card className="relative min-h-full w-1/4 rounded-md"></Card>;
 }

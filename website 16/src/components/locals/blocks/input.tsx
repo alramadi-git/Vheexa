@@ -1,4 +1,4 @@
-import type { ComponentProps, JSX } from "react";
+import type { ComponentProps } from "react";
 import type { FieldValues } from "react-hook-form";
 
 import { cn } from "@/utilities/cn";
@@ -11,11 +11,6 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/shadcn/form";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/shadcn/tooltip";
 import { Input as ShadcnInput } from "@/components/shadcn/input";
 
 type TInput<TFieldValues extends FieldValues> = {
@@ -39,6 +34,7 @@ function Input<TFieldValues extends FieldValues = FieldValues>(
           <FormControl>
             <ShadcnInput
               {...field}
+              {...props.input}
               className={cn(
                 {
                   "text-destructive placeholder:text-destructive":
@@ -52,19 +48,7 @@ function Input<TFieldValues extends FieldValues = FieldValues>(
           {!fieldState.invalid && props.description && (
             <FormDescription>{props.description}</FormDescription>
           )}
-
-          {/* <Tooltip> */}
-          {/* <TooltipTrigger asChild> */}
           <FormMessage className="w-fit" />
-          {/* </TooltipTrigger> */}
-          {/* <TooltipContent
-              sideOffset={-1}
-              side="bottom"
-              className="bg-card text-foreground border px-2"
-            >
-              {fieldState.error?.message}
-            </TooltipContent> */}
-          {/* </Tooltip> */}
         </FormItem>
       )}
     />

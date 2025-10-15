@@ -3,7 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import { Fragment } from "react";
 
 import Hero from "@/app/[locale]/user/vehicles/_components/uis/hero/hero";
-import DataList from "@/app/[locale]/user/vehicles/_components/uis/data-list/data-list";
+import List from "@/app/[locale]/user/vehicles/_components/uis/list/list";
 
 export default async function Page({ params }: PageProps<"/[locale]/user/vehicles">) {
   const { locale } = await params;
@@ -12,7 +12,7 @@ export default async function Page({ params }: PageProps<"/[locale]/user/vehicle
   return (
     <Fragment>
       <Hero />
-      <DataList />
+      <List />
     </Fragment>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { VehicleService } from "@/services/user/vehicle/vehicle";
+import { VehicleService } from "@/app/[locale]/user/_services/vehicle/vehicle";
 
 import { setRequestLocale } from "next-intl/server";
 import * as Serialization from "class-transformer";

@@ -608,12 +608,14 @@
               "form": {
                 "email": {
                   "label": "Email",
-                  "placeholder": "user@vheexa.com",
+                  "placeholder": "account@vheexa.com",
+                  "default": "user@vheexa.com",
                   "description": "Enter your email address"
                 },
                 "password": {
                   "label": "Password",
                   "placeholder": "********",
+                  "default": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
                   "description": "Enter your password"
                 }
               }

@@ -1,11 +1,17 @@
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 using FluentValidation;
 
+using API.Models;
+using API.User.Models;
 using Business.User.Services;
 using DataAccess.User.DTOs.Requests;
 using DataAccess.User.DTOs.Responses;
-using Microsoft.AspNetCore.Identity;
+
 
 namespace API.User.Controllers;
 
@@ -13,21 +19,43 @@ namespace API.User.Controllers;
 [Route("api/user/authentication")]
 public class AuthenticationController : Controller
 {
+    private readonly JWTOptions _JWTOptions;
     private readonly AuthenticationService _AuthenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService)
+
+    public AuthenticationController(
+        JWTOptions jWTOptions,
+        AuthenticationService authenticationService
+    )
     {
+        _JWTOptions = jWTOptions;
         _AuthenticationService = authenticationService;
     }
 
     [HttpPost("signin")]
-    public async Task<ActionResult<SuccessOneDTO<UserDTO>>> SigninAsync([FromBody] CredentialsDTO userSignedupData)
+    public async Task<ActionResult<SuccessOneDTO<UserModel>>> SigninAsync([FromBody] CredentialsDTO userSignedupData)
     {
         try
         {
             var user = await _AuthenticationService.SigninAsync(userSignedupData);
 
-            return Ok(user);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = _JWTOptions.Issuer,
+                Audience = _JWTOptions.Audience,
+                SigningCredentials = new SigningCredentials(_JWTOptions.SymmetricSecurityKey(), SecurityAlgorithms.HmacSha256),
+                Subject = new ClaimsIdentity([
+                    new Claim("uuid", user.Data.UUID.ToString()),
+                    new Claim("email", user.Data.Email.ToString()),
+                ])
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var jwt = tokenHandler.WriteToken(token);
+
+            var response = new SuccessOneDTO<UserModel>(new UserModel(user.Data, jwt));
+            return Ok(response);
         }
         catch (ValidationException ex)
         {

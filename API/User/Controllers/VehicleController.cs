@@ -15,13 +15,10 @@ namespace API.User.Controllers;
 public class VehicleController : Controller
 {
     private readonly VehicleService _VehicleService;
-    private readonly ILogger<VehicleColorDTO> _Logger;
 
-
-    public VehicleController(VehicleService vehicleService, ILogger<VehicleColorDTO> logger)
+    public VehicleController(VehicleService vehicleService)
     {
         _VehicleService = vehicleService;
-        _Logger = logger;
     }
 
     [HttpGet("{uuid:guid}")]
@@ -56,13 +53,10 @@ public class VehicleController : Controller
         [FromQuery] PaginationFilterDTO pagination
     )
     {
-        _Logger.LogInformation(HttpContext.Request.GetDisplayUrl());
-
-        var user = await _VehicleService.GetManyAsync(filters, pagination);
-        return Ok(user);
-
         try
         {
+            var user = await _VehicleService.GetManyAsync(filters, pagination);
+            return Ok(user);
         }
         catch (ValidationException ex)
         {

@@ -267,7 +267,7 @@ INSERT INTO "Locations" ("Country", "City", "Street", "Latitude", "Longitude") V
 INSERT INTO "Humans" ("AvatarUUID", "LocationUUID", "Username", "DateOfBirth", "PhoneNumber", "Email", "Password") VALUES
 ((SELECT "UUID" FROM "Images" OFFSET 0 LIMIT 1),
  (SELECT "UUID" FROM "Locations" OFFSET 0 LIMIT 1),
- 'user', '1990-01-01', '+10000000000', 'user@vheexa.com', 'AQAAAAIAAYagAAAAEE110qdoPdFA56+/BhahkESGi1susGSrN/oMVDGuSLctPVm0jWuG0kHaZwVB9XcHVw==');
+ 'user', '1990-01-01', '+10000000000', 'user@vheexa.com', 'AQAAAAIAAYagAAAAEIxLR0r2g0pwsSvrhCJNoGcOHtiHt6eb1Rm90G0m+jjHS9B3RiF4px6sQlvv8N3nEA==');
 
 INSERT INTO "Users" ("HumanUUID", "IsDeleted", "DeletedAt", "UpdatedAt", "CreatedAt") VALUES
 ((SELECT "UUID" FROM "Humans" OFFSET 0 LIMIT 1), FALSE, NULL, NOW(), NOW());
@@ -279,7 +279,7 @@ INSERT INTO "Partners" ("LogoUUID", "BannerUUID", "Handle", "Name", "PhoneNumber
 (
  (SELECT "UUID" FROM "Images" OFFSET 1 LIMIT 1),
  (SELECT "UUID" FROM "Images" OFFSET 2 LIMIT 1),
- 'partner', 'vheexa.', '+19999999999', 'partner@vheexa.com', 'AQAAAAIAAYagAAAAEE110qdoPdFA56+/BhahkESGi1susGSrN/oMVDGuSLctPVm0jWuG0kHaZwVB9XcHVw==',
+ 'vheexa', 'vheexa.', '+19999999999', 'partner@vheexa.com', 'AQAAAAIAAYagAAAAEIxLR0r2g0pwsSvrhCJNoGcOHtiHt6eb1Rm90G0m+jjHS9B3RiF4px6sQlvv8N3nEA==',
  FALSE, NULL, NOW(), NOW()
 );
 

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  console.log("api: start")
   let queryString = request.nextUrl.searchParams.toString();
   queryString = queryString === "" ? "" : `?${queryString}`;
 
-  const api = `${process.env.API}/user/vehicles${queryString}}`;
-
+  const api = `${process.env.API}/user/vehicles${queryString}`;
   const apiResponse = await fetch(api, {
     method: "GET",
     headers: {

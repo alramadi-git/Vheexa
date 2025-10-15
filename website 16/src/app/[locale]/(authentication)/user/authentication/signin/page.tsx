@@ -1,27 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Button } from "@/components/shadcn/button";
-import { FaGoogle, FaApple, FaMeta } from "react-icons/fa6";
 import Form from "./_components/form";
-
-const authenticationProviders = [
-  {
-    id: "google",
-    label: "Sign in with google",
-    icon: <FaGoogle />,
-  },
-  {
-    id: "apple",
-    label: "Sign in with apple",
-    icon: <FaApple />,
-  },
-  {
-    id: "meta",
-    label: "Sign in with meta",
-    icon: <FaMeta />,
-  },
-];
 
 export const dynamic = "force-static";
 export async function generateMetadata({
@@ -46,8 +26,8 @@ export default async function Page({
 
   return (
     <div className="flex flex-col gap-y-6 overflow-auto p-6">
-      <div className="flex flex-col gap-6 p-6 md:p-8">
-        <div className="flex flex-col items-center text-center">
+      <div className="my-auto flex flex-col gap-6 p-6">
+        <div className="flex flex-col">
           <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground text-balance">
             {t("description")}

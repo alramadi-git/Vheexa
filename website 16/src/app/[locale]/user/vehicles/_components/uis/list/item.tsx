@@ -1,8 +1,8 @@
-import { tVehicle } from "@/services/user/types/vehicle";
-import * as Serialization from "class-transformer";
+import { Mony } from "@/libraries/mony";
+import { tVehicle } from "@/app/[locale]/user/_types/vehicle";
 
-import { UsersRound, Fuel } from "lucide-react";
 import { RiSteeringFill } from "react-icons/ri";
+import { Fuel, UsersRound } from "lucide-react";
 
 import {
   Card,
@@ -12,25 +12,23 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/shadcn/card";
-import { FullHDImage } from "@/components/locals/blocks/image";
-
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/shadcn/carousel";
-
+import { Fragment } from "react";
 import { Badge } from "@/components/shadcn/badge";
-import { Separator } from "@/components/shadcn/separator";
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/link";
-import { Mony } from "@/libraries/mony";
-import { Fragment } from "react";
+import { Separator } from "@/components/shadcn/separator";
+import { FullHDImage } from "@/components/locals/blocks/image";
 
 type tItemProps = {
   vehicle: tVehicle;
 };
-export default function Item({  vehicle }: tItemProps) {
+
+export default function Item({ vehicle }: tItemProps) {
   const monyFormatter = new Mony();
 
   return (

@@ -12,9 +12,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     },
     body: JSON.stringify(requestBody),
   });
+  console.log(apiResponse);
 
   if (apiResponse.ok === false) {
-    const apiBody = await apiResponse.json();
+    const apiBody = null //await apiResponse.json();
     const response = new NextResponse(JSON.stringify(apiBody), {
       status: apiResponse.status,
     });
