@@ -16,6 +16,6 @@ public class PaginationFilterDTO
     public int Page { get; set; } = 1;
     public PAGE_SIZE PageSize { get; set; } = PAGE_SIZE._10;
 
-    public int Skip() { return Page - 1; }
+    public int Skip() { return (Page - 1) * (int)PageSize; }
     public int Take() { return (int)PageSize; }
 }

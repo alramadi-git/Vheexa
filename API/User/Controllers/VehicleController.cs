@@ -6,6 +6,7 @@ using Business.User.Services;
 using DataAccess.User.DTOs.Requests;
 using DataAccess.User.DTOs.Responses;
 using DataAccess.User.DTOs.Requests.Filters;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace API.User.Controllers;
 
@@ -14,10 +15,13 @@ namespace API.User.Controllers;
 public class VehicleController : Controller
 {
     private readonly VehicleService _VehicleService;
+    private readonly ILogger<VehicleColorDTO> _Logger;
 
-    public VehicleController(VehicleService vehicleService)
+
+    public VehicleController(VehicleService vehicleService, ILogger<VehicleColorDTO> logger)
     {
         _VehicleService = vehicleService;
+        _Logger = logger;
     }
 
     [HttpGet("{uuid:guid}")]
@@ -52,6 +56,8 @@ public class VehicleController : Controller
         [FromQuery] PaginationFilterDTO pagination
     )
     {
+        _Logger.LogInformation(HttpContext.Request.GetDisplayUrl());
+
         var user = await _VehicleService.GetManyAsync(filters, pagination);
         return Ok(user);
 

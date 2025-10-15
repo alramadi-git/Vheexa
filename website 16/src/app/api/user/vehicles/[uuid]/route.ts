@@ -16,18 +16,10 @@ export async function GET(
   });
 
   const apiBody = await apiResponse.json();
-
-  if (apiResponse.ok === false) {
-    const response = new NextResponse(JSON.stringify(apiBody), {
-      status: apiResponse.status,
-    });
-
-    return response;
-  }
-
   const response = new NextResponse(JSON.stringify(apiBody), {
     status: apiResponse.status,
   });
 
+  if (apiResponse.ok === false) return response;
   return response;
 }

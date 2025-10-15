@@ -1,12 +1,12 @@
 import type { ComponentProps, JSX } from "react";
 
-export default function List<TItem>({
+export default function List<tItem>({
   items,
   render,
   ...props
 }: Omit<ComponentProps<"div">, "children"> & {
-  items: Array<TItem>;
-  render: (item: TItem) => JSX.Element;
+  items: Array<tItem>;
+  render: (item: tItem) => JSX.Element;
 }) {
   return <div {...props}>{items.map(render)}</div>;
 }

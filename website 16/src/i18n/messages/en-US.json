@@ -616,11 +616,6 @@
                   "placeholder": "********",
                   "description": "Enter your password"
                 }
-              },
-
-              "alternate-sign-in": {
-                "label": "OR CONTINUE WITH",
-                "providers": []
               }
             }
           }

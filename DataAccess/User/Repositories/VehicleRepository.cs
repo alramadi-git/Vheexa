@@ -56,7 +56,7 @@ public class VehicleRepository
     public async Task<SuccessManyDTO<VehicleDTO>> GetManyAsync(VehicleFiltersDTO filters, PaginationFilterDTO pagination)
     {
         var vehiclesQuery = _AppDBContext.Vehicles.AsQueryable();
-        
+
         vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo);
         vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner);
         vehiclesQuery = vehiclesQuery.Where(vehicle => vehicle.Partner.IsDeleted == false);
@@ -65,6 +65,8 @@ public class VehicleRepository
 
         vehiclesQuery = vehiclesQuery.Where(vehicle => vehicle.IsPublished == true && vehicle.IsDeleted == false);
         vehiclesQuery = filters.Apply(vehiclesQuery);
+
+        vehiclesQuery = vehiclesQuery.OrderBy(vehicle => vehicle.CreatedAt);
 
         var totalItems = await vehiclesQuery.CountAsync();
         vehiclesQuery = vehiclesQuery
@@ -82,8 +84,7 @@ public class VehicleRepository
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsPublished == true && vehicleImage.IsDeleted == false);
 
         var vehicleUUIDsImages = new Dictionary<Guid, VehicleImageEntity>();
-        var vehicleImages = await vehicleImagesQuery.AsNoTracking()
-        .ToArrayAsync();
+        var vehicleImages = await vehicleImagesQuery.AsNoTracking().ToArrayAsync();
 
         var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
 

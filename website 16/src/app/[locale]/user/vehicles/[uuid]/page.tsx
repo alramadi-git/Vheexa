@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
-import { Vehicle } from "@/classes/vehicle";
-import { VehicleService } from "@/services/vehicle/vehicle";
+import { VehicleService } from "@/services/user/vehicle/vehicle";
 
 import { setRequestLocale } from "next-intl/server";
 import * as Serialization from "class-transformer";
@@ -41,7 +40,8 @@ export default async function Page(
   const { locale, uuid } = await props.params;
   setRequestLocale(locale);
 
-  const result = VehicleService.GetOne(uuid);
+  const response = await VehicleService.GetOne(uuid);
+  console.log(response)
   // const vehicle = Serialization.plainToInstance(Vehicle, result.Data);
 
   return (

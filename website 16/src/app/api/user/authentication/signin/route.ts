@@ -1,32 +1,16 @@
 import { NextResponse } from "next/server";
-import { tCredentials, zCredentials } from "@/validations/credentials";
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body: tCredentials = await request.json();
-
-  const zCredentialsResult = zCredentials.safeParse(body);
-  if (zCredentialsResult.success === false) {
-    const response = new NextResponse(
-      JSON.stringify({
-        message: "Invalid credentials",
-        errors: zCredentialsResult.error.issues,
-      }),
-      {
-        status: 400,
-      },
-    );
-
-    return response;
-  }
-
   const api = `${process.env.API}/user/authentication/signin`;
+  const requestBody = await request.json();
+
   const apiResponse = await fetch(api, {
     method: "POST",
     headers: {
       "Api-Key": `${process.env.API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(requestBody),
   });
 
   if (apiResponse.ok === false) {

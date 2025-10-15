@@ -1,6 +1,6 @@
 "use client";
 
-import type { TNullable } from "@/types/nullish";
+import type { tNullable } from "@/types/nullish";
 
 import { useRouter } from "@/i18n/navigation";
 import { useSearchParams as useSearchParamsNextJS } from "next/navigation";
@@ -14,7 +14,7 @@ export function useSearchParams() {
     return searchParamsString === "" ? "" : `?${searchParamsString}`;
   }
 
-  function Get(key: string): TNullable<string> {
+  function Get(key: string): tNullable<string> {
     return searchParams.get(key);
   }
 

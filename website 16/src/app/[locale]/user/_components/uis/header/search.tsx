@@ -5,10 +5,10 @@ import { Input } from "@/components/shadcn/input";
 import { SearchIcon } from "lucide-react";
 import { Kbd } from "@/components/locals/blocks/typography";
 import { useEffect, useRef } from "react";
-import { TNullable } from "@/types/nullish";
+import { tNullable } from "@/types/nullish";
 
 export default function Search() {
-  const ref = useRef<TNullable<HTMLInputElement>>(null);
+  const ref = useRef<tNullable<HTMLInputElement>>(null);
   const t = useTranslations("app.user.layout.header");
 
   useEffect(() => {

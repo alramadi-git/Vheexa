@@ -2,7 +2,7 @@
 
 import { LOCALE } from "@/i18n/routing";
 
-import type { TNullable } from "@/types/nullish";
+import type { tNullable } from "@/types/nullish";
 
 import { cn } from "@/utilities/cn";
 import { useLocale, useTranslations } from "next-intl";
@@ -49,8 +49,8 @@ export default function Languages({
 
   const continents: Array<TContinent> = t.raw("continents");
 
-  const selectedLocale = useMemo<TNullable<TCountry>>(() => {
-    let selectedLocale: TNullable<TCountry> = null;
+  const selectedLocale = useMemo<tNullable<TCountry>>(() => {
+    let selectedLocale: tNullable<TCountry> = null;
 
     for (const continent of continents) {
       if (selectedLocale !== null) break;

@@ -1,6 +1,5 @@
+import { tVehicle } from "@/services/user/types/vehicle";
 import * as Serialization from "class-transformer";
-
-import { Vehicle } from "@/classes/vehicle";
 
 import { UsersRound, Fuel } from "lucide-react";
 import { RiSteeringFill } from "react-icons/ri";
@@ -28,47 +27,46 @@ import { Link } from "@/components/locals/blocks/link";
 import { Mony } from "@/libraries/mony";
 import { Fragment } from "react";
 
-type TItemProps = {
-  data: unknown;
+type tItemProps = {
+  vehicle: tVehicle;
 };
-export default function Item({ data }: TItemProps) {
+export default function Item({  vehicle }: tItemProps) {
   const monyFormatter = new Mony();
-  const vehicle = Serialization.plainToInstance(Vehicle, data);
 
   return (
     <Card className="overflow-hidden rounded-md pt-0">
       <CardHeader className="relative h-58 px-0">
         <FullHDImage
-          src={vehicle.Thumbnail.URL}
-          alt={vehicle.Name}
+          src={vehicle.thumbnail!.url}
+          alt={vehicle.name}
           className="h-58"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 to-transparent"></div>
 
         <div className="absolute top-3 left-3 z-10 flex items-center gap-1">
           <FullHDImage
-            src={vehicle.Partner.Logo.URL}
-            alt={vehicle.Partner.Name}
+            src={vehicle.partner.logo!.url}
+            alt={vehicle.partner.name}
             className="size-10 rounded-lg"
           />
 
           <div>
             <h4 className="text-foreground text-lg leading-5 font-bold">
-              {vehicle.Partner.Name}
+              {vehicle.partner.name}
             </h4>
             <p className="text-muted-foreground text-sm font-medium">
-              {vehicle.Partner.Email}
+              {vehicle.partner.email}
             </p>
           </div>
         </div>
 
         <ul className="absolute bottom-0 left-0 z-10 flex flex-wrap gap-1 p-3">
-          {vehicle.Colors.map((color, index) => (
+          {vehicle.colors.map((color, index) => (
             <li
               key={index}
               className="h-1 w-8 rounded-full shadow-2xl shadow-red-500"
               style={{
-                background: color.HexCode,
+                background: color.hexCode,
               }}
             ></li>
           ))}
@@ -77,7 +75,7 @@ export default function Item({ data }: TItemProps) {
       <CardContent className="space-y-2">
         <Carousel className="w-full max-w-xs">
           <CarouselContent className="p-2">
-            {vehicle.Tags.map((tag, index) => (
+            {vehicle.tags.map((tag, index) => (
               <CarouselItem key={index} className="basis-auto ps-2 select-none">
                 <Badge variant="outline">#{tag}</Badge>
               </CarouselItem>
@@ -86,15 +84,15 @@ export default function Item({ data }: TItemProps) {
         </Carousel>
 
         <div className="flex items-center justify-between">
-          <CardTitle>{vehicle.Name}</CardTitle>
+          <CardTitle>{vehicle.name}</CardTitle>
 
           <Badge variant="outline" className="gap-1">
-            {vehicle.ManufacturingYear.getFullYear()}
+            {vehicle.modelYear}
           </Badge>
         </div>
 
         <CardDescription className="line-clamp-2">
-          {vehicle.Description}
+          {vehicle.description}
         </CardDescription>
 
         <Separator />
@@ -102,16 +100,16 @@ export default function Item({ data }: TItemProps) {
         <div className="grid grid-cols-2 gap-3">
           <div className="flex items-center gap-1">
             <RiSteeringFill className="size-4" />
-            <span className="text-sm font-medium">{vehicle.Transmission}</span>
+            <span className="text-sm font-medium">{vehicle.transmission}</span>
           </div>
           <div className="flex items-center gap-1">
             <Fuel className="size-4" />
-            <span className="text-sm font-medium">{vehicle.Fuel}</span>
+            <span className="text-sm font-medium">{vehicle.fuel}</span>
           </div>
           <div className="flex items-center gap-1">
             <UsersRound className="size-4" />
             <span className="text-sm font-medium">
-              {vehicle.Capacity} Capacity
+              {vehicle.capacity} Capacity
             </span>
           </div>
         </div>
@@ -119,14 +117,16 @@ export default function Item({ data }: TItemProps) {
       <CardFooter className="mt-auto flex items-end gap-3 pb-0">
         <div>
           <p className="text-lg leading-normal font-medium">
-            {monyFormatter.format(vehicle.DiscountedPrice())}
+            {monyFormatter.format(
+              vehicle.price - vehicle.discount * vehicle.price,
+            )}
           </p>
 
           <div className="flex items-center gap-0.5 text-xs">
-            {vehicle.HasDiscount() && (
+            {vehicle.discount !== 0 && (
               <Fragment>
                 <del className="leading-normal">
-                  {monyFormatter.format(vehicle.Price)}
+                  {monyFormatter.format(vehicle.price)}
                 </del>
 
                 <span>/</span>
@@ -139,7 +139,7 @@ export default function Item({ data }: TItemProps) {
         <Separator orientation="vertical" />
 
         <Button asChild className="grow">
-          <Link href={`/user/vehicles/${vehicle.ID}`}>View Details</Link>
+          <Link href={`/user/vehicles/${vehicle.uuid}`}>View Details</Link>
         </Button>
       </CardFooter>
     </Card>

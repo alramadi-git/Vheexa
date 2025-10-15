@@ -2,13 +2,13 @@
 
 import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { tCredentials, zCredentials } from "@/validations/credentials";
+import { tCredentials, zCredentials } from "@/validations/user/credentials";
 import { useForm } from "react-hook-form";
 
 import { Form as ReactHookForm } from "@/components/shadcn/form";
 import { Input } from "@/components/locals/blocks/input";
 import { Button } from "@/components/shadcn/button";
-import { AuthenticationService } from "@/services/authentication/authentication";
+import { AuthenticationService } from "@/services/user/authentication/authentication";
 
 export default function Form() {
   const form = useForm<tCredentials>({

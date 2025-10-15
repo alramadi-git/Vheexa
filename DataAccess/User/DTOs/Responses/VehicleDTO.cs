@@ -19,8 +19,8 @@ public class VehicleDTO
     public DateOnly ModelYear { get; set; }
 
     public string Transmission { get; set; }
-    public short Capacity { get; set; }
     public string Fuel { get; set; }
+    public short Capacity { get; set; }
 
     public double Price { get; set; }
     public float Discount { get; set; }

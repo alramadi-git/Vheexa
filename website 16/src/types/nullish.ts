@@ -1,7 +1,7 @@
-type TUndefinable<T> = T | undefined;
+type tUndefinable<T> = T | undefined;
 
-type TNullable<T> = T | null;
+type tNullable<T> = T | null;
 
-type TNullish<T> = TUndefinable<T> | TNullable<T>;
+type tNullish<T> = tUndefinable<T> | tNullable<T>;
 
-export type { TUndefinable, TNullable, TNullish };
+export type { tUndefinable, tNullable, tNullish };
