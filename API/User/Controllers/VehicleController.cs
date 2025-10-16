@@ -27,7 +27,6 @@ public class VehicleController : Controller
         try
         {
             var user = await _VehicleService.GetOneAsync(uuid);
-
             return Ok(user);
         }
         catch (ValidationException ex)

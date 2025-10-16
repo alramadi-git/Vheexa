@@ -71,7 +71,9 @@
 
           "search-placeholder": "Search...",
 
-          "signin-label": "Sign in now",
+          "account": {
+            "not-signed-in": "Sign in now"
+          },
 
           "languages": {
             "placeholder": "Search your language...",

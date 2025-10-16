@@ -1,20 +1,23 @@
 import "./../globals.css";
 
 import { ENVIRONMENT } from "@/enums/environment";
-import { type Metadata } from "next";
 import { Cairo } from "next/font/google";
+import type { Metadata } from "next";
+
+import { cn } from "@/utilities/cn";
+import { routing } from "@/i18n/routing";
+
 import {
   getMessages,
   getTranslations,
   setRequestLocale,
 } from "next-intl/server";
-import { cn } from "@/utilities/cn";
-import { routing } from "@/i18n/routing";
+
 import ThemeProvider from "@/components/locals/providers/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
-import Script from "next/script";
 import { Toaster } from "@/components/shadcn/sonner";
+import Script from "next/script";
 
 const cairo = Cairo({
   weight: [
@@ -61,19 +64,19 @@ export default async function Layout({
   return (
     <html suppressHydrationWarning lang={t("lang")} dir={t("dir")}>
       <body className={cn(cairo.className, "antialiased")}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider
-            enableSystem
-            disableTransitionOnChange
-            defaultTheme="light"
-            attribute="class"
-          >
-            <TooltipProvider>
-              {children}
-              <Toaster position="bottom-right" />
-            </TooltipProvider>
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        <ThemeProvider
+          enableSystem
+          disableTransitionOnChange
+          defaultTheme="light"
+          attribute="class"
+        >
+            <NextIntlClientProvider locale={locale} messages={messages}>
+              <TooltipProvider>
+                {children}
+                <Toaster position="bottom-right" />
+              </TooltipProvider>
+            </NextIntlClientProvider>
+        </ThemeProvider>
 
         {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
           process.env.NODE_ENV === ENVIRONMENT.TEST) && (

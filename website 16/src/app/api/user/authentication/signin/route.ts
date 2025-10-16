@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { tSuccessOneModel } from "@/app/api/user/_models/response";
+import { tSigninModel } from "../../_models/signin";
 
 export async function POST(request: Request): Promise<NextResponse> {
   const api = `${process.env.API}/user/authentication/signin`;
@@ -12,20 +14,27 @@ export async function POST(request: Request): Promise<NextResponse> {
     },
     body: JSON.stringify(requestBody),
   });
-  console.log(apiResponse);
-
-  if (apiResponse.ok === false) {
-    const apiBody = null //await apiResponse.json();
-    const response = new NextResponse(JSON.stringify(apiBody), {
-      status: apiResponse.status,
-    });
-
-    return response;
-  }
 
   const response = new NextResponse(null, {
     status: apiResponse.status,
-    headers: apiResponse.headers,
+  });
+
+  const apiResponseBody: tSuccessOneModel<tSigninModel> = await apiResponse.json();
+  
+  const user = JSON.stringify(apiResponseBody.data.user);
+  const token = apiResponseBody.data.token;
+
+  response.cookies.set("user", user, {
+    httpOnly: false,
+    secure: true,
+    path: "/",
+    sameSite: "strict",
+  });
+  response.cookies.set("token", token, {
+    httpOnly: false,
+    secure: true,
+    path: "/",
+    sameSite: "strict",
   });
 
   return response;

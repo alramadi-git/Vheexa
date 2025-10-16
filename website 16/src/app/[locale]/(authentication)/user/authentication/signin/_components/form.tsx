@@ -30,7 +30,7 @@ export default function Form() {
   function onSubmit(credentials: z.infer<typeof zCredentials>) {
     AuthenticationService.signin(credentials);
 
-    // router.push("/user");
+    router.push("/user");
   }
 
   return (

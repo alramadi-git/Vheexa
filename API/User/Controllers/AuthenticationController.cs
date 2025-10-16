@@ -1,16 +1,14 @@
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using FluentValidation;
 
 using API.Models;
-using API.User.Models;
 using Business.User.Services;
 using DataAccess.User.DTOs.Requests;
 using DataAccess.User.DTOs.Responses;
+using API.User.Models;
 
 
 namespace API.User.Controllers;
@@ -52,19 +50,10 @@ public class AuthenticationController : Controller
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwt = tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
 
-            var response = new SuccessOneDTO<UserModel>(new UserModel(user.Data, jwt));
+            var response = new SuccessOneDTO<UserModel>(new UserModel(user.Data, tokenString));
             return Ok(response);
-        }
-        catch (ValidationException ex)
-        {
-            var errors = ex.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage)).ToArray();
-            return BadRequest(new ErrorDTO(STATUS_CODE.BAD_REQUEST, errors, ex.Message));
-        }
-        catch (ErrorDTO ex)
-        {
-            return StatusCode((int)ex.StatusCode, ex);
         }
         catch (Exception ex)
         {

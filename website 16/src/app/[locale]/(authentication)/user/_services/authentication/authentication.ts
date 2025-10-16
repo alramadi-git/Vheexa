@@ -1,4 +1,6 @@
-import { tResponseOne } from "@/types/response";
+"use client";
+
+import type { tResponseOneModel } from "@/app/api/user/_models/response";
 import z from "zod/v4";
 
 const zCredentials = z.object({
@@ -27,31 +29,16 @@ type tCredentials = z.infer<typeof zCredentials>;
 class AuthenticationService {
   public static async signin(
     credentials: tCredentials,
-  ): Promise<tResponseOne<null>> {
-    zCredentials.safeParse(credentials);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/user/authentication/signin`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
+  ): Promise<tResponseOneModel<null>> {
+    await fetch(`${process.env.NEXT_PUBLIC_API}/user/authentication/signin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(credentials),
+    });
 
-    if (response.ok === false) {
-      const responseBody = await response.json();
-
-      return {
-        code: response.status,
-        message: responseBody.message,
-      };
-    }
-
-    return {
-      data: null,
-    };
+    return { data: null };
   }
 }
 

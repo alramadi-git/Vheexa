@@ -8,6 +8,7 @@ import Search from "@/app/[locale]/user/_components/uis/header/search";
 import MobileNavigation from "@/app/[locale]/user/_components/uis/header/mobile-navigation";
 import Navigation from "@/app/[locale]/user/_components/uis/header/navigation";
 import Languages from "@/app/[locale]/user/_components/uis/header/languages";
+import Account from "./account";
 
 export default async function Component() {
   const t = await getTranslations("app.user.layout.header");
@@ -33,9 +34,8 @@ export default async function Component() {
 
           {/** Top End */}
           <div className="flex w-full items-center justify-end gap-2">
-            <Button asChild>
-              <Link href="/user/authentication/signin">{t("signin-label")}</Link>
-            </Button>
+            <Account />
+
             <Languages />
             <MobileNavigation />
           </div>

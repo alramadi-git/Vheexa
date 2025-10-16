@@ -1,8 +1,8 @@
+import { tVehicle } from "@/app/api/user/_types/vehicle";
 import { Mony } from "@/libraries/mony";
-import { tVehicle } from "@/app/[locale]/user/_types/vehicle";
 
 import { RiSteeringFill } from "react-icons/ri";
-import { Fuel, UsersRound } from "lucide-react";
+import { LuFuel, LuUsersRound } from "react-icons/lu";
 
 import {
   Card,
@@ -101,11 +101,11 @@ export default function Item({ vehicle }: tItemProps) {
             <span className="text-sm font-medium">{vehicle.transmission}</span>
           </div>
           <div className="flex items-center gap-1">
-            <Fuel className="size-4" />
+            <LuFuel className="size-4" />
             <span className="text-sm font-medium">{vehicle.fuel}</span>
           </div>
           <div className="flex items-center gap-1">
-            <UsersRound className="size-4" />
+            <LuUsersRound className="size-4" />
             <span className="text-sm font-medium">
               {vehicle.capacity} Capacity
             </span>

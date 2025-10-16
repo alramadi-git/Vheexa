@@ -1,5 +1,3 @@
-using System.Text
-;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +6,6 @@ using API.Models;
 using Business.User.Services;
 using DataAccess;
 using DataAccess.User.Repositories;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace API;
 
