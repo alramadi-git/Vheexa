@@ -3,15 +3,7 @@
 import { useTranslations } from "next-intl";
 import useUser from "../../../_hooks/use-user";
 
-import {
-  LuBolt,
-  LuBookOpen,
-  LuChevronDown,
-  LuLayers2,
-  LuLogOut,
-  LuPin,
-  LuUserPen,
-} from "react-icons/lu";
+import { LuUserRound, LuChevronDown, LuBolt, LuLogOut } from "react-icons/lu";
 
 import {
   Avatar,
@@ -20,12 +12,12 @@ import {
 } from "@/components/shadcn/avatar";
 import {
   DropdownMenu,
+  DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuLabel,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 
 import { Button } from "@/components/shadcn/button";
@@ -33,7 +25,7 @@ import { Link } from "@/components/locals/blocks/link";
 
 export default function Account() {
   const t = useTranslations("app.user.layout.header.account");
-  const user = useUser();
+  const { user, logout } = useUser();
 
   if (user === undefined)
     return (
@@ -45,14 +37,16 @@ export default function Account() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto border hover:bg-transparent">
-          <Avatar className="rounded-md h-full">
+        <Button variant="ghost" className="border hover:bg-transparent">
+          <Avatar className="size-6 items-center justify-center rounded-md">
             <AvatarImage
-              src="/origin/avatar.jpg"
-              alt="Profile image"
-              className="rounded-none"
+              // src={user.avatar?.url}
+              alt={user.email}
+              className="rounded-md bg-transparent"
             />
-            <AvatarFallback className="rounded-none">{user.email}</AvatarFallback>
+            <AvatarFallback className="rounded-md bg-transparent">
+              <LuUserRound className="opacity-60" aria-hidden="true" />
+            </AvatarFallback>
           </Avatar>
           <LuChevronDown size={16} className="opacity-60" aria-hidden="true" />
         </Button>
@@ -60,41 +54,24 @@ export default function Account() {
       <DropdownMenuContent align="end" className="max-w-64">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
-            Keith Kennedy
+            {user.username}
           </span>
           <span className="text-muted-foreground truncate text-xs font-normal">
-            k.kennedy@coss.com
+            {user.email}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <LuBolt size={16} className="opacity-60" aria-hidden="true" />
-            <span>Option 1</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <LuLayers2 size={16} className="opacity-60" aria-hidden="true" />
-            <span>Option 2</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <LuBookOpen size={16} className="opacity-60" aria-hidden="true" />
-            <span>Option 3</span>
+          <DropdownMenuItem asChild>
+            <Link href="/user/profile">
+              <LuBolt size={16} className="opacity-60" aria-hidden="true" />
+              <span>Profile</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <LuPin size={16} className="opacity-60" aria-hidden="true" />
-            <span>Option 4</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <LuUserPen size={16} className="opacity-60" aria-hidden="true" />
-            <span>Option 5</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LuLogOut size={16} className="opacity-60" aria-hidden="true" />
+        <DropdownMenuItem onClick={logout} variant="destructive">
+          <LuLogOut size={16} aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

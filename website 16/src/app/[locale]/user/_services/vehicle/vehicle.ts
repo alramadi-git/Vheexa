@@ -1,27 +1,53 @@
 import type {
-  tResponseOneModel,
-  tResponseManyModel,
+  tSuccessManyModel,
+  tSuccessOneModel,
 } from "@/app/api/user/_models/response";
 import type { tVehicle } from "@/app/api/user/_types/vehicle";
 
 import z from "zod/v4";
 
-const zVehicleFilters = z.object({
-  search: z.string().optional(),
-  transmission: z.string().optional(),
-  fuel: z.string().optional(),
-  minCapacity: z.number().optional(),
-  maxCapacity: z.number().optional(),
-  minPrice: z.number().optional(),
-  maxPrice: z.number().optional(),
-  hasDiscount: z.boolean().optional(),
-});
+const zVehicleFilters = z
+  .object({
+    search: z.string(),
+    transmission: z.string(),
+    fuel: z.string(),
+    minCapacity: z.number().min(0),
+    maxCapacity: z.number().min(0),
+    minPrice: z.number().min(0),
+    maxPrice: z.number().min(0),
+    hasDiscount: z.boolean(),
+  })
+  .refine(
+    (vehicleFilters) =>
+      vehicleFilters.minCapacity <= vehicleFilters.maxCapacity,
+  )
+  .refine(
+    (vehicleFilters) => vehicleFilters.minPrice <= vehicleFilters.maxPrice,
+  )
+  .strict();
 type tVehicleFilters = z.infer<typeof zVehicleFilters>;
+
+enum eLIMIT {
+  _5 = 5,
+  _10 = 10,
+  _25 = 25,
+  _50 = 50,
+  _75 = 75,
+  _100 = 100,
+}
+
+const zPagination = z
+  .object({
+    page: z.number().min(1),
+    limit: z.enum(eLIMIT),
+  })
+  .strict();
+type tPagination = z.infer<typeof zPagination>;
 
 class VehicleService {
   public static async GetOne(
     uuid: string,
-  ): Promise<tResponseOneModel<tVehicle>> {
+  ): Promise<tSuccessOneModel<tVehicle>> {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API}/user/vehicles/${uuid}`,
       {
@@ -32,30 +58,44 @@ class VehicleService {
       },
     );
 
-    const responseBody = await response.json();
+    const responseBody: tSuccessOneModel<tVehicle> = await response.json();
     return responseBody;
   }
 
   public static async GetMany(
-    query: tVehicleFilters,
-  ): Promise<tResponseManyModel<tVehicle>> {
+    filters: tVehicleFilters,
+    pagination: tPagination,
+  ): Promise<tSuccessManyModel<tVehicle>> {
+    const filtersResult = zVehicleFilters.safeParse(filters);
+    if (filtersResult.success === false)
+      throw new Error(filtersResult.error.message);
+
+    const paginationResult = zPagination.safeParse(pagination);
+    if (paginationResult.success === false)
+      throw new Error(paginationResult.error.message);
+
+    filters = filtersResult.data;
+    pagination = paginationResult.data;
+
     const queryArray = [];
+    if (filters.search) queryArray.push(`Search.Value=${filters.search}`);
+    if (filters.transmission)
+      queryArray.push(`Transmission.Value=${filters.transmission}`);
+    if (filters.fuel) queryArray.push(`Fuel.Value=${filters.fuel}`);
 
-    if (query.search) queryArray.push(`vehicle.search=${query.search}`);
-    if (query.transmission)
-      queryArray.push(`vehicle.transmission=${query.transmission}`);
-    if (query.fuel) queryArray.push(`vehicle.fuel=${query.fuel}`);
+    if (filters.minCapacity)
+      queryArray.push(`MinCapacity.Value=${filters.minCapacity}`);
+    if (filters.maxCapacity)
+      queryArray.push(`MaxCapacity.Value=${filters.maxCapacity}`);
 
-    if (query.minCapacity)
-      queryArray.push(`vehicle.minCapacity=${query.minCapacity}`);
-    if (query.maxCapacity)
-      queryArray.push(`vehicle.maxCapacity=${query.maxCapacity}`);
+    if (filters.minPrice) queryArray.push(`MinPrice.Value=${filters.minPrice}`);
+    if (filters.maxPrice) queryArray.push(`MaxPrice.Value=${filters.maxPrice}`);
 
-    if (query.minPrice) queryArray.push(`vehicle.minPrice=${query.minPrice}`);
-    if (query.maxPrice) queryArray.push(`vehicle.maxPrice=${query.maxPrice}`);
+    if (filters.hasDiscount)
+      queryArray.push(`HasDiscount.Value=${filters.hasDiscount}`);
 
-    if (query.hasDiscount)
-      queryArray.push(`vehicle.hasDiscount=${query.hasDiscount}`);
+    queryArray.push(`Page=${pagination.page}`);
+    queryArray.push(`Limit=${pagination.limit}`);
 
     let queryString = queryArray.join("&");
     queryString = queryString === "" ? "" : `?${queryString}`;
@@ -70,12 +110,15 @@ class VehicleService {
       },
     );
 
-    const responseBody: tResponseManyModel<tVehicle> = await response.json();
+    const responseBody: tSuccessManyModel<tVehicle> = await response.json();
     return responseBody;
   }
 }
 
 export type { tVehicleFilters };
 export { zVehicleFilters };
+
+export type { tPagination };
+export { zPagination };
 
 export { VehicleService };

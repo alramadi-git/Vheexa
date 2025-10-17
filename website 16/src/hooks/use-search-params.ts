@@ -1,37 +1,65 @@
 "use client";
 
-import type { tNullable } from "@/types/nullish";
+import type { tUndefinable } from "@/types/nullish";
 
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
 import { useSearchParams as useSearchParamsNextJS } from "next/navigation";
 
 export function useSearchParams() {
   const router = useRouter();
-  const searchParams = new URLSearchParams(useSearchParamsNextJS().toString());
 
-  function ToString() {
-    const searchParamsString = searchParams.toString();
-    return searchParamsString === "" ? "" : `?${searchParamsString}`;
+  const pathname = usePathname();
+  let searchParams = new URLSearchParams(useSearchParamsNextJS().toString());
+
+  function getOne(key: string): tUndefinable<string> {
+    return searchParams.get(key) ?? undefined;
+  }
+  function getMany(keys: Array<string>): Array<tUndefinable<string>> {
+    const values: Array<tUndefinable<string>> = [];
+    for (const key of keys) values.push(getOne(key));
+
+    return values;
   }
 
-  function Get(key: string): tNullable<string> {
-    return searchParams.get(key);
-  }
-
-  function Set(key: string, value: string) {
+  function setOne(key: string, value: string): void {
     searchParams.set(key, value);
-    router.push(ToString());
+  }
+  function setMany(kv: Array<[string, string]>): void {
+    for (const [key, value] of kv) setOne(key, value);
   }
 
-  function Delete(key: string) {
+  function deleteOne(key: string): void {
     searchParams.delete(key);
-    router.push(ToString());
+  }
+  function deleteMany(keys: Array<string>): void {
+    for (const key of keys) deleteOne(key);
+  }
+
+  function clear(): void {
+    searchParams = new URLSearchParams();
+  }
+
+  function toString(): string {
+    const urlString = searchParams.toString();
+    return urlString === "" ? "" : `?${urlString}`;
+  }
+
+  function apply(
+    options: Parameters<typeof router.push>["1"] = {
+      scroll: false,
+    },
+  ): void {
+    router.push(`${pathname}${toString()}`, options);
   }
 
   return {
-    ToString,
-    Get,
-    Set,
-    Delete,
+    getOne,
+    getMany,
+    setOne,
+    setMany,
+    deleteOne,
+    deleteMany,
+    clear,
+    apply,
   };
 }

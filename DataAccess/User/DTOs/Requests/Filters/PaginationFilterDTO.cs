@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 namespace DataAccess.User.DTOs.Requests.Filters;
 
-public enum PAGE_SIZE
+public enum LIMIT
 {
     _5 = 5,
     _10 = 10,
@@ -14,8 +14,8 @@ public enum PAGE_SIZE
 public class PaginationFilterDTO
 {
     public int Page { get; set; } = 1;
-    public PAGE_SIZE PageSize { get; set; } = PAGE_SIZE._10;
+    public LIMIT Limit { get; set; } = LIMIT._10;
 
-    public int Skip() { return (Page - 1) * (int)PageSize; }
-    public int Take() { return (int)PageSize; }
+    public int Skip() { return (Page - 1) * (int)Limit; }
+    public int Take() { return (int)Limit; }
 }

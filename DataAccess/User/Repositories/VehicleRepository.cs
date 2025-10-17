@@ -99,6 +99,6 @@ public class VehicleRepository
         vehicleColors.Where(vehicleColor => vehicleColor.VehicleUUID == vehicle.UUID)
         )).ToArray();
 
-        return new SuccessManyDTO<VehicleDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.PageSize, totalItems));
+        return new SuccessManyDTO<VehicleDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));
     }
 };

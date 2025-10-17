@@ -4,7 +4,7 @@ import { tUndefinable } from "@/types/nullish";
 import { tUser } from "@/app/api/user/_types/user";
 
 import { useEffect, useState } from "react";
-import { getCookie } from "cookies-next/client";
+import { getCookie, deleteCookie } from "cookies-next/client";
 
 export default function useUser() {
   const [user, setUser] = useState<tUndefinable<tUser>>(undefined);
@@ -17,5 +17,13 @@ export default function useUser() {
     setUser(parsedCookie);
   }, []);
 
-  return user;
+  function logout() {
+    if (user === undefined) return;
+
+    deleteCookie("token");
+    deleteCookie("user");
+    setUser(undefined);
+  }
+
+  return { user, logout };
 }

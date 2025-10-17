@@ -18,6 +18,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import { Toaster } from "@/components/shadcn/sonner";
 import Script from "next/script";
+import ReactQueryProvider from "@/components/locals/providers/react-query-provider";
 
 const cairo = Cairo({
   weight: [
@@ -70,12 +71,14 @@ export default async function Layout({
           defaultTheme="light"
           attribute="class"
         >
-            <NextIntlClientProvider locale={locale} messages={messages}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ReactQueryProvider>
               <TooltipProvider>
                 {children}
                 <Toaster position="bottom-right" />
               </TooltipProvider>
-            </NextIntlClientProvider>
+            </ReactQueryProvider>
+          </NextIntlClientProvider>
         </ThemeProvider>
 
         {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||

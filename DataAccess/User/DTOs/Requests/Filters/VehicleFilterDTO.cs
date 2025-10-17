@@ -7,9 +7,9 @@ public class SearchFilterDTO : AbstractFilterDTO<string, VehicleEntity>
     {
         return entities
         .Where(ent =>
-            ent.Name.Contains(Value)
-            || ent.Description.Contains(Value)
-            || ent.Tags.Contains(Value)
+            ent.Name.ToLower().Contains(Value.ToLower())
+            || ent.Description.ToLower().Contains(Value.ToLower())
+            || ent.Tags.Any(tag => tag.ToLower().Contains(Value.ToLower()))
         );
     }
 }
@@ -18,7 +18,14 @@ public class TransmissionFilterDTO : AbstractFilterDTO<string, VehicleEntity>
 {
     public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
     {
-        return entities.Where(ent => ent.Transmission.Contains(Value));
+        return entities.Where(ent => ent.Transmission.ToLower().Contains(Value.ToLower()));
+    }
+}
+public class FuelFilterDTO : AbstractFilterDTO<string, VehicleEntity>
+{
+    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
+    {
+        return entities.Where(ent => ent.Fuel.ToLower().Contains(Value.ToLower()));
     }
 }
 
@@ -37,13 +44,6 @@ public class MaxCapacityFilterDTO : AbstractFilterDTO<short, VehicleEntity>
     }
 }
 
-public class FuelFilterDTO : AbstractFilterDTO<string, VehicleEntity>
-{
-    public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
-    {
-        return entities.Where(ent => ent.Fuel.Contains(Value));
-    }
-}
 
 public class MinPriceFilterDTO : AbstractFilterDTO<double, VehicleEntity>
 {
@@ -64,7 +64,8 @@ public class HasDiscountFilterDTO : AbstractFilterDTO<bool, VehicleEntity>
 {
     public override IQueryable<VehicleEntity> Apply(IQueryable<VehicleEntity> entities)
     {
-        return entities.Where(ent => ent.Discount > 0 == Value);
+        if (Value == true) return entities.Where(ent => ent.Discount > 0);
+        return entities;
     }
 }
 

@@ -21,23 +21,52 @@ import { Card } from "@/components/shadcn/card";
 import { Button } from "@/components/shadcn/button";
 import { Input } from "@/components/shadcn/input";
 import { Checkbox } from "@/components/shadcn/checkbox";
+import { useSearchParams } from "@/hooks/use-search-params";
 
 export default function Filters() {
+  const searchParams = useSearchParams();
+
+  const minCapacity = Number(searchParams.getOne("minCapacity"));
+  const maxCapacity = Number(searchParams.getOne("maxCapacity"));
+  const minPrice = Number(searchParams.getOne("minPrice"));
+  const maxPrice = Number(searchParams.getOne("maxPrice"));
+
   const form = useForm<tVehicleFilters>({
     defaultValues: {
-      search: undefined,
-      transmission: undefined,
-      fuel: undefined,
-      minCapacity: undefined,
-      maxCapacity: undefined,
-      minPrice: undefined,
-      maxPrice: undefined,
-      hasDiscount: undefined,
+      search: searchParams.getOne("search") ?? "",
+      transmission: searchParams.getOne("transmission") ?? "",
+      fuel: searchParams.getOne("fuel") ?? "",
+      minCapacity: Number.isNaN(minCapacity) ? 0 : minCapacity,
+      maxCapacity: Number.isNaN(maxCapacity) ? 0 : maxCapacity,
+      minPrice: Number.isNaN(minPrice) ? 0 : minPrice,
+      maxPrice: Number.isNaN(maxPrice) ? 0 : maxPrice,
+      hasDiscount: Boolean(searchParams.getOne("hasDiscount")) ?? false,
     },
     resolver: zodResolver(zVehicleFilters),
   });
 
-  function onSubmit(vehilcFilters: z.infer<typeof zVehicleFilters>) {}
+  function onSubmit(filters: z.infer<typeof zVehicleFilters>) {
+    const filtersArray: Array<[string, string]> = [];
+
+    if (filters.search !== "") filtersArray.push(["search", filters.search]);
+    if (filters.transmission !== "")
+      filtersArray.push(["transmission", filters.transmission]);
+    if (filters.fuel !== "") filtersArray.push(["fuel", filters.fuel]);
+    if (filters.minCapacity > 0)
+      filtersArray.push(["minCapacity", filters.minCapacity.toString()]);
+    if (filters.maxCapacity > 0)
+      filtersArray.push(["maxCapacity", filters.maxCapacity.toString()]);
+    if (filters.minPrice > 0)
+      filtersArray.push(["minPrice", filters.minPrice.toString()]);
+    if (filters.maxPrice > 0)
+      filtersArray.push(["maxPrice", filters.maxPrice.toString()]);
+    if (filters.hasDiscount)
+      filtersArray.push(["hasDiscount", filters.hasDiscount.toString()]);
+
+    searchParams.clear();
+    searchParams.setMany(filtersArray);
+    searchParams.apply();
+  }
 
   return (
     <Card className="relative min-h-full w-1/4 rounded-md">
@@ -46,29 +75,26 @@ export default function Filters() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="sticky top-[125px] left-0 space-y-8 p-6"
         >
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-6">
-              <FormField
-                control={form.control}
-                name="search"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Search</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Search your vehicle..."
-                        type="text"
-                        {...field}
-                      />
-                    </FormControl>
+          <FormField
+            control={form.control}
+            name="search"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Search</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Search your vehicle..."
+                    type="text"
+                    {...field}
+                  />
+                </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            {/* <div className="col-span-6">
+          {/* <div className="col-span-6">
             <FormField
               control={form.control}
               name=""
@@ -104,7 +130,6 @@ export default function Filters() {
               )}
             />
           </div> */}
-          </div>
 
           <FormField
             control={form.control}
