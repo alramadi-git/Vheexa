@@ -70,9 +70,11 @@ export default function Account() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout} variant="destructive">
-          <LuLogOut size={16} aria-hidden="true" />
-          <span>Logout</span>
+        <DropdownMenuItem asChild onClick={logout} variant="destructive">
+          <button className="w-full">
+            <LuLogOut size={16} aria-hidden="true" />
+            <span>Logout</span>
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
