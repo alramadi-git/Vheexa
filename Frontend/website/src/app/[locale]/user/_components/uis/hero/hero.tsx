@@ -1,6 +1,6 @@
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { FullHDImage } from "@/components/locals/blocks/image";
 import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";

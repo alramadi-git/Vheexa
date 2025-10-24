@@ -13,11 +13,8 @@ export async function POST(
   request: Request,
 ): Promise<NextResponse<tResponseOneModel<tUserModel>>> {
   try {
-    console.log("request");
     const loginCredentialsBody = await request.json();
-    console.log("body: ", loginCredentialsBody);
     const loginCredentials = zLoginCredentials.parse(loginCredentialsBody);
-    console.log("body after parsing: ", loginCredentialsBody);
 
     const apiResponse = await fetch(
       `${process.env.API_URL}/user/authentication/login`,
