@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{EF70B5E3-5E9A-4989-AAF3-2ACFC7E8D940}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{7199CBFA-B2C6-4C95-9CB6-6E7BE0B0EACF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{01408D36-153C-4483-ADA6-B65D966F6ED7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF70B5E3-5E9A-4989-AAF3-2ACFC7E8D940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF70B5E3-5E9A-4989-AAF3-2ACFC7E8D940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF70B5E3-5E9A-4989-AAF3-2ACFC7E8D940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF70B5E3-5E9A-4989-AAF3-2ACFC7E8D940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7199CBFA-B2C6-4C95-9CB6-6E7BE0B0EACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7199CBFA-B2C6-4C95-9CB6-6E7BE0B0EACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7199CBFA-B2C6-4C95-9CB6-6E7BE0B0EACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7199CBFA-B2C6-4C95-9CB6-6E7BE0B0EACF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01408D36-153C-4483-ADA6-B65D966F6ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01408D36-153C-4483-ADA6-B65D966F6ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01408D36-153C-4483-ADA6-B65D966F6ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01408D36-153C-4483-ADA6-B65D966F6ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24075701-7513-4F24-B305-0855C365016E}
+	EndGlobalSection
+EndGlobal

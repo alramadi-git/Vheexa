@@ -1,0 +1,762 @@
+{
+  "app": {
+    "settings": {
+      "lang": "en-US",
+      "dir": "ltr"
+    },
+
+    "components": {
+      "list": {
+        "empty": {
+          "title": "No results were found",
+
+          "illustrations": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-product.png",
+            "alt": "Empty List"
+          }
+        },
+
+        "error": {
+          "title": "Something went wrong",
+
+          "illustrations": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/error-product.png",
+            "alt": "Error"
+          }
+        }
+      },
+
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+
+        "page-details": "Page <page></page> of <totalPages></totalPages>"
+      }
+    },
+
+    "layout": {
+      "metadata": {
+        "title": {
+          "default": "Vheexa | Rent Any Vehicle Easily and Quickly",
+          "template": "%s | Vheexa"
+        },
+        "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — with competitive prices and a seamless booking experience in minutes.",
+
+        "icons": {
+          "icon": [
+            {
+              "sizes": "16x16",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-16x16.png"
+            },
+            {
+              "sizes": "32x32",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon-32x32.png"
+            },
+            {
+              "sizes": "192x192",
+              "type": "image/png",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-192x192.png"
+            },
+            {
+              "type": "image/png",
+              "sizes": "512x512",
+              "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/android-chrome-512x512.png"
+            }
+          ],
+          "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
+          "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
+        },
+
+        "openGraph": {},
+
+        "creator": "vheexa",
+        "authors": [
+          {
+            "name": "nawaf alramadi",
+            "url": "https://www.alramadi.me"
+          }
+        ]
+      }
+    },
+
+    "not-found": {
+      "illustration": {
+        "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found.png",
+        "alt": "Not Found"
+      },
+
+      "title": "Oops... 404 not found page",
+      "link": {
+        "href": "/user",
+        "label": "Go to the homepage"
+      }
+    },
+
+    "user": {
+      "layout": {
+        "metadata": {
+          "title": {
+            "default": "User",
+            "template": "%s | User — Vheexa"
+          },
+
+          "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
+        },
+
+        "header": {
+          "logo": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+            "alt": "Vheexa Company Logo"
+          },
+
+          "search-placeholder": "Search...",
+
+          "account": {
+            "not-logged-in": "Login now",
+
+            "logged-in": {
+              "navigation": [
+                {
+                  "href": "/user/profile",
+                  "label": "Profile"
+                }
+              ],
+
+              "logout": "Logout"
+            }
+          },
+
+          "languages": {
+            "placeholder": "Search your language...",
+            "when-empty": "No matching languages found",
+
+            "continents": [
+              {
+                "label": "Africa",
+                "countries": [
+                  {
+                    "dir": "rtl",
+                    "locale": "ar-MA",
+                    "flag": "🇲🇦",
+                    "label": "العربية (المغرب)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-NG",
+                    "flag": "🇳🇬",
+                    "label": "English (Nigeria)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-ZA",
+                    "flag": "🇿🇦",
+                    "label": "English (South Africa)"
+                  }
+                ]
+              },
+              {
+                "label": "America",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "en-CA",
+                    "flag": "🇨🇦",
+                    "label": "English (Canada)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "es-MX",
+                    "flag": "🇲🇽",
+                    "label": "Español (México)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-US",
+                    "flag": "🇺🇸",
+                    "label": "English (United States)"
+                  }
+                ]
+              },
+              {
+                "label": "Asia",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "zh-CN",
+                    "flag": "🇨🇳",
+                    "label": "中文 (中国)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "hi-IN",
+                    "flag": "🇮🇳",
+                    "label": "हिन्दी (भारत)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "ja-JP",
+                    "flag": "🇯🇵",
+                    "label": "日本語 (日本)"
+                  },
+                  {
+                    "dir": "rtl",
+                    "locale": "ar-SA",
+                    "flag": "🇸🇦",
+                    "label": "العربية (المملكة العربية السعودية)"
+                  }
+                ]
+              },
+              {
+                "label": "Europe",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "fr-FR",
+                    "flag": "🇫🇷",
+                    "label": "Français (France)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "de-DE",
+                    "flag": "🇩🇪",
+                    "label": "Deutsch (Deutschland)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-GB",
+                    "flag": "🇬🇧",
+                    "label": "English (United Kingdom)"
+                  }
+                ]
+              },
+              {
+                "label": "Oceania",
+                "countries": [
+                  {
+                    "dir": "ltr",
+                    "locale": "en-AU",
+                    "flag": "🇦🇺",
+                    "label": "English (Australia)"
+                  },
+                  {
+                    "dir": "ltr",
+                    "locale": "en-NZ",
+                    "flag": "🇳🇿",
+                    "label": "English (New Zealand)"
+                  }
+                ]
+              }
+            ]
+          },
+
+          "navigation": {
+            "links": [
+              {
+                "id": 1,
+                "label": "Quick Links",
+
+                "submenu": [
+                  {
+                    "id": 1,
+                    "href": "/user",
+                    "label": "Home",
+                    "description": "The main page featuring the latest news and highlights."
+                  },
+                  {
+                    "id": 2,
+                    "href": "/user/vehicles",
+                    "label": "Vehicles",
+                    "description": "Browse all available vehicles for rent with search and filter options."
+                  },
+                  {
+                    "id": 3,
+                    "href": "/user/blogs",
+                    "label": "Blogs",
+                    "description": "Articles, tips, and fresh content about the world of vehicles and mobility."
+                  },
+                  {
+                    "id": 4,
+                    "href": "/user/about",
+                    "label": "About Us",
+                    "description": "Learn about our vision, mission, and the team behind Vheexa."
+                  },
+                  {
+                    "id": 5,
+                    "href": "/user/contact",
+                    "label": "Contact Us",
+                    "description": "Get in touch with us via forms, email, or phone."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+
+        "footer": {
+          "logo": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+            "alt": "Vheexa Company Logo"
+          },
+          "title": "Vheexa",
+          "description": "A platform for renting all types of vehicles easily and quickly, offering you diverse options at competitive prices, with a safe and comfortable booking experience.",
+
+          "quick-links": [
+            {
+              "label": "Our Services",
+              "routes": [
+                {
+                  "label": "Platform Features",
+                  "href": "#"
+                },
+                {
+                  "label": "Available Solutions",
+                  "href": "#"
+                },
+                {
+                  "label": "Our Clients",
+                  "href": "#"
+                },
+                {
+                  "label": "Pricing Plans",
+                  "href": "#"
+                },
+                {
+                  "label": "Support",
+                  "href": "#"
+                }
+              ]
+            },
+            {
+              "label": "Our Options",
+              "routes": [
+                {
+                  "label": "For Startups",
+                  "href": "#"
+                },
+                {
+                  "label": "For Freelancers",
+                  "href": "#"
+                },
+                {
+                  "label": "For Enterprises",
+                  "href": "#"
+                },
+                {
+                  "label": "For Students",
+                  "href": "#"
+                },
+                {
+                  "label": "Collaboration & Teamwork",
+                  "href": "#"
+                },
+                {
+                  "label": "Design & Creativity",
+                  "href": "#"
+                },
+                {
+                  "label": "Resource Management",
+                  "href": "#"
+                }
+              ]
+            },
+            {
+              "label": "About the Company",
+              "routes": [
+                {
+                  "label": "About Us",
+                  "href": "#"
+                },
+                {
+                  "label": "Careers",
+                  "href": "#"
+                },
+                {
+                  "label": "Blog",
+                  "href": "#"
+                },
+                {
+                  "label": "Press Releases",
+                  "href": "#"
+                },
+                {
+                  "label": "Contact Us",
+                  "href": "#"
+                },
+                {
+                  "label": "Technical Support",
+                  "href": "#"
+                }
+              ]
+            },
+            {
+              "label": "Policies & Terms",
+              "routes": [
+                {
+                  "label": "Terms of Use",
+                  "href": "#"
+                },
+                {
+                  "label": "Privacy Policy",
+                  "href": "#"
+                },
+                {
+                  "label": "Cookie Policy",
+                  "href": "#"
+                },
+                {
+                  "label": "Security & Privacy",
+                  "href": "#"
+                }
+              ]
+            }
+          ],
+
+          "outro": "<copyright></copyright> <time></time> <span>Vheexa LLC, All rights reserved.</span>"
+        }
+      },
+
+      "page": {
+        "hero": {
+          "title": "Rent Any Vehicle, Quickly and Easily",
+          "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — at competitive prices with a smooth booking experience in just minutes.",
+
+          "actions": {
+            "book-now": {
+              "href": "/user/vehicles",
+              "label": "Start Booking"
+            },
+            "learn-more": {
+              "href": "/user/about",
+              "label": "Learn More"
+            }
+          },
+
+          "credibility": {
+            "label": "Trusted for Every Journey",
+
+            "items": [
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              },
+              {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+                "alt": "Logo"
+              }
+            ]
+          }
+        },
+
+        "stats": {
+          "title": "Vheexa Vehicle Rentals",
+          "description": "Vheexa is more than just a vehicle rental platform — it’s a complete ecosystem of services. From cars to bikes and trucks, backed by modern technologies that help individuals and businesses innovate and simplify mobility.",
+
+          "metrics": {
+            "description": "A complete ecosystem backed by numbers that reflect the trust of our clients and partners.",
+
+            "items": [
+              {
+                "label": "Partners",
+                "value": 1200
+              },
+              {
+                "label": "Happy Clients",
+                "value": 250000
+              },
+              {
+                "label": "Completed Trips",
+                "value": 540000
+              },
+              {
+                "label": "Cities Covered",
+                "value": 75
+              }
+            ]
+          },
+
+          "testimonial": {
+            "quote": "Using Vheexa was like discovering a new power in mobility management. The platform combines simplicity and flexibility, enabling us to deliver safe and practical solutions to users.",
+            "author": {
+              "name": "Nawaf Alramadi",
+              "role": "CEO",
+              "avatar": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png",
+                "alt": "Profile picture"
+              }
+            }
+          }
+        },
+
+        "features": {
+          "title": "Vheexa Features",
+          "description": "Vheexa is an all-in-one platform for renting any type of vehicle quickly and easily. It offers a seamless and secure booking experience with diverse options tailored to your needs and budget, plus full support and premium customer service.",
+
+          "illustration": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+            "alt": "Placeholder illustration"
+          },
+
+          "highlights": [
+            {
+              "label": "Ease of Use",
+              "description": "A simple and fast interface lets you book in minutes."
+            },
+            {
+              "label": "Competitive Prices",
+              "description": "Multiple options to fit every budget."
+            },
+            {
+              "label": "Trust & Security",
+              "description": "Verified partners and secure payment methods."
+            },
+            {
+              "label": "Variety & Coverage",
+              "description": "Vehicles available across multiple cities and countries."
+            }
+          ]
+        },
+
+        "how-it-works": {
+          "title": "How Does Vheexa Work?",
+          "description": "Simple and quick steps to rent any vehicle through our platform — no hassle.",
+
+          "steps": [
+            {
+              "label": "Book",
+              "description": "Choose the right vehicle — cars, bikes, or trucks — and set your preferred time and location easily.",
+              "illustration": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "Book a vehicle easily"
+              }
+            },
+            {
+              "label": "Pick Up",
+              "description": "Head to the pickup point or get the vehicle delivered to you — fast and secure.",
+              "illustration": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "Vehicle pickup"
+              }
+            },
+            {
+              "label": "Return",
+              "description": "After your trip, return the vehicle easily or request pickup from your location.",
+              "illustration": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "Vehicle return"
+              }
+            }
+          ]
+        },
+
+        "faqs": {
+          "title": "Frequently Asked Questions",
+          "description": "Answers to the most common questions about Vheexa and vehicle rentals.",
+
+          "questions": [
+            {
+              "id": "faq-booking",
+              "question": "How do I rent a vehicle through Vheexa?",
+              "answer": "Simply sign up on the platform, choose your preferred vehicle, select the time and pickup location, then complete your booking with online payment."
+            },
+            {
+              "id": "faq-vehicles",
+              "question": "What types of vehicles are available?",
+              "answer": "We provide a wide range of vehicles including cars, motorcycles, trucks, and even luxury vehicles to meet various needs."
+            },
+            {
+              "id": "faq-cancellation",
+              "question": "Can I cancel my booking?",
+              "answer": "Yes, you can cancel your booking before the scheduled pickup time according to the cancellation policy listed on the platform."
+            },
+            {
+              "id": "faq-insurance",
+              "question": "Are prices inclusive of insurance?",
+              "answer": "Most vehicles include basic insurance, with optional add-ons available at checkout."
+            },
+            {
+              "id": "faq-delivery-return",
+              "question": "How are vehicles delivered and returned?",
+              "answer": "You can pick up the vehicle at the designated point or request delivery. After your booking, return it to the same point or request pickup from your location."
+            }
+          ],
+
+          "help": "Didn’t find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we’ll be happy to assist you."
+        }
+      },
+
+      "vehicles": {
+        "layout": {
+          "metadata": {
+            "title": "Vehicles",
+            "description": "Browse all vehicle types available on Vheexa — from cars and bikes to trucks and luxury vehicles — with search and filter options to match your needs."
+          }
+        },
+
+        "page": {
+          "hero": {
+            "badge": "All options at your fingertips <ArrowUpRight></ArrowUpRight>",
+
+            "title": "Choose Your Perfect Vehicle",
+            "description": "Explore our wide selection of vehicles for rent. Whether you’re looking for an affordable car, a motorcycle for fun, a truck for work, or a luxury vehicle for special occasions — Vheexa has everything you need, quickly and easily.",
+
+            "image": {
+              "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+              "alt": "Placeholder image"
+            }
+          },
+
+          "products": {
+            "form": {
+              "search": {
+                "label": "Search",
+                "placeholder": "Search your vehicle..."
+              },
+              "transmission": {
+                "label": "Transmission",
+                "placeholder": "You want it manual, automatic or semi-automatic..."
+              },
+              "fuel": {
+                "label": "Fuel",
+                "placeholder": "Want a specific type of fuel..."
+              },
+
+              "min-capacity": {
+                "label": "Min Capacity",
+                "placeholder": "How many people you wanna carry..."
+              },
+              "max-capacity": {
+                "label": "Max Capacity",
+                "placeholder": "How many people you don't need to carry..."
+              },
+
+              "min-price": {
+                "label": "Min Price",
+                "placeholder": "How much do you want it..."
+              },
+              "max-price": {
+                "label": "Max Price",
+                "placeholder": "How much you last..."
+              },
+
+              "has-discount": {
+                "label": "Only show vehicles with discounts",
+                "description": " When checked, only show vehicles with discounts, otherwise show alls"
+              }
+            },
+
+            "product": {
+              "specifications": {
+                "capacity": "Capacity"
+              },
+
+              "price-per": "A day",
+              "view-details": "View Details"
+            }
+          }
+        },
+
+        "uuid": {
+          "page": {
+            "product": {
+              "default-image": {
+                "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+                "alt": "Placeholder image"
+              },
+
+              "tabs": {
+                "specifications": {
+                  "label": "Specifications",
+
+                  "content": {
+                    "transmission": "Transmission",
+                    "fuel": "Fuel",
+                    "capacity": "Capacity"
+                  }
+                },
+                "comments-and-reviews": {
+                  "label": "Comments & Reviews",
+
+                  "content": "Coming soon...."
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "authentication": {
+        "layout": {
+          "metadata": {
+            "title": {
+              "absolute": "Auth | Vheexa",
+              "template": "%s | Vheexa Auth"
+            },
+            "description": "Access your Vheexa account to manage bookings and rents easily and securely."
+          },
+
+          "image": {
+            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+            "alt": "placeholder"
+          }
+        },
+
+        "login": {
+          "page": {
+            "metadata": {
+              "title": "Login",
+              "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
+            },
+
+            "card": {
+              "title": "Welcome back",
+              "description": "Login to your Vheexa account",
+
+              "form": {
+                "email": {
+                  "label": "Email",
+                  "placeholder": "account@vheexa.com",
+                  "default": "user@vheexa.com",
+                  "description": "Enter your email address"
+                },
+                "password": {
+                  "label": "Password",
+                  "placeholder": "********",
+                  "default": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
+                  "description": "Enter your password"
+                },
+
+                "submit": "Login"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

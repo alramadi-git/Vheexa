@@ -1,0 +1,23 @@
+{
+  "cSpell.words": [
+    "appsettings",
+    "dropoff",
+    "dropoffs",
+    "Hmac",
+    "imagekit",
+    "magicui",
+    "nawaf",
+    "Npgsql",
+    "Opengraph",
+    "shadcn",
+    "signedup",
+    "signup",
+    "Tiktok",
+    "turbopack",
+    "tuuid",
+    "vercel",
+    "vheexa",
+    "zain"
+  ],
+  "typescript.tsdk": "website\\node_modules\\typescript\\lib"
+}
