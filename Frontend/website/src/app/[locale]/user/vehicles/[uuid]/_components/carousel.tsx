@@ -1,12 +1,19 @@
-import { Card, CardContent } from "@/components/shadcn/card";
+"use client";
+
+import { tNullable } from "@/types/nullish";
+import { tVehicleModel } from "@/models/user/vehicle";
+
+import { useCallback, useEffect, useState } from "react";
+
 import {
+  type CarouselApi,
   Carousel as ShadcnCarousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/shadcn/carousel";
-import { tVehicleModel } from "@/models/user/vehicle";
+import { Card, CardContent } from "@/components/shadcn/card";
+import { FullHDImage } from "@/components/locals/blocks/image";
+import { UseEmblaCarouselType } from "embla-carousel-react";
 
 type tCarouselProps = {
   thumbnail: tVehicleModel["thumbnail"];
@@ -14,57 +21,83 @@ type tCarouselProps = {
 };
 
 export default function Carousel({ thumbnail, images }: tCarouselProps) {
+  const [navigationCarouselApi, setNavigationCarouselApi] =
+    useState<tNullable<CarouselApi>>(null);
+  const [mainCarouselApi, setMainCarouselApi] =
+    useState<tNullable<CarouselApi>>(null);
+
+  const onSelect = useCallback(
+    function onSelect(api: CarouselApi) {
+      mainCarouselApi?.scrollTo(api?.selectedScrollSnap() ?? 0);
+      navigationCarouselApi?.scrollTo(api?.selectedScrollSnap() ?? 0);
+    },
+    [mainCarouselApi, navigationCarouselApi],
+  );
+
+  useEffect(() => {
+    mainCarouselApi?.on("select", (api) => onSelect(api));
+    navigationCarouselApi?.on("select", (api) => onSelect(api));
+  }, [mainCarouselApi, navigationCarouselApi, onSelect]);
+
   return (
-    <div className="flex h-full">
+    <div className="grid grid-cols-4 gap-2">
       <ShadcnCarousel
+        setApi={setNavigationCarouselApi}
         opts={{
           align: "start",
-          
         }}
         orientation="vertical"
-        className="w-[165px]"
       >
-        <CarouselContent className="-mt-1 h-[650px]">
-          {Array.from({ length: 15 }).map((_, index) => (
-            <CarouselItem key={index} className="pt-1 md:basis-1/2">
-              <div className="p-1">
-                <Card>
-                  <CardContent className="flex items-center justify-center p-6">
-                    <span className="text-3xl font-semibold">{index + 1}</span>
-                  </CardContent>
-                </Card>
-              </div>
+        <CarouselContent className="-mt-1 h-[590px]">
+          {thumbnail && (
+            <CarouselItem key={thumbnail.uuid} className="basis-1/5 pt-2">
+              <FullHDImage src={thumbnail.url} alt="" className="rounded-sm" />
+            </CarouselItem>
+          )}
+          {images.map((image) => (
+            <CarouselItem key={image.uuid} className="basis-1/5 pt-2">
+              <FullHDImage src={image.url} alt="" className="rounded-sm" />
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        {/* <CarouselPrevious />
-        <CarouselNext /> */}
       </ShadcnCarousel>
 
-      {/* <ShadcnCarousel
+      <ShadcnCarousel
+        setApi={setMainCarouselApi}
         opts={{
           align: "start",
         }}
-        className="w-full max-w-xs"
+        className="col-span-3"
       >
-        <CarouselContent className="-mt-1 h-[200px]">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index} className="pt-1 md:basis-1/2">
-              <div className="p-1">
-                <Card>
-                  <CardContent className="flex items-center justify-center p-6">
-                    <span className="text-3xl font-semibold">{index + 1}</span>
-                  </CardContent>
-                </Card>
-              </div>
+        <CarouselContent>
+          {thumbnail && (
+            <CarouselItem
+              key={thumbnail.uuid}
+              id={thumbnail.uuid}
+              className="h-[590px]"
+            >
+              <FullHDImage
+                src={thumbnail.url}
+                alt=""
+                className="size-full rounded-sm"
+              />
+            </CarouselItem>
+          )}
+          {images.map((image) => (
+            <CarouselItem
+              key={image.uuid}
+              id={image.uuid}
+              className="h-[590px]"
+            >
+              <FullHDImage
+                src={image.url}
+                alt=""
+                className="size-full rounded-sm"
+              />
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        <CarouselPrevious />
-        <CarouselNext />
-      </ShadcnCarousel> */}
+      </ShadcnCarousel>
     </div>
   );
 }
