@@ -33,7 +33,7 @@ import {
 
 import { Fragment } from "react";
 import { Badge } from "@/components/shadcn/badge";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import Carousel from "./_components/carousel";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -52,6 +52,61 @@ export async function generateMetadata(
     title: vehicle.name,
     description: vehicle.description,
   };
+}
+
+export default async function Page(
+  props: PageProps<"/[locale]/user/vehicles/[uuid]">,
+) {
+  const vehicleService = new VehicleService();
+
+  const { locale, uuid } = await props.params;
+  setRequestLocale(locale);
+  const t = await getTranslations("app.user.vehicles.uuid.page.product");
+
+  const result = await vehicleService.GetOne(uuid);
+  if (result.isSuccess === false) notFound();
+
+  const vehicle = result.data;
+
+  return (
+    <Fragment>
+      <Section className="h-hero">
+        <Container className="grid h-full grid-cols-2 gap-6">
+          <Carousel thumbnail={vehicle.thumbnail} images={vehicle.images} />
+
+          <div className="flex flex-col">
+            <Badge variant="outline" className="text-lg">
+              {vehicle.manufacturer}
+            </Badge>
+
+            <Intro>
+              <Title level={LEVEL.H1} className="mb-0">
+                {vehicle.name}
+              </Title>
+              <Description>{vehicle.description}</Description>
+            </Intro>
+
+            <Tabs
+              defaultValue={t("tabs.specifications.label")}
+              className="mt-6 grow gap-3"
+            >
+              <TabsList>
+                <TabsTrigger value={t("tabs.specifications.label")}>
+                  {t("tabs.specifications.label")}
+                </TabsTrigger>
+                <TabsTrigger value={t("tabs.comments-and-reviews.label")}>
+                  {t("tabs.comments-and-reviews.label")}
+                </TabsTrigger>
+              </TabsList>
+
+              <Specifications vehicle={vehicle} />
+              <CommentsAndReviews />
+            </Tabs>
+          </div>
+        </Container>
+      </Section>
+    </Fragment>
+  );
 }
 
 type tSpecificationProps = {
@@ -112,68 +167,5 @@ async function CommentsAndReviews() {
     <TabsContent value={t("label")} className="flex size-full">
       <p className="m-auto text-2xl font-bold">{t("content")}</p>
     </TabsContent>
-  );
-}
-
-export default async function Page(
-  props: PageProps<"/[locale]/user/vehicles/[uuid]">,
-) {
-  const vehicleService = new VehicleService();
-
-  const { locale, uuid } = await props.params;
-  setRequestLocale(locale);
-  const t = await getTranslations("app.user.vehicles.uuid.page.product");
-
-  const result = await vehicleService.GetOne(uuid);
-  if (result.isSuccess === false) notFound();
-
-  const vehicle = result.data;
-
-  return (
-    <Fragment>
-      <Section className="h-hero">
-        <Container className="grid h-full grid-cols-2 gap-6">
-          <div className="relative size-full overflow-hidden rounded-md">
-            <FullHDImage
-              src={vehicle.thumbnail?.url ?? t("default-image.src")}
-              alt={
-                vehicle.thumbnail?.url ? vehicle.name : t("default-image.alt")
-              }
-              className="absolute inset-0 size-full"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <Badge variant="outline" className="text-lg">
-              {vehicle.manufacturer}
-            </Badge>
-
-            <Intro>
-              <Title level={LEVEL.H1} className="mb-0">
-                {vehicle.name}
-              </Title>
-              <Description>{vehicle.description}</Description>
-            </Intro>
-
-            <Tabs
-              defaultValue={t("tabs.specifications.label")}
-              className="mt-6 grow gap-3"
-            >
-              <TabsList>
-                <TabsTrigger value={t("tabs.specifications.label")}>
-                  {t("tabs.specifications.label")}
-                </TabsTrigger>
-                <TabsTrigger value={t("tabs.comments-and-reviews.label")}>
-                  {t("tabs.comments-and-reviews.label")}
-                </TabsTrigger>
-              </TabsList>
-
-              <Specifications vehicle={vehicle} />
-              <CommentsAndReviews />
-            </Tabs>
-          </div>
-        </Container>
-      </Section>
-    </Fragment>
   );
 }

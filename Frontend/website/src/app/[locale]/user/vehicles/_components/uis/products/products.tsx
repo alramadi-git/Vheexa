@@ -55,26 +55,22 @@ export default function Products() {
       <Container className="flex gap-4">
         <Filters />
         <div className="flex min-h-full w-full flex-col justify-between gap-4">
-          {result === undefined ? null : (
-            <Fragment>
-              <List<tVehicleModel>
-                items={result.isSuccess ? result.data : []}
-                render={(item) => <Item key={item.uuid} vehicle={item} />}
-                loading={{
-                  isLoading,
-                  render: (_, index) => <ItemSkeleton key={index} />,
-                }}
-                error={{
-                  isError: !result.isSuccess,
-                }}
-                className="grid w-full grid-cols-3 gap-6"
-              />
+          <Fragment>
+            <List<tVehicleModel>
+              items={result?.isSuccess ? result.data : []}
+              render={(item) => <Item key={item.uuid} vehicle={item} />}
+              loading={{
+                isLoading,
+                render: (_, index) => <ItemSkeleton key={index} />,
+              }}
+              error={{
+                isError: !result?.isSuccess,
+              }}
+              className="grid w-full grid-cols-3 gap-6"
+            />
 
-              {result.isSuccess && (
-                <Pagination pagination={result.pagination} />
-              )}
-            </Fragment>
-          )}
+            {result?.isSuccess && <Pagination pagination={result.pagination} />}
+          </Fragment>
         </div>
       </Container>
     </Section>
