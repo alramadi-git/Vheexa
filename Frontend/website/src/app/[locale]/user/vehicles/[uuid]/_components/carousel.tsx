@@ -11,9 +11,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/shadcn/carousel";
-import { Card, CardContent } from "@/components/shadcn/card";
 import { FullHDImage } from "@/components/locals/blocks/image";
-import { UseEmblaCarouselType } from "embla-carousel-react";
 
 type tCarouselProps = {
   thumbnail: tVehicleModel["thumbnail"];
