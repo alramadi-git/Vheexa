@@ -12,15 +12,24 @@ const zVehicleFilters = z
     hasDiscount: z.boolean(),
   })
   .refine(
-    (vehicleFilters) =>
-      vehicleFilters.minCapacity <= vehicleFilters.maxCapacity,
+    (vehicleFilters) => {
+      if (vehicleFilters.minCapacity === 0 || vehicleFilters.maxCapacity === 0)
+        return true;
+
+      return vehicleFilters.minCapacity <= vehicleFilters.maxCapacity;
+    },
     {
       path: ["minCapacity"],
       error: "min capacity should be less than or equal to max capacity",
     },
   )
   .refine(
-    (vehicleFilters) => vehicleFilters.minPrice <= vehicleFilters.maxPrice,
+    (vehicleFilters) => {
+      if (vehicleFilters.minPrice === 0 || vehicleFilters.maxPrice === 0)
+        return true;
+
+      return vehicleFilters.minPrice <= vehicleFilters.maxPrice;
+    },
     {
       path: ["minPrice"],
       error: "min price should be less than or equal to max price",

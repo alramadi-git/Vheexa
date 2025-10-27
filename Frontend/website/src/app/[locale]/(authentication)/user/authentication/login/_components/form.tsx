@@ -25,6 +25,7 @@ import {
 } from "@/components/shadcn/field";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/locals/blocks/toast";
+import { PasswordInput } from "@/components/locals/blocks/form";
 
 export default function Form() {
   const authenticationService = new AuthenticationService();
@@ -66,12 +67,12 @@ export default function Form() {
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="email">{t("email.label")}</FieldLabel>
             <Input
-              {...field}
+              aria-invalid={fieldState.invalid}
               id="email"
               type="email"
               placeholder={t("email.placeholder")}
               autoComplete="off"
-              aria-invalid={fieldState.invalid}
+              {...field}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             {!fieldState.invalid && (
@@ -87,13 +88,12 @@ export default function Form() {
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="password">{t("password.label")}</FieldLabel>
-            <Input
-              {...field}
+            <PasswordInput
+              aria-invalid={fieldState.invalid}
               id="password"
-              type="text"
               placeholder={t("password.placeholder")}
               autoComplete="off"
-              aria-invalid={fieldState.invalid}
+              {...field}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             {!fieldState.invalid && (

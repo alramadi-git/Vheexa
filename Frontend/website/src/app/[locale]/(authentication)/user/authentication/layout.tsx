@@ -37,14 +37,14 @@ export default async function Layout({
         maxOpacity={0.1}
         className="-z-10 skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
       />
-      <Card className="bg-transparent p-0">
+      <Card className="rounded-sm bg-transparent p-0">
         <CardContent className="grid h-[550px] w-[850px] overflow-hidden p-0 md:grid-cols-2">
           {children}
 
           <FullHDImage
             src={t("image.src")}
             alt={t("image.alt")}
-            className="size-full object-cover max-md:hidden dark:brightness-[0.2] dark:grayscale"
+            className="size-full rounded-e-sm object-cover max-md:hidden dark:brightness-[0.2] dark:grayscale"
           />
         </CardContent>
       </Card>

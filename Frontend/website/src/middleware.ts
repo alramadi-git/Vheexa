@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+
+import UserMiddleware from "./middlewares/user/user";
 import NextIntlMiddleware from "@/middlewares/next-intl";
 
-export default function middleware(request: NextRequest) {
-  const redirect = NextIntlMiddleware(request);
-  if (!redirect.ok) return redirect;
+export default function middleware(request: NextRequest): NextResponse {
+  let middlewares = NextIntlMiddleware(request);
+  if (middlewares?.ok !== true) return middlewares;
+
+  middlewares = UserMiddleware(request);
+  if (middlewares?.ok !== true) return middlewares;
 
   return NextResponse.next();
 }
