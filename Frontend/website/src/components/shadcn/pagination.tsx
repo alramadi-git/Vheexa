@@ -7,7 +7,6 @@ import {
 
 import { cn } from "@/utilities/cn";
 import { Button, buttonVariants } from "@/components/shadcn/button";
-import { Link } from "../locals/blocks/link";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
