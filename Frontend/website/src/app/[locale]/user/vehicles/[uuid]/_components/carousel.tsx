@@ -12,13 +12,17 @@ import {
   CarouselItem,
 } from "@/components/shadcn/carousel";
 import { FullHDImage } from "@/components/locals/blocks/image";
+import { clsImage } from "@/classes/user/image";
 
 type tCarouselProps = {
-  thumbnail: tVehicleModel["thumbnail"];
-  images: tVehicleModel["images"];
+  thumbnailModel: tVehicleModel["thumbnail"];
+  imagesModel: tVehicleModel["images"];
 };
 
-export default function Carousel({ thumbnail, images }: tCarouselProps) {
+export default function Carousel({
+  thumbnailModel,
+  imagesModel,
+}: tCarouselProps) {
   const [navigationCarouselApi, setNavigationCarouselApi] =
     useState<tNullable<CarouselApi>>(null);
   const [mainCarouselApi, setMainCarouselApi] =
@@ -36,6 +40,10 @@ export default function Carousel({ thumbnail, images }: tCarouselProps) {
     mainCarouselApi?.on("select", (api) => onSelect(api));
     navigationCarouselApi?.on("select", (api) => onSelect(api));
   }, [mainCarouselApi, navigationCarouselApi, onSelect]);
+
+  const thumbnail =
+    thumbnailModel == null ? null : new clsImage(thumbnailModel);
+  const images = imagesModel.map((image) => new clsImage(image));
 
   return (
     <div className="grid grid-cols-4 gap-2">

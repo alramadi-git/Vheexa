@@ -13,8 +13,8 @@ type tPartnerModel = {
   phoneNumber: string;
   email: string;
 
-  updatedAt: string; //Date
-  createdAt: string; //Date
+  updatedAt: string;
+  createdAt: string;
 };
 
 export type { tPartnerModel };

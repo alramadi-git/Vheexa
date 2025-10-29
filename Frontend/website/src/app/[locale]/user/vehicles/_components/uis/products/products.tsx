@@ -37,6 +37,7 @@ import { FullHDImage } from "@/components/locals/blocks/image";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { ErrorToast } from "@/components/locals/blocks/toast";
 import { toast } from "sonner";
+import { clsVehicle } from "@/classes/user/vehicle";
 
 export default function Products() {
   const { isLoading, result } = useVehiclesQuery();
@@ -58,7 +59,7 @@ export default function Products() {
           <Fragment>
             <List<tVehicleModel>
               items={result?.isSuccess ? result.data : []}
-              render={(item) => <Item key={item.uuid} vehicle={item} />}
+              render={(item) => <Item key={item.uuid} vehicleModel={item} />}
               loading={{
                 isLoading,
                 render: (_, index) => <ItemSkeleton key={index} />,
@@ -78,11 +79,13 @@ export default function Products() {
 }
 
 type tItemProps = {
-  vehicle: tVehicleModel;
+  vehicleModel: tVehicleModel;
 };
-function Item({ vehicle }: tItemProps) {
-  const monyFormatter = new Mony();
+function Item({ vehicleModel }: tItemProps) {
   const t = useTranslations("app.user.vehicles.page.products.product");
+
+  const monyFormatter = new Mony();
+  const vehicle = new clsVehicle(vehicleModel);
 
   return (
     <Card className="overflow-hidden rounded-md pt-0">
@@ -138,7 +141,7 @@ function Item({ vehicle }: tItemProps) {
           <CardTitle>{vehicle.name}</CardTitle>
 
           <Badge variant="outline" className="gap-1">
-            {vehicle.modelYear}
+            {vehicle.modelYear.getFullYear()}
           </Badge>
         </div>
 
@@ -168,16 +171,14 @@ function Item({ vehicle }: tItemProps) {
       <CardFooter className="mt-auto flex items-end gap-3 pb-0">
         <div>
           <p className="text-lg leading-normal font-medium">
-            {monyFormatter.format(
-              vehicle.price - vehicle.discount * vehicle.price,
-            )}
+            {monyFormatter.format(vehicle.getGrossPrice())}
           </p>
 
           <div className="flex items-center gap-0.5 text-xs">
-            {vehicle.discount !== 0 && (
+            {vehicle.isDiscounted() && (
               <Fragment>
                 <del className="leading-normal">
-                  {monyFormatter.format(vehicle.price)}
+                  {monyFormatter.format(vehicle.getNetPrice())}
                 </del>
 
                 <span>/</span>

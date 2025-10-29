@@ -133,6 +133,6 @@
   }
 
   .h-hero {
-    @apply h-[calc(100vh-118px)];
+    @apply min-h-[calc(100vh-118px)];
   }
 }

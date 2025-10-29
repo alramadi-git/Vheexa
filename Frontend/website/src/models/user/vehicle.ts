@@ -18,7 +18,7 @@ type tVehicleModel = {
   description: string;
 
   manufacturer: string;
-  modelYear: string; //Date;
+  modelYear: string;
 
   transmission: string;
   fuel: string;
@@ -29,8 +29,8 @@ type tVehicleModel = {
 
   tags: string[];
 
-  updatedAt: string; //Date;
-  createdAt: string; //Date;
+  updatedAt: string;
+  createdAt: string;
 };
 
 export type { tVehicleModel };

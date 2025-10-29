@@ -696,7 +696,10 @@
                   "content": {
                     "transmission": "Transmission",
                     "fuel": "Fuel",
-                    "capacity": "Capacity"
+                    "capacity": {
+                      "label": "Takes up to",
+                      "value": "{value, plural, =1 {# Person} other {# people}}"
+                    }
                   }
                 },
                 "comments-and-reviews": {
