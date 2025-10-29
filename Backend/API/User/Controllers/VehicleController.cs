@@ -5,8 +5,8 @@ using FluentValidation;
 using API.Models;
 using Business.User.Services;
 using Database.DTOs;
-using Database.User.DTOs;
 using Database.Parameters;
+using Database.User.DTOs;
 using Database.User.Parameters;
 
 namespace API.User.Controllers;
