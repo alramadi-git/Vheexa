@@ -8,30 +8,32 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
-import Time from "@/app/[locale]/user/_components/uis/footer/time";
 import { Link } from "@/components/locals/blocks/link";
 import { FullHDImage } from "@/components/locals/blocks/image";
 import { Container, Section } from "@/components/locals/blocks/typography";
 
-type TRoute = {
+type tRoute = {
   label: string;
   href: string;
 };
-type TLinkGroup = {
+type tLinkGroup = {
   label: string;
-  routes: Array<TRoute>;
+  links: Array<tRoute>;
 };
 
+const date = new Date();
 export default async function Footer() {
-  const t = await getTranslations("app.user.layout.footer");
+  const year = date.getFullYear();
 
-  const quickLinks: Array<TLinkGroup> = t.raw("quick-links");
+  const t = await getTranslations("app.user.layout.footer");
+  const quickLinks: Array<tLinkGroup> = t.raw("quick-links");
+
   return (
     <footer>
       <Section className="border-t py-12">
         <Container>
-          <div className="grid gap-12 md:grid-cols-5 md:gap-6 lg:grid-cols-4">
-            <div className="space-y-3">
+          <div className="grid md:grid-cols-6 gap-6">
+            <div className="md:col-span-2 space-y-3">
               <div className="flex items-center gap-2">
                 <Link href="/user" className="block size-fit">
                   <FullHDImage
@@ -49,19 +51,24 @@ export default async function Footer() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 md:col-span-5 lg:col-span-3">
+            <div className="md:col-span-4 grid sm:grid-cols-2 gap-6 lg:grid-cols-4">
               {quickLinks.map((linkGroup, index) => (
-                <div key={index} className="space-y-3 text-sm">
-                  <p className="block text-lg font-medium">{linkGroup.label}</p>
-                  {linkGroup.routes.map((item, index) => (
-                    <Link
-                      key={index}
-                      href={item.href}
-                      className="text-muted-foreground hover:text-primary block duration-150"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+                <div key={index} className="space-y-3">
+                  <h4 className="block text-lg font-medium">
+                    {linkGroup.label}
+                  </h4>
+                  <ul className="space-y-2 text-sm">
+                    {linkGroup.links.map((item, index) => (
+                      <li key={index}>
+                        <Link
+                          href={item.href}
+                          className="text-muted-foreground hover:text-primary block duration-150"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -71,7 +78,7 @@ export default async function Footer() {
             <p className="text-muted-foreground flex items-center gap-1.5">
               {t.rich("outro", {
                 copyright: () => <FaRegCopyright className="size-3" />,
-                time: () => <Time />,
+                time: () => <time dateTime={`${year}`}>{year}</time>,
                 span: (chunk) => <span>{chunk}</span>,
               })}
             </p>

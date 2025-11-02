@@ -6,6 +6,11 @@
     },
 
     "components": {
+      "avatar": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png",
+      "logo": "https://ik.imagekit.io/alramadi/vheexa/website/assets/logo.png",
+      "banner": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+      "thumbnail": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+      
       "list": {
         "empty": {
           "title": "No results were found",
@@ -299,13 +304,14 @@
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
             "alt": "Vheexa Company Logo"
           },
+
           "title": "Vheexa",
           "description": "A platform for renting all types of vehicles easily and quickly, offering you diverse options at competitive prices, with a safe and comfortable booking experience.",
 
           "quick-links": [
             {
               "label": "Our Services",
-              "routes": [
+              "links": [
                 {
                   "label": "Platform Features",
                   "href": "#"
@@ -330,7 +336,7 @@
             },
             {
               "label": "Our Options",
-              "routes": [
+              "links": [
                 {
                   "label": "For Startups",
                   "href": "#"
@@ -363,7 +369,7 @@
             },
             {
               "label": "About the Company",
-              "routes": [
+              "links": [
                 {
                   "label": "About Us",
                   "href": "#"
@@ -392,7 +398,7 @@
             },
             {
               "label": "Policies & Terms",
-              "routes": [
+              "links": [
                 {
                   "label": "Terms of Use",
                   "href": "#"

@@ -14,6 +14,10 @@ export function useSearchParams() {
   function getOne(key: string): tUndefinable<string> {
     return searchParams.get(key) ?? undefined;
   }
+  function getOneOrDefault(key: string, _default: string): string {
+    return searchParams.get(key) ?? _default;
+  }
+
   function getMany(keys: Array<string>): Array<tUndefinable<string>> {
     const values: Array<tUndefinable<string>> = [];
     for (const key of keys) values.push(getOne(key));
@@ -50,6 +54,7 @@ export function useSearchParams() {
 
   return {
     getOne,
+    getOneOrDefault,
     getMany,
     setOne,
     setMany,

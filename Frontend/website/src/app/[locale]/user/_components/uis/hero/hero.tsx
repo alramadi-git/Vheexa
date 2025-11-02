@@ -10,7 +10,7 @@ import {
   Description,
   Intro,
   Section,
-  LEVEL,
+  H,
   Title,
 } from "@/components/locals/blocks/typography";
 
@@ -28,7 +28,7 @@ export default async function Hero() {
       <Container className="flex h-full flex-col justify-between">
         <div>
           <Intro>
-            <Title level={LEVEL.H1} className="max-w-2xl text-6xl">
+            <Title level={H._1} className="max-w-2xl text-6xl">
               {t("title")}
             </Title>
             <Description className="max-w-2xl">{t("description")}</Description>

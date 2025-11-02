@@ -1,17 +1,17 @@
 import { LOCALE, routing } from "@/i18n/routing";
 
-enum CURRENCY {
+enum eCurrency {
   "en-US" = "USD",
 }
-class Mony {
+class MonyFormatter {
   private readonly Locale: LOCALE;
-  private readonly Currency: CURRENCY;
+  private readonly Currency: eCurrency;
 
   private readonly _Formatter: Intl.NumberFormat;
 
   constructor() {
     this.Locale = routing.defaultLocale;
-    this.Currency = CURRENCY[routing.defaultLocale];
+    this.Currency = eCurrency[routing.defaultLocale];
 
     this._Formatter = new Intl.NumberFormat(this.Locale, {
       style: "currency",
@@ -24,4 +24,4 @@ class Mony {
   }
 }
 
-export { Mony };
+export { MonyFormatter };

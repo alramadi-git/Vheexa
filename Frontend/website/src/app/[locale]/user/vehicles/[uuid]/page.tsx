@@ -5,7 +5,7 @@ import { VehicleService } from "@/services/user/vehicle";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { LEVEL } from "@/components/locals/blocks/typography";
+import { H } from "@/components/locals/blocks/typography";
 import {
   Section,
   Container,
@@ -68,7 +68,7 @@ export default async function Page(
             </Badge>
 
             <Intro>
-              <Title level={LEVEL.H1} className="mb-0">
+              <Title level={H._1} className="mb-0">
                 {vehicle.name}
               </Title>
               <Description>{vehicle.description}</Description>

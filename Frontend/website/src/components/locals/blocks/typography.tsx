@@ -3,7 +3,7 @@ import { cn } from "@/utilities/cn";
 
 function Section({ className, children, ...props }: ComponentProps<"section">) {
   return (
-    <section className={cn("px-16 py-32", className)} {...props}>
+    <section className={cn("px-6 py-16 md:px-16 md:py-32", className)} {...props}>
       {children}
     </section>
   );
@@ -24,21 +24,21 @@ function Intro({ className, children, ...props }: ComponentProps<"div">) {
   );
 }
 
-enum LEVEL {
-  H1 = "h1",
-  H2 = "h2",
+enum H {
+  _1 = "h1",
+  _2 = "h2",
 }
 function Title({
-  level = LEVEL.H2,
+  level = H._2,
   className,
   children,
   ...props
-}: (ComponentProps<"h1"> | ComponentProps<"h2">) & { level?: LEVEL }) {
+}: (ComponentProps<"h1"> | ComponentProps<"h2">) & { level?: H }) {
   const H = level;
 
   return (
     <H
-      className={cn("text-5xl leading-18 font-bold text-pretty", className)}
+      className={cn("text-4xl font-bold text-pretty", className)}
       {...props}
     >
       {children}
@@ -84,5 +84,5 @@ function Blockquote({
   );
 }
 
-export { LEVEL };
+export { H };
 export { Section, Container, Intro, Title, Description, Kbd, Blockquote };

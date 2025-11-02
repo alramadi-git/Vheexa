@@ -1,48 +1,10 @@
 "use client";
 
 import type { ComponentProps, JSX } from "react";
-import { FullHDImage } from "./image";
+
 import { useTranslations } from "next-intl";
-
-type tList<tItem> = Omit<ComponentProps<"div">, "children"> & {
-  items: Array<tItem>;
-  render: (item: tItem) => JSX.Element;
-
-  loading: {
-    isLoading: boolean;
-    render: (value: null, index: number, array: number[]) => JSX.Element;
-  };
-  error: {
-    isError: boolean;
-    render?: JSX.Element;
-  };
-  empty?: JSX.Element;
-};
-
-export function List<tItem>({
-  items,
-  render,
-  loading,
-  error,
-  empty,
-  ...props
-}: tList<tItem>) {
-  if (loading.isLoading)
-    return <ListSkeleton render={loading.render} {...props} />;
-  if (error?.isError) return error.render ?? <Error />;
-
-  if (items.length === 0) return empty ?? <Empty />;
-  return <div {...props}>{items.map(render)}</div>;
-}
-
-type tListSelectionProps = Omit<ComponentProps<"div">, "children"> & {
-  render: (value: null, index: number, array: number[]) => JSX.Element;
-};
-
-function ListSkeleton({ render, ...props }: tListSelectionProps) {
-  const arr = new Array(10).fill(null);
-  return <div {...props}>{arr.map(render)}</div>;
-}
+import { FullHDImage } from "./image";
+import { tCallback } from "@/types/array";
 
 function Empty() {
   const t = useTranslations("app.components.list.empty");
@@ -60,7 +22,32 @@ function Empty() {
   );
 }
 
-function Error() {
+type tListSuccessProps<tItem> = Omit<ComponentProps<"div">, "children"> & {
+  items: Array<tItem>;
+  render: tCallback<tItem, JSX.Element>;
+
+  whenEmpty?: JSX.Element;
+};
+function ListSuccess<tItem>({
+  items,
+  render,
+  whenEmpty,
+  ...props
+}: tListSuccessProps<tItem>) {
+  if (items.length === 0) return whenEmpty ?? <Empty />;
+  return <div {...props}>{items.map(render)}</div>;
+}
+
+type tListLoadingProps = Omit<ComponentProps<"div">, "children"> & {
+  itemsLength: number;
+  render: tCallback<null, JSX.Element>;
+};
+function ListLoading({ itemsLength, render, ...props }: tListLoadingProps) {
+  const arr = new Array(itemsLength).fill(null);
+  return <div {...props}>{arr.map(render)}</div>;
+}
+
+function Failed() {
   const t = useTranslations("app.components.list.error");
 
   return (
@@ -75,3 +62,31 @@ function Error() {
     </div>
   );
 }
+
+enum eListStatus {
+  LOADING,
+  SUCCESS,
+  FAILED,
+}
+type tList<tItem> = {
+  status: eListStatus;
+  whenLoading: tListLoadingProps;
+  whenSuccess: tListSuccessProps<tItem>;
+  whenFailed?: JSX.Element;
+};
+
+function List<tItem>({
+  status,
+  whenLoading,
+  whenSuccess,
+  whenFailed,
+}: tList<tItem>) {
+  if (status === eListStatus.LOADING) return <ListLoading {...whenLoading} />;
+
+  if (status === eListStatus.SUCCESS) return <ListSuccess {...whenSuccess} />;
+
+  return whenFailed ?? <Failed />;
+}
+
+export { eListStatus };
+export default List;

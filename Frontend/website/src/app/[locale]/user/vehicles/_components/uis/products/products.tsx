@@ -2,7 +2,8 @@
 
 import type { tVehicleModel } from "@/models/user/vehicle";
 
-import { Mony } from "@/libraries/mony";
+import { MonyFormatter } from "@/libraries/mony";
+import { clsVehicle } from "@/classes/user/vehicle";
 
 import { useTranslations } from "next-intl";
 import { useVehiclesQuery } from "../../../_hooks/use-vehicles-query";
@@ -24,7 +25,7 @@ import {
   CarouselItem,
 } from "@/components/shadcn/carousel";
 import Filters from "./filters";
-import { List } from "@/components/locals/blocks/list";
+import List, { eListStatus } from "@/components/locals/blocks/list";
 import Pagination from "@/components/locals/blocks/pagination";
 
 import { Fragment } from "react";
@@ -35,12 +36,11 @@ import { Link } from "@/components/locals/blocks/link";
 import { Separator } from "@/components/shadcn/separator";
 import { FullHDImage } from "@/components/locals/blocks/image";
 import { Skeleton } from "@/components/shadcn/skeleton";
-import { ErrorToast } from "@/components/locals/blocks/toast";
 import { toast } from "sonner";
-import { clsVehicle } from "@/classes/user/vehicle";
+import { ErrorToast } from "@/components/locals/blocks/toast";
 
 export default function Products() {
-  const { isLoading, result } = useVehiclesQuery();
+  const { result } = useVehiclesQuery();
 
   if (result !== undefined && !result?.isSuccess) {
     console.error("error status code: ", result.statusCode);
@@ -53,45 +53,51 @@ export default function Products() {
 
   return (
     <Section>
-      <Container className="flex gap-4">
+      <Container className="space-y-7">
         <Filters />
-        <div className="flex min-h-full w-full flex-col justify-between gap-4">
-          <Fragment>
-            <List<tVehicleModel>
-              items={result?.isSuccess ? result.data : []}
-              render={(item) => <Item key={item.uuid} vehicleModel={item} />}
-              loading={{
-                isLoading,
-                render: (_, index) => <ItemSkeleton key={index} />,
-              }}
-              error={{
-                isError: !result?.isSuccess,
-              }}
-              className="grid w-full grid-cols-3 gap-6"
-            />
 
-            {result?.isSuccess && <Pagination pagination={result.pagination} />}
-          </Fragment>
-        </div>
+        <List<tVehicleModel>
+          status={
+            result === undefined
+              ? eListStatus.LOADING
+              : result.isSuccess
+                ? eListStatus.SUCCESS
+                : eListStatus.FAILED
+          }
+          whenLoading={{
+            itemsLength: 8,
+            render: (_, index) => <ItemLoading key={index} />,
+            className: "grid grid-cols-4 gap-7",
+          }}
+          whenSuccess={{
+            items: result?.isSuccess ? result.data : [],
+            render: (value) => <Item key={value.uuid} {...value} />,
+            className: "grid grid-cols-4 gap-7",
+          }}
+        />
+
+        {result?.isSuccess && <Pagination pagination={result.pagination} />}
       </Container>
     </Section>
   );
 }
 
-type tItemProps = {
-  vehicleModel: tVehicleModel;
-};
-function Item({ vehicleModel }: tItemProps) {
+type tItemProps = tVehicleModel;
+function Item(vehicleModel: tItemProps) {
+  const tDefaults = useTranslations("app.components");
+  const tDefaultLogo = tDefaults("logo") 
+  const tDefaultThumbnail = tDefaults("thumbnail") 
+
   const t = useTranslations("app.user.vehicles.page.products.product");
 
-  const monyFormatter = new Mony();
+  const monyFormatter = new MonyFormatter();
   const vehicle = new clsVehicle(vehicleModel);
 
   return (
     <Card className="overflow-hidden rounded-md pt-0">
       <CardHeader className="relative h-58 px-0">
         <FullHDImage
-          src={vehicle.thumbnail!.url}
+          src={vehicle.thumbnail?.url ?? tDefaultThumbnail}
           alt={vehicle.name}
           className="h-58"
         />
@@ -99,7 +105,7 @@ function Item({ vehicleModel }: tItemProps) {
 
         <div className="absolute top-3 left-3 z-10 flex items-center gap-1">
           <FullHDImage
-            src={vehicle.partner.logo!.url}
+            src={vehicle.partner.logo?.url ?? tDefaultLogo}
             alt={vehicle.partner.name}
             className="size-10 rounded-lg"
           />
@@ -200,7 +206,7 @@ function Item({ vehicleModel }: tItemProps) {
   );
 }
 
-function ItemSkeleton() {
+function ItemLoading() {
   return (
     <Card className="overflow-hidden rounded-md pt-0">
       <CardHeader className="relative h-58 px-0">
