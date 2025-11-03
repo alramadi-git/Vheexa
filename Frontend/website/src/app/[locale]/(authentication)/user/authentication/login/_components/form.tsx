@@ -10,21 +10,25 @@ import {
 } from "@/validations/authentication";
 
 import useAccountStore from "@/app/[locale]/user/_stores/account-store";
+
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 
 import { Controller, useForm } from "react-hook-form";
 
-import { Button } from "@/components/shadcn/button";
-import { Input } from "@/components/shadcn/input";
+import { toast } from "sonner";
+import { ErrorToast } from "@/components/locals/blocks/toast";
+
+import { LuLoaderCircle } from "react-icons/lu";
 import {
   Field,
   FieldDescription,
   FieldError,
+  FieldGroup,
   FieldLabel,
 } from "@/components/shadcn/field";
-import { toast } from "sonner";
-import { ErrorToast } from "@/components/locals/blocks/toast";
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
 import { PasswordInput } from "@/components/locals/blocks/form";
 
 export default function Form() {
@@ -54,56 +58,71 @@ export default function Form() {
       toast.custom(() => <ErrorToast error={response} />);
       return;
     }
+
     login(response.data);
-    router.push("/user");
+    router.back();
   }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <Controller
-        control={form.control}
-        name="email"
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="email">{t("email.label")}</FieldLabel>
-            <Input
-              aria-invalid={fieldState.invalid}
-              id="email"
-              type="email"
-              placeholder={t("email.placeholder")}
-              autoComplete="off"
-              {...field}
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            {!fieldState.invalid && (
-              <FieldDescription>{t("email.description")}</FieldDescription>
-            )}
-          </Field>
-        )}
-      />
+      <FieldGroup>
+        <Controller
+          control={form.control}
+          name="email"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="email">{t("email.label")}</FieldLabel>
+              <Input
+                aria-invalid={fieldState.invalid}
+                id="email"
+                type="email"
+                placeholder={t("email.placeholder")}
+                autoComplete="off"
+                {...field}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              {!fieldState.invalid && (
+                <FieldDescription>{t("email.description")}</FieldDescription>
+              )}
+            </Field>
+          )}
+        />
 
-      <Controller
-        control={form.control}
-        name="password"
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="password">{t("password.label")}</FieldLabel>
-            <PasswordInput
-              aria-invalid={fieldState.invalid}
-              id="password"
-              placeholder={t("password.placeholder")}
-              autoComplete="off"
-              {...field}
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            {!fieldState.invalid && (
-              <FieldDescription>{t("password.description")}</FieldDescription>
-            )}
-          </Field>
-        )}
-      />
+        <Controller
+          control={form.control}
+          name="password"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="password">{t("password.label")}</FieldLabel>
+              <PasswordInput
+                aria-invalid={fieldState.invalid}
+                id="password"
+                placeholder={t("password.placeholder")}
+                autoComplete="off"
+                {...field}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              {!fieldState.invalid && (
+                <FieldDescription>{t("password.description")}</FieldDescription>
+              )}
+            </Field>
+          )}
+        />
+      </FieldGroup>
 
-      <Button type="submit" variant="outline" className="w-full">
+      <Button
+        type="submit"
+        variant="outline"
+        className="w-full"
+        disabled={form.formState.isSubmitting}
+      >
+        {form.formState.isSubmitting && (
+          <LuLoaderCircle
+            className="-ms-1 animate-spin"
+            size={16}
+            aria-hidden="true"
+          />
+        )}
         {t("submit")}
       </Button>
     </form>

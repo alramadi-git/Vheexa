@@ -3,7 +3,7 @@ import { cn } from "@/utilities/cn";
 
 function Section({ className, children, ...props }: ComponentProps<"section">) {
   return (
-    <section className={cn("px-6 py-16 md:px-16 md:py-32", className)} {...props}>
+    <section className={cn("px-6 py-16 md:px-14 md:py-28 lg:px-16 lg:py-32", className)} {...props}>
       {children}
     </section>
   );

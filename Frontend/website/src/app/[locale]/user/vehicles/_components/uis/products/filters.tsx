@@ -1,13 +1,14 @@
 "use client";
 
 import { z } from "zod";
-import { tVehicleFilters, zVehicleFilters } from "@/services/user/vehicle";
-import { Controller, useForm } from "react-hook-form";
+import { type tVehicleFilters, zVehicleFilters } from "@/services/user/vehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "@/hooks/use-search-params";
 
+import { Card } from "@/components/shadcn/card";
 import {
   Field,
   FieldGroup,
@@ -15,7 +16,6 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/shadcn/field";
-import { Card } from "@/components/shadcn/card";
 import { Input } from "@/components/shadcn/input";
 import { Checkbox } from "@/components/shadcn/checkbox";
 import { Button } from "@/components/shadcn/button";
@@ -66,7 +66,7 @@ export default function Filters() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-7"
       >
-        <FieldGroup className="flex-row">
+        <FieldGroup className="lg:grid-cols-3">
           <Controller
             control={form.control}
             name="search"
@@ -132,7 +132,7 @@ export default function Filters() {
           />
         </FieldGroup>
 
-        <FieldGroup className="flex-row">
+        <FieldGroup className="sm:grid-cols-2 lg:grid-cols-4">
           <Controller
             control={form.control}
             name="minCapacity"
@@ -224,12 +224,15 @@ export default function Filters() {
           />
         </FieldGroup>
 
-        <div className="flex gap-7">
+        <FieldGroup className="lg:grid-cols-5">
           <Controller
             control={form.control}
             name="hasDiscount"
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="w-[350px]">
+              <Field
+                data-invalid={fieldState.invalid}
+                className="lg:col-span-2"
+              >
                 <div className="flex gap-3">
                   <Checkbox
                     id="has-discount"
@@ -256,11 +259,11 @@ export default function Filters() {
           <Button
             type="submit"
             variant="outline"
-            className="block h-auto p-0 text-base grow font-medium"
+            className="size-full text-base font-medium lg:col-span-3"
           >
             Apply
           </Button>
-        </div>
+        </FieldGroup>
       </form>
     </Card>
   );

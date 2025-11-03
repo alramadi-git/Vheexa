@@ -19,5 +19,5 @@
     "vheexa",
     "zain"
   ],
-  "typescript.tsdk": "website\\node_modules\\typescript\\lib"
+  "typescript.tsdk": "Frontend\\website\\node_modules\\typescript\\lib"
 }

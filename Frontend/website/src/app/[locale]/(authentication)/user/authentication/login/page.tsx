@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import Form from "./_components/form";
@@ -25,17 +26,13 @@ export default async function Page({
   const t = await getTranslations("app.user.authentication.login.page.card");
 
   return (
-    <div className="flex flex-col gap-y-6 overflow-auto p-6">
-      <div className="my-auto flex flex-col gap-6 p-6">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold">{t("title")}</h1>
-          <p className="text-muted-foreground text-balance">
-            {t("description")}
-          </p>
-        </div>
-
-        <Form />
+    <div className="flex flex-col justify-between gap-6 p-6">
+      <div className="flex flex-col">
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground text-balance">{t("description")}</p>
       </div>
+
+      <Form />
     </div>
   );
 }

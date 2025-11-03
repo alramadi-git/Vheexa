@@ -12,7 +12,7 @@ export default function useAccount() {
   const logoutStore = useAccountStore((store) => store.logout);
 
   useEffect(() => {
-    const cookie = getCookie("account");
+    const cookie = getCookie("user-account");
     if (cookie === undefined) return;
 
     const cookieAccount = JSON.parse(cookie);
@@ -22,8 +22,8 @@ export default function useAccount() {
   function logout() {
     if (account === undefined) return;
 
-    deleteCookie("account");
-    deleteCookie("token");
+    deleteCookie("user-account");
+    deleteCookie("user-token");
 
     logoutStore();
   }

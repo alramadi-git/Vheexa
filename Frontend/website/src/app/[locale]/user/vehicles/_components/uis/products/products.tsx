@@ -2,11 +2,14 @@
 
 import type { tVehicleModel } from "@/models/user/vehicle";
 
-import { MonyFormatter } from "@/libraries/mony";
+import { MonyFormatter } from "@/libraries/monyFormatter";
 import { clsVehicle } from "@/classes/user/vehicle";
 
 import { useTranslations } from "next-intl";
 import { useVehiclesQuery } from "../../../_hooks/use-vehicles-query";
+
+import { toast } from "sonner";
+import { ErrorToast } from "@/components/locals/blocks/toast";
 
 import { RiSteeringFill } from "react-icons/ri";
 import { LuFuel, LuUsersRound } from "react-icons/lu";
@@ -36,57 +39,12 @@ import { Link } from "@/components/locals/blocks/link";
 import { Separator } from "@/components/shadcn/separator";
 import { FullHDImage } from "@/components/locals/blocks/image";
 import { Skeleton } from "@/components/shadcn/skeleton";
-import { toast } from "sonner";
-import { ErrorToast } from "@/components/locals/blocks/toast";
-
-export default function Products() {
-  const { result } = useVehiclesQuery();
-
-  if (result !== undefined && !result?.isSuccess) {
-    console.error("error status code: ", result.statusCode);
-    console.error("error status text: ", result.statusText);
-    console.error("error message: ", result.message);
-    console.error("error issues: ", result.issues);
-
-    toast.custom(() => <ErrorToast error={result} />);
-  }
-
-  return (
-    <Section>
-      <Container className="space-y-7">
-        <Filters />
-
-        <List<tVehicleModel>
-          status={
-            result === undefined
-              ? eListStatus.LOADING
-              : result.isSuccess
-                ? eListStatus.SUCCESS
-                : eListStatus.FAILED
-          }
-          whenLoading={{
-            itemsLength: 8,
-            render: (_, index) => <ItemLoading key={index} />,
-            className: "grid grid-cols-4 gap-7",
-          }}
-          whenSuccess={{
-            items: result?.isSuccess ? result.data : [],
-            render: (value) => <Item key={value.uuid} {...value} />,
-            className: "grid grid-cols-4 gap-7",
-          }}
-        />
-
-        {result?.isSuccess && <Pagination pagination={result.pagination} />}
-      </Container>
-    </Section>
-  );
-}
 
 type tItemProps = tVehicleModel;
 function Item(vehicleModel: tItemProps) {
   const tDefaults = useTranslations("app.components");
-  const tDefaultLogo = tDefaults("logo") 
-  const tDefaultThumbnail = tDefaults("thumbnail") 
+  const tDefaultLogo = tDefaults("logo");
+  const tDefaultThumbnail = tDefaults("thumbnail");
 
   const t = useTranslations("app.user.vehicles.page.products.product");
 
@@ -103,11 +61,11 @@ function Item(vehicleModel: tItemProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 to-transparent"></div>
 
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-1">
+        <div className="absolute top-3 left-3 z-10 flex gap-1">
           <FullHDImage
             src={vehicle.partner.logo?.url ?? tDefaultLogo}
             alt={vehicle.partner.name}
-            className="size-10 rounded-lg"
+            className="size-8 rounded-lg"
           />
 
           <div>
@@ -196,7 +154,7 @@ function Item(vehicleModel: tItemProps) {
 
         <Separator orientation="vertical" />
 
-        <Button asChild className="grow">
+        <Button asChild className="h-full grow">
           <Link href={`/user/vehicles/${vehicle.uuid}`}>
             {t("view-details")}
           </Link>
@@ -259,10 +217,55 @@ function ItemLoading() {
           <Skeleton className="h-4 w-36" />
         </div>
 
-        <Skeleton className="h-full w-1" />
+        <Skeleton className="h-full w-2" />
 
         <Skeleton className="h-full w-full" />
       </CardFooter>
     </Card>
+  );
+}
+
+export default function Products() {
+  const { result } = useVehiclesQuery();
+
+  if (result !== undefined && !result?.isSuccess) {
+    console.error("error status code: ", result.statusCode);
+    console.error("error status text: ", result.statusText);
+    console.error("error message: ", result.message);
+    console.error("error issues: ", result.issues);
+
+    toast.custom(() => <ErrorToast error={result} />);
+  }
+
+  return (
+    <Section>
+      <Container className="space-y-7">
+        <Filters />
+
+        <List<tVehicleModel>
+          status={
+            result === undefined
+              ? eListStatus.LOADING
+              : result.isSuccess
+                ? eListStatus.SUCCESS
+                : eListStatus.FAILED
+          }
+          whenLoading={{
+            itemsLength: 8,
+            render: (_, index) => <ItemLoading key={index} />,
+            className:
+              "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7",
+          }}
+          whenSuccess={{
+            items: result?.isSuccess ? result.data : [],
+            render: (value) => <Item key={value.uuid} {...value} />,
+            className:
+              "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7",
+          }}
+        />
+
+        {result?.isSuccess && <Pagination pagination={result.pagination} />}
+      </Container>
+    </Section>
   );
 }

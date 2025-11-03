@@ -19,7 +19,8 @@ export default async function Hero() {
 
   return (
     <div className="relative">
-      {/* <Background /> */}
+      <Background />
+      
       <Container>
         <Section className="grid lg:grid-cols-2 lg:gap-8">
           <div className="space-y-8 max-lg:my-auto lg:space-y-12">

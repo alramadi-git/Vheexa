@@ -279,7 +279,7 @@ INSERT INTO "Partners" ("LogoUUID", "BannerUUID", "Handle", "Name", "PhoneNumber
 (
  (SELECT "UUID" FROM "Images" OFFSET 1 LIMIT 1),
  (SELECT "UUID" FROM "Images" OFFSET 2 LIMIT 1),
- 'vheexa', 'vheexa.', '+19999999999', 'partner@vheexa.com', 'AQAAAAIAAYagAAAAEIxLR0r2g0pwsSvrhCJNoGcOHtiHt6eb1Rm90G0m+jjHS9B3RiF4px6sQlvv8N3nEA==',
+ 'vheexa', 'vheexa', '+19999999999', 'partner@vheexa.com', 'AQAAAAIAAYagAAAAEIxLR0r2g0pwsSvrhCJNoGcOHtiHt6eb1Rm90G0m+jjHS9B3RiF4px6sQlvv8N3nEA==',
  FALSE, NULL, NOW(), NOW()
 );
 

@@ -49,13 +49,13 @@ export async function POST(
       { status: apiResponse.status },
     );
 
-    response.cookies.set("account", JSON.stringify(account), {
+    response.cookies.set("user-account", JSON.stringify(account), {
       httpOnly: false,
       secure: true,
       path: "/",
       sameSite: "strict",
     });
-    response.cookies.set("token", token, {
+    response.cookies.set("user-token", token, {
       httpOnly: false,
       secure: true,
       path: "/",
