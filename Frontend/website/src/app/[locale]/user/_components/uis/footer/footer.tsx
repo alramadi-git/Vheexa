@@ -10,7 +10,10 @@ import {
 } from "react-icons/fa6";
 import { Link } from "@/components/locals/blocks/link";
 import { FullHDImage } from "@/components/locals/blocks/image";
-import { Container, Section, sectionClassName } from "@/components/locals/blocks/typography";
+import {
+  sectionClassName,
+  Container,
+} from "@/components/locals/blocks/typography";
 import { cn } from "@/utilities/cn";
 
 type tRoute = {
@@ -31,115 +34,113 @@ export default async function Footer() {
 
   return (
     <footer className={cn(sectionClassName, "border-t")}>
-        <Container>
-          <div className="grid md:grid-cols-6 gap-6">
-            <div className="md:col-span-2 space-y-3">
-              <div className="flex items-center gap-2">
-                <Link href="/user" className="block size-fit">
-                  <FullHDImage
-                    src={t("logo.src")}
-                    alt={t("logo.alt")}
-                    className="size-10"
-                  />
-                </Link>
+      <Container>
+        <div className="grid gap-6 md:grid-cols-6">
+          <div className="space-y-3 md:col-span-2">
+            <div className="flex items-center gap-2">
+              <Link href="/user" className="block size-fit">
+                <FullHDImage
+                  src={t("logo.src")}
+                  alt={t("logo.alt")}
+                  className="size-10"
+                />
+              </Link>
 
-                <h3 className="text-2xl font-bold">{t("title")}</h3>
-              </div>
-
-              <p className="text-muted-foreground text-pretty">
-                {t("description")}
-              </p>
+              <h3 className="text-2xl font-bold">{t("title")}</h3>
             </div>
 
-            <div className="md:col-span-4 grid xs:grid-cols-2 gap-6 lg:grid-cols-4">
-              {quickLinks.map((linkGroup, index) => (
-                <div key={index} className="space-y-3">
-                  <h4 className="block text-lg font-medium">
-                    {linkGroup.label}
-                  </h4>
-                  <ul className="space-y-2 text-sm">
-                    {linkGroup.links.map((item, index) => (
-                      <li key={index}>
-                        <Link
-                          href={item.href}
-                          className="text-muted-foreground hover:text-primary block duration-150"
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6 text-sm">
-            <p className="text-muted-foreground flex items-center gap-1.5">
-              {t.rich("outro", {
-                copyright: () => <FaRegCopyright className="size-3" />,
-                time: () => <time dateTime={`${year}`}>{year}</time>,
-                span: (chunk) => <span>{chunk}</span>,
-              })}
+            <p className="text-muted-foreground text-pretty">
+              {t("description")}
             </p>
-            <div className="flex flex-wrap justify-center gap-3.5">
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <FaLinkedinIn className="size-4" />
-              </Link>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="X/Twitter"
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <FaXTwitter className="size-4" />
-              </Link>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <FaMeta className="size-4" />
-              </Link>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <FaInstagram className="size-4" />
-              </Link>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <FaTiktok className="size-4" />
-              </Link>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Youtube"
-                className="text-muted-foreground hover:text-primary block duration-150"
-              >
-                <FaYoutube className="size-4" />
-              </Link>
-            </div>
           </div>
-        </Container>
+
+          <div className="xs:grid-cols-2 grid gap-6 md:col-span-4 lg:grid-cols-4">
+            {quickLinks.map((linkGroup, index) => (
+              <div key={index} className="space-y-3">
+                <h4 className="block text-lg font-medium">{linkGroup.label}</h4>
+                <ul className="space-y-2 text-sm">
+                  {linkGroup.links.map((item, index) => (
+                    <li key={index}>
+                      <Link
+                        href={item.href}
+                        className="text-muted-foreground hover:text-primary block duration-150"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6 text-sm">
+          <p className="text-muted-foreground flex items-center gap-1.5">
+            {t.rich("outro", {
+              copyright: () => <FaRegCopyright className="size-3" />,
+              time: () => <time dateTime={`${year}`}>{year}</time>,
+              span: (chunk) => <span>{chunk}</span>,
+            })}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3.5">
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaLinkedinIn className="size-4" />
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X/Twitter"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaXTwitter className="size-4" />
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaMeta className="size-4" />
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaInstagram className="size-4" />
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaTiktok className="size-4" />
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Youtube"
+              className="text-muted-foreground hover:text-primary block duration-150"
+            >
+              <FaYoutube className="size-4" />
+            </Link>
+          </div>
+        </div>
+      </Container>
     </footer>
   );
 }
