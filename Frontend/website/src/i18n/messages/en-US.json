@@ -439,10 +439,10 @@
             }
           },
 
-          "credibility": {
+          "partners": {
             "label": "Trusted for Every Journey",
 
-            "items": [
+            "logos": [
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
                 "alt": "Logo"

@@ -7,22 +7,79 @@ import {
   Title,
   Description,
 } from "@/components/locals/blocks/typography";
-import Metrics from "@/app/[locale]/user/_components/uis/stats/metrics";
-import Testimonial from "@/app/[locale]/user/_components/uis/stats/testimonial";
+import { FullHDImage } from "@/components/locals/blocks/image";
+import { Blockquote } from "@/components/locals/blocks/typography";
+import { AnimatedNumber } from "@/components/motion-primitives/animated-number";
+import { Separator } from "@/components/shadcn/separator";
+
+async function Testimonial() {
+  const t = await getTranslations("app.user.page.stats.testimonial");
+
+  return (
+    <div>
+      <Blockquote>{t("quote")}</Blockquote>
+      <div className="mt-6 flex gap-2">
+        <FullHDImage
+          src={t("author.avatar.src")}
+          alt={t("author.avatar.alt")}
+          className="size-6 rounded-sm"
+        />
+        <cite className="block font-medium not-italic">
+          {t("author.name")}, {t("author.role")}
+        </cite>
+      </div>
+    </div>
+  );
+}
+
+type tItem = {
+  label: string;
+  value: number;
+};
+
+async function Metrics() {
+  const t = await getTranslations("app.user.page.stats.metrics");
+  const items: Array<tItem> = t.raw("items");
+
+  return (
+    <div>
+      <p className="text-2xl">{t("description")}</p>
+      <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-4 xl:flex xl:flex-nowrap xl:justify-between">
+        {items.map((item, index) => (
+          <div key={index} className="flex flex-col gap-1">
+            <div className="flex items-center md:order-2">
+              <AnimatedNumber
+                className="bg-linear-to-r from-zinc-950 to-zinc-600 bg-clip-text text-3xl font-medium text-transparent dark:from-white dark:to-zinc-800"
+                springOptions={{
+                  bounce: 10,
+                  duration: 10000,
+                }}
+                value={item.value}
+              />
+              <span className="ms-0.5 text-3xl">+</span>
+            </div>
+            <p>{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default async function Stats() {
   const t = await getTranslations("app.user.page.stats");
 
   return (
     <Section>
-      <Container className="space-y-8 px-6 md:space-y-12">
+      <Container className="space-y-8 md:space-y-12">
         <Intro>
           <Title className="max-w-3xl">{t("title")}</Title>
           <Description className="max-w-5xl">{t("description")}</Description>
         </Intro>
-        <div className="grid grid-cols-2 gap-12">
-          <Metrics />
+        <div className="grid gap-6 xl:grid-cols-2">
           <Testimonial />
+          <Separator orientation="horizontal" className="xl:hidden" />
+          <Metrics />
         </div>
       </Container>
     </Section>

@@ -1,13 +1,15 @@
 import type { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
 
+const sectionClassName: string = "px-8 py-16 lg:px-12 lg:py-24";
 function Section({ className, children, ...props }: ComponentProps<"section">) {
   return (
-    <section className={cn("px-6 py-16 md:px-14 md:py-28 lg:px-16 lg:py-32", className)} {...props}>
+    <section className={cn(sectionClassName, className)} {...props}>
       {children}
     </section>
   );
 }
+
 function Container({ className, children, ...props }: ComponentProps<"div">) {
   return (
     <div {...props} className={cn("container", className)}>
@@ -37,10 +39,7 @@ function Title({
   const H = level;
 
   return (
-    <H
-      className={cn("text-4xl font-bold text-pretty", className)}
-      {...props}
-    >
+    <H className={cn("text-4xl font-bold text-pretty", className)} {...props}>
       {children}
     </H>
   );
@@ -85,4 +84,5 @@ function Blockquote({
 }
 
 export { H };
+export { sectionClassName };
 export { Section, Container, Intro, Title, Description, Kbd, Blockquote };

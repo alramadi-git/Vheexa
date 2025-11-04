@@ -10,7 +10,8 @@ import {
 } from "react-icons/fa6";
 import { Link } from "@/components/locals/blocks/link";
 import { FullHDImage } from "@/components/locals/blocks/image";
-import { Container, Section } from "@/components/locals/blocks/typography";
+import { Container, Section, sectionClassName } from "@/components/locals/blocks/typography";
+import { cn } from "@/utilities/cn";
 
 type tRoute = {
   label: string;
@@ -29,8 +30,7 @@ export default async function Footer() {
   const quickLinks: Array<tLinkGroup> = t.raw("quick-links");
 
   return (
-    <footer>
-      <Section className="border-t py-12">
+    <footer className={cn(sectionClassName, "border-t")}>
         <Container>
           <div className="grid md:grid-cols-6 gap-6">
             <div className="md:col-span-2 space-y-3">
@@ -51,7 +51,7 @@ export default async function Footer() {
               </p>
             </div>
 
-            <div className="md:col-span-4 grid sm:grid-cols-2 gap-6 lg:grid-cols-4">
+            <div className="md:col-span-4 grid xs:grid-cols-2 gap-6 lg:grid-cols-4">
               {quickLinks.map((linkGroup, index) => (
                 <div key={index} className="space-y-3">
                   <h4 className="block text-lg font-medium">
@@ -140,7 +140,6 @@ export default async function Footer() {
             </div>
           </div>
         </Container>
-      </Section>
     </footer>
   );
 }

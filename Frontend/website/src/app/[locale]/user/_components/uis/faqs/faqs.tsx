@@ -54,7 +54,7 @@ export default async function FAQs() {
 
   return (
     <Section>
-      <Container className="max-w-5xl space-y-16">
+      <Container className="space-y-16">
         <Intro>
           <Title>{t("title")}</Title>
           <Description>{t("description")}</Description>
