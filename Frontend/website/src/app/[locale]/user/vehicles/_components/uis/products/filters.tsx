@@ -33,7 +33,7 @@ export default function Filters() {
       maxCapacity: Number(searchParams.getOneOrDefault("maxCapacity", "0")),
       minPrice: Number(searchParams.getOneOrDefault("minPrice", "0")),
       maxPrice: Number(searchParams.getOneOrDefault("maxPrice", "0")),
-      hasDiscount: Boolean(searchParams.getOneOrDefault("hasDiscount", "0")),
+      hasDiscount: Boolean(Number(searchParams.getOneOrDefault("hasDiscount", "0"))),
     },
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error

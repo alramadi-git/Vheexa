@@ -1,15 +1,12 @@
 "use client";
 
-import useAccount from "../../../_hooks/use-account";
+import { type ComponentProps } from "react";
+
 import { useTranslations } from "next-intl";
+import useAccount from "@/app/[locale]/user/_hooks/use-account";
 
-import { LuUserRound, LuChevronDown, LuBolt, LuLogOut } from "react-icons/lu";
+import { LuBolt, LuUserRound, LuLogOut } from "react-icons/lu";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/shadcn/avatar";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -19,13 +16,22 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/shadcn/dropdown-menu";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/shadcn/avatar";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/link";
 
+type tAccountProps = {
+  align?: ComponentProps<typeof DropdownMenuContent>["align"];
+};
+
 const icons = [LuBolt];
 
-export default function Account() {
+export default function Account({ align = "start" }: tAccountProps) {
   const { account, logout } = useAccount();
   const t = useTranslations("app.user.layout.header.account");
 
@@ -50,7 +56,7 @@ export default function Account() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="border hover:bg-transparent">
+        <Button variant="ghost" className="border p-2.5 hover:bg-transparent">
           <Avatar className="size-6 items-center justify-center rounded-md">
             <AvatarImage
               src={account.avatar?.url}
@@ -61,10 +67,10 @@ export default function Account() {
               <LuUserRound className="opacity-60" aria-hidden="true" />
             </AvatarFallback>
           </Avatar>
-          <LuChevronDown size={16} className="opacity-60" aria-hidden="true" />
+          {/* <LuChevronDown size={16} className="opacity-60" aria-hidden="true" /> */}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="max-w-64">
+      <DropdownMenuContent align={align} className="max-w-64">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
             {account.username}

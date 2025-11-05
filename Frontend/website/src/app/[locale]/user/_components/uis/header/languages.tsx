@@ -33,14 +33,15 @@ type tCountry = {
   label: string;
 };
 
-type tLanguagesProps = {
-  props: Omit<ComponentProps<"div">, "children">;
+type tLanguagesProps = Omit<ComponentProps<"div">, "children"> & {
+  align?: ComponentProps<typeof PopoverContent>["align"];
 };
 
 export default function Languages({
+  align = "start" ,
   className,
   ...props
-}: tLanguagesProps["props"]) {
+}: tLanguagesProps) {
   const t = useTranslations("app.user.layout.header.languages");
   const locale = useLocale();
 
@@ -76,8 +77,8 @@ export default function Languages({
           </Button>
         </PopoverTrigger>
         <PopoverContent
+          align={align}
           className="border-input w-full min-w-[var(--radix-popper-anchor-width)] rounded p-0"
-          align="end"
         >
           <Command className="rounded">
             <CommandInput placeholder={t("placeholder")} />

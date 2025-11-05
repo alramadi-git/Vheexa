@@ -16,6 +16,11 @@ type tNavigationLink = {
   label: string;
 };
 
+type tNavigationMenu = {
+  id: number;
+  label: string;
+  submenu?: Array<tSubNavigationLink>;
+};
 type tSubNavigationLink = {
   id: number;
   href: string;
@@ -23,13 +28,7 @@ type tSubNavigationLink = {
   description: string;
 };
 
-type tNavigationMenu = {
-  id: number;
-  label: string;
-  submenu?: Array<tSubNavigationLink>;
-};
-
-export default async function NavigationMenuWithDropdown() {
+export default async function DesktopNavigation() {
   const t = await getTranslations("app.user.layout.header");
   const navigation: Array<tNavigationLink | tNavigationMenu> =
     t.raw("navigation.links");
