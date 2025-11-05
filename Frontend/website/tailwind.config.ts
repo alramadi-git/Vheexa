@@ -6,14 +6,9 @@ const config: Config = {
   content: ["./src/app/**/*.{ts,tsx,js,jsx}"],
 
   theme: {
-    extend: {
-      screens: {
-        xs: "375px",
-      },
-    },
     container: {
-      center: true, 
-      padding: "1rem", 
+      center: true,
+      padding: "1rem",
       screens: {
         xs: "375px",
         sm: "640px",
