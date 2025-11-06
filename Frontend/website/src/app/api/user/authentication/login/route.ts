@@ -15,13 +15,14 @@ export async function POST(
   try {
     const loginCredentialsBody = await request.json();
     const loginCredentials = zLoginCredentials.parse(loginCredentialsBody);
+    console.log(process.env.API_KEY);
 
     const apiResponse = await fetch(
       `${process.env.API_URL}/user/authentication/login`,
       {
         method: "POST",
         headers: {
-          "API-Key": `${process.env.API_KEY}`,
+          "X-Api-Key": `${process.env.API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(loginCredentials),

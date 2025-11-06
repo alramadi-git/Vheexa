@@ -1,9 +1,9 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API.Options;
+namespace API.Configurations;
 
-public class JWTOptions
+public class JwtSettings
 {
     public int Lifetime { get; set; }
     public string Issuer { get; set; }

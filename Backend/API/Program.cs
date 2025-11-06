@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using API.Options;
-
 using Business.Validations;
 using Business.User.Services;
 using Business.User.Validations;
 
 using Database;
 using Database.User.Repositories;
+using API.Configurations;
+using API.Middlewares;
 
 namespace API;
 
@@ -20,11 +20,17 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
+        // Register configuration objects
+        var APIKey = builder.Configuration.GetSection("ApiKeys").Get<ApiKeys>()!;
+        builder.Services.AddSingleton<ApiKeys>(APIKey);
 
-        var jwtOptions = builder.Configuration.GetSection("JWTOptions").Get<JWTOptions>()!;
-        builder.Services.AddSingleton(jwtOptions);
+        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
+        builder.Services.AddSingleton<JwtSettings>(jwtSettings);
 
+        // Register middlewares
+        builder.Services.AddScoped<FrontendAPIKeyMiddleware>();
+
+        // Add Authentication (JWT)
         builder.Services.AddAuthentication()
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -33,29 +39,36 @@ public class Program
                     ValidateLifetime = true,
 
                     ValidateIssuer = true,
-                    ValidIssuer = jwtOptions.Issuer,
+                    ValidIssuer = jwtSettings.Issuer,
 
                     ValidateAudience = true,
-                    ValidAudience = jwtOptions.Audience,
+                    ValidAudience = jwtSettings.Audience,
 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = jwtOptions.SymmetricSecurityKey()
+                    IssuerSigningKey = jwtSettings.SymmetricSecurityKey()
                 };
             });
 
+
+        // Register validations
+        builder.Services.AddScoped<LoginCredentialsValidation>();
+
+        builder.Services.AddScoped<VehicleFiltersValidation>();
         builder.Services.AddScoped<PaginationValidation>();
 
-        builder.Services.AddScoped<LoginCredentialsValidation>();
+
+        // Register database
+        builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
+
+        // Register business & data layer services
         builder.Services.AddScoped<AuthenticationService>();
         builder.Services.AddScoped<AuthenticationRepository>();
 
-        builder.Services.AddScoped<VehicleFiltersValidation>();
         builder.Services.AddScoped<VehicleService>();
         builder.Services.AddScoped<VehicleRepository>();
 
-        // Add services to the container.
-
         builder.Services.AddControllers();
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -71,8 +84,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseMiddleware<FrontendAPIKeyMiddleware>();
         app.UseAuthorization();
-
 
         app.MapControllers();
 

@@ -4,13 +4,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 using FluentValidation;
-
-using API.Options;
 using API.Models;
 using Database.DTOs;
 using Database.Parameters;
 using Database.User.DTOs;
 using Business.User.Services;
+using API.Configurations;
 
 
 namespace API.User.Controllers;
@@ -19,11 +18,11 @@ namespace API.User.Controllers;
 [Route("api/user/authentication")]
 public class AuthenticationController : Controller
 {
-    private readonly JWTOptions _JWTOptions;
+    private readonly JwtSettings _JWTOptions;
     private readonly AuthenticationService _AuthenticationService;
 
 
-    public AuthenticationController(JWTOptions jWTOptions, AuthenticationService authenticationService)
+    public AuthenticationController(JwtSettings jWTOptions, AuthenticationService authenticationService)
     {
         _JWTOptions = jWTOptions;
         _AuthenticationService = authenticationService;
