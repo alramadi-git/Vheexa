@@ -35,8 +35,8 @@ export default async function Footer() {
   return (
     <footer className={cn(sectionClassName, "border-t")}>
       <Container>
-        <div className="grid gap-6 md:grid-cols-6">
-          <div className="space-y-3 md:col-span-2">
+        <div className="grid sm:grid-cols-3 gap-6 lg:grid-cols-6">
+          <div className="space-y-3 lg:col-span-2">
             <div className="flex items-center gap-2">
               <Link href="/user" className="block size-fit">
                 <FullHDImage
@@ -54,7 +54,7 @@ export default async function Footer() {
             </p>
           </div>
 
-          <div className="xs:grid-cols-2 grid gap-6 md:col-span-4 lg:grid-cols-4">
+          <div className="sm:col-span-2 grid xs:grid-cols-2 gap-6 lg:col-span-4 lg:grid-cols-4">
             {quickLinks.map((linkGroup, index) => (
               <div key={index} className="space-y-3">
                 <h4 className="block text-lg font-medium">{linkGroup.label}</h4>

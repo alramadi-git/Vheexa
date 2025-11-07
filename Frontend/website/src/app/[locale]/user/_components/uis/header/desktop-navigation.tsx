@@ -9,63 +9,82 @@ import {
   NavigationMenuTrigger,
 } from "@/components/shadcn/navigation-menu";
 import { Link } from "@/components/locals/blocks/link";
+import { eEnvironment } from "@/enums/environment";
 
-type tNavigationLink = {
-  id: number;
-  href: string;
-  label: string;
-};
-
-type tNavigationMenu = {
-  id: number;
-  label: string;
-  submenu?: Array<tSubNavigationLink>;
-};
-type tSubNavigationLink = {
+type tSubNavigationMenuItem = {
   id: number;
   href: string;
   label: string;
   description: string;
 };
+type tSubNavigationMenu = {
+  id: number;
+  label: string;
+  submenu: Array<tSubNavigationMenuItem>;
+};
+
+type tNavigationMenuItemProps = {
+  item: Omit<tSubNavigationMenuItem, "id">;
+};
+function SubNavigationMenuItem({ item }: tNavigationMenuItemProps) {
+  return (
+    <NavigationMenuLink
+      asChild={process.env.NODE_ENV === eEnvironment.development}
+      // setting asChild to true in development works fine and nothing weird happens
+      // in production the first link Hom doesn't appear doe to unknown issue
+      // the only way to fix it so far is to set asChild to false in production and everything works fine
+      // why only in production cuz in development it throws an error <a/> can't have a nested <a/> tag
+    >
+      <Link href={item.href}>
+        <span className="leading-none font-medium">{item.label}</span>
+        <p className="text-muted-foreground line-clamp-2 text-xs leading-snug">
+          {item.description}
+        </p>
+      </Link>
+    </NavigationMenuLink>
+  );
+}
+
+type tNavigationMenuItemsProps = {
+  items: tSubNavigationMenuItem[];
+};
+function SubNavigationMenuItems({ items }: tNavigationMenuItemsProps) {
+  return (
+    <ul className="grid grid-cols-2 gap-3 p-1 md:w-[400px] lg:w-[500px]">
+      {items.map(({ id, ...item }) => (
+        <li key={id}>
+          <SubNavigationMenuItem item={item} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+type tSubNavigationMenuProps = {
+  subNavigationMenu: Omit<tSubNavigationMenu, "id">;
+};
+function SubNavigationMenu({ subNavigationMenu }: tSubNavigationMenuProps) {
+  return (
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>{subNavigationMenu.label}</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <SubNavigationMenuItems items={subNavigationMenu.submenu} />
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  );
+}
 
 export default async function DesktopNavigation() {
-  const t = await getTranslations("app.user.layout.header");
-  const navigation: Array<tNavigationLink | tNavigationMenu> =
-    t.raw("navigation.links");
+  const tHeader = await getTranslations("app.user.layout.header");
+  const tNavigationMenu: Array<tSubNavigationMenu> =
+    tHeader.raw("navigation-menu");
 
   return (
     <NavigationMenu className="z-20">
       <NavigationMenuList>
-        {navigation.map((navigationItem) => {
-          if ("submenu" in navigationItem)
-            return (
-              <NavigationMenuItem key={navigationItem.id}>
-                <NavigationMenuTrigger>
-                  {navigationItem.label}
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-3 p-1 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                    {navigationItem.submenu?.map((submenuItem) => (
-                      <li key={submenuItem.id}>
-                        <NavigationMenuLink asChild>
-                          <Link href={submenuItem.href}>
-                            <span className="leading-none font-medium">
-                              {submenuItem.label}
-                            </span>
-                            <p className="text-muted-foreground line-clamp-2 text-xs leading-snug">
-                              {submenuItem.description}
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            );
-
-          return <></>;
-        })}
+        {tNavigationMenu.map(({ id, ...subNavigationItem }) => (
+          <SubNavigationMenu key={id} subNavigationMenu={subNavigationItem} />
+        ))}
       </NavigationMenuList>
     </NavigationMenu>
   );

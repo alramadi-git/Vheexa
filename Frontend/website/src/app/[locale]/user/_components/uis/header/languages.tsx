@@ -24,7 +24,7 @@ import { LinkLocale } from "@/components/locals/blocks/link";
 
 type tContinent = {
   label: string;
-  countries: Array<tCountry>;
+  countries: tCountry[];
 };
 type tCountry = {
   dir: string;

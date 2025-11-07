@@ -15,7 +15,6 @@ export async function POST(
   try {
     const loginCredentialsBody = await request.json();
     const loginCredentials = zLoginCredentials.parse(loginCredentialsBody);
-    console.log(process.env.API_KEY);
 
     const apiResponse = await fetch(
       `${process.env.API_URL}/user/authentication/login`,

@@ -1,6 +1,6 @@
 import "../globals.css";
 
-import { ENVIRONMENT } from "@/enums/environment";
+import { eEnvironment } from "@/enums/environment";
 import { Cairo } from "next/font/google";
 import type { Metadata } from "next";
 
@@ -81,8 +81,8 @@ export default async function Layout({
           </NextIntlClientProvider>
         </ThemeProvider>
 
-        {(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT ||
-          process.env.NODE_ENV === ENVIRONMENT.TEST) && (
+        {(process.env.NODE_ENV === eEnvironment.development ||
+          process.env.NODE_ENV === eEnvironment.test) && (
           <Script
             crossOrigin="anonymous"
             src="https://unpkg.com/react-scan/dist/auto.global.js"

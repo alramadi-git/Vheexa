@@ -18,18 +18,59 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { Container } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/shadcn/accordion";
+import { Link } from "@/components/locals/blocks/link";
 
-// type tLink = {
-//   id: number;
-//   href: string;
-//   label: string;
-// };
+type tSubNavigationMenuItem = {
+  id: number;
+  href: string;
+  label: string;
+  description: string;
+};
+type tSubNavigationMenu = {
+  id: number;
+  label: string;
+  submenu: Array<tSubNavigationMenuItem>;
+};
+
+type tSubNavigationMenuProps = {
+  subNavigationMenu: tSubNavigationMenu;
+};
+function SubNavigationMenu({ subNavigationMenu }: tSubNavigationMenuProps) {
+  return (
+    <AccordionItem value={subNavigationMenu.id.toString()} className="py-2">
+      <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
+        {subNavigationMenu.label}
+      </AccordionTrigger>
+      <AccordionContent className="text-muted-foreground pb-2">
+        <ul className="flex flex-col gap-2">
+          {subNavigationMenu.submenu.map((submenu) => (
+            <li key={submenu.id}>
+              <Link
+                href={submenu.href}
+                className="inline-block duration-150 hover:indent-1 hover:underline"
+              >
+                {submenu.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
 
 export default async function MobileNavigation() {
   const tApp = await getTranslations("app.settings");
 
-  // const tHeader = await getTranslations("app.user.layout.header");
-  // const navigation: Array<tLink> = tHeader.raw("navigation.links");
+  const tHeader = await getTranslations("app.user.layout.header");
+  const tNavigationMenu: Array<tSubNavigationMenu> =
+    tHeader.raw("navigation-menu");
 
   return (
     <Sheet>
@@ -62,7 +103,16 @@ export default async function MobileNavigation() {
             <Account align="end" />
           </SheetHeader>
 
-          <div className="h-full"></div>
+          <Accordion
+            collapsible
+            type="single"
+            className="h-full"
+            defaultValue="3"
+          >
+            {tNavigationMenu.map((item) => (
+              <SubNavigationMenu key={item.id} subNavigationMenu={item} />
+            ))}
+          </Accordion>
         </Container>
       </SheetContent>
     </Sheet>
