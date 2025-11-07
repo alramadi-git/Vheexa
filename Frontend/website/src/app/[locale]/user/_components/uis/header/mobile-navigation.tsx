@@ -51,12 +51,14 @@ function SubNavigationMenu({ subNavigationMenu }: tSubNavigationMenuProps) {
         <ul className="flex flex-col gap-2">
           {subNavigationMenu.submenu.map((submenu) => (
             <li key={submenu.id}>
-              <Link
-                href={submenu.href}
-                className="inline-block duration-150 hover:indent-1 hover:underline"
-              >
-                {submenu.label}
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  href={submenu.href}
+                  className="inline-block duration-150 hover:indent-1 hover:underline"
+                >
+                  {submenu.label}
+                </Link>
+              </SheetClose>
             </li>
           ))}
         </ul>
