@@ -10,7 +10,7 @@
       "logo": "https://ik.imagekit.io/alramadi/vheexa/website/assets/logo.png",
       "banner": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
       "thumbnail": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-      
+
       "list": {
         "empty": {
           "title": "No results were found",
@@ -256,47 +256,45 @@
             ]
           },
 
-          "navigation": {
-            "links": [
-              {
-                "id": 1,
-                "label": "Quick Links",
+          "navigation-menu": [
+            {
+              "id": 1,
+              "label": "Quick Links",
 
-                "submenu": [
-                  {
-                    "id": 1,
-                    "href": "/user",
-                    "label": "Home",
-                    "description": "The main page featuring the latest news and highlights."
-                  },
-                  {
-                    "id": 2,
-                    "href": "/user/vehicles",
-                    "label": "Vehicles",
-                    "description": "Browse all available vehicles for rent with search and filter options."
-                  },
-                  {
-                    "id": 3,
-                    "href": "/user/blogs",
-                    "label": "Blogs",
-                    "description": "Articles, tips, and fresh content about the world of vehicles and mobility."
-                  },
-                  {
-                    "id": 4,
-                    "href": "/user/about",
-                    "label": "About Us",
-                    "description": "Learn about our vision, mission, and the team behind Vheexa."
-                  },
-                  {
-                    "id": 5,
-                    "href": "/user/contact",
-                    "label": "Contact Us",
-                    "description": "Get in touch with us via forms, email, or phone."
-                  }
-                ]
-              }
-            ]
-          }
+              "submenu": [
+                {
+                  "id": 1,
+                  "href": "/user",
+                  "label": "Home",
+                  "description": "The main page featuring the latest news and highlights."
+                },
+                {
+                  "id": 2,
+                  "href": "/user/vehicles",
+                  "label": "Vehicles",
+                  "description": "Browse all available vehicles for rent with search and filter options."
+                },
+                {
+                  "id": 3,
+                  "href": "/user/blogs",
+                  "label": "Blogs",
+                  "description": "Articles, tips, and fresh content about the world of vehicles and mobility."
+                },
+                {
+                  "id": 4,
+                  "href": "/user/about",
+                  "label": "About Us",
+                  "description": "Learn about our vision, mission, and the team behind Vheexa."
+                },
+                {
+                  "id": 5,
+                  "href": "/user/contact",
+                  "label": "Contact Us",
+                  "description": "Get in touch with us via forms, email, or phone."
+                }
+              ]
+            }
+          ]
         },
 
         "footer": {
