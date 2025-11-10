@@ -9,7 +9,7 @@ type tUserModel = {
   location: tLocationModel;
 
   username: string;
-  dateOfBirth: string;
+  dateOfBirth: string; // Date
 
   phoneNumber: string;
   email: string;

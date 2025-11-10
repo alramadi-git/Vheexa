@@ -1,26 +1,33 @@
 import { tVehicleModel } from "@/models/user/vehicle";
 
+import { tPagination, zPagination } from "@/validations/pagination";
+import { tVehicleFilters, zVehicleFilters } from "@/validations/user/vehicle";
+
 import {
   tSuccessOneService,
   tSuccessManyService,
   tResponseOneService,
   tResponseManyService,
-  Service,
-  ErrorService,
+  ClsErrorService,
+  ClsAbstractService,
 } from "../service";
 
-import { tFailedModel } from "@/models/failed";
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import {
+  tSuccessManyModel,
+  tSuccessOneModel,
+  tFailedModel,
+} from "@/models/response";
 
-import { tPagination, zPaginationFilter } from "@/validations/pagination";
-import { tVehicleFilters, zVehicleFilters } from "@/validations/user/vehicle";
+class ClsVehicleService extends ClsAbstractService {
+  constructor() {
+    super("/user/vehicles");
+  }
 
-class VehicleService extends Service {
-  public async GetOne(
+  public async getOne(
     uuid: string,
   ): Promise<tResponseOneService<tVehicleModel>> {
     return await this.catcher<tSuccessOneService<tVehicleModel>>(async () => {
-      const response = await fetch(`${this._APIUrl}/user/vehicles/${uuid}`, {
+      const response = await fetch(`${this._url}/${uuid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -29,8 +36,8 @@ class VehicleService extends Service {
 
       if (response.ok === false) {
         const responseBody: tFailedModel = await response.json();
-        throw new ErrorService(
-          responseBody.statusCode,
+        throw new ClsErrorService(
+          response.status,
           response.statusText,
           responseBody.message,
           responseBody.issues,
@@ -48,16 +55,13 @@ class VehicleService extends Service {
     });
   }
 
-  public async GetMany(
+  public async getMany(
     filters: tVehicleFilters,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModel>> {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 5000);
-    });
     return await this.catcher<tSuccessManyService<tVehicleModel>>(async () => {
       filters = zVehicleFilters.parse(filters);
-      pagination = zPaginationFilter.parse(pagination);
+      pagination = zPagination.parse(pagination);
 
       const queryArray = [];
       if (filters.search !== "") queryArray.push(`search=${filters.search}`);
@@ -82,26 +86,19 @@ class VehicleService extends Service {
       queryArray.push(`limit=${pagination.limit}`);
 
       let queryString = queryArray.join("&");
-      queryString = queryString === "" ? "" : `?${queryString}`;
+      queryString = queryString.length === 0 ? "" : `?${queryString}`;
 
-      const response = await fetch(
-        `${this._APIUrl}/user/vehicles${queryString}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "force-cache",
-          next: {
-            revalidate: 3600,
-          },
+      const response = await fetch(`${this._url}${queryString}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       if (response.ok === false) {
         const responseBody: tFailedModel = await response.json();
-        throw new ErrorService(
-          responseBody.statusCode,
+        throw new ClsErrorService(
+          response.status,
           response.statusText,
           responseBody.message,
           responseBody.issues,
@@ -126,6 +123,6 @@ export type { tVehicleFilters as tVehicleFilters };
 export { zVehicleFilters };
 
 export type { tPagination };
-export { zPaginationFilter as zPagination };
+export { zPagination as zPagination };
 
-export { VehicleService };
+export { ClsVehicleService };

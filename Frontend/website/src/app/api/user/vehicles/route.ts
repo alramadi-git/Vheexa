@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { ZodError } from "zod/v4";
 import { tVehicleFilters, zVehicleFilters } from "@/validations/user/vehicle";
-import { zPaginationFilter } from "@/validations/pagination";
+import { zPagination } from "@/validations/pagination";
 import { tFilterModel } from "@/models/filter";
 import { tSuccessManyModel } from "@/models/success";
 import { tVehicleModel } from "@/models/user/vehicle";
@@ -35,7 +35,7 @@ export async function GET(
     };
 
     filters = zVehicleFilters.parse(filters);
-    pagination = zPaginationFilter.parse(pagination);
+    pagination = zPagination.parse(pagination);
 
     const queryArray = [];
     if (filters.search !== "")

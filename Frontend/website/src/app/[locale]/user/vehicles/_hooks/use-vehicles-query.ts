@@ -1,10 +1,10 @@
-import { VehicleService } from "@/services/user/vehicle";
+import { ClsVehicleService } from "@/services/user/vehicle";
 
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "@/hooks/use-search-params";
 
 export function useVehiclesQuery() {
-  const vehicleService = new VehicleService();
+  const vehicleService = new ClsVehicleService();
 
   const searchParams = useSearchParams();
   const [search = "", transmission = "", fuel = ""] = searchParams.getMany([
@@ -75,7 +75,7 @@ export function useVehiclesQuery() {
       limit,
     ],
     queryFn: () =>
-      vehicleService.GetMany(
+      vehicleService.getMany(
         {
           search: search,
           transmission: transmission,

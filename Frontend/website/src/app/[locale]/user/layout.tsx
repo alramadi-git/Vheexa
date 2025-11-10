@@ -1,8 +1,8 @@
 import { type Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Fragment } from "react";
-import Header from "@/app/[locale]/user/_components/uis/header/header";
-import Footer from "@/app/[locale]/user/_components/uis/footer/footer";
+import Header from "@/components/locals/user/header/header";
+import Footer from "@/components/locals/user/footer/footer";
 
 export const dynamic = "force-static";
 export async function generateMetadata(

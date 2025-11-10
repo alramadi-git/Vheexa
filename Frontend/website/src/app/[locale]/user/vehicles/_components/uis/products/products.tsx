@@ -2,7 +2,7 @@
 
 import type { tVehicleModel } from "@/models/user/vehicle";
 
-import { MonyFormatter } from "@/libraries/monyFormatter";
+import { ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { clsVehicle } from "@/classes/user/vehicle";
 
 import { useTranslations } from "next-intl";
@@ -48,7 +48,7 @@ function Item(vehicleModel: tItemProps) {
 
   const t = useTranslations("app.user.vehicles.page.products.product");
 
-  const monyFormatter = new MonyFormatter();
+  const monyFormatter = new ClsMonyFormatter();
   const vehicle = new clsVehicle(vehicleModel);
 
   return (

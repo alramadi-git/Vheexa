@@ -1,42 +1,42 @@
 "use client";
 
-import { tFailedModel } from "@/models/failed";
-import { tSuccessOneModel } from "@/models/success";
 import { tUserModel } from "@/models/user/user";
-
-import {
-  Service,
-  ErrorService,
-  tResponseOneService,
-  tSuccessOneService,
-} from "@/services/service";
 
 import {
   tLoginCredentials,
   zLoginCredentials,
 } from "@/validations/authentication";
 
-class AuthenticationService extends Service {
+import { tSuccessOneModel, tFailedModel } from "@/models/response";
+import {
+  tSuccessOneService,
+  tResponseOneService,
+  ClsErrorService,
+  ClsAbstractService,
+} from "@/services/service";
+
+class ClsAuthenticationService extends ClsAbstractService {
+  protected constructor() {
+    super("/user/authentication");
+  }
+
   public async login(
-    loginCredentials: tLoginCredentials,
+    credentials: tLoginCredentials,
   ): Promise<tResponseOneService<tUserModel>> {
     return this.catcher<tSuccessOneService<tUserModel>>(async () => {
-      const loginCredentialsResult = zLoginCredentials.parse(loginCredentials);
-      const response = await fetch(
-        `${this._APIUrl}/user/authentication/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(loginCredentialsResult),
+      const credentialsResult = zLoginCredentials.parse(credentials);
+      const response = await fetch(`${this._url}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(credentialsResult),
+      });
 
       if (response.ok === false) {
         const responseBody: tFailedModel = await response.json();
-        throw new ErrorService(
-          responseBody.statusCode,
+        throw new ClsErrorService(
+          response.status,
           response.statusText,
           responseBody.message,
           responseBody.issues,
@@ -54,4 +54,4 @@ class AuthenticationService extends Service {
   }
 }
 
-export { AuthenticationService };
+export { ClsAuthenticationService };

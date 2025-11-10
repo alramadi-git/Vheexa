@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export default function AuthenticatedPagesMiddleware(
+export default function authenticatedMiddleware(
   request: NextRequest,
 ): NextResponse {
   if (!request.nextUrl.pathname.includes("/user/profile"))
@@ -9,9 +9,9 @@ export default function AuthenticatedPagesMiddleware(
   const account = request.cookies.get("user-account");
   const token = request.cookies.get("user-token");
 
-  if (account == undefined || token === undefined)
+  if (!(account && token))
     return NextResponse.redirect(
-      new URL("/user/authentication/login", request.nextUrl),
+      new URL("/user/authentication/login", request.nextUrl.origin),
     );
 
   return NextResponse.next();

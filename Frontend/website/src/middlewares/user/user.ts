@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import AuthenticatedPagesMiddleware from "./authenticated-pages";
-import NonAuthenticatedPagesMiddleware from "./non-authenticated-pages";
+import authenticatedMiddleware from "./authenticate";
+import unauthenticatedMiddleware from "./unauthenticated";
 
-export default function UserMiddleware(request: NextRequest): NextResponse {
-  if (!request.nextUrl.pathname.includes("/user")) return NextResponse.next();
+export default function userMiddleware(request: NextRequest): NextResponse {
+  if (!request.nextUrl.pathname.startsWith("/user", 6))
+    return NextResponse.next();
 
   /** pages you should not access when you are authenticated */
-  let middlewares = AuthenticatedPagesMiddleware(request);
+  let middlewares = authenticatedMiddleware(request);
   if (middlewares?.ok !== true) return middlewares;
 
-  middlewares = NonAuthenticatedPagesMiddleware(request);
+  middlewares = unauthenticatedMiddleware(request);
   if (middlewares?.ok !== true) return middlewares;
 
   return NextResponse.next();

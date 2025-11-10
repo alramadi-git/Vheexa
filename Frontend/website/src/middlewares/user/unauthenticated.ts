@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export default function NonAuthenticatedPagesMiddleware(
+export default function unauthenticatedMiddleware(
   request: NextRequest,
 ): NextResponse {
-  if (!request.nextUrl.pathname.includes("/user/authentication"))
+  if (!request.nextUrl.pathname.startsWith("/user/authentication", 6))
     return NextResponse.next();
 
   const account = request.cookies.get("user-account");
   const token = request.cookies.get("user-token");
 
-  if (account !== undefined && token !== undefined)
-    return NextResponse.redirect(new URL("/user", request.nextUrl));
+  if (account && token)
+    return NextResponse.redirect(new URL("/user", request.nextUrl.origin));
 
   return NextResponse.next();
 }

@@ -1,15 +1,7 @@
-import { tIssueModel } from "@/models/failed";
 import { tPaginationModel } from "@/models/pagination";
+import { tIssueModel } from "@/models/response";
 
 import { ZodError } from "zod/v4";
-
-type tFailedService = {
-  isSuccess: false;
-  statusCode: number;
-  statusText: string;
-  message: string;
-  issues: tIssueModel[];
-};
 
 type tSuccessOneService<tData> = {
   isSuccess: true;
@@ -26,10 +18,18 @@ type tSuccessManyService<tData> = {
   pagination: tPaginationModel;
 };
 
+type tFailedService = {
+  isSuccess: false;
+  statusCode: number;
+  statusText: string;
+  message: string;
+  issues: tIssueModel[];
+};
+
 type tResponseOneService<tData> = tFailedService | tSuccessOneService<tData>;
 type tResponseManyService<tData> = tFailedService | tSuccessManyService<tData>;
 
-class ErrorService extends Error {
+class ClsErrorService extends Error {
   public statusCode: number;
   public statusText: string;
   public issues: tIssueModel[];
@@ -55,8 +55,12 @@ class ErrorService extends Error {
   }
 }
 
-abstract class Service {
-  protected _APIUrl: string = process.env.NEXT_PUBLIC_API_URL!;
+abstract class ClsAbstractService {
+  protected _url: string;
+
+  protected constructor(path: string) {
+    this._url = `${process.env.NEXT_PUBLIC_API_URL!}${path}`;
+  }
 
   protected async catcher<tReturn>(
     callback: () => Promise<tFailedService | tReturn>,
@@ -76,7 +80,7 @@ abstract class Service {
           })),
         } satisfies tFailedService;
 
-      if (error instanceof ErrorService)
+      if (error instanceof ClsErrorService)
         return {
           isSuccess: false,
           statusCode: error.statusCode,
@@ -97,10 +101,10 @@ abstract class Service {
 }
 
 export type {
-  tFailedService,
   tSuccessOneService,
   tSuccessManyService,
+  tFailedService,
   tResponseOneService,
   tResponseManyService,
 };
-export { ErrorService, Service };
+export { ClsErrorService, ClsAbstractService };

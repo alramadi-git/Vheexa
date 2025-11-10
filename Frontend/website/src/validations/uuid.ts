@@ -1,7 +1,7 @@
 import z from "zod/v4";
 
-const zUUID = z.uuid();
-type tUUID = z.infer<typeof zUUID>;
+const zUuid = z.uuid();
+type tUuid = z.infer<typeof zUuid>;
 
-export type { tUUID };
-export { zUUID };
+export type { tUuid };
+export { zUuid };

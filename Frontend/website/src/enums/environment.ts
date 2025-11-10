@@ -1,7 +1,7 @@
-enum ENVIRONMENT {
-  DEVELOPMENT = "development",
-  PRODUCTION = "production",
-  TEST = "test",
+enum eEnvironment {
+  development = "development",
+  production = "production",
+  test = "test",
 }
 
-export { ENVIRONMENT };
+export { eEnvironment };

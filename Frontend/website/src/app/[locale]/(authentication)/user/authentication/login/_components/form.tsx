@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthenticationService } from "@/services/user/authentication";
+import { ClsAuthenticationService } from "@/services/user/authentication";
 
 import z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,7 +32,7 @@ import { Input } from "@/components/shadcn/input";
 import { PasswordInput } from "@/components/locals/blocks/form";
 
 export default function Form() {
-  const authenticationService = new AuthenticationService();
+  const authenticationService = new ClsAuthenticationService();
 
   const t = useTranslations("app.user.authentication.login.page.card.form");
 
