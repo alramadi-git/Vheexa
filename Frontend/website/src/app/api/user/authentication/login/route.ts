@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 
-import { tSuccessOneModel } from "@/models/success";
-import { tAccountModel } from "@/models/account";
-import { tFailedModel, ErrorModel } from "@/models/failed";
-import { tUserModel } from "@/models/user/user";
-
 import { ZodError } from "zod/v4";
 import { zLoginCredentials } from "@/validations/authentication";
-import { tResponseOneModel } from "@/models/response";
+
+import {
+  ClsErrorModel,
+  tFailedModel,
+  tResponseOneModel,
+  tSuccessOneModel,
+} from "@/models/response";
+
+import { tAccountModel } from "@/models/account";
+import { tUserModel } from "@/models/[user]/user";
 
 export async function POST(
   request: Request,
@@ -31,7 +35,7 @@ export async function POST(
     if (apiResponse.ok === false) {
       const apiResponseBody: tFailedModel = await apiResponse.json();
 
-      throw new ErrorModel(
+      throw new ClsErrorModel(
         apiResponseBody.statusCode,
         apiResponseBody.message,
         apiResponseBody.issues,
@@ -77,7 +81,7 @@ export async function POST(
         { status: 400 },
       );
 
-    if (error instanceof ErrorModel)
+    if (error instanceof ClsErrorModel)
       return NextResponse.json(
         {
           statusCode: error.statusCode,

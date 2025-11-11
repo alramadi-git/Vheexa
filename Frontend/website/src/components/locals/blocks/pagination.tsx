@@ -81,7 +81,7 @@ export default function Pagination(
   },
 ) {
   const searchParams = useSearchParams();
-  const t = useTranslations("app.components.pagination");
+  const tPagination = useTranslations("components.pagination");
 
   const pagination = new clsPagination(props.pagination);
   function setPagination(pagination: clsPagination) {
@@ -166,7 +166,7 @@ export default function Pagination(
         className="text-muted-foreground ms-auto text-sm whitespace-nowrap"
         aria-live="polite"
       >
-        {t.rich("page-details", {
+        {tPagination.rich("page-details", {
           page: () => (
             <span className="text-foreground">{pagination.page}</span>
           ),

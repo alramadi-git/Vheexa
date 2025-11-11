@@ -1,9 +1,15 @@
-import { ErrorModel, tFailedModel } from "@/models/failed";
-import { tResponseOneModel } from "@/models/response";
-import { tSuccessOneModel } from "@/models/success";
-import { tVehicleModel } from "@/models/user/vehicle";
 import { NextRequest, NextResponse } from "next/server";
+
 import { ZodError } from "zod";
+
+import {
+  tSuccessOneModel,
+  tFailedModel,
+  ClsErrorModel,
+  tResponseOneModel,
+} from "@/models/response";
+
+import { tVehicleModel } from "@/models/[user]/vehicle";
 
 export async function GET(
   request: NextRequest,
@@ -25,7 +31,7 @@ export async function GET(
 
     if (apiResponse.ok === false) {
       const apiResponseBody: tFailedModel = await apiResponse.json();
-      throw new ErrorModel(
+      throw new ClsErrorModel(
         apiResponseBody.statusCode,
         apiResponseBody.message,
         apiResponseBody.issues,
@@ -55,7 +61,7 @@ export async function GET(
         { status: 400 },
       );
 
-    if (error instanceof ErrorModel)
+    if (error instanceof ClsErrorModel)
       return NextResponse.json(
         {
           statusCode: error.statusCode,

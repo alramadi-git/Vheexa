@@ -2,8 +2,8 @@ import { setRequestLocale } from "next-intl/server";
 
 import { Fragment } from "react";
 
-import Hero from "@/app/[locale]/user/vehicles/_components/uis/hero/hero";
-import Products from "@/app/[locale]/user/vehicles/_components/uis/products/products";
+import Hero from "@/components/locals/[user]/[vehicles]/hero/hero";
+import Products from "@/components/locals/[user]/[vehicles]/products/products";
 
 export default async function Page({ params }: PageProps<"/[locale]/user/vehicles">) {
   const { locale } = await params;

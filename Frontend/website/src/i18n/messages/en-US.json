@@ -1,44 +1,46 @@
 {
-  "app": {
-    "settings": {
-      "lang": "en-US",
-      "dir": "ltr"
-    },
+  "settings": {
+    "language": "en-US",
+    "direction": "ltr"
+  },
 
-    "components": {
+  "components": {
+    "defaults": {
       "avatar": "https://ik.imagekit.io/alramadi/vheexa/website/assets/avatar.png",
       "logo": "https://ik.imagekit.io/alramadi/vheexa/website/assets/logo.png",
       "banner": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-      "thumbnail": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+      "thumbnail": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png"
+    },
 
-      "list": {
-        "empty": {
-          "title": "No results were found",
+    "list": {
+      "empty": {
+        "title": "No results were found",
 
-          "illustrations": {
-            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-product.png",
-            "alt": "Empty List"
-          }
-        },
-
-        "error": {
-          "title": "Something went wrong",
-
-          "illustrations": {
-            "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/error-product.png",
-            "alt": "Error"
-          }
+        "illustrations": {
+          "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-product.png",
+          "alt": "Empty List"
         }
       },
 
-      "pagination": {
-        "previous": "Previous",
-        "next": "Next",
+      "error": {
+        "title": "Something went wrong",
 
-        "page-details": "Page <page></page> of <totalPages></totalPages>"
+        "illustrations": {
+          "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/error-product.png",
+          "alt": "Error"
+        }
       }
     },
 
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+
+      "page-details": "Page <page></page> of <totalPages></totalPages>"
+    }
+  },
+
+  "app": {
     "layout": {
       "metadata": {
         "title": {
@@ -119,10 +121,10 @@
           "search-placeholder": "Search...",
 
           "account": {
-            "not-logged-in": "Login now",
+            "unauthenticated": "Login now",
 
-            "logged-in": {
-              "navigation": [
+            "authenticated": {
+              "menu": [
                 {
                   "href": "/user/profile",
                   "label": "Profile"
@@ -727,7 +729,7 @@
             "description": "Access your Vheexa account to manage bookings and rents easily and securely."
           },
 
-          "image": {
+          "illustration": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alt": "placeholder"
           }
@@ -740,26 +742,25 @@
               "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
             },
 
-            "card": {
+            "form": {
               "title": "Welcome back",
               "description": "Login to your Vheexa account",
 
-              "form": {
-                "email": {
-                  "label": "Email",
-                  "placeholder": "account@vheexa.com",
-                  "default": "user@vheexa.com",
-                  "description": "Enter your email address"
-                },
-                "password": {
-                  "label": "Password",
-                  "placeholder": "********",
-                  "default": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
-                  "description": "Enter your password"
-                },
+              "email": {
+                "label": "Email",
+                "placeholder": "account@vheexa.com",
+                "default": "user@vheexa.com",
+                "description": "Enter your email address"
+              },
 
-                "submit": "Login"
-              }
+              "password": {
+                "label": "Password",
+                "placeholder": "********",
+                "default": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
+                "description": "Enter your password"
+              },
+
+              "submit": "Login"
             }
           }
         }

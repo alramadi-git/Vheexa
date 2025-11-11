@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ClsVehicleService } from "@/services/user/vehicle";
+import { ClsVehicleService } from "@/services/[user]/vehicle";
 
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -16,9 +16,9 @@ import {
 
 import { Fragment } from "react";
 import { Badge } from "@/components/shadcn/badge";
-import Carousel from "./_components/carousel";
+import Carousel from "../../../../../components/locals/[user]/[vehicles]/[uuid]/carousel";
 import { clsVehicle } from "@/classes/user/vehicle";
-import Tabs from "./_components/tabs";
+import Tabs from "../../../../../components/locals/[user]/[vehicles]/[uuid]/tabs";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;

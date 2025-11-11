@@ -7,7 +7,7 @@ type tErrorToast = {
 };
 export function ErrorToast({ error }: tErrorToast) {
   return (
-    <div className="rounded-md border border-red-500/50 bg-background px-4 py-3 text-red-600">
+    <div className="bg-background cursor-pointer rounded-md border border-red-500/50 px-4 py-3 text-red-600">
       <div className="flex gap-3">
         <LuCircleAlert
           className="mt-0.5 shrink-0 opacity-60"

@@ -28,8 +28,8 @@ public class AppDBContext : DbContext
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            var uuidProp = entityType.FindProperty("UUID");
-            if (uuidProp != null) modelBuilder.Entity(entityType.ClrType).HasKey("UUID");
+            var uuidProperty = entityType.FindProperty("UUID");
+            if (uuidProperty != null) modelBuilder.Entity(entityType.ClrType).HasKey("UUID");
         }
 
         base.OnModelCreating(modelBuilder);

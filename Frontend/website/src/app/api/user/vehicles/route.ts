@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { ZodError } from "zod/v4";
-import { tVehicleFilters, zVehicleFilters } from "@/validations/user/vehicle";
-import { zPagination } from "@/validations/pagination";
-import { tFilterModel } from "@/models/filter";
-import { tSuccessManyModel } from "@/models/success";
-import { tVehicleModel } from "@/models/user/vehicle";
-import { tFailedModel, ErrorModel } from "@/models/failed";
-import { tResponseManyModel } from "@/models/response";
+import { tVehicleFilters, zVehicleFilters } from "@/validations/[user]/[vehicles]/vehicle";
+import { tPagination, zPagination } from "@/validations/pagination";
+
+import {
+  tSuccessManyModel,
+  tFailedModel,
+  ClsErrorModel,
+  tResponseManyModel,
+} from "@/models/response";
+
+import { tVehicleModel } from "@/models/[user]/vehicle";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseManyModel<tVehicleModel>>> {
   try {
-    let { filters, pagination }: tFilterModel<tVehicleFilters> = {
+    let {
+      filters,
+      pagination,
+    }: { filters: tVehicleFilters; pagination: tPagination } = {
       filters: {
         search: request.nextUrl.searchParams.get("search") || "",
         transmission: request.nextUrl.searchParams.get("transmission") || "",
@@ -76,7 +83,7 @@ export async function GET(
 
     if (apiResponse.ok === false) {
       const apiResponseBody: tFailedModel = await apiResponse.json();
-      throw new ErrorModel(
+      throw new ClsErrorModel(
         apiResponseBody.statusCode,
         apiResponseBody.message,
         apiResponseBody.issues,
@@ -106,7 +113,7 @@ export async function GET(
         { status: 400 },
       );
 
-    if (error instanceof ErrorModel)
+    if (error instanceof ClsErrorModel)
       return NextResponse.json(
         {
           statusCode: error.statusCode,
