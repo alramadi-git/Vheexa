@@ -12,7 +12,7 @@ import {
   CarouselItem,
 } from "@/components/shadcn/carousel";
 import { FullHDImage } from "@/components/locals/blocks/image";
-import { clsImage } from "@/classes/user/image";
+import { clsImage } from "@/classes/[user]/image";
 
 type tCarouselProps = {
   thumbnailModel: tVehicleModel["thumbnail"];

@@ -17,7 +17,7 @@ import {
 import { Fragment } from "react";
 import { Badge } from "@/components/shadcn/badge";
 import Carousel from "../../../../../components/locals/[user]/[vehicles]/[uuid]/carousel";
-import { clsVehicle } from "@/classes/user/vehicle";
+import { clsVehicle } from "@/classes/[user]/vehicle";
 import Tabs from "../../../../../components/locals/[user]/[vehicles]/[uuid]/tabs";
 
 export const dynamic = "force-static";

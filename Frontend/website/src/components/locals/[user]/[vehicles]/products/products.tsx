@@ -3,7 +3,7 @@
 import type { tVehicleModel } from "@/models/[user]/vehicle";
 
 import { ClsMonyFormatter } from "@/libraries/mony-formatter";
-import { clsVehicle } from "@/classes/user/vehicle";
+import { clsVehicle } from "@/classes/[user]/vehicle";
 
 import { useTranslations } from "next-intl";
 import { useVehiclesQuery } from "../../../../../hooks/[user]/[vehicles]/use-vehicles-query";
