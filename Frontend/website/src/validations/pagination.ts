@@ -1,6 +1,6 @@
 import z from "zod/v4";
 
-enum eLIMIT {
+enum eLimit {
   _5 = 5,
   _10 = 10,
   _25 = 25,
@@ -9,15 +9,17 @@ enum eLIMIT {
   _100 = 100,
 }
 
-const zPaginationFilter = z
-  .object({
-    page: z.number().min(1),
-    limit: z.enum(eLIMIT),
-  })
-  .strict();
-type tPagination = z.infer<typeof zPaginationFilter>;
 
-export { eLIMIT };
+const zPagination = z
+.object({
+  page: z.number().min(1),
+  limit: z.enum(eLimit),
+})
+.strict();
+type tPagination = z.infer<typeof zPagination>;
+
+export { eLimit };
 
 export type { tPagination };
-export { zPaginationFilter };
+export { zPagination };
+

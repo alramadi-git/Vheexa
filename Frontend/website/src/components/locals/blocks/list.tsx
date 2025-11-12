@@ -1,23 +1,23 @@
 "use client";
 
-import type { ComponentProps, JSX } from "react";
+import { tCallback } from "@/types/array";
+import { ComponentProps, JSX } from "react";
 
 import { useTranslations } from "next-intl";
 import { FullHDImage } from "./image";
-import { tCallback } from "@/types/array";
 
 function Empty() {
-  const t = useTranslations("app.components.list.empty");
+  const tEmpty = useTranslations("components.list.empty");
 
   return (
     <div className="flex size-full flex-col items-center">
       <FullHDImage
-        src={t("illustrations.src")}
-        alt={t("illustrations.alt")}
+        src={tEmpty("illustrations.src")}
+        alt={tEmpty("illustrations.alt")}
         className="size-[460px] object-contain"
       />
 
-      <p className="text-center text-2xl">{t("title")}</p>
+      <p className="text-center text-2xl">{tEmpty("title")}</p>
     </div>
   );
 }
@@ -47,26 +47,26 @@ function ListLoading({ itemsLength, render, ...props }: tListLoadingProps) {
   return <div {...props}>{arr.map(render)}</div>;
 }
 
-function Failed() {
-  const t = useTranslations("app.components.list.error");
+function Error() {
+  const tError = useTranslations("components.list.error");
 
   return (
     <div className="flex size-full flex-col items-center">
       <FullHDImage
-        src={t("illustrations.src")}
-        alt={t("illustrations.alt")}
+        src={tError("illustrations.src")}
+        alt={tError("illustrations.alt")}
         className="size-[460px] object-contain"
       />
 
-      <p className="text-center text-2xl">{t("title")}</p>
+      <p className="text-center text-2xl">{tError("title")}</p>
     </div>
   );
 }
 
 enum eListStatus {
-  LOADING,
-  SUCCESS,
-  FAILED,
+  loading,
+  success,
+  failed,
 }
 type tList<tItem> = {
   status: eListStatus;
@@ -81,11 +81,11 @@ function List<tItem>({
   whenSuccess,
   whenFailed,
 }: tList<tItem>) {
-  if (status === eListStatus.LOADING) return <ListLoading {...whenLoading} />;
+  if (status === eListStatus.loading) return <ListLoading {...whenLoading} />;
 
-  if (status === eListStatus.SUCCESS) return <ListSuccess {...whenSuccess} />;
+  if (status === eListStatus.success) return <ListSuccess {...whenSuccess} />;
 
-  return whenFailed ?? <Failed />;
+  return whenFailed ?? <Error />;
 }
 
 export { eListStatus };

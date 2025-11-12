@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { Card, CardContent } from "@/components/shadcn/card";
@@ -8,26 +8,16 @@ import { FullHDImage } from "@/components/locals/blocks/image";
 import { Container, Section } from "@/components/locals/blocks/typography";
 
 export const dynamic = "force-static";
-export async function generateMetadata({
-  params,
-}: LayoutProps<"/[locale]/user/authentication">): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({
-    locale,
-    namespace: "app.user.authentication.layout",
-  });
-
-  return t.raw("metadata");
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getTranslations("app.user.authentication.layout")).raw(
+    "metadata",
+  );
 }
 
 export default async function Layout({
-  params,
   children,
 }: LayoutProps<"/[locale]/user/authentication">) {
-  const { locale } = await params;
-
-  setRequestLocale(locale);
-  const t = await getTranslations("app.user.authentication.layout");
+  const tLayout = await getTranslations("app.user.authentication.layout");
 
   return (
     <main className="relative h-dvh overflow-hidden">
@@ -46,8 +36,8 @@ export default async function Layout({
 
               <FullHDImage
                 priority
-                src={t("image.src")}
-                alt={t("image.alt")}
+                src={tLayout("illustration.src")}
+                alt={tLayout("illustration.alt")}
                 className="hidden size-full rounded-e-sm object-cover md:block dark:brightness-[0.2] dark:grayscale"
               />
             </CardContent>

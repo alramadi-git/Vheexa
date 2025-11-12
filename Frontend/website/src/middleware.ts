@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import UserMiddleware from "./middlewares/user/user";
-import NextIntlMiddleware from "@/middlewares/next-intl";
+import nextIntlMiddleware from "@/middlewares/next-intl";
+import userMiddleware from "./middlewares/[user]/user";
 
 export default function middleware(request: NextRequest): NextResponse {
-  let middlewares = NextIntlMiddleware(request);
+  let middlewares = nextIntlMiddleware(request);
   if (middlewares?.ok !== true) return middlewares;
 
-  middlewares = UserMiddleware(request);
+  middlewares = userMiddleware(request);
   if (middlewares?.ok !== true) return middlewares;
 
   return NextResponse.next();
@@ -15,7 +15,7 @@ export default function middleware(request: NextRequest): NextResponse {
 
 export const config = {
   // Match all pathnames except for
-  // - … if they start with `/api`, `/_next` or `/_vercel`
+  // - … if they start with `/_next` or `/_vercel`
   // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
+  matcher: "/((?!|_next|_vercel|.*\\..*).*)",
 };

@@ -1,4 +1,4 @@
-import type { tImageModel } from "@/models/user/image";
+import type { tImageModel } from "@/models/[user]/image";
 
 class clsImage {
   public uuid: string;

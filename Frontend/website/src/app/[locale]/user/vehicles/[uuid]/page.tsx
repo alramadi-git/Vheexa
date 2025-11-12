@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { VehicleService } from "@/services/user/vehicle";
+import { ClsVehicleService } from "@/services/[user]/vehicle";
 
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -16,9 +16,9 @@ import {
 
 import { Fragment } from "react";
 import { Badge } from "@/components/shadcn/badge";
-import Carousel from "./_components/carousel";
+import Carousel from "../../../../../components/locals/[user]/[vehicles]/[uuid]/carousel";
 import { clsVehicle } from "@/classes/user/vehicle";
-import Tabs from "./_components/tabs";
+import Tabs from "../../../../../components/locals/[user]/[vehicles]/[uuid]/tabs";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -26,10 +26,10 @@ export const revalidate = 3600;
 export async function generateMetadata(
   props: PageProps<"/[locale]/user/vehicles/[uuid]">,
 ): Promise<Metadata> {
-  const vehicleService = new VehicleService();
+  const vehicleService = new ClsVehicleService();
   const { uuid } = await props.params;
 
-  const result = await vehicleService.GetOne(uuid);
+  const result = await vehicleService.getOne(uuid);
   if (result.isSuccess === false) notFound();
 
   const vehicle = result.data;
@@ -42,12 +42,12 @@ export async function generateMetadata(
 export default async function Page(
   props: PageProps<"/[locale]/user/vehicles/[uuid]">,
 ) {
-  const vehicleService = new VehicleService();
+  const vehicleService = new ClsVehicleService();
 
   const { locale, uuid } = await props.params;
   setRequestLocale(locale);
 
-  const result = await vehicleService.GetOne(uuid);
+  const result = await vehicleService.getOne(uuid);
   if (result.isSuccess === false) notFound();
 
   const vehicleModel = result.data;

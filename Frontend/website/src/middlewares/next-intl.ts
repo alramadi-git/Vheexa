@@ -1,6 +1,6 @@
 import { routing } from "@/i18n/routing";
 import createMiddleware from "next-intl/middleware";
 
-const NextIntlMiddleware = createMiddleware(routing);
+const nextIntlMiddleware = createMiddleware(routing);
 
-export default NextIntlMiddleware;
+export default nextIntlMiddleware;
