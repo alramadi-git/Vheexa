@@ -9,7 +9,7 @@ import {
   tResponseOneModel,
 } from "@/models/response";
 
-import { tVehicleModel } from "@/models/[user]/vehicle";
+import { tVehicleModel } from "@/models/vehicle";
 
 export async function GET(
   request: NextRequest,

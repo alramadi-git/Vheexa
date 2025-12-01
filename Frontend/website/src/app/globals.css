@@ -131,4 +131,8 @@
   a {
     @apply cursor-pointer;
   }
+
+  .dashboard .h-fullscreen {
+    @apply min-h-[calc(100dvh-64px)];
+  }
 }

@@ -1,21 +1,5 @@
-import { tNullable } from "@/types/nullish";
-import { tImageModel } from "@/models/[user]/image";
-import { tLocationModel } from "@/models/[user]/location";
+import { tHumanModel } from "../human";
 
-type tUserModel = {
-  uuid: string;
-
-  avatar: tNullable<tImageModel>;
-  location: tLocationModel;
-
-  username: string;
-  dateOfBirth: string; // Date
-
-  phoneNumber: string;
-  email: string;
-
-  updatedAt: string; // Date
-  createdAt: string; // Date
-};
+type tUserModel = tHumanModel;
 
 export type { tUserModel };

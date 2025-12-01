@@ -1,4 +1,6 @@
-type tAccountModel<tAccount> = {
+import { tHumanModel } from "./human";
+
+type tAccountModel<tAccount extends tHumanModel> = {
   account: tAccount;
   token: string;
 };

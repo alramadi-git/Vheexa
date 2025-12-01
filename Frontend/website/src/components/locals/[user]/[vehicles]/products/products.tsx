@@ -1,6 +1,6 @@
 "use client";
 
-import type { tVehicleModel } from "@/models/[user]/vehicle";
+import type { tVehicleModel } from "@/models/vehicle";
 
 import { ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { clsVehicle } from "@/classes/[user]/vehicle";

@@ -15,7 +15,7 @@
     "components": "@/components",
     "utils": "@/utilities/cn",
     "ui": "@/components/shadcn",
-    "lib": "@/libraries",
+    "lib": "@/utilities/cn",
     "hooks": "@/hooks"
   },
   "registries": {

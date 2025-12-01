@@ -10,7 +10,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/shadcn/tabs";
-import { tVehicleModel } from "@/models/[user]/vehicle";
+import { tVehicleModel } from "@/models/vehicle";
 import { getTranslations } from "next-intl/server";
 import { LuFuel, LuUsersRound } from "react-icons/lu";
 import { RiSteeringFill } from "react-icons/ri";
@@ -19,18 +19,19 @@ type tTabsProps = {
   vehicleModel: tVehicleModel;
 };
 export default async function Tabs({ vehicleModel }: tTabsProps) {
-  const t = await getTranslations("app.user.vehicles.uuid.page.product.tabs");
+  const tTabs = await getTranslations("app.user.vehicles.uuid.page.product.tabs");
+  
   return (
     <ShadcnTabs
-      defaultValue={t("specifications.label")}
+      defaultValue={tTabs("specifications.label")}
       className="mt-6 grow gap-3"
     >
       <TabsList>
-        <TabsTrigger value={t("specifications.label")}>
-          {t("specifications.label")}
+        <TabsTrigger value={tTabs("specifications.label")}>
+          {tTabs("specifications.label")}
         </TabsTrigger>
-        <TabsTrigger value={t("comments-and-reviews.label")}>
-          {t("comments-and-reviews.label")}
+        <TabsTrigger value={tTabs("comments-and-reviews.label")}>
+          {tTabs("comments-and-reviews.label")}
         </TabsTrigger>
       </TabsList>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { tNullable } from "@/types/nullish";
-import { tVehicleModel } from "@/models/[user]/vehicle";
+import { tVehicleModel } from "@/models/vehicle";
 
 import { useCallback, useEffect, useState } from "react";
 
@@ -23,32 +23,31 @@ export default function Carousel({
   thumbnailModel,
   imagesModel,
 }: tCarouselProps) {
-  const [navigationCarouselApi, setNavigationCarouselApi] =
-    useState<tNullable<CarouselApi>>(null);
   const [mainCarouselApi, setMainCarouselApi] =
     useState<tNullable<CarouselApi>>(null);
-
-  const onSelect = useCallback(
-    function onSelect(api: CarouselApi) {
-      mainCarouselApi?.scrollTo(api?.selectedScrollSnap() ?? 0);
-      navigationCarouselApi?.scrollTo(api?.selectedScrollSnap() ?? 0);
-    },
-    [mainCarouselApi, navigationCarouselApi],
-  );
+  const [subCarouselApi, setSubCarouselApi] =
+    useState<tNullable<CarouselApi>>(null);
 
   useEffect(() => {
-    mainCarouselApi?.on("select", (api) => onSelect(api));
-    navigationCarouselApi?.on("select", (api) => onSelect(api));
-  }, [mainCarouselApi, navigationCarouselApi, onSelect]);
+    if (!mainCarouselApi || !subCarouselApi) return;
+
+    mainCarouselApi.on("select", (api) => onSelect(api, subCarouselApi));
+    subCarouselApi.on("select", (api) => onSelect(api, mainCarouselApi));
+  }, [mainCarouselApi, subCarouselApi]);
 
   const thumbnail =
     thumbnailModel == null ? null : new clsImage(thumbnailModel);
   const images = imagesModel.map((image) => new clsImage(image));
 
+  function onSelect(api: CarouselApi, subApi: CarouselApi) {
+    const index = api?.selectedScrollSnap() ?? 0;
+    subApi?.scrollTo(index);
+  }
+
   return (
     <div className="grid grid-cols-4 gap-2">
       <ShadcnCarousel
-        setApi={setNavigationCarouselApi}
+        setApi={setSubCarouselApi}
         opts={{
           align: "start",
         }}

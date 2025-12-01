@@ -27,8 +27,7 @@ import { toast } from "sonner";
 import { ErrorToast } from "@/components/locals/blocks/toast";
 
 import { Button } from "@/components/shadcn/button";
-import { Input } from "@/components/shadcn/input";
-import { PasswordInput } from "@/components/locals/blocks/form";
+import { FieldEmail, FieldPassword } from "@/components/locals/blocks/fields";
 
 export default function Form() {
   const authenticationService = new ClsAuthenticationService();
@@ -40,8 +39,8 @@ export default function Form() {
 
   const form = useForm<tLoginCredentials>({
     defaultValues: {
-      email: tForm("email.default"),
-      password: tForm("password.default"),
+      email: tForm("email.default-value"),
+      password: tForm("password.default-value"),
     },
     resolver: zodResolver(zLoginCredentials),
   });
@@ -59,7 +58,7 @@ export default function Form() {
     }
 
     login(response.data);
-    router.back();
+    router.push("/user");
   }
 
   return (
@@ -68,19 +67,22 @@ export default function Form() {
         <Controller
           control={form.control}
           name="email"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
+          render={(controller) => (
+            <Field data-invalid={controller.fieldState.invalid}>
               <FieldLabel htmlFor="email">{tForm("email.label")}</FieldLabel>
-              <Input
-                aria-invalid={fieldState.invalid}
-                id="email"
-                type="email"
-                placeholder={tForm("email.placeholder")}
-                autoComplete="off"
-                {...field}
+              <FieldEmail
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                controllerRenderProps={controller}
+                inputProps={{
+                  id: "email",
+                  placeholder: tForm("email.placeholder"),
+                }}
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              {!fieldState.invalid && (
+              {controller.fieldState.invalid && (
+                <FieldError errors={[controller.fieldState.error]} />
+              )}
+              {!controller.fieldState.invalid && (
                 <FieldDescription>
                   {tForm("email.description")}
                 </FieldDescription>
@@ -92,20 +94,25 @@ export default function Form() {
         <Controller
           control={form.control}
           name="password"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
+          render={(controller) => (
+            <Field data-invalid={controller.fieldState.invalid}>
               <FieldLabel htmlFor="password">
                 {tForm("password.label")}
               </FieldLabel>
-              <PasswordInput
-                aria-invalid={fieldState.invalid}
-                id="password"
-                placeholder={tForm("password.placeholder")}
-                autoComplete="off"
-                {...field}
+              <FieldPassword
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                controllerRenderProps={controller}
+                inputProps={{
+                  "aria-invalid": controller.fieldState.invalid,
+                  id: "email",
+                  placeholder: tForm("password.placeholder"),
+                }}
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              {!fieldState.invalid && (
+              {controller.fieldState.invalid && (
+                <FieldError errors={[controller.fieldState.error]} />
+              )}
+              {!controller.fieldState.invalid && (
                 <FieldDescription>
                   {tForm("password.description")}
                 </FieldDescription>

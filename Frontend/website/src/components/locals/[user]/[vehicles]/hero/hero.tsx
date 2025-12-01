@@ -5,7 +5,6 @@ import {
   Section,
   Container,
   Intro,
-  H,
   Title,
   Description,
 } from "@/components/locals/blocks/typography";
@@ -20,7 +19,7 @@ export default async function Hero() {
   return (
     <div className="relative">
       <Background />
-      
+
       <Container>
         <Section className="grid lg:grid-cols-2 lg:gap-8">
           <div className="space-y-8 max-lg:my-auto lg:space-y-12">
@@ -34,7 +33,7 @@ export default async function Hero() {
             </Badge>
 
             <Intro className="lg:space-y-6">
-              <Title level={H._1} className="lg:text-5xl xl:text-6xl">
+              <Title heading="h1" className="lg:text-5xl xl:text-6xl">
                 {tHero("title")}
               </Title>
 

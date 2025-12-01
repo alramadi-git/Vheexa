@@ -1,4 +1,8 @@
-import { tPaginationModel } from "@/models/pagination";
+type tPaginationModel = {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+};
 
 type tSuccessOneModel<tData> = {
   data: tData;
@@ -14,10 +18,12 @@ type tIssueModel = {
 };
 type tFailedModel = {
   statusCode: number;
-  message: string;
-
   issues: tIssueModel[];
+  message: string;
 };
+
+type tResponseOneModel<tData> = tFailedModel | tSuccessOneModel<tData>;
+type tResponseManyModel<tData> = tFailedModel | tSuccessManyModel<tData>;
 
 class ClsErrorModel extends Error {
   public readonly statusCode: number;
@@ -33,10 +39,8 @@ class ClsErrorModel extends Error {
   }
 }
 
-type tResponseOneModel<tData> = tFailedModel | tSuccessOneModel<tData>;
-type tResponseManyModel<tData> = tFailedModel | tSuccessManyModel<tData>;
-
 export type {
+  tPaginationModel,
   tSuccessOneModel,
   tSuccessManyModel,
   tIssueModel,
@@ -44,4 +48,5 @@ export type {
   tResponseOneModel,
   tResponseManyModel,
 };
+
 export { ClsErrorModel };

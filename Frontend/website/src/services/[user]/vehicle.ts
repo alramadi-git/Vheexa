@@ -1,7 +1,7 @@
-import { tVehicleModel } from "@/models/[user]/vehicle";
+import { tVehicleModel } from "@/models/vehicle";
 
 import { tPagination, zPagination } from "@/validations/pagination";
-import { tVehicleFilters, zVehicleFilters } from "@/validations/[user]/[vehicles]/vehicle";
+import { tVehicleFilter, zVehicleFilter } from "@/validations/[user]/[vehicles]/vehicle-filter";
 
 import {
   tSuccessOneService,
@@ -56,11 +56,11 @@ class ClsVehicleService extends ClsAbstractService {
   }
 
   public async getMany(
-    filters: tVehicleFilters,
+    filters: tVehicleFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModel>> {
     return await this.catcher<tSuccessManyService<tVehicleModel>>(async () => {
-      filters = zVehicleFilters.parse(filters);
+      filters = zVehicleFilter.parse(filters);
       pagination = zPagination.parse(pagination);
 
       const queryArray = [];
@@ -119,8 +119,8 @@ class ClsVehicleService extends ClsAbstractService {
   }
 }
 
-export type { tVehicleFilters as tVehicleFilters };
-export { zVehicleFilters };
+export type { tVehicleFilter as tVehicleFilters };
+export { zVehicleFilter as zVehicleFilters };
 
 export type { tPagination };
 export { zPagination as zPagination };

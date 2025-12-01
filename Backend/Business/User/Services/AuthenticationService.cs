@@ -1,9 +1,9 @@
 using FluentValidation;
-using Database.User.Repositories;
 using Database.DTOs;
-using Database.User.DTOs;
 using Database.Parameters;
 using Business.Validations;
+using Database.DTOs.User;
+using Database.Repositories.User;
 
 namespace Business.User.Services;
 

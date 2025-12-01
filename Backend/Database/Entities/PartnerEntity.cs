@@ -3,12 +3,12 @@ namespace Database.Entities;
 public class PartnerEntity
 {
     public Guid UUID { get; set; }
-    
-    public ImageEntity? Logo { get; set; }
-    public Guid? LogoUUID { get; set; }
 
-    public ImageEntity? Banner { get; set; }
+    public Guid? LogoUUID { get; set; }
+    public ImageEntity? Logo { get; set; }
+
     public Guid? BannerUUID { get; set; }
+    public ImageEntity? Banner { get; set; }
 
     public string Handle { get; set; }
     public string Name { get; set; }

@@ -36,8 +36,8 @@ export default async function Layout({
 
               <FullHDImage
                 priority
-                src={tLayout("illustration.src")}
-                alt={tLayout("illustration.alt")}
+                src={tLayout("illustration.url")}
+                alt={tLayout("illustration.alternate")}
                 className="hidden size-full rounded-e-sm object-cover md:block dark:brightness-[0.2] dark:grayscale"
               />
             </CardContent>

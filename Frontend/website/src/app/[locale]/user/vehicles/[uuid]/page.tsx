@@ -68,7 +68,7 @@ export default async function Page(
             </Badge>
 
             <Intro>
-              <Title level={H._1} className="mb-0">
+              <Title heading={H._1} className="mb-0">
                 {vehicle.name}
               </Title>
               <Description>{vehicle.description}</Description>

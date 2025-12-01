@@ -8,9 +8,9 @@ using Business.User.Services;
 using Business.User.Validations;
 
 using Database;
-using Database.User.Repositories;
 using API.Configurations;
 using API.Middlewares;
+using Database.Repositories.User;
 
 namespace API;
 

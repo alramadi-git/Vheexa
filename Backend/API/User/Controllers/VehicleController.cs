@@ -6,8 +6,8 @@ using API.Models;
 using Business.User.Services;
 using Database.DTOs;
 using Database.Parameters;
-using Database.User.DTOs;
-using Database.User.Parameters;
+using Database.DTOs.User;
+using Database.Parameters.User;
 
 namespace API.User.Controllers;
 
@@ -33,7 +33,7 @@ public class VehicleController : Controller
         catch (ValidationException exception)
         {
             return BadRequest(new FailedModel(
-                (int)STATUS_CODE.BAD_REQUEST,
+                (int)HTTP_STATUS_CODE.BAD_REQUEST,
                 exception.Message,
                 exception.Errors.Select(error => new IssueExceptionDTO(error.PropertyName, error.ErrorMessage)).ToArray()
             ));
@@ -45,7 +45,7 @@ public class VehicleController : Controller
         }
         catch (Exception exception)
         {
-            var code = (int)STATUS_CODE.INTERNAL_SERVER_ERROR;
+            var code = (int)HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
             return StatusCode(code, new FailedModel(code, exception.Message));
         }
     }
@@ -65,7 +65,7 @@ public class VehicleController : Controller
         catch (ValidationException exception)
         {
             return BadRequest(new FailedModel(
-                (int)STATUS_CODE.BAD_REQUEST,
+                (int)HTTP_STATUS_CODE.BAD_REQUEST,
                 exception.Message,
                 exception.Errors.Select(error => new IssueExceptionDTO(error.PropertyName, error.ErrorMessage)).ToArray()
             ));
@@ -77,7 +77,7 @@ public class VehicleController : Controller
         }
         catch (Exception exception)
         {
-            var code = (int)STATUS_CODE.INTERNAL_SERVER_ERROR;
+            var code = (int)HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
             return StatusCode(code, new FailedModel(code, exception.Message));
         }
     }

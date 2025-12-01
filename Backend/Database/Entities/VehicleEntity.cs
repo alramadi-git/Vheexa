@@ -4,11 +4,11 @@ public class VehicleEntity
 {
     public Guid UUID { get; set; }
 
-    public PartnerEntity Partner { get; set; }
     public Guid PartnerUUID { get; set; }
+    public PartnerEntity Partner { get; set; }
 
-    public ImageEntity? Thumbnail { get; set; }
     public Guid? ThumbnailUUID { get; set; }
+    public ImageEntity? Thumbnail { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }

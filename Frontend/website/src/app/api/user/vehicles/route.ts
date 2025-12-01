@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { ZodError } from "zod/v4";
-import { tVehicleFilters, zVehicleFilters } from "@/validations/[user]/[vehicles]/vehicle";
+import { tVehicleFilter, zVehicleFilter } from "@/validations/[user]/[vehicles]/vehicle-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import {
@@ -11,7 +11,7 @@ import {
   tResponseManyModel,
 } from "@/models/response";
 
-import { tVehicleModel } from "@/models/[user]/vehicle";
+import { tVehicleModel } from "@/models/vehicle";
 
 export async function GET(
   request: NextRequest,
@@ -20,7 +20,7 @@ export async function GET(
     let {
       filters,
       pagination,
-    }: { filters: tVehicleFilters; pagination: tPagination } = {
+    }: { filters: tVehicleFilter; pagination: tPagination } = {
       filters: {
         search: request.nextUrl.searchParams.get("search") || "",
         transmission: request.nextUrl.searchParams.get("transmission") || "",
@@ -41,7 +41,7 @@ export async function GET(
       },
     };
 
-    filters = zVehicleFilters.parse(filters);
+    filters = zVehicleFilter.parse(filters);
     pagination = zPagination.parse(pagination);
 
     const queryArray = [];

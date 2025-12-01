@@ -1,31 +1,35 @@
-import z from "zod/v4";
+import z from "zod";
 
-const zEmail = z.email();
-type tEmail = z.infer<typeof zEmail>;
-
-const zPassword = z
-  .string()
-  .trim()
-  .min(8, "Password must be at least 8 characters.")
-  .max(32, "Password must be at most 32 characters.")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
-  .regex(/[0-9]/, "Password must contain at least one number.")
-  .regex(
-    /[^a-zA-Z0-9]/,
-    "Password must contain at least one special character.",
-  )
-  .regex(/^\S+$/, "Password must not contain any white spaces.");
-type tPassword = z.infer<typeof zPassword>;
-
-const zLoginCredentials = z
+export const zEmail = z
   .object({
-    email: zEmail,
-    password: zPassword,
+    email: z.email().trim(),
   })
   .strict();
+export type tEmail = z.infer<typeof zEmail>;
 
-type tLoginCredentials = z.infer<typeof zLoginCredentials>;
+export const zPassword = z
+  .object({
+    password: z
+      .string()
+      .trim()
+      .min(8, { message: "Password must be at least 8" })
+      .max(32, { message: "Password must be at most 32" })
+      .regex(/[a-z]/, {
+        message: "Password must contain at least one lowercase letter",
+      })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter",
+      })
+      .regex(/[0-9]/, { message: "Password must contain at least one number" })
+      .regex(/[^A-Za-z0-9]/, {
+        message: "Password must contain at least one special character",
+      })
+      .regex(/^\S+$/, {
+        message: "Password must not contain spaces",
+      }),
+  })
+  .strict();
+export type tPassword = z.infer<typeof zPassword>;
 
-export type { tEmail, tPassword, tLoginCredentials };
-export { zEmail, zPassword, zLoginCredentials };
+export const zLoginCredentials = z.object().extend(zEmail.shape).extend(zPassword.shape);
+export type tLoginCredentials = z.infer<typeof zLoginCredentials>;

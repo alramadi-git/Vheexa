@@ -5,7 +5,6 @@ import {
   Section,
   Container,
   Intro,
-  H,
   Title,
   Description,
 } from "@/components/locals/blocks/typography";
@@ -67,7 +66,7 @@ export default async function Hero() {
     <Section>
       <Container className="space-y-6">
         <Intro>
-          <Title level={H._1} className="max-w-2xl sm:text-5xl">
+          <Title heading="h1" className="max-w-2xl sm:text-5xl">
             {tHero("title")}
           </Title>
           <Description className="max-w-2xl">{tHero("description")}</Description>

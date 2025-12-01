@@ -1,5 +1,5 @@
 using FluentValidation;
-using Database.User.Parameters;
+using Database.Parameters.User;
 
 namespace Business.User.Validations;
 

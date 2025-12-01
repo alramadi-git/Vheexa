@@ -4,8 +4,8 @@ public class UserEntity
 {
     public Guid UUID { get; set; }
 
-    public HumanEntity Human { get; set; }
     public Guid HumanUUID { get; set; }
+    public HumanEntity Human { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }

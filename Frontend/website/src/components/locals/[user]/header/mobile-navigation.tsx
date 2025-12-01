@@ -70,8 +70,7 @@ export default async function MobileNavigation() {
   const tSettings = await getTranslations("settings");
 
   const tHeader = await getTranslations("app.user.layout.header");
-  const navigationMenu: tSubNavigationMenu[] =
-    tHeader.raw("navigation-menu");
+  const navigationMenu: tSubNavigationMenu[] = tHeader.raw("navigation-menu");
 
   return (
     <Sheet>
@@ -101,7 +100,7 @@ export default async function MobileNavigation() {
             </SheetClose>
 
             <Languages align="end" className="grow" />
-            <Account align="end" className="w-full" />
+            <Account align="end" />
           </SheetHeader>
 
           <Accordion

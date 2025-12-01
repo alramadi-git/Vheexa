@@ -1,5 +1,4 @@
-import { tPaginationModel } from "@/models/pagination";
-import { tIssueModel } from "@/models/response";
+import { tPaginationModel, tIssueModel } from "@/models/response";
 
 import { ZodError } from "zod/v4";
 

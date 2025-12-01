@@ -1,10 +1,14 @@
-import type { ComponentProps } from "react";
+import { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
 
 const sectionClassName: string = "px-8 py-16 lg:px-12 lg:py-24";
 function Section({ className, children, ...props }: ComponentProps<"section">) {
   return (
-    <section className={cn(sectionClassName, className)} {...props}>
+    <section
+      aria-label="section"
+      className={cn(sectionClassName, className)}
+      {...props}
+    >
       {children}
     </section>
   );
@@ -12,7 +16,11 @@ function Section({ className, children, ...props }: ComponentProps<"section">) {
 
 function Container({ className, children, ...props }: ComponentProps<"div">) {
   return (
-    <div {...props} className={cn("container", className)}>
+    <div
+      aria-label="container"
+      className={cn("container", className)}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -20,28 +28,29 @@ function Container({ className, children, ...props }: ComponentProps<"div">) {
 
 function Intro({ className, children, ...props }: ComponentProps<"div">) {
   return (
-    <div {...props} className={cn("space-y-4", className)}>
+    <div aria-label="Intro" className={cn("space-y-4", className)} {...props}>
       {children}
     </div>
   );
 }
 
-enum H {
-  _1 = "h1",
-  _2 = "h2",
-}
 function Title({
-  level = H._2,
+  heading = "h2",
   className,
   children,
   ...props
-}: (ComponentProps<"h1"> | ComponentProps<"h2">) & { level?: H }) {
-  const H = level;
+}:
+  | ({ heading?: "h1" } & ComponentProps<"h1">)
+  | ({ heading?: "h2" } & ComponentProps<"h2">)) {
+  const Heading = heading;
 
   return (
-    <H className={cn("text-4xl font-bold text-pretty", className)} {...props}>
+    <Heading
+      className={cn("text-4xl font-bold text-pretty", className)}
+      {...props}
+    >
       {children}
-    </H>
+    </Heading>
   );
 }
 function Description({ className, children, ...props }: ComponentProps<"p">) {
@@ -62,7 +71,7 @@ function Kbd({
       {...props}
       dir="ltr"
       className={cn(
-        "text-muted-foreground/70 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium",
+        "text-muted-foreground/70 inline-flex h-5 max-h-full items-center rounded-sm border px-1 font-[inherit] text-[0.625rem] font-medium",
         className,
       )}
     >
@@ -83,6 +92,5 @@ function Blockquote({
   );
 }
 
-export { H };
 export { sectionClassName };
 export { Section, Container, Intro, Title, Description, Kbd, Blockquote };
