@@ -3,9 +3,11 @@ using Database.Parameters;
 using Business.User.Validations;
 using FluentValidation;
 using Business.Validations;
-using Database.DTOs.User;
 using Database.Parameters.User;
 using Database.Repositories.User;
+using Database.DTOs.Partner;
+using Database.DTOs.User;
+using Database.DTOs.Response;
 
 namespace Business.User.Services;
 
@@ -23,12 +25,12 @@ public class VehicleService
         _VehicleRepository = vehicleRepository;
     }
 
-    public async Task<SuccessOneDTO<VehicleDTO>> GetOneAsync(Guid vehicleUUID)
+    public async Task<SuccessOneDTO<VehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
     {
         return await _VehicleRepository.GetOneAsync(vehicleUUID);
     }
 
-    public async Task<SuccessManyDTO<VehicleDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
+    public async Task<SuccessManyDTO<VehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
     {
         await _VehicleFiltersValidation.ValidateAndThrowAsync(filters);
         await _PaginationValidation.ValidateAndThrowAsync(pagination);

@@ -1,17 +1,16 @@
-import { tHumanModel } from "../human";
+import { tHumanModel } from "./human";
 
-import { tPartnerModel } from "./partner";
-
-import { tRoleModel } from "../role";
+import { tRoleModel } from "./role";
 import { tBranchModel } from "./branch";
 
 enum eMemberStatusModel {
-  ACTIVE,
-  INACTIVE,
+  active,
+  inactive,
 }
 
-type tMemberModel = tHumanModel & {
-  partner: tPartnerModel;
+type tMemberModel = {
+  uuid: string;
+  human: tHumanModel;
   role: tRoleModel;
   branch: tBranchModel;
   status: eMemberStatusModel;

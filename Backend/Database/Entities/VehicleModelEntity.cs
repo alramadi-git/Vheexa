@@ -12,9 +12,9 @@ public class VehicleModelEntity
     }
     public enum FUEL_MODEL
     {
-        PETROL_91,
-        PETROL_95,
-        PETROL_98,
+        PETROL91,
+        PETROL95,
+        PETROL98,
         DIESEL,
         ELECTRIC,
         HYBRID,

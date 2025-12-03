@@ -6,8 +6,10 @@ using API.Models;
 using Business.User.Services;
 using Database.DTOs;
 using Database.Parameters;
-using Database.DTOs.User;
 using Database.Parameters.User;
+using Database.DTOs.Partner;
+using Database.DTOs.User;
+using Database.DTOs.Response;
 
 namespace API.User.Controllers;
 
@@ -23,7 +25,7 @@ public class VehicleController : Controller
     }
 
     [HttpGet("{uuid:guid}")]
-    public async Task<ActionResult<SuccessOneDTO<VehicleDTO>>> GetOneAsync([FromRoute] Guid uuid)
+    public async Task<ActionResult<SuccessOneDTO<VehicleModelDTO>>> GetOneAsync([FromRoute] Guid uuid)
     {
         try
         {
@@ -52,7 +54,7 @@ public class VehicleController : Controller
 
 
     [HttpGet]
-    public async Task<ActionResult<SuccessManyDTO<VehicleDTO>>> GetManyAsync(
+    public async Task<ActionResult<SuccessManyDTO<VehicleModelDTO>>> GetManyAsync(
         [FromQuery] VehicleFiltersParameter filters,
         [FromQuery] PaginationParameter pagination
     )

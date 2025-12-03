@@ -1,18 +1,15 @@
-import { tVehicleModelModel } from "./vehicle-model";
-
 import { tVehicleColorModel } from "./vehicle-color";
 import { tBranchModel } from "./branch";
 
 enum eVehicleInstanceStatusModel {
-  AVAILABLE,
-  UNAVAILABLE,
-  RENTED,
-  MAINTENANCE,
+  available,
+  unavailable,
+  rented,
+  maintenance,
 }
 
 type tVehicleInstanceModel = {
   uuid: string;
-  vehicle: tVehicleModelModel;
   branch: tBranchModel;
   color: tVehicleColorModel;
   plate: string;

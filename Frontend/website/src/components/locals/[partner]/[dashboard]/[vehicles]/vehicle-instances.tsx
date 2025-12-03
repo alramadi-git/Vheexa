@@ -4,9 +4,9 @@ import { useTranslations } from "next-intl";
 import { TabsContent } from "@/components/shadcn/tabs";
 
 export default function VehicleInstances() {
-  const tHero = useTranslations(
-    "app.partner.dashboard.vehicles.page.hero.vehicle-instances",
+  const tVehicleInstances = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-instances",
   );
 
-  return <TabsContent value={tHero("label")}>vehicle instances</TabsContent>;
+  return <TabsContent value={tVehicleInstances("label")}>vehicle instances</TabsContent>;
 }

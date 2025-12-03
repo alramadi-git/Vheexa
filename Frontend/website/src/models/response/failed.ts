@@ -1,29 +1,13 @@
-type tPaginationModel = {
-  page: number;
-  pageSize: number;
-  totalItems: number;
-};
-
-type tSuccessOneModel<tData> = {
-  data: tData;
-};
-type tSuccessManyModel<tData> = {
-  data: tData[];
-  pagination: tPaginationModel;
-};
-
 type tIssueModel = {
   field: string;
   message: string;
 };
+
 type tFailedModel = {
   statusCode: number;
   issues: tIssueModel[];
   message: string;
 };
-
-type tResponseOneModel<tData> = tFailedModel | tSuccessOneModel<tData>;
-type tResponseManyModel<tData> = tFailedModel | tSuccessManyModel<tData>;
 
 class ClsErrorModel extends Error {
   public readonly statusCode: number;
@@ -39,13 +23,5 @@ class ClsErrorModel extends Error {
   }
 }
 
-export type {
-  tPaginationModel,
-  tSuccessOneModel,
-  tSuccessManyModel,
-  tIssueModel,
-  tFailedModel,
-  tResponseOneModel,
-  tResponseManyModel,
-};
+export type { tIssueModel, tFailedModel };
 export { ClsErrorModel };

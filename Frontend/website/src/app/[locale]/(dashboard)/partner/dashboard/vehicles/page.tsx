@@ -1,11 +1,11 @@
 "use client";
 
-import Hero from "@/components/locals/[partner]/[dashboard]/[vehicles]/hero";
+import Vehicles from "@/components/locals/[partner]/[dashboard]/[vehicles]/vehicles";
 
 export default function Page() {
   return (
     <main className="h-fullscreen">
-      <Hero />
+      <Vehicles />
     </main>
   );
 }

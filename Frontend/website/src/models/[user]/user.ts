@@ -1,6 +1,16 @@
-import { tHumanModel } from "../human";
+import { tNullable } from "@/types/nullish";
 
-type tUserModel = tHumanModel & {
+import { tImageModel } from "./image";
+import { tLocationModel } from "./location";
+
+type tUserModel = {
+  uuid: string;
+  avatar: tNullable<tImageModel>;
+  location: tLocationModel;
+  username: string;
+  dateOfBirth: string;
+  phoneNumber: string;
+  email: string;
   updatedAt: string;
   createdAt: string;
 };

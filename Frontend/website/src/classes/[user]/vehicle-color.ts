@@ -1,4 +1,4 @@
-import type { tVehicleColorModel } from "@/models/vehicle-color";
+import type { tVehicleColorModel } from "@/models/[partner]/vehicle-color";
 
 class clsVehicleColor {
   public uuid: string;

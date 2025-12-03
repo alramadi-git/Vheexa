@@ -1,9 +1,10 @@
-import { tHistoryModel } from "../history";
-
 import { tMemberModel } from "./member";
+import { tHistoryModel } from "./history";
 
-type tMemberHistoryModel = tHistoryModel & {
+type tMemberHistoryModel = {
+  uuid: string;
   member: tMemberModel;
+  history: tHistoryModel;
   createdAt: string;
 };
 

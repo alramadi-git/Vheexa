@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 
 using Database.Parameters;
 
-using Database.DTOs;
 using Database.DTOs.User;
+using Database.DTOs.Response;
 
 namespace Database.Repositories.User;
 
@@ -27,12 +27,12 @@ public class AuthenticationRepository
         userQuery = userQuery.Where((user) => user.IsDeleted == false);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync()
-        ?? throw new ExceptionDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "No such user.");
+        ?? throw new FailedDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         var passwordHasher = new PasswordHasher<object?>();
         var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human.Password, loginCredentials.Password);
 
-        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ExceptionDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new FailedDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             var trackingUser = await userQuery.FirstAsync();

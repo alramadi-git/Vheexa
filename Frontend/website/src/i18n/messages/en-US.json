@@ -759,21 +759,9 @@
             }
           },
           "sidebar": {
-            "header": {
-              "account": {
-                "navigation-menu": [
-                  [
-                    {
-                      "url": "/partner/dashboard/profile",
-                      "label": "Profile"
-                    }
-                  ]
-                ]
-              }
-            },
             "content": [
               {
-                "label": "General",
+                "label": "Management",
                 "links": [
                   {
                     "url": "/partner/dashboard/roles",
@@ -798,12 +786,10 @@
               "newsletter": {
                 "label": "Subscribe to our newsletter",
                 "description": "Opt-in to receive updates and news about Vheexa.",
-
                 "form": {
                   "email": {
                     "placeholder": "partner@vheexa.com"
                   },
-
                   "submit": "Subscribe now"
                 }
               }
@@ -813,7 +799,7 @@
 
         "vehicles": {
           "page": {
-            "hero": {
+            "vehicles": {
               "title": "Vehicles",
               "description": "Manage your vehicles and offers easily and efficiently.",
 

@@ -1,4 +1,4 @@
-namespace Database.DTOs;
+namespace Database.DTOs.Response;
 
 public enum HTTP_STATUS_CODE
 {
@@ -10,30 +10,30 @@ public enum HTTP_STATUS_CODE
     INTERNAL_SERVER_ERROR = 500
 }
 
-public class IssueExceptionDTO
+public class IssueFailedDTO
 {
     public string Field { get; set; }
     public string Message { get; set; }
 
-    public IssueExceptionDTO(string field, string message)
+    public IssueFailedDTO(string field, string message)
     {
         Field = field;
         Message = message;
     }
 }
 
-public class ExceptionDTO : Exception
+public class FailedDTO : Exception
 {
     public HTTP_STATUS_CODE StatusCode { get; set; }
-    public IssueExceptionDTO[] Issues { get; set; } = [];
+    public IssueFailedDTO[] Issues { get; set; } = [];
 
-    public ExceptionDTO(HTTP_STATUS_CODE statusCode, string message)
+    public FailedDTO(HTTP_STATUS_CODE statusCode, string message)
     : base(message)
     {
         StatusCode = statusCode;
     }
 
-    public ExceptionDTO(HTTP_STATUS_CODE statusCode, string message, IssueExceptionDTO[] issues)
+    public FailedDTO(HTTP_STATUS_CODE statusCode, string message, IssueFailedDTO[] issues)
     : this(statusCode, message)
     {
         Issues = issues;

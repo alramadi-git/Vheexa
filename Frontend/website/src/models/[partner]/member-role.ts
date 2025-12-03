@@ -1,15 +1,17 @@
-import { tRoleModel } from "../role";
+import { tRoleModel } from "./role";
 
 enum eMemberRoleStatusModel {
-  ACTIVE,
-  INACTIVE,
+  active,
+  inactive,
 }
 
-type tMemberRoleModel = tRoleModel & {
+type tMemberRoleModel = {
+  uuid: string;
+  role: tRoleModel;
   status: eMemberRoleStatusModel;
   createdAt: string;
   updatedAt: string;
 };
 
 export { eMemberRoleStatusModel };
-export type { tMemberRoleModel as tRoleModel };
+export type { tMemberRoleModel };

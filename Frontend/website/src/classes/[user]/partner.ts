@@ -1,5 +1,5 @@
 import type { tNullable } from "@/types/nullish";
-import type { tPartnerModel } from "@/models/partner";
+import type { tPartnerModel } from "@/models/[partner]/partner";
 
 import { clsImage } from "./image";
 

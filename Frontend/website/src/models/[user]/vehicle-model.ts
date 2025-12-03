@@ -1,3 +1,5 @@
+import { tPartnerModel } from "./partner";
+
 import { tImageModel } from "./image";
 
 import { tVehicleImageModel } from "./vehicle-image";
@@ -30,6 +32,7 @@ enum eVehicleModelStatusModel {
 
 type tVehicleModelModel = {
   uuid: string;
+  partner: tPartnerModel;
   thumbnail: tImageModel;
   images: tVehicleImageModel[];
   colors: tVehicleColorModel[];
