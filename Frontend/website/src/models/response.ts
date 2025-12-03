@@ -48,5 +48,4 @@ export type {
   tResponseOneModel,
   tResponseManyModel,
 };
-
 export { ClsErrorModel };

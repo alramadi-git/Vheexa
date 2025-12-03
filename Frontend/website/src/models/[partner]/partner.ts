@@ -1,4 +1,5 @@
 import { tNullable } from "@/types/nullish";
+
 import { tImageModel } from "../image";
 
 type tPartnerModel = {

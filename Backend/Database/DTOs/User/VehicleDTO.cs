@@ -31,7 +31,7 @@ public class VehicleDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public VehicleDTO(VehicleEntity vehicleEntity, ImageEntity[] images, VehicleColorEntity[] colors)
+    public VehicleDTO(VehicleModelEntity vehicleEntity, ImageEntity[] images, VehicleColorEntity[] colors)
     {
         UUID = vehicleEntity.UUID;
 

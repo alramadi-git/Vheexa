@@ -1,4 +1,5 @@
 import { tNullable } from "@/types/nullish";
+
 import { tImageModel } from "./image";
 import { tLocationModel } from "./location";
 
@@ -10,8 +11,6 @@ type tHumanModel = {
   dateOfBirth: string;
   phoneNumber: string;
   email: string;
-  updatedAt: string;
-  createdAt: string;
 };
 
 export type { tHumanModel };

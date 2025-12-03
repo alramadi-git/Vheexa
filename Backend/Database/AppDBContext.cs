@@ -7,33 +7,22 @@ public class AppDBContext : DbContext
 {
 
     public DbSet<HistoryEntity> Histories { get; set; }
-
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<PermissionEntity> Permissions { get; set; }
     public DbSet<RolePermissionEntity> RolePermissions { get; set; }
-
     public DbSet<ImageEntity> Images { get; set; }
     public DbSet<LocationEntity> Locations { get; set; }
-
     public DbSet<HumanEntity> Humans { get; set; }
-
-
     public DbSet<UserEntity> Users { get; set; }
-
     public DbSet<PartnerEntity> Partners { get; set; }
     public DbSet<PartnerRoleEntity> PartnerRoles { get; set; }
-    public DbSet<BranchEntity> PartnerSupportedLocations { get; set; }
-
+    public DbSet<BranchEntity> Branches { get; set; }
     public DbSet<MemberEntity> Members { get; set; }
     public DbSet<MemberHistoryEntity> MemberHistories { get; set; }
-
-
-    public DbSet<VehicleEntity> Vehicles { get; set; }
+    public DbSet<VehicleModelEntity> VehicleModels { get; set; }
     public DbSet<VehicleImageEntity> VehicleImages { get; set; }
     public DbSet<VehicleColorEntity> VehicleColors { get; set; }
-
     public DbSet<VehicleInstanceEntity> VehicleInstances { get; set; }
-    public DbSet<VehicleInstanceSupportedLocationEntity> VehicleInstanceSupportedLocations { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 

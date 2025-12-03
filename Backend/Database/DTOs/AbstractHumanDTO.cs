@@ -25,7 +25,7 @@ public class AbstractHumanDTO
         Location = new LocationDTO(humanEntity.Location);
 
         Username = humanEntity.Username;
-        DateOfBirth = humanEntity.DateOfBirth;
+        DateOfBirth = humanEntity.Birthday;
 
         PhoneNumber = humanEntity.PhoneNumber;
         Email = humanEntity.Email;

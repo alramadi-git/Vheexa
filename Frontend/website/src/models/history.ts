@@ -5,9 +5,9 @@ enum eHistoryActionModel {
 }
 
 enum eHistoryEntityModel {
-  PARTNER,
+  PARTNERS,
+  PARTNER_ROLES,
   BRANCHES,
-  ROLES,
   MEMBERS,
   VEHICLE_MODEL,
   VEHICLE_INSTANCE,

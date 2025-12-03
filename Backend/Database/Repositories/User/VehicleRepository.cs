@@ -20,7 +20,7 @@ public class VehicleRepository
 
     public async Task<SuccessOneDTO<VehicleDTO>> GetOneAsync(Guid vehicleUUID)
     {
-        var vehicleQuery = _AppDBContext.Vehicles.AsQueryable();
+        var vehicleQuery = _AppDBContext.VehicleModels.AsQueryable();
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.UUID == vehicleUUID);
 
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo);
@@ -35,14 +35,14 @@ public class VehicleRepository
 
         var vehicleImagesQuery = _AppDBContext.VehicleImages.AsQueryable();
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
-        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleUUID == vehicleUUID);
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicleUUID);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsPublished == true && vehicleImage.IsDeleted == false);
 
         var vehicleImages = await vehicleImagesQuery.AsNoTracking()
         .Select(vehicleImage => vehicleImage.Image).ToArrayAsync();
 
         var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
-        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.VehicleUUID == vehicleUUID);
+        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.VehicleModelUUID == vehicleUUID);
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.IsPublished == true && vehicleColor.IsDeleted == false);
 
         var vehicleColors = await vehicleColorsQuery.AsNoTracking().ToArrayAsync();
@@ -58,7 +58,7 @@ public class VehicleRepository
 
     public async Task<SuccessManyDTO<VehicleDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
     {
-        var vehiclesQuery = _AppDBContext.Vehicles.AsQueryable();
+        var vehiclesQuery = _AppDBContext.VehicleModels.AsQueryable();
 
         vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo);
         vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner);
@@ -83,7 +83,7 @@ public class VehicleRepository
         var vehicleImagesQuery = _AppDBContext.VehicleImages.AsQueryable();
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
 
-        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleUUID));
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleModelUUID));
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsPublished == true && vehicleImage.IsDeleted == false);
 
         var vehicleUUIDsImages = new Dictionary<Guid, VehicleImageEntity>();
@@ -91,15 +91,15 @@ public class VehicleRepository
 
         var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
 
-        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleUUIDs.Contains(vehicleColor.VehicleUUID));
+        vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleUUIDs.Contains(vehicleColor.VehicleModelUUID));
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.IsPublished == true && vehicleColor.IsDeleted == false);
 
         var vehicleColors = await vehicleColorsQuery.AsNoTracking().ToArrayAsync();
 
         var vehiclesDTO = vehicles.Select(vehicle => new VehicleDTO(
         vehicle,
-        vehicleImages.Where(vehicleImage => vehicleImage.VehicleUUID == vehicle.UUID).Select(vehicleImage => vehicleImage.Image).ToArray(),
-        vehicleColors.Where(vehicleColor => vehicleColor.VehicleUUID == vehicle.UUID).ToArray()
+        vehicleImages.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicle.UUID).Select(vehicleImage => vehicleImage.Image).ToArray(),
+        vehicleColors.Where(vehicleColor => vehicleColor.VehicleModelUUID == vehicle.UUID).ToArray()
         )).ToArray();
 
         return new SuccessManyDTO<VehicleDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));

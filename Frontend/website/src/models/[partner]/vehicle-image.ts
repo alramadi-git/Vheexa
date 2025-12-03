@@ -1,9 +1,7 @@
 import { tImageModel } from "../image";
 
-type tVehicleImageModel = Omit<tImageModel, "uuid"> & {
-  uuid: string;
+type tVehicleImageModel = tImageModel & {
   index: number;
-  isPublished: boolean;
 };
 
 export type { tVehicleImageModel };

@@ -23,6 +23,11 @@ enum eVehicleModelFuelModel {
   HYDROGEN,
 }
 
+enum eVehicleModelStatusModel {
+  ACTIVE,
+  INACTIVE,
+}
+
 type tVehicleModelModel = {
   uuid: string;
   thumbnail: tImageModel;
@@ -38,10 +43,10 @@ type tVehicleModelModel = {
   price: number;
   discount: number;
   tags: string[];
-  isPublished: boolean;
+  status: eVehicleModelStatusModel;
   updatedAt: string;
   createdAt: string;
 };
 
-export { eVehicleModelTransmissionModel, eVehicleModelFuelModel };
+export { eVehicleModelTransmissionModel, eVehicleModelFuelModel, eVehicleModelStatusModel };
 export type { tVehicleModelModel };

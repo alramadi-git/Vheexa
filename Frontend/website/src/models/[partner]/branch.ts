@@ -1,10 +1,15 @@
 import { tLocationModel } from "../location";
 
-type tBranchModel = Omit<tLocationModel, "uuid"> & {
-  uuid: string;
-  isPublished: boolean;
+enum eBranchStatusModel {
+  ACTIVE,
+  INACTIVE,
+}
+
+type tBranchModel = tLocationModel & {
+  status: eBranchStatusModel;
   updatedAt: string;
   createdAt: string;
 };
 
+export { eBranchStatusModel };
 export type { tBranchModel };
