@@ -38,9 +38,10 @@ public class VehicleRepository
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicleUUID);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
+        vehicleImagesQuery = vehicleImagesQuery.OrderBy(vehicleImage => vehicleImage.Index);
 
         var vehicleImages = await vehicleImagesQuery.AsNoTracking()
-        .Select(vehicleImage => vehicleImage.Image).ToArrayAsync();
+        .Select(vehicleImage => vehicleImage).ToArrayAsync();
 
         var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.VehicleModelUUID == vehicleUUID);
@@ -95,16 +96,17 @@ public class VehicleRepository
         var vehicleColorsTask = vehicleColorsQuery.AsNoTracking().ToArrayAsync();
         await Task.WhenAll([vehicleImagesTask, vehicleColorsTask]);
 
-        var vehicleImages = vehicleImagesTask.Result;
-        var vehicleColors = vehicleColorsTask.Result;
+        var vehicleImages = vehicleImagesTask.Result.GroupBy(vehicleImage => vehicleImage.VehicleModelUUID).ToDictionary(g => g.Key, g => g.ToArray());
+        var vehicleColors = vehicleColorsTask.Result.GroupBy(vehicleColor => vehicleColor.VehicleModelUUID).ToDictionary(g => g.Key, g => g.ToArray());
 
-        // TODO:
-        // Use dictionary for this problem
-        var vehiclesDTO = vehicles.Select(vehicle => new VehicleModelDTO(
-        vehicle,
-        vehicleImages.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicle.UUID).Select(vehicleImage => vehicleImage.Image).ToArray(),
-        vehicleColors.Where(vehicleColor => vehicleColor.VehicleModelUUID == vehicle.UUID).ToArray()
-        )).ToArray();
+
+        var vehiclesDTO = vehicles.Select(vehicle =>
+        {
+            vehicleImages.TryGetValue(vehicle.UUID, out var images);
+            vehicleColors.TryGetValue(vehicle.UUID, out var colors);
+
+            return new VehicleModelDTO(vehicle, images ?? [], colors ?? []);
+        }).ToArray();
 
         return new SuccessManyDTO<VehicleModelDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));
     }

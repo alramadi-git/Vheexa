@@ -7,7 +7,7 @@ public class VehicleModelDTO
     public Guid UUID { get; set; }
     public PartnerDTO Partner { get; set; }
     public ImageDTO? Thumbnail { get; set; }
-    public ImageDTO[] Images { get; set; }
+    public VehicleImageDTO[] Images { get; set; }
     public VehicleColorDTO[] Colors { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -23,14 +23,14 @@ public class VehicleModelDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public VehicleModelDTO(VehicleModelEntity vehicleModel, ImageEntity[] images, VehicleColorEntity[] colors)
+    public VehicleModelDTO(VehicleModelEntity vehicleModel, VehicleImageEntity[] images, VehicleColorEntity[] colors)
     {
         UUID = vehicleModel.UUID;
         Partner = new PartnerDTO(vehicleModel.Partner);
         Thumbnail = vehicleModel.Thumbnail == null
         ? null
         : new ImageDTO(vehicleModel.Thumbnail);
-        Images = images.Select(image => new ImageDTO(image)).ToArray();
+        Images = images.Select(image => new VehicleImageDTO(image)).ToArray();
         Colors = colors.Select(vehicleColor => new VehicleColorDTO(vehicleColor)).ToArray();
         Name = vehicleModel.Name;
         Description = vehicleModel.Description;
