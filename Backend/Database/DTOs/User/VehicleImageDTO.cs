@@ -1,17 +1,18 @@
+using Database.DTOs.Generals;
 using Database.Entities;
 
-namespace Database.DTOs;
+namespace Database.DTOs.User;
 
-public class VehicleImageDTO
+public class ClsVehicleImageDTO
 {
     public Guid UUID { get; set; }
-    public ImageDTO Image { get; set; }
+    public ClsImageDTO Image { get; set; }
     public int Index { get; set; }
 
-    public VehicleImageDTO(VehicleImageEntity vehicleImage)
+    public ClsVehicleImageDTO(VehicleImageEntity vehicleImage)
     {
         UUID = vehicleImage.UUID;
-        Image = new ImageDTO(vehicleImage.Image);
+        Image = new ClsImageDTO(vehicleImage.Image);
         Index = vehicleImage.Index;
     }
 }

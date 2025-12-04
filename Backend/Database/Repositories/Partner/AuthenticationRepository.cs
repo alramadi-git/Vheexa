@@ -17,7 +17,7 @@ public class AuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneDTO<MemberDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
+    public async Task<SuccessOneDTO<ClsMemberDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
     {
         var memberQuery = _AppDBContext.Members.AsQueryable();
         memberQuery = memberQuery.Include(member => member.Human).ThenInclude(human => human.Avatar);
@@ -41,6 +41,6 @@ public class AuthenticationRepository
             await _AppDBContext.SaveChangesAsync();
         }
 
-        return new SuccessOneDTO<MemberDTO>(new MemberDTO(member));
+        return new SuccessOneDTO<ClsMemberDTO>(new MemberDTO(member));
     }
 };

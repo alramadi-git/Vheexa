@@ -1,26 +1,26 @@
+using Database.DTOs.Abstracts;
+using Database.DTOs.User;
 using Database.Entities;
 
 namespace Database.DTOs.Partner;
 
-public class MemberDTO
+public class ClsMemberDTO : AbstractClsHumanDTO
 {
     public Guid UUID { get; set; }
-    public HumanDTO Human { get; set; }
-    public PartnerDTO Partner { get; set; }
-    public RoleDTO Role { get; set; }
-    public BranchDTO Branch { get; set; }
+    public ClsPartnerDTO Partner { get; set; }
+    public ClsRoleDTO Role { get; set; }
+    public ClsBranchDTO Branch { get; set; }
     public MemberEntity.STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public MemberDTO(MemberEntity memberEntity, PermissionEntity[] permissions)
+    public ClsMemberDTO(MemberEntity member, PermissionEntity[] permissions) : base(member.Human)
     {
-        UUID = memberEntity.UUID;
-        Human = new HumanDTO(memberEntity.Human);
-        Partner = new PartnerDTO(memberEntity.Partner);
-        Role = new RoleDTO(memberEntity.Role, permissions);
-        Branch = new BranchDTO(memberEntity.Branch);
-        UpdatedAt = memberEntity.UpdatedAt;
-        CreatedAt = memberEntity.CreatedAt;
+        UUID = member.UUID;
+        Partner = new ClsPartnerDTO(member.Partner);
+        Role = new ClsRoleDTO(member.Role, permissions);
+        Branch = new ClsBranchDTO(member.Branch);
+        UpdatedAt = member.UpdatedAt;
+        CreatedAt = member.CreatedAt;
     }
 }

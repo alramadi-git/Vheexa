@@ -5,6 +5,7 @@ using Database.Parameters;
 
 using Database.DTOs.User;
 using Database.DTOs.Response;
+using Database.DTOs.Abstracts;
 
 namespace Database.Repositories.User;
 
@@ -17,7 +18,7 @@ public class AuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneDTO<UserDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
+    public async Task<SuccessOneDTO<ClsUserDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
     {
         var userQuery = _AppDBContext.Users.AsQueryable();
         userQuery = userQuery.Include(user => user.Human).ThenInclude(human => human.Avatar);
@@ -41,6 +42,6 @@ public class AuthenticationRepository
             await _AppDBContext.SaveChangesAsync();
         }
 
-        return new SuccessOneDTO<UserDTO>(new UserDTO(user));
+        return new SuccessOneDTO<ClsUserDTO>(new ClsUserDTO(user));
     }
 };

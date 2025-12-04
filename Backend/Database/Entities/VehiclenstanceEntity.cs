@@ -11,8 +11,8 @@ public class VehicleInstanceEntity
     public Guid UUID { get; set; }
     public Guid VehicleModelUUID { get; set; }
     public VehicleModelEntity VehicleModel { get; set; }
-    public Guid VehicleBranchUUID { get; set; }
-    public BranchEntity VehicleBranch { get; set; }
+    public Guid BranchUUID { get; set; }
+    public BranchEntity Branch { get; set; }
     public Guid VehicleColorUUID { get; set; }
     public VehicleColorEntity VehicleColor { get; set; }
     public string Plate { get; set; }

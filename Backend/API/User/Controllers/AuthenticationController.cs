@@ -11,6 +11,7 @@ using Business.User.Services;
 using API.Configurations;
 using Database.DTOs.User;
 using Database.DTOs.Response;
+using Database.DTOs.Abstracts;
 
 
 namespace API.User.Controllers;
@@ -31,7 +32,7 @@ public class AuthenticationController : Controller
 
 
     [HttpPost("login")]
-    public async Task<ActionResult<SuccessOneDTO<AccountModel<UserDTO>>>> LoginAsync([FromBody] LoginCredentialsParameter userSignedupData)
+    public async Task<ActionResult<SuccessOneDTO<AccountModel<ClsUserDTO>>>> LoginAsync([FromBody] LoginCredentialsParameter userSignedupData)
     {
         try
         {
@@ -52,7 +53,7 @@ public class AuthenticationController : Controller
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            var response = new SuccessOneDTO<AccountModel<UserDTO>>(new AccountModel<UserDTO>(user.Data, tokenString));
+            var response = new SuccessOneDTO<AccountModel<ClsUserDTO>>(new AccountModel<ClsUserDTO>(user.Data, tokenString));
             return Ok(response);
         }
         catch (ValidationException exception)

@@ -1,13 +1,13 @@
 using Database.Entities;
 
-namespace Database.DTOs;
+namespace Database.DTOs.Generals;
 
-public class ImageDTO
+public class ClsImageDTO
 {
     public Guid UUID { get; set; }
     public string URL { get; set; }
 
-    public ImageDTO(ImageEntity imageEntity)
+    public ClsImageDTO(ImageEntity imageEntity)
     {
         UUID = imageEntity.UUID;
         URL = imageEntity.URL;

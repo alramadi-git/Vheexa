@@ -1,12 +1,13 @@
+using Database.DTOs.Generals;
 using Database.Entities;
 
 namespace Database.DTOs.User;
 
-public class PartnerDTO
+public class ClsPartnerDTO
 {
     public Guid UUID { get; set; }
-    public ImageDTO? Logo { get; set; }
-    public ImageDTO? Banner { get; set; }
+    public ClsImageDTO? Logo { get; set; }
+    public ClsImageDTO? Banner { get; set; }
     public string Handle { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
@@ -14,15 +15,15 @@ public class PartnerDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public PartnerDTO(PartnerEntity partner)
+    public ClsPartnerDTO(PartnerEntity partner)
     {
         UUID = partner.UUID;
         Logo = partner.Logo == null
         ? null
-        : new ImageDTO(partner.Logo);
+        : new ClsImageDTO(partner.Logo);
         Banner = partner.Banner == null
         ? null
-        : new ImageDTO(partner.Banner);
+        : new ClsImageDTO(partner.Banner);
         Handle = partner.Handle;
         Name = partner.Name;
         PhoneNumber = partner.PhoneNumber;

@@ -17,7 +17,6 @@ export default function SidebarContent() {
     "app.partner.dashboard.layout.sidebar",
   );
   const sections = tSidebarContent.raw("content");
-  console.log("sections: ", sections);
 
   return (
     <ShadcnSidebarContent>

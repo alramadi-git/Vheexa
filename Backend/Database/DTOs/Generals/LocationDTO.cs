@@ -1,8 +1,8 @@
 using Database.Entities;
 
-namespace Database.DTOs;
+namespace Database.DTOs.Generals;
 
-public class LocationDTO
+public class ClsLocationDTO
 {
     public Guid UUID { get; set; }
     public string Country { get; set; }
@@ -11,7 +11,7 @@ public class LocationDTO
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
-    public LocationDTO(LocationEntity locationEntity)
+    public ClsLocationDTO(LocationEntity locationEntity)
     {
         UUID = locationEntity.UUID;
         Country = locationEntity.Country;

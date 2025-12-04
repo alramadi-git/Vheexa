@@ -1,14 +1,14 @@
 using Database.Entities;
 
-namespace Database.DTOs;
+namespace Database.DTOs.User;
 
-public class VehicleColorDTO
+public class ClsVehicleColorDTO
 {
     public Guid UUID { get; set; }
     public string Name { get; set; }
     public string HexCode { get; set; }
 
-    public VehicleColorDTO(VehicleColorEntity vehicleColor)
+    public ClsVehicleColorDTO(VehicleColorEntity vehicleColor)
     {
         UUID = vehicleColor.UUID;
         Name = vehicleColor.Name;

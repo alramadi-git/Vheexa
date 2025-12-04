@@ -1,14 +1,15 @@
+using Database.DTOs.Generals;
 using Database.Entities;
 
 namespace Database.DTOs.User;
 
-public class VehicleModelDTO
+public class ClsVehicleModelDTO
 {
     public Guid UUID { get; set; }
-    public PartnerDTO Partner { get; set; }
-    public ImageDTO? Thumbnail { get; set; }
-    public VehicleImageDTO[] Images { get; set; }
-    public VehicleColorDTO[] Colors { get; set; }
+    public ClsPartnerDTO Partner { get; set; }
+    public ClsImageDTO? Thumbnail { get; set; }
+    public ClsVehicleImageDTO[] Images { get; set; }
+    public ClsVehicleColorDTO[] Colors { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public string Manufacturer { get; set; }
@@ -23,15 +24,15 @@ public class VehicleModelDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public VehicleModelDTO(VehicleModelEntity vehicleModel, VehicleImageEntity[] images, VehicleColorEntity[] colors)
+    public ClsVehicleModelDTO(VehicleModelEntity vehicleModel, VehicleImageEntity[] images, VehicleColorEntity[] colors)
     {
         UUID = vehicleModel.UUID;
-        Partner = new PartnerDTO(vehicleModel.Partner);
+        Partner = new ClsPartnerDTO(vehicleModel.Partner);
         Thumbnail = vehicleModel.Thumbnail == null
         ? null
-        : new ImageDTO(vehicleModel.Thumbnail);
-        Images = images.Select(image => new VehicleImageDTO(image)).ToArray();
-        Colors = colors.Select(vehicleColor => new VehicleColorDTO(vehicleColor)).ToArray();
+        : new ClsImageDTO(vehicleModel.Thumbnail);
+        Images = images.Select(image => new ClsVehicleImageDTO(image)).ToArray();
+        Colors = colors.Select(vehicleColor => new ClsVehicleColorDTO(vehicleColor)).ToArray();
         Name = vehicleModel.Name;
         Description = vehicleModel.Description;
         Manufacturer = vehicleModel.Manufacturer;

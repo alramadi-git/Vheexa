@@ -25,12 +25,12 @@ public class VehicleService
         _VehicleRepository = vehicleRepository;
     }
 
-    public async Task<SuccessOneDTO<VehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
+    public async Task<SuccessOneDTO<Database.DTOs.User.ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
     {
         return await _VehicleRepository.GetOneAsync(vehicleUUID);
     }
 
-    public async Task<SuccessManyDTO<VehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
+    public async Task<SuccessManyDTO<Database.DTOs.User.ClsVehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
     {
         await _VehicleFiltersValidation.ValidateAndThrowAsync(filters);
         await _PaginationValidation.ValidateAndThrowAsync(pagination);

@@ -19,7 +19,7 @@ public class VehicleRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneDTO<VehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
+    public async Task<SuccessOneDTO<ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
     {
         var vehicleQuery = _AppDBContext.VehicleModels.AsQueryable();
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.UUID == vehicleUUID);
@@ -49,16 +49,16 @@ public class VehicleRepository
 
         var vehicleColors = await vehicleColorsQuery.AsNoTracking().ToArrayAsync();
 
-        var vehicleDTO = new VehicleModelDTO(
+        var vehicleDTO = new ClsVehicleModelDTO(
             vehicle,
             vehicleImages,
             vehicleColors
         );
 
-        return new SuccessOneDTO<VehicleModelDTO>(vehicleDTO);
+        return new SuccessOneDTO<ClsVehicleModelDTO>(vehicleDTO);
     }
 
-    public async Task<SuccessManyDTO<VehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
+    public async Task<SuccessManyDTO<ClsVehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
     {
         var vehiclesQuery = _AppDBContext.VehicleModels.AsQueryable();
 
@@ -105,9 +105,9 @@ public class VehicleRepository
             vehicleImages.TryGetValue(vehicle.UUID, out var images);
             vehicleColors.TryGetValue(vehicle.UUID, out var colors);
 
-            return new VehicleModelDTO(vehicle, images ?? [], colors ?? []);
+            return new ClsVehicleModelDTO(vehicle, images ?? [], colors ?? []);
         }).ToArray();
 
-        return new SuccessManyDTO<VehicleModelDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));
+        return new SuccessManyDTO<ClsVehicleModelDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));
     }
 };

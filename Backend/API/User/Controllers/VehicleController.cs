@@ -25,7 +25,7 @@ public class VehicleController : Controller
     }
 
     [HttpGet("{uuid:guid}")]
-    public async Task<ActionResult<SuccessOneDTO<VehicleModelDTO>>> GetOneAsync([FromRoute] Guid uuid)
+    public async Task<ActionResult<SuccessOneDTO<Database.DTOs.User.ClsVehicleModelDTO>>> GetOneAsync([FromRoute] Guid uuid)
     {
         try
         {
@@ -54,7 +54,7 @@ public class VehicleController : Controller
 
 
     [HttpGet]
-    public async Task<ActionResult<SuccessManyDTO<VehicleModelDTO>>> GetManyAsync(
+    public async Task<ActionResult<SuccessManyDTO<Database.DTOs.User.ClsVehicleModelDTO>>> GetManyAsync(
         [FromQuery] VehicleFiltersParameter filters,
         [FromQuery] PaginationParameter pagination
     )
