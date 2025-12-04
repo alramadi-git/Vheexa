@@ -15,6 +15,7 @@ public class AppDBContext : DbContext
     public DbSet<HumanEntity> Humans { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<PartnerEntity> Partners { get; set; }
+    public DbSet<PartnerSettingsEntity> PartnersSettings { get; set; }
     public DbSet<PartnerRoleEntity> PartnerRoles { get; set; }
     public DbSet<BranchEntity> Branches { get; set; }
     public DbSet<MemberEntity> Members { get; set; }

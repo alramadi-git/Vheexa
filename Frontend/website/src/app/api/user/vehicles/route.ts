@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { ZodError } from "zod/v4";
-import { tVehicleFilter, zVehicleFilter } from "@/validations/[user]/[vehicles]/vehicle-filter";
+import { tVehicleFilter, zVehicleFilter } from "@/validations/user/vehicles/vehicle-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import {

@@ -1,5 +1,7 @@
 import { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
+import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
+import { cva, VariantProps } from "class-variance-authority";
 
 const sectionClassName: string = "px-8 py-16 lg:px-12 lg:py-24";
 function Section({ className, children, ...props }: ComponentProps<"section">) {
@@ -61,6 +63,39 @@ function Description({ className, children, ...props }: ComponentProps<"p">) {
   );
 }
 
+const badgeVariants = cva("border-none focus-visible:outline-none", {
+  variants: {
+    variant: {
+      success:
+        "bg-emerald-600/10 text-emerald-600 focus-visible:ring-emerald-600/20 dark:bg-emerald-400/10 dark:text-emerald-400 dark:focus-visible:ring-emerald-400/40 [a&]:hover:bg-emerald-600/5 dark:[a&]:hover:bg-emerald-400/5",
+      info: "bg-blue-600/10 text-blue-600 focus-visible:ring-blue-600/20 dark:bg-blue-400/10 dark:text-blue-400 dark:focus-visible:ring-blue-400/40 [a&]:hover:bg-blue-600/5 dark:[a&]:hover:bg-blue-400/5",
+      warning:
+        "bg-amber-600/10 text-amber-600 focus-visible:ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-400 dark:focus-visible:ring-amber-400/40 [a&]:hover:bg-amber-600/5 dark:[a&]:hover:bg-amber-400/5",
+      destructive:
+        "bg-destructive/10 [a&]:hover:bg-destructive/5 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive",
+      primary:
+        "bg-primary/10 [a&]:hover:bg-primary/5 focus-visible:ring-primary/20 dark:focus-visible:ring-primary/40 text-primary",
+      foreground:
+        "bg-foreground/10 [a&]:hover:bg-foreground/5 focus-visible:ring-foreground/20 dark:focus-visible:ring-foreground/40 text-foreground",
+      muted:
+        "bg-muted-foreground/10 [a&]:hover:bg-muted-foreground/5 focus-visible:ring-muted-foreground/20 dark:focus-visible:ring-muted-foreground/40 text-muted-foreground",
+    },
+  },
+  defaultVariants: {
+    variant: "success",
+  },
+});
+function Badge({
+  variant,
+  ...props
+}: ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
+  return (
+    <ShadcnBadge className={cn(badgeVariants({ variant }))}>
+      <span {...props} />
+    </ShadcnBadge>
+  );
+}
+
 function Kbd({
   className,
   children,
@@ -71,7 +106,7 @@ function Kbd({
       {...props}
       dir="ltr"
       className={cn(
-        "text-muted-foreground/70 inline-flex h-5 max-h-full items-center rounded-sm border px-1 font-[inherit] text-[0.625rem] font-medium",
+        "text-muted-foreground/70 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium",
         className,
       )}
     >
@@ -93,4 +128,13 @@ function Blockquote({
 }
 
 export { sectionClassName };
-export { Section, Container, Intro, Title, Description, Kbd, Blockquote };
+export {
+  Section,
+  Container,
+  Intro,
+  Title,
+  Description,
+  Badge,
+  Kbd,
+  Blockquote,
+};

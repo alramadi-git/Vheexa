@@ -11,7 +11,7 @@ import {
 } from "@/models/response";
 
 import { tAccountModel } from "@/models/account";
-import { tUserModel } from "@/models/[user]/user";
+import { tUserModel } from "@/models/user/user";
 
 export async function POST(
   request: Request,

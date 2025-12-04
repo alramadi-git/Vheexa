@@ -1,4 +1,4 @@
-import { eLocale, routing } from "@/i18n/routing";
+import { eLocale } from "@/i18n/routing";
 
 enum eCurrency {
   "en-US" = "USD",
@@ -7,12 +7,11 @@ enum eCurrency {
 class ClsMonyFormatter {
   private readonly _locale: eLocale;
   private readonly _currency: eCurrency;
-
   private readonly _formatter: Intl.NumberFormat;
 
-  constructor() {
-    this._locale = routing.defaultLocale;
-    this._currency = eCurrency[routing.defaultLocale];
+  constructor(locale: eLocale, currency: eCurrency) {
+    this._locale = locale;
+    this._currency = currency;
 
     this._formatter = new Intl.NumberFormat(this._locale, {
       style: "currency",
@@ -25,4 +24,4 @@ class ClsMonyFormatter {
   }
 }
 
-export { ClsMonyFormatter };
+export { eCurrency, ClsMonyFormatter };

@@ -65,13 +65,13 @@ export default function Account(props: tAccountProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="border p-2.5 hover:bg-transparent">
-          <Avatar className="size-6 items-center justify-center rounded-sm">
+          <Avatar className="size-6 items-center justify-center rounded">
             <AvatarImage
               src={account.avatar?.url}
               alt={account.username}
-              className="rounded-sm bg-transparent"
+              className="rounded bg-transparent"
             />
-            <AvatarFallback className="rounded-sm bg-transparent">
+            <AvatarFallback className="rounded bg-transparent">
               <LuUserRound className="opacity-60" aria-hidden="true" />
             </AvatarFallback>
           </Avatar>

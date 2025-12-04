@@ -1,6 +1,6 @@
 "use client";
 
-import Vehicles from "@/components/locals/[partner]/[dashboard]/[vehicles]/vehicles";
+import Vehicles from "@/components/locals/partner/dashboard/vehicles/page/vehicles/vehicles";
 
 export default function Page() {
   return (

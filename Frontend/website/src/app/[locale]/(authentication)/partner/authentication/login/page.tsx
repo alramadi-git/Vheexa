@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { getTranslations } from "next-intl/server";
-import Form from "@/components/locals/[partner]/[authentication]/[login]/form";
+import Form from "@/components/locals/partner/authentication/login/page/form";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {

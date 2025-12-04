@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ClsVehicleService } from "@/services/[user]/vehicle";
+import { ClsVehicleService } from "@/services/user/vehicle";
 
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -17,7 +17,7 @@ import {
 import { Fragment } from "react";
 import { Badge } from "@/components/shadcn/badge";
 import Carousel from "../../../../../components/locals/[user]/[vehicles]/[uuid]/carousel";
-import { clsVehicle } from "@/classes/[user]/vehicle";
+import { clsVehicle } from "@/classes/user/vehicle";
 import Tabs from "../../../../../components/locals/[user]/[vehicles]/[uuid]/tabs";
 
 export const dynamic = "force-static";
@@ -29,7 +29,7 @@ export async function generateMetadata(
   const vehicleService = new ClsVehicleService();
   const { uuid } = await props.params;
 
-  const result = await vehicleService.getOne(uuid);
+  const result = await vehicleService.getOneAsync(uuid);
   if (result.isSuccess === false) notFound();
 
   const vehicle = result.data;
@@ -47,7 +47,7 @@ export default async function Page(
   const { locale, uuid } = await props.params;
   setRequestLocale(locale);
 
-  const result = await vehicleService.getOne(uuid);
+  const result = await vehicleService.getOneAsync(uuid);
   if (result.isSuccess === false) notFound();
 
   const vehicleModel = result.data;
