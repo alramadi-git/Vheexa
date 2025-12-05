@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/authentication";
+} from "@/validations/password";
 
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";

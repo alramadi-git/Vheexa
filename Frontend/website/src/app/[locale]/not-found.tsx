@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import { Container, Section } from "@/components/locals/blocks/typography";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 
 export default function NotFound() {
   const tNotFound = useTranslations("app.not-found");

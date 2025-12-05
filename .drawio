@@ -3589,7 +3589,7 @@
         <mxCell id="cvgqhZrbZ4pVp18m3lCR-585" value="VEHICLE_MODEL_STATUS:&lt;div&gt;&lt;div&gt;- ACTIVE&lt;/div&gt;&lt;div&gt;- INACTIVE&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=36;fontStyle=1;fontColor=default;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;" parent="1" vertex="1">
           <mxGeometry x="9126.42" y="822" width="512" height="142" as="geometry" />
         </mxCell>
-        <mxCell id="oXcIwI3QX5AftJR4gIsx-581" value="PartnerSettings" style="shape=table;startSize=74;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=36;strokeWidth=4;fontStyle=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;spacing=18;align=left;" vertex="1" parent="1">
+        <mxCell id="oXcIwI3QX5AftJR4gIsx-581" value="PartnersSettings" style="shape=table;startSize=74;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=36;strokeWidth=4;fontStyle=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;spacing=18;align=left;" vertex="1" parent="1">
           <mxGeometry x="3864.42" y="1039" width="747.9880952380977" height="310.9200000000001" as="geometry" />
         </mxCell>
         <mxCell id="oXcIwI3QX5AftJR4gIsx-582" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" vertex="1" parent="oXcIwI3QX5AftJR4gIsx-581">

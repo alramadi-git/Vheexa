@@ -9,9 +9,9 @@ import {
   tFailedModel,
   ClsErrorModel,
   tResponseManyModel,
-} from "@/models/response";
+} from "@/models/general/response";
 
-import { tVehicleModel } from "@/models/vehicle";
+import { tVehicleModel } from "@/models/user/vehicle";
 
 export async function GET(
   request: NextRequest,
@@ -37,7 +37,7 @@ export async function GET(
       },
       pagination: {
         page: Number(request.nextUrl.searchParams.get("page")),
-        limit: Number(request.nextUrl.searchParams.get("limit")),
+        pageSize: Number(request.nextUrl.searchParams.get("limit")),
       },
     };
 
@@ -65,7 +65,7 @@ export async function GET(
       queryArray.push(`HasDiscount.Value=${filters.hasDiscount}`);
 
     queryArray.push(`Page=${pagination.page}`);
-    queryArray.push(`Limit=${pagination.limit}`);
+    queryArray.push(`Limit=${pagination.pageSize}`);
 
     let queryString = queryArray.join("&");
     queryString = queryString === "" ? "" : `?${queryString}`;

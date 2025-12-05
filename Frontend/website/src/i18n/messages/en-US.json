@@ -761,6 +761,15 @@
           "sidebar": {
             "content": [
               {
+                "label": "General",
+                "links": [
+                  {
+                    "url": "/partner/dashboard",
+                    "label": "Dashboard"
+                  }
+                ]
+              },
+              {
                 "label": "Management",
                 "links": [
                   {
@@ -770,6 +779,10 @@
                   {
                     "url": "/partner/dashboard/members",
                     "label": "Members"
+                  },
+                  {
+                    "url": "/partner/dashboard/branches",
+                    "label": "Branches"
                   },
                   {
                     "url": "/partner/dashboard/vehicles",
@@ -786,12 +799,7 @@
               "news": {
                 "label": "Subscribe to our News",
                 "description": "Opt-in to receive updates and News about Vheexa.",
-                "form": {
-                  "email": {
-                    "placeholder": "partner@vheexa.com"
-                  },
-                  "submit": "Subscribe now"
-                }
+                "subscribe": "Subscribe now"
               }
             }
           }
@@ -806,7 +814,7 @@
               "vehicle-models": {
                 "label": "Vehicle Models",
                 "table": {
-                  "uuid": { "header": "Uuid" },
+                  "uuid": { "header": "UUID" },
                   "vehicle-model": { "header": "Vehicle Model" },
                   "specs": {
                     "header": "Specs",
@@ -827,7 +835,21 @@
                     "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
                   },
                   "updated-at": { "header": "Updated At" },
-                  "created-at": { "header": "Created At" }
+                  "created-at": { "header": "Created At" },
+                  "action": {
+                    "header": "Action",
+                    "cell": {
+                      "view": {
+                        "label": "View"
+                      },
+                      "edit": {
+                        "label": "Edit"
+                      },
+                      "delete": {
+                        "label": "Delete"
+                      }
+                    }
+                  }
                 }
               },
               "vehicle-instances": {

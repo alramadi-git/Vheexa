@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/components/locals/blocks/link";
+import { Link } from "@/components/locals/blocks/links";
 import {
   SidebarContent as ShadcnSidebarContent,
   SidebarGroup,

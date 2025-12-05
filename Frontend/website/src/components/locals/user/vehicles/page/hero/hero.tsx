@@ -9,7 +9,7 @@ import {
   Description,
 } from "@/components/locals/blocks/typography";
 import { Badge } from "@/components/shadcn/badge";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 
 import Background from "./background";
 

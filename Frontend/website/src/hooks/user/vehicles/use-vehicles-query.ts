@@ -89,7 +89,7 @@ export function useVehiclesQuery() {
           maxPrice: maxPrice,
           hasDiscount: hasDiscount,
         },
-        { page: page, limit: limit },
+        { page: page, pageSize: limit },
       ),
   });
 

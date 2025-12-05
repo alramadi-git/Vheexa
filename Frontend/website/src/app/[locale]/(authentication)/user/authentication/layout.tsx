@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { Card, CardContent } from "@/components/shadcn/card";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 import { Container, Section } from "@/components/locals/blocks/typography";
 
 export const dynamic = "force-static";

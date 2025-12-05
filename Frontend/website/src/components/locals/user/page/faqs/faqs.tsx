@@ -13,7 +13,7 @@ import {
   Title,
   Description,
 } from "@/components/locals/blocks/typography";
-import { Link } from "@/components/locals/blocks/link";
+import { Link } from "@/components/locals/blocks/links";
 
 type tQuestion = {
   id: string;

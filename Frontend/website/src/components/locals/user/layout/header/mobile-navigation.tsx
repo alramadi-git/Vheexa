@@ -20,7 +20,7 @@ import {
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Container } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/link";
+import { Link } from "@/components/locals/blocks/links";
 
 import Languages from "./languages";
 import Account from "./account";

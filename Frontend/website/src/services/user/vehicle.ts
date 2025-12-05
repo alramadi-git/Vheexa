@@ -89,7 +89,7 @@ class ClsVehicleService extends ClsAbstractService {
           queryArray.push(`hasDiscount=${filters.hasDiscount}`);
 
         queryArray.push(`page=${pagination.page}`);
-        queryArray.push(`limit=${pagination.limit}`);
+        queryArray.push(`limit=${pagination.pageSize}`);
 
         let queryString = queryArray.join("&");
         queryString = queryString.length === 0 ? "" : `?${queryString}`;

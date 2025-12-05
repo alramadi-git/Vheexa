@@ -11,7 +11,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/shadcn/carousel";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 import { clsImage } from "@/classes/user/image";
 
 type tCarouselProps = {

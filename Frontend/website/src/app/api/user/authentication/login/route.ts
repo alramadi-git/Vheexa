@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { ZodError } from "zod/v4";
-import { zLoginCredentials } from "@/validations/authentication";
+import { zLoginCredentials } from "@/validations/password";
 
 import {
   ClsErrorModel,

@@ -1,4 +1,5 @@
 "use client";
+import { eLocale } from "@/i18n/routing";
 
 import {
   eVehicleModelFuelModel,
@@ -6,9 +7,8 @@ import {
   eVehicleModelTransmissionModel,
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
-import { eLocale } from "@/i18n/routing";
 
-import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
+import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
 import { cn } from "@/utilities/cn";
@@ -24,11 +24,18 @@ import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import {
-  LuActivity,
-  LuChartNoAxesColumn,
-  LuFuel,
+  LuDot,
   LuUsers,
+  LuActivity,
+  LuFuel,
+  LuEllipsisVertical,
+  LuBookOpenText,
+  LuPenLine,
+  LuTrash2,
+  LuCircleCheck,
+  LuCircleX,
 } from "react-icons/lu";
+import { MdOutlineDiscount } from "react-icons/md";
 
 import { TabsContent } from "@/components/shadcn/tabs";
 import {
@@ -48,7 +55,14 @@ import {
 } from "@/components/shadcn/breadcrumb";
 import { Badge } from "@/components/locals/blocks/typography";
 import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
-import { Separator } from "@/components/shadcn/separator";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/shadcn/dropdown-menu";
+import { Button } from "@/components/shadcn/button";
 
 const data = [
   {
@@ -880,8 +894,6 @@ const data = [
 
 export default function VehicleModels() {
   const locale = useLocale() as eLocale;
-  const monyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
-  const dateFormatter = new ClsDateFormatter(locale);
 
   const tVehicleModels = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models",
@@ -890,22 +902,18 @@ export default function VehicleModels() {
   const columns: ColumnDef<tVehicleModelModel>[] = useMemo(() => {
     return [
       {
-        header: () => (
-          <h2 className="text-lg">{tVehicleModels("table.uuid.header")}</h2>
-        ),
+        header: () => <Heading title={tVehicleModels("table.uuid.header")} />,
         accessorKey: "uuid",
         cell: (info) => (
-          <Badge variant="muted">
-            {info.getValue<tVehicleModelModel["uuid"]>().slice(0, 8)}
-          </Badge>
+          <Uuid uuid={info.getValue<tVehicleModelModel["uuid"]>()} />
         ),
       },
       {
         id: "vehicle-model",
         header: () => (
-          <h2 className="text-lg">
-            {tVehicleModels("table.vehicle-model.header")}
-          </h2>
+          <Heading
+            title={tVehicleModels("table.vehicle-model.header")}
+          ></Heading>
         ),
         accessorFn: (row) => ({
           name: row.name,
@@ -915,35 +923,27 @@ export default function VehicleModels() {
         }),
 
         cell: (info) => {
-          const { name, description, manufacturer, modelYear } =
+          const { name, description, modelYear, manufacturer } =
             info.getValue<
               Pick<
                 tVehicleModelModel,
-                "name" | "description" | "manufacturer" | "modelYear"
+                "name" | "description" | "modelYear" | "manufacturer"
               >
             >();
 
           return (
-            <div>
-              <span className="flex items-center justify-between gap-3">
-                <h3 className="text-base">
-                  {name} {modelYear}
-                </h3>
-                <ShadcnBadge variant="outline">{manufacturer}</ShadcnBadge>
-              </span>
-              <p className="text-muted-foreground truncate">
-                {description}
-                {description}
-              </p>
-            </div>
+            <VehicleModel
+              title={name}
+              description={description}
+              modelYear={modelYear}
+              manufacturer={manufacturer}
+            />
           );
         },
       },
       {
         id: "specs",
-        header: () => (
-          <h2 className="text-lg">{tVehicleModels("table.specs.header")}</h2>
-        ),
+        header: () => <Heading title={tVehicleModels("table.specs.header")} />,
         accessorFn: (row) => ({
           capacity: row.capacity,
           transmission: row.transmission,
@@ -956,139 +956,80 @@ export default function VehicleModels() {
             >();
 
           return (
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <LuUsers size={16}/>
-                  {tVehicleModels("table.specs.cell.capacity", {
-                    capacity: capacity,
-                  })}{" "}
-                </BreadcrumbItem>
-                <BreadcrumbSeparator> · </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <LuActivity size={16}/>
-                  {tVehicleModels("table.specs.cell.transmission", {
-                    transmission: transmission,
-                  })}
-                </BreadcrumbItem>
-                <BreadcrumbSeparator> · </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <LuFuel size={16}/>
-                  {tVehicleModels("table.specs.cell.fuel", {
-                    fuel: fuel,
-                  })}
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <Specs
+              capacity={capacity}
+              transmission={transmission}
+              fuel={fuel}
+            />
           );
         },
       },
       {
-        header: () => (
-          <h2 className="text-lg">{tVehicleModels("table.colors.header")}</h2>
-        ),
+        header: () => <Heading title={tVehicleModels("table.colors.header")} />,
         accessorKey: "colors",
         cell: (info) => (
-          <ul aria-label="Colors" className="flex gap-1.5">
-            {info.getValue<tVehicleModelModel["colors"]>().map((color) => (
-              <li
-                key={color.uuid}
-                style={{
-                  background: `color-mix(in oklab, ${color.hexCode} 20%, transparent)`,
-                  color: color.hexCode,
-                }}
-                className="tabular- flex items-center justify-center rounded p-1 text-xs font-medium shadow text-shadow-2xs"
-              >
-                {color.name.split(" ").map((chunk) => chunk.at(0))}
-              </li>
-            ))}
-          </ul>
+          <Colors colors={info.getValue<tVehicleModelModel["colors"]>()} />
         ),
       },
       {
-        header: () => (
-          <h2 className="text-lg">{tVehicleModels("table.price.header")}</h2>
-        ),
-        accessorKey: "price",
-        cell: (info) => (
-          <span>
-            {tVehicleModels.rich("table.price.cell", {
-              price: monyFormatter.format(
-                info.getValue<tVehicleModelModel["price"]>(),
-              ),
-              span: (chunk) => (
-                <span className="text-muted-foreground text-xs">{chunk}</span>
-              ),
-            })}
-          </span>
-        ),
+        id: "price",
+        header: () => <Heading title={tVehicleModels("table.price.header")} />,
+        accessorFn: (row) => ({
+          price: row.price,
+          discount: row.discount,
+        }),
+        cell: (info) => {
+          const { price, discount } =
+            info.getValue<Pick<tVehicleModelModel, "price" | "discount">>();
+
+          return <Price price={price} discount={discount} />;
+        },
       },
       {
         header: () => (
-          <h2 className="text-lg">{tVehicleModels("table.discount.header")}</h2>
+          <Heading title={tVehicleModels("table.discount.header")} />
         ),
         accessorKey: "discount",
         cell: (info) => {
           const discount = info.getValue<tVehicleModelModel["discount"]>();
 
-          return (
-            <span
-              className={cn("inline-flex w-full items-center gap-1", {
-                "text-amber-500": discount === 0,
-                "text-emerald-500": discount !== 0,
-              })}
-            >
-              {monyFormatter.format(discount)}
-              <LuChartNoAxesColumn size={16} />
-            </span>
-          );
+          return <Discount discount={discount} />;
         },
       },
       {
-        header: () => (
-          <h2 className="text-lg">{tVehicleModels("table.status.header")}</h2>
-        ),
+        header: () => <Heading title={tVehicleModels("table.status.header")} />,
         accessorKey: "status",
         cell: (info) => {
           const status = info.getValue<tVehicleModelModel["status"]>();
-          return (
-            <Badge
-              variant={
-                status === eVehicleModelStatusModel.active
-                  ? "success"
-                  : "destructive"
-              }
-            >
-              {tVehicleModels("table.status.cell", {
-                status: status,
-              })}
-            </Badge>
-          );
+          return <Status status={status} />;
         },
       },
       {
         header: () => (
-          <h2 className="text-lg">
-            {tVehicleModels("table.updated-at.header")}
-          </h2>
+          <Heading title={tVehicleModels("table.updated-at.header")} />
         ),
         accessorKey: "updatedAt",
-        cell: (info) =>
-          dateFormatter.format(
-            new Date(info.getValue<tVehicleModelModel["updatedAt"]>()),
-          ),
+        cell: (info) => (
+          <Time
+            date={new Date(info.getValue<tVehicleModelModel["updatedAt"]>())}
+          />
+        ),
       },
       {
         header: () => (
-          <h2 className="text-lg">
-            {tVehicleModels("table.created-at.header")}
-          </h2>
+          <Heading title={tVehicleModels("table.created-at.header")} />
         ),
         accessorKey: "createdAt",
-        cell: (info) =>
-          dateFormatter.format(
-            new Date(info.getValue<tVehicleModelModel["createdAt"]>()),
-          ),
+        cell: (info) => (
+          <Time
+            date={new Date(info.getValue<tVehicleModelModel["createdAt"]>())}
+          />
+        ),
+      },
+      {
+        id: "action",
+        header: () => <Heading title={tVehicleModels("table.action.header")} />,
+        cell: (info) => <Action vehicleModel={info.row.original} />,
       },
     ];
   }, []);
@@ -1120,7 +1061,12 @@ export default function VehicleModels() {
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell
+                  key={cell.id}
+                  className={cn({
+                    "max-w-86": cell.column.id === "vehicle-model",
+                  })}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
@@ -1130,5 +1076,250 @@ export default function VehicleModels() {
         <TableFooter></TableFooter>
       </Table>
     </TabsContent>
+  );
+}
+
+type tHeadingProps = {
+  title: string;
+};
+function Heading({ title }: tHeadingProps) {
+  return <h2 className="text-lg">{title}</h2>;
+}
+
+type tUuidProps = {
+  uuid: tVehicleModelModel["uuid"];
+};
+function Uuid({ uuid }: tUuidProps) {
+  return <Badge variant="muted">{uuid.slice(0, 8)}</Badge>;
+}
+
+type tVehicleModelProps = {
+  title: tVehicleModelModel["name"];
+  description: tVehicleModelModel["description"];
+  modelYear: tVehicleModelModel["modelYear"];
+  manufacturer: tVehicleModelModel["manufacturer"];
+};
+function VehicleModel({
+  title,
+  description,
+  modelYear,
+  manufacturer,
+}: tVehicleModelProps) {
+  return (
+    <div>
+      <span className="flex items-center gap-3">
+        <ShadcnBadge variant="outline">{manufacturer}</ShadcnBadge>
+        <h3 className="text-base">
+          {title} {modelYear}
+        </h3>
+      </span>
+      <p className="text-muted-foreground truncate">
+        {description}
+        {description}
+      </p>
+    </div>
+  );
+}
+
+type tSpecsProps = {
+  capacity: tVehicleModelModel["capacity"];
+  transmission: tVehicleModelModel["transmission"];
+  fuel: tVehicleModelModel["fuel"];
+};
+function Specs({ capacity, transmission, fuel }: tSpecsProps) {
+  const tSpecs = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.specs.cell",
+  );
+
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <LuUsers size={16} />
+          {tSpecs("capacity", {
+            capacity: capacity,
+          })}
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>
+          <LuDot size={16} />
+        </BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <LuActivity size={16} />
+          {tSpecs("transmission", {
+            transmission: transmission,
+          })}
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>
+          <LuDot size={16} />
+        </BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <LuFuel size={16} />
+          {tSpecs("fuel", {
+            fuel: fuel,
+          })}
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
+type tColorsProps = {
+  colors: tVehicleModelModel["colors"];
+};
+function Colors({ colors }: tColorsProps) {
+  return (
+    <ul className="flex gap-1.5">
+      {colors.map((color) => (
+        <li
+          key={color.uuid}
+          style={{
+            background: `color-mix(in oklab, ${color.hexCode} 20%, transparent)`,
+            color: color.hexCode,
+          }}
+          className="flex items-center justify-center rounded p-1 text-xs font-medium"
+        >
+          {color.name.split(" ").map((chunk) => chunk.at(0))}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+type tPriceProps = {
+  price: tVehicleModelModel["price"];
+  discount: tVehicleModelModel["discount"];
+};
+function Price({ price, discount }: tPriceProps) {
+  const tPrice = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.price",
+  );
+  const locale = useLocale() as eLocale;
+  const monyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
+
+  return discount === 0 ? (
+    <span>
+      {tPrice.rich("cell", {
+        price: monyFormatter.format(price - discount),
+        span: (chunk) => (
+          <span className="text-muted-foreground text-xs">{chunk}</span>
+        ),
+      })}
+    </span>
+  ) : (
+    <span className="flex flex-col">
+      <del className="text-muted-foreground">{monyFormatter.format(price)}</del>
+      <ins className="no-underline">
+        {tPrice.rich("cell", {
+          price: monyFormatter.format(price - discount),
+          span: (chunk) => (
+            <span className="text-muted-foreground text-xs">{chunk}</span>
+          ),
+        })}
+      </ins>
+    </span>
+  );
+}
+
+type tDiscountProps = {
+  discount: tVehicleModelModel["discount"];
+};
+function Discount({ discount }: tDiscountProps) {
+  const locale = useLocale() as eLocale;
+  const monyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
+
+  return (
+    <span
+      className={cn("inline-flex w-full items-center gap-1", {
+        "text-blue-500": discount === 0,
+        "text-emerald-500": discount !== 0,
+      })}
+    >
+      {monyFormatter.format(discount)}
+      <MdOutlineDiscount size={16} />
+    </span>
+  );
+}
+
+type tStatusProps = {
+  status: tVehicleModelModel["status"];
+};
+function Status({ status }: tStatusProps) {
+  const tStatus = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.status",
+  );
+
+  return (
+    <Badge
+      variant={status === eVehicleModelStatusModel.active ? "success" : "muted"}
+      className="flex items-center gap-1"
+    >
+      {status === eVehicleModelStatusModel.active ? (
+        <LuCircleCheck />
+      ) : (
+        <LuCircleX />
+      )}
+      {tStatus("cell", {
+        status: status,
+      })}
+    </Badge>
+  );
+}
+
+type tTimeProps = {
+  date: Date;
+};
+function Time({ date }: tTimeProps) {
+  const locale = useLocale() as eLocale;
+  const dateFormatter = new ClsDateFormatter(locale);
+
+  const formattedDate = dateFormatter.format(date);
+
+  return <time dateTime={formattedDate}>{formattedDate}</time>;
+}
+
+type tActionProps = {
+  vehicleModel: tVehicleModelModel;
+};
+function Action({ vehicleModel }: tActionProps) {
+  const tAction = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.action.cell",
+  );
+
+  return (
+    <DropdownMenu>
+      <div className="flex w-full">
+        <DropdownMenuTrigger asChild>
+          <Button
+            aria-label="View, edit and delete"
+            variant="ghost"
+            size="icon"
+            className="ms-auto"
+          >
+            <LuEllipsisVertical size={16} />
+          </Button>
+        </DropdownMenuTrigger>
+      </div>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <button className="size-full">
+            <LuBookOpenText />
+            {tAction("view.label")}
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <button className="size-full text-blue-500! hover:bg-blue-500/10!">
+            <LuPenLine className="text-blue-500" />
+            {tAction("edit.label")}
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem variant="destructive" asChild>
+          <button className="size-full">
+            <LuTrash2 />
+            {tAction("delete.label")}
+          </button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

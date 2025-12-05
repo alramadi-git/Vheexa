@@ -1,25 +1,23 @@
 import z from "zod/v4";
 
-enum eLimit {
-  _5 = 5,
-  _10 = 10,
-  _25 = 25,
-  _50 = 50,
-  _75 = 75,
-  _100 = 100,
+enum ePageSize {
+  five = 5,
+  ten = 10,
+  twentyFive = 25,
+  fifty = 50,
+  seventyFive = 75,
+  hundred = 100,
 }
 
-
 const zPagination = z
-.object({
-  page: z.number().min(1),
-  limit: z.enum(eLimit),
-})
-.strict();
+  .object({
+    page: z.number().min(1),
+    pageSize: z.enum(ePageSize),
+  })
+  .strict();
 type tPagination = z.infer<typeof zPagination>;
 
-export { eLimit };
+export { ePageSize };
 
 export type { tPagination };
 export { zPagination };
-

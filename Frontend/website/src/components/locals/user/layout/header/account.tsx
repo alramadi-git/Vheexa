@@ -15,7 +15,7 @@ import {
 
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/link";
+import { Link } from "@/components/locals/blocks/links";
 
 import BlockAccount from "../../../blocks/account";
 

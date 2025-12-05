@@ -1,10 +1,14 @@
+import { tUuid } from "@/validations/uuid";
 import { tMemberModel } from "@/models/partner/member";
 
-import { tSuccessOneModel } from "@/models/general/success";
+import { tSuccessManyModel, tSuccessOneModel } from "@/models/general/success";
 import { tFailedModel } from "@/models/general/failed";
+
 import {
   tSuccessOneService,
+  tSuccessManyService,
   tResponseOneService,
+  tResponseManyService,
   ClsErrorService,
   ClsAbstractService,
 } from "@/services/service";
@@ -14,8 +18,10 @@ class ClsVehicleModelService extends ClsAbstractService {
     super("/partner/vehicle-models");
   }
 
-  private async _getManyAsync(): Promise<tSuccessOneService<tMemberModel>> {
-    const response = await fetch(`${this._url}?`, {
+  private async _getOneAsync(
+    uuid: tUuid,
+  ): Promise<tSuccessOneService<tMemberModel>> {
+    const response = await fetch(`${this._url}/${uuid}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -40,9 +46,43 @@ class ClsVehicleModelService extends ClsAbstractService {
       data: responseBody.data,
     };
   }
-
-  public async login(): Promise<tResponseOneService<tMemberModel>> {
+  public async getOneAsync(
+    uuid: tUuid,
+  ): Promise<tResponseOneService<tMemberModel>> {
     return this.catcher<tSuccessOneService<tMemberModel>>(
+      async () => await this._getOneAsync(uuid),
+    );
+  }
+
+  private async _getManyAsync(): Promise<tSuccessManyService<tMemberModel>> {
+    const response = await fetch(`${this._url}?`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok === false) {
+      const responseBody: tFailedModel = await response.json();
+      throw new ClsErrorService(
+        response.status,
+        response.statusText,
+        responseBody.message,
+        responseBody.issues,
+      );
+    }
+
+    const responseBody: tSuccessManyModel<tMemberModel> = await response.json();
+    return {
+      isSuccess: true,
+      statusCode: response.status,
+      statusText: response.statusText,
+      data: responseBody.data,
+      pagination: responseBody.pagination,
+    };
+  }
+  public async getManyAsync(): Promise<tResponseManyService<tMemberModel>> {
+    return this.catcher<tSuccessManyService<tMemberModel>>(
       async () => await this._getManyAsync(),
     );
   }

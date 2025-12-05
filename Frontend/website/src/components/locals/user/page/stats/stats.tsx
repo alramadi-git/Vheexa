@@ -7,7 +7,7 @@ import {
   Title,
   Description,
 } from "@/components/locals/blocks/typography";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 import { Blockquote } from "@/components/locals/blocks/typography";
 import { AnimatedNumber } from "@/components/motion-primitives/animated-number";
 import { Separator } from "@/components/shadcn/separator";

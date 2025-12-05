@@ -35,8 +35,8 @@ import { Fragment } from "react";
 import { Section, Container } from "@/components/locals/blocks/typography";
 import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/link";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { Link } from "@/components/locals/blocks/links";
+import { FullHDImage } from "@/components/locals/blocks/images";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { Separator } from "@/components/shadcn/separator";
 

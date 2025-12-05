@@ -9,8 +9,8 @@ import {
   Description,
 } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/link";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { Link } from "@/components/locals/blocks/links";
+import { FullHDImage } from "@/components/locals/blocks/images";
 import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
 

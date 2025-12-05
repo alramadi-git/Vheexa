@@ -15,7 +15,7 @@ import {
   Description,
 } from "@/components/locals/blocks/typography";
 
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 
 type tStep = {
   label: string;

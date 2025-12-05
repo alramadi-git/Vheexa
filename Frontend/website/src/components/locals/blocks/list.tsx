@@ -4,7 +4,7 @@ import { tCallback } from "@/types/array";
 import { ComponentProps, JSX } from "react";
 
 import { useTranslations } from "next-intl";
-import { FullHDImage } from "./image";
+import { FullHDImage } from "./images";
 
 function Empty() {
   const tEmpty = useTranslations("components.list.empty");

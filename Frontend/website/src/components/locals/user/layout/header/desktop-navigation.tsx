@@ -8,7 +8,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/shadcn/navigation-menu";
-import { Link } from "@/components/locals/blocks/link";
+import { Link } from "@/components/locals/blocks/links";
 import { eEnvironment } from "@/enums/environment";
 
 type tSubNavigationMenuItem = {

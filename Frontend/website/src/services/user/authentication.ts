@@ -1,7 +1,7 @@
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/authentication";
+} from "@/validations/password";
 
 import { tUserModel } from "@/models/user/user";
 

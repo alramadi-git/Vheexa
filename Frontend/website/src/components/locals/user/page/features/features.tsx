@@ -10,7 +10,7 @@ import {
   Section,
   Title,
 } from "@/components/locals/blocks/typography";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { FullHDImage } from "@/components/locals/blocks/images";
 
 async function Illustration() {
   const t = await getTranslations("app.user.page.features.illustration");

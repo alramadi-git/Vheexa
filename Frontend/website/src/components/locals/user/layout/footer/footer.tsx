@@ -8,8 +8,8 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
-import { Link } from "@/components/locals/blocks/link";
-import { FullHDImage } from "@/components/locals/blocks/image";
+import { Link } from "@/components/locals/blocks/links";
+import { FullHDImage } from "@/components/locals/blocks/images";
 import {
   sectionClassName,
   Container,

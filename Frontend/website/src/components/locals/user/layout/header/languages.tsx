@@ -20,7 +20,7 @@ import {
   CommandList,
 } from "@/components/shadcn/command";
 import { Button } from "@/components/shadcn/button";
-import { LinkLocale } from "@/components/locals/blocks/link";
+import { LinkLocale } from "@/components/locals/blocks/links";
 
 type tContinent = {
   label: string;

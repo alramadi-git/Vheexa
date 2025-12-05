@@ -7,8 +7,8 @@ import DesktopNavigation from "@/components/locals/user/header/desktop-navigatio
 import MobileNavigation from "@/components/locals/user/header/mobile-navigation";
 
 import { Container } from "@/components/locals/blocks/typography";
-import { FullHDImage } from "@/components/locals/blocks/image";
-import { Link } from "@/components/locals/blocks/link";
+import { FullHDImage } from "@/components/locals/blocks/images";
+import { Link } from "@/components/locals/blocks/links";
 
 export default async function Header() {
   const tHeader = await getTranslations("app.user.layout.header");

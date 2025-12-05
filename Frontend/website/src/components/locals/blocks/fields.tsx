@@ -1,6 +1,8 @@
 "use client";
 
-import { tEmail, tPassword } from "@/validations/authentication";
+import { tEmail } from "@/validations/email";
+import { tPassword } from "@/validations/password";
+
 import { ComponentProps, useState } from "react";
 
 import { cn } from "@/utilities/cn";
@@ -27,7 +29,12 @@ export type tControllerRenderProps<
 };
 
 export type tFieldPassword = {
-  controllerRenderProps: tControllerRenderProps<tPassword, "password">;
+  controllerRenderProps: tControllerRenderProps<
+    {
+      password: tPassword;
+    },
+    "password"
+  >;
   inputProps?: Omit<
     tInputProps,
     "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
@@ -78,7 +85,12 @@ export function FieldPassword({
 }
 
 export type tFieldEmail = {
-  controllerRenderProps: tControllerRenderProps<tEmail, "email">;
+  controllerRenderProps: tControllerRenderProps<
+    {
+      email: tEmail;
+    },
+    "email"
+  >;
   inputProps?: Omit<
     tInputProps,
     "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"

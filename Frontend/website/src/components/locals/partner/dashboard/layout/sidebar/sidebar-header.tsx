@@ -29,7 +29,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@/components/shadcn/dropdown-menu";
-import { Link } from "@/components/locals/blocks/link";
+import { Link } from "@/components/locals/blocks/links";
 import { Skeleton } from "@/components/shadcn/skeleton";
 
 type tLink = {
