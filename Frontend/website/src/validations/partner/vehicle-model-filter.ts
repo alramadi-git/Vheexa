@@ -8,51 +8,88 @@ import {
 
 const zVehicleModelFilter = z
   .object({
-    search: z.string(), // name, manufacturer, tags
-    modelYear: z
-      .number()
-      .min(1980, "model year cannot be older than 1980.")
-      .refine(
-        (value) => value <= new Date().getFullYear(),
-        "model year cannot be in the future.",
-      ),
-    price: z
+    search: z.optional(z.string().trim()), // name, manufacturer, tags
+    modelYears: z.array(
+      z
+        .number()
+        .min(1980, "model year cannot be older than 1980.")
+        .refine((value) => value <= new Date().getFullYear(), {
+          path: ["modelYears"],
+          error: "model year cannot be in the future.",
+        }),
+    ),
+    capacity: z
       .object({
-        min: z.number().min(0, "price cannot be negative."),
-        max: z.number().min(0, "price cannot be negative."),
+        min: z.optional(z.number().min(0, "capacity cannot be negative.")),
+        max: z.optional(z.number().min(0, "capacity cannot be negative.")),
       })
       .refine(
-        (value) => value.min <= value.max,
-        "min price should be less than, equal to max price or leave it blank.",
+        (value) => {
+          if (value.min !== undefined && value.max !== undefined)
+            return value.min <= value.max;
+          return true;
+        },
+        {
+          path: ["capacity"],
+          error:
+            "min capacity should be less than, equal to max capacity or leave it blank.",
+        },
+      ),
+    transmissions: z.array(z.enum(eVehicleModelTransmissionModel)),
+    fuels: z.array(z.enum(eVehicleModelFuelModel)),
+    colors: z.array(z.string().nonempty()),
+    price: z
+      .object({
+        min: z.optional(z.number().min(0, "price cannot be negative.")),
+        max: z.optional(z.number().min(0, "price cannot be negative.")),
+      })
+      .refine(
+        (value) => {
+          if (value.min !== undefined && value.max !== undefined)
+            return value.min <= value.max;
+          return true;
+        },
+        {
+          path: ["price"],
+          error:
+            "min price should be less than, equal to max price or leave it blank.",
+        },
       ),
     discount: z
       .object({
-        min: z.number().min(0, "discount cannot be negative."),
-        max: z.number().min(0, "discount cannot be negative."),
+        min: z.optional(z.number().min(0, "discount cannot be negative.")),
+        max: z.optional(z.number().min(0, "discount cannot be negative.")),
       })
       .refine(
-        (value) => value.min <= value.max,
-        "min discount should be less than, equal to max discount or leave it blank.",
+        (value) => {
+          if (value.min !== undefined && value.max !== undefined)
+            return value.min <= value.max;
+          return true;
+        },
+        {
+          path: ["discount"],
+          error:
+            "min discount should be less than, equal to max discount or leave it blank.",
+        },
       ),
-    capacity: z
-      .object({
-        min: z.number().min(0, "capacity cannot be negative."),
-        max: z.number().min(0, "capacity cannot be negative."),
-      })
-      .refine(
-        (value) => value.min <= value.max,
-        "min capacity should be less than, equal to max capacity or leave it blank.",
-      ),
-    colors: z.array(z.string()),
-    transmissions: z.array(z.enum(eVehicleModelTransmissionModel)),
-    fuels: z.array(z.enum(eVehicleModelFuelModel)),
     statuses: z.array(z.enum(eVehicleModelStatusModel)),
   })
-  .strict()
-  .refine((value) => {
-  value.
-    return true;
-  });
+  .refine(
+    (value) => {
+      const maxDiscount = value.discount.max ?? value.discount.min;
+      if (maxDiscount === undefined) return true;
+
+      const minPrice = value.price.min ?? value.price.max;
+      if (minPrice === undefined) return true;
+
+      return minPrice > maxDiscount;
+    },
+    {
+      path: ["discount"],
+      error: "price should be greater than the discount.",
+    },
+  )
+  .strict();
 type tVehicleModelFilter = z.infer<typeof zVehicleModelFilter>;
 
 export type { tVehicleModelFilter };

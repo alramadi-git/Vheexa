@@ -7,6 +7,7 @@ public class VehicleColorEntity
     public VehicleModelEntity VehicleModel { get; set; }
     public string Name { get; set; }
     public string HexCode { get; set; }
+    public string[] Tags { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 }

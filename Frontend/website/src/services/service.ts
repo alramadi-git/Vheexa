@@ -75,7 +75,9 @@ abstract class ClsAbstractService {
           statusText: "Bad Request",
           message: error.message,
           issues: error.issues.map((issue) => ({
-            field: issue.path[0].toString(),
+            field: issue.path
+              .map((p) => (typeof p === "number" ? `[${p}]` : p))
+              .join("."),
             message: issue.message,
           })),
         } satisfies tFailedService;

@@ -32,7 +32,6 @@ type tVehicleModelModel = {
   uuid: string;
   thumbnail: tImageModel;
   images: tVehicleImageModel[];
-  colors: tVehicleColorModel[];
   name: string;
   description: string;
   manufacturer: string;
@@ -40,11 +39,11 @@ type tVehicleModelModel = {
   transmission: eVehicleModelTransmissionModel;
   capacity: number;
   fuel: eVehicleModelFuelModel;
+  colors: tVehicleColorModel[];
   price: number;
   discount: number;
   tags: string[];
   status: eVehicleModelStatusModel;
-  
   updatedAt: string;
   createdAt: string;
 };

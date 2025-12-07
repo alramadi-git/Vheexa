@@ -11,8 +11,8 @@ enum ePageSize {
 
 const zPagination = z
   .object({
-    page: z.number().min(1),
-    pageSize: z.enum(ePageSize),
+    page: z.optional(z.number().min(1)),
+    pageSize: z.optional(z.enum(ePageSize)),
   })
   .strict();
 type tPagination = z.infer<typeof zPagination>;
