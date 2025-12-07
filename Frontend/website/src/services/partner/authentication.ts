@@ -1,7 +1,11 @@
 import {
+  tRegisterCredentials,
+  zRegisterCredentials,
+} from "@/validations/partner/register-credentials";
+import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/login-credentials.";
+} from "@/validations/login-credentials";
 
 import { tMemberModel } from "@/models/partner/member";
 
@@ -11,8 +15,8 @@ import { tFailedModel } from "@/models/failed";
 import {
   tSuccessOneService,
   tResponseOneService,
-  ClsErrorService,
   ClsAbstractService,
+  ClsErrorService,
 } from "@/services/service";
 
 class ClsAuthenticationService extends ClsAbstractService {
@@ -20,72 +24,76 @@ class ClsAuthenticationService extends ClsAbstractService {
     super("/partner/authentication");
   }
 
-  private async _register(
-    credentials: tLoginCredentials,
+  private async _registerAsync(
+    credentials: tRegisterCredentials,
   ): Promise<tSuccessOneService<tMemberModel>> {
-    const credentialsResult = zLoginCredentials.parse(credentials);
-    const response = await fetch(`${this._url}/register`, {
+    const parsedCredentials = zRegisterCredentials.parse(credentials);
+
+    const data = await fetch(`${this._url}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
-      body: JSON.stringify(credentialsResult),
+      body: JSON.stringify(parsedCredentials),
     });
 
-    if (response.ok === false) {
-      const responseBody: tFailedModel = await response.json();
+    if (!data.ok) {
+      const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
-        response.status,
-        response.statusText,
-        responseBody.message,
-        responseBody.issues,
+        data.status,
+        data.statusText,
+        dataBody.message,
+        dataBody.issues,
       );
     }
 
-    const responseBody: tSuccessOneModel<tMemberModel> = await response.json();
+    const dataBody: tSuccessOneModel<tMemberModel> = await data.json();
     return {
       isSuccess: true,
-      statusCode: response.status,
-      statusText: response.statusText,
-      data: responseBody.data,
+      statusCode: data.status,
+      statusText: data.statusText,
+      data: dataBody.data,
     };
   }
-  public async register(
-    credentials: tLoginCredentials,
+  public async registerAsync(
+    credentials: tRegisterCredentials,
   ): Promise<tResponseOneService<tMemberModel>> {
     return this.catcher<tSuccessOneService<tMemberModel>>(
-      async () => await this._register(credentials),
+      async () => await this._registerAsync(credentials),
     );
   }
 
   private async _loginAsync(
     credentials: tLoginCredentials,
   ): Promise<tSuccessOneService<tMemberModel>> {
-    const credentialsResult = zLoginCredentials.parse(credentials);
-    const response = await fetch(`${this._url}/login`, {
+    const parsedCredentials = zLoginCredentials.parse(credentials);
+
+    const date = await fetch(`${this._url}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
-      body: JSON.stringify(credentialsResult),
+      body: JSON.stringify(parsedCredentials),
     });
 
-    if (response.ok === false) {
-      const responseBody: tFailedModel = await response.json();
+    if (!date.ok) {
+      const dataBody: tFailedModel = await date.json();
       throw new ClsErrorService(
-        response.status,
-        response.statusText,
-        responseBody.message,
-        responseBody.issues,
+        date.status,
+        date.statusText,
+        dataBody.message,
+        dataBody.issues,
       );
     }
 
-    const responseBody: tSuccessOneModel<tMemberModel> = await response.json();
+    const dataBody: tSuccessOneModel<tMemberModel> = await date.json();
     return {
       isSuccess: true,
-      statusCode: response.status,
-      statusText: response.statusText,
-      data: responseBody.data,
+      statusCode: date.status,
+      statusText: date.statusText,
+      data: dataBody.data,
     };
   }
   public async loginAsync(

@@ -8,7 +8,7 @@ const zMemberRole = z
   .object({
     status: z.enum(eMemberRoleStatusModel),
   })
-  .extend(zRole)
+  .extend(zRole.shape)
   .strict();
 type tMemberRole = z.infer<typeof zMemberRole>;
 

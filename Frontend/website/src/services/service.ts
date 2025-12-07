@@ -1,6 +1,7 @@
-import { tPaginationModel, tIssueModel } from "@/models/response";
+import { tPaginationModel } from "@/models/pagination";
+import { tIssueModel } from "@/models/failed";
 
-import { ZodError } from "zod/v4";
+import { ZodError } from "zod";
 
 type tSuccessOneService<tData> = {
   isSuccess: true;

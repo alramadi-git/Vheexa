@@ -1,10 +1,10 @@
-import { ClsVehicleService } from "@/services/user/vehicle";
+import { ClsVehicleModelService } from "@/services/user/vehicle-model";
 
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "@/hooks/use-search-params";
 
 export function useVehiclesQuery() {
-  const vehicleService = new ClsVehicleService();
+  const vehicleService = new ClsVehicleModelService();
 
   const searchParams = useSearchParams();
 

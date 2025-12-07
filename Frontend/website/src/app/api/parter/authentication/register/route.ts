@@ -2,20 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { tMemberAccountModel } from "@/models/partner/account";
 
-import { zLoginCredentials } from "@/validations/login-credentials";
-
 import { tSuccessOneModel } from "@/models/success";
 import { tFailedModel, ClsErrorModel } from "@/models/failed";
+
+import { zRegisterCredentials } from "@/validations/partner/register-credentials";
 
 import { apiCatcher } from "@/utilities/api/api-helper";
 
 export async function POST(request: NextRequest) {
   return apiCatcher(async () => {
-    const loginCredentials = await request.json();
-    const parsedLoginCredentials = zLoginCredentials.parse(loginCredentials);
+    const registerCredentials = await request.json();
+    const parsedRegisterCredentials =
+      zRegisterCredentials.parse(registerCredentials);
 
     const data = await fetch(
-      `${process.env.API_URL}/partner/authentication/login`,
+      `${process.env.API_URL}/partner/authentication/register`,
       {
         method: "POST",
         headers: {
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(parsedLoginCredentials),
+        body: JSON.stringify(parsedRegisterCredentials),
       },
     );
 
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
       priority: "high",
       sameSite: "strict",
       path: "/partner/dashboard",
-      maxAge: parsedLoginCredentials.rememberMe ? eTime.month : undefined,
+      maxAge: parsedRegisterCredentials.rememberMe ? eTime.month : undefined,
     });
 
     return response;

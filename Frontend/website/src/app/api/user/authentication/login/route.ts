@@ -1,113 +1,69 @@
 import { NextResponse } from "next/server";
 
-import { ZodError } from "zod/v4";
-import { zLoginCredentials } from "@/validations/password";
-
-import {
-  ClsErrorModel,
-  tFailedModel,
-  tResponseOneModel,
-  tSuccessOneModel,
-} from "@/models/response";
-
 import { tAccountModel } from "@/models/account";
 import { tUserModel } from "@/models/user/user";
+
+import {
+  tLoginCredentials,
+  zLoginCredentials,
+} from "@/validations/login-credentials";
+
+import { tSuccessOneModel } from "@/models/success";
+import { tFailedModel, ClsErrorModel } from "@/models/failed";
+
+import { tResponseOneModel } from "@/models/response";
+
+import { apiCatcher } from "@/utilities/api/api-helper";
 
 export async function POST(
   request: Request,
 ): Promise<NextResponse<tResponseOneModel<tUserModel>>> {
-  try {
-    const loginCredentialsBody = await request.json();
-    const loginCredentials = zLoginCredentials.parse(loginCredentialsBody);
+  return apiCatcher(async () => {
+    const loginCredentials: tLoginCredentials = await request.json();
+    const parsedLoginCredentials: tLoginCredentials =
+      zLoginCredentials.parse(loginCredentials);
 
-    const apiResponse = await fetch(
+    const data = await fetch(
       `${process.env.API_URL}/user/authentication/login`,
       {
         method: "POST",
         headers: {
           "X-Api-Key": `${process.env.API_KEY}`,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify(loginCredentials),
+        body: JSON.stringify(parsedLoginCredentials),
       },
     );
 
-    if (apiResponse.ok === false) {
-      const apiResponseBody: tFailedModel = await apiResponse.json();
+    if (!data.ok) {
+      const dataBody: tFailedModel = await data.json();
 
       throw new ClsErrorModel(
-        apiResponseBody.statusCode,
-        apiResponseBody.message,
-        apiResponseBody.issues,
+        dataBody.statusCode,
+        dataBody.message,
+        dataBody.issues,
       );
     }
 
-    const apiResponseBody: tSuccessOneModel<tAccountModel<tUserModel>> =
-      await apiResponse.json();
-
-    const account = apiResponseBody.data.account;
-    const token = apiResponseBody.data.token;
+    const {
+      data: { account, token },
+    }: tSuccessOneModel<tAccountModel<tUserModel>> = await data.json();
 
     const response = new NextResponse<tSuccessOneModel<tUserModel>>(
       JSON.stringify({ data: account }),
-      { status: apiResponse.status },
+      { status: data.status },
     );
 
-    response.cookies.set("user-account", JSON.stringify(account), {
-      httpOnly: false,
-      secure: true,
-      path: "/",
-      sameSite: "strict",
-    });
     response.cookies.set("user-token", token, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
-      path: "/",
+      priority: "high",
       sameSite: "strict",
+      path: "/partner/dashboard",
+      maxAge: parsedLoginCredentials.rememberMe ? eTime.month : undefined,
     });
 
     return response;
-  } catch (error: unknown) {
-    if (error instanceof ZodError)
-      return NextResponse.json(
-        {
-          statusCode: 400,
-          message: error.message,
-          issues: error.issues.map((issue) => ({
-            field: issue.path[0].toString(),
-            message: issue.message,
-          })),
-        },
-        { status: 400 },
-      );
-
-    if (error instanceof ClsErrorModel)
-      return NextResponse.json(
-        {
-          statusCode: error.statusCode,
-          message: error.message,
-          issues: error.issues,
-        },
-        { status: error.statusCode },
-      );
-
-    if (error instanceof Error)
-      return NextResponse.json(
-        {
-          statusCode: 500,
-          message: error.message,
-          issues: [],
-        },
-        { status: 500 },
-      );
-
-    return NextResponse.json(
-      {
-        statusCode: 500,
-        message: "Unknown error",
-        issues: [],
-      },
-      { status: 500 },
-    );
-  }
+  });
 }

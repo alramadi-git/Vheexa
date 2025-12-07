@@ -7,7 +7,7 @@ const zBranch = z
   .object({
     status: z.enum(eBranchStatusModel),
   })
-  .extend(zLocation);
+  .extend(zLocation.shape);
 type tBranch = z.infer<typeof zBranch>;
 
 export type { tBranch };

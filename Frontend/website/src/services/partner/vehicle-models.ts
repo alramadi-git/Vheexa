@@ -1,5 +1,4 @@
-import { tUuid } from "@/validations/uuid";
-import { tMemberModel } from "@/models/partner/member";
+import { tUuid, zUuid } from "@/validations/uuid";
 
 import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
 import { tFailedModel } from "@/models/failed";
@@ -12,6 +11,7 @@ import {
   ClsErrorService,
   ClsAbstractService,
 } from "@/services/service";
+import { tVehicleModelModel } from "@/models/partner/vehicle-model";
 
 class ClsVehicleModelService extends ClsAbstractService {
   public constructor() {
@@ -20,69 +20,77 @@ class ClsVehicleModelService extends ClsAbstractService {
 
   private async _getOneAsync(
     uuid: tUuid,
-  ): Promise<tSuccessOneService<tMemberModel>> {
-    const response = await fetch(`${this._url}/${uuid}`, {
+  ): Promise<tSuccessOneService<tVehicleModelModel>> {
+    const parsedUuid = zUuid.parse(uuid);
+
+    const data = await fetch(`${this._url}/${parsedUuid}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
     });
 
-    if (response.ok === false) {
-      const responseBody: tFailedModel = await response.json();
+    if (!data.ok) {
+      const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
-        response.status,
-        response.statusText,
-        responseBody.message,
-        responseBody.issues,
+        data.status,
+        data.statusText,
+        dataBody.message,
+        dataBody.issues,
       );
     }
 
-    const responseBody: tSuccessOneModel<tMemberModel> = await response.json();
+    const dataBody: tSuccessOneModel<tVehicleModelModel> = await data.json();
     return {
       isSuccess: true,
-      statusCode: response.status,
-      statusText: response.statusText,
-      data: responseBody.data,
+      statusCode: data.status,
+      statusText: data.statusText,
+      data: dataBody.data,
     };
   }
   public async getOneAsync(
     uuid: tUuid,
-  ): Promise<tResponseOneService<tMemberModel>> {
-    return this.catcher<tSuccessOneService<tMemberModel>>(
+  ): Promise<tResponseOneService<tVehicleModelModel>> {
+    return this.catcher<tSuccessOneService<tVehicleModelModel>>(
       async () => await this._getOneAsync(uuid),
     );
   }
 
-  private async _getManyAsync(): Promise<tSuccessManyService<tMemberModel>> {
-    const response = await fetch(`${this._url}?`, {
+  private async _getManyAsync(): Promise<
+    tSuccessManyService<tVehicleModelModel>
+  > {
+    const data = await fetch(`${this._url}?`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
     });
 
-    if (response.ok === false) {
-      const responseBody: tFailedModel = await response.json();
+    if (!data.ok) {
+      const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
-        response.status,
-        response.statusText,
-        responseBody.message,
-        responseBody.issues,
+        data.status,
+        data.statusText,
+        dataBody.message,
+        dataBody.issues,
       );
     }
 
-    const responseBody: tSuccessManyModel<tMemberModel> = await response.json();
+    const dataBody: tSuccessManyModel<tVehicleModelModel> = await data.json();
     return {
       isSuccess: true,
-      statusCode: response.status,
-      statusText: response.statusText,
-      data: responseBody.data,
-      pagination: responseBody.pagination,
+      statusCode: data.status,
+      statusText: data.statusText,
+      data: dataBody.data,
+      pagination: dataBody.pagination,
     };
   }
-  public async getManyAsync(): Promise<tResponseManyService<tMemberModel>> {
-    return this.catcher<tSuccessManyService<tMemberModel>>(
+  public async getManyAsync(): Promise<
+    tResponseManyService<tVehicleModelModel>
+  > {
+    return this.catcher<tSuccessManyService<tVehicleModelModel>>(
       async () => await this._getManyAsync(),
     );
   }

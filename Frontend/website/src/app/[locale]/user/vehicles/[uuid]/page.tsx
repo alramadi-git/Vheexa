@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ClsVehicleService } from "@/services/user/vehicle";
+import { ClsVehicleModelService } from "@/services/user/vehicle-model";
 
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -26,7 +26,7 @@ export const revalidate = 3600;
 export async function generateMetadata(
   props: PageProps<"/[locale]/user/vehicles/[uuid]">,
 ): Promise<Metadata> {
-  const vehicleService = new ClsVehicleService();
+  const vehicleService = new ClsVehicleModelService();
   const { uuid } = await props.params;
 
   const result = await vehicleService.getOneAsync(uuid);
@@ -42,7 +42,7 @@ export async function generateMetadata(
 export default async function Page(
   props: PageProps<"/[locale]/user/vehicles/[uuid]">,
 ) {
-  const vehicleService = new ClsVehicleService();
+  const vehicleService = new ClsVehicleModelService();
 
   const { locale, uuid } = await props.params;
   setRequestLocale(locale);

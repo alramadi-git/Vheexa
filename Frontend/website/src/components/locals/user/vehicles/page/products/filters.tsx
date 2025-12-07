@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { tVehicleFilters, zVehicleFilters } from "@/services/user/vehicle";
+import { tVehicleFilters, zVehicleFilters } from "@/services/user/vehicle-model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 

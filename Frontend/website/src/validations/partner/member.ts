@@ -13,7 +13,7 @@ const zMember = z
     branch: zBranch,
     status: z.enum(eMemberStatusModel),
   })
-  .extend(zHuman)
+  .extend(zHuman.shape)
   .strict();
 type tMember = z.infer<typeof zMember>;
 
