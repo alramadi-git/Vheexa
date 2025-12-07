@@ -1,4 +1,4 @@
-import { tImageModel } from "../general/image";
+import { tImageModel } from "../image";
 
 type tVehicleImageModel = tImageModel & {
   index: number;

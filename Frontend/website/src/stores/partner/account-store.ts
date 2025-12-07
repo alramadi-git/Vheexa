@@ -67,7 +67,7 @@ const useAccountStore = create<tUseAccountStore>((set, get) => {
           longitude: 39.172778,
         },
         username: "member",
-        dateOfBirth: "2006-09-09",
+        birthday: "2006-09-09",
         phoneNumber: "+966512345678",
         email: "member@vheexa.com",
         createdAt: "2025-01-10T10:00:00.000Z",

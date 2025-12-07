@@ -9,7 +9,7 @@ import {
   tFailedModel,
   ClsErrorModel,
   tResponseManyModel,
-} from "@/models/general/response";
+} from "@/models/response";
 
 import { tVehicleModel } from "@/models/user/vehicle";
 

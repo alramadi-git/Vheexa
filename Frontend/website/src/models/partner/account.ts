@@ -1,4 +1,4 @@
-import { tAccountModel } from "../general/account";
+import { tAccountModel } from "../account";
 
 import { tMemberModel } from "./member";
 import { tPartnerModel } from "./partner";

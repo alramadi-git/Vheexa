@@ -1,6 +1,6 @@
 "use client";
 
-import { tPaginationModel } from "@/models/general/pagination";
+import { tPaginationModel } from "@/models/pagination";
 
 import { useTranslations } from "next-intl";
 

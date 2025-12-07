@@ -5,8 +5,8 @@ import {
 
 import { tMemberModel } from "@/models/partner/member";
 
-import { tSuccessOneModel } from "@/models/general/success";
-import { tFailedModel } from "@/models/general/failed";
+import { tSuccessOneModel } from "@/models/success";
+import { tFailedModel } from "@/models/failed";
 
 import {
   tSuccessOneService,

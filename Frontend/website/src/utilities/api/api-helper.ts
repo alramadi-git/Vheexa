@@ -1,9 +1,9 @@
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/general/success";
-import { tFailedModel, ClsErrorModel } from "@/models/general/failed";
+import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tFailedModel, ClsErrorModel } from "@/models/failed";
 import {
   tResponseOneModel,
   tResponseManyModel,
-} from "@/models/general/response";
+} from "@/models/response";
 
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";

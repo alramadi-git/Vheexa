@@ -1,8 +1,8 @@
 import { tUuid } from "@/validations/uuid";
 import { tMemberModel } from "@/models/partner/member";
 
-import { tSuccessManyModel, tSuccessOneModel } from "@/models/general/success";
-import { tFailedModel } from "@/models/general/failed";
+import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
+import { tFailedModel } from "@/models/failed";
 
 import {
   tSuccessOneService,

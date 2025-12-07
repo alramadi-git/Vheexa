@@ -5,8 +5,8 @@ import {
 
 import { tUserModel } from "@/models/user/user";
 
-import { tSuccessOneModel } from "@/models/general/success";
-import { tFailedModel } from "@/models/general/failed";
+import { tSuccessOneModel } from "@/models/success";
+import { tFailedModel } from "@/models/failed";
 
 import {
   tSuccessOneService,

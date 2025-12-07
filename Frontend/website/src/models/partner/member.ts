@@ -1,4 +1,4 @@
-import { tHumanModel } from "../general/human";
+import { tHumanModel } from "../human";
 
 import { tMemberRoleModel } from "./member-role";
 import { tBranchModel } from "./branch";

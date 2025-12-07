@@ -1,4 +1,4 @@
-import { tImageModel } from "../general/image";
+import { tImageModel } from "../image";
 
 import { tVehicleImageModel } from "./vehicle-image";
 import { tVehicleColorModel } from "./vehicle-color";

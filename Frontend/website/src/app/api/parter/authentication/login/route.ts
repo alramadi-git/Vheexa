@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { apiCatcher } from "@/utilities/api/api-helper";
 import { zLoginCredentials } from "@/validations/password";
-import { ClsErrorModel, tFailedModel } from "@/models/general/failed";
-import { tSuccessOneModel } from "@/models/general/success";
+import { ClsErrorModel, tFailedModel } from "@/models/failed";
+import { tSuccessOneModel } from "@/models/success";
 import { tMemberAccountModel } from "@/models/partner/account";
 
 export async function POST(request: NextRequest) {

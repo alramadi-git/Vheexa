@@ -1,4 +1,4 @@
-import { tLocationModel } from "../general/location";
+import { tLocationModel } from "../location";
 
 type tBranchModel = tLocationModel & {
   updatedAt: string;

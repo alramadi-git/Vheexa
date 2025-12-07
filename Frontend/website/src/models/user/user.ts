@@ -1,7 +1,7 @@
 import { tNullable } from "@/types/nullish";
 
-import { tImageModel } from "../general/image";
-import { tLocationModel } from "../general/location";
+import { tImageModel } from "../image";
+import { tLocationModel } from "../location";
 
 type tUserModel = {
   uuid: string;

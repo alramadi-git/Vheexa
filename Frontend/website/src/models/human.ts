@@ -8,7 +8,7 @@ type tHumanModel = {
   avatar: tNullable<tImageModel>;
   location: tLocationModel;
   username: string;
-  dateOfBirth: string;
+  birthday: string;
   phoneNumber: string;
   email: string;
 };

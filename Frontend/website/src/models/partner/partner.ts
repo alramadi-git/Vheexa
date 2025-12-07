@@ -1,7 +1,7 @@
 import { tNullable } from "@/types/nullish";
 
 import { tPartnerSettings } from "./partner-settings";
-import { tImageModel } from "../general/image";
+import { tImageModel } from "../image";
 
 type tPartnerModel = {
   uuid: string;
