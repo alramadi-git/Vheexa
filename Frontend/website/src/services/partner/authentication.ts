@@ -29,15 +29,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   ): Promise<tSuccessOneService<tMemberModel>> {
     const parsedCredentials = zRegisterCredentials.parse(credentials);
 
-    const data = await fetch(`${this._url}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(parsedCredentials),
-    });
-
+    const data = await this._fetch.post("/register", parsedCredentials);
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
@@ -69,15 +61,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   ): Promise<tSuccessOneService<tMemberModel>> {
     const parsedCredentials = zLoginCredentials.parse(credentials);
 
-    const date = await fetch(`${this._url}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(parsedCredentials),
-    });
-
+    const date = await this._fetch.post("/login", parsedCredentials);
     if (!date.ok) {
       const dataBody: tFailedModel = await date.json();
       throw new ClsErrorService(

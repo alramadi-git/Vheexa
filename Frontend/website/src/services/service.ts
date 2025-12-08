@@ -2,6 +2,7 @@ import { tPaginationModel } from "@/models/pagination";
 import { tIssueModel } from "@/models/failed";
 
 import { ZodError } from "zod";
+import { ClsFetch } from "@/libraries/fetch";
 
 type tSuccessOneService<tData> = {
   isSuccess: true;
@@ -56,10 +57,10 @@ class ClsErrorService extends Error {
 }
 
 abstract class ClsAbstractService {
-  protected _url: string;
+  protected _fetch: ClsFetch;
 
-  protected constructor(path: string) {
-    this._url = `${process.env.NEXT_PUBLIC_API_URL!}${path}`;
+  protected constructor(basePath: string) {
+    this._fetch = new ClsFetch(process.env.NEXT_PUBLIC_API_URL!, basePath);
   }
 
   protected async catcher<tReturn>(

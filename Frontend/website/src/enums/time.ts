@@ -7,3 +7,5 @@ enum eTime {
   month = 2419200,
   year = 31536000,
 }
+
+export { eTime };

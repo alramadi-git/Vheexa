@@ -8,7 +8,7 @@ import { tSuccessOneModel } from "@/models/success";
 import { tFailedModel, ClsErrorModel } from "@/models/failed";
 import { tResponseOneModel } from "@/models/response";
 
-import { apiCatcher } from "@/utilities/api/api-helper";
+import { apiCatcher } from "@/utilities/api";
 
 export async function GET(
   _: NextRequest,

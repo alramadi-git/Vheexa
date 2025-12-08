@@ -2,31 +2,29 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { tMemberAccountModel } from "@/models/partner/account";
 
-import { zLoginCredentials } from "@/validations/login-credentials";
+import { tLoginCredentials, zLoginCredentials } from "@/validations/login-credentials";
+
+import { eTime } from "@/enums/time";
 
 import { tSuccessOneModel } from "@/models/success";
 import { tFailedModel, ClsErrorModel } from "@/models/failed";
 
-import { apiCatcher } from "@/utilities/api/api-helper";
+import { apiCatcher } from "@/utilities/api";
+import { ClsFetch } from "@/libraries/fetch";
 
 export async function POST(request: NextRequest) {
   return apiCatcher(async () => {
     const loginCredentials = await request.json();
-    const parsedLoginCredentials = zLoginCredentials.parse(loginCredentials);
+    const parsedLoginCredentials: tLoginCredentials = zLoginCredentials.parse(loginCredentials);
 
-    const data = await fetch(
-      `${process.env.API_URL}/partner/authentication/login`,
+    const data = await new ClsFetch(
+      process.env.API_URL!,
+      "/partner/authentication",
       {
-        method: "POST",
-        headers: {
-          "X-Api-Key": `${process.env.API_KEY}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(parsedLoginCredentials),
+        "X-Api-Key": `${process.env.API_KEY}`,
       },
-    );
-
+    ).post("/login", parsedLoginCredentials);
+    
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
 

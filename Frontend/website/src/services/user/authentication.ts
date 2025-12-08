@@ -1,7 +1,7 @@
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/password";
+} from "@/validations/login-credentials";
 
 import { tUserModel } from "@/models/user/user";
 
@@ -23,31 +23,25 @@ class ClsAuthenticationService extends ClsAbstractService {
   private async _loginAsync(
     credentials: tLoginCredentials,
   ): Promise<tSuccessOneService<tUserModel>> {
-    const credentialsResult = zLoginCredentials.parse(credentials);
-    const response = await fetch(`${this._url}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentialsResult),
-    });
+    const parsedCredentials = zLoginCredentials.parse(credentials);
 
-    if (response.ok === false) {
-      const responseBody: tFailedModel = await response.json();
+    const data = await this._fetch.post("/login", parsedCredentials);
+    if (data.ok === false) {
+      const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
-        response.status,
-        response.statusText,
-        responseBody.message,
-        responseBody.issues,
+        data.status,
+        data.statusText,
+        dataBody.message,
+        dataBody.issues,
       );
     }
 
-    const responseBody: tSuccessOneModel<tUserModel> = await response.json();
+    const dataBody: tSuccessOneModel<tUserModel> = await data.json();
     return {
       isSuccess: true,
-      statusCode: response.status,
-      statusText: response.statusText,
-      data: responseBody.data,
+      statusCode: data.status,
+      statusText: data.statusText,
+      data: dataBody.data,
     };
   }
   public async loginAsync(

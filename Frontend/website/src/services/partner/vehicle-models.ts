@@ -1,3 +1,5 @@
+import { ClsQuery } from "@/libraries/query";
+
 import { tUuid, zUuid } from "@/validations/uuid";
 
 import {
@@ -30,14 +32,7 @@ class ClsVehicleModelService extends ClsAbstractService {
   ): Promise<tSuccessOneService<tVehicleModelModel>> {
     const parsedUuid = zUuid.parse(uuid);
 
-    const data = await fetch(`${this._url}/${parsedUuid}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-
+    const data = await this._fetch.get(parsedUuid);
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
@@ -71,96 +66,55 @@ class ClsVehicleModelService extends ClsAbstractService {
     const parsedFilter = zVehicleModelFilter.parse(filter);
     const parsedPagination = zPagination.parse(pagination);
 
-    const clsSearchParams = new URLSearchParams();
+    const clsQuery = new ClsQuery();
 
-    if (parsedFilter.search !== undefined) {
-      clsSearchParams.set("vehicle-model.search", parsedFilter.search);
-    }
+    clsQuery.set("vehicle-model.search", parsedFilter.search);
 
-    parsedFilter.modelYears.forEach((modelYear) =>
-      clsSearchParams.append("vehicle-model.model-years", modelYear.toString()),
+    clsQuery.setMany(
+      "vehicle-model.model-years",
+      parsedFilter.modelYears.map((modelYear) => modelYear.toString()),
     );
 
-    if (parsedFilter.capacity.min !== undefined) {
-      clsSearchParams.set(
-        "vehicle-model.capacity.min",
-        parsedFilter.capacity.min.toString(),
-      );
-    }
-    if (parsedFilter.capacity.max !== undefined) {
-      clsSearchParams.set(
-        "vehicle-model.capacity.max",
-        parsedFilter.capacity.max.toString(),
-      );
-    }
-
-    parsedFilter.transmissions.forEach((transmissions) =>
-      clsSearchParams.append(
-        "vehicle-model.transmissions",
-        transmissions.toString(),
-      ),
+    clsQuery.set(
+      "vehicle-model.capacity.min",
+      parsedFilter.capacity.min?.toString(),
+    );
+    clsQuery.set(
+      "vehicle-model.capacity.max",
+      parsedFilter.capacity.max?.toString(),
     );
 
-    parsedFilter.fuels.forEach((fuel) =>
-      clsSearchParams.append("vehicle-model.fuels", fuel.toString()),
+    clsQuery.setMany(
+      "vehicle-model.transmissions",
+      parsedFilter.transmissions.map((transmission) => transmission.toString()),
     );
 
-    parsedFilter.colors.forEach((color) =>
-      clsSearchParams.append("vehicle-model.colors", color),
+    clsQuery.setMany(
+      "vehicle-model.fuels",
+      parsedFilter.fuels.map((fuel) => fuel.toString()),
     );
 
-    if (parsedFilter.price.min !== undefined) {
-      clsSearchParams.set(
-        "vehicle-model.price.min",
-        parsedFilter.price.min.toString(),
-      );
-    }
-    if (parsedFilter.price.max !== undefined) {
-      clsSearchParams.set(
-        "vehicle-model.price.max",
-        parsedFilter.price.max.toString(),
-      );
-    }
+    clsQuery.set("vehicle-model.price.min", parsedFilter.price.min?.toString());
+    clsQuery.set("vehicle-model.price.max", parsedFilter.price.max?.toString());
 
-    if (parsedFilter.discount.min !== undefined) {
-      clsSearchParams.set(
-        "vehicle-model.discount.min",
-        parsedFilter.discount.min.toString(),
-      );
-    }
-    if (parsedFilter.discount.max !== undefined) {
-      clsSearchParams.set(
-        "vehicle-model.discount.max",
-        parsedFilter.discount.max.toString(),
-      );
-    }
-
-    parsedFilter.statuses.forEach((status) =>
-      clsSearchParams.append("vehicle-model.statuses", status.toString()),
+    clsQuery.set(
+      "vehicle-model.discount.min",
+      parsedFilter.discount.min?.toString(),
+    );
+    clsQuery.set(
+      "vehicle-model.discount.max",
+      parsedFilter.discount.max?.toString(),
     );
 
-    if (parsedPagination.page !== undefined) {
-      clsSearchParams.set("pagination.page", parsedPagination.page.toString());
-    }
-    if (parsedPagination.pageSize !== undefined) {
-      clsSearchParams.set(
-        "pagination.page-size",
-        parsedPagination.pageSize.toString(),
-      );
-    }
-
-    const searchParamsString = clsSearchParams.toString();
-    const data = await fetch(
-      `${this._url}${searchParamsString.length === 0 ? "" : `?${searchParamsString}`}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      },
+    clsQuery.setMany(
+      "vehicle-model.statuses",
+      parsedFilter.statuses.map((status) => status.toString()),
     );
 
+    clsQuery.set("pagination.page", parsedPagination.page?.toString());
+    clsQuery.set("pagination.page-size", parsedPagination.pageSize?.toString());
+
+    const data = await this._fetch.get(clsQuery.toString());
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(

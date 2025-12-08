@@ -6,7 +6,7 @@ import { ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { clsVehicle } from "@/classes/user/vehicle";
 
 import { useTranslations } from "next-intl";
-import { useVehiclesQuery } from "../../../../../../hooks/user/vehicles/use-vehicles-query";
+import { useVehicleModels } from "../../../../../../hooks/user/vehicles/use-vehicles-query";
 
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/locals/blocks/toast";
@@ -226,7 +226,7 @@ function ItemLoading() {
 }
 
 export default function Products() {
-  const { result } = useVehiclesQuery();
+  const { result } = useVehicleModels();
 
   if (result !== undefined && !result?.isSuccess) {
     console.error("error status code: ", result.statusCode);
