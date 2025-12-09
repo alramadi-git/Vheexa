@@ -42,7 +42,7 @@ type tVehicleModelModel = {
   colors: tVehicleColorModel[];
   price: number;
   discount: number;
-  tags: string[];
+  tags: string;
   status: eVehicleModelStatusModel;
   updatedAt: string;
   createdAt: string;

@@ -6,8 +6,11 @@ import partnerMiddleware from "./middlewares/partner/partner";
 import userMiddleware from "./middlewares/user/user";
 
 export default function middleware(request: NextRequest): NextResponse {
-  let middlewares = nextIntlMiddleware(request);
-  if (middlewares?.ok !== true) return middlewares;
+  let middlewares = NextResponse.next();
+  if (!request.nextUrl.pathname.startsWith("/api", 6)) {
+    middlewares = nextIntlMiddleware(request);
+    if (middlewares?.ok !== true) return middlewares;
+  }
 
   // middlewares = partnerMiddleware(request);
   // if (middlewares?.ok !== true) return middlewares;
@@ -20,7 +23,7 @@ export default function middleware(request: NextRequest): NextResponse {
 
 export const config = {
   // Match all pathnames except for
-  // - … if they start with `/_next` or `/_vercel`
+  // - … if they start with `/api`, `/_next` or `/_vercel`
   // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: "/((?!_next|_vercel|.*\\..*).*)",
+  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
 };

@@ -38,8 +38,8 @@ export default function useVehicleModels() {
       .getAll("vehicle-model-filter.model-years")
       .map((modelYear) => Number(modelYear)),
     capacity: {
-      min: minCapacity !== undefined ? Number(minCapacity) : undefined,
-      max: maxCapacity !== undefined ? Number(maxCapacity) : undefined,
+      min: minCapacity !== null ? Number(minCapacity) : undefined,
+      max: maxCapacity !== null ? Number(maxCapacity) : undefined,
     },
     transmissions: searchParams
       .getAll("vehicle-model-filter.transmissions")
@@ -49,78 +49,23 @@ export default function useVehicleModels() {
       .map((fuel) => Number(fuel)),
     colors: searchParams.getAll("vehicle-model-filter.colors"),
     price: {
-      min: minPrice !== undefined ? Number(minPrice) : undefined,
-      max: maxPrice !== undefined ? Number(maxPrice) : undefined,
+      min: minPrice !== null ? Number(minPrice) : undefined,
+      max: maxPrice !== null ? Number(maxPrice) : undefined,
     },
     discount: {
-      min: minDiscount !== undefined ? Number(minDiscount) : undefined,
-      max: maxDiscount !== undefined ? Number(maxDiscount) : undefined,
+      min: minDiscount !== null ? Number(minDiscount) : undefined,
+      max: maxDiscount !== null ? Number(maxDiscount) : undefined,
     },
     statuses: searchParams
       .getAll("vehicle-model-filter.statuses")
       .map((status) => Number(status)),
   };
   const pagination: tPagination = {
-    page: page !== undefined ? Number(page) : undefined,
-    pageSize: pageSize !== undefined ? Number(pageSize) : undefined,
+    page: page !== null ? Number(page) : undefined,
+    pageSize: pageSize !== null ? Number(pageSize) : undefined,
   };
 
-  const clsQuery = new ClsQuery();
-
-  clsQuery.set("vehicle-model-filter.search", filter.search);
-
-  clsQuery.setMany(
-    "vehicle-model-filter.model-year",
-    filter.modelYears.map((modelYear) => modelYear.toString()),
-  );
-
-  clsQuery.set(
-    "vehicle-model-filter.capacity.min",
-    filter.capacity.min?.toString(),
-  );
-  clsQuery.set(
-    "vehicle-model-filter.capacity.max",
-    filter.capacity.max?.toString(),
-  );
-
-  clsQuery.setMany(
-    "vehicle-model-filter.transmissions",
-    filter.transmissions.map((transmission) => transmission.toString()),
-  );
-
-  clsQuery.setMany(
-    "vehicle-model-filter.fuels",
-    filter.fuels.map((fuel) => fuel.toString()),
-  );
-
-  clsQuery.setMany("vehicle-model-filter.colors", filter.colors);
-
-  clsQuery.set("vehicle-model-filter.price.min", filter.price.min?.toString());
-  clsQuery.set("vehicle-model-filter.price.max", filter.price.max?.toString());
-
-  clsQuery.set(
-    "vehicle-model-filter.discount.min",
-    filter.discount.min?.toString(),
-  );
-  clsQuery.set(
-    "vehicle-model-filter.discount.max",
-    filter.discount.max?.toString(),
-  );
-
-  clsQuery.setMany(
-    "vehicle-model-filter.statuses",
-    filter.statuses.map((status) => status.toString()),
-  );
-
-  clsQuery.set("pagination.page", pagination.page?.toString());
-  clsQuery.set("pagination.pageSize", pagination.pageSize?.toString());
-
-  const {
-    isLoading,
-    isError,
-    data: result,
-    error,
-  } = useQuery({
+  const { isLoading, data: result } = useQuery({
     queryKey: [
       "vehicles",
       filter.search,
@@ -140,8 +85,6 @@ export default function useVehicleModels() {
 
   return {
     isLoading,
-    isError,
     result,
-    error,
   };
 }

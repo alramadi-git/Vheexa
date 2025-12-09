@@ -8,7 +8,7 @@ import {
 
 const zVehicleModelFilter = z
   .object({
-    search: z.optional(z.string().trim()), // name, manufacturer, tags
+    search: z.optional(z.string().trim()),
     modelYears: z.array(
       z
         .number()

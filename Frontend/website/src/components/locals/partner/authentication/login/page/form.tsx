@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/password";
+} from "@/validations/login-credentials";
 
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
@@ -27,7 +27,6 @@ import { toast } from "sonner";
 import { ErrorToast } from "@/components/locals/blocks/toast";
 
 import { Button } from "@/components/shadcn/button";
-import { Input } from "@/components/shadcn/input";
 import { FieldEmail, FieldPassword } from "@/components/locals/blocks/fields";
 
 export default function Form() {

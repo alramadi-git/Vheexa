@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
 import { useTranslations } from "next-intl";
-import { useSearchParams } from "@/hooks/use-search-params";
+import { useQuery } from "@/hooks/use-query";
 
 import { Card } from "@/components/shadcn/card";
 import {
@@ -21,7 +21,7 @@ import { Checkbox } from "@/components/shadcn/checkbox";
 import { Button } from "@/components/shadcn/button";
 
 export default function Filters() {
-  const searchParams = useSearchParams();
+  const searchParams = useQuery();
   const form = useForm<tVehicleFilters>({
     defaultValues: {
       search: searchParams.getOneOrDefault("search", ""),

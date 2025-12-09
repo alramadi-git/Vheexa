@@ -47,7 +47,35 @@
     "pagination": {
       "previous": "Previous",
       "next": "Next",
-
+      "page-size": {
+        "label": "Page size",
+        "options": [
+          {
+            "value": 5,
+            "label": "Five"
+          },
+          {
+            "value": 10,
+            "label": "Ten"
+          },
+          {
+            "value": 25,
+            "label": "Twenty Five"
+          },
+          {
+            "value": 50,
+            "label": "Fifty"
+          },
+          {
+            "value": 75,
+            "label": "Seventy Five"
+          },
+          {
+            "value": 100,
+            "label": "One Hundred"
+          }
+        ]
+      },
       "page-details": "Page <page></page> of <totalPages></totalPages>"
     }
   },
@@ -813,6 +841,13 @@
 
               "vehicle-models": {
                 "label": "Vehicle Models",
+                "add-new": {
+                  "trigger": "Add New Vehicle Model",
+                  "title": "Add New Vehicle Model",
+                  "description": "Add a new vehicle model to your inventory.",
+
+                  "form": {}
+                },
                 "table": {
                   "uuid": { "header": "UUID" },
                   "vehicle-model": { "header": "Vehicle Model" },

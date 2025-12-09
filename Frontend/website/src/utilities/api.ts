@@ -14,7 +14,7 @@ async function apiCatcher<tData>(
   >,
 ): Promise<NextResponse<tResponseOneModel<tData> | tResponseManyModel<tData>>> {
   try {
-    return callback();
+    return await callback();
   } catch (error: unknown) {
     if (error instanceof ZodError)
       return NextResponse.json(

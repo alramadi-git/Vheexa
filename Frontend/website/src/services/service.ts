@@ -58,7 +58,7 @@ class ClsErrorService extends Error {
 
 abstract class ClsAbstractService {
   protected async catcher<tReturn>(
-    callback: () => Promise<tFailedService | tReturn>,
+    callback: () => Promise<tReturn>,
   ) {
     try {
       return await callback();
