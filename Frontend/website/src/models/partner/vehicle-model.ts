@@ -36,8 +36,8 @@ type tVehicleModelModel = {
   description: string;
   manufacturer: string;
   modelYear: number;
-  transmission: eVehicleModelTransmissionModel;
   capacity: number;
+  transmission: eVehicleModelTransmissionModel;
   fuel: eVehicleModelFuelModel;
   colors: tVehicleColorModel[];
   price: number;

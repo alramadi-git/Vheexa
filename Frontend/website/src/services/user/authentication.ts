@@ -25,7 +25,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   ): Promise<tSuccessOneService<tUserModel>> {
     const parsedCredentials = zLoginCredentials.parse(credentials);
 
-    const data = await this._fetch.post("/login", parsedCredentials);
+    const data = await this._fetch.post("/user/authentication/login", parsedCredentials);
     if (data.ok === false) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(

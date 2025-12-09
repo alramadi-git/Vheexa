@@ -5,7 +5,7 @@ import { tVehicleModelModel } from "@/models/user/vehicle-model";
 import { zUuid } from "@/validations/uuid";
 
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel, ClsErrorModel } from "@/models/failed";
+import { tFailedModel, ClsFailedModel } from "@/models/failed";
 import { tResponseOneModel } from "@/models/response";
 
 import { apiCatcher } from "@/utilities/api";
@@ -33,7 +33,7 @@ export async function GET(
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
      
-      throw new ClsErrorModel(
+      throw new ClsFailedModel(
         dataBody.statusCode,
         dataBody.message,
         dataBody.issues,

@@ -14,7 +14,7 @@ public class VehicleInstanceEntity
     public Guid BranchUUID { get; set; }
     public BranchEntity Branch { get; set; }
     public Guid VehicleColorUUID { get; set; }
-    public VehicleColorEntity VehicleColor { get; set; }
+    public VehicleModelColorEntity VehicleColor { get; set; }
     public string Plate { get; set; }
     public STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }

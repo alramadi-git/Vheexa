@@ -9,7 +9,7 @@ import {
 import { ePageSize, tPagination, zPagination } from "@/validations/pagination";
 
 import { tSuccessManyModel } from "@/models/success";
-import { tFailedModel, ClsErrorModel } from "@/models/failed";
+import { tFailedModel, ClsFailedModel } from "@/models/failed";
 import { tResponseManyModel } from "@/models/response";
 
 import { apiCatcher } from "@/utilities/api";
@@ -85,7 +85,7 @@ export async function GET(
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
 
-      throw new ClsErrorModel(
+      throw new ClsFailedModel(
         dataBody.statusCode,
         dataBody.message,
         dataBody.issues,

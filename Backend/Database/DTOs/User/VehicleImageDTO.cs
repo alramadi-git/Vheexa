@@ -9,7 +9,7 @@ public class ClsVehicleImageDTO
     public ClsImageDTO Image { get; set; }
     public int Index { get; set; }
 
-    public ClsVehicleImageDTO(VehicleImageEntity vehicleImage)
+    public ClsVehicleImageDTO(VehicleModelImageEntity vehicleImage)
     {
         UUID = vehicleImage.UUID;
         Image = new ClsImageDTO(vehicleImage.Image);

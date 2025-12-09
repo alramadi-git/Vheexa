@@ -24,4 +24,4 @@ class ClsErrorModel extends Error {
 }
 
 export type { tIssueModel, tFailedModel };
-export { ClsErrorModel };
+export { ClsErrorModel as ClsFailedModel };

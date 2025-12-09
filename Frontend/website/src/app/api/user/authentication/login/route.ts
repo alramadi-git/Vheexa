@@ -9,7 +9,7 @@ import {
 } from "@/validations/login-credentials";
 
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel, ClsErrorModel } from "@/models/failed";
+import { tFailedModel, ClsFailedModel } from "@/models/failed";
 
 import { tResponseOneModel } from "@/models/response";
 
@@ -39,7 +39,7 @@ export async function POST(
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
 
-      throw new ClsErrorModel(
+      throw new ClsFailedModel(
         dataBody.statusCode,
         dataBody.message,
         dataBody.issues,

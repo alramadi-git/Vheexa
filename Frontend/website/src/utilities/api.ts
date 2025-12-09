@@ -1,7 +1,7 @@
 import "server-only";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
-import { tFailedModel, ClsErrorModel } from "@/models/failed";
+import { tFailedModel, ClsFailedModel } from "@/models/failed";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
 
 import { NextResponse } from "next/server";
@@ -29,7 +29,7 @@ async function apiCatcher<tData>(
         { status: 400 },
       );
 
-    if (error instanceof ClsErrorModel)
+    if (error instanceof ClsFailedModel)
       return NextResponse.json(
         {
           statusCode: error.statusCode,

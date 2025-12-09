@@ -1,13 +1,13 @@
 namespace Database.Entities;
 
-public class VehicleImageEntity
+public class VehicleModelColorEntity
 {
     public Guid UUID { get; set; }
     public Guid VehicleModelUUID { get; set; }
     public VehicleModelEntity VehicleModel { get; set; }
-    public Guid ImageUUID { get; set; }
-    public ImageEntity Image { get; set; }
-    public int Index { get; set; }
+    public string Name { get; set; }
+    public string HexCode { get; set; }
+    public string[] Tags { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 }

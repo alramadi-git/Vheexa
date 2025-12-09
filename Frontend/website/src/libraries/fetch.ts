@@ -1,7 +1,7 @@
 class ClsFetch {
-  private readonly _domain: string;
-  private readonly _basePath: string;
-  private readonly _headers: RequestInit["headers"];
+  protected readonly _domain: string;
+  protected readonly _basePath: string;
+  protected readonly _headers: RequestInit["headers"];
 
   public constructor(domain: string, basePath: string);
   public constructor(
@@ -23,22 +23,51 @@ class ClsFetch {
     };
   }
 
-  private _url(path: string): string {
+  protected _generateUrl(path: string): string {
     return `${this._domain}${this._basePath}${path}`;
   }
 
-  public async get(path: string): Promise<Response> {
-    return await fetch(this._url(path), {
+  public async get(
+    path: string,
+    headers: RequestInit["headers"] = {},
+  ): Promise<Response> {
+    return await fetch(this._generateUrl(path), {
       method: "GET",
-      headers: this._headers,
+      headers: { ...this._headers, ...headers },
     });
   }
 
-  public async post(path: string, data: unknown): Promise<Response> {
-    return await fetch(this._url(path), {
+  public async post(
+    path: string,
+    data: unknown,
+    headers: RequestInit["headers"] = {},
+  ): Promise<Response> {
+    return await fetch(this._generateUrl(path), {
       method: "POST",
-      headers: this._headers,
+      headers: { ...this._headers, ...headers },
       body: JSON.stringify(data),
+    });
+  }
+
+  public async patch(
+    path: string,
+    data: unknown,
+    headers: RequestInit["headers"] = {},
+  ): Promise<Response> {
+    return await fetch(this._generateUrl(path), {
+      method: "PATCH",
+      headers: { ...this._headers, ...headers },
+      body: JSON.stringify(data),
+    });
+  }
+
+  public async delete(
+    path: string,
+    headers: RequestInit["headers"] = {},
+  ): Promise<Response> {
+    return await fetch(this._generateUrl(path), {
+      method: "DELETE",
+      headers: { ...this._headers, ...headers },
     });
   }
 }

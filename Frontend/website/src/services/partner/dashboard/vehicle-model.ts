@@ -1,5 +1,3 @@
-import { ClsQuery } from "@/libraries/query";
-
 import { tUuid, zUuid } from "@/validations/uuid";
 
 import {
@@ -8,7 +6,9 @@ import {
 } from "@/validations/partner/vehicle-model-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
+import { tVehicleModelCreate } from "@/validations/partner/vehicle-model-create";
 import { tVehicleModelModel } from "@/models/partner/vehicle-model";
+import { tVehicleModelUpdate } from "@/validations/partner/vehicle-model-update";
 
 import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
 import { tFailedModel } from "@/models/failed";
@@ -22,9 +22,37 @@ import {
   ClsAbstractService,
 } from "@/services/service";
 
+import { ClsQuery } from "@/libraries/query";
+import { clsFetch } from "@/consts/partner/fetch";
+
 class ClsVehicleModelService extends ClsAbstractService {
-  public constructor() {
-    super("/partner/vehicle-models");
+  private async _addOneAsync(
+    vehicleModel: tVehicleModelCreate,
+  ): Promise<tSuccessOneService<null>> {
+    const data = await clsFetch.post("/dashboard/vehicle-models", vehicleModel);
+
+    if (!data.ok) {
+      const dataBody: tFailedModel = await data.json();
+      throw new ClsErrorService(
+        data.status,
+        data.statusText,
+        dataBody.message,
+        dataBody.issues,
+      );
+    }
+
+    const dataBody: tSuccessOneModel<null> = await data.json();
+    return {
+      isSuccess: true,
+      statusCode: data.status,
+      statusText: data.statusText,
+      data: dataBody.data,
+    };
+  }
+  public async addOneAsync(vehicleModel: tVehicleModelCreate) {
+    return this.catcher<tSuccessOneService<null>>(
+      async () => await this._addOneAsync(vehicleModel),
+    );
   }
 
   private async _getOneAsync(
@@ -32,7 +60,7 @@ class ClsVehicleModelService extends ClsAbstractService {
   ): Promise<tSuccessOneService<tVehicleModelModel>> {
     const parsedUuid = zUuid.parse(uuid);
 
-    const data = await this._fetch.get(parsedUuid);
+    const data = await clsFetch.get(`/dashboard/vehicle-models/${parsedUuid}`);
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
@@ -114,7 +142,9 @@ class ClsVehicleModelService extends ClsAbstractService {
     clsQuery.set("pagination.page", parsedPagination.page?.toString());
     clsQuery.set("pagination.page-size", parsedPagination.pageSize?.toString());
 
-    const data = await this._fetch.get(clsQuery.toString());
+    const data = await clsFetch.get(
+      `/dashboard/vehicle-models${clsQuery.toString()}`,
+    );
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
@@ -140,6 +170,43 @@ class ClsVehicleModelService extends ClsAbstractService {
   ): Promise<tResponseManyService<tVehicleModelModel>> {
     return this.catcher<tSuccessManyService<tVehicleModelModel>>(
       async () => await this._getManyAsync(filter, pagination),
+    );
+  }
+
+  private async _updateOneAsync(
+    uuid: tUuid,
+    vehicleModel: tVehicleModelUpdate,
+  ): Promise<tSuccessOneService<null>> {
+    const data = await clsFetch.patch(
+      `/dashboard/vehicle-models${uuid}`,
+      vehicleModel,
+    );
+
+    if (!data.ok) {
+      const dataBody: tFailedModel = await data.json();
+      throw new ClsErrorService(
+        data.status,
+        data.statusText,
+        dataBody.message,
+        dataBody.issues,
+      );
+    }
+
+    const dataBody: tSuccessOneModel<null> = await data.json();
+    return {
+      isSuccess: true,
+      statusCode: data.status,
+      statusText: data.statusText,
+      data: dataBody.data,
+    };
+  }
+  public async updateOneAsync(
+    uuid: tUuid,
+
+    vehicleModel: tVehicleModelCreate,
+  ) {
+    return this.catcher<tSuccessOneService<null>>(
+      async () => await this._updateOneAsync(uuid, vehicleModel),
     );
   }
 }

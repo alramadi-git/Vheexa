@@ -57,12 +57,6 @@ class ClsErrorService extends Error {
 }
 
 abstract class ClsAbstractService {
-  protected _fetch: ClsFetch;
-
-  protected constructor(basePath: string) {
-    this._fetch = new ClsFetch(process.env.NEXT_PUBLIC_API_URL!, basePath);
-  }
-
   protected async catcher<tReturn>(
     callback: () => Promise<tFailedService | tReturn>,
   ) {

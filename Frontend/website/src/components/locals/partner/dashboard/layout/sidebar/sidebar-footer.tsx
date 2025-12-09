@@ -39,7 +39,7 @@ function News() {
 
         <Button
           size="sm"
-          className="bg-sidebar-primary text-sidebar-primary-foreground w-full shadow-none"
+          className="bg-sidebar-primary text-sidebar-primary-foreground mt-3 w-full shadow-none"
         >
           {tNews("subscribe")}
         </Button>

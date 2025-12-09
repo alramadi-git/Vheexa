@@ -34,7 +34,7 @@ public class VehicleRepository
         var vehicle = await vehicleQuery.AsNoTracking().FirstOrDefaultAsync()
         ?? throw new FailedDTO(HTTP_STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
-        var vehicleImagesQuery = _AppDBContext.VehicleImages.AsQueryable();
+        var vehicleImagesQuery = _AppDBContext.VehicleModelImages.AsQueryable();
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicleUUID);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
@@ -43,7 +43,7 @@ public class VehicleRepository
         var vehicleImages = await vehicleImagesQuery.AsNoTracking()
         .Select(vehicleImage => vehicleImage).ToArrayAsync();
 
-        var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
+        var vehicleColorsQuery = _AppDBContext.VehicleModelColors.AsQueryable();
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.VehicleModelUUID == vehicleUUID);
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.IsDeleted == false);
 
@@ -82,13 +82,13 @@ public class VehicleRepository
         var vehicleUUIDs =
         new HashSet<Guid>(vehicles.Select(vehicle => vehicle.UUID));
 
-        var vehicleImagesQuery = _AppDBContext.VehicleImages.AsQueryable();
+        var vehicleImagesQuery = _AppDBContext.VehicleModelImages.AsQueryable();
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleModelUUID));
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
         vehicleImagesQuery = vehicleImagesQuery.OrderBy(vehicleImage => vehicleImage.Index);
 
-        var vehicleColorsQuery = _AppDBContext.VehicleColors.AsQueryable();
+        var vehicleColorsQuery = _AppDBContext.VehicleModelColors.AsQueryable();
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleUUIDs.Contains(vehicleColor.VehicleModelUUID));
         vehicleColorsQuery = vehicleColorsQuery.Where(vehicleColor => vehicleColor.IsDeleted == false);
 

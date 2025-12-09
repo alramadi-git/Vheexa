@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { apiCatcher } from "@/utilities/api";
+
 import { tMemberAccountModel } from "@/models/partner/account";
 
 import {
@@ -7,13 +9,12 @@ import {
   zRegisterCredentials,
 } from "@/validations/partner/register-credentials";
 
+import { clsFetch } from "@/consts/api/fetch";
+
 import { eTime } from "@/enums/time";
 
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel, ClsErrorModel } from "@/models/failed";
-
-import { apiCatcher } from "@/utilities/api";
-import { ClsFetch } from "@/libraries/fetch";
+import { tFailedModel, ClsFailedModel } from "@/models/failed";
 
 export async function POST(request: NextRequest) {
   return apiCatcher(async () => {
@@ -21,18 +22,15 @@ export async function POST(request: NextRequest) {
     const parsedRegisterCredentials: tRegisterCredentials =
       zRegisterCredentials.parse(registerCredentials);
 
-    const data = await new ClsFetch(
-      process.env.API_URL!,
-      "/partner/authentication",
-      {
-        "X-Api-Key": `${process.env.API_KEY}`,
-      },
-    ).post("/register", parsedRegisterCredentials);
+    const data = await clsFetch.post(
+      "/partner/authentication/register",
+      parsedRegisterCredentials,
+    );
 
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
 
-      throw new ClsErrorModel(
+      throw new ClsFailedModel(
         dataBody.statusCode,
         dataBody.message,
         dataBody.issues,

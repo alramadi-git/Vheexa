@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { apiCatcher } from "@/utilities/api";
+
 import {
   tVehicleModelFilter,
   zVehicleModelFilter,
@@ -7,11 +9,12 @@ import {
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { ClsQuery } from "@/libraries/query";
-import { ClsFetch } from "@/libraries/fetch";
+import { clsFetch } from "@/consts/api/fetch";
 
-import { tFailedModel, ClsErrorModel } from "@/models/failed";
+import { tFailedModel, ClsFailedModel } from "@/models/failed";
 
-import { apiCatcher } from "@/utilities/api";
+import { tVehicleModelModel } from "@/models/partner/vehicle-model";
+import { tSuccessManyModel } from "@/models/success";
 
 export async function GET(request: NextRequest) {
   return apiCatcher(async () => {
@@ -85,11 +88,11 @@ export async function GET(request: NextRequest) {
     );
 
     clsQuery.set(
-      "VehicleModelFilter.Capacity.min.Value",
+      "VehicleModelFilter.Capacity.Min.Value",
       parsedFilter.capacity.min?.toString(),
     );
     clsQuery.set(
-      "VehicleModelFilter.Capacity.max.Value",
+      "VehicleModelFilter.Capacity.Max.Value",
       parsedFilter.capacity.max?.toString(),
     );
 
@@ -102,6 +105,8 @@ export async function GET(request: NextRequest) {
       "VehicleModelFilter.Fuels.Value",
       parsedFilter.fuels.map((fuel) => fuel.toString()),
     );
+
+    clsQuery.setMany("VehicleModelFilter.Colors.Value", parsedFilter.colors);
 
     clsQuery.set(
       "VehicleModelFilter.Price.Min.Value",
@@ -133,25 +138,24 @@ export async function GET(request: NextRequest) {
     );
 
     const token = request.cookies.get("partner-token");
-    const data = await new ClsFetch(
-      process.env.API_URL!,
-      "/partner/vehicle-models",
+    const data = await clsFetch.get(
+      `/partner/vehicle-models${clsQuery.toString()}`,
       {
-        "X-Api-Key": `${process.env.API_KEY}`,
         Authorization: `Bearer ${token}`,
       },
-    ).get(clsQuery.toString() );
+    );
 
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
 
-      throw new ClsErrorModel(
+      throw new ClsFailedModel(
         dataBody.statusCode,
         dataBody.message,
         dataBody.issues,
       );
     }
 
-    return;
+    const dataBody: tSuccessManyModel<tVehicleModelModel> = await data.json();
+    return NextResponse.json(dataBody, { status: data.status });
   });
 }

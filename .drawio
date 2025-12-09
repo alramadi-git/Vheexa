@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Page-1" id="c7acuwJ6e7UkxPXnuQJT">
-        <mxGraphModel dx="1234" dy="2626" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1358" dy="1918" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -2449,7 +2449,7 @@
                         <mxRectangle width="553" height="79" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="478" value="VehicleImages" style="shape=table;startSize=74;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=36;strokeWidth=4;fontStyle=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;align=left;spacing=18;" parent="1" vertex="1">
+                <mxCell id="478" value="VehicleModelImages" style="shape=table;startSize=74;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=36;strokeWidth=4;fontStyle=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;align=left;spacing=18;" parent="1" vertex="1">
                     <mxGeometry x="9129.42" y="983" width="852.9166666666733" height="547.9200000000001" as="geometry"/>
                 </mxCell>
                 <mxCell id="479" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" parent="478" vertex="1">
@@ -2560,7 +2560,7 @@
                         <mxRectangle width="465" height="79" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="536" value="VehicleColors" style="shape=table;startSize=74;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=36;strokeWidth=4;fontStyle=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;align=left;spacing=18;" parent="1" vertex="1">
+                <mxCell id="536" value="VehicleModelColors" style="shape=table;startSize=74;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=36;strokeWidth=4;fontStyle=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;align=left;spacing=18;" parent="1" vertex="1">
                     <mxGeometry x="9126.42" y="1557" width="892.5753968253975" height="626.9200000000001" as="geometry"/>
                 </mxCell>
                 <mxCell id="537" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" parent="536" vertex="1">
@@ -2635,20 +2635,20 @@
                         <mxRectangle width="510" height="79" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="582" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" vertex="1" parent="536">
+                <mxCell id="582" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" parent="536" vertex="1">
                     <mxGeometry y="390" width="892.5753968253975" height="79" as="geometry"/>
                 </mxCell>
-                <mxCell id="583" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" vertex="1" parent="582">
+                <mxCell id="583" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;" parent="582" vertex="1">
                     <mxGeometry width="96" height="79" as="geometry">
                         <mxRectangle width="96" height="79" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="584" value="Tags" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;align=left;spacing=18;" vertex="1" parent="582">
+                <mxCell id="584" value="Tags" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;align=left;spacing=18;" parent="582" vertex="1">
                     <mxGeometry x="96" width="287" height="79" as="geometry">
                         <mxRectangle width="287" height="79" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="585" value="TEXT[], NOT NULL" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;align=left;spacing=18;" vertex="1" parent="582">
+                <mxCell id="585" value="TEXT[], NOT NULL" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=28;rounded=0;sketch=1;curveFitting=1;jiggle=2;fontStyle=1;fontFamily=Comic Sans MS;align=left;spacing=18;" parent="582" vertex="1">
                     <mxGeometry x="383" width="510" height="79" as="geometry">
                         <mxRectangle width="510" height="79" as="alternateBounds"/>
                     </mxGeometry>

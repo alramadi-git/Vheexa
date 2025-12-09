@@ -7,6 +7,8 @@ import {
   zLoginCredentials,
 } from "@/validations/login-credentials";
 
+import { clsFetch } from "@/consts/partner/fetch";
+
 import { tMemberModel } from "@/models/partner/member";
 
 import { tSuccessOneModel } from "@/models/success";
@@ -20,16 +22,12 @@ import {
 } from "@/services/service";
 
 class ClsAuthenticationService extends ClsAbstractService {
-  public constructor() {
-    super("/partner/authentication");
-  }
-
   private async _registerAsync(
     credentials: tRegisterCredentials,
   ): Promise<tSuccessOneService<tMemberModel>> {
     const parsedCredentials = zRegisterCredentials.parse(credentials);
 
-    const data = await this._fetch.post("/register", parsedCredentials);
+    const data = await clsFetch.post("/authentication/register", parsedCredentials);
     if (!data.ok) {
       const dataBody: tFailedModel = await data.json();
       throw new ClsErrorService(
@@ -61,7 +59,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   ): Promise<tSuccessOneService<tMemberModel>> {
     const parsedCredentials = zLoginCredentials.parse(credentials);
 
-    const date = await this._fetch.post("/login", parsedCredentials);
+    const date = await clsFetch.post("/authentication/login", parsedCredentials);
     if (!date.ok) {
       const dataBody: tFailedModel = await date.json();
       throw new ClsErrorService(

@@ -893,8 +893,6 @@ const data = [
 ];
 
 export default function VehicleModels() {
-  const locale = useLocale() as eLocale;
-
   const tVehicleModels = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models",
   );

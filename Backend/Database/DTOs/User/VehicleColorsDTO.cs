@@ -8,7 +8,7 @@ public class ClsVehicleColorDTO
     public string Name { get; set; }
     public string HexCode { get; set; }
 
-    public ClsVehicleColorDTO(VehicleColorEntity vehicleColor)
+    public ClsVehicleColorDTO(VehicleModelColorEntity vehicleColor)
     {
         UUID = vehicleColor.UUID;
         Name = vehicleColor.Name;

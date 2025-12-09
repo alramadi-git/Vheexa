@@ -21,8 +21,8 @@ public class AppDBContext : DbContext
     public DbSet<MemberEntity> Members { get; set; }
     public DbSet<MemberHistoryEntity> MemberHistories { get; set; }
     public DbSet<VehicleModelEntity> VehicleModels { get; set; }
-    public DbSet<VehicleImageEntity> VehicleImages { get; set; }
-    public DbSet<VehicleColorEntity> VehicleColors { get; set; }
+    public DbSet<VehicleModelImageEntity> VehicleModelImages { get; set; }
+    public DbSet<VehicleModelColorEntity> VehicleModelColors { get; set; }
     public DbSet<VehicleInstanceEntity> VehicleInstances { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }

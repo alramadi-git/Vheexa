@@ -86,7 +86,7 @@ const zVehicleModelFilter = z
     },
     {
       path: ["discount"],
-      error: "price should be greater than the discount.",
+      error: "discount should be less than the discount.",
     },
   )
   .strict();
