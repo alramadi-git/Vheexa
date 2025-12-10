@@ -29,7 +29,7 @@ export type tControllerRenderProps<
 };
 
 export type tFieldPassword = {
-  controllerRenderProps: tControllerRenderProps<
+  controller: tControllerRenderProps<
     {
       password: tPassword;
     },
@@ -41,7 +41,7 @@ export type tFieldPassword = {
   >;
 };
 export function FieldPassword({
-  controllerRenderProps,
+  controller,
   inputProps: { id, className, ...inputProps } = {},
 }: tFieldPassword) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -56,7 +56,7 @@ export function FieldPassword({
         id={id}
         type={isVisible ? "text" : "password"}
         className={cn("pe-9", className)}
-        {...controllerRenderProps.field}
+        {...controller.field}
         {...inputProps}
       />
 
@@ -69,7 +69,7 @@ export function FieldPassword({
           "text-muted-foreground/80 hover:text-foreground absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           {
             "text-destructive/80 hover:text-destructive":
-              controllerRenderProps.fieldState.invalid,
+              controller.fieldState.invalid,
           },
         )}
         onClick={toggleVisibility}
@@ -85,7 +85,7 @@ export function FieldPassword({
 }
 
 export type tFieldEmail = {
-  controllerRenderProps: tControllerRenderProps<
+  controller: tControllerRenderProps<
     {
       email: tEmail;
     },
@@ -97,7 +97,7 @@ export type tFieldEmail = {
   >;
 };
 export function FieldEmail({
-  controllerRenderProps,
+  controller: controller,
   inputProps: { id, className, ...inputProps } = {},
 }: tFieldEmail) {
   return (
@@ -106,14 +106,14 @@ export function FieldEmail({
         id={id}
         type="email"
         className={cn("peer pe-9", className)}
-        {...controllerRenderProps.field}
+        {...controller.field}
         {...inputProps}
       />
       <div
         className={cn(
           "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
           {
-            "text-destructive": controllerRenderProps.fieldState.invalid,
+            "text-destructive": controller.fieldState.invalid,
           },
         )}
       >

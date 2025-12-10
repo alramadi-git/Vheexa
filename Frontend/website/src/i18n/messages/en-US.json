@@ -832,21 +832,34 @@
             }
           }
         },
-
         "vehicles": {
           "page": {
             "vehicles": {
               "title": "Vehicles",
               "description": "Manage your vehicles and offers easily and efficiently.",
-
               "vehicle-models": {
                 "label": "Vehicle Models",
                 "add-new": {
                   "trigger": "Add New Vehicle Model",
                   "title": "Add New Vehicle Model",
                   "description": "Add a new vehicle model to your inventory.",
-
-                  "form": {}
+                  "form": {
+                    "name": {
+                      "id": "name",
+                      "label": "Name",
+                      "placeholder": "Enter a name..."
+                    },
+                    "manufacturer": {
+                      "id": "manufacturer",
+                      "label": "Manufacturer",
+                      "placeholder": "Select a manufacturer..."
+                    },
+                    "model-year": {
+                      "id": "model-year",
+                      "label": "Model Year",
+                      "placeholder": "Select a model year..."
+                    }
+                  }
                 },
                 "table": {
                   "uuid": { "header": "UUID" },

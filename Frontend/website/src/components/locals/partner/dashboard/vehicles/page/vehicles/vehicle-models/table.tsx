@@ -2,9 +2,7 @@
 import { eLocale } from "@/i18n/routing";
 
 import {
-  eVehicleModelFuelModel,
   eVehicleModelStatusModel,
-  eVehicleModelTransmissionModel,
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
 
@@ -21,7 +19,6 @@ import {
 } from "@tanstack/react-table";
 
 import { useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { useLocale, useTranslations } from "next-intl";
 
 import useVehicleModels from "@/hooks/partner/vehicle-model";
@@ -37,14 +34,11 @@ import {
   LuTrash2,
   LuCircleCheck,
   LuCircleX,
-  LuPlus,
 } from "react-icons/lu";
 import { MdOutlineDiscount } from "react-icons/md";
 
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { TabsContent } from "@/components/shadcn/tabs";
 import {
-  Table,
+  Table as ShadcnTable,
   TableRow,
   TableHeader,
   TableHead,
@@ -65,35 +59,26 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/shadcn/dropdown-menu";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/shadcn/dialog";
+
 import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
 import { Badge } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
 
-import { Pagination } from "@/components/locals/blocks/pagination";
-import {
-  tVehicleModelCreate,
-  zVehicleModelCreate,
-} from "@/validations/partner/vehicle-model-create";
-import { zodResolver } from "@hookform/resolvers/zod";
+type tVehicleModelsProps = {
+  data: ReturnType<typeof useVehicleModels>;
+};
 
-export default function VehicleModels() {
-  const { isLoading, result } = useVehicleModels();
-  const tVehicleModels = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models",
+export default function Table({
+  data: { isLoading, result },
+}: tVehicleModelsProps) {
+  const tTable = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table",
   );
 
   const columns: ColumnDef<tVehicleModelModel>[] = useMemo(() => {
     return [
       {
-        header: () => <Heading title={tVehicleModels("table.uuid.header")} />,
+        header: () => <Heading title={tTable("uuid.header")} />,
         accessorKey: "uuid",
         cell: (info) => (
           <Uuid uuid={info.getValue<tVehicleModelModel["uuid"]>()} />
@@ -102,9 +87,7 @@ export default function VehicleModels() {
       {
         id: "vehicle-model",
         header: () => (
-          <Heading
-            title={tVehicleModels("table.vehicle-model.header")}
-          ></Heading>
+          <Heading title={tTable("vehicle-model.header")}></Heading>
         ),
         accessorFn: (row) => ({
           name: row.name,
@@ -134,7 +117,7 @@ export default function VehicleModels() {
       },
       {
         id: "specs",
-        header: () => <Heading title={tVehicleModels("table.specs.header")} />,
+        header: () => <Heading title={tTable("specs.header")} />,
         accessorFn: (row) => ({
           capacity: row.capacity,
           transmission: row.transmission,
@@ -156,7 +139,7 @@ export default function VehicleModels() {
         },
       },
       {
-        header: () => <Heading title={tVehicleModels("table.colors.header")} />,
+        header: () => <Heading title={tTable("colors.header")} />,
         accessorKey: "colors",
         cell: (info) => (
           <Colors colors={info.getValue<tVehicleModelModel["colors"]>()} />
@@ -164,7 +147,7 @@ export default function VehicleModels() {
       },
       {
         id: "price",
-        header: () => <Heading title={tVehicleModels("table.price.header")} />,
+        header: () => <Heading title={tTable("price.header")} />,
         accessorFn: (row) => ({
           price: row.price,
           discount: row.discount,
@@ -177,9 +160,7 @@ export default function VehicleModels() {
         },
       },
       {
-        header: () => (
-          <Heading title={tVehicleModels("table.discount.header")} />
-        ),
+        header: () => <Heading title={tTable("discount.header")} />,
         accessorKey: "discount",
         cell: (info) => {
           const discount = info.getValue<tVehicleModelModel["discount"]>();
@@ -188,7 +169,7 @@ export default function VehicleModels() {
         },
       },
       {
-        header: () => <Heading title={tVehicleModels("table.status.header")} />,
+        header: () => <Heading title={tTable("status.header")} />,
         accessorKey: "status",
         cell: (info) => {
           const status = info.getValue<tVehicleModelModel["status"]>();
@@ -196,9 +177,7 @@ export default function VehicleModels() {
         },
       },
       {
-        header: () => (
-          <Heading title={tVehicleModels("table.updated-at.header")} />
-        ),
+        header: () => <Heading title={tTable("updated-at.header")} />,
         accessorKey: "updatedAt",
         cell: (info) => (
           <Time
@@ -207,9 +186,7 @@ export default function VehicleModels() {
         ),
       },
       {
-        header: () => (
-          <Heading title={tVehicleModels("table.created-at.header")} />
-        ),
+        header: () => <Heading title={tTable("created-at.header")} />,
         accessorKey: "createdAt",
         cell: (info) => (
           <Time
@@ -219,7 +196,7 @@ export default function VehicleModels() {
       },
       {
         id: "action",
-        header: () => <Heading title={tVehicleModels("table.action.header")} />,
+        header: () => <Heading title={tTable("action.header")} />,
         cell: (info) => <Action vehicleModel={info.row.original} />,
       },
     ];
@@ -234,48 +211,40 @@ export default function VehicleModels() {
   if (isLoading) return null;
   if (!result?.isSuccess) return null;
 
-  function onclick() {}
-
   return (
-    <TabsContent value={tVehicleModels("label")} className="space-y-3">
-      <Add />
-
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className={cn({
-                    "max-w-86": cell.column.id === "vehicle-model",
-                  })}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter></TableFooter>
-      </Table>
-
-      <Pagination pagination={result.pagination} />
-    </TabsContent>
+    <ShadcnTable>
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id}>
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+              </TableHead>
+            ))}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows.map((row) => (
+          <TableRow key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <TableCell
+                key={cell.id}
+                className={cn({
+                  "max-w-86": cell.column.id === "vehicle-model",
+                })}
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+      <TableFooter></TableFooter>
+    </ShadcnTable>
   );
 }
 
@@ -521,40 +490,5 @@ function Action({ vehicleModel }: tActionProps) {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-}
-
-function Add() {
-  const tAdd = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
-  );
-  const { control, handleSubmit } = useForm<tVehicleModelCreate>({
-    resolver: zodResolver(zVehicleModelCreate),
-  });
-
-  function onSubmit(data: tVehicleModelCreate) {}
-
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-          <LuPlus />
-          {tAdd("trigger")}
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        showCloseButton
-        className="h-[calc(100vh-2rem)] min-w-[calc(100vw-2rem)]"
-      >
-        <VisuallyHidden>
-          <DialogHeader>
-            <DialogTitle>{tAdd("title")}</DialogTitle>
-            <DialogDescription>{tAdd("description")}</DialogDescription>
-          </DialogHeader>
-        </VisuallyHidden>
-
-        <form onSubmit={handleSubmit(onSubmit)}></form>
-      </DialogContent>
-    </Dialog>
   );
 }

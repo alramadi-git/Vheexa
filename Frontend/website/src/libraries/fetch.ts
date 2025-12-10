@@ -1,6 +1,8 @@
 class ClsFetch {
   protected readonly _domain: string;
   protected readonly _basePath: string;
+  protected readonly _baseUrl: string;
+
   protected readonly _headers: RequestInit["headers"];
 
   public constructor(domain: string, basePath: string);
@@ -16,6 +18,7 @@ class ClsFetch {
   ) {
     this._domain = domain;
     this._basePath = basePath;
+    this._baseUrl = `${this._domain}$${this._basePath}`;
     this._headers = {
       "Content-Type": "application/json",
       Accept: "application/json",

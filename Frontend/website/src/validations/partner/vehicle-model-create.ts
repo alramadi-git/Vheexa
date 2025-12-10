@@ -16,10 +16,9 @@ const zVehicleModelCreate = z
           index: z.number().min(0, "index cannot be negative."),
         }),
       )
-      .refine((value) => {
-        const indexes = new Set(value.map((v) => v.index));
-        return indexes.size === value.length;
-      }),
+      .refine(
+        (value) => new Set(value.map((v) => v.index)).size === value.length,
+      ),
     name: z.string().nonempty(),
     description: z.string().nonempty(),
     manufacturer: z.string().nonempty(),
@@ -27,14 +26,20 @@ const zVehicleModelCreate = z
     capacity: z.number().min(1, "capacity cannot be negative."),
     transmission: z.enum(eVehicleModelTransmissionModel),
     fuel: z.enum(eVehicleModelFuelModel),
-    colors: z.object({
-      name: z.string().nonempty(),
-      hexCode: z.hex(),
-      tags: z.array(z.string().nonempty()),
-    }),
+    colors: z
+      .array(
+        z.object({
+          name: z.string().nonempty(),
+          hexCode: z.hex(),
+          tags: z.array(z.string().nonempty()),
+        }),
+      )
+      .refine(
+        (value) => new Set(value.map((v) => v.hexCode)).size === value.length,
+      ),
     price: z.number().min(0, "price cannot be negative."),
     discount: z.number().min(0, "discount cannot be negative."),
-    tags: z.array(z.string().nonempty()),
+    tags: z.string().nonempty(),
     status: z.enum(eVehicleModelStatusModel),
   })
   .refine((value) => value.price > value.discount, {

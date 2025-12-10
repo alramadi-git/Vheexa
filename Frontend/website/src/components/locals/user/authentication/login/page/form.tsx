@@ -73,7 +73,7 @@ export default function Form() {
               <FieldEmail
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                controllerRenderProps={controller}
+                controller={controller}
                 inputProps={{
                   id: "email",
                   placeholder: tForm("email.placeholder"),
@@ -102,7 +102,7 @@ export default function Form() {
               <FieldPassword
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                controllerRenderProps={controller}
+                controller={controller}
                 inputProps={{
                   "aria-invalid": controller.fieldState.invalid,
                   id: "email",

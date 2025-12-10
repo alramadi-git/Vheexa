@@ -16,8 +16,8 @@ import {
   CardTitle,
 } from "@/components/shadcn/card";
 import { useTranslations } from "next-intl";
-import VehicleModels from "./vehicles-models";
-import VehicleInstances from "./vehicle-instances";
+import VehicleModels from "./vehicle-models/vehicle-models";
+import VehicleInstances from "./vehicle-instances/vehicle-instances";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(

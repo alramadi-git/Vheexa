@@ -105,8 +105,18 @@ export function Pagination(props: tPaginationProps) {
   const pagination = new clsPagination(props.pagination);
 
   function setPagination(pagination: clsPagination) {
-    searchParams.set("pagination.page", pagination.page.toString());
-    searchParams.set("pagination.page-size", pagination.pageSize.toString());
+    if (pagination.isFirst()) {
+      searchParams.remove("pagination.page");
+    } else {
+      searchParams.set("pagination.page", pagination.page.toString());
+    }
+
+    if (pagination.pageSize === ePageSize.ten) {
+      searchParams.remove("pagination.page-size");
+    } else {
+      searchParams.set("pagination.page-size", pagination.pageSize.toString());
+    }
+
     searchParams.apply();
   }
 
