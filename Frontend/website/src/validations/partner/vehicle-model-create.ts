@@ -1,6 +1,7 @@
 import z from "zod";
 
 import {
+  eVehicleModelCategoryModel,
   eVehicleModelTransmissionModel,
   eVehicleModelFuelModel,
   eVehicleModelStatusModel,
@@ -21,8 +22,15 @@ const zVehicleModelCreate = z
       ),
     name: z.string().nonempty(),
     description: z.string().nonempty(),
+    category: z.enum(eVehicleModelCategoryModel),
     manufacturer: z.string().nonempty(),
-    modelYear: z.number().min(1980, "model year cannot be older than 1980."),
+    modelYear: z
+      .number()
+      .min(1980, "model year cannot be older than 1980.")
+      .refine((value) => {
+        const year = new Date().getFullYear();
+        return value <= year;
+      }, "model year cannot be in the future."),
     capacity: z.number().min(1, "capacity cannot be negative."),
     transmission: z.enum(eVehicleModelTransmissionModel),
     fuel: z.enum(eVehicleModelFuelModel),

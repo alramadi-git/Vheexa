@@ -3,7 +3,7 @@
 import { tEmail } from "@/validations/email";
 import { tPassword } from "@/validations/password";
 
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useMemo, useState } from "react";
 
 import { cn } from "@/utilities/cn";
 
@@ -157,7 +157,10 @@ function FieldDatePicker<
   inputProps: { className, ...inputProps } = {},
 }: tFieldDatePickerProps<tFieldValues, tName>) {
   const locale = useLocale() as eLocale;
-  const clsDateFormatter = new ClsDateFormatter(locale);
+  const clsDateFormatter = useMemo(
+    () => new ClsDateFormatter(locale),
+    [locale],
+  );
 
   const [inputValue, setInputValue] = useState<string>(
     !controller.field.value
@@ -172,8 +175,10 @@ function FieldDatePicker<
   return (
     <div className="relative flex gap-2">
       <Input
-        className={cn("bg-background pr-10", className)}
         value={inputValue}
+        placeholder={clsDateFormatter.format(new Date())}
+        className={cn("bg-background pr-10", className)}
+        onKeyDown={(e) => e.code === "Enter" && e.currentTarget.blur()}
         onChange={(e) => {
           const value = e.target.value;
           const date = new Date(value);
@@ -187,15 +192,15 @@ function FieldDatePicker<
             return;
           }
 
-          if (!date || isNaN(date.getTime())) return;
+          if (isNaN(date.getTime())) return;
 
           setMonth(date);
           controller.field.onChange(date);
         }}
-        onBlur={() =>
-          controller.field.value !== undefined &&
-          setInputValue(clsDateFormatter.format(controller.field.value))
-        }
+        onBlur={() => {
+          if (controller.field.value === undefined) setInputValue("");
+          else setInputValue(clsDateFormatter.format(controller.field.value));
+        }}
         {...inputProps}
       />
       <Popover

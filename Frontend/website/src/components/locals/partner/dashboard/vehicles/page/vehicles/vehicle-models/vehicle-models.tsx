@@ -12,7 +12,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LuPlus } from "react-icons/lu";
+import { LuChevronDown, LuPlus } from "react-icons/lu";
 
 import { TabsContent } from "@/components/shadcn/tabs";
 import {
@@ -29,6 +29,7 @@ import {
   FieldLabel,
   FieldContent,
   FieldError,
+  FieldSet,
 } from "@/components/shadcn/field";
 import { Separator } from "@/components/shadcn/separator";
 
@@ -45,6 +46,14 @@ import {
   SelectValue,
 } from "@/components/shadcn/select";
 import { FieldDatePicker } from "@/components/locals/blocks/fields";
+import {
+  eVehicleModelCategoryModel,
+  eVehicleModelFuelModel,
+  eVehicleModelStatusModel,
+  eVehicleModelTransmissionModel,
+} from "@/models/partner/vehicle-model";
+import { Textarea } from "@/components/shadcn/textarea";
+import { useMemo } from "react";
 
 export default function VehicleModels() {
   const data = useVehicleModels();
@@ -63,13 +72,50 @@ export default function VehicleModels() {
   );
 }
 
+type tCategory = {
+  value: number;
+  label: string;
+};
+type tManufacturer = {
+  value: number;
+  manufacturers: string[];
+};
+
 function AddNew() {
   const tAddNew = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
   );
-  const { control, handleSubmit } = useForm<tVehicleModelCreate>({
-    resolver: zodResolver(zVehicleModelCreate),
-  });
+  const { control, watch, setValue, handleSubmit } =
+    useForm<tVehicleModelCreate>({
+      defaultValues: {
+        thumbnail: "",
+        images: [],
+        name: "",
+        description: "",
+        category: eVehicleModelCategoryModel.car,
+        manufacturer: "",
+        modelYear: new Date().getFullYear(),
+        capacity: 0,
+        transmission: eVehicleModelTransmissionModel.manual,
+        fuel: eVehicleModelFuelModel.petrol91,
+        colors: [],
+        price: 0,
+        discount: 0,
+        tags: "",
+        status: eVehicleModelStatusModel.active,
+      },
+      resolver: zodResolver(zVehicleModelCreate),
+    });
+  const category = watch("category");
+
+  const categories: tCategory[] = tAddNew.raw("form.category.categories");
+  const manufactures: tManufacturer["manufacturers"] = useMemo(
+    () =>
+      (tAddNew.raw("form.manufacturer.manufacturers") as tManufacturer[]).find(
+        (manufacturer) => manufacturer.value === category,
+      )!.manufacturers,
+    [tAddNew, category],
+  );
 
   function onSubmit(data: tVehicleModelCreate) {}
 
@@ -94,21 +140,59 @@ function AddNew() {
         <Separator />
 
         <form className="mt-6 grow" onSubmit={handleSubmit(onSubmit)}>
-          <FieldGroup className="grid-cols-3">
+          <FieldSet className="grid grid-cols-3 gap-6">
             <Controller
               control={control}
               name="name"
               render={(controller) => (
                 <Field>
-                  <FieldLabel htmlFor={tAddNew("form.name.id")}>
+                  <FieldLabel htmlFor="name">
                     {tAddNew("form.name.label")}
                   </FieldLabel>
                   <FieldContent>
                     <Input
                       {...controller.field}
-                      id={tAddNew("form.name.id")}
+                      id="name"
                       placeholder={tAddNew("form.name.placeholder")}
                     />
+                  </FieldContent>
+                  <FieldError errors={[controller.fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="category"
+              render={(controller) => (
+                <Field>
+                  <FieldLabel htmlFor="category">
+                    {tAddNew("form.category.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Select
+                      value={controller.field.value.toString()}
+                      onValueChange={(value) => {
+                        console.log(value);
+                        setValue("manufacturer", "");
+                        controller.field.onChange(Number(value));
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={tAddNew("form.category.placeholder")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem
+                            key={category.value}
+                            value={category.value.toString()}
+                          >
+                            {category.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FieldContent>
                   <FieldError errors={[controller.fieldState.error]} />
                 </Field>
@@ -119,41 +203,83 @@ function AddNew() {
               name="manufacturer"
               render={(controller) => (
                 <Field>
-                  <FieldLabel htmlFor={tAddNew("form.manufacturer.id")}>
+                  <FieldLabel htmlFor="manufacturer">
                     {tAddNew("form.manufacturer.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <Input
-                      {...controller.field}
-                      id={tAddNew("form.manufacturer.id")}
-                      placeholder={tAddNew("form.manufacturer.placeholder")}
-                    />
+                    <Select
+                      value={controller.field.value}
+                      onValueChange={controller.field.onChange}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={tAddNew("form.manufacturer.placeholder")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="h-86">
+                        {manufactures.map((manufacturer) => (
+                          <SelectItem key={manufacturer} value={manufacturer}>
+                            {manufacturer}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FieldContent>
                   <FieldError errors={[controller.fieldState.error]} />
                 </Field>
               )}
             />
+          </FieldSet>
+          <FieldSet>
             <Controller
               control={control}
               name="modelYear"
-              render={(controller) => (
+              render={({ field: { onChange, ...field }, fieldState }) => (
                 <Field>
-                  <FieldLabel htmlFor={tAddNew("form.model-year.id")}>
+                  <FieldLabel htmlFor="model-year">
                     {tAddNew("form.model-year.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <FieldDatePicker
-                      controller={controller}
-                      inputProps={{
-                        placeholder: tAddNew("form.model-year.placeholder"),
+                    <Input
+                      {...field}
+                      id="model-year"
+                      type="number"
+                      placeholder={tAddNew("form.model-year.placeholder")}
+                      onChange={(e) => {
+                        const value = Number(e.currentTarget.value);
+
+                        if (Number.isNaN(value)) return;
+                        onChange(value);
                       }}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+          </FieldSet>
+
+          <FieldSet>
+            <Controller
+              control={control}
+              name="description"
+              render={(controller) => (
+                <Field>
+                  <FieldLabel htmlFor="description">
+                    {tAddNew("form.description.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Textarea
+                      {...controller.field}
+                      placeholder={tAddNew("form.description.placeholder")}
                     />
                   </FieldContent>
                   <FieldError errors={[controller.fieldState.error]} />
                 </Field>
               )}
             />
-          </FieldGroup>
+          </FieldSet>
+          {/* <button type="submit">submit</button> */}
         </form>
       </DialogContent>
     </Dialog>

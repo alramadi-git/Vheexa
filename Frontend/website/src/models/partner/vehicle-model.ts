@@ -3,6 +3,17 @@ import { tImageModel } from "../image";
 import { tVehicleImageModel } from "./vehicle-image";
 import { tVehicleColorModel } from "./vehicle-color";
 
+enum eVehicleModelCategoryModel {
+  car,
+  van,
+  truck,
+  motorcycle,
+  boat,
+  yacht,
+  jetSki,
+  helicopter,
+}
+
 enum eVehicleModelTransmissionModel {
   manual,
   automatic,
@@ -34,6 +45,7 @@ type tVehicleModelModel = {
   images: tVehicleImageModel[];
   name: string;
   description: string;
+  category: eVehicleModelCategoryModel;
   manufacturer: string;
   modelYear: number;
   capacity: number;
@@ -49,6 +61,7 @@ type tVehicleModelModel = {
 };
 
 export {
+  eVehicleModelCategoryModel,
   eVehicleModelTransmissionModel,
   eVehicleModelFuelModel,
   eVehicleModelStatusModel,

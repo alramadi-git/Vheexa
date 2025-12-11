@@ -845,19 +845,191 @@
                   "description": "Add a new vehicle model to your inventory.",
                   "form": {
                     "name": {
-                      "id": "name",
                       "label": "Name",
-                      "placeholder": "Enter a name..."
+                      "placeholder": "Enter a vehicle name like Audi A4, BMW R1250, Sunseeker Predator, Yamaha WaveRunner, or Bell 206"
+                    },
+                    "category": {
+                      "label": "Category",
+                      "placeholder": "Select a car, motorcycle, yacht, boat or even helicopter...",
+                      "categories": [
+                        {
+                          "value": 0,
+                          "label": "Cars"
+                        },
+                        {
+                          "value": 1,
+                          "label": "Vans"
+                        },
+                        {
+                          "value": 2,
+                          "label": "Trucks"
+                        },
+                        {
+                          "value": 3,
+                          "label": "Motorcycles"
+                        },
+                        {
+                          "value": 4,
+                          "label": "Boats"
+                        },
+                        {
+                          "value": 5,
+                          "label": "Yachts"
+                        },
+                        {
+                          "value": 6,
+                          "label": "Jet Skis"
+                        },
+                        {
+                          "value": 7,
+                          "label": "Helicopters"
+                        }
+                      ]
                     },
                     "manufacturer": {
-                      "id": "manufacturer",
                       "label": "Manufacturer",
-                      "placeholder": "Select a manufacturer..."
+                      "placeholder": "Enter a manufacturer",
+                      "manufacturers": [
+                        {
+                          "value": 0,
+                          "manufacturers": [
+                            "Audi",
+                            "BMW",
+                            "Mercedes-Benz",
+                            "Toyota",
+                            "Honda",
+                            "Ford",
+                            "Volkswagen",
+                            "Nissan",
+                            "Chevrolet",
+                            "Kia",
+                            "Hyundai",
+                            "Mazda",
+                            "Peugeot",
+                            "Renault",
+                            "Volvo",
+                            "Subaru",
+                            "Jaguar",
+                            "Land Rover",
+                            "Tesla",
+                            "Mitsubishi"
+                          ]
+                        },
+                        {
+                          "value": 1,
+                          "manufacturers": [
+                            "Ford",
+                            "Mercedes-Benz",
+                            "Volkswagen",
+                            "Toyota",
+                            "Nissan",
+                            "Renault",
+                            "Peugeot",
+                            "Fiat",
+                            "Citroën",
+                            "Hyundai",
+                            "Chevrolet"
+                          ]
+                        },
+                        {
+                          "value": 2,
+                          "manufacturers": [
+                            "Volvo",
+                            "Scania",
+                            "MAN",
+                            "Ford",
+                            "Mercedes-Benz",
+                            "Isuzu",
+                            "DAF",
+                            "Kenworth",
+                            "Peterbilt",
+                            "Mack",
+                            "Iveco",
+                            "Hino"
+                          ]
+                        },
+                        {
+                          "value": 3,
+                          "manufacturers": [
+                            "Honda",
+                            "Yamaha",
+                            "Kawasaki",
+                            "Ducati",
+                            "BMW",
+                            "Suzuki",
+                            "Harley-Davidson",
+                            "Triumph",
+                            "KTM",
+                            "Royal Enfield",
+                            "Aprilia",
+                            "Victory",
+                            "Moto Guzzi"
+                          ]
+                        },
+                        {
+                          "value": 4,
+                          "manufacturers": [
+                            "Bayliner",
+                            "Yamaha",
+                            "Sea Ray",
+                            "Boston Whaler",
+                            "Chaparral",
+                            "Tracker",
+                            "Beneteau",
+                            "Jeanneau",
+                            "MasterCraft",
+                            "Four Winns"
+                          ]
+                        },
+                        {
+                          "value": 5,
+                          "manufacturers": [
+                            "Sunseeker",
+                            "Azimut",
+                            "Ferretti",
+                            "Beneteau",
+                            "Princess Yachts",
+                            "Riva",
+                            "Sanlorenzo",
+                            "Pershing",
+                            "Heesen",
+                            "Oceanco",
+                            "Fairline"
+                          ]
+                        },
+                        {
+                          "value": 6,
+                          "manufacturers": [
+                            "Kawasaki",
+                            "Yamaha",
+                            "Sea-Doo",
+                            "BRP",
+                            "Honda"
+                          ]
+                        },
+                        {
+                          "value": 7,
+                          "manufacturers": [
+                            "Bell",
+                            "Airbus Helicopters",
+                            "Robinson",
+                            "Sikorsky",
+                            "AgustaWestland",
+                            "Enstrom",
+                            "MD Helicopters",
+                            "Kamov",
+                            "Eurocopter"
+                          ]
+                        }
+                      ]
                     },
                     "model-year": {
-                      "id": "model-year",
                       "label": "Model Year",
-                      "placeholder": "Select a model year..."
+                      "placeholder": "1980 - today"
+                    },
+                    "description": {
+                      "label": "Description",
+                      "placeholder": "Enter a description"
                     }
                   }
                 },

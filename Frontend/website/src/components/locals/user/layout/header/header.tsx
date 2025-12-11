@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
 import Account from "./account";
-import Languages from "@/components/locals/user/header/languages";
+import Languages from "@/components/locals/user/layout/header/languages";
 
-import DesktopNavigation from "@/components/locals/user/header/desktop-navigation";
-import MobileNavigation from "@/components/locals/user/header/mobile-navigation";
+import DesktopNavigation from "@/components/locals/user/layout/header/desktop-navigation";
+import MobileNavigation from "@/components/locals/user/layout/header/mobile-navigation";
 
 import { Container } from "@/components/locals/blocks/typography";
 import { FullHDImage } from "@/components/locals/blocks/images";
