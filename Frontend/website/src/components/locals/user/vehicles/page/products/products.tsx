@@ -6,7 +6,7 @@ import { ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { clsVehicle } from "@/classes/user/vehicle";
 
 import { useTranslations } from "next-intl";
-import { useVehicleModels } from "../../../../../../hooks/user/vehicles/use-vehicles-query";
+import { useVehicleModels } from "../../../../../../hooks/user/vehicles-models";
 
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/locals/blocks/toast";
@@ -29,7 +29,7 @@ import {
 } from "@/components/shadcn/carousel";
 import Filters from "./filters";
 import List, { eListStatus } from "@/components/locals/blocks/list";
-import Pagination from "@/components/locals/blocks/pagination";
+import { Pagination } from "@/components/locals/blocks/pagination";
 
 import { Fragment } from "react";
 import { Section, Container } from "@/components/locals/blocks/typography";

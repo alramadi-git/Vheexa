@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
 import { useTranslations } from "next-intl";
-import { useQuery } from "@/hooks/use-query";
+import { useQuery } from "@/hooks/query";
 
 import { Card } from "@/components/shadcn/card";
 import {

@@ -90,54 +90,54 @@ class ClsVehicleModelService extends ClsAbstractService {
 
       const clsQuery = new ClsQuery();
 
-      clsQuery.set("vehicle-model.search", parsedFilter.search);
+      clsQuery.set("vehicle-model-filter.search", parsedFilter.search);
 
       clsQuery.setMany(
-        "vehicle-model.model-years",
+        "vehicle-model-filter.model-years",
         parsedFilter.modelYears.map((modelYear) => modelYear.toString()),
       );
 
       clsQuery.set(
-        "vehicle-model.capacity.min",
+        "vehicle-model-filter.capacity.min",
         parsedFilter.capacity.min?.toString(),
       );
       clsQuery.set(
-        "vehicle-model.capacity.max",
+        "vehicle-model-filter.capacity.max",
         parsedFilter.capacity.max?.toString(),
       );
 
       clsQuery.setMany(
-        "vehicle-model.transmissions",
+        "vehicle-model-filter.transmissions",
         parsedFilter.transmissions.map((transmission) =>
           transmission.toString(),
         ),
       );
 
       clsQuery.setMany(
-        "vehicle-model.fuels",
+        "vehicle-model-filter.fuels",
         parsedFilter.fuels.map((fuel) => fuel.toString()),
       );
 
       clsQuery.set(
-        "vehicle-model.price.min",
+        "vehicle-model-filter.price.min",
         parsedFilter.price.min?.toString(),
       );
       clsQuery.set(
-        "vehicle-model.price.max",
+        "vehicle-model-filter.price.max",
         parsedFilter.price.max?.toString(),
       );
 
       clsQuery.set(
-        "vehicle-model.discount.min",
+        "vehicle-model-filter.discount.min",
         parsedFilter.discount.min?.toString(),
       );
       clsQuery.set(
-        "vehicle-model.discount.max",
+        "vehicle-model-filter.discount.max",
         parsedFilter.discount.max?.toString(),
       );
 
       clsQuery.setMany(
-        "vehicle-model.statuses",
+        "vehicle-model-filter.statuses",
         parsedFilter.statuses.map((status) => status.toString()),
       );
 

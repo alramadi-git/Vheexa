@@ -4,7 +4,6 @@ import { tVehicleModelFilter } from "@/validations/partner/vehicle-model-filter"
 import { tPagination } from "@/validations/pagination";
 
 import { ClsVehicleModelService } from "@/services/partner/dashboard/vehicle-model";
-import { ClsQuery } from "@/libraries/query";
 
 import { useQuery } from "@tanstack/react-query";
 

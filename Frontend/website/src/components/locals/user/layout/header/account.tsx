@@ -3,7 +3,7 @@
 import { type ComponentProps } from "react";
 
 import { useTranslations } from "next-intl";
-import useAccount from "@/hooks/user/use-account";
+import useAccount from "@/hooks/user/account";
 
 import { LuUserRound } from "react-icons/lu";
 

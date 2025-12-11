@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import useAccount from "@/hooks/partner/use-account";
+import useAccount from "@/hooks/partner/account";
 
 import {
   LuChevronsUpDown,

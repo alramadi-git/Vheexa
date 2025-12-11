@@ -21,7 +21,7 @@ import {
 import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
-import useVehicleModels from "@/hooks/partner/vehicle-model";
+import useVehicleModels from "@/hooks/partner/vehicle-models";
 
 import {
   LuDot,

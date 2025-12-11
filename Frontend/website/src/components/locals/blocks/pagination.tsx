@@ -4,7 +4,7 @@ import { ePageSize } from "@/validations/pagination";
 import { tPaginationModel } from "@/models/pagination";
 
 import { useTranslations } from "next-intl";
-import { useQuery } from "@/hooks/use-query";
+import { useQuery } from "@/hooks/query";
 
 import {
   LuChevronFirst,

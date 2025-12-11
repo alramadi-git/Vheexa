@@ -13,13 +13,26 @@ import {
   ControllerRenderProps,
   ControllerFieldState,
   UseFormStateReturn,
+  FieldPath,
 } from "react-hook-form";
 
-import { LuMail, LuEye, LuEyeOff } from "react-icons/lu";
+import { LuMail, LuEye, LuEyeOff, LuCalendar } from "react-icons/lu";
 import { Input } from "@/components/shadcn/input";
+import { useLocale } from "next-intl";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { eLocale } from "@/i18n/routing";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/shadcn/popover";
+import { Button } from "@/components/shadcn/button";
+import { Calendar } from "@/components/shadcn/calendar";
+import { tUndefinable } from "@/types/nullish";
+import { string } from "zod";
 
-export type tInputProps = ComponentProps<typeof Input>;
-export type tControllerRenderProps<
+type tInputProps = ComponentProps<typeof Input>;
+type tControllerRenderProps<
   TFieldValues extends FieldValues,
   TName extends Path<TFieldValues>,
 > = {
@@ -28,7 +41,7 @@ export type tControllerRenderProps<
   formState: UseFormStateReturn<TFieldValues>;
 };
 
-export type tFieldPassword = {
+type tFieldPasswordProps = {
   controller: tControllerRenderProps<
     {
       password: tPassword;
@@ -40,10 +53,10 @@ export type tFieldPassword = {
     "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
   >;
 };
-export function FieldPassword({
+function FieldPassword({
   controller,
   inputProps: { id, className, ...inputProps } = {},
-}: tFieldPassword) {
+}: tFieldPasswordProps) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   function toggleVisibility() {
@@ -84,7 +97,7 @@ export function FieldPassword({
   );
 }
 
-export type tFieldEmail = {
+type tFieldEmailProps = {
   controller: tControllerRenderProps<
     {
       email: tEmail;
@@ -96,10 +109,10 @@ export type tFieldEmail = {
     "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
   >;
 };
-export function FieldEmail({
-  controller: controller,
+function FieldEmail({
+  controller,
   inputProps: { id, className, ...inputProps } = {},
-}: tFieldEmail) {
+}: tFieldEmailProps) {
   return (
     <div className="relative">
       <Input
@@ -122,3 +135,104 @@ export function FieldEmail({
     </div>
   );
 }
+
+type tFieldDatePickerProps<
+  tFieldValues extends FieldValues = FieldValues,
+  tName extends FieldPath<tFieldValues> = FieldPath<tFieldValues>,
+> = {
+  controller: {
+    field: ControllerRenderProps<tFieldValues, tName>;
+    fieldState: ControllerFieldState;
+  };
+  inputProps?: Omit<
+    tInputProps,
+    "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
+  >;
+};
+function FieldDatePicker<
+  tFieldValues extends FieldValues = FieldValues,
+  tName extends FieldPath<tFieldValues> = FieldPath<tFieldValues>,
+>({
+  controller,
+  inputProps: { className, ...inputProps } = {},
+}: tFieldDatePickerProps<tFieldValues, tName>) {
+  const locale = useLocale() as eLocale;
+  const clsDateFormatter = new ClsDateFormatter(locale);
+
+  const [inputValue, setInputValue] = useState<string>(
+    !controller.field.value
+      ? ""
+      : clsDateFormatter.format(controller.field.value),
+  );
+
+  const [month, setMonth] = useState<tUndefinable<Date>>(
+    controller.field.value ?? new Date(),
+  );
+
+  return (
+    <div className="relative flex gap-2">
+      <Input
+        className={cn("bg-background pr-10", className)}
+        value={inputValue}
+        onChange={(e) => {
+          const value = e.target.value;
+          const date = new Date(value);
+
+          setInputValue(value);
+
+          if (value === "") {
+            setMonth(undefined);
+            controller.field.onChange(undefined);
+
+            return;
+          }
+
+          if (!date || isNaN(date.getTime())) return;
+
+          setMonth(date);
+          controller.field.onChange(date);
+        }}
+        onBlur={() =>
+          controller.field.value !== undefined &&
+          setInputValue(clsDateFormatter.format(controller.field.value))
+        }
+        {...inputProps}
+      />
+      <Popover
+        onOpenChange={(open) => !open && setMonth(controller.field.value)}
+      >
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+          >
+            <LuCalendar className="size-3.5" />
+            <span className="sr-only">Pick a date</span>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-auto overflow-hidden p-0"
+          align="end"
+          alignOffset={-8}
+          sideOffset={10}
+        >
+          <Calendar
+            mode="single"
+            month={month}
+            onMonthChange={setMonth}
+            selected={controller.field.value}
+            onSelect={(date) => {
+              controller.field.onChange(date);
+
+              if (!date) return;
+              setInputValue(clsDateFormatter.format(date));
+            }}
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+export type { tFieldPasswordProps, tFieldEmailProps, tFieldDatePickerProps };
+export { FieldPassword, FieldEmail, FieldDatePicker };

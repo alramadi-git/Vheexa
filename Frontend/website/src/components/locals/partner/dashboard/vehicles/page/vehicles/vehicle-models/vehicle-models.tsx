@@ -1,15 +1,20 @@
 "use client";
 
-import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 
-import useVehicleModels from "@/hooks/partner/vehicle-model";
+import useVehicleModels from "@/hooks/partner/vehicle-models";
+
+import {
+  tVehicleModelCreate,
+  zVehicleModelCreate,
+} from "@/validations/partner/vehicle-model-create";
+
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { LuPlus } from "react-icons/lu";
 
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { TabsContent } from "@/components/shadcn/tabs";
-
 import {
   Dialog,
   DialogTrigger,
@@ -18,15 +23,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/shadcn/dialog";
-import { Button } from "@/components/shadcn/button";
-
-import { Pagination } from "@/components/locals/blocks/pagination";
-import {
-  tVehicleModelCreate,
-  zVehicleModelCreate,
-} from "@/validations/partner/vehicle-model-create";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Table from "./table";
 import {
   FieldGroup,
   Field,
@@ -34,9 +30,21 @@ import {
   FieldContent,
   FieldError,
 } from "@/components/shadcn/field";
-import { Container } from "@/components/locals/blocks/typography";
-import { Input } from "@/components/shadcn/input";
 import { Separator } from "@/components/shadcn/separator";
+
+import { Input } from "@/components/shadcn/input";
+import { Button } from "@/components/shadcn/button";
+
+import Table from "./table";
+import { Pagination } from "@/components/locals/blocks/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/select";
+import { FieldDatePicker } from "@/components/locals/blocks/fields";
 
 export default function VehicleModels() {
   const data = useVehicleModels();
@@ -96,12 +104,16 @@ function AddNew() {
                     {tAddNew("form.name.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <Input {...controller.field} id={tAddNew("form.name.id")} />
+                    <Input
+                      {...controller.field}
+                      id={tAddNew("form.name.id")}
+                      placeholder={tAddNew("form.name.placeholder")}
+                    />
                   </FieldContent>
                   <FieldError errors={[controller.fieldState.error]} />
                 </Field>
               )}
-            />{" "}
+            />
             <Controller
               control={control}
               name="manufacturer"
@@ -112,8 +124,9 @@ function AddNew() {
                   </FieldLabel>
                   <FieldContent>
                     <Input
-                      id={tAddNew("form.manufacturer.id")}
                       {...controller.field}
+                      id={tAddNew("form.manufacturer.id")}
+                      placeholder={tAddNew("form.manufacturer.placeholder")}
                     />
                   </FieldContent>
                   <FieldError errors={[controller.fieldState.error]} />
@@ -129,9 +142,11 @@ function AddNew() {
                     {tAddNew("form.model-year.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <Input
-                      {...controller.field}
-                      id={tAddNew("form.model-year.id")}
+                    <FieldDatePicker
+                      controller={controller}
+                      inputProps={{
+                        placeholder: tAddNew("form.model-year.placeholder"),
+                      }}
                     />
                   </FieldContent>
                   <FieldError errors={[controller.fieldState.error]} />

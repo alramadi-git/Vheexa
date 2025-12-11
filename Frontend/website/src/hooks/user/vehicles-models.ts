@@ -1,7 +1,7 @@
 import { ClsVehicleModelService } from "@/services/user/vehicle-model";
 
 import { useQuery } from "@tanstack/react-query";
-import { useQuery } from "@/hooks/use-query";
+import { useQuery } from "@/hooks/query";
 
 export function useVehicleModels() {
   const vehicleService = new ClsVehicleModelService();
