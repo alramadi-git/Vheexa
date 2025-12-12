@@ -1030,6 +1030,10 @@
                     "description": {
                       "label": "Description",
                       "placeholder": "Enter a description"
+                    },
+                    "tags": {
+                      "label": "Tags",
+                      "placeholder": "Enter your tags: tag1, tag2, etc..."
                     }
                   }
                 },

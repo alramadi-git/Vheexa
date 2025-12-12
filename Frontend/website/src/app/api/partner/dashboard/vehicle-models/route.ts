@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
 
     clsQuery.set("VehicleModelFilter.Search.Value", parsedFilter.search);
 
-    clsQuery.setMany(
+    clsQuery.setArray(
       "VehicleModelFilter.ModelYear.Value",
       parsedFilter.modelYears.map((modelYear) => modelYear.toString()),
     );
@@ -101,17 +101,17 @@ export async function GET(request: NextRequest) {
       parsedFilter.capacity.max?.toString(),
     );
 
-    clsQuery.setMany(
+    clsQuery.setArray(
       "VehicleModelFilter.Transmissions.Value",
       parsedFilter.transmissions.map((transmission) => transmission.toString()),
     );
 
-    clsQuery.setMany(
+    clsQuery.setArray(
       "VehicleModelFilter.Fuels.Value",
       parsedFilter.fuels.map((fuel) => fuel.toString()),
     );
 
-    clsQuery.setMany("VehicleModelFilter.Colors.Value", parsedFilter.colors);
+    clsQuery.setArray("VehicleModelFilter.Colors.Value", parsedFilter.colors);
 
     clsQuery.set(
       "VehicleModelFilter.Price.Min.Value",
@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
       parsedFilter.discount.max?.toString(),
     );
 
-    clsQuery.setMany(
+    clsQuery.setArray(
       "VehicleModelFilter.Statuses.Value",
       parsedFilter.statuses.map((status) => status.toString()),
     );

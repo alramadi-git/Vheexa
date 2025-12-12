@@ -92,7 +92,7 @@ class ClsVehicleModelService extends ClsAbstractService {
 
       clsQuery.set("vehicle-model-filter.search", parsedFilter.search);
 
-      clsQuery.setMany(
+      clsQuery.setArray(
         "vehicle-model-filter.model-years",
         parsedFilter.modelYears.map((modelYear) => modelYear.toString()),
       );
@@ -106,14 +106,14 @@ class ClsVehicleModelService extends ClsAbstractService {
         parsedFilter.capacity.max?.toString(),
       );
 
-      clsQuery.setMany(
+      clsQuery.setArray(
         "vehicle-model-filter.transmissions",
         parsedFilter.transmissions.map((transmission) =>
           transmission.toString(),
         ),
       );
 
-      clsQuery.setMany(
+      clsQuery.setArray(
         "vehicle-model-filter.fuels",
         parsedFilter.fuels.map((fuel) => fuel.toString()),
       );
@@ -136,7 +136,7 @@ class ClsVehicleModelService extends ClsAbstractService {
         parsedFilter.discount.max?.toString(),
       );
 
-      clsQuery.setMany(
+      clsQuery.setArray(
         "vehicle-model-filter.statuses",
         parsedFilter.statuses.map((status) => status.toString()),
       );

@@ -1,11 +1,17 @@
 "use client";
 
+import { tUndefinable } from "@/types/nullish";
+
 import { tEmail } from "@/validations/email";
 import { tPassword } from "@/validations/password";
 
-import { ComponentProps, useMemo, useState } from "react";
-
 import { cn } from "@/utilities/cn";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+
+import { eLocale } from "@/i18n/routing";
+
+import { useLocale } from "next-intl";
+import { ComponentProps, useMemo, useState } from "react";
 
 import {
   FieldValues,
@@ -17,19 +23,14 @@ import {
 } from "react-hook-form";
 
 import { LuMail, LuEye, LuEyeOff, LuCalendar } from "react-icons/lu";
-import { Input } from "@/components/shadcn/input";
-import { useLocale } from "next-intl";
-import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { eLocale } from "@/i18n/routing";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/popover";
+import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
 import { Calendar } from "@/components/shadcn/calendar";
-import { tUndefinable } from "@/types/nullish";
-import { string } from "zod";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -140,10 +141,7 @@ type tFieldDatePickerProps<
   tFieldValues extends FieldValues = FieldValues,
   tName extends FieldPath<tFieldValues> = FieldPath<tFieldValues>,
 > = {
-  controller: {
-    field: ControllerRenderProps<tFieldValues, tName>;
-    fieldState: ControllerFieldState;
-  };
+  controller: tControllerRenderProps<tFieldValues, tName>;
   inputProps?: Omit<
     tInputProps,
     "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"

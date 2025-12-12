@@ -2,7 +2,7 @@ class ClsQuery extends URLSearchParams {
   public override set(name: string, value?: string): void {
     if (value !== undefined) super.set(name, value);
   }
-  public setMany(name: string, values: string[]): void {
+  public setArray(name: string, values: string[]): void {
     values.forEach((value) => super.append(name, value));
   }
 

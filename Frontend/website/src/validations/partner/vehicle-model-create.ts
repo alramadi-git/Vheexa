@@ -20,10 +20,13 @@ const zVehicleModelCreate = z
       .refine(
         (value) => new Set(value.map((v) => v.index)).size === value.length,
       ),
-    name: z.string().nonempty(),
-    description: z.string().nonempty(),
+    name: z.string().nonempty("name cannot be empty."),
+    description: z
+      .string()
+      .nonempty("description cannot be empty.")
+      .max(750, "description cannot be longer than 750 characters."),
     category: z.enum(eVehicleModelCategoryModel),
-    manufacturer: z.string().nonempty(),
+    manufacturer: z.string().nonempty("manufacturer cannot be empty."),
     modelYear: z
       .number()
       .min(1980, "model year cannot be older than 1980.")
@@ -39,7 +42,15 @@ const zVehicleModelCreate = z
         z.object({
           name: z.string().nonempty(),
           hexCode: z.hex(),
-          tags: z.array(z.string().nonempty()),
+          tags: z.array(
+            z
+              .string()
+              .nonempty("tags cannot be empty.")
+              .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
+                message:
+                  "Tags must be comma-separated followed by a space and contain only letters.",
+              }),
+          ),
         }),
       )
       .refine(
@@ -47,7 +58,12 @@ const zVehicleModelCreate = z
       ),
     price: z.number().min(0, "price cannot be negative."),
     discount: z.number().min(0, "discount cannot be negative."),
-    tags: z.string().nonempty(),
+    tags: z
+      .string()
+      .nonempty("tags cannot be empty.")
+      .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
+        message: "Tags must be comma-separated followed by a space and contain only letters.",
+      }),
     status: z.enum(eVehicleModelStatusModel),
   })
   .refine((value) => value.price > value.discount, {

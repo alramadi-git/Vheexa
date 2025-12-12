@@ -1,8 +1,10 @@
 "use client";
 
-import { useRouter, usePathname } from "@/i18n/navigation";
-import { ClsQuery } from "@/libraries/query";
 import { useSearchParams as useSearchParamsNextJS } from "next/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
+
+import { ClsQuery } from "@/libraries/query";
+
 import { useState } from "react";
 
 export function useQuery() {
@@ -15,6 +17,10 @@ export function useQuery() {
 
   function set(key: string, value?: string): void {
     query.set(key, value);
+  }
+
+  function setArray(key: string, value: string[]): void {
+    query.setArray(key, value);
   }
 
   function remove(key: string): void {
@@ -35,6 +41,7 @@ export function useQuery() {
 
   return {
     set,
+    setArray,
     remove,
     clear,
     apply,
