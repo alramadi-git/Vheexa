@@ -14,10 +14,8 @@ import { clsFetch } from "@/consts/api/fetch";
 import { tFailedModel, ClsFailedModel } from "@/models/failed";
 
 import {
-  eVehicleModelTransmissionModel,
-  eVehicleModelFuelModel,
-  eVehicleModelStatusModel,
   tVehicleModelModel,
+  eVehicleModelStatusModel,
 } from "@/models/partner/vehicle-model";
 import { tSuccessManyModel } from "@/models/success";
 
@@ -54,12 +52,12 @@ export async function GET(request: NextRequest) {
         min: minCapacity !== null ? Number(minCapacity) : undefined,
         max: maxCapacity !== null ? Number(maxCapacity) : undefined,
       },
-      transmissions: request.nextUrl.searchParams
-        .getAll("vehicle-model-filter.transmissions")
-        .map((transmission) => Number(transmission)),
-      fuels: request.nextUrl.searchParams
-        .getAll("vehicle-model-filter.model-years")
-        .map((fuel) => Number(fuel)),
+      transmissions: request.nextUrl.searchParams.getAll(
+        "vehicle-model-filter.transmissions",
+      ),
+      fuels: request.nextUrl.searchParams.getAll(
+        "vehicle-model-filter.model-years",
+      ),
       colors: request.nextUrl.searchParams.getAll(
         "vehicle-model-filter.colors",
       ),
@@ -147,6 +145,7 @@ export async function GET(request: NextRequest) {
       data: [
         {
           uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          category: 0,
           thumbnail: {
             uuid: "a3d9e2b1-4f5c-4e8a-9b2d-1c6e7f8a9b2c",
             url: "https://example.com/images/thumbnails/model_s.jpg",
@@ -169,8 +168,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Tesla",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.automatic,
-          fuel: eVehicleModelFuelModel.electric,
+          transmission: "Automatic",
+          fuel: "Electric",
           colors: [
             {
               uuid: "d6h1i2j3-4k5l-6m7n-8o9p-1q2r3s4t5u6v",
@@ -194,6 +193,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+          category: 0,
           thumbnail: {
             uuid: "f8g9h1i2-3j4k-5l6m-7n8o-9p1q2r3s4t5u",
             url: "https://example.com/images/thumbnails/civic.jpg",
@@ -216,8 +216,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Honda",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.manual,
-          fuel: eVehicleModelFuelModel.petrol95,
+          transmission: "Manual",
+          fuel: "Petrol 95",
           colors: [
             {
               uuid: "i2j3k4l5-6m7n-8o9p-1q2r-3s4t5u6v7w8x",
@@ -241,6 +241,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "b2c3d4e5-f6g7-8901-h2i3-j4k5l6m7n8o9",
+          category: 0,
           thumbnail: {
             uuid: "k4l5m6n7-8o9p-1q2r-3s4t-5u6v7w8x9y0z",
             url: "https://example.com/images/thumbnails/m3.jpg",
@@ -258,8 +259,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "BMW",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.dualClutch,
-          fuel: eVehicleModelFuelModel.petrol98,
+          transmission: "Dual Clutch",
+          fuel: "Petrol 98",
           colors: [
             {
               uuid: "m6n7o8p9-1q2r-3s4t-5u6v-7w8x9y0z1a2b",
@@ -277,6 +278,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "c3d4e5f6-g7h8-9012-i3j4-k5l6m7n8o9p0",
+          category: 0,
           thumbnail: {
             uuid: "n7o8p9q1-2r3s-4t5u-6v7w-8x9y0z1a2b3c",
             url: "https://example.com/images/thumbnails/golf.jpg",
@@ -294,8 +296,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Volkswagen",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.semiAutomatic,
-          fuel: eVehicleModelFuelModel.petrol95,
+          transmission: "Semi-Automatic",
+          fuel: "Petrol 95",
           colors: [
             {
               uuid: "p9q1r2s3-4t5u-6v7w-8x9y-0z1a2b3c4d5e",
@@ -313,6 +315,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "d4e5f6g7-h8i9-0123-j4k5-l6m7n8o9p0q1",
+          category: 0,
           thumbnail: {
             uuid: "q1r2s3t4-5u6v-7w8x-9y0z-1a2b3c4d5e6f",
             url: "https://example.com/images/thumbnails/camry.jpg",
@@ -330,8 +333,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Toyota",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.cvt,
-          fuel: eVehicleModelFuelModel.hybrid,
+          transmission: "CVT",
+          fuel: "Hybrid",
           colors: [
             {
               uuid: "s3t4u5v6-7w8x-9y0z-1a2b-3c4d5e6f7g8h",
@@ -349,6 +352,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "e5f6g7h8-i9j0-1234-k5l6-m7n8o9p0q1r2",
+          category: 0,
           thumbnail: {
             uuid: "t4u5v6w7-8x9y-0z1a-2b3c-4d5e6f7g8h9i",
             url: "https://example.com/images/thumbnails/forester.jpg",
@@ -366,8 +370,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Subaru",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.cvt,
-          fuel: eVehicleModelFuelModel.petrol91,
+          transmission: "CVT",
+          fuel: "Petrol 91",
           colors: [
             {
               uuid: "v6w7x8y9-1z2a-3b4c-5d6e-7f8g9h0i1j2k",
@@ -385,6 +389,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "f6g7h8i9-j0k1-2345-l6m7-n8o9p0q1r2s3",
+          category: 2,
           thumbnail: {
             uuid: "w7x8y9z0-1a2b-3c4d-5e6f-7g8h9i0j1k2l",
             url: "https://example.com/images/thumbnails/f150.jpg",
@@ -402,8 +407,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Ford",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.automatic,
-          fuel: eVehicleModelFuelModel.diesel,
+          transmission: "Automatic",
+          fuel: "Diesel",
           colors: [
             {
               uuid: "y9z0a1b2-3c4d-5e6f-7g8h-9i0j1k2l3m4n",
@@ -421,6 +426,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "g7h8i9j0-k1l2-3456-m7n8-o9p0q1r2s3t4",
+          category: 0,
           thumbnail: {
             uuid: "z0a1b2c3-4d5e-6f7g-8h9i-0j1k2l3m4n5o",
             url: "https://example.com/images/thumbnails/corvette.jpg",
@@ -438,8 +444,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Chevrolet",
           modelYear: 2025,
           capacity: 2,
-          transmission: eVehicleModelTransmissionModel.dualClutch,
-          fuel: eVehicleModelFuelModel.petrol98,
+          transmission: "Dual Clutch",
+          fuel: "Petrol 98",
           colors: [
             {
               uuid: "b2c3d4e5-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
@@ -457,6 +463,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "h8i9j0k1-l2m3-4567-n8o9-p0q1r2s3t4u5",
+          category: 0,
           thumbnail: {
             uuid: "c3d4e5f6-7g8h-9i0j-1k2l-3m4n5o6p7q8r",
             url: "https://example.com/images/thumbnails/xc90.jpg",
@@ -474,8 +481,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Volvo",
           modelYear: 2025,
           capacity: 7,
-          transmission: eVehicleModelTransmissionModel.automatic,
-          fuel: eVehicleModelFuelModel.hybrid,
+          transmission: "Automatic",
+          fuel: "Hybrid",
           colors: [
             {
               uuid: "e5f6g7h8-9i0j-1k2l-3m4n-5o6p7q8r9s0t",
@@ -493,6 +500,7 @@ export async function GET(request: NextRequest) {
         },
         {
           uuid: "i9j0k1l2-m3n4-5678-o9p0-q1r2s3t4u5v6",
+          category: 0,
           thumbnail: {
             uuid: "f6g7h8i9-0j1k-2l3m-4n5o-6p7q8r9s0t1u",
             url: "https://example.com/images/thumbnails/charger.jpg",
@@ -510,8 +518,8 @@ export async function GET(request: NextRequest) {
           manufacturer: "Dodge",
           modelYear: 2025,
           capacity: 5,
-          transmission: eVehicleModelTransmissionModel.automatic,
-          fuel: eVehicleModelFuelModel.petrol91,
+          transmission: "Automatic",
+          fuel: "Petrol 91",
           colors: [
             {
               uuid: "h8i9j0k1-2l3m-4n5o-6p7q-8r9s0t1u2v3w",

@@ -13,7 +13,14 @@ import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LuPlus } from "react-icons/lu";
+import {
+  LuAArrowDown,
+  LuAArrowUp,
+  LuChevronDown,
+  LuChevronUp,
+  LuMinus,
+  LuPlus,
+} from "react-icons/lu";
 
 import { TabsContent } from "@/components/shadcn/tabs";
 import {
@@ -48,11 +55,47 @@ import {
 } from "@/components/shadcn/select";
 import {
   eVehicleModelCategoryModel,
-  eVehicleModelFuelModel,
   eVehicleModelStatusModel,
-  eVehicleModelTransmissionModel,
 } from "@/models/partner/vehicle-model";
 import { Textarea } from "@/components/shadcn/textarea";
+import { SearchableSelect } from "@/components/locals/blocks/selects";
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from "@/components/shadcn/number-field";
+
+type tEnumBase = {
+  value: number;
+  label: string;
+};
+type tCategory = tEnumBase;
+
+type tManufacturer = {
+  value: number;
+  manufacturers: {
+    key: string;
+    value: string;
+  }[];
+};
+
+type tTransmission = {
+  value: number;
+  transmissions: {
+    key: string;
+    value: string;
+  }[];
+};
+
+type tFuel = {
+  value: number;
+  fuels: {
+    key: string;
+    value: string;
+  }[];
+};
 
 export default function VehicleModels() {
   const data = useVehicleModels();
@@ -71,15 +114,6 @@ export default function VehicleModels() {
   );
 }
 
-type tCategory = {
-  value: number;
-  label: string;
-};
-type tManufacturer = {
-  value: number;
-  manufacturers: string[];
-};
-
 function AddNew() {
   const tAddNew = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
@@ -89,34 +123,52 @@ function AddNew() {
       defaultValues: {
         thumbnail: "",
         images: [],
-        name: "",
-        description: "",
-        category: eVehicleModelCategoryModel.car,
-        manufacturer: "",
-        modelYear: new Date().getFullYear(),
+        name: "", // info
+        description: "", // info
+        category: eVehicleModelCategoryModel.car, // info
+        manufacturer: "", // info
+        modelYear: 1980, // info
         capacity: 0,
-        transmission: eVehicleModelTransmissionModel.manual,
-        fuel: eVehicleModelFuelModel.petrol91,
+        transmission: "",
+        fuel: "",
         colors: [],
         price: 0,
         discount: 0,
-        tags: "",
+        tags: "", // info
         status: eVehicleModelStatusModel.active,
       },
       resolver: zodResolver(zVehicleModelCreate),
     });
-  const category = watch("category");
 
+  const category = watch("category");
   const categories: tCategory[] = tAddNew.raw("form.category.categories");
-  const manufactures: tManufacturer["manufacturers"] = useMemo(
+
+  const manufacturers: tManufacturer["manufacturers"] = useMemo(
     () =>
       (tAddNew.raw("form.manufacturer.manufacturers") as tManufacturer[]).find(
         (manufacturer) => manufacturer.value === category,
-      )!.manufacturers,
+      )?.manufacturers ?? [],
+    [tAddNew, category],
+  );
+  const transmissions: tTransmission["transmissions"] = useMemo(
+    () =>
+      (tAddNew.raw("form.transmission.transmissions") as tTransmission[]).find(
+        (manufacturer) => manufacturer.value === category,
+      )?.transmissions ?? [],
+    [tAddNew, category],
+  );
+  const fuels: tFuel["fuels"] = useMemo(
+    () =>
+      (tAddNew.raw("form.fuel.fuels") as tFuel[]).find(
+        (manufacturer) => manufacturer.value === category,
+      )?.fuels ?? [],
     [tAddNew, category],
   );
 
-  function onSubmit(data: tVehicleModelCreate) {}
+  function onSubmit(data: tVehicleModelCreate) {
+    console.log(data);
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -137,7 +189,10 @@ function AddNew() {
         </DialogHeader>
         <Separator />
 
-        <form className="mt-6 grow" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="mt-6 grow space-y-6 space-x-6"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <FieldSet className="grid grid-cols-3 gap-6">
             <FieldGroup>
               <Controller
@@ -170,19 +225,17 @@ function AddNew() {
                       {tAddNew("form.model-year.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <Input
+                      <NumberField
                         {...field}
-                        required
                         id="model-year"
-                        type="number"
-                        placeholder={tAddNew("form.model-year.placeholder")}
-                        onChange={(e) => {
-                          const value = Number(e.currentTarget.value);
-
-                          if (Number.isNaN(value)) return;
-                          onChange(value);
-                        }}
-                      />
+                        onValueChange={onChange}
+                      >
+                        <NumberFieldGroup>
+                          <NumberFieldDecrement />
+                          <NumberFieldInput />
+                          <NumberFieldIncrement />
+                        </NumberFieldGroup>
+                      </NumberField>
                     </FieldContent>
                     <FieldError errors={[fieldState.error]} />
                   </Field>
@@ -202,6 +255,8 @@ function AddNew() {
                         value={controller.field.value.toString()}
                         onValueChange={(value) => {
                           setValue("manufacturer", "");
+                          setValue("transmission", "");
+                          setValue("fuel", "");
                           controller.field.onChange(Number(value));
                         }}
                       >
@@ -235,25 +290,43 @@ function AddNew() {
                       {tAddNew("form.manufacturer.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <Select
-                        value={controller.field.value}
-                        onValueChange={controller.field.onChange}
-                      >
-                        <SelectTrigger id="manufacturer" className="w-full">
-                          <SelectValue
-                            placeholder={tAddNew(
-                              "form.manufacturer.placeholder",
+                      <SearchableSelect
+                        triggerRender={() => (
+                          <Button
+                            role="combobox"
+                            variant="outline"
+                            className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                          >
+                            {controller.field.value === "" ? (
+                              <span className="text-muted-foreground">
+                                {tAddNew("form.manufacturer.when-no-value")}
+                              </span>
+                            ) : (
+                              controller.field.value
                             )}
-                          />
-                        </SelectTrigger>
-                        <SelectContent className="h-86">
-                          {manufactures.map((manufacturer) => (
-                            <SelectItem key={manufacturer} value={manufacturer}>
-                              {manufacturer}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                            <LuChevronDown
+                              size={16}
+                              className="text-muted-foreground/80 ms-auto shrink-0"
+                            />
+                          </Button>
+                        )}
+                        value={controller.field.value}
+                        inputProps={{
+                          placeholder: tAddNew(
+                            "form.manufacturer.when-no-value",
+                          ),
+                        }}
+                        onSelect={controller.field.onChange}
+                        list={manufacturers}
+                        itemRender={(item) => (
+                          <button className="w-full">{item.value}</button>
+                        )}
+                        whenNoResultRender={() =>
+                          manufacturers.length === 0
+                            ? tAddNew("form.manufacturer.when-invalid-category")
+                            : tAddNew("form.manufacturer.when-no-result")
+                        }
+                      />
                     </FieldContent>
                     <FieldError errors={[controller.fieldState.error]} />
                   </Field>
@@ -274,7 +347,6 @@ function AddNew() {
                       <Textarea
                         {...controller.field}
                         required
-                        
                         id="description"
                         placeholder={tAddNew("form.description.placeholder")}
                         className="h-full resize-none"
@@ -301,6 +373,134 @@ function AddNew() {
                 )}
               />
             </FieldGroup>
+          </FieldSet>
+
+          <FieldSet>
+            <Controller
+              control={control}
+              name="capacity"
+              render={({ field: { onChange, ...field }, fieldState }) => (
+                <Field>
+                  <Field>
+                    <FieldLabel htmlFor="capacity">
+                      {tAddNew("form.capacity.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <NumberField
+                        {...field}
+                        id="capacity"
+                        onValueChange={onChange}
+                      >
+                        <NumberFieldGroup>
+                          <NumberFieldDecrement />
+                          <NumberFieldInput />
+                          <NumberFieldIncrement />
+                        </NumberFieldGroup>
+                      </NumberField>
+                    </FieldContent>
+                    <FieldError errors={[fieldState.error]} />
+                  </Field>
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="transmission"
+              render={(controller) => (
+                <Field>
+                  <FieldLabel htmlFor="transmission">
+                    {tAddNew("form.transmission.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <SearchableSelect
+                      triggerRender={() => (
+                        <Button
+                          role="combobox"
+                          variant="outline"
+                          className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                        >
+                          {controller.field.value === "" ? (
+                            <span className="text-muted-foreground">
+                              {tAddNew("form.fuel.when-no-value")}
+                            </span>
+                          ) : (
+                            controller.field.value
+                          )}
+                          <LuChevronDown
+                            size={16}
+                            className="text-muted-foreground/80 ms-auto shrink-0"
+                          />
+                        </Button>
+                      )}
+                      value={controller.field.value}
+                      inputProps={{
+                        placeholder: tAddNew("form.transmission.when-no-value"),
+                      }}
+                      onSelect={controller.field.onChange}
+                      list={transmissions}
+                      itemRender={(item) => (
+                        <button className="w-full">{item.value}</button>
+                      )}
+                      whenNoResultRender={() =>
+                        transmissions.length === 0
+                          ? tAddNew("form.transmission.when-invalid-category")
+                          : tAddNew("form.transmission.when-no-result")
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={[controller.fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="fuel"
+              render={(controller) => (
+                <Field>
+                  <FieldLabel htmlFor="fuel">
+                    {tAddNew("form.fuel.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <SearchableSelect
+                      triggerRender={() => (
+                        <Button
+                          role="combobox"
+                          variant="outline"
+                          className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                        >
+                          {controller.field.value === "" ? (
+                            <span className="text-muted-foreground">
+                              {tAddNew("form.fuel.when-no-value")}
+                            </span>
+                          ) : (
+                            controller.field.value
+                          )}
+                          <LuChevronDown
+                            size={16}
+                            className="text-muted-foreground/80 ms-auto shrink-0"
+                          />
+                        </Button>
+                      )}
+                      value={controller.field.value}
+                      inputProps={{
+                        placeholder: tAddNew("form.fuel.when-no-value"),
+                      }}
+                      onSelect={controller.field.onChange}
+                      list={fuels}
+                      itemRender={(item) => (
+                        <button className="w-full">{item.value}</button>
+                      )}
+                      whenNoResultRender={() =>
+                        fuels.length === 0
+                          ? tAddNew("form.fuel.when-invalid-category")
+                          : tAddNew("form.fuel.when-no-result")
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={[controller.fieldState.error]} />
+                </Field>
+              )}
+            />
           </FieldSet>
 
           <button type="submit">submit</button>

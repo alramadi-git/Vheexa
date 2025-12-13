@@ -1,10 +1,6 @@
 import z from "zod";
 
-import {
-  eVehicleModelTransmissionModel,
-  eVehicleModelFuelModel,
-  eVehicleModelStatusModel,
-} from "@/models/partner/vehicle-model";
+import { eVehicleModelStatusModel } from "@/models/partner/vehicle-model";
 import { zUuid } from "../uuid";
 
 const zVehicleModelUpdate = z
@@ -24,19 +20,21 @@ const zVehicleModelUpdate = z
       z.number().min(1980, "model year cannot be older than 1980."),
     ),
     capacity: z.optional(z.number().min(1, "capacity cannot be negative.")),
-    transmission: z.optional(z.enum(eVehicleModelTransmissionModel)),
-    fuel: z.optional(z.enum(eVehicleModelFuelModel)),
+    transmission: z.optional(
+      z.string().nonempty("transmission cannot be empty."),
+    ),
+    fuel: z.optional(z.string().nonempty("fuel cannot be empty.")),
     colors: z.array(
       z.object({
         uuid: zUuid,
-        name: z.string().nonempty(),
+        name: z.string().nonempty("color cannot be empty."),
         hexCode: z.hex(),
-        tags: z.array(z.string().nonempty()),
+        tags: z.array(z.string().nonempty("tag cannot be empty.")),
       }),
     ),
     price: z.optional(z.number().min(0, "price cannot be negative.")),
     discount: z.optional(z.number().min(0, "discount cannot be negative.")),
-    tags: z.optional(z.string().nonempty()),
+    tags: z.optional(z.string().nonempty("tag cannot be empty.")),
     status: z.optional(z.enum(eVehicleModelStatusModel)),
   })
 

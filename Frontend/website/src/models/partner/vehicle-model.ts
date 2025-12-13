@@ -14,26 +14,6 @@ enum eVehicleModelCategoryModel {
   helicopter,
 }
 
-enum eVehicleModelTransmissionModel {
-  manual,
-  automatic,
-  semiAutomatic,
-  cvt,
-  dualClutch,
-}
-
-enum eVehicleModelFuelModel {
-  petrol91,
-  petrol95,
-  petrol98,
-  diesel,
-  electric,
-  hybrid,
-  cng,
-  lpg,
-  hydrogen,
-}
-
 enum eVehicleModelStatusModel {
   active,
   inactive,
@@ -49,8 +29,8 @@ type tVehicleModelModel = {
   manufacturer: string;
   modelYear: number;
   capacity: number;
-  transmission: eVehicleModelTransmissionModel;
-  fuel: eVehicleModelFuelModel;
+  transmission: string;
+  fuel: string;
   colors: tVehicleColorModel[];
   price: number;
   discount: number;
@@ -60,10 +40,5 @@ type tVehicleModelModel = {
   createdAt: string;
 };
 
-export {
-  eVehicleModelCategoryModel,
-  eVehicleModelTransmissionModel,
-  eVehicleModelFuelModel,
-  eVehicleModelStatusModel,
-};
+export { eVehicleModelCategoryModel, eVehicleModelStatusModel };
 export type { tVehicleModelModel };

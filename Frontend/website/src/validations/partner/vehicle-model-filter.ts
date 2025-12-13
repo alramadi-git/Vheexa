@@ -1,10 +1,6 @@
 import z from "zod";
 
-import {
-  eVehicleModelTransmissionModel,
-  eVehicleModelFuelModel,
-  eVehicleModelStatusModel,
-} from "@/models/partner/vehicle-model";
+import { eVehicleModelStatusModel } from "@/models/partner/vehicle-model";
 
 const zVehicleModelFilter = z
   .object({
@@ -35,9 +31,11 @@ const zVehicleModelFilter = z
             "min capacity should be less than, equal to max capacity or leave it blank.",
         },
       ),
-    transmissions: z.array(z.enum(eVehicleModelTransmissionModel)),
-    fuels: z.array(z.enum(eVehicleModelFuelModel)),
-    colors: z.array(z.string().nonempty()),
+    transmissions: z.array(
+      z.string().nonempty("transmission cannot be empty."),
+    ),
+    fuels: z.array(z.string().nonempty("fuel cannot be empty.")),
+    colors: z.array(z.string().nonempty("color cannot be empty.")),
     price: z
       .object({
         min: z.optional(z.number().min(0, "price cannot be negative.")),

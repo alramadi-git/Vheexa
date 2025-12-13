@@ -2,8 +2,6 @@ import z from "zod";
 
 import {
   eVehicleModelCategoryModel,
-  eVehicleModelTransmissionModel,
-  eVehicleModelFuelModel,
   eVehicleModelStatusModel,
 } from "@/models/partner/vehicle-model";
 
@@ -34,9 +32,9 @@ const zVehicleModelCreate = z
         const year = new Date().getFullYear();
         return value <= year;
       }, "model year cannot be in the future."),
-    capacity: z.number().min(1, "capacity cannot be negative."),
-    transmission: z.enum(eVehicleModelTransmissionModel),
-    fuel: z.enum(eVehicleModelFuelModel),
+    capacity: z.number().min(1, "capacity cannot be zero."),
+    transmission: z.string().nonempty("transmission cannot be empty."),
+    fuel: z.string().nonempty("fuel cannot be empty."),
     colors: z
       .array(
         z.object({
@@ -45,7 +43,7 @@ const zVehicleModelCreate = z
           tags: z.array(
             z
               .string()
-              .nonempty("tags cannot be empty.")
+              .nonempty("tag cannot be empty.")
               .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
                 message:
                   "Tags must be comma-separated followed by a space and contain only letters.",
@@ -60,9 +58,10 @@ const zVehicleModelCreate = z
     discount: z.number().min(0, "discount cannot be negative."),
     tags: z
       .string()
-      .nonempty("tags cannot be empty.")
+      .nonempty("tag cannot be empty.")
       .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-        message: "Tags must be comma-separated followed by a space and contain only letters.",
+        message:
+          "Tags must be comma-separated followed by a space and contain only letters.",
       }),
     status: z.enum(eVehicleModelStatusModel),
   })
