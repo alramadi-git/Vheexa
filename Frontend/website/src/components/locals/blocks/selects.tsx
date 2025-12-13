@@ -12,7 +12,7 @@ import {
   CommandItem,
 } from "@/components/shadcn/command";
 import { Key, ComponentProps, ReactNode, useState, useEffect } from "react";
-import { Button } from "@/components/shadcn/button";
+import { LuArrowRight } from "react-icons/lu";
 
 type tDataBase = {
   key: Key;
@@ -45,10 +45,10 @@ function FreeSearchableSelect<tData extends tDataBase>({
 
   function onEnter() {
     _onSelect(inputValue);
-    setIsOpen(false);
   }
   function _onSelect(value: string) {
     onSelect(value);
+    setIsOpen(false);
   }
 
   return (
@@ -61,12 +61,16 @@ function FreeSearchableSelect<tData extends tDataBase>({
             onValueChange={(value) => setInputValue(value)}
             onKeyDown={(e) => {
               if (e.code === "Enter") {
-                onEnter();
                 e.currentTarget.blur();
+                onEnter();
               }
             }}
             {...inputProps}
-          />
+          >
+            <button type="button" onClick={onEnter} className="mr-2">
+              <LuArrowRight size={16} className="text-muted-foreground/80 hover:text-primary/80" />
+            </button>
+          </CommandInput>
           <CommandList>
             <CommandEmpty>{whenNoResultRender()}</CommandEmpty>
             {list.map((item) => (

@@ -25,6 +25,21 @@
     "account": {
       "logout": "Logout"
     },
+    "colors": {
+      "color-creator": {
+        "trigger": "Add",
+        "content": {
+          "name": {
+            "placeholder": "Enter color name: e.g., Black, White, Red, etc..."
+          },
+          "tags": {
+            "placeholder": "Enter tags for better search: (e.g., Black, Dark, Night, etc..."
+          },
+
+          "save": "Save"
+        }
+      }
+    },
     "list": {
       "empty": {
         "title": "No results were found",
@@ -839,7 +854,7 @@
                   "form": {
                     "name": {
                       "label": "Name",
-                      "placeholder": "Enter a vehicle name like Audi A4, BMW R1250, Sunseeker Predator, Yamaha WaveRunner, or Bell 206"
+                      "placeholder": "Enter a vehicle name like Audi A4, BMW R1250 or Bell 206"
                     },
                     "model-year": {
                       "label": "Model Year",
@@ -1714,6 +1729,12 @@
                           ]
                         }
                       ]
+                    },
+                    "colors": {
+                      "label": "Colors",
+                      "colorsSelect": {
+                        "label": "Select vehicle colors"
+                      }
                     }
                   }
                 },

@@ -1,7 +1,7 @@
 type tVehicleColorModel = {
   uuid: string;
-  name: string;
   hexCode: string;
+  name: string;
   tags: string;
 };
 

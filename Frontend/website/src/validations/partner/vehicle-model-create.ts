@@ -16,7 +16,9 @@ const zVehicleModelCreate = z
         }),
       )
       .refine(
-        (value) => new Set(value.map((v) => v.index)).size === value.length,
+        (images) =>
+          new Set(images.map((image) => image.index)).size === images.length,
+        "indices must be unique.",
       ),
     name: z.string().nonempty("name cannot be empty."),
     description: z
@@ -32,29 +34,36 @@ const zVehicleModelCreate = z
         const year = new Date().getFullYear();
         return value <= year;
       }, "model year cannot be in the future."),
-    capacity: z.number().min(1, "capacity cannot be zero."),
+    capacity: z.number().min(1, "capacity cannot be less than 1."),
     transmission: z.string().nonempty("transmission cannot be empty."),
     fuel: z.string().nonempty("fuel cannot be empty."),
     colors: z
       .array(
         z.object({
-          name: z.string().nonempty(),
           hexCode: z.hex(),
-          tags: z.array(
-            z
-              .string()
-              .nonempty("tag cannot be empty.")
-              .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-                message:
-                  "Tags must be comma-separated followed by a space and contain only letters.",
-              }),
-          ),
+          name: z.string().nonempty(),
+          tags: z
+            .array(
+              z
+                .string()
+                .nonempty("tag cannot be empty.")
+                .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
+                  message:
+                    "Tags must be comma-separated followed by a space and contain only letters.",
+                }),
+            )
+            .refine(
+              (tags) => new Set(tags.map((tag) => tag)).size === tags.length,
+              "colors must be hex codes unique.",
+            ),
         }),
       )
       .refine(
-        (value) => new Set(value.map((v) => v.hexCode)).size === value.length,
+        (colors) =>
+          new Set(colors.map((color) => color.hexCode)).size === colors.length,
+        "colors must be hex codes unique.",
       ),
-    price: z.number().min(0, "price cannot be negative."),
+    price: z.number().min(1, "price cannot be less than 1."),
     discount: z.number().min(0, "discount cannot be negative."),
     tags: z
       .string()
