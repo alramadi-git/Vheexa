@@ -10,8 +10,8 @@ import { ClsDateFormatter } from "@/libraries/date-formatter";
 
 import { eLocale } from "@/i18n/routing";
 
-import { useLocale } from "next-intl";
-import { ComponentProps, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { ComponentProps, useCallback, useMemo, useState } from "react";
 
 import {
   FieldValues,
@@ -22,7 +22,7 @@ import {
   FieldPath,
 } from "react-hook-form";
 
-import { LuMail, LuEye, LuEyeOff, LuCalendar } from "react-icons/lu";
+import { LuMail, LuEye, LuEyeOff, LuCalendar, LuUpload } from "react-icons/lu";
 import {
   Popover,
   PopoverContent,
@@ -31,6 +31,14 @@ import {
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
 import { Calendar } from "@/components/shadcn/calendar";
+
+import { toast } from "sonner";
+import {
+  FileUpload,
+  FileUploadDropzone,
+  FileUploadTrigger,
+} from "@/components/shadcn/file-upload";
+import { Toast } from "./typography";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -237,5 +245,47 @@ function FieldDatePicker<
   );
 }
 
-export type { tFieldPasswordProps, tFieldEmailProps, tFieldDatePickerProps };
-export { FieldPassword, FieldEmail, FieldDatePicker };
+type tFileUploadProps = Omit<ComponentProps<typeof FileUpload>, "onFileReject">;
+function FieldFileUpload({ id, ...props }: tFileUploadProps) {
+  const tFileUpload = useTranslations("components.fields.file-upload");
+
+  const onFileReject = useCallback(
+    (file: File, message: string) => {
+      toast.custom(() => (
+        <Toast variant="destructive" label={message}>
+          <p>
+            {tFileUpload("when-reject", {
+              filename:
+                file.name.length > 10
+                  ? file.name.slice(0, 10) + "..."
+                  : file.name,
+            })}
+          </p>
+        </Toast>
+      ));
+    },
+    [tFileUpload],
+  );
+
+  return (
+    <FileUpload onFileReject={onFileReject} {...props}>
+      <FileUploadDropzone>
+        <div className="flex flex-col items-center gap-1 text-center">
+          <div className="flex items-center justify-center rounded-full border p-2.5">
+            <LuUpload className="text-muted-foreground size-6" />
+          </div>
+          <p className="text-sm font-medium">{tFileUpload("title")}</p>
+          <p className="text-muted-foreground text-xs">
+            {tFileUpload("subtitle")}
+          </p>
+        </div>
+        <FileUploadTrigger asChild id={id}>
+          <Button variant="outline" size="sm" className="mt-2 w-fit">
+            {tFileUpload("trigger")}
+          </Button>
+        </FileUploadTrigger>
+      </FileUploadDropzone>
+    </FileUpload>
+  );
+}
+export { FieldPassword, FieldEmail, FieldDatePicker, FieldFileUpload };

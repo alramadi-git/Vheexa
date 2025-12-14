@@ -6,9 +6,9 @@ import { useMemo } from "react";
 import useVehicleModels from "@/hooks/partner/vehicle-models";
 
 import {
-  tVehicleModelCreate,
-  zVehicleModelCreate,
-} from "@/validations/partner/vehicle-model-create";
+  tVehicleModelCreateForm,
+  zVehicleModelCreateForm,
+} from "@/validations/partner/vehicle-model-create-form";
 
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -64,6 +64,8 @@ import { Badge } from "@/components/shadcn/badge";
 import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
 import { eLocale } from "@/i18n/routing";
 import { ScrollArea } from "@/components/shadcn/scroll-area";
+import { FieldFileUpload } from "@/components/locals/blocks/fields";
+import { FullHDImage } from "@/components/locals/blocks/images";
 
 type tEnumOption = {
   value: number;
@@ -116,10 +118,10 @@ function AddNew() {
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
   );
   const { control, formState, watch, setValue, trigger, reset, handleSubmit } =
-    useForm<tVehicleModelCreate>({
+    useForm<tVehicleModelCreateForm>({
       defaultValues: {
-        thumbnail: "",
-        images: [],
+        thumbnail: undefined, // media
+        images: [], // media
         name: "", // info
         description: "", // info
         category: eVehicleModelCategoryModel.car, // info
@@ -128,38 +130,40 @@ function AddNew() {
         capacity: 1, // specs
         transmission: "", // specs
         fuel: "", // specs
-        colors: [],
-        price: 1,
-        discount: 0,
+        colors: [], // specs
+        price: 1, // prices
+        discount: 0, // prices
         tags: "", // info
-        status: eVehicleModelStatusModel.active,
+        status: eVehicleModelStatusModel.active, // statues,
       },
-      resolver: zodResolver(zVehicleModelCreate),
+      resolver: zodResolver(zVehicleModelCreateForm),
     });
 
   const category = watch("category");
   const categories: tEnumOption[] = useMemo(
-    () => tAddNew.raw("form.category.categories"),
+    () => tAddNew.raw("form.info.category.categories"),
     [tAddNew],
   );
 
   const manufacturers: tManufacturer["manufacturers"] = useMemo(
     () =>
-      (tAddNew.raw("form.manufacturer.manufacturers") as tManufacturer[]).find(
-        (manufacturer) => manufacturer.value === category,
-      )?.manufacturers ?? [],
+      (
+        tAddNew.raw("form.info.manufacturer.manufacturers") as tManufacturer[]
+      ).find((manufacturer) => manufacturer.value === category)
+        ?.manufacturers ?? [],
     [tAddNew, category],
   );
   const transmissions: tTransmission["transmissions"] = useMemo(
     () =>
-      (tAddNew.raw("form.transmission.transmissions") as tTransmission[]).find(
-        (manufacturer) => manufacturer.value === category,
-      )?.transmissions ?? [],
+      (
+        tAddNew.raw("form.specs.transmission.transmissions") as tTransmission[]
+      ).find((manufacturer) => manufacturer.value === category)
+        ?.transmissions ?? [],
     [tAddNew, category],
   );
   const fuels: tFuel["fuels"] = useMemo(
     () =>
-      (tAddNew.raw("form.fuel.fuels") as tFuel[]).find(
+      (tAddNew.raw("form.specs.fuel.fuels") as tFuel[]).find(
         (manufacturer) => manufacturer.value === category,
       )?.fuels ?? [],
     [tAddNew, category],
@@ -178,7 +182,7 @@ function AddNew() {
   const locale = useLocale() as eLocale;
   const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
 
-  function onSubmit(data: tVehicleModelCreate): void {
+  function onSubmit(data: tVehicleModelCreateForm): void {
     console.log(data);
   }
 
@@ -221,14 +225,14 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="name">
-                          {tAddNew("form.name.label")}
+                          {tAddNew("form.info.name.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Input
                             {...controller.field}
                             required
                             id="name"
-                            placeholder={tAddNew("form.name.placeholder")}
+                            placeholder={tAddNew("form.info.name.placeholder")}
                           />
                         </FieldContent>
                         <FieldError errors={[controller.fieldState.error]} />
@@ -241,7 +245,7 @@ function AddNew() {
                     render={({ field: { onChange, ...field }, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="model-year">
-                          {tAddNew("form.model-year.label")}
+                          {tAddNew("form.info.model-year.label")}
                         </FieldLabel>
                         <FieldContent>
                           <NumberField
@@ -266,7 +270,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="category">
-                          {tAddNew("form.category.label")}
+                          {tAddNew("form.info.category.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Select
@@ -310,7 +314,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="manufacturer">
-                          {tAddNew("form.manufacturer.label")}
+                          {tAddNew("form.info.manufacturer.label")}
                         </FieldLabel>
                         <FieldContent>
                           <SearchableSelect
@@ -323,7 +327,9 @@ function AddNew() {
                               >
                                 {controller.field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
-                                    {tAddNew("form.manufacturer.when-no-value")}
+                                    {tAddNew(
+                                      "form.info.manufacturer.when-no-value",
+                                    )}
                                   </span>
                                 ) : (
                                   controller.field.value
@@ -337,7 +343,7 @@ function AddNew() {
                             value={controller.field.value}
                             inputProps={{
                               placeholder: tAddNew(
-                                "form.manufacturer.when-no-value",
+                                "form.info.manufacturer.when-no-value",
                               ),
                             }}
                             onSelect={controller.field.onChange}
@@ -348,9 +354,11 @@ function AddNew() {
                             whenNoResultRender={() =>
                               manufacturers.length === 0
                                 ? tAddNew(
-                                    "form.manufacturer.when-invalid-category",
+                                    "form.info.manufacturer.when-invalid-category",
                                   )
-                                : tAddNew("form.manufacturer.when-no-result")
+                                : tAddNew(
+                                    "form.info.manufacturer.when-no-result",
+                                  )
                             }
                           />
                         </FieldContent>
@@ -367,7 +375,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field className="grow">
                         <FieldLabel htmlFor="description">
-                          {tAddNew("form.description.label")}
+                          {tAddNew("form.info.description.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Textarea
@@ -375,7 +383,7 @@ function AddNew() {
                             required
                             id="description"
                             placeholder={tAddNew(
-                              "form.description.placeholder",
+                              "form.info.description.placeholder",
                             )}
                             className="h-full resize-none"
                           />
@@ -391,7 +399,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="tags">
-                          {tAddNew("form.tags.label")}
+                          {tAddNew("form.info.tags.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Input {...controller.field} required id="tags" />
@@ -412,7 +420,7 @@ function AddNew() {
                       <Field>
                         <Field>
                           <FieldLabel htmlFor="capacity">
-                            {tAddNew("form.capacity.label")}
+                            {tAddNew("form.specs.capacity.label")}
                           </FieldLabel>
                           <FieldContent>
                             <NumberField
@@ -438,7 +446,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="transmission">
-                          {tAddNew("form.transmission.label")}
+                          {tAddNew("form.specs.transmission.label")}
                         </FieldLabel>
                         <FieldContent>
                           <SearchableSelect
@@ -451,7 +459,7 @@ function AddNew() {
                               >
                                 {controller.field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
-                                    {tAddNew("form.fuel.when-no-value")}
+                                    {tAddNew("form.specs.fuel.when-no-value")}
                                   </span>
                                 ) : (
                                   controller.field.value
@@ -465,7 +473,7 @@ function AddNew() {
                             value={controller.field.value}
                             inputProps={{
                               placeholder: tAddNew(
-                                "form.transmission.when-no-value",
+                                "form.specs.transmission.when-no-value",
                               ),
                             }}
                             onSelect={controller.field.onChange}
@@ -476,9 +484,11 @@ function AddNew() {
                             whenNoResultRender={() =>
                               transmissions.length === 0
                                 ? tAddNew(
-                                    "form.transmission.when-invalid-category",
+                                    "form.specs.transmission.when-invalid-category",
                                   )
-                                : tAddNew("form.transmission.when-no-result")
+                                : tAddNew(
+                                    "form.specs.transmission.when-no-result",
+                                  )
                             }
                           />
                         </FieldContent>
@@ -492,7 +502,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="fuel">
-                          {tAddNew("form.fuel.label")}
+                          {tAddNew("form.specs.fuel.label")}
                         </FieldLabel>
                         <FieldContent>
                           <SearchableSelect
@@ -505,7 +515,7 @@ function AddNew() {
                               >
                                 {controller.field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
-                                    {tAddNew("form.fuel.when-no-value")}
+                                    {tAddNew("form.specs.fuel.when-no-value")}
                                   </span>
                                 ) : (
                                   controller.field.value
@@ -518,7 +528,9 @@ function AddNew() {
                             )}
                             value={controller.field.value}
                             inputProps={{
-                              placeholder: tAddNew("form.fuel.when-no-value"),
+                              placeholder: tAddNew(
+                                "form.specs.fuel.when-no-value",
+                              ),
                             }}
                             onSelect={controller.field.onChange}
                             list={fuels}
@@ -527,8 +539,10 @@ function AddNew() {
                             )}
                             whenNoResultRender={() =>
                               fuels.length === 0
-                                ? tAddNew("form.fuel.when-invalid-category")
-                                : tAddNew("form.fuel.when-no-result")
+                                ? tAddNew(
+                                    "form.specs.fuel.when-invalid-category",
+                                  )
+                                : tAddNew("form.specs.fuel.when-no-result")
                             }
                           />
                         </FieldContent>
@@ -542,7 +556,7 @@ function AddNew() {
                     render={(controller) => (
                       <Field>
                         <FieldLabel htmlFor="colors">
-                          {tAddNew("form.colors.label")}
+                          {tAddNew("form.specs.colors.label")}
                         </FieldLabel>
                         <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
                           <ul className="flex items-center gap-2 overflow-x-auto ps-px">
@@ -593,7 +607,52 @@ function AddNew() {
             </FieldGroup>
 
             <FieldSet>
-              <FieldGroup>Media</FieldGroup>
+              <FieldGroup>
+                <Controller
+                  control={control}
+                  name="thumbnail"
+                  render={({ field, fieldState }) => {
+                    return (
+                      <Field>
+                        <FieldLabel htmlFor="thumbnail">
+                          {tAddNew("form.media.thumbnail.label")}
+                        </FieldLabel>
+                        <FieldContent>
+                          {field.value ? (
+                            <div className="dark:border-sidebar-border relative rounded border-2 border-dashed border-black p-px">
+                              <FullHDImage
+                                src={URL.createObjectURL(field.value)}
+                                alt={field.value.name}
+                                className="dark:bg-sidebar-border h-68 rounded bg-black object-contain brightness-75"
+                              />
+                              <button
+                                type="button"
+                                className="light:text-white absolute top-2 right-2"
+                                onClick={() => field.onChange(undefined)}
+                              >
+                                <LuX size={24} />
+                              </button>
+                            </div>
+                          ) : (
+                            <FieldFileUpload
+                              id="thumbnail"
+                              accept="image/*"
+                              maxFiles={1}
+                              value={
+                                field.value === undefined ? [] : [field.value]
+                              }
+                              onValueChange={(files) =>
+                                field.onChange(files[0])
+                              }
+                            />
+                          )}
+                        </FieldContent>
+                        <FieldError errors={[fieldState.error]} />
+                      </Field>
+                    );
+                  }}
+                />
+              </FieldGroup>
             </FieldSet>
 
             <FieldGroup className="grid-cols-4 2xl:col-span-3">
@@ -606,7 +665,7 @@ function AddNew() {
                       <Field>
                         <Field>
                           <FieldLabel htmlFor="price">
-                            {tAddNew("form.price.label")}
+                            {tAddNew("form.pricing.price.label")}
                           </FieldLabel>
                           <FieldContent>
                             <NumberField
@@ -637,7 +696,7 @@ function AddNew() {
                       <Field>
                         <Field>
                           <FieldLabel htmlFor="discount">
-                            {tAddNew("form.discount.label")}
+                            {tAddNew("form.pricing.discount.label")}
                           </FieldLabel>
                           <FieldContent>
                             <NumberField

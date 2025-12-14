@@ -1,4 +1,5 @@
 import "server-only";
+
 import { ClsFetch } from "@/libraries/fetch";
 
 const clsFetch = new ClsFetch(process.env.API_DOMAIN!, "/api", {

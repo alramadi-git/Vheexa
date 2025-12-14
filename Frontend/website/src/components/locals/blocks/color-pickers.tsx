@@ -75,7 +75,7 @@ function ColorCreator({
       {...props}
     >
       <ColorPickerTrigger asChild>
-        <Button id={id} variant="ghost" className="rounded-s-none">
+        <Button id={id} variant="ghost" className="rounded-s-none text-muted-foreground">
           <IoColorPalette />
         </Button>
       </ColorPickerTrigger>

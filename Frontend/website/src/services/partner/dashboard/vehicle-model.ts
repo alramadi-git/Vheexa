@@ -6,7 +6,7 @@ import {
 } from "@/validations/partner/vehicle-model-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { tVehicleModelCreate } from "@/validations/partner/vehicle-model-create";
+import { tVehicleModelCreateForm } from "@/validations/partner/vehicle-model-create-form";
 import { tVehicleModelModel } from "@/models/partner/vehicle-model";
 import { tVehicleModelUpdate } from "@/validations/partner/vehicle-model-update";
 
@@ -26,7 +26,7 @@ import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/partner/fetch";
 
 class ClsVehicleModelService extends ClsAbstractService {
-  public async addOneAsync(vehicleModel: tVehicleModelCreate) {
+  public async addOneAsync(vehicleModel: tVehicleModelCreateForm) {
     return this.catcher<tSuccessOneService<null>>(async () => {
       const data = await clsFetch.post(
         "/dashboard/vehicle-models",

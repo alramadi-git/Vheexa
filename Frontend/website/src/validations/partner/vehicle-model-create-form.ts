@@ -5,21 +5,18 @@ import {
   eVehicleModelStatusModel,
 } from "@/models/partner/vehicle-model";
 
-const zVehicleModelCreate = z
+const zVehicleModelCreateForm = z
   .object({
-    thumbnail: z.url(),
-    images: z
-      .array(
-        z.object({
-          url: z.url(),
-          index: z.number().min(0, "index cannot be negative."),
-        }),
-      )
-      .refine(
-        (images) =>
-          new Set(images.map((image) => image.index)).size === images.length,
-        "indices must be unique.",
-      ),
+    thumbnail: z
+      .file("expected thumbnail file (e.g. png, jpg, etc...)")
+      .refine((value) => value.type.startsWith("image/"), {
+        error: "Only images allowed",
+      }),
+    images: z.array(
+      z.file().refine((value) => value.type.startsWith("image/"), {
+        error: "Only images allowed",
+      }),
+    ),
     name: z.string().nonempty("name cannot be empty."),
     description: z
       .string()
@@ -48,7 +45,7 @@ const zVehicleModelCreate = z
                 .string()
                 .nonempty("tag cannot be empty.")
                 .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-                  message:
+                  error:
                     "Tags must be comma-separated followed by a space and contain only letters.",
                 }),
             )
@@ -70,7 +67,7 @@ const zVehicleModelCreate = z
       .string()
       .nonempty("tag cannot be empty.")
       .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-        message:
+        error:
           "Tags must be comma-separated followed by a space and contain only letters.",
       }),
     status: z.enum(eVehicleModelStatusModel),
@@ -80,7 +77,7 @@ const zVehicleModelCreate = z
     error: "discount should be less than the price at least 1 dollar.",
   })
   .strict();
-type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;
+type tVehicleModelCreateForm = z.infer<typeof zVehicleModelCreateForm>;
 
-export type { tVehicleModelCreate };
-export { zVehicleModelCreate };
+export type { tVehicleModelCreateForm };
+export { zVehicleModelCreateForm };
