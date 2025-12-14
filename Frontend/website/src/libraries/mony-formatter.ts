@@ -19,6 +19,10 @@ class ClsMonyFormatter {
     });
   }
 
+  get options(): Intl.NumberFormatOptions {
+    return this._formatter.resolvedOptions();
+  }
+
   format(value: number): string {
     return this._formatter.format(value);
   }

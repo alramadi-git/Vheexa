@@ -35,8 +35,8 @@
           "tags": {
             "placeholder": "Enter tags for better search: (e.g., Black, Dark, Night, etc..."
           },
-
-          "save": "Save"
+          "save": "Save",
+          "reset": "Reset"
         }
       }
     },
@@ -862,7 +862,6 @@
                     },
                     "category": {
                       "label": "Category",
-                      "placeholder": "Select a car, motorcycle, yacht, boat or even helicopter...",
                       "categories": [
                         {
                           "value": 0,
@@ -1735,6 +1734,34 @@
                       "colorsSelect": {
                         "label": "Select vehicle colors"
                       }
+                    },
+                    "price": {
+                      "label": "Price"
+                    },
+                    "discount": {
+                      "label": "Discount"
+                    },
+
+                    "info": {},
+                    "specs": {},
+                    "media": {},
+                    "pricing": {},
+                    "status": {
+                      "label": "Status",
+                      "statuses": [
+                        {
+                          "value": 0,
+                          "label": "Active"
+                        },
+                        {
+                          "value": 1,
+                          "label": "Inactive"
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "submit": "Submit",
+                      "reset": "Reset"
                     }
                   }
                 },
@@ -1832,9 +1859,13 @@
       }
     },
     "not-found": {
+      "title": "Whoops!",
+      "subtitle": "Something went wrong",
+      "description": " The page you're looking for isn't found, we suggest you back to home.",
+      "go-back-to-home": "Go Back to Home",
       "illustration": {
-        "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.png",
-        "alternate": "Not Found"
+        "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+        "alternate": "404 Not Found Illustration"
       }
     }
   }

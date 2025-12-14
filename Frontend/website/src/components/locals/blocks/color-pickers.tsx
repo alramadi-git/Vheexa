@@ -1,9 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ComponentProps, useRef, useState } from "react";
+import { ComponentProps, useState } from "react";
 
 import { IoColorPalette } from "react-icons/io5";
+import { LuX } from "react-icons/lu";
 
 import {
   ColorPicker as ShadcnColorPicker,
@@ -23,8 +24,6 @@ import {
 } from "@diceui/tags-input";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-import { LuX } from "react-icons/lu";
-import { tNullable } from "@/types/nullish";
 
 type tColorValue = {
   hexCode: string;
@@ -40,12 +39,10 @@ function ColorCreator({
   id,
   side,
   align = "end",
-  onSave,
+  onSave: onSave,
   ...props
 }: tColorCreatorProps) {
   const tColorCreator = useTranslations("components.colors.color-creator");
-
-  const ref = useRef<tNullable<HTMLDivElement>>(null);
 
   const [colorValue, setColorValue] = useState<string>("#000000");
   const [colorName, setColorName] = useState<string>("");
@@ -55,29 +52,30 @@ function ColorCreator({
     setColorValue(value);
   }
 
-  function onClick() {
+  function save() {
     onSave({
       hexCode: colorValue,
       name: colorName,
       tags: colorTags,
     });
+    reset();
+  }
+
+  function reset() {
+    setColorValue("#000000");
+    setColorName("");
+    setColorTags([]);
   }
 
   return (
     <ShadcnColorPicker
-      ref={ref}
       format="hex"
-      defaultValue={colorValue}
+      value={colorValue}
       onValueChange={onValueChange}
       {...props}
     >
       <ColorPickerTrigger asChild>
-        <Button
-          id={id}
-          variant="ghost"
-          className="rounded-s-none"
-          // onClick={() => setIsOpen(true)}
-        >
+        <Button id={id} variant="ghost" className="rounded-s-none">
           <IoColorPalette />
         </Button>
       </ColorPickerTrigger>
@@ -89,8 +87,11 @@ function ColorCreator({
         </div>
         <div className="flex items-center gap-2">
           <ColorPickerInput />
-          <Button onClick={onClick} className="grow">
+          <Button onClick={save} className="grow">
             {tColorCreator("content.save")}
+          </Button>
+          <Button onClick={reset} className="grow">
+            {tColorCreator("content.reset")}
           </Button>
         </div>
         <Input

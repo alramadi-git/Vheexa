@@ -40,8 +40,8 @@ const zVehicleModelCreate = z
     colors: z
       .array(
         z.object({
-          hexCode: z.hex(),
-          name: z.string().nonempty(),
+          hexCode: z.string().regex(/^#([0-9a-fA-F]{6})$/, "Invalid hex code."),
+          name: z.string().nonempty("color name cannot be empty."),
           tags: z
             .array(
               z
@@ -58,6 +58,7 @@ const zVehicleModelCreate = z
             ),
         }),
       )
+      .min(1, "at least one color is required.")
       .refine(
         (colors) =>
           new Set(colors.map((color) => color.hexCode)).size === colors.length,
@@ -74,9 +75,9 @@ const zVehicleModelCreate = z
       }),
     status: z.enum(eVehicleModelStatusModel),
   })
-  .refine((value) => value.price > value.discount, {
+  .refine((value) => value.price - 0.99 > value.discount, {
     path: ["discount"],
-    error: "discount should be less than the price.",
+    error: "discount should be less than the price at least 1 dollar.",
   })
   .strict();
 type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;

@@ -8,7 +8,7 @@ export default function Layout({ children }: LayoutProps<"/[locale]">) {
   return (
     <SidebarProvider>
       <Sidebar />
-      <SidebarInset>
+      <SidebarInset className="dashboard">
         <Header />
         {children}
       </SidebarInset>
