@@ -1,3 +1,5 @@
+import { ClsAbstractService, tResponseOneService } from "@/services/service";
+
 import {
   tRegisterCredentials,
   zRegisterCredentials,
@@ -7,83 +9,72 @@ import {
   zLoginCredentials,
 } from "@/validations/login-credentials";
 
-import { clsFetch } from "@/consts/partner/fetch";
-
 import { tMemberModel } from "@/models/partner/member";
-
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel } from "@/models/failed";
-
-import {
-  tSuccessOneService,
-  tResponseOneService,
-  ClsAbstractService,
-  ClsErrorService,
-} from "@/services/service";
 
 class ClsAuthenticationService extends ClsAbstractService {
-  private async _registerAsync(
-    credentials: tRegisterCredentials,
-  ): Promise<tSuccessOneService<tMemberModel>> {
-    const parsedCredentials = zRegisterCredentials.parse(credentials);
-
-    const data = await clsFetch.post("/authentication/register", parsedCredentials);
-    if (!data.ok) {
-      const dataBody: tFailedModel = await data.json();
-      throw new ClsErrorService(
-        data.status,
-        data.statusText,
-        dataBody.message,
-        dataBody.issues,
-      );
-    }
-
-    const dataBody: tSuccessOneModel<tMemberModel> = await data.json();
-    return {
-      isSuccess: true,
-      statusCode: data.status,
-      statusText: data.statusText,
-      data: dataBody.data,
-    };
-  }
   public async registerAsync(
     credentials: tRegisterCredentials,
   ): Promise<tResponseOneService<tMemberModel>> {
-    return this.catcher<tSuccessOneService<tMemberModel>>(
-      async () => await this._registerAsync(credentials),
-    );
-  }
+    return this._catch<tMemberModel>(async () => {
+      const parsedCredentials = zRegisterCredentials.parse(credentials);
 
-  private async _loginAsync(
-    credentials: tLoginCredentials,
-  ): Promise<tSuccessOneService<tMemberModel>> {
-    const parsedCredentials = zLoginCredentials.parse(credentials);
-
-    const date = await clsFetch.post("/authentication/login", parsedCredentials);
-    if (!date.ok) {
-      const dataBody: tFailedModel = await date.json();
-      throw new ClsErrorService(
-        date.status,
-        date.statusText,
-        dataBody.message,
-        dataBody.issues,
+      const response: Response = await this._fetch.post(
+        "/partner/authentication/register",
+        parsedCredentials,
       );
-    }
+      if (!response.ok) {
+        const errorText: string = await response.text();
+        throw new Error(`Registration failed: ${errorText}`);
+      }
 
-    const dataBody: tSuccessOneModel<tMemberModel> = await date.json();
-    return {
-      isSuccess: true,
-      statusCode: date.status,
-      statusText: date.statusText,
-      data: dataBody.data,
-    };
+      const data: tSuccessOneModel<tMemberModel> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
   }
+
   public async loginAsync(
     credentials: tLoginCredentials,
   ): Promise<tResponseOneService<tMemberModel>> {
-    return this.catcher<tSuccessOneService<tMemberModel>>(
-      async () => await this._loginAsync(credentials),
-    );
+    return this._catch<tMemberModel>(async () => {
+      const parsedCredentials = zLoginCredentials.parse(credentials);
+
+      const response: Response = await this._fetch.post(
+        "/partner/authentication/login",
+        parsedCredentials,
+      );
+      if (!response.ok) {
+        const errorText: string = await response.text();
+        throw new Error(errorText);
+      }
+
+      const data: tSuccessOneModel<tMemberModel> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
+  }
+
+  public async getAccount(): Promise<tResponseOneService<tMemberModel>> {
+    return this._catch<tMemberModel>(async () => {
+      const response: Response = await this._fetch.get(
+        "/partner/authentication/me",
+      );
+      if (!response.ok) {
+        const errorText: string = await response.text();
+        throw new Error(errorText);
+      }
+
+      const data: tSuccessOneModel<tMemberModel> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
   }
 }
 

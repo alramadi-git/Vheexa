@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { tVehicleModelFilter } from "@/validations/partner/vehicle-model-filter";
 import { tPagination } from "@/validations/pagination";
 
-import { ClsVehicleModelService } from "@/services/partner/dashboard/vehicle-model";
+import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -40,12 +40,8 @@ export default function useVehicleModels() {
       min: minCapacity !== null ? Number(minCapacity) : undefined,
       max: maxCapacity !== null ? Number(maxCapacity) : undefined,
     },
-    transmissions: searchParams
-      .getAll("vehicle-model-filter.transmissions")
-      .map((transmission) => Number(transmission)),
-    fuels: searchParams
-      .getAll("vehicle-model-filter.model-years")
-      .map((fuel) => Number(fuel)),
+    transmissions: searchParams.getAll("vehicle-model-filter.transmissions"),
+    fuels: searchParams.getAll("vehicle-model-filter.model-years"),
     colors: searchParams.getAll("vehicle-model-filter.colors"),
     price: {
       min: minPrice !== null ? Number(minPrice) : undefined,

@@ -135,4 +135,8 @@
   .dashboard .h-fullscreen {
     @apply min-h-[calc(100dvh-64px)];
   }
+
+  :disabled {
+    @apply cursor-not-allowed! opacity-50!;
+  }
 }

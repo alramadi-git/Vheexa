@@ -1,20 +1,29 @@
 "use client";
 
+import {
+  eVehicleModelCategoryModel,
+  eVehicleModelStatusModel,
+} from "@/models/partner/vehicle-model";
+
 import { eLocale } from "@/i18n/routing";
-import { useLocale, useTranslations } from "next-intl";
+
 import { useMemo } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import useVehicleModels from "@/hooks/partner/vehicle-models";
+
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
 
 import {
   tVehicleModelCreateForm,
   zVehicleModelCreateForm,
 } from "@/validations/partner/vehicle-model-create-form";
 
-import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
-
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { cn } from "@/utilities/cn";
 
 import {
   LuChevronDown,
@@ -41,20 +50,6 @@ import {
   FieldError,
   FieldSet,
 } from "@/components/shadcn/field";
-
-import { Pagination } from "@/components/locals/blocks/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/select";
-import {
-  eVehicleModelCategoryModel,
-  eVehicleModelStatusModel,
-} from "@/models/partner/vehicle-model";
-import { SearchableSelect } from "@/components/locals/blocks/selects";
 import {
   NumberField,
   NumberFieldDecrement,
@@ -63,24 +58,19 @@ import {
   NumberFieldInput,
 } from "@/components/shadcn/number-field";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/select";
+import {
   Sortable,
   SortableContent,
   SortableItem,
   SortableItemHandle,
   SortableOverlay,
 } from "@/components/shadcn/sortable";
-import { Separator } from "@/components/shadcn/separator";
-import { ScrollArea } from "@/components/shadcn/scroll-area";
-import { Badge } from "@/components/shadcn/badge";
-import { Button } from "@/components/shadcn/button";
-import { Input } from "@/components/shadcn/input";
-import { Textarea } from "@/components/shadcn/textarea";
-
-import VehicleModelTable from "./table";
-
-import { ColorCreator } from "@/components/locals/blocks/color-pickers";
-import { FieldFileUpload } from "@/components/locals/blocks/fields";
-import { FullHDImage } from "@/components/locals/blocks/images";
 import {
   Table,
   TableBody,
@@ -90,7 +80,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/shadcn/table";
-import { ClsDateFormatter } from "@/libraries/date-formatter";
+
+import { Separator } from "@/components/shadcn/separator";
+import { Badge } from "@/components/shadcn/badge";
+import { ScrollArea } from "@/components/shadcn/scroll-area";
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Textarea } from "@/components/shadcn/textarea";
+
+import VehicleModelTable from "./table";
+import { Pagination } from "@/components/locals/blocks/pagination";
+
+import { SearchableSelect } from "@/components/locals/blocks/selects";
+import { FieldFileUpload } from "@/components/locals/blocks/fields";
+import { ColorCreator } from "@/components/locals/blocks/color-pickers";
+
+import { FullHDImage } from "@/components/locals/blocks/images";
 
 type tEnumOption = {
   value: number;
@@ -139,6 +144,11 @@ export default function VehicleModels() {
 }
 
 function AddNew() {
+  const locale = useLocale() as eLocale;
+
+  const clsDateFormatter = new ClsDateFormatter(locale);
+  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
+
   const tAddNew = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
   );
@@ -205,14 +215,11 @@ function AddNew() {
     [tAddNew],
   );
 
-  const locale = useLocale() as eLocale;
+  const imageTableHeaders: string[] = tAddNew.raw(
+    "form.media.images.table.headers",
+  );
 
-  const clsDateFormatter = new ClsDateFormatter(locale);
-  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
-
-  function onSubmit(data: tVehicleModelCreateForm): void {
-    console.log(data);
-  }
+  function onSubmit(data: tVehicleModelCreateForm): void {}
 
   function onReset(): void {
     reset();
@@ -646,11 +653,11 @@ function AddNew() {
                       </FieldLabel>
                       <FieldContent>
                         {field.value ? (
-                          <div className="dark:border-sidebar-border relative rounded border-2 border-dashed border-black p-px">
+                          <div className="relative rounded p-px">
                             <FullHDImage
                               src={URL.createObjectURL(field.value)}
                               alt={field.value.name}
-                              className="dark:bg-sidebar-border h-96 rounded bg-black object-contain brightness-75"
+                              className="dark:bg-sidebar-border h-68 rounded bg-black object-contain brightness-75"
                             />
                             <button
                               type="button"
@@ -692,34 +699,25 @@ function AddNew() {
                           orientation="mixed"
                         >
                           <Table className="rounded-none border">
-                            <TableHeader>
+                            <TableHeader
+                              className={cn({
+                                hidden: field.value.length === 0,
+                              })}
+                            >
                               <TableRow className="bg-accent/50">
-                                <TableHead className="w-[50px] bg-transparent" />
-                                <TableHead className="bg-transparent">
-                                  Name
-                                </TableHead>
-                                <TableHead className="bg-transparent">
-                                  Size
-                                </TableHead>
-                                <TableHead className="bg-transparent text-right">
-                                  Last Modified
-                                </TableHead>
+                                {imageTableHeaders.map((header) => (
+                                  <TableHead
+                                    key={header}
+                                    className="bg-transparent"
+                                  >
+                                    {header}
+                                  </TableHead>
+                                ))}
                               </TableRow>
                             </TableHeader>
                             <SortableContent asChild>
                               <TableBody>
-                                {[
-                                  {
-                                    name: "h",
-                                    size: 139423,
-                                    lastModified: 33232984732,
-                                  },
-                                  {
-                                    name: "h",
-                                    size: 139423,
-                                    lastModified: 332332984732,
-                                  },
-                                ].map((file) => (
+                                {field.value.map((file) => (
                                   <SortableItem
                                     key={file.lastModified}
                                     value={file.lastModified}
@@ -741,21 +739,30 @@ function AddNew() {
                                         {file.name}
                                       </TableCell>
                                       <TableCell className="text-muted-foreground">
-                                        {(file.size / 1024 / 1024).toFixed(2)}
-                                        MB
+                                        {tAddNew(
+                                          "form.media.images.table.cells.file-size",
+                                          {
+                                            size: (file.size / 1024).toFixed(2),
+                                          },
+                                        )}
                                       </TableCell>
-                                      <TableCell className="text-muted-foreground text-right">
+                                      <TableCell className="text-muted-foreground">
                                         {clsDateFormatter.format(
                                           new Date(file.lastModified),
                                         )}
                                       </TableCell>
-                                      <TableCell className="text-muted-foreground text-right">
+                                      <TableCell className="text-muted-foreground">
                                         <Button
                                           variant="ghost"
+                                          type="button"
                                           className="hover:text-destructive"
-                                          onClick={() => {
-                                            
-                                          }}
+                                          onClick={() =>
+                                            field.onChange(
+                                              field.value.filter(
+                                                (f) => f.name !== file.name,
+                                              ),
+                                            )
+                                          }
                                         >
                                           <LuTrash />
                                         </Button>
@@ -766,12 +773,18 @@ function AddNew() {
                               </TableBody>
                             </SortableContent>
                             <TableFooter>
-                              <TableRow >
+                              <TableRow>
                                 <TableCell colSpan={5}>
                                   <FieldFileUpload
+                                    multiple
                                     id="images"
                                     accept="image/*"
-                                    maxFiles={10}
+                                    maxFiles={25}
+                                    className={cn({
+                                      "cursor-not-allowed opacity-50":
+                                        field.value.length === 25,
+                                    })}
+                                    disabled={field.value.length === 25}
                                     value={field.value}
                                     onValueChange={field.onChange}
                                   />

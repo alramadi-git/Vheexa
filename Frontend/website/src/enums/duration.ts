@@ -1,4 +1,4 @@
-enum eTime {
+enum eDuration {
   second = 1,
   minute = 60,
   hour = 3600,
@@ -8,4 +8,4 @@ enum eTime {
   year = 31536000,
 }
 
-export { eTime };
+export { eDuration };

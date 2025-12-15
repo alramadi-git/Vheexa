@@ -20,7 +20,7 @@ export function useQuery() {
   }
 
   function setArray(key: string, value: string[]): void {
-    query.setArray(key, value);
+    query.set(key, value);
   }
 
   function remove(key: string): void {

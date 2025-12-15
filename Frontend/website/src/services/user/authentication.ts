@@ -47,7 +47,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   public async loginAsync(
     credentials: tLoginCredentials,
   ): Promise<tResponseOneService<tUserModel>> {
-    return this.catcher<tSuccessOneService<tUserModel>>(async () =>
+    return this._catch<tSuccessOneService<tUserModel>>(async () =>
       this._loginAsync(credentials),
     );
   }

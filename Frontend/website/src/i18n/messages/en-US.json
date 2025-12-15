@@ -1758,12 +1758,15 @@
                         "label": "Images",
                         "table": {
                           "headers": [
-                            "Index",
+                            "",
                             "File Name",
                             "File Size",
                             "Last Modified",
                             "Action"
-                          ]
+                          ],
+                          "cells": {
+                            "file-size": "{size} KB"
+                          }
                         }
                       }
                     },

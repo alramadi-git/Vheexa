@@ -18,7 +18,7 @@ const zVehicleModelCreateForm = z
         .refine((value) => value.type.startsWith("image/"), {
           error: "Only images are allowed",
         }),
-    ),
+    ).max(25, "You can upload a maximum of 25 images."),
     name: z.string().nonempty("name cannot be empty."),
     description: z
       .string()

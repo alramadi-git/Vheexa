@@ -5,15 +5,6 @@ import { eVehicleModelStatusModel } from "@/models/partner/vehicle-model";
 const zVehicleModelFilter = z
   .object({
     search: z.optional(z.string().trim()),
-    modelYears: z.array(
-      z
-        .number()
-        .min(1980, "model year cannot be older than 1980.")
-        .refine((value) => value <= new Date().getFullYear(), {
-          path: ["modelYears"],
-          error: "model year cannot be in the future.",
-        }),
-    ),
     capacity: z
       .object({
         min: z.optional(z.number().min(0, "capacity cannot be negative.")),
@@ -80,11 +71,11 @@ const zVehicleModelFilter = z
       const minPrice = value.price.min ?? value.price.max;
       if (minPrice === undefined) return true;
 
-      return minPrice > maxDiscount;
+      return minPrice - 0.99 > maxDiscount;
     },
     {
       path: ["discount"],
-      error: "discount should be less than the discount.",
+      error: "discount should be less than the discount at least 1 dollar.",
     },
   )
   .strict();

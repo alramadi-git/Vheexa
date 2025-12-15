@@ -5,11 +5,11 @@ import { eMemberRoleStatusModel } from "@/models/partner/member-role";
 import { eMemberStatusModel } from "@/models/partner/member";
 
 import { tNullable } from "@/types/nullish";
-import { tMemberAccountModel } from "@/models/partner/account";
+import { tPartnerAccountModel } from "@/models/partner/account";
 
 type tUseAccountStore = {
-  account: tNullable<tMemberAccountModel["account"]>;
-  login: (account: tMemberAccountModel["account"]) => void;
+  account: tNullable<tPartnerAccountModel["account"]>;
+  login: (account: tPartnerAccountModel["account"]) => void;
   logout: () => void;
 };
 
@@ -95,7 +95,7 @@ const useAccountStore = create<tUseAccountStore>((set, get) => {
       },
     },
 
-    login: (account: tMemberAccountModel["account"]) => {
+    login: (account: tPartnerAccountModel["account"]) => {
       if (get().account !== null) return;
 
       set({ account });
