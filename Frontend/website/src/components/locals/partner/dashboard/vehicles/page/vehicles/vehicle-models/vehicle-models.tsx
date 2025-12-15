@@ -1,5 +1,6 @@
 "use client";
 
+import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
 
@@ -10,10 +11,18 @@ import {
   zVehicleModelCreateForm,
 } from "@/validations/partner/vehicle-model-create-form";
 
+import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
+
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LuChevronDown, LuPlus, LuX } from "react-icons/lu";
+import {
+  LuChevronDown,
+  LuGripVertical,
+  LuPlus,
+  LuTrash,
+  LuX,
+} from "react-icons/lu";
 
 import { TabsContent } from "@/components/shadcn/tabs";
 import {
@@ -32,12 +41,7 @@ import {
   FieldError,
   FieldSet,
 } from "@/components/shadcn/field";
-import { Separator } from "@/components/shadcn/separator";
 
-import { Input } from "@/components/shadcn/input";
-import { Button } from "@/components/shadcn/button";
-
-import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 import {
   Select,
@@ -50,7 +54,6 @@ import {
   eVehicleModelCategoryModel,
   eVehicleModelStatusModel,
 } from "@/models/partner/vehicle-model";
-import { Textarea } from "@/components/shadcn/textarea";
 import { SearchableSelect } from "@/components/locals/blocks/selects";
 import {
   NumberField,
@@ -59,13 +62,35 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from "@/components/shadcn/number-field";
-import { ColorCreator } from "@/components/locals/blocks/color-pickers";
-import { Badge } from "@/components/shadcn/badge";
-import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
-import { eLocale } from "@/i18n/routing";
+import {
+  Sortable,
+  SortableContent,
+  SortableItem,
+  SortableItemHandle,
+  SortableOverlay,
+} from "@/components/shadcn/sortable";
+import { Separator } from "@/components/shadcn/separator";
 import { ScrollArea } from "@/components/shadcn/scroll-area";
+import { Badge } from "@/components/shadcn/badge";
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Textarea } from "@/components/shadcn/textarea";
+
+import VehicleModelTable from "./table";
+
+import { ColorCreator } from "@/components/locals/blocks/color-pickers";
 import { FieldFileUpload } from "@/components/locals/blocks/fields";
 import { FullHDImage } from "@/components/locals/blocks/images";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/shadcn/table";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
 
 type tEnumOption = {
   value: number;
@@ -105,7 +130,7 @@ export default function VehicleModels() {
   return (
     <TabsContent value={tVehicleModels("label")} className="space-y-3">
       <AddNew />
-      <Table data={data} />
+      <VehicleModelTable data={data} />
       {data.result?.isSuccess && (
         <Pagination pagination={data.result.pagination} />
       )}
@@ -117,23 +142,24 @@ function AddNew() {
   const tAddNew = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
   );
+
   const { control, formState, watch, setValue, trigger, reset, handleSubmit } =
     useForm<tVehicleModelCreateForm>({
       defaultValues: {
-        thumbnail: undefined, // media
-        images: [], // media
         name: "", // info
         description: "", // info
+        tags: "", // info
+        modelYear: 1980, // info
         category: eVehicleModelCategoryModel.car, // info
         manufacturer: "", // info
-        modelYear: 1980, // info
         capacity: 1, // specs
         transmission: "", // specs
         fuel: "", // specs
         colors: [], // specs
+        thumbnail: undefined, // media
+        images: [], // media
         price: 1, // prices
         discount: 0, // prices
-        tags: "", // info
         status: eVehicleModelStatusModel.active, // statues,
       },
       resolver: zodResolver(zVehicleModelCreateForm),
@@ -180,6 +206,8 @@ function AddNew() {
   );
 
   const locale = useLocale() as eLocale;
+
+  const clsDateFormatter = new ClsDateFormatter(locale);
   const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
 
   function onSubmit(data: tVehicleModelCreateForm): void {
@@ -222,20 +250,20 @@ function AddNew() {
                   <Controller
                     control={control}
                     name="name"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="name">
                           {tAddNew("form.info.name.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Input
-                            {...controller.field}
+                            {...field}
                             required
                             id="name"
                             placeholder={tAddNew("form.info.name.placeholder")}
                           />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
@@ -267,14 +295,14 @@ function AddNew() {
                   <Controller
                     control={control}
                     name="category"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="category">
                           {tAddNew("form.info.category.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Select
-                            value={controller.field.value.toString()}
+                            value={field.value.toString()}
                             onValueChange={(value) => {
                               setValue("manufacturer", "");
                               setValue("transmission", "");
@@ -286,7 +314,7 @@ function AddNew() {
                                 trigger("fuel");
                               }
 
-                              controller.field.onChange(Number(value));
+                              field.onChange(Number(value));
                             }}
                           >
                             <SelectTrigger id="category" className="w-full">
@@ -304,14 +332,14 @@ function AddNew() {
                             </SelectContent>
                           </Select>
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
                   <Controller
                     control={control}
                     name="manufacturer"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="manufacturer">
                           {tAddNew("form.info.manufacturer.label")}
@@ -325,14 +353,14 @@ function AddNew() {
                                 variant="outline"
                                 className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                               >
-                                {controller.field.value === "" ? (
+                                {field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
                                     {tAddNew(
                                       "form.info.manufacturer.when-no-value",
                                     )}
                                   </span>
                                 ) : (
-                                  controller.field.value
+                                  field.value
                                 )}
                                 <LuChevronDown
                                   size={16}
@@ -340,13 +368,13 @@ function AddNew() {
                                 />
                               </Button>
                             )}
-                            value={controller.field.value}
+                            value={field.value}
                             inputProps={{
                               placeholder: tAddNew(
                                 "form.info.manufacturer.when-no-value",
                               ),
                             }}
-                            onSelect={controller.field.onChange}
+                            onSelect={field.onChange}
                             list={manufacturers}
                             itemRender={(item) => (
                               <button className="w-full">{item.value}</button>
@@ -362,7 +390,7 @@ function AddNew() {
                             }
                           />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
@@ -372,14 +400,14 @@ function AddNew() {
                   <Controller
                     control={control}
                     name="description"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field className="grow">
                         <FieldLabel htmlFor="description">
                           {tAddNew("form.info.description.label")}
                         </FieldLabel>
                         <FieldContent>
                           <Textarea
-                            {...controller.field}
+                            {...field}
                             required
                             id="description"
                             placeholder={tAddNew(
@@ -388,7 +416,7 @@ function AddNew() {
                             className="h-full resize-none"
                           />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
@@ -396,15 +424,15 @@ function AddNew() {
                   <Controller
                     control={control}
                     name="tags"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="tags">
                           {tAddNew("form.info.tags.label")}
                         </FieldLabel>
                         <FieldContent>
-                          <Input {...controller.field} required id="tags" />
+                          <Input {...field} required id="tags" />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
@@ -443,7 +471,7 @@ function AddNew() {
                   <Controller
                     control={control}
                     name="transmission"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="transmission">
                           {tAddNew("form.specs.transmission.label")}
@@ -457,12 +485,12 @@ function AddNew() {
                                 variant="outline"
                                 className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                               >
-                                {controller.field.value === "" ? (
+                                {field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
                                     {tAddNew("form.specs.fuel.when-no-value")}
                                   </span>
                                 ) : (
-                                  controller.field.value
+                                  field.value
                                 )}
                                 <LuChevronDown
                                   size={16}
@@ -470,13 +498,13 @@ function AddNew() {
                                 />
                               </Button>
                             )}
-                            value={controller.field.value}
+                            value={field.value}
                             inputProps={{
                               placeholder: tAddNew(
                                 "form.specs.transmission.when-no-value",
                               ),
                             }}
-                            onSelect={controller.field.onChange}
+                            onSelect={field.onChange}
                             list={transmissions}
                             itemRender={(item) => (
                               <button className="w-full">{item.value}</button>
@@ -492,14 +520,14 @@ function AddNew() {
                             }
                           />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
                   <Controller
                     control={control}
                     name="fuel"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="fuel">
                           {tAddNew("form.specs.fuel.label")}
@@ -513,12 +541,12 @@ function AddNew() {
                                 variant="outline"
                                 className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                               >
-                                {controller.field.value === "" ? (
+                                {field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
                                     {tAddNew("form.specs.fuel.when-no-value")}
                                   </span>
                                 ) : (
-                                  controller.field.value
+                                  field.value
                                 )}
                                 <LuChevronDown
                                   size={16}
@@ -526,13 +554,13 @@ function AddNew() {
                                 />
                               </Button>
                             )}
-                            value={controller.field.value}
+                            value={field.value}
                             inputProps={{
                               placeholder: tAddNew(
                                 "form.specs.fuel.when-no-value",
                               ),
                             }}
-                            onSelect={controller.field.onChange}
+                            onSelect={field.onChange}
                             list={fuels}
                             itemRender={(item) => (
                               <button className="w-full">{item.value}</button>
@@ -546,21 +574,21 @@ function AddNew() {
                             }
                           />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                       </Field>
                     )}
                   />
                   <Controller
                     control={control}
                     name="colors"
-                    render={(controller) => (
+                    render={({ field, fieldState }) => (
                       <Field>
                         <FieldLabel htmlFor="colors">
                           {tAddNew("form.specs.colors.label")}
                         </FieldLabel>
                         <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
                           <ul className="flex items-center gap-2 overflow-x-auto ps-px">
-                            {controller.field.value.map((color, index) => (
+                            {field.value.map((color, index) => (
                               <li key={index}>
                                 <Badge
                                   variant="outline"
@@ -590,7 +618,7 @@ function AddNew() {
                             onSave={(value) => colors.append(value)}
                           />
                         </FieldContent>
-                        <FieldError errors={[controller.fieldState.error]} />
+                        <FieldError errors={[fieldState.error]} />
                         <ul className="flex gap-3 overflow-x-auto">
                           {formState.errors.colors?.map?.((error, index) => (
                             <li key={index} className="truncate">
@@ -611,46 +639,154 @@ function AddNew() {
                 <Controller
                   control={control}
                   name="thumbnail"
-                  render={({ field, fieldState }) => {
-                    return (
-                      <Field>
-                        <FieldLabel htmlFor="thumbnail">
-                          {tAddNew("form.media.thumbnail.label")}
-                        </FieldLabel>
-                        <FieldContent>
-                          {field.value ? (
-                            <div className="dark:border-sidebar-border relative rounded border-2 border-dashed border-black p-px">
-                              <FullHDImage
-                                src={URL.createObjectURL(field.value)}
-                                alt={field.value.name}
-                                className="dark:bg-sidebar-border h-68 rounded bg-black object-contain brightness-75"
-                              />
-                              <button
-                                type="button"
-                                className="light:text-white absolute top-2 right-2"
-                                onClick={() => field.onChange(undefined)}
-                              >
-                                <LuX size={24} />
-                              </button>
-                            </div>
-                          ) : (
-                            <FieldFileUpload
-                              id="thumbnail"
-                              accept="image/*"
-                              maxFiles={1}
-                              value={
-                                field.value === undefined ? [] : [field.value]
-                              }
-                              onValueChange={(files) =>
-                                field.onChange(files[0])
-                              }
+                  render={({ field, fieldState }) => (
+                    <Field>
+                      <FieldLabel htmlFor="thumbnail">
+                        {tAddNew("form.media.thumbnail.label")}
+                      </FieldLabel>
+                      <FieldContent>
+                        {field.value ? (
+                          <div className="dark:border-sidebar-border relative rounded border-2 border-dashed border-black p-px">
+                            <FullHDImage
+                              src={URL.createObjectURL(field.value)}
+                              alt={field.value.name}
+                              className="dark:bg-sidebar-border h-96 rounded bg-black object-contain brightness-75"
                             />
-                          )}
-                        </FieldContent>
-                        <FieldError errors={[fieldState.error]} />
-                      </Field>
-                    );
-                  }}
+                            <button
+                              type="button"
+                              className="light:text-white absolute top-2 right-2"
+                              onClick={() => field.onChange(undefined)}
+                            >
+                              <LuX size={24} />
+                            </button>
+                          </div>
+                        ) : (
+                          <FieldFileUpload
+                            id="thumbnail"
+                            accept="image/*"
+                            value={
+                              field.value === undefined ? [] : [field.value]
+                            }
+                            onValueChange={(files) => field.onChange(files[0])}
+                            maxFiles={1}
+                          />
+                        )}
+                      </FieldContent>
+                      <FieldError errors={[fieldState.error]} />
+                    </Field>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="images"
+                  render={({ field, fieldState }) => (
+                    <Field>
+                      <FieldLabel htmlFor="images">
+                        {tAddNew("form.media.images.label")}
+                      </FieldLabel>
+                      <FieldContent>
+                        <Sortable
+                          value={field.value}
+                          onValueChange={(value) => field.onChange(value)}
+                          getItemValue={(value) => value.lastModified}
+                          orientation="mixed"
+                        >
+                          <Table className="rounded-none border">
+                            <TableHeader>
+                              <TableRow className="bg-accent/50">
+                                <TableHead className="w-[50px] bg-transparent" />
+                                <TableHead className="bg-transparent">
+                                  Name
+                                </TableHead>
+                                <TableHead className="bg-transparent">
+                                  Size
+                                </TableHead>
+                                <TableHead className="bg-transparent text-right">
+                                  Last Modified
+                                </TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <SortableContent asChild>
+                              <TableBody>
+                                {[
+                                  {
+                                    name: "h",
+                                    size: 139423,
+                                    lastModified: 33232984732,
+                                  },
+                                  {
+                                    name: "h",
+                                    size: 139423,
+                                    lastModified: 332332984732,
+                                  },
+                                ].map((file) => (
+                                  <SortableItem
+                                    key={file.lastModified}
+                                    value={file.lastModified}
+                                    asChild
+                                  >
+                                    <TableRow>
+                                      <TableCell className="w-[50px]">
+                                        <SortableItemHandle asChild>
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="size-8"
+                                          >
+                                            <LuGripVertical className="h-4 w-4" />
+                                          </Button>
+                                        </SortableItemHandle>
+                                      </TableCell>
+                                      <TableCell className="font-medium">
+                                        {file.name}
+                                      </TableCell>
+                                      <TableCell className="text-muted-foreground">
+                                        {(file.size / 1024 / 1024).toFixed(2)}
+                                        MB
+                                      </TableCell>
+                                      <TableCell className="text-muted-foreground text-right">
+                                        {clsDateFormatter.format(
+                                          new Date(file.lastModified),
+                                        )}
+                                      </TableCell>
+                                      <TableCell className="text-muted-foreground text-right">
+                                        <Button
+                                          variant="ghost"
+                                          className="hover:text-destructive"
+                                          onClick={() => {
+                                            
+                                          }}
+                                        >
+                                          <LuTrash />
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  </SortableItem>
+                                ))}
+                              </TableBody>
+                            </SortableContent>
+                            <TableFooter>
+                              <TableRow >
+                                <TableCell colSpan={5}>
+                                  <FieldFileUpload
+                                    id="images"
+                                    accept="image/*"
+                                    maxFiles={10}
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            </TableFooter>
+                          </Table>
+                          <SortableOverlay>
+                            <div className="bg-primary/10 size-full rounded" />
+                          </SortableOverlay>
+                        </Sortable>
+                      </FieldContent>
+                      <FieldError errors={[fieldState.error]} />
+                    </Field>
+                  )}
                 />
               </FieldGroup>
             </FieldSet>

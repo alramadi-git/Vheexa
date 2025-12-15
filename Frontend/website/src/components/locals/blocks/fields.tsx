@@ -11,7 +11,7 @@ import { ClsDateFormatter } from "@/libraries/date-formatter";
 import { eLocale } from "@/i18n/routing";
 
 import { useLocale, useTranslations } from "next-intl";
-import { ComponentProps, useCallback, useMemo, useState } from "react";
+import { ComponentProps, useCallback, useMemo, useRef, useState } from "react";
 
 import {
   FieldValues,
@@ -35,8 +35,8 @@ import { Calendar } from "@/components/shadcn/calendar";
 import { toast } from "sonner";
 import {
   FileUpload,
-  FileUploadDropzone,
   FileUploadTrigger,
+  FileUploadDropzone,
 } from "@/components/shadcn/file-upload";
 import { Toast } from "./typography";
 
@@ -246,21 +246,42 @@ function FieldDatePicker<
 }
 
 type tFileUploadProps = Omit<ComponentProps<typeof FileUpload>, "onFileReject">;
-function FieldFileUpload({ id, ...props }: tFileUploadProps) {
+function FieldFileUpload({
+  id,
+  value,
+  onFileValidate: validateFile,
+  ...props
+}: tFileUploadProps) {
   const tFileUpload = useTranslations("components.fields.file-upload");
 
+  const onFileValidate = useCallback(
+    (file: File) => {
+      if (value?.some((value) => value.name === file.name)) {
+        return tFileUpload("validations.when-duplicate-names", {
+          filename: file.name,
+        });
+      }
+
+      const validation = validateFile?.(file);
+      if (validation) return validation;
+
+      return null;
+    },
+    [value, validateFile, tFileUpload],
+  );
   const onFileReject = useCallback(
     (file: File, message: string) => {
       toast.custom(() => (
-        <Toast variant="destructive" label={message}>
-          <p>
-            {tFileUpload("when-reject", {
-              filename:
-                file.name.length > 10
-                  ? file.name.slice(0, 10) + "..."
-                  : file.name,
-            })}
-          </p>
+        <Toast
+          variant="destructive"
+          label={tFileUpload("when-reject", {
+            filename:
+              file.name.length > 10
+                ? file.name.slice(0, 10) + "..."
+                : file.name,
+          })}
+        >
+          <p>{message}</p>
         </Toast>
       ));
     },
@@ -268,8 +289,13 @@ function FieldFileUpload({ id, ...props }: tFileUploadProps) {
   );
 
   return (
-    <FileUpload onFileReject={onFileReject} {...props}>
-      <FileUploadDropzone>
+    <FileUpload
+      value={value}
+      onFileValidate={onFileValidate}
+      onFileReject={onFileReject}
+      {...props}
+    >
+      <FileUploadDropzone className="size-full">
         <div className="flex flex-col items-center gap-1 text-center">
           <div className="flex items-center justify-center rounded-full border p-2.5">
             <LuUpload className="text-muted-foreground size-6" />

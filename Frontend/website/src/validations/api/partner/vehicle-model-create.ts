@@ -5,20 +5,23 @@ import {
   eVehicleModelStatusModel,
 } from "@/models/partner/vehicle-model";
 
-const zVehicleModelCreateForm = z
+const zVehicleModelCreate = z
   .object({
-    thumbnail: z
-      .file("expected thumbnail file (e.g. png, jpg, etc...)")
-      .refine((value) => value.type.startsWith("image/"), {
-        error: "Only images are allowed",
-      }),
-    images: z.array(
-      z
-        .file("expected thumbnail file (e.g. png, jpg, etc...)")
-        .refine((value) => value.type.startsWith("image/"), {
-          error: "Only images are allowed",
+    thumbnail: z.url(),
+    images: z
+      .array(
+        z.object({
+          url: z.url(),
+          index: z.number().min(0),
         }),
-    ),
+      )
+      .refine(
+        (images) =>
+          new Set(images.map((image) => image.index)).size === images.length,
+        {
+          error: "Image indexes must be unique.",
+        },
+      ),
     name: z.string().nonempty("name cannot be empty."),
     description: z
       .string()
@@ -79,7 +82,7 @@ const zVehicleModelCreateForm = z
     error: "discount should be less than the price at least 1 dollar.",
   })
   .strict();
-type tVehicleModelCreateForm = z.infer<typeof zVehicleModelCreateForm>;
+type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;
 
-export type { tVehicleModelCreateForm };
-export { zVehicleModelCreateForm };
+export type { tVehicleModelCreate };
+export { zVehicleModelCreate };

@@ -45,6 +45,9 @@
         "title": "Drag & drop files here",
         "subtitle": "Or click to browse",
         "trigger": "Browse files",
+        "validations": {
+          "when-duplicate-names": "{filename} has already been added"
+        },
         "when-reject": "{filename} has been rejected"
       }
     },
@@ -1750,6 +1753,18 @@
                     "media": {
                       "thumbnail": {
                         "label": "Thumbnail"
+                      },
+                      "images": {
+                        "label": "Images",
+                        "table": {
+                          "headers": [
+                            "Index",
+                            "File Name",
+                            "File Size",
+                            "Last Modified",
+                            "Action"
+                          ]
+                        }
                       }
                     },
                     "pricing": {
