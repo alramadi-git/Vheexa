@@ -9,8 +9,14 @@ const zPartner = z
   .object({
     logo: z.url(),
     banner: z.url(),
-    handle: z.string().nonempty().lowercase(),
-    name: z.string().nonempty(),
+    handle: z
+      .string()
+      .nonempty("Partner handle is required.")
+      .regex(
+        /^[a-z0-9-_]+$/,
+        "Handle can only contain lowercase letters, numbers, hyphens and underscores.",
+      ),
+    name: z.string().nonempty("Partner name is required."),
     phoneNumber: zPhoneNumber,
     email: zEmail,
     password: zPassword,

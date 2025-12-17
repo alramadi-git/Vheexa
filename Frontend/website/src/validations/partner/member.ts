@@ -1,17 +1,20 @@
 import z from "zod";
 
-import { eMemberStatusModel } from "@/models/partner/member";
-
 import { zHuman } from "../human";
 
-import { zMemberRole } from "./member-role";
-import { zBranch } from "./branch";
+import { zRoleCreate } from "./role-create";
+import { zBranchCreate } from "./branch-create";
+
+import { eMemberStatusModel } from "@/models/partner/member";
 
 const zMember = z
   .object({
-    role: zMemberRole,
-    branch: zBranch,
-    status: z.enum(eMemberStatusModel),
+    role: zRoleCreate,
+    branch: zBranchCreate,
+    status: z.enum(
+      eMemberStatusModel,
+      "Invalid status, try select (e.g., Active, Inactive).",
+    ),
   })
   .extend(zHuman.shape)
   .strict();

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { eBranchStatusModel } from "@/models/partner/branch";
-import { ePartnerRoleStatusModel } from "@/models/partner/partner-role";
+import { ePartnerRoleStatusModel } from "@/models/partner/role";
 import { eMemberStatusModel } from "@/models/partner/member";
 
 import { tNullable } from "@/types/nullish";

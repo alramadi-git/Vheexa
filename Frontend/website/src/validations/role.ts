@@ -4,7 +4,7 @@ import { zUuid } from "./uuid";
 
 const zRole = z
   .object({
-    name: z.string().nonempty(),
+    name: z.string().nonempty("Role name is required."),
     permissions: z.array(zUuid),
   })
   .strict();

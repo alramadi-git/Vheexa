@@ -1,14 +1,18 @@
 import z from "zod";
 
-import { eVehicleModelStatusModel } from "@/models/partner/vehicle-model";
+import {
+  eVehicleModelCategoryModel,
+  eVehicleModelStatusModel,
+} from "@/models/partner/vehicle-model";
 
 const zVehicleModelFilter = z
   .object({
     search: z.optional(z.string().trim()),
+    category: z.array(z.enum(eVehicleModelCategoryModel)),
     capacity: z
       .object({
-        min: z.optional(z.number().min(0, "capacity cannot be negative.")),
-        max: z.optional(z.number().min(0, "capacity cannot be negative.")),
+        min: z.optional(z.number().nonnegative("capacity cannot be negative.")),
+        max: z.optional(z.number().nonnegative("capacity cannot be negative.")),
       })
       .refine(
         (value) => {
@@ -29,8 +33,8 @@ const zVehicleModelFilter = z
     colors: z.array(z.string().nonempty("color cannot be empty.")),
     price: z
       .object({
-        min: z.optional(z.number().min(0, "price cannot be negative.")),
-        max: z.optional(z.number().min(0, "price cannot be negative.")),
+        min: z.optional(z.number().nonnegative("price cannot be negative.")),
+        max: z.optional(z.number().nonnegative("price cannot be negative.")),
       })
       .refine(
         (value) => {
@@ -46,8 +50,8 @@ const zVehicleModelFilter = z
       ),
     discount: z
       .object({
-        min: z.optional(z.number().min(0, "discount cannot be negative.")),
-        max: z.optional(z.number().min(0, "discount cannot be negative.")),
+        min: z.optional(z.number().nonnegative("discount cannot be negative.")),
+        max: z.optional(z.number().nonnegative("discount cannot be negative.")),
       })
       .refine(
         (value) => {
@@ -61,7 +65,12 @@ const zVehicleModelFilter = z
             "min discount should be less than, equal to max discount or leave it blank.",
         },
       ),
-    statuses: z.array(z.enum(eVehicleModelStatusModel)),
+    statuses: z.array(
+      z.enum(
+        eVehicleModelStatusModel,
+        "Invalid status, try select (e.g., Active, Inactive).",
+      ),
+    ),
   })
   .refine(
     (value) => {

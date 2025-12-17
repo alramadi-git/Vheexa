@@ -1,9 +1,16 @@
-import { tPermissionModel } from "./permission";
+import { tRoleModel } from "../role";
 
-type tRoleModel = {
-  uuid: string;
-  name: string;
-  permissions: tPermissionModel[];
+enum ePartnerRoleStatusModel {
+  active,
+  inactive,
+}
+
+type tPartnerRoleModel = tRoleModel & {
+  assignedCount: number;
+  status: ePartnerRoleStatusModel;
+  createdAt: string;
+  updatedAt: string;
 };
 
-export type { tRoleModel };
+export { ePartnerRoleStatusModel };
+export type { tPartnerRoleModel };

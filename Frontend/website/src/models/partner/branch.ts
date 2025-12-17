@@ -7,6 +7,10 @@ enum eBranchStatusModel {
 
 type tBranchModel = tLocationModel & {
   name: string;
+  phoneNumber: string;
+  email: string;
+  vehicleInstanceCount: number;
+  memberCount: number;
   status: eBranchStatusModel;
   updatedAt: string;
   createdAt: string;

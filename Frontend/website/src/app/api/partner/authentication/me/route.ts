@@ -4,7 +4,7 @@ import { apiCatcher } from "@/utilities/api";
 
 import { clsFetch } from "@/consts/api/fetch";
 
-import { tToken, zToken } from "@/validations/token";
+import { tJwt, zJwt } from "@/validations/jwt";
 
 import { tPartnerAccountModel } from "@/models/partner/account";
 import { tSuccessOneModel } from "@/models/success";
@@ -15,7 +15,7 @@ export async function GET(
 ): Promise<NextResponse<tResponseOneModel<tPartnerAccountModel["account"]>>> {
   return await apiCatcher<tPartnerAccountModel["account"]>(async () => {
     const token: unknown = request.cookies.get("partner-token")?.value;
-    const parsedToken: tToken = zToken.parse(token);
+    const parsedToken: tJwt = zJwt.parse(token);
 
     const backendResponse: Response = await clsFetch.get(
       "/partner/authentication/me",

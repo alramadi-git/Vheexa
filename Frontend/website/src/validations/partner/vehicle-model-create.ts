@@ -54,7 +54,7 @@ const zVehicleModelCreate = z
         "colors must be hex codes unique.",
       ),
     price: z.number().min(1, "price cannot be less than 1."),
-    discount: z.number().min(0, "discount cannot be negative."),
+    discount: z.number().nonnegative("discount cannot be negative."),
     tags: z
       .string()
       .nonempty("tag cannot be empty.")
@@ -62,7 +62,10 @@ const zVehicleModelCreate = z
         error:
           "Tags must be comma-separated followed by a space and contain only letters.",
       }),
-    status: z.enum(eVehicleModelStatusModel),
+    status: z.enum(
+      eVehicleModelStatusModel,
+      "Invalid status, try select (e.g., Active, Inactive).",
+    ),
   })
   .refine((value) => value.price - 0.99 > value.discount, {
     path: ["discount"],
