@@ -96,6 +96,7 @@ import { FieldFileUpload } from "@/components/locals/blocks/fields";
 import { ColorCreator } from "@/components/locals/blocks/color-pickers";
 
 import { FullHDImage } from "@/components/locals/blocks/images";
+import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
 type tEnumOption = {
   value: number;
@@ -146,8 +147,18 @@ export default function VehicleModels() {
 function AddNew() {
   const locale = useLocale() as eLocale;
 
-  const clsDateFormatter = new ClsDateFormatter(locale);
-  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
+  const clsDateFormatter = useMemo(
+    () => new ClsDateFormatter(locale),
+    [locale],
+  );
+  const clsMonyFormatter = useMemo(
+    () => new ClsMonyFormatter(locale, eCurrency[locale]),
+    [locale],
+  );
+
+  const clsVehicleModelService = useMemo(() => {
+    return new ClsVehicleModelService();
+  }, []);
 
   const tAddNew = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
@@ -167,7 +178,7 @@ function AddNew() {
         fuel: "", // specs
         colors: [], // specs
         thumbnail: undefined, // media
-        images: [], // media
+        gallery: [], // media
         price: 1, // prices
         discount: 0, // prices
         status: eVehicleModelStatusModel.active, // statues,
@@ -215,11 +226,13 @@ function AddNew() {
     [tAddNew],
   );
 
-  const imageTableHeaders: string[] = tAddNew.raw(
-    "form.media.images.table.headers",
+  const galleryTableHeaders: string[] = tAddNew.raw(
+    "form.media.gallery.table.headers",
   );
 
-  function onSubmit(data: tVehicleModelCreateForm): void {}
+  function onSubmit(data: tVehicleModelCreateForm): void {
+    clsVehicleModelService.addAsync("b7c80f27-ec4c-47e8-8188-7e49fbec65d8", data);
+  }
 
   function onReset(): void {
     reset();
@@ -363,7 +376,7 @@ function AddNew() {
                                 {field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
                                     {tAddNew(
-                                      "form.info.manufacturer.when-no-value",
+                                      "form.info.manufacturer.placeholder",
                                     )}
                                   </span>
                                 ) : (
@@ -378,7 +391,7 @@ function AddNew() {
                             value={field.value}
                             inputProps={{
                               placeholder: tAddNew(
-                                "form.info.manufacturer.when-no-value",
+                                "form.info.manufacturer.placeholder",
                               ),
                             }}
                             onSelect={field.onChange}
@@ -437,7 +450,12 @@ function AddNew() {
                           {tAddNew("form.info.tags.label")}
                         </FieldLabel>
                         <FieldContent>
-                          <Input {...field} required id="tags" />
+                          <Input
+                            {...field}
+                            required
+                            id="tags"
+                            placeholder={tAddNew("form.info.tags.placeholder")}
+                          />
                         </FieldContent>
                         <FieldError errors={[fieldState.error]} />
                       </Field>
@@ -494,7 +512,7 @@ function AddNew() {
                               >
                                 {field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
-                                    {tAddNew("form.specs.fuel.when-no-value")}
+                                    {tAddNew("form.specs.fuel.placeholder")}
                                   </span>
                                 ) : (
                                   field.value
@@ -508,7 +526,7 @@ function AddNew() {
                             value={field.value}
                             inputProps={{
                               placeholder: tAddNew(
-                                "form.specs.transmission.when-no-value",
+                                "form.specs.transmission.placeholder",
                               ),
                             }}
                             onSelect={field.onChange}
@@ -550,7 +568,7 @@ function AddNew() {
                               >
                                 {field.value === "" ? (
                                   <span className="text-muted-foreground truncate">
-                                    {tAddNew("form.specs.fuel.when-no-value")}
+                                    {tAddNew("form.specs.fuel.placeholder")}
                                   </span>
                                 ) : (
                                   field.value
@@ -564,7 +582,7 @@ function AddNew() {
                             value={field.value}
                             inputProps={{
                               placeholder: tAddNew(
-                                "form.specs.fuel.when-no-value",
+                                "form.specs.fuel.placeholder",
                               ),
                             }}
                             onSelect={field.onChange}
@@ -594,32 +612,39 @@ function AddNew() {
                           {tAddNew("form.specs.colors.label")}
                         </FieldLabel>
                         <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
-                          <ul className="flex items-center gap-2 overflow-x-auto ps-px">
-                            {field.value.map((color, index) => (
-                              <li key={index}>
-                                <Badge
-                                  variant="outline"
-                                  style={{ color: color.hexCode }}
-                                  className="border-muted-foreground text-shadow-primary inline-flex items-center gap-2 border font-bold uppercase text-shadow-2xs"
-                                >
-                                  {color.name
-                                    .split(" ")
-                                    .map((chunk) => chunk.at(0))
-                                    .join("")}
-
-                                  <button
-                                    type="button"
-                                    className="border-primary text-primary rounded border p-px"
-                                    onClick={() => {
-                                      colors.remove(index);
-                                    }}
+                          {field.value.length === 0 ? (
+                            <span className="text-muted-foreground truncate">
+                              {tAddNew("form.specs.colors.placeholder")}
+                            </span>
+                          ) : (
+                            <ul className="flex items-center gap-2 overflow-x-auto ps-px">
+                              {field.value.map((color, index) => (
+                                <li key={index}>
+                                  <Badge
+                                    variant="outline"
+                                    style={{ color: color.hexCode }}
+                                    className="border-muted-foreground text-shadow-primary inline-flex items-center gap-2 border font-bold uppercase text-shadow-2xs"
                                   >
-                                    <LuX />
-                                  </button>
-                                </Badge>
-                              </li>
-                            ))}
-                          </ul>
+                                    {color.name
+                                      .split(" ")
+                                      .map((chunk) => chunk.at(0))
+                                      .join("")}
+
+                                    <button
+                                      type="button"
+                                      className="border-primary text-primary rounded border p-px"
+                                      onClick={() => {
+                                        colors.remove(index);
+                                      }}
+                                    >
+                                      <LuX />
+                                    </button>
+                                  </Badge>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
                           <ColorCreator
                             id="colors"
                             onSave={(value) => colors.append(value)}
@@ -685,11 +710,11 @@ function AddNew() {
                 />
                 <Controller
                   control={control}
-                  name="images"
+                  name="gallery"
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor="images">
-                        {tAddNew("form.media.images.label")}
+                      <FieldLabel htmlFor="gallery">
+                        {tAddNew("form.media.gallery.label")}
                       </FieldLabel>
                       <FieldContent>
                         <Sortable
@@ -705,7 +730,7 @@ function AddNew() {
                               })}
                             >
                               <TableRow className="bg-accent/50">
-                                {imageTableHeaders.map((header) => (
+                                {galleryTableHeaders.map((header) => (
                                   <TableHead
                                     key={header}
                                     className="bg-transparent"
@@ -740,7 +765,7 @@ function AddNew() {
                                       </TableCell>
                                       <TableCell className="text-muted-foreground">
                                         {tAddNew(
-                                          "form.media.images.table.cells.file-size",
+                                          "form.media.gallery.table.cells.file-size",
                                           {
                                             size: (file.size / 1024).toFixed(2),
                                           },

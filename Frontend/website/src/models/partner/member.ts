@@ -1,6 +1,6 @@
 import { tHumanModel } from "../human";
 
-import { tMemberRoleModel } from "./member-role";
+import { tPartnerRoleModel } from "./partner-role";
 import { tBranchModel } from "./branch";
 
 enum eMemberStatusModel {
@@ -9,7 +9,7 @@ enum eMemberStatusModel {
 }
 
 type tMemberModel = tHumanModel & {
-  role: tMemberRoleModel;
+  role: tPartnerRoleModel;
   branch: tBranchModel;
   status: eMemberStatusModel;
   updatedAt: string;

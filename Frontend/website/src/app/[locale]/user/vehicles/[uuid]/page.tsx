@@ -59,7 +59,7 @@ export default async function Page(
         <Container className="grid min-h-full grid-cols-2 gap-6">
           <Carousel
             thumbnailModel={vehicleModel.thumbnail}
-            imagesModel={vehicleModel.images}
+            imagesModel={vehicleModel.gallery}
           />
 
           <div className="flex flex-col">

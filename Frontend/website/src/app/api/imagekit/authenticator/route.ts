@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { tImageKitAuthenticatorModel } from "@/models/image-kit/authenticator";
 import { getUploadAuthParams } from "@imagekit/next/server";
+import { tImageKitAuthenticatorModel } from "@/models/imagekit/authenticator";
 
 export async function GET(): Promise<
   NextResponse<tImageKitAuthenticatorModel>

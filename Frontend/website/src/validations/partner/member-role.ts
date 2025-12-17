@@ -1,12 +1,12 @@
 import z from "zod";
 
-import { eMemberRoleStatusModel } from "@/models/partner/member-role";
+import { ePartnerRoleStatusModel } from "@/models/partner/partner-role";
 
 import { zRole } from "../role";
 
 const zMemberRole = z
   .object({
-    status: z.enum(eMemberRoleStatusModel),
+    status: z.enum(ePartnerRoleStatusModel),
   })
   .extend(zRole.shape)
   .strict();

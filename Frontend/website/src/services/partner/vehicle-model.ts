@@ -7,29 +7,119 @@ import {
 import { tUuid, zUuid } from "@/validations/uuid";
 
 import {
+  tVehicleModelCreateForm,
+  zVehicleModelCreateForm,
+} from "@/validations/partner/vehicle-model-create-form";
+import {
+  tVehicleModelCreate,
+  zVehicleModelCreate,
+} from "@/validations/partner/vehicle-model-create";
+
+import {
   tVehicleModelFilter,
   zVehicleModelFilter,
 } from "@/validations/partner/vehicle-model-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { tVehicleModelCreateForm } from "@/validations/partner/vehicle-model-create-form";
-import { tVehicleModelModel } from "@/models/partner/vehicle-model";
-
-import { ClsImageKitService } from "@/services/image-kit/image-kit";
+import { ClsImageKitService } from "@/services/imagekit/imagekit";
 import { ClsQuery } from "@/libraries/query";
 
-import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
+import { tImageKitAuthenticatorModel } from "@/models/imagekit/authenticator";
+import { UploadResponse } from "@imagekit/next";
+
+import { tVehicleModelModel } from "@/models/partner/vehicle-model";
+import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsVehicleModelService extends ClsAbstractService {
-  public async addAsync(vehicleModel: tVehicleModelCreateForm) {
-    return this._catch<null>(async () => {
-      const clsImageKitService = new ClsImageKitService();
-      clsImageKitService.authenticator();
-      // clsImageKitService.upload();
+  public async addAsync(
+    partnerUuid: tUuid,
+    vehicleModelCreateForm: tVehicleModelCreateForm,
+  ): Promise<tResponseOneService<null>> {
+    return await this._catch<null>(async () => {
+      const parsedVehicleModelCreateForm: tVehicleModelCreateForm =
+        zVehicleModelCreateForm.parse(vehicleModelCreateForm);
+
+      const clsImageKitService: ClsImageKitService = new ClsImageKitService();
+
+      const credentials: tImageKitAuthenticatorModel =
+        await clsImageKitService.authenticator();
+
+      const now = Date.now().toString();
+      const thumbnailRequest: Promise<UploadResponse> =
+        clsImageKitService.upload({
+          ...credentials,
+          folder: `/vheexa/assets/vehicles`,
+          file: parsedVehicleModelCreateForm.thumbnail,
+          fileName: `thumbnail-${now}`,
+        });
+
+      const imagesRequest: Promise<UploadResponse>[] =
+        parsedVehicleModelCreateForm.gallery.map((image) =>
+          clsImageKitService.upload({
+            ...credentials,
+            folder: `/vheexa/assets/vehicles`,
+            file: image,
+            fileName: `gallery-${now}`,
+          }),
+        );
+
+      const [
+        thumbnailResult,
+        ...imagesResult
+      ]: PromiseSettledResult<UploadResponse>[] = await Promise.allSettled([
+        thumbnailRequest,
+        ...imagesRequest,
+      ]);
+
+      if (thumbnailResult.status === "rejected") {
+        throw new Error(
+          `Failed to upload thumbnail: ${thumbnailResult.reason instanceof Error ? thumbnailResult.reason.message : String(thumbnailResult.reason)}`,
+        );
+      }
+
+      const rejectedImages = imagesResult.filter(
+        (imageResult) => imageResult.status === "rejected",
+      );
+      if (rejectedImages.length > 0) {
+        const errorText = rejectedImages
+          .map((rejectedImage) =>
+            rejectedImage.reason instanceof Error
+              ? rejectedImage.reason.message
+              : String(rejectedImage.reason),
+          )
+          .join(", ");
+
+        throw new Error(`Failed to upload some images: ${errorText}`);
+      }
+
+      const thumbnailUrl: string = thumbnailResult.value.url ?? "";
+      const imagesUrls: string[] = (
+        imagesResult as PromiseFulfilledResult<UploadResponse>[]
+      ).map((imageResult) => imageResult.value.url ?? "");
+
+      const vehicleModelCreate: tVehicleModelCreate = {
+        thumbnail: thumbnailUrl,
+        gallery: imagesUrls,
+        name: vehicleModelCreateForm.name,
+        description: vehicleModelCreateForm.description,
+        category: vehicleModelCreateForm.category,
+        manufacturer: vehicleModelCreateForm.manufacturer,
+        modelYear: vehicleModelCreateForm.modelYear,
+        capacity: vehicleModelCreateForm.capacity,
+        transmission: vehicleModelCreateForm.transmission,
+        fuel: vehicleModelCreateForm.fuel,
+        colors: vehicleModelCreateForm.colors,
+        price: vehicleModelCreateForm.price,
+        discount: vehicleModelCreateForm.discount,
+        tags: vehicleModelCreateForm.tags,
+        status: vehicleModelCreateForm.status,
+      };
+      const parsedVehicleModelCreate: tVehicleModelCreate =
+        zVehicleModelCreate.parse(vehicleModelCreate);
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/vehicle-models",
-        vehicleModel,
+        parsedVehicleModelCreate,
       );
 
       if (!response.ok) {
@@ -46,12 +136,13 @@ class ClsVehicleModelService extends ClsAbstractService {
   public async getOneAsync(
     uuid: tUuid,
   ): Promise<tResponseOneService<tVehicleModelModel>> {
-    return this._catch<tVehicleModelModel>(async () => {
+    return await this._catch<tVehicleModelModel>(async () => {
       const parsedUuid: tUuid = zUuid.parse(uuid);
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/vehicle-models/${parsedUuid}`,
       );
+
       if (!response.ok) {
         const errorText: string = await response.text();
         throw new Error(errorText);
@@ -60,9 +151,6 @@ class ClsVehicleModelService extends ClsAbstractService {
       const data: tSuccessOneModel<tVehicleModelModel> = await response.json();
       return {
         isSuccess: true,
-        statusCode: response.status,
-        statusText: response.statusText,
-        d: "",
         data: data.data,
       };
     });
@@ -71,7 +159,7 @@ class ClsVehicleModelService extends ClsAbstractService {
     filter: tVehicleModelFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModelModel>> {
-    return this._catch<tVehicleModelModel>(async () => {
+    return await this._catch<tVehicleModelModel>(async () => {
       const parsedFilter: tVehicleModelFilter =
         zVehicleModelFilter.parse(filter);
       const parsedPagination: tPagination = zPagination.parse(pagination);
@@ -138,6 +226,25 @@ class ClsVehicleModelService extends ClsAbstractService {
         isSuccess: true,
         data: data.data,
         pagination: data.pagination,
+      };
+    });
+  }
+  public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
+    return await this._catch<null>(async () => {
+      const parsedUuid: tUuid = zUuid.parse(uuid);
+
+      const response: Response = await this._fetch.delete(
+        `/partner/dashboard/vehicle-models/${parsedUuid}`,
+      );
+
+      if (!response.ok) {
+        const errorText: string = await response.text();
+        throw new Error(errorText);
+      }
+
+      return {
+        isSuccess: true,
+        data: null,
       };
     });
   }

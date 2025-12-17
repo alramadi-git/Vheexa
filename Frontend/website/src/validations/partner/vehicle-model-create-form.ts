@@ -12,7 +12,7 @@ const zVehicleModelCreateForm = z
       .refine((value) => value.type.startsWith("image/"), {
         error: "Only images are allowed",
       }),
-    images: z.array(
+    gallery: z.array(
       z
         .file("expected thumbnail file (e.g. png, jpg, etc...)")
         .refine((value) => value.type.startsWith("image/"), {

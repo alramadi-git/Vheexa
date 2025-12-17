@@ -8,20 +8,7 @@ import {
 const zVehicleModelCreate = z
   .object({
     thumbnail: z.url(),
-    images: z
-      .array(
-        z.object({
-          url: z.url(),
-          index: z.number().min(0),
-        }),
-      )
-      .refine(
-        (images) =>
-          new Set(images.map((image) => image.index)).size === images.length,
-        {
-          error: "Image indexes must be unique.",
-        },
-      ),
+    gallery: z.array(z.url()).max(25, "You can upload a maximum of 25 images."),
     name: z.string().nonempty("name cannot be empty."),
     description: z
       .string()

@@ -22,7 +22,7 @@ enum eVehicleModelStatusModel {
 type tVehicleModelModel = {
   uuid: string;
   thumbnail: tImageModel;
-  images: tVehicleImageModel[];
+  gallery: tVehicleImageModel[];
   name: string;
   description: string;
   category: eVehicleModelCategoryModel;

@@ -869,8 +869,7 @@
                         "placeholder": "Enter a vehicle name like Audi A4, BMW R1250 or Bell 206"
                       },
                       "model-year": {
-                        "label": "Model Year",
-                        "placeholder": "1980 - today"
+                        "label": "Model Year"
                       },
                       "category": {
                         "label": "Category",
@@ -911,7 +910,7 @@
                       },
                       "manufacturer": {
                         "label": "Manufacturer",
-                        "when-no-value": "Select vehicle brand (e.g., Toyota, BMW, Mercedes)...",
+                        "placeholder": "Select vehicle brand (e.g., Toyota, BMW, Mercedes, etc...)",
                         "when-invalid-category": "Select a valid category",
                         "when-no-result": "No Match where found",
                         "manufacturers": [
@@ -1327,17 +1326,16 @@
                       },
                       "tags": {
                         "label": "Tags",
-                        "placeholder": "Enter your tags: tag1, tag2, etc..."
+                        "placeholder": "Enter tags for better reach (e.g., SUV, electric, automatic, 5-seater, red)"
                       }
                     },
                     "specs": {
                       "capacity": {
-                        "label": "Capacity",
-                        "placeholder": "Enter vehicle capacity..."
+                        "label": "Capacity"
                       },
                       "transmission": {
                         "label": "Transmission",
-                        "when-no-value": "Select transmission type (e.g., Automatic, Manual, CVT)...",
+                        "placeholder": "Select transmission type (e.g., Automatic, Manual, CVT, etc...)",
                         "when-invalid-category": "Select a valid category",
                         "when-no-result": "No Match where found",
                         "transmissions": [
@@ -1553,7 +1551,7 @@
                       },
                       "fuel": {
                         "label": "Fuel",
-                        "when-no-value": "Select fuel type (e.g., Petrol 95, Diesel, Electric)...",
+                        "placeholder": "Select fuel type (e.g., Petrol 95, Diesel, Electric, etc...)",
                         "when-invalid-category": "Select a valid category",
                         "when-no-result": "No Match where found",
                         "fuels": [
@@ -1745,17 +1743,15 @@
                       },
                       "colors": {
                         "label": "Colors",
-                        "colorsSelect": {
-                          "label": "Select vehicle colors"
-                        }
+                        "placeholder": "Enter color (e.g., Black, White, etc...)"
                       }
                     },
                     "media": {
                       "thumbnail": {
                         "label": "Thumbnail"
                       },
-                      "images": {
-                        "label": "Images",
+                      "gallery": {
+                        "label": "Gallery",
                         "table": {
                           "headers": [
                             "",

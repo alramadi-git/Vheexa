@@ -34,7 +34,7 @@ type tVehicleModelModel = {
   uuid: string;
   partner: tPartnerModel;
   thumbnail: tImageModel;
-  images: tVehicleImageModel[];
+  gallery: tVehicleImageModel[];
   colors: tVehicleColorModel[];
   name: string;
   description: string;

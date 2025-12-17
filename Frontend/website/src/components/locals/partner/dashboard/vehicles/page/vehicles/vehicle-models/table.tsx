@@ -200,7 +200,7 @@ export default function Table({
         cell: (info) => <Action vehicleModel={info.row.original} />,
       },
     ];
-  }, []);
+  }, [tTable]);
 
   const table = useReactTable({
     data: result?.isSuccess ? result.data : [],

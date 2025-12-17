@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { apiCatcher } from "@/utilities/api";
+
 import { clsFetch } from "@/consts/api/fetch";
 
 import { tToken, zToken } from "@/validations/token";
@@ -12,7 +13,7 @@ import { tResponseOneModel } from "@/models/response";
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<tPartnerAccountModel["account"]>>> {
-  return await apiCatcher(async () => {
+  return await apiCatcher<tPartnerAccountModel["account"]>(async () => {
     const token: unknown = request.cookies.get("partner-token")?.value;
     const parsedToken: tToken = zToken.parse(token);
 

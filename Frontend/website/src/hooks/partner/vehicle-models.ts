@@ -33,9 +33,6 @@ export default function useVehicleModels() {
 
   const filter: tVehicleModelFilter = {
     search: searchParams.get("vehicle-model-filter.search") ?? undefined,
-    modelYears: searchParams
-      .getAll("vehicle-model-filter.model-years")
-      .map((modelYear) => Number(modelYear)),
     capacity: {
       min: minCapacity !== null ? Number(minCapacity) : undefined,
       max: maxCapacity !== null ? Number(maxCapacity) : undefined,
@@ -64,7 +61,6 @@ export default function useVehicleModels() {
     queryKey: [
       "vehicles",
       filter.search,
-      filter.modelYears,
       filter.capacity,
       filter.transmissions,
       filter.fuels,

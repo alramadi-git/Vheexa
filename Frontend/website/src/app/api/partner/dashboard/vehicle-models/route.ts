@@ -1,24 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { apiCatcher } from "@/utilities/api";
-
 import {
   tVehicleModelFilter,
   zVehicleModelFilter,
 } from "@/validations/partner/vehicle-model-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
+import { apiCatcher } from "@/utilities/api";
+
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
 import {
-  tVehicleModelModel,
   eVehicleModelStatusModel,
+  tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
-import { tSuccessManyModel } from "@/models/success";
+import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
+import { tResponseManyModel } from "@/models/response";
+import { zVehicleModelCreate } from "@/validations/partner/vehicle-model-create";
 
-export async function GET(request: NextRequest) {
-  return apiCatcher(async () => {
+export async function GET(
+  request: NextRequest,
+): Promise<NextResponse<tResponseManyModel<tVehicleModelModel>>> {
+  return await apiCatcher<tVehicleModelModel>(async () => {
     const [
       minCapacity,
       maxCapacity,
@@ -39,7 +43,7 @@ export async function GET(request: NextRequest) {
       request.nextUrl.searchParams.get("pagination.page-size"),
     ];
 
-    const filter: tVehicleModelFilter = {
+    const VehicleModelFilter: tVehicleModelFilter = {
       search:
         request.nextUrl.searchParams.get("vehicle-model-filter.search") ??
         undefined,
@@ -73,7 +77,8 @@ export async function GET(request: NextRequest) {
       pageSize: pageSize === null ? undefined : Number(pageSize),
     };
 
-    const parsedFilter: tVehicleModelFilter = zVehicleModelFilter.parse(filter);
+    const parsedFilter: tVehicleModelFilter =
+      zVehicleModelFilter.parse(VehicleModelFilter);
     const parsedPagination: tPagination = zPagination.parse(pagination);
 
     const clsQuery: ClsQuery = new ClsQuery();
@@ -126,7 +131,7 @@ export async function GET(request: NextRequest) {
       parsedPagination.pageSize?.toString(),
     );
 
-    return NextResponse.json<tSuccessManyModel<tVehicleModelModel>>({
+    return NextResponse.json({
       data: [
         {
           uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -135,7 +140,7 @@ export async function GET(request: NextRequest) {
             uuid: "a3d9e2b1-4f5c-4e8a-9b2d-1c6e7f8a9b2c",
             url: "https://example.com/images/thumbnails/model_s.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "b4e8f1a2-3d9c-4e7f-8a9b-2c1d3e4f5a6b",
               url: "https://example.com/images/side.jpg",
@@ -183,7 +188,7 @@ export async function GET(request: NextRequest) {
             uuid: "f8g9h1i2-3j4k-5l6m-7n8o-9p1q2r3s4t5u",
             url: "https://example.com/images/thumbnails/civic.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "g9h1i2j3-4k5l-6m7n-8o9p-1q2r3s4t5u6v",
               url: "https://example.com/images/civic_front.jpg",
@@ -231,7 +236,7 @@ export async function GET(request: NextRequest) {
             uuid: "k4l5m6n7-8o9p-1q2r-3s4t-5u6v7w8x9y0z",
             url: "https://example.com/images/thumbnails/m3.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "l5m6n7o8-9p1q-2r3s-4t5u-6v7w8x9y0z1a",
               url: "https://example.com/images/m3_side.jpg",
@@ -268,7 +273,7 @@ export async function GET(request: NextRequest) {
             uuid: "n7o8p9q1-2r3s-4t5u-6v7w-8x9y0z1a2b3c",
             url: "https://example.com/images/thumbnails/golf.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "o8p9q1r2-3s4t-5u6v-7w8x-9y0z1a2b3c4d",
               url: "https://example.com/images/golf_exterior.jpg",
@@ -305,7 +310,7 @@ export async function GET(request: NextRequest) {
             uuid: "q1r2s3t4-5u6v-7w8x-9y0z-1a2b3c4d5e6f",
             url: "https://example.com/images/thumbnails/camry.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "r2s3t4u5-6v7w-8x9y-0z1a-2b3c4d5e6f7g",
               url: "https://example.com/images/camry_interior.jpg",
@@ -342,7 +347,7 @@ export async function GET(request: NextRequest) {
             uuid: "t4u5v6w7-8x9y-0z1a-2b3c-4d5e6f7g8h9i",
             url: "https://example.com/images/thumbnails/forester.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "u5v6w7x8-9y0z-1a2b-3c4d-5e6f7g8h9i0j",
               url: "https://example.com/images/forester_offroad.jpg",
@@ -379,7 +384,7 @@ export async function GET(request: NextRequest) {
             uuid: "w7x8y9z0-1a2b-3c4d-5e6f-7g8h9i0j1k2l",
             url: "https://example.com/images/thumbnails/f150.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "x8y9z0a1-2b3c-4d5e-6f7g-8h9i0j1k2l3m",
               url: "https://example.com/images/f150_truckbed.jpg",
@@ -416,7 +421,7 @@ export async function GET(request: NextRequest) {
             uuid: "z0a1b2c3-4d5e-6f7g-8h9i-0j1k2l3m4n5o",
             url: "https://example.com/images/thumbnails/corvette.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "a1b2c3d4-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
               url: "https://example.com/images/corvette_race.jpg",
@@ -453,7 +458,7 @@ export async function GET(request: NextRequest) {
             uuid: "c3d4e5f6-7g8h-9i0j-1k2l-3m4n5o6p7q8r",
             url: "https://example.com/images/thumbnails/xc90.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "d4e5f6g7-8h9i-0j1k-2l3m-4n5o6p7q8r9s",
               url: "https://example.com/images/xc90_family.jpg",
@@ -490,7 +495,7 @@ export async function GET(request: NextRequest) {
             uuid: "f6g7h8i9-0j1k-2l3m-4n5o-6p7q8r9s0t1u",
             url: "https://example.com/images/thumbnails/charger.jpg",
           },
-          images: [
+          gallery: [
             {
               uuid: "g7h8i9j0-1k2l-3m4n-5o6p-7q8r9s0t1u2v",
               url: "https://example.com/images/charger_muscle.jpg",
@@ -542,5 +547,39 @@ export async function GET(request: NextRequest) {
     return NextResponse.json<tSuccessManyModel<tVehicleModelModel>>(response, {
       status: backendResponse.status,
     });
+  });
+}
+
+export async function POST(
+  request: NextRequest,
+): Promise<NextResponse<tSuccessOneModel<null>>> {
+  return apiCatcher(async () => {
+    const vehicleModelCreate = await request.json();
+    const parsedVehicleModelCreate =
+      zVehicleModelCreate.parse(vehicleModelCreate);
+
+    console.log("Parsed Vehicle Model Create:", parsedVehicleModelCreate);
+    return NextResponse.json<tSuccessOneModel<null>>(
+      { data: null },
+      { status: 201 },
+    );
+
+    const token: string = request.cookies.get("partner-token")!.value;
+    const backendResponse: Response = await clsFetch.post(
+      `/partner/dashboard/vehicle-models/`,
+      {
+        Authorization: `Bearer ${token}`,
+      },
+    );
+
+    if (!backendResponse.ok) {
+      const errorText: string = await backendResponse.json();
+      throw new Error(errorText);
+    }
+
+    return NextResponse.json<tSuccessOneModel<null>>(
+      { data: null },
+      { status: backendResponse.status },
+    );
   });
 }
