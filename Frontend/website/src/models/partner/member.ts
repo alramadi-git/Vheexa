@@ -1,6 +1,6 @@
 import { tHumanModel } from "../human";
 
-import { tPartnerRoleModel } from "./role";
+import { tPartnerRoleModel } from "./partner-role";
 import { tBranchModel } from "./branch";
 
 enum eMemberStatusModel {

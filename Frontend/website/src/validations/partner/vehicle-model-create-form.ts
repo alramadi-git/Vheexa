@@ -26,7 +26,7 @@ const zVehicleModelCreateForm = z
       .string()
       .nonempty("description cannot be empty.")
       .max(750, "description cannot be longer than 750 characters."),
-    category: z.enum(eVehicleModelCategoryModel),
+    category: z.enum(eVehicleModelCategoryModel, "Invalid category."),
     manufacturer: z.string().nonempty("manufacturer cannot be empty."),
     modelYear: z
       .number()
@@ -74,10 +74,7 @@ const zVehicleModelCreateForm = z
         error:
           "Tags must be comma-separated followed by a space and contain only letters.",
       }),
-    status: z.enum(
-      eVehicleModelStatusModel,
-      "Invalid status, try select (e.g., Active, Inactive).",
-    ),
+    status: z.enum(eVehicleModelStatusModel, "Invalid status."),
   })
   .refine((value) => value.price - 0.99 > value.discount, {
     path: ["discount"],

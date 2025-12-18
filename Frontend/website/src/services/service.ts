@@ -26,13 +26,13 @@ abstract class ClsAbstractService {
     "/api",
   );
 
-  protected async _catch<tData>(
+  protected async _catchAsync<tData>(
     callback: () => Promise<tSuccessOneService<tData>>,
   ): Promise<tResponseOneService<tData>>;
-  protected async _catch<tData>(
+  protected async _catchAsync<tData>(
     callback: () => Promise<tSuccessManyService<tData>>,
   ): Promise<tResponseManyService<tData>>;
-  protected async _catch<tData>(
+  protected async _catchAsync<tData>(
     callback: () => Promise<
       tResponseOneService<tData> | tResponseManyService<tData>
     >,

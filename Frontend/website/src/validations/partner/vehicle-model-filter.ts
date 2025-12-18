@@ -8,7 +8,7 @@ import {
 const zVehicleModelFilter = z
   .object({
     search: z.optional(z.string().trim()),
-    category: z.array(z.enum(eVehicleModelCategoryModel)),
+    categories: z.array(z.enum(eVehicleModelCategoryModel, "Invalid category.")),
     capacity: z
       .object({
         min: z.optional(z.number().nonnegative("capacity cannot be negative.")),
@@ -65,12 +65,7 @@ const zVehicleModelFilter = z
             "min discount should be less than, equal to max discount or leave it blank.",
         },
       ),
-    statuses: z.array(
-      z.enum(
-        eVehicleModelStatusModel,
-        "Invalid status, try select (e.g., Active, Inactive).",
-      ),
-    ),
+    status: z.optional(z.enum(eVehicleModelStatusModel, "Invalid status.")),
   })
   .refine(
     (value) => {

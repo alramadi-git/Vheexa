@@ -1,42 +1,43 @@
 import z from "zod";
-import { zRole } from "../role";
 
-import { ePartnerRoleStatusModel } from "@/models/partner/role";
+import { ePartnerRoleStatusModel } from "@/models/partner/partner-role";
 
-const allowedPermissionUuids = [
-  "Partner.Update",
-  "Partner.Delete",
-  "Branches.Create",
-  "Branches.Update",
-  "Branches.Read",
-  "Branches.Delete",
-  "Roles.Create",
-  "Roles.Update",
-  "Roles.Read",
-  "Roles.Delete",
-  "Members.Create",
-  "Members.Update",
-  "Members.Read",
-  "Members.Delete",
-  "VehicleModels.Create",
-  "VehicleModels.Update",
-  "VehicleModels.Read",
-  "VehicleModels.Delete",
-  "VehicleInstances.Create",
-  "VehicleInstances.Update",
-  "VehicleInstances.Read",
-  "VehicleInstances.Delete",
-];
+enum ePartnerRoleCreatePermission {
+  PartnerUpdate,
+  PartnerDelete,
+  BranchesCreate,
+  BranchesUpdate,
+  BranchesRead,
+  BranchesDelete,
+  RolesCreate,
+  RolesUpdate,
+  RolesRead,
+  RolesDelete,
+  MembersCreate,
+  MembersUpdate,
+  MembersRead,
+  MembersDelete,
+  VehicleModelsCreate,
+  VehicleModelsUpdate,
+  VehicleModelsRead,
+  VehicleModelsDelete,
+  VehicleInstancesCreate,
+  VehicleInstancesUpdate,
+  VehicleInstancesRead,
+  VehicleInstancesDelete,
+}
 
-const zRoleCreate = z
+const zPartnerRoleCreate = z
   .object({
     name: z.string().nonempty("Role name is required."),
-    permissions: z.array(z.enum(allowedPermissionUuids)),
+    permissions: z
+      .array(z.enum(ePartnerRoleCreatePermission, "Invalid permission."))
+      .min(1, "At least one permission is required."),
     status: z.enum(ePartnerRoleStatusModel),
   })
-  .extend(zRole.shape)
   .strict();
-type tRoleCreate = z.infer<typeof zRoleCreate>;
+type tPartnerRoleCreate = z.infer<typeof zPartnerRoleCreate>;
 
-export type { tRoleCreate as tRoleCreate };
-export { zRoleCreate as zRoleCreate };
+export { ePartnerRoleCreatePermission };
+export type { tPartnerRoleCreate };
+export { zPartnerRoleCreate };

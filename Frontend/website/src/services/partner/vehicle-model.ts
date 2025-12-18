@@ -35,7 +35,7 @@ class ClsVehicleModelService extends ClsAbstractService {
     partnerUuid: tUuid,
     vehicleModelCreateForm: tVehicleModelCreateForm,
   ): Promise<tResponseOneService<null>> {
-    return await this._catch<null>(async () => {
+    return await this._catchAsync<null>(async () => {
       const parsedVehicleModelCreateForm: tVehicleModelCreateForm =
         zVehicleModelCreateForm.parse(vehicleModelCreateForm);
 
@@ -136,7 +136,7 @@ class ClsVehicleModelService extends ClsAbstractService {
   public async getOneAsync(
     uuid: tUuid,
   ): Promise<tResponseOneService<tVehicleModelModel>> {
-    return await this._catch<tVehicleModelModel>(async () => {
+    return await this._catchAsync<tVehicleModelModel>(async () => {
       const parsedUuid: tUuid = zUuid.parse(uuid);
 
       const response: Response = await this._fetch.get(
@@ -159,13 +159,18 @@ class ClsVehicleModelService extends ClsAbstractService {
     filter: tVehicleModelFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModelModel>> {
-    return await this._catch<tVehicleModelModel>(async () => {
+    return await this._catchAsync<tVehicleModelModel>(async () => {
       const parsedFilter: tVehicleModelFilter =
         zVehicleModelFilter.parse(filter);
       const parsedPagination: tPagination = zPagination.parse(pagination);
 
       const clsQuery: ClsQuery = new ClsQuery();
       clsQuery.set("vehicle-model-filter.search", parsedFilter.search);
+
+      clsQuery.set(
+        "vehicle-model-filter.categories",
+        parsedFilter.categories.map((category) => category.toString()),
+      );
 
       clsQuery.set(
         "vehicle-model-filter.capacity.min",
@@ -202,8 +207,8 @@ class ClsVehicleModelService extends ClsAbstractService {
       );
 
       clsQuery.set(
-        "vehicle-model-filter.statuses",
-        parsedFilter.statuses.map((status) => status.toString()),
+        "vehicle-model-filter.status",
+        parsedFilter.status?.toString(),
       );
 
       clsQuery.set("pagination.page", parsedPagination.page?.toString());
@@ -230,7 +235,7 @@ class ClsVehicleModelService extends ClsAbstractService {
     });
   }
   public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
-    return await this._catch<null>(async () => {
+    return await this._catchAsync<null>(async () => {
       const parsedUuid: tUuid = zUuid.parse(uuid);
 
       const response: Response = await this._fetch.delete(

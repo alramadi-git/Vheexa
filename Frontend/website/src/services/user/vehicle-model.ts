@@ -59,7 +59,7 @@ class ClsVehicleModelService extends ClsAbstractService {
   public async getOneAsync(
     uuid: string,
   ): Promise<tResponseOneService<tVehicleModelModel>> {
-    return await this._catch<tSuccessOneService<tVehicleModelModel>>(
+    return await this._catchAsync<tSuccessOneService<tVehicleModelModel>>(
       async () => await this._getOneAsync(uuid),
     );
   }
@@ -131,7 +131,7 @@ class ClsVehicleModelService extends ClsAbstractService {
     filters: tVehicleFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModelModel>> {
-    return await this._catch<tSuccessManyService<tVehicleModelModel>>(
+    return await this._catchAsync<tSuccessManyService<tVehicleModelModel>>(
       async () => await this._getManyAsync(filters, pagination),
     );
   }

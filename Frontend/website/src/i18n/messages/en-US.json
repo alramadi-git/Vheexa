@@ -1837,6 +1837,39 @@
               }
             }
           }
+        },
+        "roles": {
+          "page": {
+            "roles": {
+              "title": "Roles",
+              "description": "Manage your roles easily and efficiently.",
+
+              "filter": {},
+              "table": {
+                "uuid": {
+                  "header": "Uuid"
+                },
+                "permissions": {
+                  "header": "Permissions"
+                },
+                "members": {
+                  "header": "Members"
+                },
+                "status": {
+                  "header": "Status"
+                },
+                "updated-at": {
+                  "header": "Updated At"
+                },
+                "created-at": {
+                  "header": "Created At"
+                },
+                "Action": {
+                  "header": "Action"
+                }
+              }
+            }
+          }
         }
       },
       "authentication": {

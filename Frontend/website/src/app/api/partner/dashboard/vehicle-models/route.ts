@@ -18,6 +18,7 @@ import {
 import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
 import { tResponseManyModel } from "@/models/response";
 import { zVehicleModelCreate } from "@/validations/partner/vehicle-model-create";
+import { tNullable } from "@/types/nullish";
 
 export async function GET(
   request: NextRequest,
@@ -30,15 +31,17 @@ export async function GET(
       maxPrice,
       minDiscount,
       maxDiscount,
+      status,
       page,
       pageSize,
-    ]: (string | null)[] = [
+    ]: tNullable<string>[] = [
       request.nextUrl.searchParams.get("vehicle-model-filter.capacity.min"),
       request.nextUrl.searchParams.get("vehicle-model-filter.capacity.max"),
       request.nextUrl.searchParams.get("vehicle-model-filter.price.min"),
       request.nextUrl.searchParams.get("vehicle-model-filter.price.max"),
       request.nextUrl.searchParams.get("vehicle-model-filter.discount.min"),
       request.nextUrl.searchParams.get("vehicle-model-filter.discount.max"),
+      request.nextUrl.searchParams.get("vehicle-model-filter.status"),
       request.nextUrl.searchParams.get("pagination.page"),
       request.nextUrl.searchParams.get("pagination.page-size"),
     ];
@@ -47,6 +50,9 @@ export async function GET(
       search:
         request.nextUrl.searchParams.get("vehicle-model-filter.search") ??
         undefined,
+      categories: request.nextUrl.searchParams
+        .getAll("vehicle-model-filter.categories")
+        .map((category) => Number(category)),
       capacity: {
         min: minCapacity === null ? undefined : Number(minCapacity),
         max: maxCapacity === null ? undefined : Number(maxCapacity),
@@ -68,9 +74,7 @@ export async function GET(
         min: minDiscount === null ? undefined : Number(minDiscount),
         max: maxDiscount === null ? undefined : Number(maxDiscount),
       },
-      statuses: request.nextUrl.searchParams
-        .getAll("vehicle-model-filter.statuses")
-        .map((status) => Number(status)),
+      status: status === null ? undefined : Number(status),
     };
     const pagination: tPagination = {
       page: page === null ? undefined : Number(page),
@@ -121,8 +125,8 @@ export async function GET(
     );
 
     clsQuery.set(
-      "VehicleModelFilter.Statuses.Value",
-      parsedFilter.statuses.map((status) => status.toString()),
+      "VehicleModelFilter.Status.Value",
+      parsedFilter.status?.toString(),
     );
 
     clsQuery.set("Pagination.Page.Value", parsedPagination.page?.toString());

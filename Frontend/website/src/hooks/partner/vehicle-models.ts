@@ -18,6 +18,7 @@ export default function useVehicleModels() {
     maxPrice,
     minDiscount,
     maxDiscount,
+    status,
     page,
     pageSize,
   ] = [
@@ -27,12 +28,16 @@ export default function useVehicleModels() {
     searchParams.get("vehicle-model-filter.price.max"),
     searchParams.get("vehicle-model-filter.discount.min"),
     searchParams.get("vehicle-model-filter.discount.max"),
+    searchParams.get("vehicle-model-filter.status"),
     searchParams.get("pagination.page"),
     searchParams.get("pagination.page-size"),
   ];
 
   const filter: tVehicleModelFilter = {
     search: searchParams.get("vehicle-model-filter.search") ?? undefined,
+    categories: searchParams
+      .getAll("vehicle-model-filter.categories")
+      .map((category) => Number(category)),
     capacity: {
       min: minCapacity !== null ? Number(minCapacity) : undefined,
       max: maxCapacity !== null ? Number(maxCapacity) : undefined,
@@ -48,9 +53,7 @@ export default function useVehicleModels() {
       min: minDiscount !== null ? Number(minDiscount) : undefined,
       max: maxDiscount !== null ? Number(maxDiscount) : undefined,
     },
-    statuses: searchParams
-      .getAll("vehicle-model-filter.statuses")
-      .map((status) => Number(status)),
+    status: status !== null ? Number(status) : undefined,
   };
   const pagination: tPagination = {
     page: page !== null ? Number(page) : undefined,
@@ -67,7 +70,7 @@ export default function useVehicleModels() {
       filter.colors,
       filter.price,
       filter.discount,
-      filter.statuses,
+      filter.status,
       pagination.page,
       pagination.pageSize,
     ],

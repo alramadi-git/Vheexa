@@ -16,7 +16,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   public async registerAsync(
     credentials: tRegisterCredentials,
   ): Promise<tResponseOneService<tMemberModel>> {
-    return this._catch<tMemberModel>(async () => {
+    return this._catchAsync<tMemberModel>(async () => {
       const parsedCredentials = zRegisterCredentials.parse(credentials);
 
       const response: Response = await this._fetch.post(
@@ -39,7 +39,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   public async loginAsync(
     credentials: tLoginCredentials,
   ): Promise<tResponseOneService<tMemberModel>> {
-    return this._catch<tMemberModel>(async () => {
+    return this._catchAsync<tMemberModel>(async () => {
       const parsedCredentials = zLoginCredentials.parse(credentials);
 
       const response: Response = await this._fetch.post(
@@ -60,7 +60,7 @@ class ClsAuthenticationService extends ClsAbstractService {
   }
 
   public async getAccount(): Promise<tResponseOneService<tMemberModel>> {
-    return this._catch<tMemberModel>(async () => {
+    return this._catchAsync<tMemberModel>(async () => {
       const response: Response = await this._fetch.get(
         "/partner/authentication/me",
       );
