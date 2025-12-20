@@ -3,9 +3,11 @@
 import { useSearchParams as useSearchParamsNextJS } from "next/navigation";
 import { useRouter, usePathname } from "@/i18n/navigation";
 
+import { useEffect, useState } from "react";
+
 import { ClsQuery } from "@/libraries/query";
 
-import { useState } from "react";
+import { tUndefinable, tNullable } from "@/types/nullish";
 
 export function useQuery() {
   const router = useRouter();
@@ -15,12 +17,23 @@ export function useQuery() {
 
   const [query, setQuery] = useState(new ClsQuery(searchParams.toString()));
 
-  function set(key: string, value?: string): void {
-    query.set(key, value);
+  useEffect(() => {
+    setQuery(new ClsQuery(searchParams.toString()));
+  }, [searchParams]);
+
+  function get(key: string): tNullable<string> {
+    return query.get(key);
   }
 
-  function setArray(key: string, value: string[]): void {
-    query.set(key, value);
+  function getAll(key: string): string[] {
+    return query.getAll(key);
+  }
+
+  function set(key: string, value?: string): void;
+  function set(key: string, value: string[]): void;
+  function set(key: string, value: tUndefinable<string> | string[]): void {
+    if (value === undefined || typeof value === "string") query.set(key, value);
+    else query.set(key, value);
   }
 
   function remove(key: string): void {
@@ -31,17 +44,15 @@ export function useQuery() {
     setQuery(new ClsQuery());
   }
 
-  function toString(): string {
-    return query.toString();
-  }
-
   function apply(options?: Parameters<typeof router.push>["1"]): void {
-    router.push(`${pathname}${toString()}`, options);
+    router.push(`${pathname}${query.toString()}`, options);
   }
 
   return {
+    get,
+    getAll,
     set,
-    setArray,
+    setArray: set,
     remove,
     clear,
     apply,

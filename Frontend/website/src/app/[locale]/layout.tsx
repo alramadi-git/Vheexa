@@ -9,21 +9,12 @@ import { cn } from "@/utilities/cn";
 import { routing } from "@/i18n/routing";
 import { getTranslations, getMessages } from "next-intl/server";
 
-import ThemeProvider from "@/components/locals/providers/theme-provider";
+import ThemeProvider from "@/components/locals/providers/theme";
 import { NextIntlClientProvider } from "next-intl";
-import ReactQueryProvider from "@/components/locals/providers/react-query-provider";
+import ReactQueryProvider from "@/components/locals/providers/react-query";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import { Toaster } from "@/components/shadcn/sonner";
 import Script from "next/script";
-
-export const dynamic = "force-static";
-export async function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  return (await getTranslations("app.layout")).raw("metadata");
-}
 
 const cairo = Cairo({
   weight: [
@@ -40,6 +31,16 @@ const cairo = Cairo({
   adjustFontFallback: true,
   subsets: ["latin"],
 });
+
+export const dynamic = "force-static";
+
+export async function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getTranslations("app.layout")).raw("metadata");
+}
 
 export default async function Layout({ children }: LayoutProps<"/[locale]">) {
   const [tSettings, messages] = await Promise.all([

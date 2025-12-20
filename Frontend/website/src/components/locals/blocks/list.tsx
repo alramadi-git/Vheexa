@@ -17,7 +17,7 @@ function Empty() {
         className="size-[460px] object-contain"
       />
 
-      <p className="text-center text-2xl">{tEmpty("title")}</p>
+      <p className="text-center text-2xl">{tEmpty("label")}</p>
     </div>
   );
 }
@@ -58,7 +58,7 @@ function Error() {
         className="size-[460px] object-contain"
       />
 
-      <p className="text-center text-2xl">{tError("title")}</p>
+      <p className="text-center text-2xl">{tError("label")}</p>
     </div>
   );
 }

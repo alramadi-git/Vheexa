@@ -8,14 +8,12 @@ class ClsQuery extends URLSearchParams {
     value: tUndefinable<string> | string[],
   ): void {
     if (value === undefined) return;
-
-    if (typeof value === "string") {
+    else if (typeof value === "string") {
       super.set(name, value);
       return;
-    } else if (Array.isArray(value)) {
-      value.forEach((item) => super.append(name, item));
-      return;
     }
+
+    value.forEach((item) => super.append(name, item));
   }
 
   public override toString(): string {

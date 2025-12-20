@@ -1,7 +1,6 @@
 "use client";
 
-import type { ComponentProps } from "react";
-
+import { ComponentProps } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export default function ThemeProvider({
