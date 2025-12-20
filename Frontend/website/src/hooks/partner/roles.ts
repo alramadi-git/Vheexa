@@ -39,6 +39,17 @@ export default function useRoles() {
     ],
     queryFn: () => clsRoleService.getManyAsync(filter, pagination),
   });
+  const d = useQuery({
+    queryKey: [
+      "roles",
+      filter.name,
+      filter.permissions,
+      filter.status,
+      pagination.page,
+      pagination.pageSize,
+    ],
+    queryFn: () => clsRoleService.getManyAsync(filter, pagination),
+  });
 
   return {
     isLoading,

@@ -10,7 +10,7 @@ enum eMemberStatusModel {
 
 type tMemberModel = tHumanModel & {
   role: Omit<tRoleModel, "assignedCount">;
-  branch: Omit<tBranchModel, "memberCount"|"vehicleInstanceCount" >;
+  branch: Omit<tBranchModel, "memberCount" | "vehicleInstanceCount">;
   status: eMemberStatusModel;
   updatedAt: string;
   createdAt: string;

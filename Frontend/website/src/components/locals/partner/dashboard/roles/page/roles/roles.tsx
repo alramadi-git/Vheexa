@@ -1,6 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import useRoles from "@/hooks/partner/roles";
+
 import {
   Card,
   CardContent,
@@ -8,13 +10,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/card";
-import { Section, Intro } from "@/components/locals/blocks/typography";
-import { Title, Description } from "../../../blocks/typographies";
 
-export default function Vehicles() {
-  const tVehicles = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles",
-  );
+import { Section, Intro } from "@/components/locals/blocks/typography";
+import {
+  Title,
+  Description,
+} from "@/components/locals/partner/dashboard/blocks/typographies";
+
+import Filter from "./filter";
+import Table from "./table";
+import { Pagination } from "@/components/locals/blocks/pagination";
+
+export default function Roles() {
+  const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
+
+  const { isLoading, result } = useRoles();
 
   return (
     <Section className="h-fullscreen">
@@ -23,13 +33,18 @@ export default function Vehicles() {
           <CardHeader className="flex justify-between px-0">
             <Intro className="space-y-1">
               <CardTitle>
-                <Title heading="h1">{tVehicles("title")}</Title>
+                <Title heading="h1">{tRoles("title")}</Title>
               </CardTitle>
               <CardDescription>
-                <Description>{tVehicles("description")}</Description>
+                <Description>{tRoles("description")}</Description>
               </CardDescription>
             </Intro>
           </CardHeader>
+          <Filter />
+          <Table />
+          {!isLoading && result?.isSuccess && (
+            <Pagination pagination={result.pagination} />
+          )}
         </CardContent>
       </Card>
     </Section>

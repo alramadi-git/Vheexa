@@ -3,27 +3,28 @@ import z from "zod";
 import { eRoleStatusModel } from "@/models/partner/role";
 
 enum ePartnerRoleCreatePermission {
+  PartnerRead,
   PartnerUpdate,
   PartnerDelete,
   RolesCreate,
-  RolesUpdate,
   RolesRead,
+  RolesUpdate,
   RolesDelete,
   BranchesCreate,
-  BranchesUpdate,
   BranchesRead,
+  BranchesUpdate,
   BranchesDelete,
   MembersCreate,
-  MembersUpdate,
   MembersRead,
+  MembersUpdate,
   MembersDelete,
   VehicleModelsCreate,
-  VehicleModelsUpdate,
   VehicleModelsRead,
+  VehicleModelsUpdate,
   VehicleModelsDelete,
   VehicleInstancesCreate,
-  VehicleInstancesUpdate,
   VehicleInstancesRead,
+  VehicleInstancesUpdate,
   VehicleInstancesDelete,
 }
 

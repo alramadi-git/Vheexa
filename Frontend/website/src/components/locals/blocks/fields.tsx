@@ -1,17 +1,22 @@
 "use client";
 
+import { eLocale } from "@/i18n/routing";
+
 import { tUndefinable } from "@/types/nullish";
 
-import { tEmail } from "@/validations/email";
-import { tPassword } from "@/validations/password";
+import { tEmail, tPassword } from "@/validations/authentication-credentials";
 
 import { cn } from "@/utilities/cn";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import { eLocale } from "@/i18n/routing";
-
 import { useLocale, useTranslations } from "next-intl";
-import { ComponentProps, useCallback, useMemo, useRef, useState } from "react";
+import {
+  ComponentProps,
+  useState,
+  useMemo,
+  useCallback,
+  ReactNode,
+} from "react";
 
 import {
   FieldValues,
@@ -22,7 +27,18 @@ import {
   FieldPath,
 } from "react-hook-form";
 
-import { LuMail, LuEye, LuEyeOff, LuCalendar, LuUpload } from "react-icons/lu";
+import {
+  LuMail,
+  LuEye,
+  LuEyeOff,
+  LuCalendar,
+  LuUpload,
+  LuSearch,
+  LuChevronsUpDown,
+  LuCheck,
+  LuX,
+} from "react-icons/lu";
+
 import {
   Popover,
   PopoverContent,
@@ -30,15 +46,26 @@ import {
 } from "@/components/shadcn/popover";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
+
 import { Calendar } from "@/components/shadcn/calendar";
 
 import { toast } from "sonner";
+import { Toast } from "./typography";
+
 import {
   FileUpload,
   FileUploadTrigger,
   FileUploadDropzone,
 } from "@/components/shadcn/file-upload";
-import { Toast } from "./typography";
+import { Badge } from "@/components/shadcn/badge";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/shadcn/command";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -49,6 +76,23 @@ type tControllerRenderProps<
   fieldState: ControllerFieldState;
   formState: UseFormStateReturn<TFieldValues>;
 };
+
+type tFieldSearchProps = Omit<tInputProps, "type" | "className">;
+function FieldSearch(props: tFieldSearchProps) {
+  return (
+    <div className="relative">
+      <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
+        <LuSearch className="size-4" />
+        <span className="sr-only">Search</span>
+      </div>
+      <Input
+        type="search"
+        className="peer px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
+        {...props}
+      />
+    </div>
+  );
+}
 
 type tFieldPasswordProps = {
   controller: tControllerRenderProps<
@@ -142,6 +186,138 @@ function FieldEmail({
         <LuMail size={16} aria-hidden="true" />
       </div>
     </div>
+  );
+}
+
+type tFieldMultiSelectProps<option extends { value: string; label: string }> = {
+  id?: string;
+  placeholder?: string;
+  options: option[];
+  values: option[];
+  setValues: (value: option[]) => void;
+  render: (option: option, isSelected: boolean) => ReactNode;
+};
+function FieldMultiSelect<option extends { value: string; label: string }>({
+  id,
+  placeholder,
+  options,
+  values,
+  setValues,
+  render = (option, isSelected) => (
+    <>
+      <span className="truncate">{option.label}</span>
+      {isSelected && <LuCheck size={16} className="ml-auto" />}
+    </>
+  ),
+}: tFieldMultiSelectProps<option>) {
+  const tFieldMultiSelect = useTranslations("components.fields.multiselect");
+  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleSelection = (value: string) => {
+    setValues(values.filter((v) => v.value !== value));
+  };
+
+  const removeSelection = (value: string) => {
+    setValues(values.filter((v) => v.value !== value));
+  };
+
+  // Define maxShownItems before using visibleItems
+  const maxShownItems = 2;
+  const visibleItems = expanded ? values : values.slice(0, maxShownItems);
+  const hiddenCount = values.length - visibleItems.length;
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          id={id}
+          aria-expanded={open}
+          role="combobox"
+          variant="outline"
+          className="h-auto min-h-8 w-full justify-between hover:bg-transparent"
+        >
+          <div className="flex flex-wrap items-center gap-1 pr-2.5">
+            {values.length > 0 ? (
+              <>
+                {visibleItems.map((visibleItem) => {
+                  return (
+                    <Badge
+                      key={visibleItem.value}
+                      variant="outline"
+                      className="rounded-sm"
+                    >
+                      {visibleItem.label}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-4"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeSelection(visibleItem.value);
+                        }}
+                        asChild
+                      >
+                        <span>
+                          <LuX className="size-3" />
+                        </span>
+                      </Button>
+                    </Badge>
+                  );
+                })}
+                {hiddenCount > 0 || expanded ? (
+                  <Badge
+                    variant="outline"
+                    className="rounded-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setExpanded((prev) => !prev);
+                    }}
+                  >
+                    {expanded
+                      ? tFieldMultiSelect("show-less")
+                      : tFieldMultiSelect("show-more", {
+                          hiddenCount,
+                        })}
+                  </Badge>
+                ) : null}
+              </>
+            ) : (
+              <span className="text-muted-foreground">{placeholder}</span>
+            )}
+          </div>
+          <LuChevronsUpDown
+            className="text-muted-foreground/80 shrink-0"
+            aria-hidden="true"
+          />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-(--radix-popper-anchor-width) p-0">
+        <Command>
+          <CommandInput placeholder="Search framework..." />
+          <CommandList>
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {options.map((option) => {
+                const isSelected: boolean = values.some(
+                  (value) => value.value === option.value,
+                );
+
+                return (
+                  <CommandItem
+                    key={option.value}
+                    value={option.value}
+                    onSelect={() => toggleSelection(option.value)}
+                  >
+                    {render(option, isSelected)}
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -314,4 +490,11 @@ function FieldFileUpload({
     </FileUpload>
   );
 }
-export { FieldPassword, FieldEmail, FieldDatePicker, FieldFileUpload };
+export {
+  FieldSearch,
+  FieldPassword,
+  FieldEmail,
+  FieldMultiSelect,
+  FieldDatePicker,
+  FieldFileUpload,
+};
