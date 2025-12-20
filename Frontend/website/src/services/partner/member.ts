@@ -7,30 +7,30 @@ import {
 import { tUuid, zUuid } from "@/validations/uuid";
 
 import {
-  tRoleCreate,
-  tRoleFilter,
-  zRoleCreate,
-  zRoleFilter,
-} from "@/validations/partner/role";
+  tMemberCreate,
+  tMemberFilter,
+  zMemberCreate,
+  zMemberFilter,
+} from "@/validations/partner/member";
 
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { ClsQuery } from "@/libraries/query";
 
-import { tRoleModel } from "@/models/partner/role";
+import { tMemberModel } from "@/models/partner/member";
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
-class ClsRoleService extends ClsAbstractService {
+class ClsMemberService extends ClsAbstractService {
   public async addAsync(
-    roleCreate: tRoleCreate,
+    memberCreate: tMemberCreate,
   ): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedRoleCreate: tRoleCreate =
-        zRoleCreate.parse(roleCreate);
+      const parsedMemberCreate: tMemberCreate =
+        zMemberCreate.parse(memberCreate);
 
       const response: Response = await this._fetch.post(
-        "/partner/dashboard/roles",
-        parsedRoleCreate,
+        "/partner/dashboard/members",
+        parsedMemberCreate,
       );
 
       if (!response.ok) {
@@ -46,12 +46,12 @@ class ClsRoleService extends ClsAbstractService {
   }
   public async getOneAsync(
     uuid: tUuid,
-  ): Promise<tResponseOneService<tRoleModel>> {
-    return await this._catchAsync<tRoleModel>(async () => {
+  ): Promise<tResponseOneService<tMemberModel>> {
+    return await this._catchAsync<tMemberModel>(async () => {
       const parsedUuid: tUuid = zUuid.parse(uuid);
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/roles/${parsedUuid}`,
+        `/partner/dashboard/members/${parsedUuid}`,
       );
 
       if (!response.ok) {
@@ -59,7 +59,7 @@ class ClsRoleService extends ClsAbstractService {
         throw new Error(errorText);
       }
 
-      const data: tSuccessOneModel<tRoleModel> = await response.json();
+      const data: tSuccessOneModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,
@@ -67,26 +67,29 @@ class ClsRoleService extends ClsAbstractService {
     });
   }
   public async getManyAsync(
-    filter: tRoleFilter,
+    filter: tMemberFilter,
     pagination: tPagination,
-  ): Promise<tResponseManyService<tRoleModel>> {
-    return await this._catchAsync<tRoleModel>(async () => {
-      const parsedFilter: tRoleFilter = zRoleFilter.parse(filter);
+  ): Promise<tResponseManyService<tMemberModel>> {
+    return await this._catchAsync<tMemberModel>(async () => {
+      const parsedFilter: tMemberFilter = zMemberFilter.parse(filter);
       const parsedPagination: tPagination = zPagination.parse(pagination);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.name", parsedFilter.name);
+      clsQuery.set("filter.search", parsedFilter.search);
+
+      clsQuery.set("filter.location", parsedFilter.location);
 
       clsQuery.set(
-        "filter.permissions",
-        parsedFilter.permissions.map((permission) => permission.toString()),
+        "filter.birthday.min",
+        parsedFilter.birthday.min?.toString(),
+      );
+      clsQuery.set(
+        "filter.birthday.max",
+        parsedFilter.birthday.max?.toString(),
       );
 
-      clsQuery.set(
-        "filter.status",
-        parsedFilter.status?.toString(),
-      );
+      clsQuery.set("filter.status", parsedFilter.status?.toString());
 
       clsQuery.set("pagination.page", parsedPagination.page?.toString());
       clsQuery.set(
@@ -95,7 +98,7 @@ class ClsRoleService extends ClsAbstractService {
       );
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/roles${clsQuery.toString()}`,
+        `/partner/dashboard/members${clsQuery.toString()}`,
       );
 
       if (!response.ok) {
@@ -103,7 +106,7 @@ class ClsRoleService extends ClsAbstractService {
         throw new Error(errorText);
       }
 
-      const data: tSuccessManyModel<tRoleModel> = await response.json();
+      const data: tSuccessManyModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,
@@ -116,7 +119,7 @@ class ClsRoleService extends ClsAbstractService {
       const parsedUuid: tUuid = zUuid.parse(uuid);
 
       const response: Response = await this._fetch.delete(
-        `/partner/dashboard/roles/${parsedUuid}`,
+        `/partner/dashboard/members/${parsedUuid}`,
       );
 
       if (!response.ok) {
@@ -132,4 +135,4 @@ class ClsRoleService extends ClsAbstractService {
   }
 }
 
-export { ClsRoleService };
+export { ClsMemberService };

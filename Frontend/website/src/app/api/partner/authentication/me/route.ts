@@ -1,21 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 import { clsFetch } from "@/consts/api/fetch";
 
-import { tJwt, zJwt } from "@/validations/jwt";
+import { zJwt } from "@/validations/jwt";
+
+import { tUndefinable } from "@/types/nullish";
 
 import { tPartnerAccountModel } from "@/models/partner/account";
+
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<tPartnerAccountModel["account"]>>> {
-  return await apiCatcher<tPartnerAccountModel["account"]>(async () => {
-    const token: unknown = request.cookies.get("partner-token")?.value;
-    const parsedToken: tJwt = zJwt.parse(token);
+  return await apiCatch<tPartnerAccountModel["account"]>(async () => {
+    const token: tUndefinable<string> =
+      request.cookies.get("partner-token")?.value;
+    const parsedToken: string = zJwt.parse(token);
 
     const backendResponse: Response = await clsFetch.get(
       "/partner/authentication/me",

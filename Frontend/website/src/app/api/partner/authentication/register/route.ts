@@ -1,24 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 import { clsFetch } from "@/consts/api/fetch";
 
 import {
   tRegisterCredentials,
   zRegisterCredentials,
-} from "@/validations/partner/register-credentials";
+} from "@/validations/partner/authentication-credentials";
 
 import { eDuration } from "@/enums/duration";
 
 import { tPartnerAccountModel } from "@/models/partner/account";
+
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
 
 export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<tPartnerAccountModel["account"]>>> {
-  return apiCatcher<tPartnerAccountModel["account"]>(async () => {
+  return await apiCatch<tPartnerAccountModel["account"]>(async () => {
     const registerCredentials: unknown = await request.json();
 
     const parsedRegisterCredentials: tRegisterCredentials =

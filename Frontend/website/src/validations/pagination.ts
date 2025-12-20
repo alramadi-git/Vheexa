@@ -11,13 +11,8 @@ enum ePageSize {
 
 const zPagination = z
   .object({
-    page: z.optional(z.number().min(1, "Page must be at least 1.")),
-    pageSize: z.optional(
-      z.enum(
-        ePageSize,
-        "Invalid page size, try select (e.g., 5, 10, 25, 50, 75, 100).",
-      ),
-    ),
+    page: z.optional(z.number().min(1, "page must be at least 1.")),
+    pageSize: z.optional(z.enum(ePageSize, "invalid page size.")),
   })
   .strict();
 type tPagination = z.infer<typeof zPagination>;

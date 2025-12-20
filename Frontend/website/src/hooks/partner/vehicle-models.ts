@@ -1,11 +1,10 @@
 import { useSearchParams } from "next/navigation";
-
-import { tVehicleModelFilter } from "@/validations/partner/vehicle-model-filter";
-import { tPagination } from "@/validations/pagination";
+import { useQuery } from "@tanstack/react-query";
 
 import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
-import { useQuery } from "@tanstack/react-query";
+import { tVehicleModelFilter } from "@/validations/partner/vehicle-model";
+import { tPagination } from "@/validations/pagination";
 
 export default function useVehicleModels() {
   const searchParams = useSearchParams();
@@ -62,7 +61,7 @@ export default function useVehicleModels() {
 
   const { isLoading, data: result } = useQuery({
     queryKey: [
-      "vehicles",
+      "vehicle-models",
       filter.search,
       filter.capacity,
       filter.transmissions,

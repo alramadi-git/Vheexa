@@ -8,17 +8,13 @@ import { tUuid, zUuid } from "@/validations/uuid";
 
 import {
   tVehicleModelCreateForm,
-  zVehicleModelCreateForm,
-} from "@/validations/partner/vehicle-model-create-form";
-import {
   tVehicleModelCreate,
-  zVehicleModelCreate,
-} from "@/validations/partner/vehicle-model-create";
-
-import {
   tVehicleModelFilter,
+  zVehicleModelCreateForm,
+  zVehicleModelCreate,
   zVehicleModelFilter,
-} from "@/validations/partner/vehicle-model-filter";
+} from "@/validations/partner/vehicle-model";
+
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { ClsImageKitService } from "@/services/imagekit/imagekit";
@@ -32,7 +28,6 @@ import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsVehicleModelService extends ClsAbstractService {
   public async addAsync(
-    partnerUuid: tUuid,
     vehicleModelCreateForm: tVehicleModelCreateForm,
   ): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {

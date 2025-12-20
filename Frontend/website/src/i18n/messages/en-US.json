@@ -824,20 +824,16 @@
                     "label": "Roles"
                   },
                   {
-                    "url": "/partner/dashboard/members",
-                    "label": "Members"
-                  },
-                  {
                     "url": "/partner/dashboard/branches",
                     "label": "Branches"
                   },
                   {
-                    "url": "/partner/dashboard/vehicles",
-                    "label": "Vehicles"
+                    "url": "/partner/dashboard/members",
+                    "label": "Members"
                   },
                   {
-                    "url": "/partner/dashboard/clients",
-                    "label": "Clients"
+                    "url": "/partner/dashboard/vehicles",
+                    "label": "Vehicles"
                   }
                 ]
               }

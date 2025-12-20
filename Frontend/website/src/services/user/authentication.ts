@@ -1,12 +1,12 @@
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/login-credentials";
+} from "@/validations/authentication-credentials";
 
 import { tUserModel } from "@/models/user/user";
 
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel } from "@/models/failed";
+import { tFailedModel } from "@/models/error";
 
 import {
   tSuccessOneService,

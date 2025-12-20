@@ -1,22 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { tUuid, zUuid } from "@/validations/uuid";
-
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 import { clsFetch } from "@/consts/api/fetch";
+
+import { tUuid, zUuid } from "@/validations/uuid";
+
+import { ClsErrorModel } from "@/models/error";
 
 import {
   eVehicleModelStatusModel,
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
+
 import { tSuccessOneModel } from "@/models/success";
+import { tResponseOneModel } from "@/models/response";
 
 export async function GET(
   request: NextRequest,
   context: RouteContext<"/api/partner/dashboard/vehicle-models/[uuid]">,
-): Promise<NextResponse<tSuccessOneModel<tVehicleModelModel>>> {
-  return apiCatcher(async () => {
+): Promise<NextResponse<tResponseOneModel<tVehicleModelModel>>> {
+  return await apiCatch<tVehicleModelModel>(async () => {
     const { uuid } = await context.params;
     const parsedUuid: tUuid = zUuid.parse(uuid);
 
@@ -80,8 +84,8 @@ export async function GET(
     );
 
     if (!backendResponse.ok) {
-      const errorText: string = await backendResponse.json();
-      throw new Error(errorText);
+      const errorText: string = await backendResponse.text();
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
     const response: tSuccessOneModel<tVehicleModelModel> =
@@ -95,8 +99,8 @@ export async function GET(
 export async function DELETE(
   request: NextRequest,
   context: RouteContext<"/api/partner/dashboard/vehicle-models/[uuid]">,
-): Promise<NextResponse<tSuccessOneModel<null>>> {
-  return apiCatcher(async () => {
+): Promise<NextResponse<tResponseOneModel<null>>> {
+  return await apiCatch<null>(async () => {
     const { uuid } = await context.params;
     const parsedUuid: tUuid = zUuid.parse(uuid);
 
@@ -113,8 +117,8 @@ export async function DELETE(
     );
 
     if (!backendResponse.ok) {
-      const errorText: string = await backendResponse.json();
-      throw new Error(errorText);
+      const errorText: string = await backendResponse.text();
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
     return NextResponse.json<tSuccessOneModel<null>>(

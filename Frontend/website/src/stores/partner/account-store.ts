@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { eBranchStatusModel } from "@/models/partner/branch";
-import { ePartnerRoleStatusModel } from "@/models/partner/partner-role";
+import { eRoleStatusModel } from "@/models/partner/role";
 import { eMemberStatusModel } from "@/models/partner/member";
 
 import { tNullable } from "@/types/nullish";
@@ -34,7 +34,7 @@ const useAccountStore = create<tUseAccountStore>((set, get) => {
           createdAt: "2023-01-15T09:00:00Z",
         },
         role: {
-          status: ePartnerRoleStatusModel.active,
+          status: eRoleStatusModel.active,
           uuid: "bb309e6e-969e-42a4-993a-f8c8fd89c857",
           name: "Partner Manager",
           permissions: [

@@ -4,45 +4,40 @@ import { tVehicleModelModel } from "@/models/user/vehicle-model";
 
 import { zUuid } from "@/validations/uuid";
 
+import { ClsErrorModel } from "@/models/error";
+
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel, ClsFailedModel } from "@/models/failed";
 import { tResponseOneModel } from "@/models/response";
 
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 export async function GET(
   _: NextRequest,
   context: RouteContext<"/api/user/vehicle-models/[uuid]">,
 ): Promise<NextResponse<tResponseOneModel<tVehicleModelModel>>> {
-  return await apiCatcher(async () => {
+  return await apiCatch<tVehicleModelModel>(async () => {
     const { uuid } = await context.params;
     const parsedUuid = zUuid.parse(uuid);
 
-    const data = await fetch(
+    const backendResponse = await fetch(
       `${process.env.API_URL}/user/vehicle-models/${parsedUuid}`,
       {
         method: "GET",
         headers: {
           "X-Api-Key": `${process.env.API_KEY}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
         },
       },
     );
 
-    if (!data.ok) {
-      const dataBody: tFailedModel = await data.json();
-     
-      throw new ClsFailedModel(
-        dataBody.statusCode,
-        dataBody.message,
-        dataBody.issues,
-      );
+    if (!backendResponse.ok) {
+      const errorText: string = await backendResponse.text();
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
-    const dataBody: tSuccessOneModel<tVehicleModelModel> = await data.json();
-    return NextResponse.json<tSuccessOneModel<tVehicleModelModel>>(dataBody, {
-      status: data.status,
+    const data: tSuccessOneModel<tVehicleModelModel> =
+      await backendResponse.json();
+    return NextResponse.json<tSuccessOneModel<tVehicleModelModel>>(data, {
+      status: backendResponse.status,
     });
   });
 }

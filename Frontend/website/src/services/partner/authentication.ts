@@ -3,11 +3,11 @@ import { ClsAbstractService, tResponseOneService } from "@/services/service";
 import {
   tRegisterCredentials,
   zRegisterCredentials,
-} from "@/validations/partner/register-credentials";
+} from "@/validations/partner/authentication-credentials";
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/login-credentials";
+} from "@/validations/authentication-credentials";
 
 import { tMemberModel } from "@/models/partner/member";
 import { tSuccessOneModel } from "@/models/success";

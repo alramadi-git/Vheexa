@@ -1,21 +1,21 @@
 import z from "zod";
 
-const zLocation = z
+const zLocationCreate = z
   .object({
-    country: z.string().nonempty("Country is required."),
-    city: z.string().nonempty("City is required."),
-    street: z.string().nonempty("Street is required."),
+    country: z.string().nonempty("country is required."),
+    city: z.string().nonempty("city is required."),
+    street: z.string().nonempty("street is required."),
     latitude: z
       .number()
-      .min(-90, "Latitude must be between -90 and 90.")
-      .max(90, "Latitude must be between -90 and 90."),
+      .min(-90, "latitude must be between -90 and 90.")
+      .max(90, "latitude must be between -90 and 90."),
     longitude: z
       .number()
-      .min(-180, "Longitude must be between -180 and 180.")
-      .max(180, "Longitude must be between -180 and 180."),
+      .min(-180, "longitude must be between -180 and 180.")
+      .max(180, "longitude must be between -180 and 180."),
   })
   .strict();
-type tLocation = z.infer<typeof zLocation>;
+type tLocationCreate = z.infer<typeof zLocationCreate>;
 
-export type { tLocation };
-export { zLocation };
+export type { tLocationCreate };
+export { zLocationCreate };

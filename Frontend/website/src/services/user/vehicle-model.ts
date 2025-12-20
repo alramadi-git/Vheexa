@@ -7,7 +7,7 @@ import { tPagination, zPagination } from "@/validations/pagination";
 import { tVehicleModelModel } from "@/models/user/vehicle-model";
 
 import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
-import { tFailedModel } from "@/models/failed";
+import { tFailedModel } from "@/models/error";
 
 import {
   tSuccessOneService,

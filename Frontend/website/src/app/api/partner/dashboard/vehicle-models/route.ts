@@ -1,29 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  tVehicleModelFilter,
-  zVehicleModelFilter,
-} from "@/validations/partner/vehicle-model-filter";
-import { tPagination, zPagination } from "@/validations/pagination";
-
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
 import {
+  tVehicleModelFilter,
+  zVehicleModelFilter,
+} from "@/validations/partner/vehicle-model";
+import { tPagination, zPagination } from "@/validations/pagination";
+
+import { zVehicleModelCreate } from "@/validations/partner/vehicle-model";
+
+import { ClsErrorModel } from "@/models/error";
+
+import { tNullable } from "@/types/nullish";
+
+import {
   eVehicleModelStatusModel,
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
-import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
-import { tResponseManyModel } from "@/models/response";
-import { zVehicleModelCreate } from "@/validations/partner/vehicle-model-create";
-import { tNullable } from "@/types/nullish";
+
+import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tResponseOneModel, tResponseManyModel } from "@/models/response";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseManyModel<tVehicleModelModel>>> {
-  return await apiCatcher<tVehicleModelModel>(async () => {
+  return await apiCatch<tVehicleModelModel>(async () => {
     const [
       minCapacity,
       maxCapacity,
@@ -35,37 +40,31 @@ export async function GET(
       page,
       pageSize,
     ]: tNullable<string>[] = [
-      request.nextUrl.searchParams.get("vehicle-model-filter.capacity.min"),
-      request.nextUrl.searchParams.get("vehicle-model-filter.capacity.max"),
-      request.nextUrl.searchParams.get("vehicle-model-filter.price.min"),
-      request.nextUrl.searchParams.get("vehicle-model-filter.price.max"),
-      request.nextUrl.searchParams.get("vehicle-model-filter.discount.min"),
-      request.nextUrl.searchParams.get("vehicle-model-filter.discount.max"),
-      request.nextUrl.searchParams.get("vehicle-model-filter.status"),
+      request.nextUrl.searchParams.get("filter.capacity.min"),
+      request.nextUrl.searchParams.get("filter.capacity.max"),
+      request.nextUrl.searchParams.get("filter.price.min"),
+      request.nextUrl.searchParams.get("filter.price.max"),
+      request.nextUrl.searchParams.get("filter.discount.min"),
+      request.nextUrl.searchParams.get("filter.discount.max"),
+      request.nextUrl.searchParams.get("filter.status"),
       request.nextUrl.searchParams.get("pagination.page"),
       request.nextUrl.searchParams.get("pagination.page-size"),
     ];
 
-    const VehicleModelFilter: tVehicleModelFilter = {
-      search:
-        request.nextUrl.searchParams.get("vehicle-model-filter.search") ??
-        undefined,
+    const filter: tVehicleModelFilter = {
+      search: request.nextUrl.searchParams.get("filter.search") ?? undefined,
       categories: request.nextUrl.searchParams
-        .getAll("vehicle-model-filter.categories")
+        .getAll("filter.categories")
         .map((category) => Number(category)),
       capacity: {
         min: minCapacity === null ? undefined : Number(minCapacity),
         max: maxCapacity === null ? undefined : Number(maxCapacity),
       },
       transmissions: request.nextUrl.searchParams.getAll(
-        "vehicle-model-filter.transmissions",
+        "filter.transmissions",
       ),
-      fuels: request.nextUrl.searchParams.getAll(
-        "vehicle-model-filter.model-years",
-      ),
-      colors: request.nextUrl.searchParams.getAll(
-        "vehicle-model-filter.colors",
-      ),
+      fuels: request.nextUrl.searchParams.getAll("filter.model-years"),
+      colors: request.nextUrl.searchParams.getAll("filter.colors"),
       price: {
         min: minPrice === null ? undefined : Number(minPrice),
         max: maxPrice === null ? undefined : Number(maxPrice),
@@ -81,53 +80,45 @@ export async function GET(
       pageSize: pageSize === null ? undefined : Number(pageSize),
     };
 
-    const parsedFilter: tVehicleModelFilter =
-      zVehicleModelFilter.parse(VehicleModelFilter);
+    const parsedFilter: tVehicleModelFilter = zVehicleModelFilter.parse(filter);
     const parsedPagination: tPagination = zPagination.parse(pagination);
 
     const clsQuery: ClsQuery = new ClsQuery();
-    clsQuery.set("VehicleModelFilter.Search.Value", parsedFilter.search);
+    clsQuery.set("Filter.Search.Value", parsedFilter.search);
 
     clsQuery.set(
-      "VehicleModelFilter.Capacity.Min.Value",
+      "Filter.Categories.Value",
+      parsedFilter.categories.map((category) => category.toString()),
+    );
+
+    clsQuery.set(
+      "Filter.Capacity.Min.Value",
       parsedFilter.capacity.min?.toString(),
     );
     clsQuery.set(
-      "VehicleModelFilter.Capacity.Max.Value",
+      "Filter.Capacity.Max.Value",
       parsedFilter.capacity.max?.toString(),
     );
 
-    clsQuery.set(
-      "VehicleModelFilter.Transmissions.Value",
-      parsedFilter.transmissions,
-    );
+    clsQuery.set("Filter.Transmissions.Value", parsedFilter.transmissions);
 
-    clsQuery.set("VehicleModelFilter.Fuels.Value", parsedFilter.fuels);
+    clsQuery.set("Filter.Fuels.Value", parsedFilter.fuels);
 
-    clsQuery.set("VehicleModelFilter.Colors.Value", parsedFilter.colors);
+    clsQuery.set("Filter.Colors.Value", parsedFilter.colors);
 
-    clsQuery.set(
-      "VehicleModelFilter.Price.Min.Value",
-      parsedFilter.price.min?.toString(),
-    );
-    clsQuery.set(
-      "VehicleModelFilter.Price.Max.Value",
-      parsedFilter.price.max?.toString(),
-    );
+    clsQuery.set("Filter.Price.Min.Value", parsedFilter.price.min?.toString());
+    clsQuery.set("Filter.Price.Max.Value", parsedFilter.price.max?.toString());
 
     clsQuery.set(
-      "VehicleModelFilter.Discount.Min.Value",
+      "Filter.Discount.Min.Value",
       parsedFilter.discount.min?.toString(),
     );
     clsQuery.set(
-      "VehicleModelFilter.Discount.Max.Value",
+      "Filter.Discount.Max.Value",
       parsedFilter.discount.max?.toString(),
     );
 
-    clsQuery.set(
-      "VehicleModelFilter.Status.Value",
-      parsedFilter.status?.toString(),
-    );
+    clsQuery.set("Filter.Status.Value", parsedFilter.status?.toString());
 
     clsQuery.set("Pagination.Page.Value", parsedPagination.page?.toString());
     clsQuery.set(
@@ -135,7 +126,7 @@ export async function GET(
       parsedPagination.pageSize?.toString(),
     );
 
-    return NextResponse.json({
+    return NextResponse.json<tSuccessManyModel<tVehicleModelModel>>({
       data: [
         {
           uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -530,7 +521,7 @@ export async function GET(
           createdAt: "2024-12-29T13:20:00Z",
         },
       ],
-      pagination: { page: 1, pageSize: 10, totalItems: 1 },
+      pagination: { page: 1, pageSize: 10, totalItems: 10 },
     });
 
     const token: string = request.cookies.get("partner-token")!.value;
@@ -542,8 +533,8 @@ export async function GET(
     );
 
     if (!backendResponse.ok) {
-      const errorText: string = await backendResponse.json();
-      throw new Error(errorText);
+      const errorText: string = await backendResponse.text();
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
     const response: tSuccessManyModel<tVehicleModelModel> =
@@ -556,13 +547,12 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-): Promise<NextResponse<tSuccessOneModel<null>>> {
-  return apiCatcher(async () => {
+): Promise<NextResponse<tResponseOneModel<null>>> {
+  return await apiCatch<null>(async () => {
     const vehicleModelCreate = await request.json();
     const parsedVehicleModelCreate =
       zVehicleModelCreate.parse(vehicleModelCreate);
 
-    console.log("Parsed Vehicle Model Create:", parsedVehicleModelCreate);
     return NextResponse.json<tSuccessOneModel<null>>(
       { data: null },
       { status: 201 },
@@ -573,12 +563,13 @@ export async function POST(
       `/partner/dashboard/vehicle-models/`,
       {
         Authorization: `Bearer ${token}`,
+        body: JSON.stringify(parsedVehicleModelCreate),
       },
     );
 
     if (!backendResponse.ok) {
-      const errorText: string = await backendResponse.json();
-      throw new Error(errorText);
+      const errorText: string = await backendResponse.text();
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
     return NextResponse.json<tSuccessOneModel<null>>(

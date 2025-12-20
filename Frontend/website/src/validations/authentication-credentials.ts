@@ -1,5 +1,8 @@
 import z from "zod";
 
+const zEmail = z.email();
+type tEmail = z.infer<typeof zEmail>;
+
 const zPassword = z
   .string()
   .min(8, { message: "Password must be at least 8 characters." })
@@ -19,5 +22,14 @@ const zPassword = z
   });
 type tPassword = z.infer<typeof zPassword>;
 
-export type { tPassword };
-export { zPassword };
+const zLoginCredentials = z
+  .object({
+    email: zEmail,
+    password: zPassword,
+    rememberMe: z.boolean(),
+  })
+  .strict();
+type tLoginCredentials = z.infer<typeof zLoginCredentials>;
+
+export type { tEmail, tPassword, tLoginCredentials };
+export { zEmail, zPassword, zLoginCredentials };

@@ -8,16 +8,17 @@ import {
 } from "@/validations/user/vehicles/vehicle-filter";
 import { ePageSize, tPagination, zPagination } from "@/validations/pagination";
 
+import { ClsErrorModel } from "@/models/error";
+
 import { tSuccessManyModel } from "@/models/success";
-import { tFailedModel, ClsFailedModel } from "@/models/failed";
 import { tResponseManyModel } from "@/models/response";
 
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseManyModel<tVehicleModelModel>>> {
-  return await apiCatcher(async () => {
+  return await apiCatch<tVehicleModelModel>(async () => {
     const filter: tVehicleFilter = {
       search: request.nextUrl.searchParams.get("search") ?? "",
       transmission: request.nextUrl.searchParams.get("transmission") ?? "",
@@ -70,7 +71,7 @@ export async function GET(
     queryArray.push(`PageSize=${parsedPagination.pageSize}`);
 
     const queryString: string = queryArray.join("&");
-    const data = await fetch(
+    const backendResponse = await fetch(
       `${process.env.API_URL}/user/vehicle-models${queryString === "" ? "" : `?${queryString}`}`,
       {
         method: "GET",
@@ -82,19 +83,15 @@ export async function GET(
       },
     );
 
-    if (!data.ok) {
-      const dataBody: tFailedModel = await data.json();
-
-      throw new ClsFailedModel(
-        dataBody.statusCode,
-        dataBody.message,
-        dataBody.issues,
-      );
+    if (!backendResponse.ok) {
+      const errorText: string = await backendResponse.text();
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
-    const dataBody: tSuccessManyModel<tVehicleModelModel> = await data.json();
-    return NextResponse.json<tSuccessManyModel<tVehicleModelModel>>(dataBody, {
-      status: data.status,
+    const data: tSuccessManyModel<tVehicleModelModel> =
+      await backendResponse.json();
+    return NextResponse.json<tSuccessManyModel<tVehicleModelModel>>(data, {
+      status: backendResponse.status,
     });
   });
 }

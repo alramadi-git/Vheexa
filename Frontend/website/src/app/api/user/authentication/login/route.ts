@@ -6,19 +6,19 @@ import { tUserModel } from "@/models/user/user";
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/login-credentials";
+} from "@/validations/authentication-credentials";
 
 import { tSuccessOneModel } from "@/models/success";
-import { tFailedModel, ClsFailedModel } from "@/models/failed";
+import { tFailedModel, ClsFailedModel } from "@/models/error";
 
 import { tResponseOneModel } from "@/models/response";
 
-import { apiCatcher } from "@/utilities/api";
+import { apiCatch } from "@/utilities/api";
 
 export async function POST(
   request: Request,
 ): Promise<NextResponse<tResponseOneModel<tUserModel>>> {
-  return apiCatcher(async () => {
+  return apiCatch(async () => {
     const loginCredentials: tLoginCredentials = await request.json();
     const parsedLoginCredentials: tLoginCredentials =
       zLoginCredentials.parse(loginCredentials);
