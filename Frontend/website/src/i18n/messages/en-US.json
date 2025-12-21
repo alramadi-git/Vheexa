@@ -1857,6 +1857,17 @@
             "roles": {
               "title": "Roles",
               "description": "Manage your roles easily and efficiently.",
+              "add-new": {
+                "trigger": "Add new Role",
+                "content": {
+                  "title": "Add New Role",
+                  "description": "Create a new role with custom permissions.",
+                  "form": {
+                    "submit": "Submit",
+                    "reset": "Reset"
+                  }
+                }
+              },
               "filter": {
                 "name": {
                   "label": "Role Name",
@@ -2014,7 +2025,8 @@
                   "header": "Permissions"
                 },
                 "members": {
-                  "header": "Members"
+                  "header": "Members",
+                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # members}}"
                 },
                 "status": {
                   "header": "Status",
@@ -2027,7 +2039,22 @@
                   "header": "Created At"
                 },
                 "actions": {
-                  "header": "Actions"
+                  "header": "Actions",
+                  "cell": {
+                    "view": {
+                      "label": "View more",
+                      "content": "View role is coming soon..."
+                    },
+                    "edit": {
+                      "label": "Edit",
+                      "content": "Edit role is coming soon..."
+                    },
+                    "remove": {
+                      "label": "Remove",
+                      "when-success": "Role deleted successfully",
+                      "when-error": "Something went wrong while deleting the role"
+                    }
+                  }
                 }
               }
             }

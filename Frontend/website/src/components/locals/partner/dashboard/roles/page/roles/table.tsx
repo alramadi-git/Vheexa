@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ePageSize } from "@/validations/pagination";
 
@@ -15,8 +15,31 @@ import {
   TableRow,
 } from "@/components/shadcn/table";
 import { Skeleton } from "@/components/shadcn/skeleton";
-import { Badge } from "@/components/locals/blocks/typography";
-import { LuCircleCheck, LuCircleX } from "react-icons/lu";
+import { Badge, Toast } from "@/components/locals/blocks/typography";
+import {
+  LuBookOpenText,
+  LuCircleCheck,
+  LuCircleX,
+  LuEllipsisVertical,
+  LuPenLine,
+  LuShield,
+  LuTrash2,
+  LuUser,
+  LuUsers,
+} from "react-icons/lu";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { eLocale } from "@/i18n/routing";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/shadcn/dropdown-menu";
+import { Button } from "@/components/shadcn/button";
+import { ClsRoleService } from "@/services/partner/role";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 
 type tTableProps = {
   isLoading: boolean;
@@ -24,6 +47,9 @@ type tTableProps = {
   data: tRoleModel[];
 };
 export default function Table({ isLoading, isSuccess, data }: tTableProps) {
+  const locale = useLocale() as eLocale;
+  const clsDateFormatter = new ClsDateFormatter(locale);
+
   const tTable = useTranslations(
     "app.partner.dashboard.roles.page.roles.table",
   );
@@ -56,7 +82,15 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableCell>
           <TableCell>{item.name}</TableCell>
           <TableCell>{item.permissions.length}</TableCell>
-          <TableCell>{item.assignedCount}</TableCell>
+          <TableCell>
+            <div className="flex items-center gap-1.5">
+              {tTable.rich("members.cell", {
+                count: item.assignedCount - 2,
+                users: () => <LuUsers size={16} />,
+                user: () => <LuUser size={16} />,
+              })}
+            </div>
+          </TableCell>
           <TableCell>
             <Badge
               variant={
@@ -74,46 +108,18 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
               })}
             </Badge>
           </TableCell>
-          <TableCell>{item.updatedAt}</TableCell>
-          <TableCell>{item.createdAt}</TableCell>
-          <TableCell>:</TableCell>
+          <TableCell>
+            {clsDateFormatter.format(new Date(item.updatedAt))}
+          </TableCell>
+          <TableCell>
+            {clsDateFormatter.format(new Date(item.createdAt))}
+          </TableCell>
+          <TableCell>
+            <Actions role={item} />
+          </TableCell>
         </TableRow>
       )}
     />
-    // <ShadcnTable>
-
-    // <TableBody>
-    //   {/* <TableRow>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //     <TableCell className="h-12">
-    //       <Skeleton className="size-full" />
-    //     </TableCell>
-    //   </TableRow> */}
-    //   <TableRow>
-    //     <TableCell colSpan={8}>Something went wrong</TableCell>
-    //   </TableRow>
-    // </TableBody>
-    // </ShadcnTable>
   );
 }
 
@@ -145,5 +151,84 @@ function Loading() {
         <Skeleton className="block h-8 w-full" />
       </TableCell>
     </TableRow>
+  );
+}
+
+type tActionsProps = {
+  role: tRoleModel;
+};
+function Actions({ role }: tActionsProps) {
+  const clsRoleService = new ClsRoleService();
+  const router = useRouter();
+
+  const tAction = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.actions.cell",
+  );
+
+  function view() {
+    toast.custom(() => (
+      <Toast variant="info" label={tAction("view.content")} />
+    ));
+  }
+  function edit() {
+    toast.custom(() => (
+      <Toast variant="info" label={tAction("edit.content")} />
+    ));
+  }
+  async function remove() {
+    const result = await clsRoleService.deleteOneAsync(role.uuid);
+    console.log("result: ", result);
+
+    if (result.isSuccess) {
+      toast.custom(() => (
+        <Toast variant="success" label={tAction("remove.when-success")}></Toast>
+      ));
+      router.refresh();
+    } else {
+      toast.custom(() => (
+        <Toast variant="destructive" label={tAction("remove.when-error")} />
+      ));
+    }
+  }
+
+  return (
+    <DropdownMenu>
+      <div className="flex w-full">
+        <DropdownMenuTrigger asChild>
+          <Button
+            aria-label="View, edit and delete"
+            variant="ghost"
+            size="icon"
+            className="mx-auto"
+          >
+            <LuEllipsisVertical size={16} />
+          </Button>
+        </DropdownMenuTrigger>
+      </div>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <button className="size-full" onClick={() => view()}>
+            <LuBookOpenText />
+            {tAction("view.label")}
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <button
+            className="size-full text-blue-500! hover:bg-blue-500/10!"
+            onClick={() => edit()}
+          >
+            <LuPenLine className="text-blue-500" />
+            {tAction("edit.label")}
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem variant="destructive" asChild>
+          <button className="size-full" onClick={() => remove()}>
+            <LuTrash2 />
+            {tAction("remove.label")}
+          </button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -18,9 +18,9 @@ import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
 import {
   tVehicleModelCreateForm,
   zVehicleModelCreateForm,
-} from "@/validations/partner/vehicle-model-create-form";
+} from "@/validations/partner/vehicle-model";
 
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "@/utilities/cn";
@@ -230,12 +230,12 @@ function AddNew() {
     "form.media.gallery.table.headers",
   );
 
-  function onSubmit(data: tVehicleModelCreateForm): void {
-    clsVehicleModelService.addAsync("b7c80f27-ec4c-47e8-8188-7e49fbec65d8", data);
-  }
-
   function onReset(): void {
     reset();
+  }
+
+  function onSubmit(data: tVehicleModelCreateForm): void {
+    clsVehicleModelService.addAsync(data);
   }
 
   return (
@@ -928,11 +928,11 @@ function AddNew() {
               />
 
               <FieldGroup className="grid-cols-2">
-                <Button type="submit" className="mt-auto">
-                  submit
-                </Button>
-                <Button type="reset" className="mt-auto">
+                <Button variant="outline" type="reset" className="mt-auto">
                   Reset
+                </Button>
+                <Button type="submit" className="mt-auto">
+                  Submit
                 </Button>
               </FieldGroup>
             </FieldGroup>

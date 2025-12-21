@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
+import { useQuery } from "@/hooks/query";
+
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -31,8 +33,6 @@ import {
   SelectItem,
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
-import { ClsQuery } from "@/libraries/query";
-import { useQuery } from "@/hooks/query";
 
 type tPermission = {
   value: string;

@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/shadcn/sidebar";
 import { useTranslations } from "next-intl";
 
@@ -38,6 +39,12 @@ type tSidebarSectionProps = {
   sections: tSection[];
 };
 function SidebarSection({ sections }: tSidebarSectionProps) {
+  const sidebar = useSidebar();
+
+  function onClick() {
+    sidebar.setOpenMobile(false);
+  }
+
   return sections.map((section, index) => (
     <SidebarGroup key={index}>
       <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
@@ -45,7 +52,7 @@ function SidebarSection({ sections }: tSidebarSectionProps) {
         <SidebarMenu>
           {section.links.map((link, index) => (
             <SidebarMenuItem key={index}>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild onClick={onClick}>
                 <Link href={link.url}>{link.label}</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
