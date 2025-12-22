@@ -1,12 +1,16 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import useRoles from "@/hooks/partner/roles";
+import { ClsRoleService } from "@/services/partner/role";
+
+import { useTranslations } from "next-intl";
 
 import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm, Controller } from "react-hook-form";
+
+import { LuCheck, LuPlus, LuLoader } from "react-icons/lu";
 
 import {
   Card,
@@ -16,7 +20,25 @@ import {
   CardTitle,
 } from "@/components/shadcn/card";
 
-import { Section, Intro } from "@/components/locals/blocks/typography";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/shadcn/dialog";
+
+import {
+  FieldGroup,
+  Field,
+  FieldLabel,
+  FieldContent,
+  FieldError,
+} from "@/components/shadcn/field";
+import { Separator } from "@/components/shadcn/separator";
+
+import { Section, Intro, Toast } from "@/components/locals/blocks/typography";
 import {
   Title,
   Description,
@@ -28,17 +50,17 @@ import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { LuPlus } from "react-icons/lu";
-import { ScrollArea } from "@/components/shadcn/scroll-area";
-import { Separator } from "@/components/shadcn/separator";
-import { FieldGroup } from "@/components/shadcn/field";
+  FieldMultiSelect,
+  FieldSearch,
+} from "@/components/locals/blocks/fields";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/select";
+import { toast } from "sonner";
 
 export default function Roles() {
   const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
@@ -79,12 +101,30 @@ export default function Roles() {
   );
 }
 
+type tPermission = {
+  value: string;
+  label: string;
+  description: string;
+};
+type tStatues = {
+  value: string;
+  label: string;
+};
+
 function AddNew() {
+  const clsRoleService = new ClsRoleService();
+
   const tAddNew = useTranslations(
     "app.partner.dashboard.roles.page.roles.add-new",
   );
 
+  const permissions: tPermission[] = tAddNew.raw(
+    "content.form.permissions.permissions",
+  );
+  const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
+
   const {
+    formState,
     control,
     reset: handleReset,
     handleSubmit,
@@ -97,9 +137,25 @@ function AddNew() {
     resolver: zodResolver(zRoleCreate),
   });
 
-  function submit(data: tRoleCreate): void {}
   function reset(): void {
     handleReset();
+  }
+  async function submit(data: tRoleCreate): Promise<void> {
+    const result = await clsRoleService.addAsync(data);
+
+    if (!result.isSuccess) {
+      toast.custom(() => (
+        <Toast
+          variant="destructive"
+          label={tAddNew("content.form.when-error")}
+        />
+      ));
+      return;
+    }
+
+    toast.custom(() => (
+      <Toast variant="success" label={tAddNew("content.form.when-success")} />
+    ));
   }
 
   return (
@@ -127,14 +183,128 @@ function AddNew() {
         <form
           onReset={reset}
           onSubmit={handleSubmit(submit)}
-          className="flex grow items-end"
+          className="flex grow flex-col gap-6"
         >
+          <FieldGroup className="grid-cols-3">
+            <Controller
+              control={control}
+              name="name"
+              render={({
+                field: { value, onChange: setValue, ...field },
+                fieldState,
+              }) => (
+                <Field>
+                  <FieldLabel htmlFor="name">
+                    {tAddNew("content.form.name.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSearch
+                      {...field}
+                      id="name"
+                      placeholder={tAddNew("content.form.name.placeholder")}
+                      value={value}
+                      onChange={setValue}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="permissions"
+              render={({
+                field: { onChange: setValue, ...field },
+                fieldState,
+              }) => (
+                <Field>
+                  <FieldLabel htmlFor="permissions">
+                    {tAddNew("content.form.permissions.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldMultiSelect
+                      placeholder={tAddNew(
+                        "content.form.permissions.placeholder",
+                      )}
+                      options={permissions}
+                      values={field.value.map((val) => val.toString())}
+                      setValues={(values) =>
+                        setValue(values.map((value) => Number(value)))
+                      }
+                      render={(option, isSelected) => (
+                        <div className="flex justify-between gap-3">
+                          <div>
+                            {option.label}
+                            <p className="text-muted-foreground line-clamp-1">
+                              {option.description}
+                            </p>
+                          </div>
+                          {isSelected && <LuCheck size={16} />}
+                        </div>
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="status"
+              render={({
+                field: { value, onChange: setValue, ...field },
+                fieldState,
+              }) => (
+                <Field>
+                  <FieldLabel htmlFor="status">
+                    {tAddNew("content.form.status.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Select
+                      {...field}
+                      value={value.toString()}
+                      onValueChange={(val) => setValue(Number(val))}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={tAddNew(
+                            "content.form.status.placeholder",
+                          )}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {statuses.map((status) => (
+                          <SelectItem key={status.value} value={status.value}>
+                            {status.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
           <FieldGroup className="grid-cols-2">
-            <Button variant="outline" type="reset" className="mt-auto">
-              {tAddNew("content.form.reset")}
+            <Button
+              variant="outline"
+              disabled={formState.isSubmitting}
+              type="reset"
+              className="mt-auto"
+            >
+              {tAddNew("content.form.actions.reset")}
             </Button>
-            <Button type="submit" className="mt-auto">
-              {tAddNew("content.form.submit")}
+            <Button
+              disabled={formState.isSubmitting}
+              type="submit"
+              className="mt-auto"
+            >
+              {formState.isSubmitting && (
+                <LuLoader size={16} className="animate-spin" />
+              )}
+              {tAddNew("content.form.actions.submit")}
             </Button>
           </FieldGroup>
         </form>

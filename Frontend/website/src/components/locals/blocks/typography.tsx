@@ -85,17 +85,19 @@ const badgeVariants = cva("border-none focus-visible:outline-none", {
     },
   },
   defaultVariants: {
-    variant: "success",
+    variant: "primary",
   },
 });
 function Badge({
   variant,
+  className,
   ...props
-}: ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
+}: ComponentProps<"span"> & VariantProps<typeof badgeVariants> & {}) {
   return (
-    <ShadcnBadge className={cn(badgeVariants({ variant }))}>
-      <span {...props} />
-    </ShadcnBadge>
+    <ShadcnBadge
+      {...props}
+      className={cn(badgeVariants({ variant }), className)}
+    />
   );
 }
 

@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "@/i18n/navigation";
+
+import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
 import { ePageSize } from "@/validations/pagination";
@@ -8,27 +11,31 @@ import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { ClsRoleService } from "@/services/partner/role";
+
+import { toast } from "sonner";
+
 import {
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/shadcn/table";
-import { Skeleton } from "@/components/shadcn/skeleton";
-import { Badge, Toast } from "@/components/locals/blocks/typography";
-import {
-  LuBookOpenText,
+  LuShieldCheck,
+  LuCheck,
+  LuPlus,
+  LuUser,
+  LuUsers,
   LuCircleCheck,
   LuCircleX,
   LuEllipsisVertical,
+  LuBookOpenText,
   LuPenLine,
-  LuShield,
   LuTrash2,
-  LuUser,
-  LuUsers,
 } from "react-icons/lu";
-import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { eLocale } from "@/i18n/routing";
+
+import {
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/shadcn/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,10 +43,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
+
+import { Skeleton } from "@/components/shadcn/skeleton";
 import { Button } from "@/components/shadcn/button";
-import { ClsRoleService } from "@/services/partner/role";
-import { toast } from "sonner";
-import { useRouter } from "@/i18n/navigation";
+import { Badge, Toast } from "@/components/locals/blocks/typography";
 
 type tTableProps = {
   isLoading: boolean;
@@ -66,7 +73,9 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableRow>
             <TableHead>{tTable("uuid.header")}</TableHead>
             <TableHead>{tTable("role-name.header")}</TableHead>
-            <TableHead>{tTable("permissions.header")}</TableHead>
+            <TableHead className="w-79">
+              {tTable("permissions.header")}
+            </TableHead>
             <TableHead>{tTable("members.header")}</TableHead>
             <TableHead>{tTable("status.header")}</TableHead>
             <TableHead>{tTable("updated-at.header")}</TableHead>
@@ -75,21 +84,24 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableRow>
         </TableHeader>
       }
-      bodyRow={(item) => (
+      emptyRender={Empty}
+      bodyRowRender={(item) => (
         <TableRow key={item.uuid}>
           <TableCell>
             <Badge variant="muted">{item.uuid.slice(0, 8)}</Badge>
           </TableCell>
           <TableCell>{item.name}</TableCell>
-          <TableCell>{item.permissions.length}</TableCell>
           <TableCell>
-            <div className="flex items-center gap-1.5">
+            <Permissions permissions={item.permissions} />
+          </TableCell>
+          <TableCell>
+            <span className="flex items-center gap-1.5">
               {tTable.rich("members.cell", {
                 count: item.assignedCount - 2,
                 users: () => <LuUsers size={16} />,
                 user: () => <LuUser size={16} />,
               })}
-            </div>
+            </span>
           </TableCell>
           <TableCell>
             <Badge
@@ -123,6 +135,35 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   );
 }
 
+type tPermissionProps = {
+  permissions: tRoleModel["permissions"];
+};
+function Permissions({ permissions }: tPermissionProps) {
+  const visiblePermissions = permissions.slice(0, 3);
+  const remainingPermissions = permissions.length - visiblePermissions.length;
+
+  return (
+    <ul className="flex flex-wrap items-center gap-1">
+      {visiblePermissions.map((permission) => (
+        <li key={permission.uuid}>
+          <Badge variant="muted" className="flex items-center gap-1">
+            <LuCheck size={16} />
+            {permission.name}
+          </Badge>
+        </li>
+      ))}
+      {remainingPermissions > 0 && (
+        <li>
+          <Badge variant="muted" className="flex items-center gap-1">
+            <LuPlus size={16} />
+            {remainingPermissions}
+          </Badge>
+        </li>
+      )}
+    </ul>
+  );
+}
+
 function Loading() {
   return (
     <TableRow>
@@ -153,6 +194,22 @@ function Loading() {
     </TableRow>
   );
 }
+function Empty() {
+  const tEmpty = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.when-empty",
+  );
+  return (
+    <TableRow>
+      <TableCell colSpan={8} className="py-12">
+        <div className="flex flex-col items-center gap-3">
+          <LuShieldCheck size={32} />
+          <h3 className="text-lg">{tEmpty("title")}</h3>
+          <p className="text-muted-foreground">{tEmpty("description")}</p>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
 
 type tActionsProps = {
   role: tRoleModel;
@@ -177,8 +234,6 @@ function Actions({ role }: tActionsProps) {
   }
   async function remove() {
     const result = await clsRoleService.deleteOneAsync(role.uuid);
-    console.log("result: ", result);
-
     if (result.isSuccess) {
       toast.custom(() => (
         <Toast variant="success" label={tAction("remove.when-success")}></Toast>
@@ -208,7 +263,7 @@ function Actions({ role }: tActionsProps) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
           <button className="size-full" onClick={() => view()}>
-            <LuBookOpenText />
+            <LuBookOpenText size={16} />
             {tAction("view.label")}
           </button>
         </DropdownMenuItem>
@@ -217,7 +272,7 @@ function Actions({ role }: tActionsProps) {
             className="size-full text-blue-500! hover:bg-blue-500/10!"
             onClick={() => edit()}
           >
-            <LuPenLine className="text-blue-500" />
+            <LuPenLine size={16} className="text-blue-500" />
             {tAction("edit.label")}
           </button>
         </DropdownMenuItem>

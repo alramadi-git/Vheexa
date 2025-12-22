@@ -54,27 +54,32 @@ export default function Filter() {
   const permissions: tPermission[] = tFilter.raw("permissions.permissions");
   const statuses: tStatues[] = tFilter.raw("status.statuses");
 
-  const [status] = [query.get("filter.name")];
-  const { control, handleSubmit, reset } = useForm<tRoleFilter>({
+  const [statusQuery] = [query.get("filter.name")];
+
+  const {
+    control,
+    reset: handleReset,
+    handleSubmit,
+  } = useForm<tRoleFilter>({
     defaultValues: {
       name: query.get("filter.name") ?? undefined,
       permissions: query
         .getAll("filter.permissions")
         .map((permission) => Number(permission)),
-      status: status !== null ? Number(status) : undefined,
+      status: statusQuery !== null ? Number(statusQuery) : undefined,
     },
     resolver: zodResolver(zRoleFilter),
   });
 
-  function onReset() {
-    reset({
+  function reset() {
+    handleReset({
       name: undefined,
       permissions: [],
       status: undefined,
     });
   }
 
-  function onSubmit(data: tRoleFilter) {
+  function submit(data: tRoleFilter) {
     query.remove("filter.name");
     query.remove("filter.permissions");
     query.remove("filter.status");
@@ -96,8 +101,8 @@ export default function Filter() {
       <CardContent>
         <form
           className="space-y-6"
-          onReset={onReset}
-          onSubmit={handleSubmit(onSubmit)}
+          onReset={reset}
+          onSubmit={handleSubmit(submit)}
         >
           <FieldGroup className="grid-cols-3">
             <Controller
@@ -224,7 +229,7 @@ export default function Filter() {
           </FieldGroup>
 
           <FieldGroup className="grid-cols-2">
-            <Button type="reset" variant="outline">
+            <Button variant="outline" type="reset">
               {tFilter("actions.reset")}
             </Button>
             <Button type="submit">{tFilter("actions.submit")}</Button>
