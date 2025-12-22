@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 
 import { useQuery } from "@/hooks/query";
 
+import { useEffect } from "react";
+
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -54,29 +56,35 @@ export default function Filter() {
   const permissions: tPermission[] = tFilter.raw("permissions.permissions");
   const statuses: tStatues[] = tFilter.raw("status.statuses");
 
-  const [statusQuery] = [query.get("filter.name")];
+  const [statusQuery] = [query.get("filter.status")];
 
   const {
     control,
+    setValue,
     reset: handleReset,
     handleSubmit,
   } = useForm<tRoleFilter>({
     defaultValues: {
-      name: query.get("filter.name") ?? undefined,
-      permissions: query
-        .getAll("filter.permissions")
-        .map((permission) => Number(permission)),
-      status: statusQuery !== null ? Number(statusQuery) : undefined,
+      name: undefined,
+      permissions: [],
+      status: undefined,
     },
     resolver: zodResolver(zRoleFilter),
   });
 
+  useEffect(() => {
+    setValue("name", query.get("filter.name") ?? undefined);
+    setValue(
+      "permissions",
+      query
+        .getAll("filter.permissions")
+        .map((permission) => Number(permission)),
+    );
+    setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
+  }, []);
+
   function reset() {
-    handleReset({
-      name: undefined,
-      permissions: [],
-      status: undefined,
-    });
+    handleReset();
   }
 
   function submit(data: tRoleFilter) {
@@ -155,12 +163,10 @@ export default function Filter() {
                       render={(option, isSelected) => (
                         <div className="flex w-full justify-between gap-3">
                           <span>
-                            <span className="truncate">
-                              {option.label}
-                              <p className="text-muted-foreground line-clamp-2">
-                                {option.description}
-                              </p>
-                            </span>
+                            {option.label}
+                            <p className="text-muted-foreground line-clamp-1">
+                              {option.description}
+                            </p>
                           </span>
                           {isSelected && <LuCheck size={16} />}
                         </div>

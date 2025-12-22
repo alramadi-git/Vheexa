@@ -44,8 +44,12 @@ export function useQuery() {
     setQuery(new ClsQuery());
   }
 
+  function toString(): string {
+    return query.toString();
+  }
+
   function apply(options?: Parameters<typeof router.push>["1"]): void {
-    router.push(`${pathname}${query.toString()}`, options);
+    router.push(`${pathname}${toString()}`, options);
   }
 
   return {
@@ -55,6 +59,7 @@ export function useQuery() {
     setArray: set,
     remove,
     clear,
+    toString,
     apply,
   };
 }

@@ -287,7 +287,7 @@ function FieldMultiSelect<option extends { value: string; label: string }>({
                     {expanded
                       ? tFieldMultiSelect("show-less")
                       : tFieldMultiSelect("show-more", {
-                          hiddenCount,
+                          count: hiddenCount,
                         })}
                   </Badge>
                 ) : null}

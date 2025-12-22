@@ -61,6 +61,8 @@ import {
   SelectValue,
 } from "@/components/shadcn/select";
 import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
+import { useState } from "react";
 
 export default function Roles() {
   const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
@@ -123,6 +125,9 @@ function AddNew() {
   );
   const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
 
+  const router = useRouter();
+
+  const [open, setOpen] = useState(false);
   const {
     formState,
     control,
@@ -156,10 +161,13 @@ function AddNew() {
     toast.custom(() => (
       <Toast variant="success" label={tAddNew("content.form.when-success")} />
     ));
+
+    setOpen(false);
+    router.refresh();
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <LuPlus />
@@ -232,7 +240,7 @@ function AddNew() {
                         setValue(values.map((value) => Number(value)))
                       }
                       render={(option, isSelected) => (
-                        <div className="flex justify-between gap-3">
+                        <div className="flex w-full justify-between gap-3">
                           <div>
                             {option.label}
                             <p className="text-muted-foreground line-clamp-1">

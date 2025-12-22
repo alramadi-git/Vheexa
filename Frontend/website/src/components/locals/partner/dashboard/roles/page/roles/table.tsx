@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import {
   LuShieldCheck,
   LuCheck,
-  LuPlus,
   LuUser,
   LuUsers,
   LuCircleCheck,
@@ -142,6 +141,10 @@ function Permissions({ permissions }: tPermissionProps) {
   const visiblePermissions = permissions.slice(0, 3);
   const remainingPermissions = permissions.length - visiblePermissions.length;
 
+  const tPermissions = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.permissions",
+  );
+
   return (
     <ul className="flex flex-wrap items-center gap-1">
       {visiblePermissions.map((permission) => (
@@ -155,8 +158,9 @@ function Permissions({ permissions }: tPermissionProps) {
       {remainingPermissions > 0 && (
         <li>
           <Badge variant="muted" className="flex items-center gap-1">
-            <LuPlus size={16} />
-            {remainingPermissions}
+            {tPermissions("cell", {
+              count: remainingPermissions,
+            })}
           </Badge>
         </li>
       )}
@@ -234,16 +238,18 @@ function Actions({ role }: tActionsProps) {
   }
   async function remove() {
     const result = await clsRoleService.deleteOneAsync(role.uuid);
-    if (result.isSuccess) {
-      toast.custom(() => (
-        <Toast variant="success" label={tAction("remove.when-success")}></Toast>
-      ));
-      router.refresh();
-    } else {
+
+    if (!result.isSuccess) {
       toast.custom(() => (
         <Toast variant="destructive" label={tAction("remove.when-error")} />
       ));
+      return;
     }
+
+    toast.custom(() => (
+      <Toast variant="success" label={tAction("remove.when-success")}></Toast>
+    ));
+    router.refresh();
   }
 
   return (

@@ -42,7 +42,7 @@
     },
     "fields": {
       "multiselect": {
-        "show-more": "{hiddenCount} +more",
+        "show-more": "+{count} more",
         "show-less": "Show Less",
         "when-no-results": "No Match where found"
       },
@@ -2161,6 +2161,7 @@
                 },
                 "permissions": {
                   "header": "Permissions"
+                  ,"cell": "+{count} more"
                 },
                 "members": {
                   "header": "Members",
