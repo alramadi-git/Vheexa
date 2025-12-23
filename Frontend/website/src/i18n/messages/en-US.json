@@ -72,15 +72,6 @@
         }
       }
     },
-    "table": {
-      "error": {
-        "label": "Something went wrong",
-        "illustrations": {
-          "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/error-product.png",
-          "alternate": "Error Illustration"
-        }
-      }
-    },
     "pagination": {
       "previous": "Previous",
       "next": "Next",
@@ -519,7 +510,7 @@
 
         "stats": {
           "title": "Vheexa Vehicle Rentals",
-          "description": "Vheexa is more than just a vehicle rental platform — it’s a complete ecosystem of services. From cars to bikes and trucks, backed by modern technologies that help individuals and businesses innovate and simplify mobility.",
+          "description": "Vheexa is more than just a vehicle rental platform — it's a complete ecosystem of services. From cars to bikes and trucks, backed by modern technologies that help individuals and businesses innovate and simplify mobility.",
 
           "metrics": {
             "description": "A complete ecosystem backed by numbers that reflect the trust of our clients and partners.",
@@ -650,7 +641,7 @@
             }
           ],
 
-          "help": "Didn’t find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we’ll be happy to assist you."
+          "help": "Didn't find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we'll be happy to assist you."
         }
       },
 
@@ -667,7 +658,7 @@
             "badge": "All options at your fingertips <ArrowUpRight></ArrowUpRight>",
 
             "title": "Choose Your Perfect Vehicle",
-            "description": "Explore our wide selection of vehicles for rent. Whether you’re looking for an affordable car, a motorcycle for fun, a truck for work, or a luxury vehicle for special occasions — Vheexa has everything you need, quickly and easily.",
+            "description": "Explore our wide selection of vehicles for rent. Whether you're looking for an affordable car, a motorcycle for fun, a truck for work, or a luxury vehicle for special occasions — Vheexa has everything you need, quickly and easily.",
 
             "image": {
               "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
@@ -1803,9 +1794,7 @@
                   "specs": {
                     "header": "Specs",
                     "cell": {
-                      "capacity": "{capacity, plural, =1 {# Person} other {# people}}",
-                      "transmission": "{transmission, select, 0 {Manual} 1 {Automatic} 2 {SemiAutomatic} 3 {CVT} 4 {DualClutch} other {Unknown}}",
-                      "fuel": "{fuel, select, 0 {Petrol 91} 1 {Petrol 95} 2 {Petrol 98} 3 {Diesel} 4 {Electric} 5 {Hybrid} 6 {CNG} 7 {LPG} 8 {Hydrogen} other {Unknown}}"
+                      "capacity": "{capacity, plural, =1 {# Person} other {# people}}"
                     }
                   },
                   "colors": { "header": "Color" },
@@ -2153,6 +2142,10 @@
                   "title": "No roles were found",
                   "description": "Try adjusting your search or add a new role."
                 },
+                "when-error": {
+                  "title": "Something went wrong",
+                  "description": "We couldn't load the roles. Please try again later."
+                },
                 "uuid": {
                   "header": "UUID"
                 },
@@ -2160,12 +2153,12 @@
                   "header": "Role Name"
                 },
                 "permissions": {
-                  "header": "Permissions"
-                  ,"cell": "+{count} more"
+                  "header": "Permissions",
+                  "cell": "+{count} More"
                 },
                 "members": {
                   "header": "Members",
-                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # members}}"
+                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
                 },
                 "status": {
                   "header": "Status",
@@ -2192,6 +2185,121 @@
                       "label": "Remove",
                       "when-success": "Role was successfully deleted",
                       "when-error": "Something went wrong while deleting the role"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "branches": {
+          "page": {
+            "branches": {
+              "title": "Branches",
+              "description": "Manage your branches easily and efficiently.",
+              "add-new": {
+                "trigger": "Add new Branch",
+                "content": {
+                  "title": "Add New Branch",
+                  "description": "Create a new branch with custom permissions.",
+                  "form": {
+                    "when-success": "Branch was successfully created",
+                    "when-error": "Something went wrong while creating the branch",
+                    "status": {
+                      "label": "Status",
+                      "placeholder": "Enter status (e.g., Active, Inactive)",
+                      "statuses": [
+                        {
+                          "value": "0",
+                          "label": "Active"
+                        },
+                        {
+                          "value": "1",
+                          "label": "Inactive"
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "submit": "Submit",
+                      "reset": "Reset"
+                    }
+                  }
+                }
+              },
+              "filter": {
+                "status": {
+                  "label": "Status",
+                  "placeholder": "Enter status (e.g., Active, Inactive)",
+                  "statuses": [
+                    {
+                      "value": "0",
+                      "label": "Active"
+                    },
+                    {
+                      "value": "1",
+                      "label": "Inactive"
+                    }
+                  ]
+                },
+                "actions": {
+                  "reset": "Reset",
+                  "submit": "Filter"
+                }
+              },
+              "table": {
+                "when-empty": {
+                  "title": "No branches were found",
+                  "description": "Try adjusting your search or add a new branch."
+                },
+                "when-error": {
+                  "title": "Something went wrong",
+                  "description": "We couldn't load the branches. Please try again later."
+                },
+                "uuid": {
+                  "header": "UUID"
+                },
+                "name": {
+                  "header": "Branch Name"
+                },
+                "location": {
+                  "header": "Location"
+                },
+                "members": {
+                  "header": "Members",
+                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
+                },
+                "vehicles": {
+                  "header": "Vehicles",
+                  "cell": "{count, plural, =0 {No vehicles} =1 {1 Vehicle} other {# Vehicles}}"
+                },
+                "contacts": {
+                  "header": "Contacts"
+                },
+                "status": {
+                  "header": "Status",
+                  "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
+                },
+                "updated-at": {
+                  "header": "Updated At"
+                },
+                "created-at": {
+                  "header": "Created At"
+                },
+                "actions": {
+                  "header": "Actions",
+                  "cell": {
+                    "view": {
+                      "label": "View more",
+                      "content": "View branch is coming soon..."
+                    },
+                    "edit": {
+                      "label": "Edit",
+                      "content": "Edit branch is coming soon..."
+                    },
+                    "remove": {
+                      "label": "Remove",
+                      "when-success": "Branch was successfully deleted",
+                      "when-error": "Something went wrong while deleting the branch"
                     }
                   }
                 }

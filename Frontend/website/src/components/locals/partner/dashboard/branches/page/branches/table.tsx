@@ -5,23 +5,24 @@ import { useRouter } from "@/i18n/navigation";
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
+import { formatPhoneNumber } from "react-phone-number-input";
+
 import { ePageSize } from "@/validations/pagination";
 
-import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
+import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 
 import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { ClsRoleService } from "@/services/partner/role";
+import { ClsBranchService } from "@/services/partner/branch";
 
 import { toast } from "sonner";
 
+import { GiAncientRuins, GiIsland } from "react-icons/gi";
 import {
-  LuShieldAlert,
-  LuShieldX,
-  LuCheck,
   LuUser,
   LuUsers,
+  LuCar,
   LuCircleCheck,
   LuCircleX,
   LuEllipsisVertical,
@@ -44,25 +45,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 
-import { Skeleton } from "@/components/shadcn/skeleton";
-import { Button } from "@/components/shadcn/button";
 import { Badge, Toast } from "@/components/locals/blocks/typography";
+import { Button } from "@/components/shadcn/button";
+import { Link } from "@/components/locals/blocks/links";
+
+import { Skeleton } from "@/components/shadcn/skeleton";
 
 type tTableProps = {
   isLoading: boolean;
   isSuccess: boolean;
-  data: tRoleModel[];
+  data: tBranchModel[];
 };
 export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   const locale = useLocale() as eLocale;
   const clsDateFormatter = new ClsDateFormatter(locale);
 
   const tTable = useTranslations(
-    "app.partner.dashboard.roles.page.roles.table",
+    "app.partner.dashboard.branches.page.branches.table",
   );
 
   return (
-    <BlockTable<tRoleModel>
+    <BlockTable<tBranchModel>
       isLoading={isLoading}
       loadingRowCount={ePageSize.ten}
       loadingRender={<Loading />}
@@ -73,15 +76,17 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead>{tTable("uuid.header")}</TableHead>
-            <TableHead>{tTable("role-name.header")}</TableHead>
-            <TableHead className="w-79">
-              {tTable("permissions.header")}
-            </TableHead>
+            <TableHead>{tTable("name.header")}</TableHead>
+            <TableHead>{tTable("location.header")}</TableHead>
             <TableHead>{tTable("members.header")}</TableHead>
+            <TableHead>{tTable("vehicles.header")}</TableHead>
+            <TableHead>{tTable("contacts.header")}</TableHead>
             <TableHead>{tTable("status.header")}</TableHead>
             <TableHead>{tTable("updated-at.header")}</TableHead>
             <TableHead>{tTable("created-at.header")}</TableHead>
-            <TableHead className="text-end">{tTable("actions.header")}</TableHead>
+            <TableHead className="text-end">
+              {tTable("actions.header")}
+            </TableHead>
           </TableRow>
         </TableHeader>
       }
@@ -93,25 +98,39 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableCell>
           <TableCell>{item.name}</TableCell>
           <TableCell>
-            <Permissions permissions={item.permissions} />
+            <span className="flex flex-col">
+              {item.country}, {item.city}
+              <span className="text-muted-foreground">{item.street}</span>
+            </span>
           </TableCell>
           <TableCell>
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1">
               {tTable.rich("members.cell", {
-                count: item.assignedCount,
+                count: item.memberCount,
                 user: () => <LuUser size={16} />,
                 users: () => <LuUsers size={16} />,
               })}
             </span>
           </TableCell>
           <TableCell>
+            <span className="flex items-center gap-1">
+              <LuCar size={16} />
+              {tTable.rich("vehicles.cell", {
+                count: item.memberCount,
+              })}
+            </span>
+          </TableCell>
+          <TableCell>
+            <Contacts phoneNumber={item.phoneNumber} email={item.email} />
+          </TableCell>
+          <TableCell>
             <Badge
               variant={
-                item.status === eRoleStatusModel.active ? "success" : "muted"
+                item.status === eBranchStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {item.status === eRoleStatusModel.active ? (
+              {item.status === eBranchStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />
@@ -128,7 +147,7 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             {clsDateFormatter.format(new Date(item.createdAt))}
           </TableCell>
           <TableCell>
-            <Actions role={item} />
+            <Actions branch={item} />
           </TableCell>
         </TableRow>
       )}
@@ -136,10 +155,15 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   );
 }
 
-
 function Loading() {
   return (
     <TableRow>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
       <TableCell>
         <Skeleton className="block h-8 w-full" />
       </TableCell>
@@ -170,14 +194,14 @@ function Loading() {
 
 function Empty() {
   const tEmpty = useTranslations(
-    "app.partner.dashboard.roles.page.roles.table.when-empty",
+    "app.partner.dashboard.branches.page.branches.table.when-empty",
   );
 
   return (
     <TableRow>
       <TableCell colSpan={8} className="py-12">
         <div className="flex flex-col items-center gap-3">
-          <LuShieldAlert size={32} />
+          <GiAncientRuins size={32} />
           <h3 className="text-lg">{tEmpty("title")}</h3>
           <p className="text-muted-foreground">{tEmpty("description")}</p>
         </div>
@@ -187,14 +211,14 @@ function Empty() {
 }
 function Error() {
   const tError = useTranslations(
-    "app.partner.dashboard.roles.page.roles.table.when-error",
+    "app.partner.dashboard.branches.page.branches.table.when-error",
   );
 
   return (
     <TableRow>
       <TableCell colSpan={8} className="py-12">
         <div className="flex flex-col items-center gap-3">
-          <LuShieldX size={32} />
+          <GiIsland size={32} />
           <h3 className="text-lg">{tError("title")}</h3>
           <p className="text-muted-foreground">{tError("description")}</p>
         </div>
@@ -203,49 +227,37 @@ function Error() {
   );
 }
 
-type tPermissionProps = {
-  permissions: tRoleModel["permissions"];
+type tContactsProps = {
+  phoneNumber: string;
+  email: string;
 };
-function Permissions({ permissions }: tPermissionProps) {
-  const visiblePermissions = permissions.slice(0, 3);
-  const remainingPermissions = permissions.length - visiblePermissions.length;
-
-  const tPermissions = useTranslations(
-    "app.partner.dashboard.roles.page.roles.table.permissions",
-  );
+function Contacts({ phoneNumber, email }: tContactsProps) {
+  const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
   return (
-    <ul className="flex flex-wrap items-center gap-1">
-      {visiblePermissions.map((permission) => (
-        <li key={permission.uuid}>
-          <Badge variant="muted" className="flex items-center gap-1">
-            <LuCheck size={16} />
-            {permission.name}
-          </Badge>
-        </li>
-      ))}
-      {remainingPermissions > 0 && (
-        <li>
-          <Badge variant="muted" className="flex items-center gap-1">
-            {tPermissions("cell", {
-              count: remainingPermissions,
-            })}
-          </Badge>
-        </li>
-      )}
-    </ul>
+    <div className="flex flex-col">
+      <Link href={`tel:${phoneNumber}`} className="w-fit hover:underline">
+        {formattedPhoneNumber}
+      </Link>
+      <Link
+        href={`mailto:${email}`}
+        className="text-muted-foreground w-fit text-xs hover:underline"
+      >
+        {email}
+      </Link>
+    </div>
   );
 }
 
 type tActionsProps = {
-  role: tRoleModel;
+  branch: tBranchModel;
 };
-function Actions({ role }: tActionsProps) {
-  const clsRoleService = new ClsRoleService();
+function Actions({ branch }: tActionsProps) {
+  const clsBranchService = new ClsBranchService();
   const router = useRouter();
 
   const tAction = useTranslations(
-    "app.partner.dashboard.roles.page.roles.table.actions.cell",
+    "app.partner.dashboard.branches.page.branches.table.actions.cell",
   );
 
   function view() {
@@ -259,7 +271,7 @@ function Actions({ role }: tActionsProps) {
     ));
   }
   async function remove() {
-    const result = await clsRoleService.deleteOneAsync(role.uuid);
+    const result = await clsBranchService.deleteOneAsync(branch.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

@@ -1,19 +1,20 @@
 "use client";
 
-import useRoles from "@/hooks/partner/roles";
-import { ClsRoleService } from "@/services/partner/role";
+import useBranches from "@/hooks/partner/branches";
+import { ClsBranchService } from "@/services/partner/branch";
 
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
-import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
+import { tBranchCreate, zBranchCreate } from "@/validations/partner/branch";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 
 import { useForm, Controller } from "react-hook-form";
 
-import { LuCheck, LuPlus, LuLoader } from "react-icons/lu";
+import { LuPlus, LuLoader } from "react-icons/lu";
 
 import {
   Card,
@@ -49,13 +50,6 @@ import {
 
 import { Button } from "@/components/shadcn/button";
 
-import Filter from "./filter";
-import Table from "./table";
-import { Pagination } from "@/components/locals/blocks/pagination";
-import {
-  FieldMultiSelect,
-  FieldSearch,
-} from "@/components/locals/blocks/fields";
 import {
   Select,
   SelectContent,
@@ -65,10 +59,18 @@ import {
 } from "@/components/shadcn/select";
 import { toast } from "sonner";
 
-export default function Roles() {
-  const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
+import Filter from "./filter";
+import Table from "./table";
+import { Pagination } from "@/components/locals/blocks/pagination";
 
-  const { isLoading, result } = useRoles();
+export default function Branches() {
+  const tBranches = useTranslations(
+    "app.partner.dashboard.branches.page.branches",
+  );
+
+  const { isLoading, result } = useBranches();
+
+  console.log(result);
 
   return (
     <Section className="h-fullscreen">
@@ -76,10 +78,10 @@ export default function Roles() {
         <CardHeader className="flex items-end justify-between">
           <Intro className="space-y-1">
             <CardTitle>
-              <Title heading="h1">{tRoles("title")}</Title>
+              <Title heading="h1">{tBranches("title")}</Title>
             </CardTitle>
             <CardDescription>
-              <Description>{tRoles("description")}</Description>
+              <Description>{tBranches("description")}</Description>
             </CardDescription>
           </Intro>
           <AddNew />
@@ -103,26 +105,19 @@ export default function Roles() {
     </Section>
   );
 }
-type tPermission = {
-  value: string;
-  label: string;
-  description: string;
-};
+
 type tStatues = {
   value: string;
   label: string;
 };
 
 function AddNew() {
-  const clsRoleService = new ClsRoleService();
+  const clsBranchService = new ClsBranchService();
 
   const tAddNew = useTranslations(
-    "app.partner.dashboard.roles.page.roles.add-new",
+    "app.partner.dashboard.branches.page.branches.add-new",
   );
 
-  const permissions: tPermission[] = tAddNew.raw(
-    "content.form.permissions.permissions",
-  );
   const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
 
   const router = useRouter();
@@ -133,20 +128,18 @@ function AddNew() {
     control,
     reset: handleReset,
     handleSubmit,
-  } = useForm<tRoleCreate>({
+  } = useForm<tBranchCreate>({
     defaultValues: {
-      name: "",
-      permissions: [],
       status: 0,
     },
-    resolver: zodResolver(zRoleCreate),
+    resolver: zodResolver(zBranchCreate),
   });
 
   function reset(): void {
     handleReset();
   }
-  async function submit(data: tRoleCreate): Promise<void> {
-    const result = await clsRoleService.addAsync(data);
+  async function submit(data: tBranchCreate): Promise<void> {
+    const result = await clsBranchService.addAsync(data);
 
     if (!result.isSuccess) {
       toast.custom(() => (
@@ -194,68 +187,6 @@ function AddNew() {
           className="flex grow flex-col gap-6"
         >
           <FieldGroup className="grid-cols-3">
-            <Controller
-              control={control}
-              name="name"
-              render={({
-                field: { value, onChange: setValue, ...field },
-                fieldState,
-              }) => (
-                <Field>
-                  <FieldLabel htmlFor="name">
-                    {tAddNew("content.form.name.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <FieldSearch
-                      {...field}
-                      id="name"
-                      placeholder={tAddNew("content.form.name.placeholder")}
-                      value={value}
-                      onChange={setValue}
-                    />
-                  </FieldContent>
-                  <FieldError errors={[fieldState.error]} />
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="permissions"
-              render={({
-                field: { onChange: setValue, ...field },
-                fieldState,
-              }) => (
-                <Field>
-                  <FieldLabel htmlFor="permissions">
-                    {tAddNew("content.form.permissions.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <FieldMultiSelect
-                      placeholder={tAddNew(
-                        "content.form.permissions.placeholder",
-                      )}
-                      options={permissions}
-                      values={field.value.map((val) => val.toString())}
-                      setValues={(values) =>
-                        setValue(values.map((value) => Number(value)))
-                      }
-                      render={(option, isSelected) => (
-                        <div className="flex w-full justify-between gap-3">
-                          <div>
-                            {option.label}
-                            <p className="text-muted-foreground line-clamp-1">
-                              {option.description}
-                            </p>
-                          </div>
-                          {isSelected && <LuCheck size={16} />}
-                        </div>
-                      )}
-                    />
-                  </FieldContent>
-                  <FieldError errors={[fieldState.error]} />
-                </Field>
-              )}
-            />
             <Controller
               control={control}
               name="status"

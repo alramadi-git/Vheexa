@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { isValidPhoneNumber } from "react-phone-number-input";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 const zPhoneNumber = z
   .string()

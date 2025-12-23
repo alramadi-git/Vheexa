@@ -314,18 +314,14 @@ function Specs({ capacity, transmission, fuel }: tSpecsProps) {
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <LuActivity size={16} />
-          {tSpecs("transmission", {
-            transmission: transmission,
-          })}
+          {transmission}
         </BreadcrumbItem>
         <BreadcrumbSeparator>
           <LuDot size={16} />
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <LuFuel size={16} />
-          {tSpecs("fuel", {
-            fuel: fuel,
-          })}
+          {fuel}
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
