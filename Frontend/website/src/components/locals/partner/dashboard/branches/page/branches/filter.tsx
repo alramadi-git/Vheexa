@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { useQuery } from "@/hooks/query";
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +30,7 @@ import {
   SelectItem,
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
+import { FieldSearch } from "@/components/locals/blocks/fields";
 
 type tStatues = {
   value: string;
@@ -37,6 +38,7 @@ type tStatues = {
 };
 
 export default function Filter() {
+  const id = useId();
   const query = useQuery();
 
   const tFilter = useTranslations(
@@ -54,12 +56,14 @@ export default function Filter() {
     handleSubmit,
   } = useForm<tBranchFilter>({
     defaultValues: {
+      search: undefined,
       status: undefined,
     },
     resolver: zodResolver(zBranchFilter),
   });
 
   useEffect(() => {
+    setValue("search", query.get("filter.search") ?? undefined);
     setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
   }, []);
 
@@ -68,10 +72,12 @@ export default function Filter() {
   }
 
   function submit(data: tBranchFilter) {
+    query.remove("filter.search");
     query.remove("filter.status");
 
     query.remove("pagination.page");
 
+    query.set("filter.search", data.search);
     query.set("filter.status", data.status?.toString());
 
     query.apply();
@@ -85,7 +91,34 @@ export default function Filter() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <FieldGroup className="grid-cols-3">
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="search"
+              render={({
+                field: { value, onChange: setValue, ...field },
+                fieldState,
+              }) => (
+                <Field>
+                  <FieldLabel htmlFor={`${id}-search`}>
+                    {tFilter("search.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSearch
+                      {...field}
+                      id={`${id}-search`}
+                      placeholder={tFilter("search.placeholder")}
+                      value={value ?? ""}
+                      onChange={(event) => {
+                        const value = event.currentTarget.value;
+                        setValue(value === "" ? undefined : value);
+                      }}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
             <Controller
               control={control}
               name="status"
@@ -94,7 +127,7 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="status">
+                  <FieldLabel htmlFor={`${id}-status`}>
                     {tFilter("status.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -112,7 +145,7 @@ export default function Filter() {
                       }}
                     >
                       <div className="flex items-center gap-1.5">
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger id={`${id}-status`} className="w-full">
                           <SelectValue
                             placeholder={tFilter("status.placeholder")}
                           />

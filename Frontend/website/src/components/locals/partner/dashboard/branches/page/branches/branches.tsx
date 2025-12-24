@@ -6,15 +6,26 @@ import { ClsBranchService } from "@/services/partner/branch";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import { tBranchCreate, zBranchCreate } from "@/validations/partner/branch";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
 import { useForm, Controller } from "react-hook-form";
 
 import { LuPlus, LuLoader } from "react-icons/lu";
+
+import { toast } from "sonner";
+
+import { Section, Intro, Toast } from "@/components/locals/blocks/typography";
+import {
+  Title,
+  Description,
+} from "@/components/locals/partner/dashboard/blocks/typographies";
+
+import Filter from "./filter";
+import Table from "./table";
+import { Pagination } from "@/components/locals/blocks/pagination";
 
 import {
   Card,
@@ -40,15 +51,6 @@ import {
   FieldContent,
   FieldError,
 } from "@/components/shadcn/field";
-import { Separator } from "@/components/shadcn/separator";
-
-import { Section, Intro, Toast } from "@/components/locals/blocks/typography";
-import {
-  Title,
-  Description,
-} from "@/components/locals/partner/dashboard/blocks/typographies";
-
-import { Button } from "@/components/shadcn/button";
 
 import {
   Select,
@@ -57,11 +59,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/select";
-import { toast } from "sonner";
 
-import Filter from "./filter";
-import Table from "./table";
-import { Pagination } from "@/components/locals/blocks/pagination";
+import {
+  FieldPhoneNumber,
+  FieldEmail,
+} from "@/components/locals/blocks/fields";
+
+import { Separator } from "@/components/shadcn/separator";
+
+import { Input } from "@/components/shadcn/input";
+import { Button } from "@/components/shadcn/button";
 
 export default function Branches() {
   const tBranches = useTranslations(
@@ -69,8 +76,6 @@ export default function Branches() {
   );
 
   const { isLoading, result } = useBranches();
-
-  console.log(result);
 
   return (
     <Section className="h-fullscreen">
@@ -112,6 +117,8 @@ type tStatues = {
 };
 
 function AddNew() {
+  const id = useId();
+
   const clsBranchService = new ClsBranchService();
 
   const tAddNew = useTranslations(
@@ -130,6 +137,9 @@ function AddNew() {
     handleSubmit,
   } = useForm<tBranchCreate>({
     defaultValues: {
+      name: "",
+      phoneNumber: "",
+      email: "",
       status: 0,
     },
     resolver: zodResolver(zBranchCreate),
@@ -186,45 +196,105 @@ function AddNew() {
           onSubmit={handleSubmit(submit)}
           className="flex grow flex-col gap-6"
         >
-          <FieldGroup className="grid-cols-3">
+          <FieldGroup className="grid-cols-2">
             <Controller
               control={control}
-              name="status"
-              render={({
-                field: { value, onChange: setValue, ...field },
-                fieldState,
-              }) => (
-                <Field>
-                  <FieldLabel htmlFor="status">
-                    {tAddNew("content.form.status.label")}
+              name="name"
+              render={({ field, fieldState }) => (
+                <Field className="col-span-2">
+                  <FieldLabel htmlFor={`${id}-name`}>
+                    {tAddNew("content.form.information.name.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <Select
+                    <Input
                       {...field}
-                      value={value.toString()}
-                      onValueChange={(val) => setValue(Number(val))}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue
-                          placeholder={tAddNew(
-                            "content.form.status.placeholder",
-                          )}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {statuses.map((status) => (
-                          <SelectItem key={status.value} value={status.value}>
-                            {status.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      required
+                      id={`${id}-name`}
+                      placeholder={tAddNew(
+                        "content.form.information.name.placeholder",
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="phoneNumber"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={`${id}-phone-number`}>
+                    {tAddNew("content.form.information.phone-number.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldPhoneNumber
+                      value={field.value}
+                      setValue={field.onChange}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor={`${id}-email`}>
+                    {tAddNew("content.form.information.email.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldEmail
+                      {...field}
+                      required
+                      id={`${id}-email`}
+                      placeholder={tAddNew(
+                        "content.form.information.email.placeholder",
+                      )}
+                    />
                   </FieldContent>
                   <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
           </FieldGroup>
+          <Controller
+            control={control}
+            name="status"
+            render={({
+              field: { value, onChange: setValue, ...field },
+              fieldState,
+            }) => (
+              <Field>
+                <FieldLabel htmlFor={`${id}-status`}>
+                  {tAddNew("content.form.status.label")}
+                </FieldLabel>
+                <FieldContent>
+                  <Select
+                    {...field}
+                    required
+                    value={value.toString()}
+                    onValueChange={(val) => setValue(Number(val))}
+                  >
+                    <SelectTrigger id={`${id}-status`} className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statuses.map((status) => (
+                        <SelectItem key={status.value} value={status.value}>
+                          {status.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FieldContent>
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
 
           <FieldGroup className="grid-cols-2">
             <Button

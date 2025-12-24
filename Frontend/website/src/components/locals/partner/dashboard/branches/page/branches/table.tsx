@@ -5,7 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
-import { formatPhoneNumber } from "react-phone-number-input";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import { ePageSize } from "@/validations/pagination";
 
@@ -199,7 +199,7 @@ function Empty() {
 
   return (
     <TableRow>
-      <TableCell colSpan={8} className="py-12">
+      <TableCell colSpan={10} className="py-12">
         <div className="flex flex-col items-center gap-3">
           <GiAncientRuins size={32} />
           <h3 className="text-lg">{tEmpty("title")}</h3>
@@ -216,7 +216,7 @@ function Error() {
 
   return (
     <TableRow>
-      <TableCell colSpan={8} className="py-12">
+      <TableCell colSpan={10} className="py-12">
         <div className="flex flex-col items-center gap-3">
           <GiIsland size={32} />
           <h3 className="text-lg">{tError("title")}</h3>
@@ -232,12 +232,12 @@ type tContactsProps = {
   email: string;
 };
 function Contacts({ phoneNumber, email }: tContactsProps) {
-  const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+  const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber);
 
   return (
     <div className="flex flex-col">
       <Link href={`tel:${phoneNumber}`} className="w-fit hover:underline">
-        {formattedPhoneNumber}
+        {parsedPhoneNumber?.formatNational()}
       </Link>
       <Link
         href={`mailto:${email}`}

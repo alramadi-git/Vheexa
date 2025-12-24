@@ -2205,9 +2205,22 @@
                   "form": {
                     "when-success": "Branch was successfully created",
                     "when-error": "Something went wrong while creating the branch",
+                    "information": {
+                      "name": {
+                        "label": "Branch Name",
+                        "placeholder": "Enter a branch name"
+                      },
+                      "phone-number": {
+                        "label": "Phone Number",
+                        "placeholder": "Enter a phone number (e.g., +15551234567)"
+                      },
+                      "email": {
+                        "label": "Email",
+                        "placeholder": "Enter an email address (e.g., branch@vheexa.com)"
+                      }
+                    },
                     "status": {
                       "label": "Status",
-                      "placeholder": "Enter status (e.g., Active, Inactive)",
                       "statuses": [
                         {
                           "value": "0",
@@ -2227,6 +2240,20 @@
                 }
               },
               "filter": {
+                "search": {
+                  "label": "Search",
+                  "placeholder": "Search for (e.g., Branch Name, Location or Contacts)",
+                  "searches": [
+                    {
+                      "value": "0",
+                      "label": "Active"
+                    },
+                    {
+                      "value": "1",
+                      "label": "Inactive"
+                    }
+                  ]
+                },
                 "status": {
                   "label": "Status",
                   "placeholder": "Enter status (e.g., Active, Inactive)",

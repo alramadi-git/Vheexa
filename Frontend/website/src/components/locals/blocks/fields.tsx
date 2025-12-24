@@ -4,12 +4,13 @@ import { eLocale } from "@/i18n/routing";
 
 import { tUndefinable } from "@/types/nullish";
 
-import { tEmail, tPassword } from "@/validations/authentication-credentials";
+import { tPassword } from "@/validations/authentication-credentials";
 
 import { cn } from "@/utilities/cn";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
 import { useLocale, useTranslations } from "next-intl";
+
 import {
   ComponentProps,
   useState,
@@ -37,27 +38,25 @@ import {
   LuChevronsUpDown,
   LuCheck,
   LuX,
+  LuPhone,
+  LuChevronDown,
 } from "react-icons/lu";
+
+import {
+  usePhoneInput,
+  CountrySelector,
+  CountrySelectorDropdown,
+  defaultCountries,
+  FlagImage,
+  CountryData,
+} from "react-international-phone";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/popover";
-import { Input } from "@/components/shadcn/input";
-import { Button } from "@/components/shadcn/button";
 
-import { Calendar } from "@/components/shadcn/calendar";
-
-import { toast } from "sonner";
-import { Toast } from "./typography";
-
-import {
-  FileUpload,
-  FileUploadTrigger,
-  FileUploadDropzone,
-} from "@/components/shadcn/file-upload";
-import { Badge } from "@/components/shadcn/badge";
 import {
   Command,
   CommandEmpty,
@@ -66,6 +65,29 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/shadcn/command";
+
+import {
+  FileUpload,
+  FileUploadTrigger,
+  FileUploadDropzone,
+} from "@/components/shadcn/file-upload";
+
+import { Calendar } from "@/components/shadcn/calendar";
+
+import { toast } from "sonner";
+import { Toast } from "./typography";
+
+import { Badge } from "@/components/shadcn/badge";
+import { Input } from "@/components/shadcn/input";
+
+import { Button } from "@/components/shadcn/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/select";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -90,6 +112,124 @@ function FieldSearch(props: tFieldSearchProps) {
         className="peer px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
         {...props}
       />
+    </div>
+  );
+}
+
+type tFieldPhoneNumberProps = {
+  placeholder?: string;
+  value?: string;
+  setValue: (phoneNumber: string) => void;
+};
+function FieldPhoneNumber({ value, setValue }: tFieldPhoneNumberProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedCountry, setSelectedCountry] = useState<CountryData>(
+    defaultCountries[0],
+  );
+
+  return (
+    <div>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            className="bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+          >
+            <FlagImage iso2={selectedCountry[1]} className="size-4" />
+            {selectedCountry[0]}
+            <span className="text-muted-foreground">+{selectedCountry[2]}</span>
+            <LuChevronDown
+              className="text-muted-foreground/80 shrink-0"
+              aria-hidden="true"
+            />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
+          align="start"
+        >
+          <Command>
+            <CommandInput placeholder="Search country..." />
+            <CommandList>
+              <CommandEmpty>No country found.</CommandEmpty>
+              {defaultCountries.map((country) => (
+                <CommandItem
+                  key={country[1]}
+                  value={country[1]}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue);
+                    setIsOpen(false);
+                  }}
+                >
+                  <div>
+                    <FlagImage iso2={country[1]} />
+                    {country[0]}
+                    <span className="text-muted-foreground">+{country[2]}</span>
+                    <LuChevronDown
+                      className="text-muted-foreground/80 shrink-0"
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  {selectedCountry[1] === country[1] && (
+                    <LuCheck size={16} className="ml-auto" />
+                  )}
+                </CommandItem>
+              ))}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+  // return (
+  //   <PhoneNumberInput
+  //     {...props}
+  //     countrySelectComponent={({ value, onChange, options }) => {
+  //       console.log("value: ", value);
+  //       console.log("onChange: ", onChange);
+  //       console.log("options: ", options);
+
+  //       return <></>;
+  //       return (
+
+  //       );
+  //     }}
+  //     inputComponent={() => (
+  //       <div className="relative">
+  //         <Input type="tel" className="peer pe-9" />
+  //         <div
+  //           className={cn(
+  //             "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
+  //             {
+  //               "text-destructive": props["aria-invalid"],
+  //             },
+  //           )}
+  //         >
+  //           <LuPhone size={16} aria-hidden="true" />
+  //         </div>
+  //       </div>
+  //     )}
+  //   />
+  // );
+}
+
+type tFieldEmailProps = Omit<ComponentProps<typeof Input>, "type">;
+function FieldEmail({ className, ...props }: tFieldEmailProps) {
+  return (
+    <div className="relative">
+      <Input type="email" className={cn("peer pe-9", className)} {...props} />
+      <div
+        className={cn(
+          "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
+          {
+            "text-destructive": props["aria-invalid"],
+          },
+        )}
+      >
+        <LuMail size={16} aria-hidden="true" />
+      </div>
     </div>
   );
 }
@@ -146,45 +286,6 @@ function FieldPassword({
           <LuEye size={16} aria-hidden="true" />
         )}
       </button>
-    </div>
-  );
-}
-
-type tFieldEmailProps = {
-  controller: tControllerRenderProps<
-    {
-      email: tEmail;
-    },
-    "email"
-  >;
-  inputProps?: Omit<
-    tInputProps,
-    "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
-  >;
-};
-function FieldEmail({
-  controller,
-  inputProps: { id, className, ...inputProps } = {},
-}: tFieldEmailProps) {
-  return (
-    <div className="relative">
-      <Input
-        id={id}
-        type="email"
-        className={cn("peer pe-9", className)}
-        {...controller.field}
-        {...inputProps}
-      />
-      <div
-        className={cn(
-          "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
-          {
-            "text-destructive": controller.fieldState.invalid,
-          },
-        )}
-      >
-        <LuMail size={16} aria-hidden="true" />
-      </div>
     </div>
   );
 }
@@ -502,6 +603,7 @@ function FieldFileUpload({
 }
 export {
   FieldSearch,
+  FieldPhoneNumber,
   FieldPassword,
   FieldEmail,
   FieldMultiSelect,
