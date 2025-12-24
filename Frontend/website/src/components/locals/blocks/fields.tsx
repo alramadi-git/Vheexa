@@ -13,10 +13,13 @@ import { useLocale, useTranslations } from "next-intl";
 
 import {
   ComponentProps,
+  ReactNode,
   useState,
+  useEffect,
   useMemo,
   useCallback,
-  ReactNode,
+  forwardRef,
+  useImperativeHandle,
 } from "react";
 
 import {
@@ -42,14 +45,8 @@ import {
   LuChevronDown,
 } from "react-icons/lu";
 
-import {
-  usePhoneInput,
-  CountrySelector,
-  CountrySelectorDropdown,
-  defaultCountries,
-  FlagImage,
-  CountryData,
-} from "react-international-phone";
+import { CountryCode, AsYouType, formatNumber } from "libphonenumber-js";
+import { defaultCountries, FlagImage } from "react-international-phone";
 
 import {
   Popover,
@@ -82,12 +79,12 @@ import { Input } from "@/components/shadcn/input";
 
 import { Button } from "@/components/shadcn/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/select";
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from "@/components/shadcn/number-field";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -116,63 +113,143 @@ function FieldSearch(props: tFieldSearchProps) {
   );
 }
 
-type tFieldPhoneNumberProps = {
-  placeholder?: string;
-  value?: string;
-  setValue: (phoneNumber: string) => void;
+type tFieldNumberProps = Omit<ComponentProps<typeof NumberField>, "className">;
+function FieldNumber({
+  "aria-invalid": isInvalid,
+  ...props
+}: tFieldNumberProps) {
+  return (
+    <NumberField
+      aria-invalid={isInvalid}
+      format={{
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }}
+      className="aria-invalid:text-destructive"
+      {...props}
+    >
+      <NumberFieldGroup aria-invalid={isInvalid}>
+        <NumberFieldDecrement
+          aria-invalid={isInvalid}
+          className="aria-invalid:text-destructive/80"
+        />
+        <NumberFieldInput />
+        <NumberFieldIncrement
+          aria-invalid={isInvalid}
+          className="aria-invalid:text-destructive/80"
+        />
+      </NumberFieldGroup>
+    </NumberField>
+  );
+}
+
+type tCountry = {
+  iso2: string;
+  "dial-code": string;
 };
-function FieldPhoneNumber({ value, setValue }: tFieldPhoneNumberProps) {
+
+type tFieldPhoneNumberProps = {
+  isInvalid?: boolean;
+  isRequired?: boolean;
+  id?: string;
+  value: string;
+  setValue: (value: string) => void;
+};
+type tFieldPhoneNumberRef = {
+  reset: () => void;
+};
+
+const FieldPhoneNumber = forwardRef<
+  tFieldPhoneNumberRef,
+  tFieldPhoneNumberProps
+>(({ isInvalid, isRequired, id, value, setValue }, ref) => {
+  const tFieldPhoneNumber = useTranslations("components.fields.phone-number");
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedCountry, setSelectedCountry] = useState<CountryData>(
-    defaultCountries[0],
+
+  const [phoneNumber, setPhoneNumber] = useState<string>(value);
+  const [selectedCountry, setSelectedCountry] = useState<tCountry>(
+    tFieldPhoneNumber.raw("country.default-value"),
   );
 
+  useImperativeHandle(ref, () => ({
+    reset: () => reset(),
+  }));
+
+  useEffect(() => {
+    changePhoneInput(phoneNumber);
+  }, [selectedCountry]);
+
+  function changePhoneInput(phoneNumber: string): void {
+    const formattedPhoneNumber = new AsYouType(
+      selectedCountry.iso2.toUpperCase() as CountryCode,
+    ).input(phoneNumber);
+
+    setPhoneNumber(formattedPhoneNumber);
+    setValue(
+      formatNumber(`+${selectedCountry["dial-code"]}${phoneNumber}`, "E.164"),
+    );
+  }
+
+  function selectCountry(country: tCountry): void {
+    setIsOpen(false);
+    setSelectedCountry(country);
+  }
+
+  function reset(): void {
+    setPhoneNumber("");
+    setSelectedCountry(tFieldPhoneNumber.raw("country.default-value"));
+  }
+
   return (
-    <div>
+    <div className="flex items-center">
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
-            className="bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+            className={cn(
+              "border-input w-28 justify-between rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]",
+              {
+                "border-destructive": isInvalid,
+              },
+            )}
           >
-            <FlagImage iso2={selectedCountry[1]} className="size-4" />
-            {selectedCountry[0]}
-            <span className="text-muted-foreground">+{selectedCountry[2]}</span>
+            <FlagImage iso2={selectedCountry.iso2} size={24} />
+            <span>+{selectedCountry["dial-code"]}</span>
             <LuChevronDown
-              className="text-muted-foreground/80 shrink-0"
+              className="text-muted-foreground/80"
               aria-hidden="true"
             />
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
-          align="start"
-        >
+        <PopoverContent align="start" className="border-input w-full p-0">
           <Command>
-            <CommandInput placeholder="Search country..." />
+            <CommandInput
+              placeholder={tFieldPhoneNumber("country.placeholder")}
+            />
             <CommandList>
-              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandEmpty>
+                {tFieldPhoneNumber("country.when-empty")}
+              </CommandEmpty>
               {defaultCountries.map((country) => (
                 <CommandItem
                   key={country[1]}
-                  value={country[1]}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue);
-                    setIsOpen(false);
+                  value={`${country[0]}-${country[1]}-${country[2]}`}
+                  onSelect={() => {
+                    selectCountry({
+                      iso2: country[1],
+                      "dial-code": country[2],
+                    });
                   }}
                 >
-                  <div>
-                    <FlagImage iso2={country[1]} />
+                  <div className="flex items-center gap-2">
+                    <FlagImage iso2={country[1]} size={24} />
                     {country[0]}
                     <span className="text-muted-foreground">+{country[2]}</span>
-                    <LuChevronDown
-                      className="text-muted-foreground/80 shrink-0"
-                      aria-hidden="true"
-                    />
                   </div>
 
-                  {selectedCountry[1] === country[1] && (
+                  {selectedCountry.iso2 === country[1] && (
                     <LuCheck size={16} className="ml-auto" />
                   )}
                 </CommandItem>
@@ -181,39 +258,35 @@ function FieldPhoneNumber({ value, setValue }: tFieldPhoneNumberProps) {
           </Command>
         </PopoverContent>
       </Popover>
+      <div className="relative grow">
+        <Input
+          id={id}
+          aria-invalid={isInvalid}
+          required={isRequired}
+          type="tel"
+          placeholder={tFieldPhoneNumber("placeholder")}
+          className="rounded-s-none pe-8"
+          value={phoneNumber}
+          onChange={(e) => {
+            changePhoneInput(e.currentTarget.value);
+          }}
+        />
+
+        <div
+          className={cn(
+            "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
+            {
+              "text-destructive/80": isInvalid,
+            },
+          )}
+        >
+          <LuPhone size={16} aria-hidden="true" />
+        </div>
+      </div>
     </div>
   );
-  // return (
-  //   <PhoneNumberInput
-  //     {...props}
-  //     countrySelectComponent={({ value, onChange, options }) => {
-  //       console.log("value: ", value);
-  //       console.log("onChange: ", onChange);
-  //       console.log("options: ", options);
-
-  //       return <></>;
-  //       return (
-
-  //       );
-  //     }}
-  //     inputComponent={() => (
-  //       <div className="relative">
-  //         <Input type="tel" className="peer pe-9" />
-  //         <div
-  //           className={cn(
-  //             "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
-  //             {
-  //               "text-destructive": props["aria-invalid"],
-  //             },
-  //           )}
-  //         >
-  //           <LuPhone size={16} aria-hidden="true" />
-  //         </div>
-  //       </div>
-  //     )}
-  //   />
-  // );
-}
+});
+FieldPhoneNumber.displayName = "FieldPhoneNumber";
 
 type tFieldEmailProps = Omit<ComponentProps<typeof Input>, "type">;
 function FieldEmail({ className, ...props }: tFieldEmailProps) {
@@ -601,8 +674,11 @@ function FieldFileUpload({
     </FileUpload>
   );
 }
+
+export type { tFieldPhoneNumberRef };
 export {
   FieldSearch,
+  FieldNumber,
   FieldPhoneNumber,
   FieldPassword,
   FieldEmail,

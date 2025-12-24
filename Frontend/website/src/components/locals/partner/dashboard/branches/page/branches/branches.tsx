@@ -1,4 +1,5 @@
 "use client";
+import { tNullable } from "@/types/nullish";
 
 import useBranches from "@/hooks/partner/branches";
 import { ClsBranchService } from "@/services/partner/branch";
@@ -6,7 +7,7 @@ import { ClsBranchService } from "@/services/partner/branch";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
-import { useId, useState } from "react";
+import { useId, useState, useRef } from "react";
 
 import { tBranchCreate, zBranchCreate } from "@/validations/partner/branch";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -63,6 +64,8 @@ import {
 import {
   FieldPhoneNumber,
   FieldEmail,
+  FieldNumber,
+  tFieldPhoneNumberRef,
 } from "@/components/locals/blocks/fields";
 
 import { Separator } from "@/components/shadcn/separator";
@@ -129,6 +132,8 @@ function AddNew() {
 
   const router = useRouter();
 
+  const phoneNumberRef = useRef<tNullable<tFieldPhoneNumberRef>>(null);
+
   const [open, setOpen] = useState(false);
   const {
     formState,
@@ -138,6 +143,11 @@ function AddNew() {
   } = useForm<tBranchCreate>({
     defaultValues: {
       name: "",
+      country: "",
+      city: "",
+      street: "",
+      latitude: 0,
+      longitude: 0,
       phoneNumber: "",
       email: "",
       status: 0,
@@ -147,6 +157,7 @@ function AddNew() {
 
   function reset(): void {
     handleReset();
+    phoneNumberRef.current?.reset();
   }
   async function submit(data: tBranchCreate): Promise<void> {
     const result = await clsBranchService.addAsync(data);
@@ -202,12 +213,17 @@ function AddNew() {
               name="name"
               render={({ field, fieldState }) => (
                 <Field className="col-span-2">
-                  <FieldLabel htmlFor={`${id}-name`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-name`}
+                    className="max-w-fit"
+                  >
                     {tAddNew("content.form.information.name.label")}
                   </FieldLabel>
                   <FieldContent>
                     <Input
                       {...field}
+                      aria-invalid={fieldState.invalid}
                       required
                       id={`${id}-name`}
                       placeholder={tAddNew(
@@ -225,11 +241,18 @@ function AddNew() {
               name="phoneNumber"
               render={({ field, fieldState }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-phone-number`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-phone-number`}
+                    className="max-w-fit"
+                  >
                     {tAddNew("content.form.information.phone-number.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldPhoneNumber
+                      ref={phoneNumberRef}
+                      isInvalid={fieldState.invalid}
+                      isRequired
                       value={field.value}
                       setValue={field.onChange}
                     />
@@ -243,13 +266,18 @@ function AddNew() {
               name="email"
               render={({ field, fieldState }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-email`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-email`}
+                    className="max-w-fit"
+                  >
                     {tAddNew("content.form.information.email.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldEmail
                       {...field}
                       required
+                      aria-invalid={fieldState.invalid}
                       id={`${id}-email`}
                       placeholder={tAddNew(
                         "content.form.information.email.placeholder",
@@ -261,6 +289,151 @@ function AddNew() {
               )}
             />
           </FieldGroup>
+
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="country"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-country`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.location.country.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Input
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      required
+                      id={`${id}-country`}
+                      placeholder={tAddNew(
+                        "content.form.location.country.placeholder",
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="city"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-city`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.location.city.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Input
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      required
+                      id={`${id}-city`}
+                      placeholder={tAddNew(
+                        "content.form.location.city.placeholder",
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="street"
+              render={({ field, fieldState }) => (
+                <Field className="col-span-2">
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-street`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.location.street.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Input
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      required
+                      id={`${id}-street`}
+                      placeholder={tAddNew(
+                        "content.form.location.street.placeholder",
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="latitude"
+              render={({
+                field: { onChange: setValue, ...field },
+                fieldState,
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-latitude`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.coordinates.latitude.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldNumber
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      required
+                      id={`${id}-latitude`}
+                      onValueChange={(number) => setValue(number ?? 0)}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="longitude"
+              render={({
+                field: { onChange: setValue, ...field },
+                fieldState,
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-longitude`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.coordinates.longitude.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldNumber
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      required
+                      id={`${id}-longitude`}
+                      onValueChange={(number) => setValue(number ?? 0)}
+                    />
+                  </FieldContent>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
           <Controller
             control={control}
             name="status"
@@ -269,7 +442,7 @@ function AddNew() {
               fieldState,
             }) => (
               <Field>
-                <FieldLabel htmlFor={`${id}-status`}>
+                <FieldLabel htmlFor={`${id}-status`} className="max-w-fit">
                   {tAddNew("content.form.status.label")}
                 </FieldLabel>
                 <FieldContent>

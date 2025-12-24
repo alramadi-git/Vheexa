@@ -41,6 +41,17 @@
       }
     },
     "fields": {
+      "phone-number": {
+        "placeholder": "Enter a phone number (e.g., 5551234567)",
+        "country": {
+          "default-value": {
+            "iso2": "us",
+            "dial-code": "1"
+          },
+          "placeholder": "Search by country code (e.g. +1, +44, etc...)",
+          "when-empty": "No matching countries found "
+        }
+      },
       "multiselect": {
         "show-more": "+{count} more",
         "show-less": "Show Less",
@@ -2217,6 +2228,28 @@
                       "email": {
                         "label": "Email",
                         "placeholder": "Enter an email address (e.g., branch@vheexa.com)"
+                      }
+                    },
+                    "location": {
+                      "country": {
+                        "label": "Country",
+                        "placeholder": "Enter a country (e.g., United States)"
+                      },
+                      "city": {
+                        "label": "City",
+                        "placeholder": "Enter a city (e.g., New York)"
+                      },
+                      "street": {
+                        "label": "Street",
+                        "placeholder": "Enter a street (e.g., 5th Avenue)"
+                      }
+                    },
+                    "coordinates": {
+                      "latitude": {
+                        "label": "Latitude"
+                      },
+                      "longitude": {
+                        "label": "Longitude"
                       }
                     },
                     "status": {
