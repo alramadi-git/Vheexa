@@ -42,7 +42,7 @@
     },
     "fields": {
       "phone-number": {
-        "placeholder": "Enter a phone number (e.g., 5551234567)",
+        "placeholder": "Enter a phone number (e.g., 5551234567, etc...)",
         "country": {
           "default-value": {
             "iso2": "us",
@@ -2222,26 +2222,25 @@
                         "placeholder": "Enter a branch name"
                       },
                       "phone-number": {
-                        "label": "Phone Number",
-                        "placeholder": "Enter a phone number (e.g., +15551234567)"
+                        "label": "Phone Number"
                       },
                       "email": {
                         "label": "Email",
-                        "placeholder": "Enter an email address (e.g., branch@vheexa.com)"
+                        "placeholder": "Enter an email address (e.g., branch@vheexa.com, etc...)"
                       }
                     },
                     "location": {
                       "country": {
                         "label": "Country",
-                        "placeholder": "Enter a country (e.g., United States)"
+                        "placeholder": "Enter a country (e.g., United States, etc...)"
                       },
                       "city": {
                         "label": "City",
-                        "placeholder": "Enter a city (e.g., New York)"
+                        "placeholder": "Enter a city (e.g., New York, etc...)"
                       },
                       "street": {
                         "label": "Street",
-                        "placeholder": "Enter a street (e.g., 5th Avenue)"
+                        "placeholder": "Enter a street (e.g., 5th Avenue, etc...)"
                       }
                     },
                     "coordinates": {
@@ -2275,17 +2274,7 @@
               "filter": {
                 "search": {
                   "label": "Search",
-                  "placeholder": "Search for (e.g., Branch Name, Location or Contacts)",
-                  "searches": [
-                    {
-                      "value": "0",
-                      "label": "Active"
-                    },
-                    {
-                      "value": "1",
-                      "label": "Inactive"
-                    }
-                  ]
+                  "placeholder": "Search for (e.g., Branch Name, Location or Contacts)"
                 },
                 "status": {
                   "label": "Status",
