@@ -161,7 +161,7 @@ function AddNew() {
   }, []);
 
   const tAddNew = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.add-new",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
   );
 
   const { control, formState, watch, setValue, trigger, reset, handleSubmit } =

@@ -8,5 +8,5 @@ export default function VehicleInstances() {
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-instances",
   );
 
-  return <TabsContent value={tVehicleInstances("label")}>vehicle instances</TabsContent>;
+  return <TabsContent value={tVehicleInstances("label")}>{tVehicleInstances("content.coming-soon")}</TabsContent>;
 }

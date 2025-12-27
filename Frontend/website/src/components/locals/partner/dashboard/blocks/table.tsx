@@ -13,7 +13,6 @@ import {
 
 type tTableProps<tData> = {
   isLoading: boolean;
-  loadingRowCount: ePageSize;
   loadingRender: ReactElement<typeof TableRow>;
   isSuccess: boolean;
   errorRender: ReactElement<typeof TableRow>;
@@ -24,7 +23,6 @@ type tTableProps<tData> = {
 };
 export default function Table<tData>({
   isLoading,
-  loadingRowCount,
   loadingRender,
   isSuccess,
   errorRender,
@@ -33,7 +31,7 @@ export default function Table<tData>({
   emptyRender,
   bodyRowRender,
 }: tTableProps<tData>) {
-  const loadingRows = Array.from({ length: loadingRowCount });
+  const loadingRows = Array.from({ length: ePageSize.ten });
 
   return (
     <ShadcnTable>

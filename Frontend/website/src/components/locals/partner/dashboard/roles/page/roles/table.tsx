@@ -64,7 +64,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   return (
     <BlockTable<tRoleModel>
       isLoading={isLoading}
-      loadingRowCount={ePageSize.ten}
       loadingRender={<Loading />}
       isSuccess={isSuccess}
       errorRender={<Error />}

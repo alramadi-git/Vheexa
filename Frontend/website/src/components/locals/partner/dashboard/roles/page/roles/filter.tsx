@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { useQuery } from "@/hooks/query";
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,6 +47,7 @@ type tStatues = {
 };
 
 export default function Filter() {
+  const id = useId();
   const query = useQuery();
 
   const tFilter = useTranslations(
@@ -121,7 +122,7 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="name">
+                  <FieldLabel htmlFor={`${id}-name`}>
                     {tFilter("name.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -149,7 +150,7 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="permissions">
+                  <FieldLabel htmlFor={`${id}-permissions`}>
                     {tFilter("permissions.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -185,7 +186,7 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="status">
+                  <FieldLabel htmlFor={`${id}-status`}>
                     {tFilter("status.label")}
                   </FieldLabel>
                   <FieldContent>
