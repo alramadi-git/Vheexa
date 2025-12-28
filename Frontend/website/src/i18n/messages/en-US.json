@@ -46,9 +46,9 @@
         "country": {
           "default-value": {
             "iso2": "us",
-            "dial-code": "1"
+            "country-code": "1"
           },
-          "placeholder": "Search by country code (e.g. +1, +44, etc...)",
+          "placeholder": "Search by county (e.g., name, dial or code)",
           "when-empty": "No matching countries found "
         }
       },
@@ -864,16 +864,17 @@
               "description": "Manage your vehicles and offers easily and efficiently.",
               "vehicle-models": {
                 "label": "Vehicle Models",
+                "add-new": {},
                 "content": {
                   "add-new": {
                     "trigger": "Add New Vehicle Model",
                     "title": "Add New Vehicle Model",
                     "description": "Add a new vehicle model to your inventory.",
                     "form": {
-                      "info": {
+                      "information": {
                         "name": {
                           "label": "Name",
-                          "placeholder": "Enter a vehicle name like Audi A4, BMW R1250 or Bell 206"
+                          "placeholder": "Enter vehicle name (e.g., Audi A4, BMW R1250 or Bell 206, etc...)"
                         },
                         "model-year": {
                           "label": "Model Year"
@@ -1841,7 +1842,7 @@
               "vehicle-instances": {
                 "label": "Vehicle Instances",
                 "content": {
-                  "coming-soon": "This feature is coming soon...."
+                  "coming-soon": "Coming soon..."
                 }
               }
             }

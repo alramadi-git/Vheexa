@@ -122,13 +122,17 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-name`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-name`}
+                    className="max-w-fit"
+                  >
                     {tFilter("name.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldSearch
                       {...field}
-                      id="name"
+                      id={`${id}-name`}
                       placeholder={tFilter("name.placeholder")}
                       value={value ?? ""}
                       onChange={(event) =>
@@ -150,11 +154,16 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-permissions`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-permissions`}
+                    className="max-w-fit"
+                  >
                     {tFilter("permissions.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldMultiSelect
+                      id={`${id}-permissions`}
                       placeholder={tFilter("permissions.placeholder")}
                       options={permissions}
                       values={field.value.map((val) => val.toString())}
@@ -186,7 +195,11 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-status`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-status`}
+                    className="max-w-fit"
+                  >
                     {tFilter("status.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -204,7 +217,7 @@ export default function Filter() {
                       }}
                     >
                       <div className="flex items-center gap-1.5">
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger id={`${id}-status`} className="w-full">
                           <SelectValue
                             placeholder={tFilter("status.placeholder")}
                           />

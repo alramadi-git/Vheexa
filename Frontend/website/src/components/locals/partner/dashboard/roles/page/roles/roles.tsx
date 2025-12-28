@@ -116,7 +116,7 @@ type tStatues = {
 
 function AddNew() {
   const clsRoleService = new ClsRoleService();
-  
+
   const id = useId();
   const tAddNew = useTranslations(
     "app.partner.dashboard.roles.page.roles.add-new",
@@ -204,13 +204,17 @@ function AddNew() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-name`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-name`}
+                    className="max-w-fit"
+                  >
                     {tAddNew("content.form.name.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldSearch
                       {...field}
-                      id="name"
+                      id={`${id}-name`}
                       placeholder={tAddNew("content.form.name.placeholder")}
                       value={value}
                       onChange={setValue}
@@ -228,11 +232,16 @@ function AddNew() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-permissions`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-permissions`}
+                    className="max-w-fit"
+                  >
                     {tAddNew("content.form.permissions.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldMultiSelect
+                      id={`${id}-permissions`}
                       placeholder={tAddNew(
                         "content.form.permissions.placeholder",
                       )}
@@ -266,7 +275,11 @@ function AddNew() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-status`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-status`}
+                    className="max-w-fit"
+                  >
                     {tAddNew("content.form.status.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -275,7 +288,7 @@ function AddNew() {
                       value={value.toString()}
                       onValueChange={(val) => setValue(Number(val))}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger id={`${id}-status`} className="w-full">
                         <SelectValue
                           placeholder={tAddNew(
                             "content.form.status.placeholder",
