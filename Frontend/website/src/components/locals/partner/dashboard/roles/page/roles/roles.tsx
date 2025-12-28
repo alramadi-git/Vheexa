@@ -38,6 +38,7 @@ import {
   FieldLabel,
   FieldContent,
   FieldError,
+  FieldSet,
 } from "@/components/shadcn/field";
 import { Separator } from "@/components/shadcn/separator";
 
@@ -66,10 +67,8 @@ import {
 import { toast } from "sonner";
 
 export default function Roles() {
-  const id = useId();
-  const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
-
   const { isLoading, result } = useRoles();
+  const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
 
   return (
     <Section className="h-fullscreen">
@@ -115,21 +114,11 @@ type tStatues = {
 };
 
 function AddNew() {
-  const clsRoleService = new ClsRoleService();
-
   const id = useId();
-  const tAddNew = useTranslations(
-    "app.partner.dashboard.roles.page.roles.add-new",
-  );
-
-  const permissions: tPermission[] = tAddNew.raw(
-    "content.form.permissions.permissions",
-  );
-  const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
-
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const {
     formState,
     control,
@@ -144,6 +133,17 @@ function AddNew() {
     resolver: zodResolver(zRoleCreate),
   });
 
+  const tAddNew = useTranslations(
+    "app.partner.dashboard.roles.page.roles.add-new",
+  );
+
+  const permissions: tPermission[] = tAddNew.raw(
+    "content.form.permissions.permissions",
+  );
+  const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
+
+  const clsRoleService = new ClsRoleService();
+
   function reset(): void {
     handleReset();
   }
@@ -154,7 +154,7 @@ function AddNew() {
       toast.custom(() => (
         <Toast
           variant="destructive"
-          label={tAddNew("content.form.toasts.when-error")}
+          label={tAddNew("content.form.actions.toasts.when-error")}
         />
       ));
       return;
@@ -163,16 +163,18 @@ function AddNew() {
     toast.custom(() => (
       <Toast
         variant="success"
-        label={tAddNew("content.form.toasts.when-success")}
+        label={tAddNew("content.form.actions.toasts.when-success")}
       />
     ));
 
-    setOpen(false);
+    setIsOpen(false);
+
+    reset();
     router.refresh();
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
           <LuPlus />
@@ -198,141 +200,141 @@ function AddNew() {
           onSubmit={handleSubmit(submit)}
           className="flex grow flex-col gap-6"
         >
-          <FieldGroup className="grid-cols-3">
-            <Controller
-              control={control}
-              name="name"
-              render={({
-                field: { value, onChange: setValue, ...field },
-                fieldState,
-              }) => (
-                <Field>
-                  <FieldLabel
-                    aria-invalid={fieldState.invalid}
-                    htmlFor={`${id}-name`}
-                    className="max-w-fit"
-                  >
-                    {tAddNew("content.form.name.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <FieldSearch
-                      {...field}
-                      id={`${id}-name`}
-                      placeholder={tAddNew("content.form.name.placeholder")}
-                      value={value}
-                      onChange={setValue}
-                    />
-                  </FieldContent>
-                  <FieldError errors={[fieldState.error]} />
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="permissions"
-              render={({
-                field: { onChange: setValue, ...field },
-                fieldState,
-              }) => (
-                <Field>
-                  <FieldLabel
-                    aria-invalid={fieldState.invalid}
-                    htmlFor={`${id}-permissions`}
-                    className="max-w-fit"
-                  >
-                    {tAddNew("content.form.permissions.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <FieldMultiSelect
-                      id={`${id}-permissions`}
-                      placeholder={tAddNew(
-                        "content.form.permissions.placeholder",
-                      )}
-                      options={permissions}
-                      values={field.value.map((val) => val.toString())}
-                      setValues={(values) =>
-                        setValue(values.map((value) => Number(value)))
-                      }
-                      render={(option, isSelected) => (
-                        <div className="flex w-full justify-between gap-3">
-                          <div>
-                            {option.label}
-                            <p className="text-muted-foreground line-clamp-1">
-                              {option.description}
-                            </p>
-                          </div>
-                          {isSelected && <LuCheck size={16} />}
-                        </div>
-                      )}
-                    />
-                  </FieldContent>
-                  <FieldError errors={[fieldState.error]} />
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="status"
-              render={({
-                field: { value, onChange: setValue, ...field },
-                fieldState,
-              }) => (
-                <Field>
-                  <FieldLabel
-                    aria-invalid={fieldState.invalid}
-                    htmlFor={`${id}-status`}
-                    className="max-w-fit"
-                  >
-                    {tAddNew("content.form.status.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <Select
-                      {...field}
-                      value={value.toString()}
-                      onValueChange={(val) => setValue(Number(val))}
+          <FieldSet>
+            <FieldGroup className="grid-cols-3">
+              <Controller
+                control={control}
+                name="name"
+                render={({
+                  field: { value, onChange: setValue, ...field },
+                  fieldState,
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={fieldState.invalid}
+                      htmlFor={`${id}-name`}
+                      className="max-w-fit"
                     >
-                      <SelectTrigger id={`${id}-status`} className="w-full">
-                        <SelectValue
-                          placeholder={tAddNew(
-                            "content.form.status.placeholder",
-                          )}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {statuses.map((status) => (
-                          <SelectItem key={status.value} value={status.value}>
-                            {status.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FieldContent>
-                  <FieldError errors={[fieldState.error]} />
-                </Field>
-              )}
-            />
-          </FieldGroup>
+                      {tAddNew("content.form.name.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldSearch
+                        {...field}
+                        id={`${id}-name`}
+                        placeholder={tAddNew("content.form.name.placeholder")}
+                        value={value}
+                        onChange={setValue}
+                      />
+                    </FieldContent>
+                    <FieldError errors={[fieldState.error]} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="permissions"
+                render={({
+                  field: { onChange: setValue, ...field },
+                  fieldState,
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={fieldState.invalid}
+                      htmlFor={`${id}-permissions`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.permissions.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldMultiSelect
+                        id={`${id}-permissions`}
+                        placeholder={tAddNew(
+                          "content.form.permissions.placeholder",
+                        )}
+                        options={permissions}
+                        values={field.value.map((val) => val.toString())}
+                        setValues={(values) =>
+                          setValue(values.map((value) => Number(value)))
+                        }
+                        render={(option, isSelected) => (
+                          <div className="flex w-full justify-between gap-3">
+                            <div>
+                              {option.label}
+                              <p className="text-muted-foreground line-clamp-1">
+                                {option.description}
+                              </p>
+                            </div>
+                            {isSelected && <LuCheck size={16} />}
+                          </div>
+                        )}
+                      />
+                    </FieldContent>
+                    <FieldError errors={[fieldState.error]} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="status"
+                render={({
+                  field: { value, onChange: setValue, ...field },
+                  fieldState,
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={fieldState.invalid}
+                      htmlFor={`${id}-status`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.status.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <Select
+                        {...field}
+                        value={value.toString()}
+                        onValueChange={(val) => setValue(Number(val))}
+                      >
+                        <SelectTrigger id={`${id}-status`} className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {statuses.map((status) => (
+                            <SelectItem key={status.value} value={status.value}>
+                              {status.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FieldContent>
+                    <FieldError errors={[fieldState.error]} />
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
 
-          <FieldGroup className="grid-cols-2">
-            <Button
-              variant="outline"
-              disabled={formState.isSubmitting}
-              type="reset"
-              className="mt-auto"
-            >
-              {tAddNew("content.form.actions.reset")}
-            </Button>
-            <Button
-              disabled={formState.isSubmitting}
-              type="submit"
-              className="mt-auto"
-            >
-              {formState.isSubmitting && (
-                <LuLoader size={16} className="animate-spin" />
-              )}
-              {tAddNew("content.form.actions.submit")}
-            </Button>
-          </FieldGroup>
+          <FieldSet>
+            <FieldGroup className="grid-cols-2">
+              <Button
+                variant="outline"
+                disabled={formState.isSubmitting}
+                type="reset"
+                className="mt-auto"
+              >
+                {tAddNew("content.form.actions.reset")}
+              </Button>
+              <Button
+                disabled={formState.isSubmitting}
+                type="submit"
+                className="mt-auto"
+              >
+                {formState.isSubmitting && (
+                  <LuLoader size={16} className="animate-spin" />
+                )}
+                {tAddNew("content.form.actions.submit")}
+              </Button>
+            </FieldGroup>
+          </FieldSet>
         </form>
       </DialogContent>
     </Dialog>

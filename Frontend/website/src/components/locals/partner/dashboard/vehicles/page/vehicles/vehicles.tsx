@@ -6,7 +6,7 @@ import { eLocale } from "@/i18n/routing";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
 
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 
 import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
@@ -52,7 +52,7 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/dialog";
 
-import { Section, Intro } from "@/components/locals/blocks/typography";
+import { Section, Intro, Toast } from "@/components/locals/blocks/typography";
 import { Description, Title } from "../../../blocks/typographies";
 
 import { Button } from "@/components/shadcn/button";
@@ -71,8 +71,10 @@ import {
 import { Input } from "@/components/shadcn/input";
 import { NumberField } from "@/components/shadcn/number-field";
 import {
+  FieldDatePicker,
   FieldFileUpload,
   FieldNumber,
+  tFieldDatePickerRef,
 } from "@/components/locals/blocks/fields";
 import {
   Select,
@@ -103,6 +105,9 @@ import {
   TableRow,
 } from "@/components/shadcn/table";
 import { cn } from "@/utilities/cn";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
+import { tNullable, tUndefinable } from "@/types/nullish";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(
@@ -157,6 +162,8 @@ type tEnumOption = {
 };
 
 type tManufacturer = {
+  "select-placeholder": string;
+  "search-placeholder": string;
   value: number;
   manufacturers: {
     key: string;
@@ -182,16 +189,15 @@ type tFuel = {
 
 function AddNewVehicleModel() {
   const id = useId();
+  const router = useRouter();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const datePickerRef = useRef<tNullable<tFieldDatePickerRef>>(null);
+
   const locale = useLocale() as eLocale;
 
   const clsDateFormatter = new ClsDateFormatter(locale);
   const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
-
-  const clsVehicleModelService = new ClsVehicleModelService();
-
-  const tAddNew = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
-  );
 
   const {
     control,
@@ -206,7 +212,7 @@ function AddNewVehicleModel() {
       name: "",
       description: "",
       tags: "",
-      modelYear: 1980,
+      marketLaunch: new Date(),
       category: eVehicleModelCategoryModel.car,
       manufacturer: "",
       capacity: 1,
@@ -221,6 +227,11 @@ function AddNewVehicleModel() {
     },
     resolver: zodResolver(zVehicleModelCreateForm),
   });
+
+  const tAddNew = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
+  );
+
   const colors = useFieldArray({
     control: control,
     name: "colors",
@@ -228,51 +239,76 @@ function AddNewVehicleModel() {
 
   const category = watch("category");
   const categories: tEnumOption[] = tAddNew.raw(
-    "form.information.category.categories",
+    "content.form.information.category.categories",
   );
 
-  const manufacturers: tManufacturer["manufacturers"] = useMemo(
+  const manufacturers: tUndefinable<tManufacturer> = useMemo(
     () =>
       (
         tAddNew.raw(
-          "form.information.manufacturer.manufacturers",
+          "content.form.information.manufacturer.manufacturers",
         ) as tManufacturer[]
-      ).find((manufacturer) => manufacturer.value === category)
-        ?.manufacturers ?? [],
+      ).find((manufacturer) => manufacturer.value === category),
     [tAddNew, category],
   );
   const transmissions: tTransmission["transmissions"] = useMemo(
     () =>
       (
-        tAddNew.raw("form.specs.transmission.transmissions") as tTransmission[]
+        tAddNew.raw(
+          "content.form.specs.transmission.transmissions",
+        ) as tTransmission[]
       ).find((manufacturer) => manufacturer.value === category)
         ?.transmissions ?? [],
     [tAddNew, category],
   );
   const fuels: tFuel["fuels"] = useMemo(
     () =>
-      (tAddNew.raw("form.specs.fuel.fuels") as tFuel[]).find(
+      (tAddNew.raw("content.form.specs.fuel.fuels") as tFuel[]).find(
         (manufacturer) => manufacturer.value === category,
       )?.fuels ?? [],
     [tAddNew, category],
   );
 
-  const statuses: tEnumOption[] = tAddNew.raw("form.status.statuses");
+  const statuses: tEnumOption[] = tAddNew.raw("content.form.status.statuses");
 
   const galleryHeaders: string[] = tAddNew.raw(
-    "form.media.gallery.table.headers",
+    "content.form.media.gallery.table.headers",
   );
+
+  const clsVehicleModelService = new ClsVehicleModelService();
 
   function reset(): void {
     handleReset();
+    datePickerRef.current?.reset(formState.defaultValues?.marketLaunch);
   }
 
-  function submit(data: tVehicleModelCreateForm): void {
-    clsVehicleModelService.addAsync(data);
+  async function submit(data: tVehicleModelCreateForm): Promise<void> {
+    console.log(data);
+
+    // const result = await clsVehicleModelService.addAsync(data);
+    // if (!result.isSuccess) {
+    //   toast.custom(() => (
+    //     <Toast
+    //       variant="destructive"
+    //       label={tAddNew("content.form.toasts.when-error")}
+    //     />
+    //   ));
+    //   return;
+    // }
+
+    // toast.custom(() => (
+    //   <Toast
+    //     variant="success"
+    //     label={tAddNew("content.form.toasts.when-success")}
+    //   />
+    // ));
+
+    // setIsOpen(false);
+    // router.refresh();
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
           <LuPlus />
@@ -284,17 +320,19 @@ function AddNewVehicleModel() {
         className="h-[calc(100vh-2rem)] min-w-[calc(100vw-2rem)] overflow-auto"
       >
         <DialogHeader className="gap-0.5">
-          <DialogTitle className="text-3xl">{tAddNew("title")}</DialogTitle>
+          <DialogTitle className="text-3xl">
+            {tAddNew("content.title")}
+          </DialogTitle>
           <DialogDescription className="text-base">
-            {tAddNew("description")}
+            {tAddNew("content.description")}
           </DialogDescription>
         </DialogHeader>
         <Separator className="mt-1 mb-6" />
 
         <form
           className="grid grow gap-6 2xl:grid-cols-3"
-          onSubmit={handleSubmit(submit)}
           onReset={reset}
+          onSubmit={handleSubmit(submit)}
         >
           <div className="2xl:col-span-2">
             <FieldSet className="grid grid-cols-3 gap-6">
@@ -304,16 +342,21 @@ function AddNewVehicleModel() {
                   name="name"
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor={`${id}-name`} className="w-fit">
-                        {tAddNew("form.information.name.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor={`${id}-name`}
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.information.name.label")}
                       </FieldLabel>
                       <FieldContent>
                         <Input
                           {...field}
                           required
+                          aria-invalid={fieldState.invalid}
                           id={`${id}-name`}
                           placeholder={tAddNew(
-                            "form.information.name.placeholder",
+                            "content.form.information.name.placeholder",
                           )}
                         />
                       </FieldContent>
@@ -323,22 +366,30 @@ function AddNewVehicleModel() {
                 />
                 <Controller
                   control={control}
-                  name="modelYear"
+                  name="marketLaunch"
                   render={({
-                    field: { onChange: setValue, ...field },
+                    field: { value, onChange: setValue },
                     fieldState,
                   }) => (
                     <Field>
-                      <FieldLabel htmlFor="model-year">
-                        {tAddNew("form.information.model-year.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor={`${id}-market-launch`}
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.information.market-launch.label")}
                       </FieldLabel>
                       <FieldContent>
-                        <FieldNumber
-                          {...field}
+                        <FieldDatePicker
+                          ref={datePickerRef}
                           aria-invalid={fieldState.invalid}
-                          required
-                          id={`${id}-model-year`}
-                          onValueChange={(number) => setValue(number ?? 0)}
+                          isRequired
+                          id={`${id}-market-launch`}
+                          placeholder={tAddNew(
+                            "content.form.information.market-launch.placeholder",
+                          )}
+                          value={value}
+                          setValue={setValue}
                         />
                       </FieldContent>
                       <FieldError errors={[fieldState.error]} />
@@ -348,14 +399,22 @@ function AddNewVehicleModel() {
                 <Controller
                   control={control}
                   name="category"
-                  render={({ field, fieldState }) => (
+                  render={({
+                    field: { value, onChange: setValue, ...field },
+                    fieldState,
+                  }) => (
                     <Field>
-                      <FieldLabel htmlFor="category">
-                        {tAddNew("form.information.category.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor={`${id}-category`}
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.information.category.label")}
                       </FieldLabel>
                       <FieldContent>
                         <Select
-                          value={field.value.toString()}
+                          {...field}
+                          value={value.toString()}
                           onValueChange={(value) => {
                             setValue("manufacturer", "");
                             setValue("transmission", "");
@@ -367,10 +426,13 @@ function AddNewVehicleModel() {
                               trigger("fuel");
                             }
 
-                            field.onChange(Number(value));
+                            setValue(Number(value));
                           }}
                         >
-                          <SelectTrigger id="category" className="w-full">
+                          <SelectTrigger
+                            id={`${id}-category`}
+                            className="w-full"
+                          >
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -394,23 +456,24 @@ function AddNewVehicleModel() {
                   name="manufacturer"
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor="manufacturer">
-                        {tAddNew("form.information.manufacturer.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor={`${id}-manufacturer`}
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.information.manufacturer.label")}
                       </FieldLabel>
                       <FieldContent>
                         <SearchableSelect
                           triggerRender={() => (
                             <Button
-                              id="manufacturer"
-                              role="combobox"
+                              id={`${id}-manufacturer`}
                               variant="outline"
                               className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                             >
                               {field.value === "" ? (
                                 <span className="text-muted-foreground truncate">
-                                  {tAddNew(
-                                    "form.information.manufacturer.placeholder",
-                                  )}
+                                  {manufacturers?.["select-placeholder"]}
                                 </span>
                               ) : (
                                 field.value
@@ -423,23 +486,17 @@ function AddNewVehicleModel() {
                           )}
                           value={field.value}
                           inputProps={{
-                            placeholder: tAddNew(
-                              "form.information.manufacturer.placeholder",
-                            ),
+                            placeholder: manufacturers?.["search-placeholder"],
                           }}
                           onSelect={field.onChange}
-                          list={manufacturers}
+                          list={manufacturers?.manufacturers ?? []}
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
                           )}
                           whenNoResultRender={() =>
-                            manufacturers.length === 0
-                              ? tAddNew(
-                                  "form.information.manufacturer.when-invalid-category",
-                                )
-                              : tAddNew(
-                                  "form.information.manufacturer.when-no-result",
-                                )
+                            tAddNew(
+                              "content.form.information.manufacturer.when-no-result",
+                            )
                           }
                         />
                       </FieldContent>
@@ -456,10 +513,11 @@ function AddNewVehicleModel() {
                   render={({ field, fieldState }) => (
                     <Field className="grow">
                       <FieldLabel
+                        aria-invalid={fieldState.invalid}
                         htmlFor={`${id}-description`}
-                        className="w-fit"
+                        className="max-w-fit"
                       >
-                        {tAddNew("form.information.description.label")}
+                        {tAddNew("content.form.information.description.label")}
                       </FieldLabel>
                       <FieldContent>
                         <Textarea
@@ -467,7 +525,7 @@ function AddNewVehicleModel() {
                           required
                           id={`${id}-description`}
                           placeholder={tAddNew(
-                            "form.information.description.placeholder",
+                            "content.form.information.description.placeholder",
                           )}
                           className="h-full resize-none"
                         />
@@ -481,8 +539,12 @@ function AddNewVehicleModel() {
                   name="tags"
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor={`${id}-tags`} className="w-fit">
-                        {tAddNew("form.information.tags.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor={`${id}-tags`}
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.information.tags.label")}
                       </FieldLabel>
                       <FieldContent>
                         <Input
@@ -490,7 +552,7 @@ function AddNewVehicleModel() {
                           required
                           id={`${id}-tags`}
                           placeholder={tAddNew(
-                            "form.information.tags.placeholder",
+                            "content.form.information.tags.placeholder",
                           )}
                         />
                       </FieldContent>
@@ -516,7 +578,7 @@ function AddNewVehicleModel() {
                           htmlFor={`${id}-capacity`}
                           className="w-fit"
                         >
-                          {tAddNew("form.specs.capacity.label")}
+                          {tAddNew("content.form.specs.capacity.label")}
                         </FieldLabel>
                         <FieldContent>
                           <FieldNumber
@@ -541,7 +603,7 @@ function AddNewVehicleModel() {
                         htmlFor={`${id}-transmission`}
                         className="w-fit"
                       >
-                        {tAddNew("form.specs.transmission.label")}
+                        {tAddNew("content.form.specs.transmission.label")}
                       </FieldLabel>
                       <FieldContent>
                         <SearchableSelect
@@ -554,7 +616,9 @@ function AddNewVehicleModel() {
                             >
                               {field.value === "" ? (
                                 <span className="text-muted-foreground truncate">
-                                  {tAddNew("form.specs.fuel.placeholder")}
+                                  {tAddNew(
+                                    "content.form.specs.fuel.placeholder",
+                                  )}
                                 </span>
                               ) : (
                                 field.value
@@ -568,7 +632,7 @@ function AddNewVehicleModel() {
                           value={field.value}
                           inputProps={{
                             placeholder: tAddNew(
-                              "form.specs.transmission.placeholder",
+                              "content.form.specs.transmission.placeholder",
                             ),
                           }}
                           onSelect={field.onChange}
@@ -579,10 +643,10 @@ function AddNewVehicleModel() {
                           whenNoResultRender={() =>
                             transmissions.length === 0
                               ? tAddNew(
-                                  "form.specs.transmission.when-invalid-category",
+                                  "content.form.specs.transmission.when-invalid-category",
                                 )
                               : tAddNew(
-                                  "form.specs.transmission.when-no-result",
+                                  "content.form.specs.transmission.when-no-result",
                                 )
                           }
                         />
@@ -596,8 +660,12 @@ function AddNewVehicleModel() {
                   name="fuel"
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor="fuel">
-                        {tAddNew("form.specs.fuel.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor="fuel"
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.specs.fuel.label")}
                       </FieldLabel>
                       <FieldContent>
                         <SearchableSelect
@@ -610,7 +678,9 @@ function AddNewVehicleModel() {
                             >
                               {field.value === "" ? (
                                 <span className="text-muted-foreground truncate">
-                                  {tAddNew("form.specs.fuel.placeholder")}
+                                  {tAddNew(
+                                    "content.form.specs.fuel.placeholder",
+                                  )}
                                 </span>
                               ) : (
                                 field.value
@@ -623,7 +693,9 @@ function AddNewVehicleModel() {
                           )}
                           value={field.value}
                           inputProps={{
-                            placeholder: tAddNew("form.specs.fuel.placeholder"),
+                            placeholder: tAddNew(
+                              "content.form.specs.fuel.placeholder",
+                            ),
                           }}
                           onSelect={field.onChange}
                           list={fuels}
@@ -632,8 +704,12 @@ function AddNewVehicleModel() {
                           )}
                           whenNoResultRender={() =>
                             fuels.length === 0
-                              ? tAddNew("form.specs.fuel.when-invalid-category")
-                              : tAddNew("form.specs.fuel.when-no-result")
+                              ? tAddNew(
+                                  "content.form.specs.fuel.when-invalid-category",
+                                )
+                              : tAddNew(
+                                  "content.form.specs.fuel.when-no-result",
+                                )
                           }
                         />
                       </FieldContent>
@@ -646,13 +722,17 @@ function AddNewVehicleModel() {
                   name="colors"
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor="colors">
-                        {tAddNew("form.specs.colors.label")}
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor="colors"
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.specs.colors.label")}
                       </FieldLabel>
                       <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
                         {field.value.length === 0 ? (
                           <span className="text-muted-foreground truncate">
-                            {tAddNew("form.specs.colors.placeholder")}
+                            {tAddNew("content.form.specs.colors.placeholder")}
                           </span>
                         ) : (
                           <ul className="flex items-center gap-2 overflow-x-auto ps-px">
@@ -711,8 +791,12 @@ function AddNewVehicleModel() {
                 name="thumbnail"
                 render={({ field, fieldState }) => (
                   <Field>
-                    <FieldLabel htmlFor="thumbnail">
-                      {tAddNew("form.media.thumbnail.label")}
+                    <FieldLabel
+                      aria-invalid={fieldState.invalid}
+                      htmlFor="thumbnail"
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.media.thumbnail.label")}
                     </FieldLabel>
                     <FieldContent>
                       {field.value ? (
@@ -749,8 +833,12 @@ function AddNewVehicleModel() {
                 name="gallery"
                 render={({ field, fieldState }) => (
                   <Field>
-                    <FieldLabel htmlFor="gallery">
-                      {tAddNew("form.media.gallery.label")}
+                    <FieldLabel
+                      aria-invalid={fieldState.invalid}
+                      htmlFor="gallery"
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.media.gallery.label")}
                     </FieldLabel>
                     <FieldContent>
                       <Sortable
@@ -801,7 +889,7 @@ function AddNewVehicleModel() {
                                     </TableCell>
                                     <TableCell className="text-muted-foreground">
                                       {tAddNew(
-                                        "form.media.gallery.table.cells.file-size",
+                                        "content.form.media.gallery.table.cells.file-size",
                                         {
                                           size: (file.size / 1024).toFixed(2),
                                         },
@@ -877,8 +965,12 @@ function AddNewVehicleModel() {
                   }) => (
                     <Field>
                       <Field>
-                        <FieldLabel htmlFor="price">
-                          {tAddNew("form.pricing.price.label")}
+                        <FieldLabel
+                          aria-invalid={fieldState.invalid}
+                          htmlFor="price"
+                          className="max-w-fit"
+                        >
+                          {tAddNew("content.form.pricing.price.label")}
                         </FieldLabel>
                         <FieldContent>
                           <FieldNumber
@@ -886,7 +978,10 @@ function AddNewVehicleModel() {
                             required
                             aria-invalid={fieldState.invalid}
                             id={`${id}-price`}
-                            onValueChange={(number) => setValue(number ?? 0)}
+                            onValueChange={(number) => {
+                              setValue(number ?? 0);
+                              trigger("discount");
+                            }}
                           />
                         </FieldContent>
                         <FieldError errors={[fieldState.error]} />
@@ -903,8 +998,12 @@ function AddNewVehicleModel() {
                   }) => (
                     <Field>
                       <Field>
-                        <FieldLabel htmlFor="discount">
-                          {tAddNew("form.pricing.discount.label")}
+                        <FieldLabel
+                          aria-invalid={fieldState.invalid}
+                          htmlFor="discount"
+                          className="max-w-fit"
+                        >
+                          {tAddNew("content.form.pricing.discount.label")}
                         </FieldLabel>
                         <FieldContent>
                           <FieldNumber
@@ -932,8 +1031,13 @@ function AddNewVehicleModel() {
               fieldState,
             }) => (
               <Field>
-                <FieldLabel htmlFor={`${id}-status`} className="w-fit">
-                  {tAddNew("form.status.label")}
+                <FieldLabel
+                  aria-invalid={fieldState.invalid}
+                  htmlFor={`${id}-status`}
+                  className="max-w-fit"
+                  className="w-fit"
+                >
+                  {tAddNew("content.form.status.label")}
                 </FieldLabel>
                 <FieldContent>
                   <Select
@@ -963,9 +1067,11 @@ function AddNewVehicleModel() {
           <FieldSet>
             <FieldGroup className="grid-cols-2">
               <Button variant="outline" type="reset">
-                {tAddNew("form.actions.reset")}
+                {tAddNew("content.form.actions.reset")}
               </Button>
-              <Button type="submit">{tAddNew("form.actions.submit")}</Button>
+              <Button type="submit">
+                {tAddNew("content.form.actions.submit")}
+              </Button>
             </FieldGroup>
           </FieldSet>
         </form>

@@ -250,35 +250,37 @@ type tActionsProps = {
   branch: tBranchModel;
 };
 function Actions({ branch }: tActionsProps) {
-  const clsBranchService = new ClsBranchService();
   const router = useRouter();
+  const clsBranchService = new ClsBranchService();
 
   const tAction = useTranslations(
     "app.partner.dashboard.branches.page.branches.table.actions.cell",
   );
 
   function view() {
-    toast.custom(() => (
-      <Toast variant="info" label={tAction("view.content")} />
-    ));
+    toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
   }
   function edit() {
-    toast.custom(() => (
-      <Toast variant="info" label={tAction("edit.content")} />
-    ));
+    toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
   async function remove() {
     const result = await clsBranchService.deleteOneAsync(branch.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (
-        <Toast variant="destructive" label={tAction("remove.when-error")} />
+        <Toast
+          variant="destructive"
+          label={tAction("remove.toasts.when-error")}
+        />
       ));
       return;
     }
 
     toast.custom(() => (
-      <Toast variant="success" label={tAction("remove.when-success")}></Toast>
+      <Toast
+        variant="success"
+        label={tAction("remove.toasts.when-success")}
+      ></Toast>
     ));
     router.refresh();
   }

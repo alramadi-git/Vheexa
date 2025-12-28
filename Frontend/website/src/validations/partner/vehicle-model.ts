@@ -28,13 +28,13 @@ const zVehicleModelCreateForm = z
       .max(750, "description cannot be longer than 750 characters."),
     category: z.enum(eVehicleModelCategoryModel, "Invalid category."),
     manufacturer: z.string().nonempty("manufacturer cannot be empty."),
-    modelYear: z
-      .number()
-      .min(1980, "model year cannot be older than 1980.")
-      .refine((value) => {
-        const year = new Date().getFullYear();
-        return value <= year;
-      }, "model year cannot be in the future."),
+    marketLaunch: z
+      .date()
+      .min(new Date(1980, 0, 1), "model year cannot be older than 1980.")
+      .refine(
+        (value) => value <= new Date(),
+        "model year cannot be in the future.",
+      ),
     capacity: z.number().min(1, "capacity cannot be less than 1."),
     transmission: z.string().nonempty("transmission cannot be empty."),
     fuel: z.string().nonempty("fuel cannot be empty."),
@@ -94,13 +94,13 @@ const zVehicleModelCreate = z
       .max(750, "description cannot be longer than 750 characters."),
     category: z.enum(eVehicleModelCategoryModel, "invalid category."),
     manufacturer: z.string().nonempty("manufacturer cannot be empty."),
-    modelYear: z
-      .number()
-      .min(1980, "model year cannot be older than 1980.")
-      .refine((value) => {
-        const year = new Date().getFullYear();
-        return value <= year;
-      }, "model year cannot be in the future."),
+    marketLaunch: z
+      .date()
+      .min(new Date(1980, 0, 1), "model year cannot be older than 1980.")
+      .refine(
+        (value) => value <= new Date(),
+        "model year cannot be in the future.",
+      ),
     capacity: z.number().min(1, "capacity cannot be less than 1."),
     transmission: z.string().nonempty("transmission cannot be empty."),
     fuel: z.string().nonempty("fuel cannot be empty."),

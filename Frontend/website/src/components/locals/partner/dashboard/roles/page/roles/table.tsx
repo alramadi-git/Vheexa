@@ -5,8 +5,6 @@ import { useRouter } from "@/i18n/navigation";
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
-import { ePageSize } from "@/validations/pagination";
-
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
@@ -80,7 +78,9 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             <TableHead>{tTable("status.header")}</TableHead>
             <TableHead>{tTable("updated-at.header")}</TableHead>
             <TableHead>{tTable("created-at.header")}</TableHead>
-            <TableHead className="text-end">{tTable("actions.header")}</TableHead>
+            <TableHead className="text-end">
+              {tTable("actions.header")}
+            </TableHead>
           </TableRow>
         </TableHeader>
       }
@@ -134,7 +134,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
     />
   );
 }
-
 
 function Loading() {
   return (
@@ -206,12 +205,12 @@ type tPermissionProps = {
   permissions: tRoleModel["permissions"];
 };
 function Permissions({ permissions }: tPermissionProps) {
-  const visiblePermissions = permissions.slice(0, 3);
-  const remainingPermissions = permissions.length - visiblePermissions.length;
-
   const tPermissions = useTranslations(
     "app.partner.dashboard.roles.page.roles.table.permissions",
   );
+
+  const visiblePermissions = permissions.slice(0, 3);
+  const remainingPermissions = permissions.length - visiblePermissions.length;
 
   return (
     <ul className="flex flex-wrap items-center gap-1">
@@ -240,35 +239,37 @@ type tActionsProps = {
   role: tRoleModel;
 };
 function Actions({ role }: tActionsProps) {
-  const clsRoleService = new ClsRoleService();
   const router = useRouter();
+  const clsRoleService = new ClsRoleService();
 
   const tAction = useTranslations(
     "app.partner.dashboard.roles.page.roles.table.actions.cell",
   );
 
   function view() {
-    toast.custom(() => (
-      <Toast variant="info" label={tAction("view.info")} />
-    ));
+    toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
   }
   function edit() {
-    toast.custom(() => (
-      <Toast variant="info" label={tAction("edit.info")} />
-    ));
+    toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
   async function remove() {
     const result = await clsRoleService.deleteOneAsync(role.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (
-        <Toast variant="destructive" label={tAction("remove.toasts.when-error")} />
+        <Toast
+          variant="destructive"
+          label={tAction("remove.toasts.when-error")}
+        />
       ));
       return;
     }
 
     toast.custom(() => (
-      <Toast variant="success" label={tAction("remove.toasts.when-success")}></Toast>
+      <Toast
+        variant="success"
+        label={tAction("remove.toasts.when-success")}
+      ></Toast>
     ));
     router.refresh();
   }

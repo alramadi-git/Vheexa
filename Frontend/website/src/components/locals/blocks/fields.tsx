@@ -144,7 +144,7 @@ function FieldNumber({
 }
 
 type tCountry = {
-  iso2: string;
+  iso: string;
   "country-code": string;
 };
 
@@ -174,16 +174,17 @@ const FieldPhoneNumber = forwardRef<
     useState<tCountry>(countryDefaultValue);
 
   useImperativeHandle(ref, () => ({
-    reset: () => reset(),
+    reset,
   }));
 
-  useEffect(() => {
-    changePhoneInput(phoneNumber);
-  }, [selectedCountry]);
+  function reset(): void {
+    setPhoneNumber("");
+    setSelectedCountry(countryDefaultValue);
+  }
 
   function changePhoneInput(phoneNumber: string): void {
     const formattedPhoneNumber = new AsYouType(
-      selectedCountry.iso2.toUpperCase() as CountryCode,
+      selectedCountry.iso.toUpperCase() as CountryCode,
     ).input(phoneNumber);
 
     setPhoneNumber(formattedPhoneNumber);
@@ -197,12 +198,9 @@ const FieldPhoneNumber = forwardRef<
 
   function selectCountry(country: tCountry): void {
     setIsOpen(false);
-    setSelectedCountry(country);
-  }
 
-  function reset(): void {
-    setPhoneNumber("");
-    setSelectedCountry(countryDefaultValue);
+    setSelectedCountry(country);
+    changePhoneInput(phoneNumber);
   }
 
   return (
@@ -219,7 +217,7 @@ const FieldPhoneNumber = forwardRef<
               },
             )}
           >
-            <FlagImage iso2={selectedCountry.iso2} size={24} />
+            <FlagImage iso2={selectedCountry.iso} size={24} />
             <span>+{selectedCountry["country-code"]}</span>
             <LuChevronDown
               className="text-muted-foreground/80"
@@ -242,7 +240,7 @@ const FieldPhoneNumber = forwardRef<
                   value={`${country[0]}-${country[1]}-${country[2]}`}
                   onSelect={() => {
                     selectCountry({
-                      iso2: country[1],
+                      iso: country[1],
                       "country-code": country[2],
                     });
                   }}
@@ -253,7 +251,7 @@ const FieldPhoneNumber = forwardRef<
                     <span className="text-muted-foreground">+{country[2]}</span>
                   </div>
 
-                  {selectedCountry.iso2 === country[1] && (
+                  {selectedCountry.iso === country[1] && (
                     <LuCheck size={16} className="ml-auto" />
                   )}
                 </CommandItem>
@@ -509,105 +507,122 @@ function FieldMultiSelect<option extends { value: string; label: string }>({
   );
 }
 
-type tFieldDatePickerProps<
-  tFieldValues extends FieldValues = FieldValues,
-  tName extends FieldPath<tFieldValues> = FieldPath<tFieldValues>,
-> = {
-  controller: tControllerRenderProps<tFieldValues, tName>;
-  inputProps?: Omit<
-    tInputProps,
-    "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
-  >;
+type tFieldDatePickerRef = {
+  reset: (date?: Date) => void;
 };
-function FieldDatePicker<
-  tFieldValues extends FieldValues = FieldValues,
-  tName extends FieldPath<tFieldValues> = FieldPath<tFieldValues>,
->({
-  controller,
-  inputProps: { className, ...inputProps } = {},
-}: tFieldDatePickerProps<tFieldValues, tName>) {
-  const locale = useLocale() as eLocale;
-  const clsDateFormatter = useMemo(
-    () => new ClsDateFormatter(locale),
-    [locale],
-  );
 
-  const [inputValue, setInputValue] = useState<string>(
-    !controller.field.value
-      ? ""
-      : clsDateFormatter.format(controller.field.value),
-  );
+type tFieldDatePickerProps = {
+  "aria-invalid"?: boolean;
+  isRequired?: boolean;
+  id?: string;
+  placeholder?: string;
+  className?: string;
+  value?: Date;
+  setValue?: (value?: Date) => void;
+};
+const FieldDatePicker = forwardRef<tFieldDatePickerRef, tFieldDatePickerProps>(
+  (
+    {
+      "aria-invalid": isInvalid,
+      isRequired,
+      id,
+      placeholder,
+      className,
+      value,
+      setValue,
+    },
+    ref,
+  ) => {
+    const locale = useLocale() as eLocale;
+    const clsDateFormatter = new ClsDateFormatter(locale);
 
-  const [month, setMonth] = useState<tUndefinable<Date>>(
-    controller.field.value ?? new Date(),
-  );
+    const [date, setDate] = useState<tUndefinable<Date>>(value);
+    const [month, setMonth] = useState<tUndefinable<Date>>(date);
 
-  return (
-    <div className="relative flex gap-2">
-      <Input
-        value={inputValue}
-        placeholder={clsDateFormatter.format(new Date())}
-        className={cn("bg-background pr-10", className)}
-        onKeyDown={(e) => e.code === "Enter" && e.currentTarget.blur()}
-        onChange={(e) => {
-          const value = e.target.value;
-          const date = new Date(value);
+    const [inputValue, setInputValue] = useState<string>(
+      date === undefined ? "" : clsDateFormatter.format(date),
+    );
 
-          setInputValue(value);
+    useImperativeHandle(ref, () => ({
+      reset,
+    }));
 
-          if (value === "") {
-            setMonth(undefined);
-            controller.field.onChange(undefined);
+    function reset(date?: Date) {
+      setDate(date);
+      setMonth(date);
+      setValue?.(date);
 
-            return;
-          }
+      if (!date) setInputValue("");
+      else setInputValue(clsDateFormatter.format(date));
+    }
 
-          if (isNaN(date.getTime())) return;
+    function selectCalendar(date?: Date) {
+      setDate(date);
+      setMonth(date);
+      setValue?.(date);
 
-          setMonth(date);
-          controller.field.onChange(date);
-        }}
-        onBlur={() => {
-          if (controller.field.value === undefined) setInputValue("");
-          else setInputValue(clsDateFormatter.format(controller.field.value));
-        }}
-        {...inputProps}
-      />
-      <Popover
-        onOpenChange={(open) => !open && setMonth(controller.field.value)}
-      >
-        <PopoverTrigger asChild>
-          <Button
-            variant="ghost"
-            className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+      if (!date) setInputValue("");
+      else setInputValue(clsDateFormatter.format(date));
+    }
+
+    return (
+      <div className="relative flex gap-2">
+        <Input
+          aria-invalid={isInvalid}
+          required={isRequired}
+          id={id}
+          placeholder={placeholder}
+          className={cn("bg-background pr-10", className)}
+          value={inputValue}
+          onKeyDown={(e) => e.code === "Enter" && e.currentTarget.blur()}
+          onChange={(e) => setInputValue(e.target.value)}
+          onBlur={() => {
+            const date = new Date(inputValue);
+            if (date === undefined || isNaN(date.getTime())) {
+              setInputValue("");
+              setMonth(undefined);
+              setDate(undefined);
+              setValue?.(undefined);
+
+              return;
+            }
+
+            setInputValue(clsDateFormatter.format(date));
+            setMonth(date);
+            setDate(date);
+            setValue?.(date);
+          }}
+        />
+        <Popover onOpenChange={(open) => open && setMonth(date)}>
+          <PopoverTrigger asChild>
+            <Button
+              aria-invalid={isInvalid}
+              variant="ghost"
+              className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+            >
+              <LuCalendar size={16} />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            alignOffset={-8}
+            sideOffset={10}
+            align="end"
+            className="w-auto overflow-hidden p-0"
           >
-            <LuCalendar className="size-3.5" />
-            <span className="sr-only">Pick a date</span>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-auto overflow-hidden p-0"
-          align="end"
-          alignOffset={-8}
-          sideOffset={10}
-        >
-          <Calendar
-            mode="single"
-            month={month}
-            onMonthChange={setMonth}
-            selected={controller.field.value}
-            onSelect={(date) => {
-              controller.field.onChange(date);
-
-              if (!date) return;
-              setInputValue(clsDateFormatter.format(date));
-            }}
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
-  );
-}
+            <Calendar
+              mode="single"
+              month={month}
+              onMonthChange={setMonth}
+              selected={date}
+              onSelect={selectCalendar}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+    );
+  },
+);
+FieldDatePicker.displayName = "FieldPhoneNumber";
 
 type tFileUploadProps = Omit<ComponentProps<typeof FileUpload>, "onFileReject">;
 function FieldFileUpload({
@@ -679,7 +694,7 @@ function FieldFileUpload({
   );
 }
 
-export type { tFieldPhoneNumberRef };
+export type { tFieldPhoneNumberRef, tFieldDatePickerRef };
 export {
   FieldSearch,
   FieldNumber,

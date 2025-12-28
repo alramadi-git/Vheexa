@@ -48,7 +48,7 @@ export async function GET(
         description:
           "Luxury electric sedan with long-range battery and autopilot.",
         manufacturer: "Tesla",
-        modelYear: 2025,
+        marketLaunch: 2025,
         capacity: 5,
         transmission: "Automatic",
         fuel: "Electric",

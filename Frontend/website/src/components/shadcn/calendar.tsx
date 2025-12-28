@@ -12,6 +12,7 @@ import { cn } from "@/utilities/cn"
 import { Button, buttonVariants } from "@/components/shadcn/button"
 
 function Calendar({
+  "aria-invalid": isInvalid,
   className,
   classNames,
   showOutsideDays = true,
@@ -21,6 +22,7 @@ function Calendar({
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
+  "aria-invalid"?: boolean;
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
   const defaultClassNames = getDefaultClassNames()

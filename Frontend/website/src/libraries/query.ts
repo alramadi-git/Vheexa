@@ -8,7 +8,7 @@ class ClsQuery extends URLSearchParams {
     value: tUndefinable<string> | string[],
   ): void {
     if (value === undefined) return;
-    else if (typeof value === "string") {
+    if (typeof value === "string") {
       super.set(name, value);
       return;
     }

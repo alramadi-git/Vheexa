@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+
 import { TabsContent } from "@/components/shadcn/tabs";
 
 export default function VehicleInstances() {
@@ -9,9 +10,12 @@ export default function VehicleInstances() {
   );
 
   return (
-    <TabsContent value={tVehicleInstances("label")} className="h-96 flex items-center justify-center">
+    <TabsContent
+      value={tVehicleInstances("label")}
+      className="flex h-96 items-center justify-center"
+    >
       <h2 className="text-3xl font-bold">
-        {tVehicleInstances("content.coming-soon")}
+        {tVehicleInstances("content.title")}
       </h2>
     </TabsContent>
   );

@@ -151,7 +151,7 @@ export async function GET(
           description:
             "Luxury electric sedan with long-range battery and autopilot.",
           manufacturer: "Tesla",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "Automatic",
           fuel: "Electric",
@@ -199,7 +199,7 @@ export async function GET(
           description:
             "Reliable compact car with excellent fuel economy and modern design.",
           manufacturer: "Honda",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "Manual",
           fuel: "Petrol 95",
@@ -242,7 +242,7 @@ export async function GET(
           description:
             "High-performance luxury sports sedan with rear-wheel drive dynamics.",
           manufacturer: "BMW",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "Dual Clutch",
           fuel: "Petrol 98",
@@ -279,7 +279,7 @@ export async function GET(
           description:
             "Iconic hot hatch with sport-tuned suspension and turbocharged engine.",
           manufacturer: "Volkswagen",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "Semi-Automatic",
           fuel: "Petrol 95",
@@ -316,7 +316,7 @@ export async function GET(
           description:
             "Midsize family sedan known for reliability and comfort.",
           manufacturer: "Toyota",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "CVT",
           fuel: "Hybrid",
@@ -353,7 +353,7 @@ export async function GET(
           description:
             "Compact SUV with standard all-wheel drive and spacious cabin.",
           manufacturer: "Subaru",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "CVT",
           fuel: "Petrol 91",
@@ -390,7 +390,7 @@ export async function GET(
           description:
             "Full-size pickup truck with powerful engine options and towing capability.",
           manufacturer: "Ford",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "Automatic",
           fuel: "Diesel",
@@ -427,7 +427,7 @@ export async function GET(
           description:
             "American mid-engine sports car with track-ready performance.",
           manufacturer: "Chevrolet",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 2,
           transmission: "Dual Clutch",
           fuel: "Petrol 98",
@@ -464,7 +464,7 @@ export async function GET(
           description:
             "Luxury three-row SUV with Scandinavian design and safety focus.",
           manufacturer: "Volvo",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 7,
           transmission: "Automatic",
           fuel: "Hybrid",
@@ -501,7 +501,7 @@ export async function GET(
           description:
             "Classic American muscle car with powerful V8 engine and bold styling.",
           manufacturer: "Dodge",
-          modelYear: 2025,
+          marketLaunch: 2025,
           capacity: 5,
           transmission: "Automatic",
           fuel: "Petrol 91",

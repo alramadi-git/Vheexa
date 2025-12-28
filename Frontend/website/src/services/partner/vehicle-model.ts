@@ -99,7 +99,7 @@ class ClsVehicleModelService extends ClsAbstractService {
         description: vehicleModelCreateForm.description,
         category: vehicleModelCreateForm.category,
         manufacturer: vehicleModelCreateForm.manufacturer,
-        modelYear: vehicleModelCreateForm.modelYear,
+        marketLaunch: vehicleModelCreateForm.marketLaunch,
         capacity: vehicleModelCreateForm.capacity,
         transmission: vehicleModelCreateForm.transmission,
         fuel: vehicleModelCreateForm.fuel,
