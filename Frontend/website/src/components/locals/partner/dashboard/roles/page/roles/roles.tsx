@@ -152,14 +152,17 @@ function AddNew() {
       toast.custom(() => (
         <Toast
           variant="destructive"
-          label={tAddNew("content.form.when-error")}
+          label={tAddNew("content.form.toasts.when-error")}
         />
       ));
       return;
     }
 
     toast.custom(() => (
-      <Toast variant="success" label={tAddNew("content.form.when-success")} />
+      <Toast
+        variant="success"
+        label={tAddNew("content.form.toasts.when-success")}
+      />
     ));
 
     setOpen(false);

@@ -857,6 +857,524 @@
             }
           }
         },
+        "roles": {
+          "page": {
+            "roles": {
+              "title": "Roles",
+              "description": "Manage your roles easily and efficiently.",
+              "add-new": {
+                "trigger": "Add new Role",
+                "content": {
+                  "title": "Add New Role",
+                  "description": "Create a new role with custom permissions.",
+                  "form": {
+                    "toasts": {
+                      "when-success": "Role was successfully created",
+                      "when-error": "Something went wrong while creating the role"
+                    },
+                    "name": {
+                      "label": "Role Name",
+                      "placeholder": "Enter a role name"
+                    },
+                    "permissions": {
+                      "label": "Permissions",
+                      "placeholder": "Enter permission (e.g., Create, Read, Update, Delete, etc...)",
+                      "when-no-results": "No results found",
+                      "permissions": [
+                        {
+                          "value": "0",
+                          "label": "Partner Read",
+                          "description": "View partner details and information."
+                        },
+                        {
+                          "value": "1",
+                          "label": "Partner Update",
+                          "description": "Edit or modify partner account details."
+                        },
+                        {
+                          "value": "2",
+                          "label": "Partner Delete",
+                          "description": "Permanently remove a partner from the system."
+                        },
+                        {
+                          "value": "3",
+                          "label": "Roles Create",
+                          "description": "Create new user roles with custom permissions."
+                        },
+                        {
+                          "value": "4",
+                          "label": "Roles Read",
+                          "description": "View existing roles and their assigned permissions."
+                        },
+                        {
+                          "value": "5",
+                          "label": "Roles Update",
+                          "description": "Modify permissions or settings of existing roles."
+                        },
+                        {
+                          "value": "6",
+                          "label": "Roles Delete",
+                          "description": "Remove unused or obsolete roles."
+                        },
+                        {
+                          "value": "7",
+                          "label": "Branches Create",
+                          "description": "Add new branch or location records."
+                        },
+                        {
+                          "value": "8",
+                          "label": "Branches Read",
+                          "description": "View branch details, status, and related data."
+                        },
+                        {
+                          "value": "9",
+                          "label": "Branches Update",
+                          "description": "Edit branch information such as address or contact."
+                        },
+                        {
+                          "value": "10",
+                          "label": "Branches Delete",
+                          "description": "Remove a branch from the organization."
+                        },
+                        {
+                          "value": "11",
+                          "label": "Members Create",
+                          "description": "Invite or add new team members to the system."
+                        },
+                        {
+                          "value": "12",
+                          "label": "Members Read",
+                          "description": "View member profiles, roles, and activity."
+                        },
+                        {
+                          "value": "13",
+                          "label": "Members Update",
+                          "description": "Update member details, roles, or access levels."
+                        },
+                        {
+                          "value": "14",
+                          "label": "Members Delete",
+                          "description": "Deactivate or remove a member from the platform."
+                        },
+                        {
+                          "value": "15",
+                          "label": "Vehicle Models Create",
+                          "description": "Define new vehicle model templates (e.g., make, type)."
+                        },
+                        {
+                          "value": "16",
+                          "label": "Vehicle Models Read",
+                          "description": "Browse available vehicle model specifications."
+                        },
+                        {
+                          "value": "17",
+                          "label": "Vehicle Models Update",
+                          "description": "Edit vehicle model attributes or capabilities."
+                        },
+                        {
+                          "value": "18",
+                          "label": "Vehicle Models Delete",
+                          "description": "Remove outdated or unused vehicle models."
+                        },
+                        {
+                          "value": "19",
+                          "label": "Vehicle Instances Create",
+                          "description": "Register a new physical vehicle unit into the fleet."
+                        },
+                        {
+                          "value": "20",
+                          "label": "Vehicle Instances Read",
+                          "description": "View details of specific vehicles (VIN, status, location)."
+                        },
+                        {
+                          "value": "21",
+                          "label": "Vehicle Instances Update",
+                          "description": "Update information for a registered vehicle unit."
+                        },
+                        {
+                          "value": "22",
+                          "label": "Vehicle Instances Delete",
+                          "description": "Decommission or remove a vehicle from the fleet."
+                        }
+                      ]
+                    },
+                    "status": {
+                      "label": "Status",
+                      "placeholder": "Enter status (e.g., Active, Inactive)",
+                      "statuses": [
+                        {
+                          "value": "0",
+                          "label": "Active"
+                        },
+                        {
+                          "value": "1",
+                          "label": "Inactive"
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "submit": "Submit",
+                      "reset": "Reset"
+                    }
+                  }
+                }
+              },
+              "filter": {
+                "name": {
+                  "label": "Role Name",
+                  "placeholder": "Enter a role name"
+                },
+                "permissions": {
+                  "label": "Permissions",
+                  "placeholder": "Enter permission (e.g., Create, Read, Update, Delete, etc...)",
+                  "when-no-results": "No results found",
+                  "permissions": [
+                    {
+                      "value": "0",
+                      "label": "Partner Read",
+                      "description": "View partner details and information."
+                    },
+                    {
+                      "value": "1",
+                      "label": "Partner Update",
+                      "description": "Edit or modify partner account details."
+                    },
+                    {
+                      "value": "2",
+                      "label": "Partner Delete",
+                      "description": "Permanently remove a partner from the system."
+                    },
+                    {
+                      "value": "3",
+                      "label": "Roles Create",
+                      "description": "Create new user roles with custom permissions."
+                    },
+                    {
+                      "value": "4",
+                      "label": "Roles Read",
+                      "description": "View existing roles and their assigned permissions."
+                    },
+                    {
+                      "value": "5",
+                      "label": "Roles Update",
+                      "description": "Modify permissions or settings of existing roles."
+                    },
+                    {
+                      "value": "6",
+                      "label": "Roles Delete",
+                      "description": "Remove unused or obsolete roles."
+                    },
+                    {
+                      "value": "7",
+                      "label": "Branches Create",
+                      "description": "Add new branch or location records."
+                    },
+                    {
+                      "value": "8",
+                      "label": "Branches Read",
+                      "description": "View branch details, status, and related data."
+                    },
+                    {
+                      "value": "9",
+                      "label": "Branches Update",
+                      "description": "Edit branch information such as address or contact."
+                    },
+                    {
+                      "value": "10",
+                      "label": "Branches Delete",
+                      "description": "Remove a branch from the organization."
+                    },
+                    {
+                      "value": "11",
+                      "label": "Members Create",
+                      "description": "Invite or add new team members to the system."
+                    },
+                    {
+                      "value": "12",
+                      "label": "Members Read",
+                      "description": "View member profiles, roles, and activity."
+                    },
+                    {
+                      "value": "13",
+                      "label": "Members Update",
+                      "description": "Update member details, roles, or access levels."
+                    },
+                    {
+                      "value": "14",
+                      "label": "Members Delete",
+                      "description": "Deactivate or remove a member from the platform."
+                    },
+                    {
+                      "value": "15",
+                      "label": "Vehicle Models Create",
+                      "description": "Define new vehicle model templates (e.g., make, type)."
+                    },
+                    {
+                      "value": "16",
+                      "label": "Vehicle Models Read",
+                      "description": "Browse available vehicle model specifications."
+                    },
+                    {
+                      "value": "17",
+                      "label": "Vehicle Models Update",
+                      "description": "Edit vehicle model attributes or capabilities."
+                    },
+                    {
+                      "value": "18",
+                      "label": "Vehicle Models Delete",
+                      "description": "Remove outdated or unused vehicle models."
+                    },
+                    {
+                      "value": "19",
+                      "label": "Vehicle Instances Create",
+                      "description": "Register a new physical vehicle unit into the fleet."
+                    },
+                    {
+                      "value": "20",
+                      "label": "Vehicle Instances Read",
+                      "description": "View details of specific vehicles (VIN, status, location)."
+                    },
+                    {
+                      "value": "21",
+                      "label": "Vehicle Instances Update",
+                      "description": "Update information for a registered vehicle unit."
+                    },
+                    {
+                      "value": "22",
+                      "label": "Vehicle Instances Delete",
+                      "description": "Decommission or remove a vehicle from the fleet."
+                    }
+                  ]
+                },
+                "status": {
+                  "label": "Status",
+                  "placeholder": "Enter status (e.g., Active, Inactive)",
+                  "statuses": [
+                    {
+                      "value": "0",
+                      "label": "Active"
+                    },
+                    {
+                      "value": "1",
+                      "label": "Inactive"
+                    }
+                  ]
+                },
+                "actions": {
+                  "reset": "Reset",
+                  "submit": "Filter"
+                }
+              },
+              "table": {
+                "when-empty": {
+                  "title": "No roles were found",
+                  "description": "Try adjusting your search or add a new role."
+                },
+                "when-error": {
+                  "title": "Something went wrong",
+                  "description": "We couldn't load the roles. Please try again later."
+                },
+                "uuid": {
+                  "header": "UUID"
+                },
+                "role-name": {
+                  "header": "Role Name"
+                },
+                "permissions": {
+                  "header": "Permissions",
+                  "cell": "+{count} More"
+                },
+                "members": {
+                  "header": "Members",
+                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
+                },
+                "status": {
+                  "header": "Status",
+                  "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
+                },
+                "updated-at": {
+                  "header": "Updated At"
+                },
+                "created-at": {
+                  "header": "Created At"
+                },
+                "actions": {
+                  "header": "Actions",
+                  "cell": {
+                    "view": {
+                      "label": "View more",
+                      "info": "View role is coming soon..."
+                    },
+                    "edit": {
+                      "label": "Edit",
+                      "info": "Edit role is coming soon..."
+                    },
+                    "remove": {
+                      "label": "Remove",
+                      "toasts": {
+                        "when-success": "Role was successfully deleted",
+                        "when-error": "Something went wrong while deleting the role"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "branches": {
+          "page": {
+            "branches": {
+              "title": "Branches",
+              "description": "Manage your branches easily and efficiently.",
+              "add-new": {
+                "trigger": "Add new Branch",
+                "content": {
+                  "title": "Add New Branch",
+                  "description": "Create a new branch with custom permissions.",
+                  "form": {
+                    "when-success": "Branch was successfully created",
+                    "when-error": "Something went wrong while creating the branch",
+                    "information": {
+                      "name": {
+                        "label": "Branch Name",
+                        "placeholder": "Enter a branch name"
+                      },
+                      "phone-number": {
+                        "label": "Phone Number"
+                      },
+                      "email": {
+                        "label": "Email",
+                        "placeholder": "Enter an email address (e.g., branch@vheexa.com, etc...)"
+                      }
+                    },
+                    "location": {
+                      "country": {
+                        "label": "Country",
+                        "placeholder": "Enter a country (e.g., United States, etc...)"
+                      },
+                      "city": {
+                        "label": "City",
+                        "placeholder": "Enter a city (e.g., New York, etc...)"
+                      },
+                      "street": {
+                        "label": "Street",
+                        "placeholder": "Enter a street (e.g., 5th Avenue, etc...)"
+                      }
+                    },
+                    "coordinates": {
+                      "latitude": {
+                        "label": "Latitude"
+                      },
+                      "longitude": {
+                        "label": "Longitude"
+                      }
+                    },
+                    "status": {
+                      "label": "Status",
+                      "statuses": [
+                        {
+                          "value": "0",
+                          "label": "Active"
+                        },
+                        {
+                          "value": "1",
+                          "label": "Inactive"
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "submit": "Submit",
+                      "reset": "Reset"
+                    }
+                  }
+                }
+              },
+              "filter": {
+                "search": {
+                  "label": "Search",
+                  "placeholder": "Search for (e.g., Branch Name, Location or Contacts)"
+                },
+                "status": {
+                  "label": "Status",
+                  "placeholder": "Enter status (e.g., Active, Inactive)",
+                  "statuses": [
+                    {
+                      "value": "0",
+                      "label": "Active"
+                    },
+                    {
+                      "value": "1",
+                      "label": "Inactive"
+                    }
+                  ]
+                },
+                "actions": {
+                  "reset": "Reset",
+                  "submit": "Filter"
+                }
+              },
+              "table": {
+                "when-empty": {
+                  "title": "No branches were found",
+                  "description": "Try adjusting your search or add a new branch."
+                },
+                "when-error": {
+                  "title": "Something went wrong",
+                  "description": "We couldn't load the branches. Please try again later."
+                },
+                "uuid": {
+                  "header": "UUID"
+                },
+                "name": {
+                  "header": "Branch Name"
+                },
+                "location": {
+                  "header": "Location"
+                },
+                "members": {
+                  "header": "Members",
+                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
+                },
+                "vehicles": {
+                  "header": "Vehicles",
+                  "cell": "{count, plural, =0 {No vehicles} =1 {1 Vehicle} other {# Vehicles}}"
+                },
+                "contacts": {
+                  "header": "Contacts"
+                },
+                "status": {
+                  "header": "Status",
+                  "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
+                },
+                "updated-at": {
+                  "header": "Updated At"
+                },
+                "created-at": {
+                  "header": "Created At"
+                },
+                "actions": {
+                  "header": "Actions",
+                  "cell": {
+                    "view": {
+                      "label": "View more",
+                      "content": "View branch is coming soon..."
+                    },
+                    "edit": {
+                      "label": "Edit",
+                      "content": "Edit branch is coming soon..."
+                    },
+                    "remove": {
+                      "label": "Remove",
+                      "when-success": "Branch was successfully deleted",
+                      "when-error": "Something went wrong while deleting the branch"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "vehicles": {
           "page": {
             "vehicles": {
@@ -1838,520 +2356,6 @@
               },
               "vehicle-instances": {
                 "label": "Vehicle Instances"
-              }
-            }
-          }
-        },
-        "roles": {
-          "page": {
-            "roles": {
-              "title": "Roles",
-              "description": "Manage your roles easily and efficiently.",
-              "add-new": {
-                "trigger": "Add new Role",
-                "content": {
-                  "title": "Add New Role",
-                  "description": "Create a new role with custom permissions.",
-                  "form": {
-                    "when-success": "Role was successfully created",
-                    "when-error": "Something went wrong while creating the role",
-                    "name": {
-                      "label": "Role Name",
-                      "placeholder": "Enter a role name"
-                    },
-                    "permissions": {
-                      "label": "Permissions",
-                      "placeholder": "Enter permission (e.g., Create, Read, Update, Delete, etc...)",
-                      "when-no-results": "No results found",
-                      "permissions": [
-                        {
-                          "value": "0",
-                          "label": "Partner Read",
-                          "description": "View partner details and information."
-                        },
-                        {
-                          "value": "1",
-                          "label": "Partner Update",
-                          "description": "Edit or modify partner account details."
-                        },
-                        {
-                          "value": "2",
-                          "label": "Partner Delete",
-                          "description": "Permanently remove a partner from the system."
-                        },
-                        {
-                          "value": "3",
-                          "label": "Roles Create",
-                          "description": "Create new user roles with custom permissions."
-                        },
-                        {
-                          "value": "4",
-                          "label": "Roles Read",
-                          "description": "View existing roles and their assigned permissions."
-                        },
-                        {
-                          "value": "5",
-                          "label": "Roles Update",
-                          "description": "Modify permissions or settings of existing roles."
-                        },
-                        {
-                          "value": "6",
-                          "label": "Roles Delete",
-                          "description": "Remove unused or obsolete roles."
-                        },
-                        {
-                          "value": "7",
-                          "label": "Branches Create",
-                          "description": "Add new branch or location records."
-                        },
-                        {
-                          "value": "8",
-                          "label": "Branches Read",
-                          "description": "View branch details, status, and related data."
-                        },
-                        {
-                          "value": "9",
-                          "label": "Branches Update",
-                          "description": "Edit branch information such as address or contact."
-                        },
-                        {
-                          "value": "10",
-                          "label": "Branches Delete",
-                          "description": "Remove a branch from the organization."
-                        },
-                        {
-                          "value": "11",
-                          "label": "Members Create",
-                          "description": "Invite or add new team members to the system."
-                        },
-                        {
-                          "value": "12",
-                          "label": "Members Read",
-                          "description": "View member profiles, roles, and activity."
-                        },
-                        {
-                          "value": "13",
-                          "label": "Members Update",
-                          "description": "Update member details, roles, or access levels."
-                        },
-                        {
-                          "value": "14",
-                          "label": "Members Delete",
-                          "description": "Deactivate or remove a member from the platform."
-                        },
-                        {
-                          "value": "15",
-                          "label": "Vehicle Models Create",
-                          "description": "Define new vehicle model templates (e.g., make, type)."
-                        },
-                        {
-                          "value": "16",
-                          "label": "Vehicle Models Read",
-                          "description": "Browse available vehicle model specifications."
-                        },
-                        {
-                          "value": "17",
-                          "label": "Vehicle Models Update",
-                          "description": "Edit vehicle model attributes or capabilities."
-                        },
-                        {
-                          "value": "18",
-                          "label": "Vehicle Models Delete",
-                          "description": "Remove outdated or unused vehicle models."
-                        },
-                        {
-                          "value": "19",
-                          "label": "Vehicle Instances Create",
-                          "description": "Register a new physical vehicle unit into the fleet."
-                        },
-                        {
-                          "value": "20",
-                          "label": "Vehicle Instances Read",
-                          "description": "View details of specific vehicles (VIN, status, location)."
-                        },
-                        {
-                          "value": "21",
-                          "label": "Vehicle Instances Update",
-                          "description": "Update information for a registered vehicle unit."
-                        },
-                        {
-                          "value": "22",
-                          "label": "Vehicle Instances Delete",
-                          "description": "Decommission or remove a vehicle from the fleet."
-                        }
-                      ]
-                    },
-                    "status": {
-                      "label": "Status",
-                      "placeholder": "Enter status (e.g., Active, Inactive)",
-                      "statuses": [
-                        {
-                          "value": "0",
-                          "label": "Active"
-                        },
-                        {
-                          "value": "1",
-                          "label": "Inactive"
-                        }
-                      ]
-                    },
-                    "actions": {
-                      "submit": "Submit",
-                      "reset": "Reset"
-                    }
-                  }
-                }
-              },
-              "filter": {
-                "name": {
-                  "label": "Role Name",
-                  "placeholder": "Enter a role name"
-                },
-                "permissions": {
-                  "label": "Permissions",
-                  "placeholder": "Enter permission (e.g., Create, Read, Update, Delete, etc...)",
-                  "when-no-results": "No results found",
-                  "permissions": [
-                    {
-                      "value": "0",
-                      "label": "Partner Read",
-                      "description": "View partner details and information."
-                    },
-                    {
-                      "value": "1",
-                      "label": "Partner Update",
-                      "description": "Edit or modify partner account details."
-                    },
-                    {
-                      "value": "2",
-                      "label": "Partner Delete",
-                      "description": "Permanently remove a partner from the system."
-                    },
-                    {
-                      "value": "3",
-                      "label": "Roles Create",
-                      "description": "Create new user roles with custom permissions."
-                    },
-                    {
-                      "value": "4",
-                      "label": "Roles Read",
-                      "description": "View existing roles and their assigned permissions."
-                    },
-                    {
-                      "value": "5",
-                      "label": "Roles Update",
-                      "description": "Modify permissions or settings of existing roles."
-                    },
-                    {
-                      "value": "6",
-                      "label": "Roles Delete",
-                      "description": "Remove unused or obsolete roles."
-                    },
-                    {
-                      "value": "7",
-                      "label": "Branches Create",
-                      "description": "Add new branch or location records."
-                    },
-                    {
-                      "value": "8",
-                      "label": "Branches Read",
-                      "description": "View branch details, status, and related data."
-                    },
-                    {
-                      "value": "9",
-                      "label": "Branches Update",
-                      "description": "Edit branch information such as address or contact."
-                    },
-                    {
-                      "value": "10",
-                      "label": "Branches Delete",
-                      "description": "Remove a branch from the organization."
-                    },
-                    {
-                      "value": "11",
-                      "label": "Members Create",
-                      "description": "Invite or add new team members to the system."
-                    },
-                    {
-                      "value": "12",
-                      "label": "Members Read",
-                      "description": "View member profiles, roles, and activity."
-                    },
-                    {
-                      "value": "13",
-                      "label": "Members Update",
-                      "description": "Update member details, roles, or access levels."
-                    },
-                    {
-                      "value": "14",
-                      "label": "Members Delete",
-                      "description": "Deactivate or remove a member from the platform."
-                    },
-                    {
-                      "value": "15",
-                      "label": "Vehicle Models Create",
-                      "description": "Define new vehicle model templates (e.g., make, type)."
-                    },
-                    {
-                      "value": "16",
-                      "label": "Vehicle Models Read",
-                      "description": "Browse available vehicle model specifications."
-                    },
-                    {
-                      "value": "17",
-                      "label": "Vehicle Models Update",
-                      "description": "Edit vehicle model attributes or capabilities."
-                    },
-                    {
-                      "value": "18",
-                      "label": "Vehicle Models Delete",
-                      "description": "Remove outdated or unused vehicle models."
-                    },
-                    {
-                      "value": "19",
-                      "label": "Vehicle Instances Create",
-                      "description": "Register a new physical vehicle unit into the fleet."
-                    },
-                    {
-                      "value": "20",
-                      "label": "Vehicle Instances Read",
-                      "description": "View details of specific vehicles (VIN, status, location)."
-                    },
-                    {
-                      "value": "21",
-                      "label": "Vehicle Instances Update",
-                      "description": "Update information for a registered vehicle unit."
-                    },
-                    {
-                      "value": "22",
-                      "label": "Vehicle Instances Delete",
-                      "description": "Decommission or remove a vehicle from the fleet."
-                    }
-                  ]
-                },
-                "status": {
-                  "label": "Status",
-                  "placeholder": "Enter status (e.g., Active, Inactive)",
-                  "statuses": [
-                    {
-                      "value": "0",
-                      "label": "Active"
-                    },
-                    {
-                      "value": "1",
-                      "label": "Inactive"
-                    }
-                  ]
-                },
-                "actions": {
-                  "reset": "Reset",
-                  "submit": "Filter"
-                }
-              },
-              "table": {
-                "when-empty": {
-                  "title": "No roles were found",
-                  "description": "Try adjusting your search or add a new role."
-                },
-                "when-error": {
-                  "title": "Something went wrong",
-                  "description": "We couldn't load the roles. Please try again later."
-                },
-                "uuid": {
-                  "header": "UUID"
-                },
-                "role-name": {
-                  "header": "Role Name"
-                },
-                "permissions": {
-                  "header": "Permissions",
-                  "cell": "+{count} More"
-                },
-                "members": {
-                  "header": "Members",
-                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
-                },
-                "status": {
-                  "header": "Status",
-                  "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
-                },
-                "updated-at": {
-                  "header": "Updated At"
-                },
-                "created-at": {
-                  "header": "Created At"
-                },
-                "actions": {
-                  "header": "Actions",
-                  "cell": {
-                    "view": {
-                      "label": "View more",
-                      "content": "View role is coming soon..."
-                    },
-                    "edit": {
-                      "label": "Edit",
-                      "content": "Edit role is coming soon..."
-                    },
-                    "remove": {
-                      "label": "Remove",
-                      "when-success": "Role was successfully deleted",
-                      "when-error": "Something went wrong while deleting the role"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "branches": {
-          "page": {
-            "branches": {
-              "title": "Branches",
-              "description": "Manage your branches easily and efficiently.",
-              "add-new": {
-                "trigger": "Add new Branch",
-                "content": {
-                  "title": "Add New Branch",
-                  "description": "Create a new branch with custom permissions.",
-                  "form": {
-                    "when-success": "Branch was successfully created",
-                    "when-error": "Something went wrong while creating the branch",
-                    "information": {
-                      "name": {
-                        "label": "Branch Name",
-                        "placeholder": "Enter a branch name"
-                      },
-                      "phone-number": {
-                        "label": "Phone Number"
-                      },
-                      "email": {
-                        "label": "Email",
-                        "placeholder": "Enter an email address (e.g., branch@vheexa.com, etc...)"
-                      }
-                    },
-                    "location": {
-                      "country": {
-                        "label": "Country",
-                        "placeholder": "Enter a country (e.g., United States, etc...)"
-                      },
-                      "city": {
-                        "label": "City",
-                        "placeholder": "Enter a city (e.g., New York, etc...)"
-                      },
-                      "street": {
-                        "label": "Street",
-                        "placeholder": "Enter a street (e.g., 5th Avenue, etc...)"
-                      }
-                    },
-                    "coordinates": {
-                      "latitude": {
-                        "label": "Latitude"
-                      },
-                      "longitude": {
-                        "label": "Longitude"
-                      }
-                    },
-                    "status": {
-                      "label": "Status",
-                      "statuses": [
-                        {
-                          "value": "0",
-                          "label": "Active"
-                        },
-                        {
-                          "value": "1",
-                          "label": "Inactive"
-                        }
-                      ]
-                    },
-                    "actions": {
-                      "submit": "Submit",
-                      "reset": "Reset"
-                    }
-                  }
-                }
-              },
-              "filter": {
-                "search": {
-                  "label": "Search",
-                  "placeholder": "Search for (e.g., Branch Name, Location or Contacts)"
-                },
-                "status": {
-                  "label": "Status",
-                  "placeholder": "Enter status (e.g., Active, Inactive)",
-                  "statuses": [
-                    {
-                      "value": "0",
-                      "label": "Active"
-                    },
-                    {
-                      "value": "1",
-                      "label": "Inactive"
-                    }
-                  ]
-                },
-                "actions": {
-                  "reset": "Reset",
-                  "submit": "Filter"
-                }
-              },
-              "table": {
-                "when-empty": {
-                  "title": "No branches were found",
-                  "description": "Try adjusting your search or add a new branch."
-                },
-                "when-error": {
-                  "title": "Something went wrong",
-                  "description": "We couldn't load the branches. Please try again later."
-                },
-                "uuid": {
-                  "header": "UUID"
-                },
-                "name": {
-                  "header": "Branch Name"
-                },
-                "location": {
-                  "header": "Location"
-                },
-                "members": {
-                  "header": "Members",
-                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
-                },
-                "vehicles": {
-                  "header": "Vehicles",
-                  "cell": "{count, plural, =0 {No vehicles} =1 {1 Vehicle} other {# Vehicles}}"
-                },
-                "contacts": {
-                  "header": "Contacts"
-                },
-                "status": {
-                  "header": "Status",
-                  "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
-                },
-                "updated-at": {
-                  "header": "Updated At"
-                },
-                "created-at": {
-                  "header": "Created At"
-                },
-                "actions": {
-                  "header": "Actions",
-                  "cell": {
-                    "view": {
-                      "label": "View more",
-                      "content": "View branch is coming soon..."
-                    },
-                    "edit": {
-                      "label": "Edit",
-                      "content": "Edit branch is coming soon..."
-                    },
-                    "remove": {
-                      "label": "Remove",
-                      "when-success": "Branch was successfully deleted",
-                      "when-error": "Something went wrong while deleting the branch"
-                    }
-                  }
-                }
               }
             }
           }
