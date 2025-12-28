@@ -37,6 +37,7 @@ import {
 } from "react-icons/lu";
 import { MdOutlineDiscount } from "react-icons/md";
 
+import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 import {
   Table as ShadcnTable,
   TableRow,
@@ -63,16 +64,191 @@ import {
 import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
 import { Badge } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
+import { Skeleton } from "@/components/shadcn/skeleton";
 
 type tVehicleModelsProps = {
-  data: ReturnType<typeof useVehicleModels>;
+  isLoading: boolean;
+  isSuccess: boolean;
+  data: tVehicleModelModel[];
 };
+
+function A({ isLoading, isSuccess, data }: tVehicleModelsProps) {
+  const locale = useLocale() as eLocale;
+
+  const clsDateFormatter = new ClsDateFormatter(locale);
+  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
+
+  const tTable = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table",
+  );
+
+  return (
+    <BlockTable<tVehicleModelModel>
+      isLoading={isLoading}
+      loadingRender={<Loading />}
+      isSuccess={isSuccess}
+      errorRender={<Error />}
+      data={data}
+      header={
+        <TableHeader>
+          <TableRow>
+            <TableHead>{tTable("uuid.header")}</TableHead>
+            <TableHead>{tTable("name.header")}</TableHead>
+            <TableHead>{tTable("location.header")}</TableHead>
+            <TableHead>{tTable("members.header")}</TableHead>
+            <TableHead>{tTable("vehicles.header")}</TableHead>
+            <TableHead>{tTable("contacts.header")}</TableHead>
+            <TableHead>{tTable("status.header")}</TableHead>
+            <TableHead>{tTable("updated-at.header")}</TableHead>
+            <TableHead>{tTable("created-at.header")}</TableHead>
+            <TableHead className="text-end">
+              {tTable("actions.header")}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+      }
+      emptyRender={<Empty />}
+      bodyRowRender={(item) => (
+        <TableRow key={item.uuid}>
+          <TableCell>
+            <Badge variant="muted">{item.uuid.slice(0, 8)}</Badge>
+          </TableCell>
+          <TableCell>{item.name}</TableCell>
+          <TableCell>
+            <span className="flex flex-col">
+              {item.country}, {item.city}
+              <span className="text-muted-foreground">{item.street}</span>
+            </span>
+          </TableCell>
+          <TableCell>
+            <span className="flex items-center gap-1">
+              {tTable.rich("members.cell", {
+                count: item.memberCount,
+                user: () => <LuUser size={16} />,
+                users: () => <LuUsers size={16} />,
+              })}
+            </span>
+          </TableCell>
+          <TableCell>
+            <span className="flex items-center gap-1">
+              <LuCar size={16} />
+              {tTable.rich("vehicles.cell", {
+                count: item.memberCount,
+              })}
+            </span>
+          </TableCell>
+          <TableCell>
+            <Contacts phoneNumber={item.phoneNumber} email={item.email} />
+          </TableCell>
+          <TableCell>
+            <Badge
+              variant={
+                item.status === eBranchStatusModel.active ? "success" : "muted"
+              }
+              className="flex items-center gap-1"
+            >
+              {item.status === eBranchStatusModel.active ? (
+                <LuCircleCheck />
+              ) : (
+                <LuCircleX />
+              )}
+              {tTable("status.cell", {
+                status: item.status,
+              })}
+            </Badge>
+          </TableCell>
+          <TableCell>
+            {clsDateFormatter.format(new Date(item.updatedAt))}
+          </TableCell>
+          <TableCell>
+            {clsDateFormatter.format(new Date(item.createdAt))}
+          </TableCell>
+          <TableCell>
+            <Actions branch={item} />
+          </TableCell>
+        </TableRow>
+      )}
+    />
+  );
+}
+
+function Loading() {
+  return (
+    <TableRow>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function Empty() {
+  const tEmpty = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicle-models.content.table.when-empty",
+  );
+
+  return (
+    <TableRow>
+      <TableCell colSpan={8} className="py-12">
+        <div className="flex flex-col items-center gap-3">
+          <LuShieldAlert size={32} />
+          <h3 className="text-lg">{tEmpty("title")}</h3>
+          <p className="text-muted-foreground">{tEmpty("description")}</p>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+function Error() {
+  const tError = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicle-models.content.table.when-error",
+  );
+
+  return (
+    <TableRow>
+      <TableCell colSpan={8} className="py-12">
+        <div className="flex flex-col items-center gap-3">
+          <LuShieldX size={32} />
+          <h3 className="text-lg">{tError("title")}</h3>
+          <p className="text-muted-foreground">{tError("description")}</p>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
 
 export default function Table({
   data: { isLoading, result },
 }: tVehicleModelsProps) {
   const tTable = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table",
   );
 
   const columns: ColumnDef<tVehicleModelModel>[] = useMemo(() => {
@@ -297,7 +473,7 @@ type tSpecsProps = {
 };
 function Specs({ capacity, transmission, fuel }: tSpecsProps) {
   const tSpecs = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.specs.cell",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.specs.cell",
   );
 
   return (
@@ -356,7 +532,7 @@ type tPriceProps = {
 };
 function Price({ price, discount }: tPriceProps) {
   const tPrice = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.price",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.price",
   );
   const locale = useLocale() as eLocale;
   const monyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
@@ -410,7 +586,7 @@ type tStatusProps = {
 };
 function Status({ status }: tStatusProps) {
   const tStatus = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.status",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.status",
   );
 
   return (
@@ -447,7 +623,7 @@ type tActionProps = {
 };
 function Action({ vehicleModel }: tActionProps) {
   const tAction = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.table.action.cell",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.action.cell",
   );
 
   return (

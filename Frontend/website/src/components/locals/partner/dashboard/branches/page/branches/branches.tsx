@@ -253,6 +253,7 @@ function AddNew() {
                       ref={phoneNumberRef}
                       isInvalid={fieldState.invalid}
                       isRequired
+                      id={`${id}-phone-number`}
                       value={field.value}
                       setValue={field.onChange}
                     />

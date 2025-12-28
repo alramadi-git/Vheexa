@@ -145,7 +145,7 @@ function FieldNumber({
 
 type tCountry = {
   iso2: string;
-  "dial-code": string;
+  "country-code": string;
 };
 
 type tFieldPhoneNumberProps = {
@@ -165,12 +165,13 @@ const FieldPhoneNumber = forwardRef<
 >(({ isInvalid, isRequired, id, value, setValue }, ref) => {
   const tFieldPhoneNumber = useTranslations("components.fields.phone-number");
 
+  const countryDefaultValue = tFieldPhoneNumber.raw("country.default-value");
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [phoneNumber, setPhoneNumber] = useState<string>(value);
-  const [selectedCountry, setSelectedCountry] = useState<tCountry>(
-    tFieldPhoneNumber.raw("country.default-value"),
-  );
+  const [selectedCountry, setSelectedCountry] =
+    useState<tCountry>(countryDefaultValue);
 
   useImperativeHandle(ref, () => ({
     reset: () => reset(),
@@ -187,7 +188,10 @@ const FieldPhoneNumber = forwardRef<
 
     setPhoneNumber(formattedPhoneNumber);
     setValue(
-      formatNumber(`+${selectedCountry["dial-code"]}${phoneNumber}`, "E.164"),
+      formatNumber(
+        `+${selectedCountry["country-code"]}${phoneNumber}`,
+        "E.164",
+      ),
     );
   }
 
@@ -198,7 +202,7 @@ const FieldPhoneNumber = forwardRef<
 
   function reset(): void {
     setPhoneNumber("");
-    setSelectedCountry(tFieldPhoneNumber.raw("country.default-value"));
+    setSelectedCountry(countryDefaultValue);
   }
 
   return (
@@ -216,7 +220,7 @@ const FieldPhoneNumber = forwardRef<
             )}
           >
             <FlagImage iso2={selectedCountry.iso2} size={24} />
-            <span>+{selectedCountry["dial-code"]}</span>
+            <span>+{selectedCountry["country-code"]}</span>
             <LuChevronDown
               className="text-muted-foreground/80"
               aria-hidden="true"
@@ -239,7 +243,7 @@ const FieldPhoneNumber = forwardRef<
                   onSelect={() => {
                     selectCountry({
                       iso2: country[1],
-                      "dial-code": country[2],
+                      "country-code": country[2],
                     });
                   }}
                 >

@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { useQuery } from "@/hooks/query";
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,6 +47,7 @@ type tStatues = {
 };
 
 export default function Filter() {
+  const id = useId();
   const query = useQuery();
 
   const tFilter = useTranslations(
@@ -121,13 +122,17 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="name">
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-name`}
+                    className="max-w-fit"
+                  >
                     {tFilter("name.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldSearch
                       {...field}
-                      id="name"
+                      id={`${id}-name`}
                       placeholder={tFilter("name.placeholder")}
                       value={value ?? ""}
                       onChange={(event) =>
@@ -149,11 +154,16 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="permissions">
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-permissions`}
+                    className="max-w-fit"
+                  >
                     {tFilter("permissions.label")}
                   </FieldLabel>
                   <FieldContent>
                     <FieldMultiSelect
+                      id={`${id}-permissions`}
                       placeholder={tFilter("permissions.placeholder")}
                       options={permissions}
                       values={field.value.map((val) => val.toString())}
@@ -185,7 +195,11 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor="status">
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-status`}
+                    className="max-w-fit"
+                  >
                     {tFilter("status.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -203,7 +217,7 @@ export default function Filter() {
                       }}
                     >
                       <div className="flex items-center gap-1.5">
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger id={`${id}-status`} className="w-full">
                           <SelectValue
                             placeholder={tFilter("status.placeholder")}
                           />

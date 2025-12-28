@@ -100,7 +100,11 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-search`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-search`}
+                    className="max-w-fit"
+                  >
                     {tFilter("search.label")}
                   </FieldLabel>
                   <FieldContent>
@@ -127,7 +131,11 @@ export default function Filter() {
                 fieldState,
               }) => (
                 <Field>
-                  <FieldLabel htmlFor={`${id}-status`}>
+                  <FieldLabel
+                    aria-invalid={fieldState.invalid}
+                    htmlFor={`${id}-status`}
+                    className="max-w-fit"
+                  >
                     {tFilter("status.label")}
                   </FieldLabel>
                   <FieldContent>

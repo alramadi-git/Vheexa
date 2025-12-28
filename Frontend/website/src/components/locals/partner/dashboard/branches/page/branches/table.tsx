@@ -7,8 +7,6 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import { ePageSize } from "@/validations/pagination";
-
 import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
@@ -67,7 +65,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   return (
     <BlockTable<tBranchModel>
       isLoading={isLoading}
-      loadingRowCount={ePageSize.ten}
       loadingRender={<Loading />}
       isSuccess={isSuccess}
       errorRender={<Error />}
