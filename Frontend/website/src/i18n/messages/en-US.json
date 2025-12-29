@@ -2350,6 +2350,30 @@
                       }
                     }
                   },
+                  "filter": {
+                    "search": {
+                      "label": "Search",
+                      "placeholder": "Search by branch (e.g., Name, Location or Contacts)"
+                    },
+                    "status": {
+                      "label": "Status",
+                      "placeholder": "Enter status (e.g., Active, Inactive)",
+                      "statuses": [
+                        {
+                          "value": "0",
+                          "label": "Active"
+                        },
+                        {
+                          "value": "1",
+                          "label": "Inactive"
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "reset": "Reset",
+                      "submit": "Filter"
+                    }
+                  },
                   "table": {
                     "uuid": {
                       "header": "UUID"

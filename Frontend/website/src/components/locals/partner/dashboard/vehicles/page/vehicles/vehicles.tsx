@@ -75,6 +75,7 @@ import {
   FieldFileUpload,
   FieldNumber,
   tFieldDatePickerRef,
+  tFileUploadRef,
 } from "@/components/locals/blocks/fields";
 import {
   Select,
@@ -147,7 +148,7 @@ export default function Vehicles() {
               </div>
             </CardHeader>
 
-            {/* <VehicleModels /> */}
+            <VehicleModels />
             <VehicleInstances />
           </CardContent>
         </Card>
@@ -192,7 +193,10 @@ function AddNewVehicleModel() {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
-  const datePickerRef = useRef<tNullable<tFieldDatePickerRef>>(null);
+
+  const marketLaunchRef = useRef<tNullable<tFieldDatePickerRef>>(null);
+  const thumbnailRef = useRef<tNullable<tFileUploadRef>>(null);
+  const galleryRef = useRef<tNullable<tFileUploadRef>>(null);
 
   const locale = useLocale() as eLocale;
 
@@ -279,32 +283,38 @@ function AddNewVehicleModel() {
 
   function reset(): void {
     handleReset();
-    datePickerRef.current?.reset(formState.defaultValues?.marketLaunch);
+
+    marketLaunchRef.current?.reset(formState.defaultValues?.marketLaunch);
+
+    thumbnailRef.current?.reset(
+      formState.defaultValues?.thumbnail && [formState.defaultValues.thumbnail],
+    );
+    galleryRef.current?.reset(
+      formState.defaultValues?.gallery as tUndefinable<File[]>,
+    );
   }
 
   async function submit(data: tVehicleModelCreateForm): Promise<void> {
-    console.log(data);
+    const result = await clsVehicleModelService.addAsync(data);
+    if (!result.isSuccess) {
+      toast.custom(() => (
+        <Toast
+          variant="destructive"
+          label={tAddNew("content.form.toasts.when-error")}
+        />
+      ));
+      return;
+    }
 
-    // const result = await clsVehicleModelService.addAsync(data);
-    // if (!result.isSuccess) {
-    //   toast.custom(() => (
-    //     <Toast
-    //       variant="destructive"
-    //       label={tAddNew("content.form.toasts.when-error")}
-    //     />
-    //   ));
-    //   return;
-    // }
+    toast.custom(() => (
+      <Toast
+        variant="success"
+        label={tAddNew("content.form.toasts.when-success")}
+      />
+    ));
 
-    // toast.custom(() => (
-    //   <Toast
-    //     variant="success"
-    //     label={tAddNew("content.form.toasts.when-success")}
-    //   />
-    // ));
-
-    // setIsOpen(false);
-    // router.refresh();
+    setIsOpen(false);
+    router.refresh();
   }
 
   return (
@@ -334,7 +344,7 @@ function AddNewVehicleModel() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <div className="2xl:col-span-2">
+          <div className="space-y-6 2xl:col-span-2">
             <FieldSet className="grid grid-cols-3 gap-6">
               <FieldGroup className="flex justify-between">
                 <Controller
@@ -377,11 +387,13 @@ function AddNewVehicleModel() {
                         htmlFor={`${id}-market-launch`}
                         className="max-w-fit"
                       >
-                        {tAddNew("content.form.information.market-launch.label")}
+                        {tAddNew(
+                          "content.form.information.market-launch.label",
+                        )}
                       </FieldLabel>
                       <FieldContent>
                         <FieldDatePicker
-                          ref={datePickerRef}
+                          ref={marketLaunchRef}
                           aria-invalid={fieldState.invalid}
                           isRequired
                           id={`${id}-market-launch`}
@@ -789,38 +801,45 @@ function AddNewVehicleModel() {
               <Controller
                 control={control}
                 name="thumbnail"
-                render={({ field, fieldState }) => (
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState,
+                }) => (
                   <Field>
                     <FieldLabel
                       aria-invalid={fieldState.invalid}
-                      htmlFor="thumbnail"
+                      htmlFor={`${id}-thumbnail`}
                       className="max-w-fit"
                     >
                       {tAddNew("content.form.media.thumbnail.label")}
                     </FieldLabel>
                     <FieldContent>
-                      {field.value ? (
+                      {value ? (
                         <div className="relative rounded p-px">
                           <FullHDImage
-                            src={URL.createObjectURL(field.value)}
-                            alt={field.value.name}
+                            src={URL.createObjectURL(value)}
+                            alt={value.name}
                             className="dark:bg-sidebar-border h-68 rounded bg-black object-contain brightness-75"
                           />
                           <button
                             type="button"
                             className="light:text-white absolute top-2 right-2"
-                            onClick={() => field.onChange(undefined)}
+                            onClick={() => {
+                              setValue(undefined);
+                              thumbnailRef.current?.changeValue([]);
+                            }}
                           >
                             <LuX size={24} />
                           </button>
                         </div>
                       ) : (
                         <FieldFileUpload
-                          id="thumbnail"
+                          aria-invalid={fieldState.invalid}
+                          id={`${id}-thumbnail`}
                           accept="image/*"
-                          value={field.value === undefined ? [] : [field.value]}
-                          onValueChange={(files) => field.onChange(files[0])}
                           maxFiles={1}
+                          value={value === undefined ? [] : [value]}
+                          setValue={(files) => setValue(files[0])}
                         />
                       )}
                     </FieldContent>
@@ -831,28 +850,30 @@ function AddNewVehicleModel() {
               <Controller
                 control={control}
                 name="gallery"
-                render={({ field, fieldState }) => (
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState,
+                }) => (
                   <Field>
                     <FieldLabel
                       aria-invalid={fieldState.invalid}
-                      htmlFor="gallery"
+                      htmlFor={`${id}-gallery`}
                       className="max-w-fit"
                     >
                       {tAddNew("content.form.media.gallery.label")}
                     </FieldLabel>
                     <FieldContent>
                       <Sortable
-                        value={field.value}
-                        onValueChange={(value) => field.onChange(value)}
-                        getItemValue={(value) => value.lastModified}
                         orientation="mixed"
+                        value={value}
+                        getItemValue={(value) => value.name}
+                        onValueChange={(value) => {
+                          setValue(value);
+                          galleryRef.current?.changeValue(value);
+                        }}
                       >
                         <Table className="rounded-none border">
-                          <TableHeader
-                            className={cn({
-                              hidden: field.value.length === 0,
-                            })}
-                          >
+                          <TableHeader>
                             <TableRow className="bg-accent/50">
                               {galleryHeaders.map((header) => (
                                 <TableHead
@@ -866,11 +887,11 @@ function AddNewVehicleModel() {
                           </TableHeader>
                           <SortableContent asChild>
                             <TableBody>
-                              {field.value.map((file) => (
+                              {value.map((file) => (
                                 <SortableItem
                                   asChild
-                                  key={file.lastModified}
-                                  value={file.lastModified}
+                                  key={file.name}
+                                  value={file.name}
                                 >
                                   <TableRow>
                                     <TableCell className="w-[50px]">
@@ -884,7 +905,7 @@ function AddNewVehicleModel() {
                                         </Button>
                                       </SortableItemHandle>
                                     </TableCell>
-                                    <TableCell className="font-medium">
+                                    <TableCell className="max-w-16 truncate font-medium">
                                       {file.name}
                                     </TableCell>
                                     <TableCell className="text-muted-foreground">
@@ -902,16 +923,19 @@ function AddNewVehicleModel() {
                                     </TableCell>
                                     <TableCell className="text-muted-foreground">
                                       <Button
+                                        aria-invalid
                                         variant="ghost"
                                         type="button"
-                                        className="hover:text-destructive"
-                                        onClick={() =>
-                                          field.onChange(
-                                            field.value.filter(
-                                              (f) => f.name !== file.name,
-                                            ),
-                                          )
-                                        }
+                                        onClick={() => {
+                                          const files = value.filter(
+                                            (f) => f.name !== file.name,
+                                          );
+
+                                          setValue(files);
+                                          galleryRef.current?.changeValue(
+                                            files,
+                                          );
+                                        }}
                                       >
                                         <LuTrash />
                                       </Button>
@@ -926,16 +950,17 @@ function AddNewVehicleModel() {
                               <TableCell colSpan={5}>
                                 <FieldFileUpload
                                   multiple
-                                  id="images"
+                                  ref={galleryRef}
+                                  id={`${id}-gallery`}
                                   accept="image/*"
                                   maxFiles={25}
                                   className={cn({
                                     "cursor-not-allowed opacity-50":
-                                      field.value.length === 25,
+                                      value.length === 25,
                                   })}
-                                  disabled={field.value.length === 25}
-                                  value={field.value}
-                                  onValueChange={field.onChange}
+                                  disabled={value.length === 25}
+                                  value={value}
+                                  setValue={setValue}
                                 />
                               </TableCell>
                             </TableRow>
@@ -953,75 +978,71 @@ function AddNewVehicleModel() {
             </FieldGroup>
           </FieldSet>
 
-          <FieldGroup className="grid-cols-4 2xl:col-span-3">
-            <FieldSet className="col-span-2">
-              <FieldGroup className="grid-cols-2">
-                <Controller
-                  control={control}
-                  name="price"
-                  render={({
-                    field: { onChange: setValue, ...field },
-                    fieldState,
-                  }) => (
+          <FieldSet className="2xl:col-span-3">
+            <FieldGroup className="grid-cols-2">
+              <Controller
+                control={control}
+                name="price"
+                render={({
+                  field: { onChange: setValue, ...field },
+                  fieldState,
+                }) => (
+                  <Field>
                     <Field>
-                      <Field>
-                        <FieldLabel
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor="price"
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.pricing.price.label")}
+                      </FieldLabel>
+                      <FieldContent>
+                        <FieldNumber
+                          {...field}
                           aria-invalid={fieldState.invalid}
-                          htmlFor="price"
-                          className="max-w-fit"
-                        >
-                          {tAddNew("content.form.pricing.price.label")}
-                        </FieldLabel>
-                        <FieldContent>
-                          <FieldNumber
-                            {...field}
-                            required
-                            aria-invalid={fieldState.invalid}
-                            id={`${id}-price`}
-                            onValueChange={(number) => {
-                              setValue(number ?? 0);
-                              trigger("discount");
-                            }}
-                          />
-                        </FieldContent>
-                        <FieldError errors={[fieldState.error]} />
-                      </Field>
+                          id={`${id}-price`}
+                          onValueChange={(number) => {
+                            setValue(number ?? 0);
+                            trigger("discount");
+                          }}
+                        />
+                      </FieldContent>
+                      <FieldError errors={[fieldState.error]} />
                     </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="discount"
-                  render={({
-                    field: { onChange: setValue, ...field },
-                    fieldState,
-                  }) => (
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="discount"
+                render={({
+                  field: { onChange: setValue, ...field },
+                  fieldState,
+                }) => (
+                  <Field>
                     <Field>
-                      <Field>
-                        <FieldLabel
+                      <FieldLabel
+                        aria-invalid={fieldState.invalid}
+                        htmlFor="discount"
+                        className="max-w-fit"
+                      >
+                        {tAddNew("content.form.pricing.discount.label")}
+                      </FieldLabel>
+                      <FieldContent>
+                        <FieldNumber
+                          {...field}
                           aria-invalid={fieldState.invalid}
-                          htmlFor="discount"
-                          className="max-w-fit"
-                        >
-                          {tAddNew("content.form.pricing.discount.label")}
-                        </FieldLabel>
-                        <FieldContent>
-                          <FieldNumber
-                            {...field}
-                            required
-                            aria-invalid={fieldState.invalid}
-                            id={`${id}-discount`}
-                            onValueChange={(number) => setValue(number ?? 0)}
-                          />
-                        </FieldContent>
-                        <FieldError errors={[fieldState.error]} />
-                      </Field>
+                          id={`${id}-discount`}
+                          onValueChange={(number) => setValue(number ?? 0)}
+                        />
+                      </FieldContent>
+                      <FieldError errors={[fieldState.error]} />
                     </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </FieldGroup>
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
 
           <Controller
             control={control}
@@ -1035,7 +1056,6 @@ function AddNewVehicleModel() {
                   aria-invalid={fieldState.invalid}
                   htmlFor={`${id}-status`}
                   className="max-w-fit"
-                  className="w-fit"
                 >
                   {tAddNew("content.form.status.label")}
                 </FieldLabel>

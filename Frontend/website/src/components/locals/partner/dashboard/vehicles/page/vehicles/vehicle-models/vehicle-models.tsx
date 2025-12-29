@@ -6,6 +6,7 @@ import useVehicleModels from "@/hooks/partner/vehicle-models";
 
 import { TabsContent } from "@/components/shadcn/tabs";
 
+import Filter from "./filter";
 import VehicleModelTable from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 
@@ -18,11 +19,12 @@ export default function VehicleModels() {
 
   return (
     <TabsContent value={tVehicleModels("label")} className="space-y-3">
-      <VehicleModelTable
+      <Filter />
+      {/* <VehicleModelTable
         isLoading={isLoading}
         isSuccess={result?.isSuccess || false}
         data={result?.isSuccess ? result.data : []}
-      />
+      /> */}
       {result?.isSuccess && <Pagination pagination={result.pagination} />}
     </TabsContent>
   );

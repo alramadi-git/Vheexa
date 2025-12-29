@@ -622,79 +622,145 @@ const FieldDatePicker = forwardRef<tFieldDatePickerRef, tFieldDatePickerProps>(
     );
   },
 );
-FieldDatePicker.displayName = "FieldPhoneNumber";
+FieldDatePicker.displayName = "FieldDatePicker";
 
-type tFileUploadProps = Omit<ComponentProps<typeof FileUpload>, "onFileReject">;
-function FieldFileUpload({
-  id,
-  value,
-  onFileValidate: validateFile,
-  ...props
-}: tFileUploadProps) {
-  const tFileUpload = useTranslations("components.fields.file-upload");
+type tFileUploadRef = {
+  reset: (files?: File[]) => void;
+  changeValue: (value: File[]) => void;
+};
 
-  const onFileValidate = useCallback(
-    (file: File) => {
-      if (value?.some((value) => value.name === file.name)) {
-        return tFileUpload("validations.when-duplicate-names", {
-          filename: file.name,
-        });
-      }
-
-      const validation = validateFile?.(file);
-      if (validation) return validation;
-
-      return null;
+type tFileUploadProps = Omit<
+  ComponentProps<typeof FileUpload>,
+  "onFileReject"
+> & {
+  "aria-invalid"?: boolean;
+  setValue?: (value: File[]) => void;
+};
+const FieldFileUpload = forwardRef<tFileUploadRef, tFileUploadProps>(
+  (
+    {
+      "aria-invalid": isInvalid,
+      id,
+      value,
+      setValue,
+      onFileValidate: validateFile,
+      ...props
     },
-    [value, validateFile, tFileUpload],
-  );
-  const onFileReject = useCallback(
-    (file: File, message: string) => {
-      toast.custom(() => (
-        <Toast
-          variant="destructive"
-          label={tFileUpload("when-reject", {
-            filename:
-              file.name.length > 10
-                ? file.name.slice(0, 10) + "..."
-                : file.name,
+    ref,
+  ) => {
+    const tFileUpload = useTranslations("components.fields.file-upload");
+
+    const [files, setFiles] = useState<File[]>(value ?? []);
+
+    useImperativeHandle(ref, () => ({
+      changeValue,
+      reset,
+    }));
+
+    function changeValue(files: File[]) {
+      setFiles(files);
+    }
+
+    function reset(files: File[] = []) {
+      setFiles(files);
+    }
+
+    const onFileValidate = useCallback(
+      (file: File) => {
+        if (value?.some((value) => value.name === file.name)) {
+          return tFileUpload("validations.when-duplicate-names", {
+            filename: file.name,
+          });
+        }
+
+        const validation = validateFile?.(file);
+        if (validation) return validation;
+
+        return null;
+      },
+      [value, validateFile, tFileUpload],
+    );
+
+    const onValueChange = useCallback(
+      (files: File[]) => {
+        setValue?.(files);
+        setFiles(files);
+      },
+      [setValue],
+    );
+
+    const onFileReject = useCallback(
+      (file: File, message: string) => {
+        toast.custom(() => (
+          <Toast
+            variant="destructive"
+            label={tFileUpload("when-reject", {
+              filename:
+                file.name.length > 10
+                  ? file.name.slice(0, 10) + "..."
+                  : file.name,
+            })}
+          >
+            <p>{message}</p>
+          </Toast>
+        ));
+      },
+      [tFileUpload],
+    );
+
+    return (
+      <FileUpload
+        {...props}
+        value={files}
+        onFileValidate={onFileValidate}
+        onValueChange={onValueChange}
+        onFileReject={onFileReject}
+      >
+        <FileUploadDropzone
+          className={cn("size-full", {
+            "border-destructive ring-destructive/20": isInvalid,
           })}
         >
-          <p>{message}</p>
-        </Toast>
-      ));
-    },
-    [tFileUpload],
-  );
-
-  return (
-    <FileUpload
-      value={value}
-      onFileValidate={onFileValidate}
-      onFileReject={onFileReject}
-      {...props}
-    >
-      <FileUploadDropzone className="size-full">
-        <div className="flex flex-col items-center gap-1 text-center">
-          <div className="flex items-center justify-center rounded-full border p-2.5">
-            <LuUpload className="text-muted-foreground size-6" />
+          <div className="flex flex-col items-center gap-1 text-center">
+            <div>
+              <LuUpload
+                size={46}
+                aria-invalid={isInvalid}
+                className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
+              />
+            </div>
+            <p
+              aria-invalid={isInvalid}
+              className="aria-invalid:text-destructive text-sm font-medium"
+            >
+              {tFileUpload("title")}
+            </p>
+            <p
+              aria-invalid={isInvalid}
+              className="aria-invalid:text-destructive/80 text-muted-foreground text-xs"
+            >
+              {tFileUpload("subtitle")}
+            </p>
           </div>
-          <p className="text-sm font-medium">{tFileUpload("title")}</p>
-          <p className="text-muted-foreground text-xs">
-            {tFileUpload("subtitle")}
-          </p>
-        </div>
-        <FileUploadTrigger asChild id={id}>
-          <Button variant="outline" size="sm" className="mt-2 w-fit">
-            {tFileUpload("trigger")}
-          </Button>
-        </FileUploadTrigger>
-      </FileUploadDropzone>
-    </FileUpload>
-  );
-}
+          <FileUploadTrigger asChild>
+            <Button
+              aria-invalid={isInvalid}
+              id={id}
+              variant="outline"
+              size="sm"
+              className="mt-2 w-fit"
+            >
+              {tFileUpload("trigger")}
+            </Button>
+          </FileUploadTrigger>
+        </FileUploadDropzone>
+      </FileUpload>
+    );
+  },
+);
+FieldFileUpload.displayName = "FieldFileUpload";
 
-export type { tFieldPhoneNumberRef, tFieldDatePickerRef };
+export type { tFieldPhoneNumberRef, tFieldDatePickerRef, tFileUploadRef };
 export {
   FieldSearch,
   FieldNumber,
