@@ -67,13 +67,7 @@ const zVehicleModelCreateForm = z
       ),
     price: z.number().min(1, "price cannot be less than 1."),
     discount: z.number().nonnegative("discount cannot be negative."),
-    tags: z
-      .string()
-      .nonempty("tag cannot be empty.")
-      .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-        error:
-          "tags must be comma-separated followed by a space and contain only letters.",
-      }),
+    tags: z.array(z.string().nonempty("tag cannot be empty.")),
     status: z.enum(eVehicleModelStatusModel, "Invalid status."),
   })
   .refine((value) => value.price - 0.99 > value.discount, {
@@ -133,13 +127,7 @@ const zVehicleModelCreate = z
       ),
     price: z.number().min(1, "price cannot be less than 1."),
     discount: z.number().nonnegative("discount cannot be negative."),
-    tags: z
-      .string()
-      .nonempty("tag cannot be empty.")
-      .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-        error:
-          "tags must be comma-separated followed by a space and contain only letters.",
-      }),
+    tags: z.array(z.string().nonempty("tag cannot be empty.")),
     status: z.enum(eVehicleModelStatusModel, "invalid status."),
   })
   .refine((value) => value.price - 0.99 > value.discount, {

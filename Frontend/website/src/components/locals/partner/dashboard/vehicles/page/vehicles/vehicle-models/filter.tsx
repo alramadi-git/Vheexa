@@ -34,7 +34,10 @@ import {
   SelectItem,
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
-import { FieldSearch } from "@/components/locals/blocks/fields";
+import {
+  FieldNumberMinMaxMinMax,
+  FieldSearch,
+} from "@/components/locals/blocks/fields";
 
 type tStatues = {
   value: string;
@@ -77,6 +80,12 @@ export default function Filter() {
   const [statusQuery] = [query.get("filter.status")];
   useEffect(() => {
     setValue("search", query.get("filter.search") ?? undefined);
+
+    setValue(
+      "categories",
+      query.getAll("filter.categories").map((category) => Number(category)),
+    );
+
     setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
   }, []);
 
@@ -137,6 +146,31 @@ export default function Filter() {
                           const value = event.currentTarget.value;
                           setValue(value === "" ? undefined : value);
                         }}
+                      />
+                    </FieldContent>
+                    <FieldError errors={[fieldState.error]} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="price"
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState,
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={fieldState.invalid}
+                      htmlFor={`${id}-price`}
+                      className="max-w-fit"
+                    >
+                      {tFilter("price.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldNumberMinMaxMinMax
+                        min-placeholder={tFilter("price.min.placeholder")}
+                        max-placeholder={tFilter("price.max.placeholder")}
                       />
                     </FieldContent>
                     <FieldError errors={[fieldState.error]} />

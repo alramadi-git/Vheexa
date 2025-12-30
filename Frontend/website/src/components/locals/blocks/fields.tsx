@@ -20,6 +20,8 @@ import {
   useCallback,
   forwardRef,
   useImperativeHandle,
+  ChangeEvent,
+  KeyboardEvent,
 } from "react";
 
 import {
@@ -85,6 +87,14 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from "@/components/shadcn/number-field";
+import {
+  TagsInputInput,
+  TagsInputItem,
+  TagsInputItemDelete,
+  TagsInputItemText,
+  TagsInputRoot,
+} from "@diceui/tags-input";
+import { boolean } from "zod";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -112,6 +122,64 @@ function FieldSearch(props: tFieldSearchProps) {
     </div>
   );
 }
+
+type tFieldTagsRef = {
+  reset: (tags?: string[]) => void;
+};
+type tFieldTagsProps = {
+  id?: string;
+  placeholder?: string;
+  tags?: string[];
+  onTagsChange?: (values: string[]) => void;
+};
+const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
+  ({ id, placeholder, tags, onTagsChange }, ref) => {
+    const [_tags, _setTags] = useState<string[]>(tags ?? []);
+
+    useImperativeHandle(ref, () => ({
+      reset,
+    }));
+
+    function reset(tags: string[] = []) {
+      _setTags(tags);
+    }
+
+    function changeTags(tags: string[]) {
+      console.log(tags);
+      _setTags(tags);
+      onTagsChange?.(tags);
+    }
+
+    return (
+      <TagsInputRoot
+        value={tags}
+        onValueChange={changeTags}
+        className="flex flex-col gap-2"
+      >
+        <div className="border-input bg-background flex flex-wrap items-center gap-1.5 rounded border px-2.5 py-1 text-sm focus-within:ring-1 focus-within:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-within:ring-zinc-400">
+          {_tags.map((tag) => (
+            <TagsInputItem
+              key={tag}
+              value={tag}
+              className="inline-flex max-w-[calc(100%-8px)] items-center gap-1.5 rounded border bg-transparent px-2.5 py-1 text-sm focus:outline-hidden data-disabled:cursor-not-allowed data-disabled:opacity-50 data-editable:select-none data-editing:bg-transparent data-editing:ring-1 data-editing:ring-zinc-500 dark:data-editing:ring-zinc-400 [&:not([data-editing])]:pr-1.5 [&[data-highlighted]:not([data-editing])]:bg-zinc-200 [&[data-highlighted]:not([data-editing])]:text-black dark:[&[data-highlighted]:not([data-editing])]:bg-zinc-800 dark:[&[data-highlighted]:not([data-editing])]:text-white"
+            >
+              <TagsInputItemText className="truncate" />
+              <TagsInputItemDelete className="size-4 shrink-0 rounded opacity-70 ring-offset-zinc-950 transition-opacity hover:opacity-100">
+                <LuX size={16} />
+              </TagsInputItemDelete>
+            </TagsInputItem>
+          ))}
+          <TagsInputInput
+            id={id}
+            placeholder={placeholder}
+            className="flex-1 truncate bg-transparent outline-hidden placeholder:text-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-zinc-400"
+          />
+        </div>
+      </TagsInputRoot>
+    );
+  },
+);
+FieldTags.displayName = "FieldTags";
 
 type tFieldNumberProps = Omit<ComponentProps<typeof NumberField>, "className">;
 function FieldNumber({
@@ -143,20 +211,110 @@ function FieldNumber({
   );
 }
 
+type tFieldNumberMinMaxProps = {
+  id?: string;
+  "aria-invalid"?: boolean;
+  "min-placeholder"?: string;
+  min?: number;
+  onMinChange?: (value?: number) => {};
+  "max-placeholder"?: string;
+  max?: number;
+  onMaxChange?: (value?: number) => {};
+  formatter?: (value?: number) => string;
+};
+function FieldNumberMinMaxMinMax({
+  "aria-invalid": isInvalid,
+  id,
+  "min-placeholder": minPlaceholder,
+  min: _min,
+  onMinChange: _onMinChange,
+  "max-placeholder": maxPlaceholder,
+  max: _max,
+  onMaxChange: _onMaxChange,
+  formatter,
+}: tFieldNumberMinMaxProps) {
+  const [min, setMin] = useState<string>(_min?.toString() ?? "");
+  const [max, setMax] = useState<string>(_max?.toString() ?? "");
+
+  function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") event.currentTarget.blur();
+  }
+
+  function onMinChange(event: ChangeEvent<HTMLInputElement>) {
+    setMin(event.currentTarget.value);
+  }
+  function onMinBlur(event: ChangeEvent<HTMLInputElement>) {
+    const value = Number(event.currentTarget.value);
+
+    if (Number.isNaN(value)) {
+      setMin("");
+      _onMinChange?.(undefined);
+
+      return;
+    }
+
+    setMin(value.toString());
+    _onMinChange?.(value);
+  }
+
+  function onMaxChange(event: ChangeEvent<HTMLInputElement>) {
+    setMax(event.currentTarget.value);
+  }
+  function onMaxBlur(event: ChangeEvent<HTMLInputElement>) {
+    const value = Number(event.currentTarget.value);
+
+    if (Number.isNaN(value)) {
+      setMax("");
+      _onMaxChange?.(undefined);
+
+      return;
+    }
+
+    setMax(value.toString());
+    _onMaxChange?.(value);
+  }
+
+  return (
+    <div className="flex">
+      <Input
+        aria-invalid={isInvalid}
+        id={id}
+        type="text"
+        placeholder={minPlaceholder}
+        className="rounded-e-none"
+        value={min}
+        onKeyDown={onKeyDown}
+        onChange={onMinChange}
+        onBlur={onMinBlur}
+      />
+      <Input
+        aria-invalid={isInvalid}
+        type="text"
+        placeholder={maxPlaceholder}
+        className="rounded-s-none"
+        value={max}
+        onKeyDown={onKeyDown}
+        onChange={onMaxChange}
+        onBlur={onMaxBlur}
+      />
+    </div>
+  );
+}
+
 type tCountry = {
   iso: string;
   "country-code": string;
 };
 
+type tFieldPhoneNumberRef = {
+  reset: () => void;
+};
 type tFieldPhoneNumberProps = {
   isInvalid?: boolean;
   isRequired?: boolean;
   id?: string;
   value: string;
   setValue: (value: string) => void;
-};
-type tFieldPhoneNumberRef = {
-  reset: () => void;
 };
 
 const FieldPhoneNumber = forwardRef<
@@ -760,10 +918,17 @@ const FieldFileUpload = forwardRef<tFileUploadRef, tFileUploadProps>(
 );
 FieldFileUpload.displayName = "FieldFileUpload";
 
-export type { tFieldPhoneNumberRef, tFieldDatePickerRef, tFileUploadRef };
+export type {
+  tFieldTagsRef,
+  tFieldPhoneNumberRef,
+  tFieldDatePickerRef,
+  tFileUploadRef,
+};
 export {
   FieldSearch,
+  FieldTags,
   FieldNumber,
+  FieldNumberMinMaxMinMax,
   FieldPhoneNumber,
   FieldPassword,
   FieldEmail,

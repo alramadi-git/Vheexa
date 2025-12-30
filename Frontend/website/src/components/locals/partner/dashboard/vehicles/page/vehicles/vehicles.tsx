@@ -1,14 +1,14 @@
 "use client";
 
+import { tNullable, tUndefinable } from "@/types/nullish";
+
 import { useLocale, useTranslations } from "next-intl";
 
 import { eLocale } from "@/i18n/routing";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
 
+import { useRouter } from "@/i18n/navigation";
 import { useId, useMemo, useRef, useState } from "react";
-
-import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
 import {
   eVehicleModelCategoryModel,
@@ -18,8 +18,11 @@ import {
   tVehicleModelCreateForm,
   zVehicleModelCreateForm,
 } from "@/validations/partner/vehicle-model";
+
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
 import {
   LuChevronDown,
@@ -58,8 +61,6 @@ import { Description, Title } from "../../../blocks/typographies";
 import { Button } from "@/components/shadcn/button";
 import { Separator } from "@/components/shadcn/separator";
 
-import VehicleModels from "./vehicle-models/vehicle-models";
-import VehicleInstances from "./vehicle-instances/vehicle-instances";
 import {
   Field,
   FieldContent,
@@ -68,12 +69,11 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/shadcn/field";
-import { Input } from "@/components/shadcn/input";
-import { NumberField } from "@/components/shadcn/number-field";
 import {
   FieldDatePicker,
   FieldFileUpload,
   FieldNumber,
+  FieldTags,
   tFieldDatePickerRef,
   tFileUploadRef,
 } from "@/components/locals/blocks/fields";
@@ -84,11 +84,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/select";
-import { Textarea } from "@/components/shadcn/textarea";
-import { SearchableSelect } from "@/components/locals/blocks/selects";
-import { Badge } from "@/components/shadcn/badge";
-import { ColorCreator } from "@/components/locals/blocks/color-pickers";
-import { FullHDImage } from "@/components/locals/blocks/images";
 import {
   Sortable,
   SortableContent,
@@ -105,10 +100,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/shadcn/table";
+import { SearchableSelect } from "@/components/locals/blocks/selects";
+import { ColorCreator } from "@/components/locals/blocks/color-pickers";
+
+import { Input } from "@/components/shadcn/input";
+import { Textarea } from "@/components/shadcn/textarea";
+import { Badge } from "@/components/shadcn/badge";
+import { FullHDImage } from "@/components/locals/blocks/images";
+
 import { cn } from "@/utilities/cn";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/navigation";
-import { tNullable, tUndefinable } from "@/types/nullish";
+
+import VehicleModels from "./vehicle-models/vehicle-models";
+import VehicleInstances from "./vehicle-instances/vehicle-instances";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(
@@ -201,7 +205,6 @@ function AddNewVehicleModel() {
   const locale = useLocale() as eLocale;
 
   const clsDateFormatter = new ClsDateFormatter(locale);
-  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
 
   const {
     control,
@@ -215,7 +218,7 @@ function AddNewVehicleModel() {
     defaultValues: {
       name: "",
       description: "",
-      tags: "",
+      tags: [],
       marketLaunch: new Date(),
       category: eVehicleModelCategoryModel.car,
       manufacturer: "",
@@ -344,7 +347,7 @@ function AddNewVehicleModel() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <div className="space-y-6 2xl:col-span-2">
+          <FieldGroup className="2xl:col-span-2">
             <FieldSet className="grid grid-cols-3 gap-6">
               <FieldGroup className="flex justify-between">
                 <Controller
@@ -549,7 +552,10 @@ function AddNewVehicleModel() {
                 <Controller
                   control={control}
                   name="tags"
-                  render={({ field, fieldState }) => (
+                  render={({
+                    field: { value, onChange: setValue },
+                    fieldState,
+                  }) => (
                     <Field>
                       <FieldLabel
                         aria-invalid={fieldState.invalid}
@@ -559,14 +565,14 @@ function AddNewVehicleModel() {
                         {tAddNew("content.form.information.tags.label")}
                       </FieldLabel>
                       <FieldContent>
-                        <Input
-                          {...field}
-                          required
+                        <FieldTags
                           id={`${id}-tags`}
                           placeholder={tAddNew(
                             "content.form.information.tags.placeholder",
                           )}
-                        />
+                          tags={value}
+                          onTagsChange={setValue}
+                        />  
                       </FieldContent>
                       <FieldError errors={[fieldState.error]} />
                     </Field>
@@ -794,7 +800,7 @@ function AddNewVehicleModel() {
                 />
               </FieldGroup>
             </FieldSet>
-          </div>
+          </FieldGroup>
 
           <FieldSet>
             <FieldGroup>

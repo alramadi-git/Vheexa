@@ -2355,6 +2355,15 @@
                       "label": "Search",
                       "placeholder": "Search by branch (e.g., Name, Location or Contacts)"
                     },
+                    "price": {
+                      "label": "Price (Min/Max)",
+                      "min": {
+                        "placeholder": "Enter min price"
+                      },
+                      "max": {
+                        "placeholder": "Enter max price"
+                      }
+                    },
                     "status": {
                       "label": "Status",
                       "placeholder": "Enter status (e.g., Active, Inactive)",
