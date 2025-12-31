@@ -2351,17 +2351,41 @@
                     }
                   },
                   "filter": {
-                    "search": {
-                      "label": "Search",
-                      "placeholder": "Search by branch (e.g., Name, Location or Contacts)"
+                    "information": {
+                      "search": {
+                        "label": "Search",
+                        "placeholder": "Search by Vehicle Model (e.g., Name, etc...)"
+                      }
                     },
-                    "price": {
-                      "label": "Price (Min/Max)",
-                      "min": {
-                        "placeholder": "Enter min price"
+                    "specifications": {
+                      "capacity": {
+                        "label": "Capacity (Min/Max)",
+                        "min": {
+                          "placeholder": "Enter min capacity"
+                        },
+                        "max": {
+                          "placeholder": "Enter max capacity"
+                        }
+                      }
+                    },
+                    "pricing": {
+                      "price": {
+                        "label": "Price (Min/Max)",
+                        "min": {
+                          "placeholder": "Enter min price"
+                        },
+                        "max": {
+                          "placeholder": "Enter max price"
+                        }
                       },
-                      "max": {
-                        "placeholder": "Enter max price"
+                      "discount": {
+                        "label": "Discount (Min/Max)",
+                        "min": {
+                          "placeholder": "Enter min discount"
+                        },
+                        "max": {
+                          "placeholder": "Enter max discount"
+                        }
                       }
                     },
                     "status": {
@@ -2390,14 +2414,14 @@
                     "vehicle-model": {
                       "header": "Vehicle Model"
                     },
-                    "specs": {
-                      "header": "Specs",
+                    "specifications": {
+                      "header": "Specifications",
                       "cell": {
                         "capacity": "{capacity, plural, =1 {# Person} other {# people}}"
                       }
                     },
                     "colors": {
-                      "header": "Color"
+                      "header": "Colors"
                     },
                     "price": {
                       "header": "Price",

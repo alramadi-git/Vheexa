@@ -27,7 +27,7 @@ type tVehicleModelModel = {
   description: string;
   category: eVehicleModelCategoryModel;
   manufacturer: string;
-  marketLaunch: Date;
+  marketLaunch: string;
   capacity: number;
   transmission: string;
   fuel: string;

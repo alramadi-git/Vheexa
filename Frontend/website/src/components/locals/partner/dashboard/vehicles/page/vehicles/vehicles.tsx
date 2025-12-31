@@ -75,6 +75,7 @@ import {
   FieldNumber,
   FieldTags,
   tFieldDatePickerRef,
+  tFieldNumberMinMaxRef,
   tFileUploadRef,
 } from "@/components/locals/blocks/fields";
 import {
@@ -195,12 +196,12 @@ type tFuel = {
 function AddNewVehicleModel() {
   const id = useId();
   const router = useRouter();
-
+  
   const [isOpen, setIsOpen] = useState(false);
-
-  const marketLaunchRef = useRef<tNullable<tFieldDatePickerRef>>(null);
-  const thumbnailRef = useRef<tNullable<tFileUploadRef>>(null);
-  const galleryRef = useRef<tNullable<tFileUploadRef>>(null);
+  
+  const marketLaunchRef = useRef<tFieldDatePickerRef>(null);
+  const thumbnailRef = useRef<tFileUploadRef>(null);
+  const galleryRef = useRef<tFileUploadRef>(null);
 
   const locale = useLocale() as eLocale;
 
@@ -572,7 +573,7 @@ function AddNewVehicleModel() {
                           )}
                           tags={value}
                           onTagsChange={setValue}
-                        />  
+                        />
                       </FieldContent>
                       <FieldError errors={[fieldState.error]} />
                     </Field>
@@ -992,6 +993,7 @@ function AddNewVehicleModel() {
                 render={({
                   field: { onChange: setValue, ...field },
                   fieldState,
+                  formState: { isSubmitted },
                 }) => (
                   <Field>
                     <Field>
@@ -1009,7 +1011,7 @@ function AddNewVehicleModel() {
                           id={`${id}-price`}
                           onValueChange={(number) => {
                             setValue(number ?? 0);
-                            trigger("discount");
+                            if (isSubmitted) trigger("discount");
                           }}
                         />
                       </FieldContent>

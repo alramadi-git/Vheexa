@@ -43,7 +43,6 @@ export default function useVehicleModels() {
     },
     transmissions: searchParams.getAll("vehicle-model-filter.transmissions"),
     fuels: searchParams.getAll("vehicle-model-filter.model-years"),
-    colors: searchParams.getAll("vehicle-model-filter.colors"),
     price: {
       min: minPrice !== null ? Number(minPrice) : undefined,
       max: maxPrice !== null ? Number(maxPrice) : undefined,
@@ -66,7 +65,6 @@ export default function useVehicleModels() {
       filter.capacity,
       filter.transmissions,
       filter.fuels,
-      filter.colors,
       filter.price,
       filter.discount,
       filter.status,

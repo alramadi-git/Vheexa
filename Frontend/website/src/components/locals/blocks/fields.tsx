@@ -94,7 +94,6 @@ import {
   TagsInputItemText,
   TagsInputRoot,
 } from "@diceui/tags-input";
-import { boolean } from "zod";
 
 type tInputProps = ComponentProps<typeof Input>;
 type tControllerRenderProps<
@@ -107,17 +106,24 @@ type tControllerRenderProps<
 };
 
 type tFieldSearchProps = Omit<tInputProps, "type" | "className">;
-function FieldSearch(props: tFieldSearchProps) {
+function FieldSearch({
+  "aria-invalid": isInvalid,
+  ...props
+}: tFieldSearchProps) {
   return (
     <div className="relative">
       <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
-        <LuSearch className="size-4" />
+        <LuSearch
+          aria-invalid={isInvalid}
+          className="aria-invalid:text-destructive/80 size-4"
+        />
         <span className="sr-only">Search</span>
       </div>
       <Input
+        {...props}
+        aria-invalid={isInvalid}
         type="search"
         className="peer px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
-        {...props}
       />
     </div>
   );
@@ -211,95 +217,157 @@ function FieldNumber({
   );
 }
 
+type tMinMax = {
+  min?: number;
+  max?: number;
+};
+type tFieldNumberMinMaxRef = {
+  change: (minMax?: tMinMax) => void;
+  reset: (minMax?: tMinMax) => void;
+};
 type tFieldNumberMinMaxProps = {
   id?: string;
   "aria-invalid"?: boolean;
   "min-placeholder"?: string;
   min?: number;
-  onMinChange?: (value?: number) => {};
+  onMinChange?: (value?: number) => void;
   "max-placeholder"?: string;
   max?: number;
-  onMaxChange?: (value?: number) => {};
+  onMaxChange?: (value?: number) => void;
   formatter?: (value?: number) => string;
 };
-function FieldNumberMinMaxMinMax({
-  "aria-invalid": isInvalid,
-  id,
-  "min-placeholder": minPlaceholder,
-  min: _min,
-  onMinChange: _onMinChange,
-  "max-placeholder": maxPlaceholder,
-  max: _max,
-  onMaxChange: _onMaxChange,
-  formatter,
-}: tFieldNumberMinMaxProps) {
-  const [min, setMin] = useState<string>(_min?.toString() ?? "");
-  const [max, setMax] = useState<string>(_max?.toString() ?? "");
+const FieldNumberMinMax = forwardRef<
+  tFieldNumberMinMaxRef,
+  tFieldNumberMinMaxProps
+>(
+  (
+    {
+      "aria-invalid": isInvalid,
+      id,
+      "min-placeholder": minPlaceholder,
+      min: _min,
+      onMinChange: _onMinChange,
+      "max-placeholder": maxPlaceholder,
+      max: _max,
+      onMaxChange: _onMaxChange,
+      formatter,
+    },
+    ref,
+  ) => {
+    const [min, setMin] = useState<number>(_min ?? 0);
+    const [minValue, setMinValue] = useState<string>(
+      formatter?.(_min) ?? _min?.toString() ?? "",
+    );
 
-  function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter") event.currentTarget.blur();
-  }
+    const [max, setMax] = useState<number>(_max ?? 0);
+    const [maxValue, setMaxValue] = useState<string>(
+      formatter?.(_max) ?? _max?.toString() ?? "",
+    );
 
-  function onMinChange(event: ChangeEvent<HTMLInputElement>) {
-    setMin(event.currentTarget.value);
-  }
-  function onMinBlur(event: ChangeEvent<HTMLInputElement>) {
-    const value = Number(event.currentTarget.value);
+    function change(minMax?: tMinMax) {
+      const min = minMax?.min;
+      const max = minMax?.max;
 
-    if (Number.isNaN(value)) {
-      setMin("");
-      _onMinChange?.(undefined);
+      setMin(min ?? 0);
+      setMinValue(formatter?.(min) ?? min?.toString() ?? "");
 
-      return;
+      setMax(max ?? 0);
+      setMaxValue(formatter?.(max) ?? max?.toString() ?? "");
     }
 
-    setMin(value.toString());
-    _onMinChange?.(value);
-  }
+    function reset(minMax?: tMinMax) {
+      const min = minMax?.min;
+      const max = minMax?.max;
 
-  function onMaxChange(event: ChangeEvent<HTMLInputElement>) {
-    setMax(event.currentTarget.value);
-  }
-  function onMaxBlur(event: ChangeEvent<HTMLInputElement>) {
-    const value = Number(event.currentTarget.value);
+      setMin(min ?? 0);
+      setMinValue(formatter?.(min) ?? min?.toString() ?? "");
 
-    if (Number.isNaN(value)) {
-      setMax("");
-      _onMaxChange?.(undefined);
-
-      return;
+      setMax(max ?? 0);
+      setMaxValue(formatter?.(max) ?? max?.toString() ?? "");
     }
 
-    setMax(value.toString());
-    _onMaxChange?.(value);
-  }
+    useImperativeHandle(ref, () => ({
+      change,
+      reset,
+    }));
 
-  return (
-    <div className="flex">
-      <Input
-        aria-invalid={isInvalid}
-        id={id}
-        type="text"
-        placeholder={minPlaceholder}
-        className="rounded-e-none"
-        value={min}
-        onKeyDown={onKeyDown}
-        onChange={onMinChange}
-        onBlur={onMinBlur}
-      />
-      <Input
-        aria-invalid={isInvalid}
-        type="text"
-        placeholder={maxPlaceholder}
-        className="rounded-s-none"
-        value={max}
-        onKeyDown={onKeyDown}
-        onChange={onMaxChange}
-        onBlur={onMaxBlur}
-      />
-    </div>
-  );
-}
+    function onFocus(field: "min" | "max") {
+      if (field === "min") setMinValue(minValue === "" ? "" : min.toString());
+      else setMaxValue(maxValue === "" ? "" : max.toString());
+    }
+
+    function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+      if (event.key === "Enter") event.currentTarget.blur();
+    }
+
+    function onChange(field: "min" | "max", value: string) {
+      if (field === "min") setMinValue(value);
+      else setMaxValue(value);
+    }
+
+    function onMinBlur(value?: number) {
+      if (Number.isNaN(value)) {
+        setMin(0);
+        setMinValue("");
+        _onMinChange?.(undefined);
+
+        return;
+      }
+
+      setMin(value ?? 0);
+      setMinValue(formatter?.(value) ?? value?.toString() ?? "");
+      _onMinChange?.(value);
+    }
+    function onMaxBlur(value?: number) {
+      if (Number.isNaN(value)) {
+        setMax(0);
+        setMaxValue("");
+        _onMaxChange?.(undefined);
+
+        return;
+      }
+
+      setMax(value ?? 0);
+      setMaxValue(formatter?.(value) ?? value?.toString() ?? "");
+      _onMaxChange?.(value);
+    }
+
+    function onBlur(field: "min" | "max", value: string) {
+      const parsedValue = value === "" ? undefined : Number(value);
+      if (field === "min") onMinBlur(parsedValue);
+      else onMaxBlur(parsedValue);
+    }
+
+    return (
+      <div className="flex">
+        <Input
+          aria-invalid={isInvalid}
+          id={id}
+          type="text"
+          placeholder={minPlaceholder}
+          className="rounded-e-none"
+          value={minValue}
+          onFocus={() => onFocus("min")}
+          onKeyDown={onKeyDown}
+          onChange={(event) => onChange("min", event.currentTarget.value)}
+          onBlur={(event) => onBlur("min", event.currentTarget.value)}
+        />
+        <Input
+          aria-invalid={isInvalid}
+          type="text"
+          placeholder={maxPlaceholder}
+          className="rounded-s-none aria-invalid:border-s-transparent"
+          value={maxValue}
+          onFocus={() => onFocus("max")}
+          onKeyDown={onKeyDown}
+          onChange={(event) => onChange("max", event.currentTarget.value)}
+          onBlur={(event) => onBlur("max", event.currentTarget.value)}
+        />
+      </div>
+    );
+  },
+);
+FieldNumberMinMax.displayName = "FieldNumberMinMaxMinMax";
 
 type tCountry = {
   iso: string;
@@ -920,6 +988,7 @@ FieldFileUpload.displayName = "FieldFileUpload";
 
 export type {
   tFieldTagsRef,
+  tFieldNumberMinMaxRef,
   tFieldPhoneNumberRef,
   tFieldDatePickerRef,
   tFileUploadRef,
@@ -928,7 +997,7 @@ export {
   FieldSearch,
   FieldTags,
   FieldNumber,
-  FieldNumberMinMaxMinMax,
+  FieldNumberMinMax,
   FieldPhoneNumber,
   FieldPassword,
   FieldEmail,

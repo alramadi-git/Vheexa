@@ -139,14 +139,18 @@ type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;
 
 const zVehicleModelFilter = z
   .object({
-    search: z.optional(z.string().trim()),
+    search: z.optional(z.string().nonempty("search either be undefined or not empty.").trim()),
     categories: z.array(
       z.enum(eVehicleModelCategoryModel, "invalid category."),
     ),
     capacity: z
       .object({
-        min: z.optional(z.number().nonnegative("capacity cannot be negative.")),
-        max: z.optional(z.number().nonnegative("capacity cannot be negative.")),
+        min: z.optional(
+          z.number().nonnegative("min capacity cannot be negative."),
+        ),
+        max: z.optional(
+          z.number().nonnegative("max capacity cannot be negative."),
+        ),
       })
       .refine(
         (value) => {
@@ -164,11 +168,14 @@ const zVehicleModelFilter = z
       z.string().nonempty("transmission cannot be empty."),
     ),
     fuels: z.array(z.string().nonempty("fuel cannot be empty.")),
-    colors: z.array(z.string().nonempty("color cannot be empty.")),
     price: z
       .object({
-        min: z.optional(z.number().nonnegative("price cannot be negative.")),
-        max: z.optional(z.number().nonnegative("price cannot be negative.")),
+        min: z.optional(
+          z.number().nonnegative("min price cannot be negative."),
+        ),
+        max: z.optional(
+          z.number().nonnegative("max price cannot be negative."),
+        ),
       })
       .refine(
         (value) => {
@@ -184,8 +191,12 @@ const zVehicleModelFilter = z
       ),
     discount: z
       .object({
-        min: z.optional(z.number().nonnegative("discount cannot be negative.")),
-        max: z.optional(z.number().nonnegative("discount cannot be negative.")),
+        min: z.optional(
+          z.number().nonnegative("min discount cannot be negative."),
+        ),
+        max: z.optional(
+          z.number().nonnegative("max discount cannot be negative."),
+        ),
       })
       .refine(
         (value) => {

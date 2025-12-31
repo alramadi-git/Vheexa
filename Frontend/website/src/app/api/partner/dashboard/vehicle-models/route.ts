@@ -64,7 +64,6 @@ export async function GET(
         "filter.transmissions",
       ),
       fuels: request.nextUrl.searchParams.getAll("filter.model-years"),
-      colors: request.nextUrl.searchParams.getAll("filter.colors"),
       price: {
         min: minPrice === null ? undefined : Number(minPrice),
         max: maxPrice === null ? undefined : Number(maxPrice),
@@ -103,8 +102,6 @@ export async function GET(
     clsQuery.set("Filter.Transmissions.Value", parsedFilter.transmissions);
 
     clsQuery.set("Filter.Fuels.Value", parsedFilter.fuels);
-
-    clsQuery.set("Filter.Colors.Value", parsedFilter.colors);
 
     clsQuery.set("Filter.Price.Min.Value", parsedFilter.price.min?.toString());
     clsQuery.set("Filter.Price.Max.Value", parsedFilter.price.max?.toString());
@@ -151,7 +148,7 @@ export async function GET(
           description:
             "Luxury electric sedan with long-range battery and autopilot.",
           manufacturer: "Tesla",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2022,0,1).toString(),
           capacity: 5,
           transmission: "Automatic",
           fuel: "Electric",
@@ -199,7 +196,7 @@ export async function GET(
           description:
             "Reliable compact car with excellent fuel economy and modern design.",
           manufacturer: "Honda",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2023,0,1).toString(),
           capacity: 5,
           transmission: "Manual",
           fuel: "Petrol 95",
@@ -242,7 +239,7 @@ export async function GET(
           description:
             "High-performance luxury sports sedan with rear-wheel drive dynamics.",
           manufacturer: "BMW",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2025,0,1).toString(),
           capacity: 5,
           transmission: "Dual Clutch",
           fuel: "Petrol 98",
@@ -279,7 +276,7 @@ export async function GET(
           description:
             "Iconic hot hatch with sport-tuned suspension and turbocharged engine.",
           manufacturer: "Volkswagen",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2021,0,1).toString(),
           capacity: 5,
           transmission: "Semi-Automatic",
           fuel: "Petrol 95",
@@ -316,7 +313,7 @@ export async function GET(
           description:
             "Midsize family sedan known for reliability and comfort.",
           manufacturer: "Toyota",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2019,0,1).toString(),
           capacity: 5,
           transmission: "CVT",
           fuel: "Hybrid",
@@ -353,7 +350,7 @@ export async function GET(
           description:
             "Compact SUV with standard all-wheel drive and spacious cabin.",
           manufacturer: "Subaru",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2020,0,1).toString(),
           capacity: 5,
           transmission: "CVT",
           fuel: "Petrol 91",
@@ -390,7 +387,7 @@ export async function GET(
           description:
             "Full-size pickup truck with powerful engine options and towing capability.",
           manufacturer: "Ford",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2025,0,1).toString(),
           capacity: 5,
           transmission: "Automatic",
           fuel: "Diesel",
@@ -427,7 +424,7 @@ export async function GET(
           description:
             "American mid-engine sports car with track-ready performance.",
           manufacturer: "Chevrolet",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2024,0,1).toString(),
           capacity: 2,
           transmission: "Dual Clutch",
           fuel: "Petrol 98",
@@ -464,7 +461,7 @@ export async function GET(
           description:
             "Luxury three-row SUV with Scandinavian design and safety focus.",
           manufacturer: "Volvo",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2025,0,1).toString(),
           capacity: 7,
           transmission: "Automatic",
           fuel: "Hybrid",
@@ -501,7 +498,7 @@ export async function GET(
           description:
             "Classic American muscle car with powerful V8 engine and bold styling.",
           manufacturer: "Dodge",
-          marketLaunch: 2025,
+          marketLaunch: new Date(2010,0,1).toString(),
           capacity: 5,
           transmission: "Automatic",
           fuel: "Petrol 91",
