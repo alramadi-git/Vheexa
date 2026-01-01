@@ -1030,118 +1030,154 @@
                   "permissions": [
                     {
                       "value": "0",
-                      "label": "Partner Read",
-                      "description": "View partner details and information."
+                      "label": "Partner",
+                      "options": [
+                        {
+                          "value": "0",
+                          "label": "Partner Read",
+                          "description": "View partner details and information."
+                        },
+                        {
+                          "value": "1",
+                          "label": "Partner Update",
+                          "description": "Edit or modify partner account details."
+                        },
+                        {
+                          "value": "2",
+                          "label": "Partner Delete",
+                          "description": "Permanently remove a partner from the system."
+                        }
+                      ]
                     },
                     {
                       "value": "1",
-                      "label": "Partner Update",
-                      "description": "Edit or modify partner account details."
+                      "label": "Roles",
+                      "options": [
+                        {
+                          "value": "3",
+                          "label": "Roles Create",
+                          "description": "Create new user roles with custom permissions."
+                        },
+                        {
+                          "value": "4",
+                          "label": "Roles Read",
+                          "description": "View existing roles and their assigned permissions."
+                        },
+                        {
+                          "value": "5",
+                          "label": "Roles Update",
+                          "description": "Modify permissions or settings of existing roles."
+                        },
+                        {
+                          "value": "6",
+                          "label": "Roles Delete",
+                          "description": "Remove unused or obsolete roles."
+                        }
+                      ]
                     },
                     {
                       "value": "2",
-                      "label": "Partner Delete",
-                      "description": "Permanently remove a partner from the system."
+                      "label": "Branches",
+                      "options": [
+                        {
+                          "value": "7",
+                          "label": "Branches Create",
+                          "description": "Add new branch or location records."
+                        },
+                        {
+                          "value": "8",
+                          "label": "Branches Read",
+                          "description": "View branch details, status, and related data."
+                        },
+                        {
+                          "value": "9",
+                          "label": "Branches Update",
+                          "description": "Edit branch information such as address or contact."
+                        },
+                        {
+                          "value": "10",
+                          "label": "Branches Delete",
+                          "description": "Remove a branch from the organization."
+                        }
+                      ]
                     },
                     {
                       "value": "3",
-                      "label": "Roles Create",
-                      "description": "Create new user roles with custom permissions."
+                      "label": "Members",
+                      "options": [
+                        {
+                          "value": "11",
+                          "label": "Members Create",
+                          "description": "Invite or add new team members to the system."
+                        },
+                        {
+                          "value": "12",
+                          "label": "Members Read",
+                          "description": "View member profiles, roles, and activity."
+                        },
+                        {
+                          "value": "13",
+                          "label": "Members Update",
+                          "description": "Update member details, roles, or access levels."
+                        },
+                        {
+                          "value": "14",
+                          "label": "Members Delete",
+                          "description": "Deactivate or remove a member from the platform."
+                        }
+                      ]
                     },
                     {
                       "value": "4",
-                      "label": "Roles Read",
-                      "description": "View existing roles and their assigned permissions."
+                      "label": "Vehicle Models",
+                      "options": [
+                        {
+                          "value": "15",
+                          "label": "Vehicle Models Create",
+                          "description": "Define new vehicle model templates (e.g., make, type)."
+                        },
+                        {
+                          "value": "16",
+                          "label": "Vehicle Models Read",
+                          "description": "Browse available vehicle model specifications."
+                        },
+                        {
+                          "value": "17",
+                          "label": "Vehicle Models Update",
+                          "description": "Edit vehicle model attributes or capabilities."
+                        },
+                        {
+                          "value": "18",
+                          "label": "Vehicle Models Delete",
+                          "description": "Remove outdated or unused vehicle models."
+                        }
+                      ]
                     },
                     {
                       "value": "5",
-                      "label": "Roles Update",
-                      "description": "Modify permissions or settings of existing roles."
-                    },
-                    {
-                      "value": "6",
-                      "label": "Roles Delete",
-                      "description": "Remove unused or obsolete roles."
-                    },
-                    {
-                      "value": "7",
-                      "label": "Branches Create",
-                      "description": "Add new branch or location records."
-                    },
-                    {
-                      "value": "8",
-                      "label": "Branches Read",
-                      "description": "View branch details, status, and related data."
-                    },
-                    {
-                      "value": "9",
-                      "label": "Branches Update",
-                      "description": "Edit branch information such as address or contact."
-                    },
-                    {
-                      "value": "10",
-                      "label": "Branches Delete",
-                      "description": "Remove a branch from the organization."
-                    },
-                    {
-                      "value": "11",
-                      "label": "Members Create",
-                      "description": "Invite or add new team members to the system."
-                    },
-                    {
-                      "value": "12",
-                      "label": "Members Read",
-                      "description": "View member profiles, roles, and activity."
-                    },
-                    {
-                      "value": "13",
-                      "label": "Members Update",
-                      "description": "Update member details, roles, or access levels."
-                    },
-                    {
-                      "value": "14",
-                      "label": "Members Delete",
-                      "description": "Deactivate or remove a member from the platform."
-                    },
-                    {
-                      "value": "15",
-                      "label": "Vehicle Models Create",
-                      "description": "Define new vehicle model templates (e.g., make, type)."
-                    },
-                    {
-                      "value": "16",
-                      "label": "Vehicle Models Read",
-                      "description": "Browse available vehicle model specifications."
-                    },
-                    {
-                      "value": "17",
-                      "label": "Vehicle Models Update",
-                      "description": "Edit vehicle model attributes or capabilities."
-                    },
-                    {
-                      "value": "18",
-                      "label": "Vehicle Models Delete",
-                      "description": "Remove outdated or unused vehicle models."
-                    },
-                    {
-                      "value": "19",
-                      "label": "Vehicle Instances Create",
-                      "description": "Register a new physical vehicle unit into the fleet."
-                    },
-                    {
-                      "value": "20",
-                      "label": "Vehicle Instances Read",
-                      "description": "View details of specific vehicles (VIN, status, location)."
-                    },
-                    {
-                      "value": "21",
-                      "label": "Vehicle Instances Update",
-                      "description": "Update information for a registered vehicle unit."
-                    },
-                    {
-                      "value": "22",
-                      "label": "Vehicle Instances Delete",
-                      "description": "Decommission or remove a vehicle from the fleet."
+                      "label": "Vehicle Instances",
+                      "options": [
+                        {
+                          "value": "19",
+                          "label": "Vehicle Instances Create",
+                          "description": "Register a new physical vehicle unit into the fleet."
+                        },
+                        {
+                          "value": "20",
+                          "label": "Vehicle Instances Read",
+                          "description": "View details of specific vehicles (VIN, status, location)."
+                        },
+                        {
+                          "value": "21",
+                          "label": "Vehicle Instances Update",
+                          "description": "Update information for a registered vehicle unit."
+                        },
+                        {
+                          "value": "22",
+                          "label": "Vehicle Instances Delete",
+                          "description": "Decommission or remove a vehicle from the fleet."
+                        }
+                      ]
                     }
                   ]
                 },
@@ -1873,17 +1909,16 @@
                             "placeholder": "Enter tags for better reach (e.g., SUV, electric, automatic, 5-seater, red, etc...)"
                           }
                         },
-                        "specs": {
+                        "specifications": {
                           "capacity": {
                             "label": "Capacity"
                           },
                           "transmission": {
                             "label": "Transmission",
-                            "placeholder": "Select transmission type (e.g., Automatic, Manual, CVT, etc...)",
-                            "when-invalid-category": "Select a valid category",
-                            "when-no-result": "No Match where found",
                             "transmissions": [
                               {
+                                "select-placeholder": "Select car transmission (e.g., Manual, Automatic, CVT, etc...)",
+                                "search-placeholder": "Search or add car transmission (e.g., Automatic, Dual-Clutch, CVT, etc...)",
                                 "value": 0,
                                 "transmissions": [
                                   {
@@ -1917,6 +1952,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select van transmission (e.g., Manual, Automatic, etc...)",
+                                "search-placeholder": "Search or add van transmission (e.g., Manual, AMT, etc...)",
                                 "value": 1,
                                 "transmissions": [
                                   {
@@ -1938,6 +1975,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select truck transmission (e.g., Eaton Fuller, Allison, etc...)",
+                                "search-placeholder": "Search or add truck transmission (e.g., AMT, Powershift, etc...)",
                                 "value": 2,
                                 "transmissions": [
                                   {
@@ -1967,6 +2006,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select motorcycle transmission (e.g., Sequential, DCT, etc...)",
+                                "search-placeholder": "Search or add motorcycle transmission (e.g., CVT, Semi-Automatic, etc...)",
                                 "value": 3,
                                 "transmissions": [
                                   {
@@ -1988,6 +2029,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select boat drive type (e.g., Outboard, Inboard, etc...)",
+                                "search-placeholder": "Search or add boat drive type (e.g., Jet Drive, V-Drive, etc...)",
                                 "value": 4,
                                 "transmissions": [
                                   {
@@ -2021,6 +2064,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select yacht drive system (e.g., Shaft Drive, Pod Drive, etc...)",
+                                "search-placeholder": "Search or add yacht drive system (e.g., IPS, Jet Drive, etc...)",
                                 "value": 5,
                                 "transmissions": [
                                   {
@@ -2050,6 +2095,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select jet ski drive type (e.g., Jet Pump, Direct Drive, etc...)",
+                                "search-placeholder": "Search or add jet ski drive type (e.g., CVT, etc...)",
                                 "value": 6,
                                 "transmissions": [
                                   {
@@ -2067,6 +2114,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select helicopter transmission system (e.g., Planetary Gear, etc...)",
+                                "search-placeholder": "Search or add helicopter transmission system (e.g., Planetary Gear, etc...)",
                                 "value": 7,
                                 "transmissions": [
                                   {
@@ -2091,15 +2140,15 @@
                                   }
                                 ]
                               }
-                            ]
+                            ],
+                            "when-no-result": "No Match where found"
                           },
                           "fuel": {
                             "label": "Fuel",
-                            "placeholder": "Select fuel type (e.g., Petrol 95, Diesel, Electric, etc...)",
-                            "when-invalid-category": "Select a valid category",
-                            "when-no-result": "No Match where found",
                             "fuels": [
                               {
+                                "select-placeholder": "Select fuel type (e.g., Petrol 95, Diesel, etc...)",
+                                "search-placeholder": "Search or add fuel type (e.g., Electric, Hybrid, etc...)",
                                 "value": 0,
                                 "fuels": [
                                   {
@@ -2145,6 +2194,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select van fuel type (e.g., Petrol 91, Diesel, etc...)",
+                                "search-placeholder": "Search or add van fuel type (e.g., CNG, LPG, etc...)",
                                 "value": 1,
                                 "fuels": [
                                   {
@@ -2174,6 +2225,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select truck fuel type (e.g., Diesel, etc...)",
+                                "search-placeholder": "Search or add truck fuel type (e.g., Biodiesel, LNG, etc...)",
                                 "value": 2,
                                 "fuels": [
                                   {
@@ -2199,6 +2252,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select motorcycle fuel type (e.g., Petrol 91, etc...)",
+                                "search-placeholder": "Search or add motorcycle fuel type (e.g., Electric, etc...)",
                                 "value": 3,
                                 "fuels": [
                                   {
@@ -2216,6 +2271,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select boat fuel type (e.g., Petrol, Marine Diesel, etc...)",
+                                "search-placeholder": "Search or add boat fuel type",
                                 "value": 4,
                                 "fuels": [
                                   {
@@ -2237,6 +2294,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select yacht fuel type (e.g., Diesel, etc...)",
+                                "search-placeholder": "Search or add yacht fuel type (e.g., Hybrid, etc...)",
                                 "value": 5,
                                 "fuels": [
                                   {
@@ -2258,6 +2317,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select jet ski fuel type (e.g., Petrol, etc...)",
+                                "search-placeholder": "Search or add jet ski fuel type (e.g., Electric, etc...)",
                                 "value": 6,
                                 "fuels": [
                                   {
@@ -2271,6 +2332,8 @@
                                 ]
                               },
                               {
+                                "select-placeholder": "Select helicopter fuel type (e.g., Jet Fuel, etc...)",
+                                "search-placeholder": "Search or add helicopter fuel type (e.g., Avgas, etc...)",
                                 "value": 7,
                                 "fuels": [
                                   {
@@ -2283,7 +2346,8 @@
                                   }
                                 ]
                               }
-                            ]
+                            ],
+                            "when-no-result": "No Match where found"
                           },
                           "colors": {
                             "label": "Colors",
@@ -2366,6 +2430,442 @@
                         "max": {
                           "placeholder": "Enter max capacity"
                         }
+                      },
+                      "transmission": {
+                        "label": "Transmission",
+                        "transmissions": [
+                          {
+                            "select-placeholder": "Select car transmission (e.g., Manual, Automatic, CVT, etc...)",
+                            "search-placeholder": "Search or add car transmission (e.g., Automatic, Dual-Clutch, CVT, etc...)",
+                            "value": 0,
+                            "transmissions": [
+                              {
+                                "key": "Manual",
+                                "value": "Manual"
+                              },
+                              {
+                                "key": "Automatic",
+                                "value": "Automatic"
+                              },
+                              {
+                                "key": "CVT",
+                                "value": "CVT"
+                              },
+                              {
+                                "key": "Dual-Clutch (DSG/DCT)",
+                                "value": "Dual-Clutch (DSG/DCT)"
+                              },
+                              {
+                                "key": "Semi-Automatic",
+                                "value": "Semi-Automatic"
+                              },
+                              {
+                                "key": "Tiptronic",
+                                "value": "Tiptronic"
+                              },
+                              {
+                                "key": "Automated Manual (AMT)",
+                                "value": "Automated Manual (AMT)"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select van transmission (e.g., Manual, Automatic, etc...)",
+                            "search-placeholder": "Search or add van transmission (e.g., Manual, AMT, etc...)",
+                            "value": 1,
+                            "transmissions": [
+                              {
+                                "key": "Manual",
+                                "value": "Manual"
+                              },
+                              {
+                                "key": "Automatic",
+                                "value": "Automatic"
+                              },
+                              {
+                                "key": "Semi-Automatic",
+                                "value": "Semi-Automatic"
+                              },
+                              {
+                                "key": "Automated Manual (AMT)",
+                                "value": "Automated Manual (AMT)"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select truck transmission (e.g., Eaton Fuller, Allison, etc...)",
+                            "search-placeholder": "Search or add truck transmission (e.g., AMT, Powershift, etc...)",
+                            "value": 2,
+                            "transmissions": [
+                              {
+                                "key": "Manual",
+                                "value": "Manual"
+                              },
+                              {
+                                "key": "Automatic",
+                                "value": "Automatic"
+                              },
+                              {
+                                "key": "Automated Manual (AMT)",
+                                "value": "Automated Manual (AMT)"
+                              },
+                              {
+                                "key": "Powershift",
+                                "value": "Powershift"
+                              },
+                              {
+                                "key": "Eaton Fuller",
+                                "value": "Eaton Fuller"
+                              },
+                              {
+                                "key": "Allison",
+                                "value": "Allison"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select motorcycle transmission (e.g., Sequential, DCT, etc...)",
+                            "search-placeholder": "Search or add motorcycle transmission (e.g., CVT, Semi-Automatic, etc...)",
+                            "value": 3,
+                            "transmissions": [
+                              {
+                                "key": "Manual (Sequential)",
+                                "value": "Manual (Sequential)"
+                              },
+                              {
+                                "key": "Automatic (CVT)",
+                                "value": "Automatic (CVT)"
+                              },
+                              {
+                                "key": "Dual-Clutch (DCT)",
+                                "value": "Dual-Clutch (DCT)"
+                              },
+                              {
+                                "key": "Semi-Automatic",
+                                "value": "Semi-Automatic"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select boat drive type (e.g., Outboard, Inboard, etc...)",
+                            "search-placeholder": "Search or add boat drive type (e.g., Jet Drive, V-Drive, etc...)",
+                            "value": 4,
+                            "transmissions": [
+                              {
+                                "key": "Outboard",
+                                "value": "Outboard"
+                              },
+                              {
+                                "key": "Inboard",
+                                "value": "Inboard"
+                              },
+                              {
+                                "key": "Sterndrive (I/O)",
+                                "value": "Sterndrive (I/O)"
+                              },
+                              {
+                                "key": "Jet Drive",
+                                "value": "Jet Drive"
+                              },
+                              {
+                                "key": "Pod Drive (IPS)",
+                                "value": "Pod Drive (IPS)"
+                              },
+                              {
+                                "key": "Sail Drive",
+                                "value": "Sail Drive"
+                              },
+                              {
+                                "key": "V-Drive",
+                                "value": "V-Drive"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select yacht drive system (e.g., Shaft Drive, Pod Drive, etc...)",
+                            "search-placeholder": "Search or add yacht drive system (e.g., IPS, Jet Drive, etc...)",
+                            "value": 5,
+                            "transmissions": [
+                              {
+                                "key": "Inboard Diesel",
+                                "value": "Inboard Diesel"
+                              },
+                              {
+                                "key": "Pod Drive (IPS/ASD)",
+                                "value": "Pod Drive (IPS/ASD)"
+                              },
+                              {
+                                "key": "Shaft Drive",
+                                "value": "Shaft Drive"
+                              },
+                              {
+                                "key": "V-Drive",
+                                "value": "V-Drive"
+                              },
+                              {
+                                "key": "Jet Drive",
+                                "value": "Jet Drive"
+                              },
+                              {
+                                "key": "Sail with Inboard",
+                                "value": "Sail with Inboard"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select jet ski drive type (e.g., Jet Pump, Direct Drive, etc...)",
+                            "search-placeholder": "Search or add jet ski drive type (e.g., CVT, etc...)",
+                            "value": 6,
+                            "transmissions": [
+                              {
+                                "key": "Direct Drive",
+                                "value": "Direct Drive"
+                              },
+                              {
+                                "key": "Jet Pump",
+                                "value": "Jet Pump"
+                              },
+                              {
+                                "key": "CVT (some models)",
+                                "value": "CVT (some models)"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select helicopter transmission system (e.g., Planetary Gear, etc...)",
+                            "search-placeholder": "Search or add helicopter transmission system (e.g., Planetary Gear, etc...)",
+                            "value": 7,
+                            "transmissions": [
+                              {
+                                "key": "Main Rotor Transmission",
+                                "value": "Main Rotor Transmission"
+                              },
+                              {
+                                "key": "Tail Rotor Drive",
+                                "value": "Tail Rotor Drive"
+                              },
+                              {
+                                "key": "Planetary Gear System",
+                                "value": "Planetary Gear System"
+                              },
+                              {
+                                "key": "Freewheeling Unit",
+                                "value": "Freewheeling Unit"
+                              },
+                              {
+                                "key": "Combined Transmission",
+                                "value": "Combined Transmission"
+                              }
+                            ]
+                          }
+                        ],
+                        "when-no-result": "No Match where found"
+                      },
+                      "fuel": {
+                        "label": "Fuel",
+                        "fuels": [
+                          {
+                            "select-placeholder": "Select fuel type (e.g., Petrol 95, Diesel, etc...)",
+                            "search-placeholder": "Search or add fuel type (e.g., Electric, Hybrid, etc...)",
+                            "value": 0,
+                            "fuels": [
+                              {
+                                "key": "Petrol 91",
+                                "value": "Petrol 91"
+                              },
+                              {
+                                "key": "Petrol 95",
+                                "value": "Petrol 95"
+                              },
+                              {
+                                "key": "Petrol 98",
+                                "value": "Petrol 98"
+                              },
+                              {
+                                "key": "Diesel",
+                                "value": "Diesel"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              },
+                              {
+                                "key": "Hybrid",
+                                "value": "Hybrid"
+                              },
+                              {
+                                "key": "Plug-in Hybrid",
+                                "value": "Plug-in Hybrid"
+                              },
+                              {
+                                "key": "CNG",
+                                "value": "CNG"
+                              },
+                              {
+                                "key": "LPG",
+                                "value": "LPG"
+                              },
+                              {
+                                "key": "Hydrogen",
+                                "value": "Hydrogen"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select van fuel type (e.g., Petrol 91, Diesel, etc...)",
+                            "search-placeholder": "Search or add van fuel type (e.g., CNG, LPG, etc...)",
+                            "value": 1,
+                            "fuels": [
+                              {
+                                "key": "Petrol 91",
+                                "value": "Petrol 91"
+                              },
+                              {
+                                "key": "Petrol 95",
+                                "value": "Petrol 95"
+                              },
+                              {
+                                "key": "Diesel",
+                                "value": "Diesel"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              },
+                              {
+                                "key": "CNG",
+                                "value": "CNG"
+                              },
+                              {
+                                "key": "LPG",
+                                "value": "LPG"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select truck fuel type (e.g., Diesel, etc...)",
+                            "search-placeholder": "Search or add truck fuel type (e.g., Biodiesel, LNG, etc...)",
+                            "value": 2,
+                            "fuels": [
+                              {
+                                "key": "Diesel",
+                                "value": "Diesel"
+                              },
+                              {
+                                "key": "Biodiesel",
+                                "value": "Biodiesel"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              },
+                              {
+                                "key": "CNG",
+                                "value": "CNG"
+                              },
+                              {
+                                "key": "LNG",
+                                "value": "LNG"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select motorcycle fuel type (e.g., Petrol 91, etc...)",
+                            "search-placeholder": "Search or add motorcycle fuel type (e.g., Electric, etc...)",
+                            "value": 3,
+                            "fuels": [
+                              {
+                                "key": "Petrol 91",
+                                "value": "Petrol 91"
+                              },
+                              {
+                                "key": "Petrol 95",
+                                "value": "Petrol 95"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select boat fuel type (e.g., Petrol, Marine Diesel, etc...)",
+                            "search-placeholder": "Search or add boat fuel type",
+                            "value": 4,
+                            "fuels": [
+                              {
+                                "key": "Petrol",
+                                "value": "Petrol"
+                              },
+                              {
+                                "key": "Diesel",
+                                "value": "Diesel"
+                              },
+                              {
+                                "key": "Marine Diesel",
+                                "value": "Marine Diesel"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select yacht fuel type (e.g., Diesel, etc...)",
+                            "search-placeholder": "Search or add yacht fuel type (e.g., Hybrid, etc...)",
+                            "value": 5,
+                            "fuels": [
+                              {
+                                "key": "Diesel",
+                                "value": "Diesel"
+                              },
+                              {
+                                "key": "Marine Diesel",
+                                "value": "Marine Diesel"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              },
+                              {
+                                "key": "Hybrid",
+                                "value": "Hybrid"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select jet ski fuel type (e.g., Petrol, etc...)",
+                            "search-placeholder": "Search or add jet ski fuel type (e.g., Electric, etc...)",
+                            "value": 6,
+                            "fuels": [
+                              {
+                                "key": "Petrol",
+                                "value": "Petrol"
+                              },
+                              {
+                                "key": "Electric",
+                                "value": "Electric"
+                              }
+                            ]
+                          },
+                          {
+                            "select-placeholder": "Select helicopter fuel type (e.g., Jet Fuel, etc...)",
+                            "search-placeholder": "Search or add helicopter fuel type (e.g., Avgas, etc...)",
+                            "value": 7,
+                            "fuels": [
+                              {
+                                "key": "Jet Fuel",
+                                "value": "Jet Fuel"
+                              },
+                              {
+                                "key": "Avgas",
+                                "value": "Avgas"
+                              }
+                            ]
+                          }
+                        ],
+                        "when-no-result": "No Match where found"
                       }
                     },
                     "pricing": {

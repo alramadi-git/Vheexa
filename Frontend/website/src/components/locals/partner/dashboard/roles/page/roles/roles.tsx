@@ -256,7 +256,7 @@ function AddNew() {
                         setValues={(values) =>
                           setValue(values.map((value) => Number(value)))
                         }
-                        render={(option, isSelected) => (
+                        renderGroup={(option, isSelected) => (
                           <div className="flex w-full justify-between gap-3">
                             <div>
                               {option.label}

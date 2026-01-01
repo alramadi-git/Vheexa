@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { useQuery } from "@/hooks/query";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useMemo, useRef } from "react";
 
 import {
   FieldError as FieldErrorType,
@@ -45,7 +45,17 @@ import {
 } from "@/components/locals/blocks/fields";
 import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
 import { eLocale } from "@/i18n/routing";
-import { tNullable } from "@/types/nullish";
+import { tNullable, tUndefinable } from "@/types/nullish";
+
+type tTransmission = {
+  "select-placeholder": string;
+  "search-placeholder": string;
+  value: number;
+  transmissions: {
+    key: string;
+    value: string;
+  }[];
+};
 
 type tStatues = {
   value: string;
@@ -53,6 +63,10 @@ type tStatues = {
 };
 
 export default function Filter() {
+  const tFilter = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.filter",
+  );
+
   const id = useId();
   const query = useQuery();
 
@@ -68,6 +82,7 @@ export default function Filter() {
     formState,
     control,
     setValue,
+    watch,
     trigger,
     reset: handleReset,
     handleSubmit,
@@ -94,6 +109,19 @@ export default function Filter() {
     resolver: zodResolver(zVehicleModelFilter),
   });
 
+  const categories = watch("categories");
+
+  const transmissions: tTransmission[] = useMemo(
+    () =>
+      (
+        tFilter.raw(
+          "specifications.transmission.transmissions",
+        ) as tTransmission[]
+      ).filter((manufacturer) => categories.includes(manufacturer.value)),
+    [tFilter, categories],
+  );
+  const statuses: tStatues[] = tFilter.raw("status.statuses");
+
   const [
     priceMin,
     priceMax,
@@ -107,6 +135,7 @@ export default function Filter() {
     query.get("filter.discount.max"),
     query.get("filter.status"),
   ];
+
   useEffect(() => {
     setValue("search", query.get("filter.search") ?? undefined);
 
@@ -129,12 +158,6 @@ export default function Filter() {
 
     setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
   }, []);
-
-  const tFilter = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.filter",
-  );
-
-  const statuses: tStatues[] = tFilter.raw("status.statuses");
 
   function reset() {
     handleReset();
@@ -251,128 +274,61 @@ export default function Filter() {
                 )}
               />
               {/* <Controller
-                  control={control}
-                  name="transmissions"
-                  render={({ field, fieldState }) => (
-                    <Field>
-                      <FieldLabel
-                        htmlFor={`${id}-transmission`}
-                        className="w-fit"
-                      >
-                        {tAddNew("content.form.specs.transmission.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <SearchableSelect
-                          triggerRender={() => (
-                            <Button
-                              id={`${id}-transmission`}
-                              role="combobox"
-                              variant="outline"
-                              className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
-                            >
-                              {field.value === "" ? (
-                                <span className="text-muted-foreground truncate">
-                                  {tAddNew(
-                                    "content.form.specs.fuel.placeholder",
-                                  )}
-                                </span>
-                              ) : (
-                                field.value
-                              )}
-                              <LuChevronDown
-                                size={16}
-                                className="text-muted-foreground/80 ms-auto shrink-0"
-                              />
-                            </Button>
-                          )}
-                          value={field.value}
-                          inputProps={{
-                            placeholder: tAddNew(
-                              "content.form.specs.transmission.placeholder",
-                            ),
-                          }}
-                          onSelect={field.onChange}
-                          list={transmissions}
-                          itemRender={(item) => (
-                            <button className="w-full">{item.value}</button>
-                          )}
-                          whenNoResultRender={() =>
-                            transmissions.length === 0
-                              ? tAddNew(
-                                  "content.form.specs.transmission.when-invalid-category",
-                                )
-                              : tAddNew(
-                                  "content.form.specs.transmission.when-no-result",
-                                )
-                          }
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                /> */}
-              {/* <Controller
-                  control={control}
-                  name="fuels"
-                  render={({ field, fieldState }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor="fuel"
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.specs.fuel.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <SearchableSelect
-                          triggerRender={() => (
-                            <Button
-                              id="fuel"
-                              role="combobox"
-                              variant="outline"
-                              className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
-                            >
-                              {field.value === "" ? (
-                                <span className="text-muted-foreground truncate">
-                                  {tAddNew(
-                                    "content.form.specs.fuel.placeholder",
-                                  )}
-                                </span>
-                              ) : (
-                                field.value
-                              )}
-                              <LuChevronDown
-                                size={16}
-                                className="text-muted-foreground/80 ms-auto shrink-0"
-                              />
-                            </Button>
-                          )}
-                          value={field.value}
-                          inputProps={{
-                            placeholder: tAddNew(
-                              "content.form.specs.fuel.placeholder",
-                            ),
-                          }}
-                          onSelect={field.onChange}
-                          list={fuels}
-                          itemRender={(item) => (
-                            <button className="w-full">{item.value}</button>
-                          )}
-                          whenNoResultRender={() =>
-                            fuels.length === 0
-                              ? tAddNew(
-                                  "content.form.specs.fuel.when-invalid-category",
-                                )
-                              : tAddNew(
-                                  "content.form.specs.fuel.when-no-result",
-                                )
-                          }
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                /> */}
+                control={control}
+                name="transmissions"
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState: { invalid, error },
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-transmission`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.specification.transmission.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <SearchableSelect
+                        triggerRender={() => (
+                          <Button
+                            id={`${id}-transmission`}
+                            variant="outline"
+                            className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                          >
+                            {value === "" ? (
+                              <span className="text-muted-foreground truncate">
+                                {transmissions?.["select-placeholder"]}
+                              </span>
+                            ) : (
+                              value
+                            )}
+                            <LuChevronDown
+                              size={16}
+                              className="text-muted-foreground/80 ms-auto shrink-0"
+                            />
+                          </Button>
+                        )}
+                        value={value}
+                        inputProps={{
+                          placeholder: transmissions?.["search-placeholder"],
+                        }}
+                        onSelect={setValue}
+                        list={transmissions?.transmissions ?? []}
+                        itemRender={(item) => (
+                          <button className="w-full">{item.value}</button>
+                        )}
+                        whenNoResultRender={() =>
+                          tAddNew(
+                            "content.form.specification.transmission.when-no-result",
+                          )
+                        }
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              /> */}
             </FieldGroup>
           </FieldSet>
 

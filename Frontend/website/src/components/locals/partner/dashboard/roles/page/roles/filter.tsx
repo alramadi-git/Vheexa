@@ -36,12 +36,19 @@ import {
   SelectItem,
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
+import { CommandGroup } from "@/components/shadcn/command";
 
-type tPermission = {
+type tPermissionGroup = {
+  value: string;
+  label: string;
+  options: tPermissionOption[];
+};
+type tPermissionOption = {
   value: string;
   label: string;
   description: string;
 };
+
 type tStatues = {
   value: string;
   label: string;
@@ -69,7 +76,9 @@ export default function Filter() {
     "app.partner.dashboard.roles.page.roles.filter",
   );
 
-  const permissions: tPermission[] = tFilter.raw("permissions.permissions");
+  const permissionGroups: tPermissionGroup[] = tFilter.raw(
+    "permissions.permissions",
+  );
   const statuses: tStatues[] = tFilter.raw("status.statuses");
 
   const [statusQuery] = [query.get("filter.status")];
@@ -167,22 +176,23 @@ export default function Filter() {
                       <FieldMultiSelect
                         id={`${id}-permissions`}
                         placeholder={tFilter("permissions.placeholder")}
-                        options={permissions}
-                        values={field.value.map((val) => val.toString())}
-                        setValues={(values) =>
-                          setValue(values.map((value) => Number(value)))
+                        groups={permissionGroups}
+                        renderTrigger={(groups, hiddenCount, toogleSelection) =>
+                          ""
                         }
-                        render={(option, isSelected) => (
-                          <div className="flex w-full justify-between gap-3">
-                            <span>
-                              {option.label}
-                              <p className="text-muted-foreground line-clamp-1">
-                                {option.description}
-                              </p>
-                            </span>
-                            {isSelected && <LuCheck size={16} />}
-                          </div>
-                        )}
+                        renderGroup={(
+                          group,
+                          selectedItems,
+                          toggleSelection,
+                        ) => {
+                          return (
+                            <CommandGroup
+                              key={group.value}
+                              heading={group.label}
+                              >
+                            </CommandGroup>
+                          );
+                        }}
                       />
                     </FieldContent>
                     <FieldError errors={[fieldState.error]} />

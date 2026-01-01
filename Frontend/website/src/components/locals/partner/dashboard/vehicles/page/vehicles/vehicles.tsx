@@ -178,6 +178,8 @@ type tManufacturer = {
 };
 
 type tTransmission = {
+  "select-placeholder": string;
+  "search-placeholder": string;
   value: number;
   transmissions: {
     key: string;
@@ -186,6 +188,8 @@ type tTransmission = {
 };
 
 type tFuel = {
+  "select-placeholder": string;
+  "search-placeholder": string;
   value: number;
   fuels: {
     key: string;
@@ -196,9 +200,9 @@ type tFuel = {
 function AddNewVehicleModel() {
   const id = useId();
   const router = useRouter();
-  
+
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const marketLaunchRef = useRef<tFieldDatePickerRef>(null);
   const thumbnailRef = useRef<tFileUploadRef>(null);
   const galleryRef = useRef<tFileUploadRef>(null);
@@ -259,21 +263,20 @@ function AddNewVehicleModel() {
       ).find((manufacturer) => manufacturer.value === category),
     [tAddNew, category],
   );
-  const transmissions: tTransmission["transmissions"] = useMemo(
+  const transmissions: tUndefinable<tTransmission> = useMemo(
     () =>
       (
         tAddNew.raw(
-          "content.form.specs.transmission.transmissions",
+          "content.form.specifications.transmission.transmissions",
         ) as tTransmission[]
-      ).find((manufacturer) => manufacturer.value === category)
-        ?.transmissions ?? [],
+      ).find((manufacturer) => manufacturer.value === category),
     [tAddNew, category],
   );
-  const fuels: tFuel["fuels"] = useMemo(
+  const fuels: tUndefinable<tFuel> = useMemo(
     () =>
-      (tAddNew.raw("content.form.specs.fuel.fuels") as tFuel[]).find(
+      (tAddNew.raw("content.form.specifications.fuel.fuels") as tFuel[]).find(
         (manufacturer) => manufacturer.value === category,
-      )?.fuels ?? [],
+      ),
     [tAddNew, category],
   );
 
@@ -470,10 +473,13 @@ function AddNewVehicleModel() {
                 <Controller
                   control={control}
                   name="manufacturer"
-                  render={({ field, fieldState }) => (
+                  render={({
+                    field: { value, onChange: setValue },
+                    fieldState: { invalid, error },
+                  }) => (
                     <Field>
                       <FieldLabel
-                        aria-invalid={fieldState.invalid}
+                        aria-invalid={invalid}
                         htmlFor={`${id}-manufacturer`}
                         className="max-w-fit"
                       >
@@ -487,12 +493,12 @@ function AddNewVehicleModel() {
                               variant="outline"
                               className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                             >
-                              {field.value === "" ? (
+                              {value === "" ? (
                                 <span className="text-muted-foreground truncate">
                                   {manufacturers?.["select-placeholder"]}
                                 </span>
                               ) : (
-                                field.value
+                                value
                               )}
                               <LuChevronDown
                                 size={16}
@@ -500,11 +506,11 @@ function AddNewVehicleModel() {
                               />
                             </Button>
                           )}
-                          value={field.value}
+                          value={value}
                           inputProps={{
                             placeholder: manufacturers?.["search-placeholder"],
                           }}
-                          onSelect={field.onChange}
+                          onSelect={setValue}
                           list={manufacturers?.manufacturers ?? []}
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
@@ -516,7 +522,7 @@ function AddNewVehicleModel() {
                           }
                         />
                       </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={error} />
                     </Field>
                   )}
                 />
@@ -589,26 +595,27 @@ function AddNewVehicleModel() {
                   name="capacity"
                   render={({
                     field: { onChange: setValue, ...field },
-                    fieldState,
+                    fieldState: { invalid, error },
                   }) => (
                     <Field>
                       <Field>
                         <FieldLabel
+                          aria-invalid={invalid}
                           htmlFor={`${id}-capacity`}
                           className="w-fit"
                         >
-                          {tAddNew("content.form.specs.capacity.label")}
+                          {tAddNew("content.form.specifications.capacity.label")}
                         </FieldLabel>
                         <FieldContent>
                           <FieldNumber
                             {...field}
                             required
-                            aria-invalid={fieldState.invalid}
+                            aria-invalid={invalid}
                             id={`${id}-capacity`}
                             onValueChange={(number) => setValue(number ?? 0)}
                           />
                         </FieldContent>
-                        <FieldError errors={[fieldState.error]} />
+                        <FieldError errors={error} />
                       </Field>
                     </Field>
                   )}
@@ -616,31 +623,34 @@ function AddNewVehicleModel() {
                 <Controller
                   control={control}
                   name="transmission"
-                  render={({ field, fieldState }) => (
+                  render={({
+                    field: { value, onChange: setValue },
+                    fieldState: { invalid, error },
+                  }) => (
                     <Field>
                       <FieldLabel
+                        aria-invalid={invalid}
                         htmlFor={`${id}-transmission`}
-                        className="w-fit"
+                        className="max-w-fit"
                       >
-                        {tAddNew("content.form.specs.transmission.label")}
+                        {tAddNew(
+                          "content.form.specifications.transmission.label",
+                        )}
                       </FieldLabel>
                       <FieldContent>
                         <SearchableSelect
                           triggerRender={() => (
                             <Button
                               id={`${id}-transmission`}
-                              role="combobox"
                               variant="outline"
                               className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                             >
-                              {field.value === "" ? (
+                              {value === "" ? (
                                 <span className="text-muted-foreground truncate">
-                                  {tAddNew(
-                                    "content.form.specs.fuel.placeholder",
-                                  )}
+                                  {transmissions?.["select-placeholder"]}
                                 </span>
                               ) : (
-                                field.value
+                                value
                               )}
                               <LuChevronDown
                                 size={16}
@@ -648,61 +658,55 @@ function AddNewVehicleModel() {
                               />
                             </Button>
                           )}
-                          value={field.value}
+                          value={value}
                           inputProps={{
-                            placeholder: tAddNew(
-                              "content.form.specs.transmission.placeholder",
-                            ),
+                            placeholder: transmissions?.["search-placeholder"],
                           }}
-                          onSelect={field.onChange}
-                          list={transmissions}
+                          onSelect={setValue}
+                          list={transmissions?.transmissions ?? []}
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
                           )}
                           whenNoResultRender={() =>
-                            transmissions.length === 0
-                              ? tAddNew(
-                                  "content.form.specs.transmission.when-invalid-category",
-                                )
-                              : tAddNew(
-                                  "content.form.specs.transmission.when-no-result",
-                                )
+                            tAddNew(
+                              "content.form.specifications.transmission.when-no-result",
+                            )
                           }
                         />
                       </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={error} />
                     </Field>
                   )}
                 />
                 <Controller
                   control={control}
                   name="fuel"
-                  render={({ field, fieldState }) => (
+                  render={({
+                    field: { value, onChange: setValue },
+                    fieldState: { invalid, error },
+                  }) => (
                     <Field>
                       <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor="fuel"
+                        aria-invalid={invalid}
+                        htmlFor={`${id}-fuel`}
                         className="max-w-fit"
                       >
-                        {tAddNew("content.form.specs.fuel.label")}
+                        {tAddNew("content.form.specifications.fuel.label")}
                       </FieldLabel>
                       <FieldContent>
                         <SearchableSelect
                           triggerRender={() => (
                             <Button
-                              id="fuel"
-                              role="combobox"
+                              id={`${id}-fuel`}
                               variant="outline"
                               className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                             >
-                              {field.value === "" ? (
+                              {value === "" ? (
                                 <span className="text-muted-foreground truncate">
-                                  {tAddNew(
-                                    "content.form.specs.fuel.placeholder",
-                                  )}
+                                  {fuels?.["select-placeholder"]}
                                 </span>
                               ) : (
-                                field.value
+                                value
                               )}
                               <LuChevronDown
                                 size={16}
@@ -710,48 +714,44 @@ function AddNewVehicleModel() {
                               />
                             </Button>
                           )}
-                          value={field.value}
+                          value={value}
                           inputProps={{
-                            placeholder: tAddNew(
-                              "content.form.specs.fuel.placeholder",
-                            ),
+                            placeholder: fuels?.["search-placeholder"],
                           }}
-                          onSelect={field.onChange}
-                          list={fuels}
+                          onSelect={setValue}
+                          list={fuels?.fuels ?? []}
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
                           )}
                           whenNoResultRender={() =>
-                            fuels.length === 0
-                              ? tAddNew(
-                                  "content.form.specs.fuel.when-invalid-category",
-                                )
-                              : tAddNew(
-                                  "content.form.specs.fuel.when-no-result",
-                                )
+                            tAddNew(
+                              "content.form.specifications.fuel.when-no-result",
+                            )
                           }
                         />
                       </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={error} />
                     </Field>
                   )}
                 />
                 <Controller
                   control={control}
                   name="colors"
-                  render={({ field, fieldState }) => (
+                  render={({ field, fieldState: {invalid, error} }) => (
                     <Field>
                       <FieldLabel
-                        aria-invalid={fieldState.invalid}
+                        aria-invalid={invalid}
                         htmlFor="colors"
                         className="max-w-fit"
                       >
-                        {tAddNew("content.form.specs.colors.label")}
+                        {tAddNew("content.form.specifications.colors.label")}
                       </FieldLabel>
                       <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
                         {field.value.length === 0 ? (
                           <span className="text-muted-foreground truncate">
-                            {tAddNew("content.form.specs.colors.placeholder")}
+                            {tAddNew(
+                              "content.form.specifications.colors.placeholder",
+                            )}
                           </span>
                         ) : (
                           <ul className="flex items-center gap-2 overflow-x-auto ps-px">
@@ -787,15 +787,7 @@ function AddNewVehicleModel() {
                           onSave={(value) => colors.append(value)}
                         />
                       </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                      <ul className="flex gap-3 overflow-x-auto">
-                        {formState.errors.colors?.map?.((error, index) => (
-                          <li key={index} className="truncate">
-                            <FieldError errors={[error?.name]} />
-                            <FieldError errors={[error?.tags]} />
-                          </li>
-                        ))}
-                      </ul>
+                      <FieldError errors={error} />
                     </Field>
                   )}
                 />

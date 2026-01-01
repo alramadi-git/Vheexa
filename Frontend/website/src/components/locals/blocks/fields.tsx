@@ -22,6 +22,7 @@ import {
   useImperativeHandle,
   ChangeEvent,
   KeyboardEvent,
+  ReactElement,
 } from "react";
 
 import {
@@ -591,52 +592,83 @@ function FieldPassword({
   );
 }
 
-type tFieldMultiSelectProps<option extends { value: string; label: string }> = {
-  id?: string;
-  placeholder?: string;
-  options: option[];
-  values: option["value"][];
-  setValues: (value: option["value"][]) => void;
-  render?: (option: option, isSelected: boolean) => ReactNode;
+type tGroup = {
+  value: string;
+  label: string;
+  options: tOption[];
 };
-function FieldMultiSelect<option extends { value: string; label: string }>({
+type tOption = {
+  value: string;
+  label: string;
+};
+
+type tFieldMultiSelectRef = {
+  reset: () => void;
+};
+type tFieldMultiSelectProps<oGroup extends tGroup> = {
+  id?: string;
+  maxShownItems?: number;
+  placeholder?: string;
+  groups: oGroup[];
+  values?: oGroup[];
+  onChange?: (groups: oGroup[]) => void;
+  renderTrigger: (option: oGroup["options"][number]) => string;
+  renderGroup: (
+    group: oGroup,
+    selectedItems: oGroup[],
+    toggleSelection: (
+      groupValue: oGroup["value"],
+      optionToToggle: oGroup["options"][number],
+      isSelected: boolean,
+    ) => void,
+  ) => ReactElement<typeof CommandGroup>;
+};
+
+function FieldMultiSelect<oGroup extends tGroup>({
   id,
+  maxShownItems = 2,
   placeholder,
-  options,
-  values,
-  setValues,
-  render = (option, isSelected) => (
-    <>
-      <span className="truncate">{option.label}</span>
-      {isSelected && <LuCheck size={16} className="ml-auto" />}
-    </>
-  ),
-}: tFieldMultiSelectProps<option>) {
+  groups,
+  values: _values = [],
+  onChange,
+  renderTrigger,
+  renderGroup,
+}: tFieldMultiSelectProps<oGroup>) {
   const tFieldMultiSelect = useTranslations("components.fields.multiselect");
+
+  const [values, setValues] = useState<oGroup[]>(_values);
 
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  // Define maxShownItems before using visibleItems
-  const maxShownItems = 2;
-  const visibleItems: option[] = expanded
-    ? values.map((value) => options.find((option) => option.value === value)!)
-    : values
-        .slice(0, maxShownItems)
-        .map((value) => options.find((option) => option.value === value)!);
+  const visibleGroups: oGroup[] = expanded
+    ? values
+    : values.slice(0, maxShownItems);
 
-  const hiddenCount = values.length - visibleItems.length;
+  const hiddenCount = values.length - visibleGroups.length;
 
-  function toggleSelection(value: string, isSelected: boolean) {
-    if (isSelected) {
-      setValues(values.filter((val) => val.toString() !== value));
-    } else {
-      setValues([...values, value]);
-    }
-  }
+  function toggleSelection(
+    groupValue: oGroup["value"],
+    optionToToggle: tOption,
+    isSelected: boolean,
+  ) {
+    setValues((prev) => {
+      const newValues = prev.map((group) => {
+        if (group.value !== groupValue) return group;
+        const newGroup = structuredClone(group);
 
-  function removeSelection(value: string) {
-    toggleSelection(value, true);
+        if (isSelected)
+          newGroup.options = newGroup.options.filter(
+            (option) => option.value !== optionToToggle.value,
+          );
+        else newGroup.options.push(optionToToggle);
+
+        return newGroup;
+      });
+
+      onChange?.(newValues);
+      return newValues;
+    });
   }
 
   return (
@@ -652,27 +684,31 @@ function FieldMultiSelect<option extends { value: string; label: string }>({
           <div className="flex flex-wrap items-center gap-1 truncate pr-2.5">
             {values.length > 0 ? (
               <>
-                {visibleItems.map((visibleItem) => {
+                {visibleGroups.map((visibleGroup) => {
                   return (
                     <Badge
-                      key={visibleItem.value}
+                      key={visibleGroup.value}
                       variant="outline"
                       className="rounded"
                     >
-                      {visibleItem.label}
+                      {renderTrigger(
+                        visibleGroup,
+                        hiddenCount,
+                        toggleSelection,
+                      )}
                       <Button
                         variant="ghost"
                         size="icon"
                         className="size-4"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeSelection(visibleItem.value);
-                        }}
-                        asChild
+                        onClick={() =>
+                          toggleSelection(
+                            visibleGroup.value,
+                            visibleGroup.options[0],
+                            true,
+                          )
+                        }
                       >
-                        <span>
-                          <LuX className="size-3" />
-                        </span>
+                        <LuX className="size-3" />
                       </Button>
                     </Badge>
                   );
@@ -681,10 +717,7 @@ function FieldMultiSelect<option extends { value: string; label: string }>({
                   <Badge
                     variant="outline"
                     className="rounded"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setExpanded((prev) => !prev);
-                    }}
+                    onClick={() => setExpanded((prev) => !prev)}
                   >
                     {expanded
                       ? tFieldMultiSelect("show-less")
@@ -709,7 +742,8 @@ function FieldMultiSelect<option extends { value: string; label: string }>({
           <CommandInput placeholder="Search framework..." />
           <CommandList>
             <CommandEmpty>{tFieldMultiSelect("when-no-results")}</CommandEmpty>
-            <CommandGroup>
+            {groups.map((group) => renderGroup(group, values, toggleSelection))}
+            {/* <CommandGroup>
               {options.map((option) => {
                 const isSelected: boolean = values.some(
                   (value) => value === option.value,
@@ -725,7 +759,7 @@ function FieldMultiSelect<option extends { value: string; label: string }>({
                   </CommandItem>
                 );
               })}
-            </CommandGroup>
+            </CommandGroup> */}
           </CommandList>
         </Command>
       </PopoverContent>
