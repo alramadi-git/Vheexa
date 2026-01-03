@@ -4,11 +4,13 @@ import { apiCatch } from "@/utilities/api";
 
 import { clsFetch } from "@/consts/api/fetch";
 
-import { zJwt } from "@/validations/jwt";
-
 import { tUndefinable } from "@/types/nullish";
 
+import { tJwt, zJwt } from "@/validations/jwt";
+
 import { tPartnerAccountModel } from "@/models/partner/account";
+
+import { ClsErrorModel } from "@/models/error";
 
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
@@ -19,7 +21,7 @@ export async function GET(
   return await apiCatch<tPartnerAccountModel["account"]>(async () => {
     const token: tUndefinable<string> =
       request.cookies.get("partner-token")?.value;
-    const parsedToken: string = zJwt.parse(token);
+    const parsedToken: tJwt = zJwt.parse(token);
 
     const backendResponse: Response = await clsFetch.get(
       "/partner/authentication/me",
@@ -28,7 +30,7 @@ export async function GET(
 
     if (!backendResponse.ok) {
       const errorText: string = await backendResponse.text();
-      throw new Error(errorText);
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
     const { data: account }: tSuccessOneModel<tPartnerAccountModel["account"]> =

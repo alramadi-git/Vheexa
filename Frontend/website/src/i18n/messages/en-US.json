@@ -41,6 +41,12 @@
       }
     },
     "fields": {
+      "email": {
+        "placeholder": "Enter email (e.g, partner@vheexa.com, etc...)"
+      },
+      "password": {
+        "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+      },
       "phone-number": {
         "placeholder": "Enter a phone number (e.g., 5551234567, 5559876543, etc...)",
         "country": {
@@ -126,7 +132,6 @@
           "template": "%s | Vheexa"
         },
         "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — with competitive prices and a seamless booking experience in minutes.",
-
         "icons": {
           "icon": [
             {
@@ -313,12 +318,10 @@
               }
             ]
           },
-
           "navigation-menu": [
             {
               "id": 1,
               "label": "Quick Links",
-
               "submenu": [
                 {
                   "id": 1,
@@ -354,16 +357,13 @@
             }
           ]
         },
-
         "footer": {
           "logo": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
             "alt": "Vheexa Company Logo"
           },
-
           "title": "Vheexa",
           "description": "A platform for renting all types of vehicles easily and quickly, offering you diverse options at competitive prices, with a safe and comfortable booking experience.",
-
           "quick-links": [
             {
               "label": "Our Services",
@@ -458,16 +458,13 @@
               ]
             }
           ],
-
           "outro": "<copyright></copyright> <time></time> <span>Vheexa LLC, All rights reserved.</span>"
         }
       },
-
       "page": {
         "hero": {
           "title": "Rent Any Vehicle, Quickly and Easily",
           "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — at competitive prices with a smooth booking experience in just minutes.",
-
           "actions": {
             "book-now": {
               "href": "/user/vehicles",
@@ -478,10 +475,8 @@
               "label": "Learn More"
             }
           },
-
           "partners": {
             "label": "Trusted for Every Journey",
-
             "logos": [
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
@@ -518,14 +513,11 @@
             ]
           }
         },
-
         "stats": {
           "title": "Vheexa Vehicle Rentals",
           "description": "Vheexa is more than just a vehicle rental platform — it's a complete ecosystem of services. From cars to bikes and trucks, backed by modern technologies that help individuals and businesses innovate and simplify mobility.",
-
           "metrics": {
             "description": "A complete ecosystem backed by numbers that reflect the trust of our clients and partners.",
-
             "items": [
               {
                 "label": "Partners",
@@ -545,7 +537,6 @@
               }
             ]
           },
-
           "testimonial": {
             "quote": "Using Vheexa was like discovering a new power in mobility management. The platform combines simplicity and flexibility, enabling us to deliver safe and practical solutions to users.",
             "author": {
@@ -558,16 +549,13 @@
             }
           }
         },
-
         "features": {
           "title": "Vheexa Features",
           "description": "Vheexa is an all-in-one platform for renting any type of vehicle quickly and easily. It offers a seamless and secure booking experience with diverse options tailored to your needs and budget, plus full support and premium customer service.",
-
           "illustration": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alt": "Placeholder illustration"
           },
-
           "highlights": [
             {
               "label": "Ease of Use",
@@ -587,11 +575,9 @@
             }
           ]
         },
-
         "how-it-works": {
           "title": "How Does Vheexa Work?",
           "description": "Simple and quick steps to rent any vehicle through our platform — no hassle.",
-
           "steps": [
             {
               "label": "Book",
@@ -619,11 +605,9 @@
             }
           ]
         },
-
         "faqs": {
           "title": "Frequently Asked Questions",
           "description": "Answers to the most common questions about Vheexa and vehicle rentals.",
-
           "questions": [
             {
               "id": "faq-booking",
@@ -651,11 +635,9 @@
               "answer": "You can pick up the vehicle at the designated point or request delivery. After your booking, return it to the same point or request pickup from your location."
             }
           ],
-
           "help": "Didn't find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we'll be happy to assist you."
         }
       },
-
       "vehicles": {
         "layout": {
           "metadata": {
@@ -663,20 +645,16 @@
             "description": "Browse all vehicle types available on Vheexa — from cars and bikes to trucks and luxury vehicles — with search and filter options to match your needs."
           }
         },
-
         "page": {
           "hero": {
             "badge": "All options at your fingertips <ArrowUpRight></ArrowUpRight>",
-
             "title": "Choose Your Perfect Vehicle",
             "description": "Explore our wide selection of vehicles for rent. Whether you're looking for an affordable car, a motorcycle for fun, a truck for work, or a luxury vehicle for special occasions — Vheexa has everything you need, quickly and easily.",
-
             "image": {
               "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
               "alt": "Placeholder image"
             }
           },
-
           "products": {
             "form": {
               "search": {
@@ -691,7 +669,6 @@
                 "label": "Fuel",
                 "placeholder": "Want a specific type of fuel..."
               },
-
               "min-capacity": {
                 "label": "Min Capacity",
                 "placeholder": "How many people you wanna carry..."
@@ -700,7 +677,6 @@
                 "label": "Max Capacity",
                 "placeholder": "How many people you don't need to carry..."
               },
-
               "min-price": {
                 "label": "Min Price",
                 "placeholder": "How much do you want it..."
@@ -709,24 +685,20 @@
                 "label": "Max Price",
                 "placeholder": "How much you last..."
               },
-
               "has-discount": {
                 "label": "Only show vehicles with discounts",
                 "description": " When checked, only show vehicles with discounts, otherwise show alls"
               }
             },
-
             "product": {
               "specifications": {
                 "capacity": "Capacity"
               },
-
               "price-per": "A day",
               "view-details": "View Details"
             }
           }
         },
-
         "uuid": {
           "page": {
             "product": {
@@ -734,11 +706,9 @@
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
                 "alt": "Placeholder image"
               },
-
               "tabs": {
                 "specifications": {
                   "label": "Specifications",
-
                   "content": {
                     "transmission": "Transmission",
                     "fuel": "Fuel",
@@ -750,7 +720,6 @@
                 },
                 "comments-and-reviews": {
                   "label": "Comments & Reviews",
-
                   "content": "Coming soon...."
                 }
               }
@@ -758,7 +727,6 @@
           }
         }
       },
-
       "authentication": {
         "layout": {
           "metadata": {
@@ -768,38 +736,32 @@
             },
             "description": "Access your Vheexa account to manage bookings and rents easily and securely."
           },
-
           "illustration": {
             "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alternate": "placeholder"
           }
         },
-
         "login": {
           "page": {
             "metadata": {
               "title": "Login",
               "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
             },
-
             "form": {
               "title": "Welcome back",
               "description": "Login to your Vheexa account",
-
               "email": {
                 "label": "Email",
                 "placeholder": "account@vheexa.com",
                 "default-value": "user@vheexa.com",
                 "description": "Enter your email address"
               },
-
               "password": {
                 "label": "Password",
                 "placeholder": "********",
                 "default-value": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
                 "description": "Enter your password"
               },
-
               "submit": "Login"
             }
           }
@@ -2985,44 +2947,102 @@
         "layout": {
           "metadata": {
             "title": {
-              "absolute": "Auth | Vheexa",
               "template": "%s | Vheexa Partner Auth"
             },
             "description": "Access your Vheexa account to manage bookings and rents easily and securely."
           },
-
           "illustration": {
             "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alternate": "placeholder"
           }
         },
-
         "login": {
           "page": {
             "metadata": {
               "title": "Login",
               "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
             },
-
             "form": {
               "title": "Welcome back",
               "description": "Login to your Vheexa account",
-
               "email": {
                 "label": "Email",
-                "placeholder": "account@vheexa.com",
-                "default-value": "partner@vheexa.com",
-                "description": "Enter your email address"
+                "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
               },
-
               "password": {
                 "label": "Password",
-                "placeholder": "********",
-                "default-value": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
-                "description": "Enter your password"
+                "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
               },
-
-              "submit": "Login"
+              "actions": {
+                "reset": "Reset",
+                "submit": "Login",
+                "when-success": "Logging to vheexa account was successfully succeeded",
+                "when-error": "Something went wrong while fetching your vheexa account"
+              }
+            }
+          }
+        },
+        "register": {
+          "page": {
+            "metadata": {
+              "title": "Register",
+              "description": "Create your vVheexa account and manage your rentals seamlessly."
+            },
+            "form": {
+              "title": "Hello there!",
+              "description": "create your vheexa account",
+              "partner": {
+                "logo": {
+                  "label": "Logo"
+                },
+                "banner": {
+                  "label": "Banner"
+                },
+                "handle": {
+                  "label": "Handle",
+                  "placeholder": "Enter handle (e.g, vheexa, etc...)"
+                },
+                "name": {
+                  "label": "Name",
+                  "placeholder": "Enter name (e.g, Vheexa, etc...)"
+                },
+                "phone-number": {
+                  "label": "Phone-number"
+                },
+                "email": {
+                  "label": "Email"
+                },
+                "password": {
+                  "label": "Password"
+                }
+              },
+              "branch": {
+                "name": {
+                  "label": "Name",
+                  "placeholder": "Enter name (e.g, , etc...)"
+                },
+                "location": {
+                  
+                },
+                "phone-number": {
+                  "label": "Phone-number"
+                },
+                "email": {
+                  "label": "Email"
+                }
+              },
+              "member": {},
+              "remember-me": {
+                "label": "Remember me",
+                "title": "",
+                "description": ""
+              },
+              "actions": {
+                "reset": "Reset",
+                "submit": "Register",
+                "when-success": "Vheexa account was successfully created",
+                "when-error": "Something went wrong while adding your vheexa account"
+              }
             }
           }
         }

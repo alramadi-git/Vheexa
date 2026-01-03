@@ -13,6 +13,8 @@ import { eDuration } from "@/enums/duration";
 
 import { tPartnerAccountModel } from "@/models/partner/account";
 
+import { ClsErrorModel } from "@/models/error";
+
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
 
@@ -32,7 +34,7 @@ export async function POST(
 
     if (!backendResponse.ok) {
       const errorText: string = await backendResponse.text();
-      throw new Error(errorText);
+      throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
     const {

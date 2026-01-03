@@ -5,15 +5,18 @@ import { apiCatch } from "@/utilities/api";
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
+import { tNullable } from "@/types/nullish";
+
+import { tJwt } from "@/validations/jwt";
+
 import { tBranchFilter, zBranchFilter } from "@/validations/partner/branch";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zBranchCreate } from "@/validations/partner/branch";
-import { ClsErrorModel } from "@/models/error";
 
 import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
 
-import { tNullable } from "@/types/nullish";
+import { ClsErrorModel } from "@/models/error";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
@@ -154,7 +157,7 @@ export async function GET(
       pagination: { page: 1, pageSize: 10, totalItems: 6 },
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.get(
       `/partner/dashboard/branches${clsQuery.toString()}`,
       {
@@ -187,7 +190,7 @@ export async function POST(
       { status: 201 },
     );
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/branches/`,
       {

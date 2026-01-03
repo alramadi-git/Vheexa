@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 
 import { getTranslations } from "next-intl/server";
-// import Form from "@/components/locals/partner/authentication/login/page/form";
+import Form from "@/components/locals/partner/authentication/register/page/form";
 
 export const dynamic = "force-static";
+
 export async function generateMetadata(): Promise<Metadata> {
-  return (await getTranslations("app.partner.authentication.login.page")).raw(
+  return (await getTranslations("app.partner.authentication.register.page")).raw(
     "metadata",
   );
 }
 
 export default async function Page() {
   const tForm = await getTranslations(
-    "app.partner.authentication.login.page.form",
+    "app.partner.authentication.register.page.form",
   );
 
   return (
@@ -24,7 +25,7 @@ export default async function Page() {
         </p>
       </div>
 
-      {/* <Form /> */}
+      <Form />
     </div>
   );
 }

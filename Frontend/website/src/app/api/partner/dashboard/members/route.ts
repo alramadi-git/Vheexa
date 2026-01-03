@@ -5,19 +5,21 @@ import { apiCatch } from "@/utilities/api";
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
+import { tNullable } from "@/types/nullish";
+
+import { tJwt } from "@/validations/jwt";
+
 import { tMemberFilter, zMemberFilter } from "@/validations/partner/member";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zMemberCreate } from "@/validations/partner/member";
 
-import { ClsErrorModel } from "@/models/error";
-
-import { tNullable } from "@/types/nullish";
-
 import { eRoleStatusModel } from "@/models/partner/role";
 import { eBranchStatusModel } from "@/models/partner/branch";
 
 import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
+
+import { ClsErrorModel } from "@/models/error";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
@@ -628,7 +630,7 @@ export async function GET(
       pagination: { page: 1, pageSize: 10, totalItems: 10 },
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.get(
       `/partner/dashboard/members${clsQuery.toString()}`,
       {
@@ -661,7 +663,7 @@ export async function POST(
       { status: 201 },
     );
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/members/`,
       {

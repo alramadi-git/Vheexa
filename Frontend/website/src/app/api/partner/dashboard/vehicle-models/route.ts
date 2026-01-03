@@ -5,6 +5,10 @@ import { apiCatch } from "@/utilities/api";
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
+import { tNullable } from "@/types/nullish";
+
+import { tJwt } from "@/validations/jwt";
+
 import {
   tVehicleModelFilter,
   zVehicleModelFilter,
@@ -13,14 +17,12 @@ import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zVehicleModelCreate } from "@/validations/partner/vehicle-model";
 
-import { ClsErrorModel } from "@/models/error";
-
-import { tNullable } from "@/types/nullish";
-
 import {
   eVehicleModelStatusModel,
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
+
+import { ClsErrorModel } from "@/models/error";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
@@ -148,7 +150,7 @@ export async function GET(
           description:
             "Luxury electric sedan with long-range battery and autopilot.",
           manufacturer: "Tesla",
-          marketLaunch: new Date(2022,0,1).toString(),
+          marketLaunch: new Date(2022, 0, 1).toString(),
           capacity: 5,
           transmission: "Automatic",
           fuel: "Electric",
@@ -196,7 +198,7 @@ export async function GET(
           description:
             "Reliable compact car with excellent fuel economy and modern design.",
           manufacturer: "Honda",
-          marketLaunch: new Date(2023,0,1).toString(),
+          marketLaunch: new Date(2023, 0, 1).toString(),
           capacity: 5,
           transmission: "Manual",
           fuel: "Petrol 95",
@@ -239,7 +241,7 @@ export async function GET(
           description:
             "High-performance luxury sports sedan with rear-wheel drive dynamics.",
           manufacturer: "BMW",
-          marketLaunch: new Date(2025,0,1).toString(),
+          marketLaunch: new Date(2025, 0, 1).toString(),
           capacity: 5,
           transmission: "Dual Clutch",
           fuel: "Petrol 98",
@@ -276,7 +278,7 @@ export async function GET(
           description:
             "Iconic hot hatch with sport-tuned suspension and turbocharged engine.",
           manufacturer: "Volkswagen",
-          marketLaunch: new Date(2021,0,1).toString(),
+          marketLaunch: new Date(2021, 0, 1).toString(),
           capacity: 5,
           transmission: "Semi-Automatic",
           fuel: "Petrol 95",
@@ -313,7 +315,7 @@ export async function GET(
           description:
             "Midsize family sedan known for reliability and comfort.",
           manufacturer: "Toyota",
-          marketLaunch: new Date(2019,0,1).toString(),
+          marketLaunch: new Date(2019, 0, 1).toString(),
           capacity: 5,
           transmission: "CVT",
           fuel: "Hybrid",
@@ -350,7 +352,7 @@ export async function GET(
           description:
             "Compact SUV with standard all-wheel drive and spacious cabin.",
           manufacturer: "Subaru",
-          marketLaunch: new Date(2020,0,1).toString(),
+          marketLaunch: new Date(2020, 0, 1).toString(),
           capacity: 5,
           transmission: "CVT",
           fuel: "Petrol 91",
@@ -387,7 +389,7 @@ export async function GET(
           description:
             "Full-size pickup truck with powerful engine options and towing capability.",
           manufacturer: "Ford",
-          marketLaunch: new Date(2025,0,1).toString(),
+          marketLaunch: new Date(2025, 0, 1).toString(),
           capacity: 5,
           transmission: "Automatic",
           fuel: "Diesel",
@@ -424,7 +426,7 @@ export async function GET(
           description:
             "American mid-engine sports car with track-ready performance.",
           manufacturer: "Chevrolet",
-          marketLaunch: new Date(2024,0,1).toString(),
+          marketLaunch: new Date(2024, 0, 1).toString(),
           capacity: 2,
           transmission: "Dual Clutch",
           fuel: "Petrol 98",
@@ -461,7 +463,7 @@ export async function GET(
           description:
             "Luxury three-row SUV with Scandinavian design and safety focus.",
           manufacturer: "Volvo",
-          marketLaunch: new Date(2025,0,1).toString(),
+          marketLaunch: new Date(2025, 0, 1).toString(),
           capacity: 7,
           transmission: "Automatic",
           fuel: "Hybrid",
@@ -498,7 +500,7 @@ export async function GET(
           description:
             "Classic American muscle car with powerful V8 engine and bold styling.",
           manufacturer: "Dodge",
-          marketLaunch: new Date(2010,0,1).toString(),
+          marketLaunch: new Date(2010, 0, 1).toString(),
           capacity: 5,
           transmission: "Automatic",
           fuel: "Petrol 91",
@@ -555,7 +557,7 @@ export async function POST(
       { status: 201 },
     );
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/vehicle-models/`,
       {

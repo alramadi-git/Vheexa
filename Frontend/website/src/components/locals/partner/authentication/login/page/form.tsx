@@ -1,33 +1,36 @@
 "use client";
 
-import { ClsAuthenticationService } from "@/services/partner/authentication";
+import { useTranslations } from "next-intl";
 
-import z from "zod/v4";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "@/i18n/navigation";
+import useAccountStore from "@/stores/partner/account-store";
+
 import {
   tLoginCredentials,
   zLoginCredentials,
 } from "@/validations/authentication-credentials";
 
-import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import useAccountStore from "@/stores/partner/account-store";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LuLoaderCircle } from "react-icons/lu";
+import { ClsAuthenticationService } from "@/services/partner/authentication";
+
+import { LuLoader } from "react-icons/lu";
 
 import { Controller, useForm } from "react-hook-form";
 import {
+  FieldSet,
   FieldGroup,
   Field,
   FieldLabel,
-  FieldDescription,
   FieldError,
 } from "@/components/shadcn/field";
+
+import { FieldEmail, FieldPassword } from "@/components/locals/blocks/fields";
+
 import { toast } from "sonner";
-import { ErrorToast } from "@/components/locals/blocks/toast";
+import { Toast } from "@/components/locals/blocks/toasts";
 
 import { Button } from "@/components/shadcn/button";
-import { FieldEmail, FieldPassword } from "@/components/locals/blocks/fields";
 
 export default function Form() {
   const authenticationService = new ClsAuthenticationService();
@@ -37,36 +40,45 @@ export default function Form() {
   const router = useRouter();
   const login = useAccountStore((store) => store.login);
 
-  const form = useForm<tLoginCredentials>({
+  const {
+    formState,
+    control,
+    reset: handleReset,
+    handleSubmit,
+  } = useForm<tLoginCredentials>({
     defaultValues: {
-      email: tForm("email.default-value"),
-      password: tForm("password.default-value"),
+      rememberMe: false,
     },
     resolver: zodResolver(zLoginCredentials),
   });
 
-  async function onSubmit(loginCredentials: z.infer<typeof zLoginCredentials>) {
-    const response = await authenticationService.loginAsync(loginCredentials);
-    if (response.isSuccess === false) {
-      console.error("error status code: ", response.statusCode);
-      console.error("error status text: ", response.statusText);
-      console.error("error message: ", response.message);
-      console.error("error issues: ", response.issues);
+  function reset() {
+    handleReset();
+  }
 
-      toast.custom(() => <ErrorToast error={response} />);
+  async function submit(loginCredentials: tLoginCredentials) {
+    const response = await authenticationService.loginAsync(loginCredentials);
+    if (!response.isSuccess) {
+      console.error("error: ", response.message);
+
+      toast.custom(() => (
+        <Toast variant="destructive" label={tForm("actions.when-error")} />
+      ));
+
       return;
     }
 
-    throw new Error("Not implemented");
     // login(response.data);
+    return;
+
     router.push("/partner/dashboard");
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(submit)} className="space-y-8">
       <FieldGroup>
-        <Controller
-          control={form.control}
+        {/* <Controller
+          control={control}
           name="email"
           render={(controller) => (
             <Field data-invalid={controller.fieldState.invalid}>
@@ -92,7 +104,7 @@ export default function Form() {
         />
 
         <Controller
-          control={form.control}
+          control={control}
           name="password"
           render={(controller) => (
             <Field data-invalid={controller.fieldState.invalid}>
@@ -117,24 +129,29 @@ export default function Form() {
               )}
             </Field>
           )}
-        />
+        /> */}
       </FieldGroup>
 
-      <Button
-        type="submit"
-        variant="outline"
-        className="w-full"
-        disabled={form.formState.isSubmitting}
-      >
-        {form.formState.isSubmitting && (
-          <LuLoaderCircle
-            className="-ms-1 animate-spin"
-            size={16}
-            aria-hidden="true"
-          />
-        )}
-        {tForm("submit")}
-      </Button>
+      <FieldSet>
+     <FieldGroup className="grid-cols-2 gap-3">
+          <Button
+            disabled={formState.isSubmitting}
+            variant="outline"
+            type="reset"
+            className="justify-start gap-1.5"
+          >
+            {tForm("actions.reset")}
+          </Button>
+          <Button
+            disabled={formState.isSubmitting}
+            type="submit"
+            className="justify-start gap-1.5"
+          >
+            {formState.isSubmitting && <LuLoader className="animate-spin" />}
+            {tForm("actions.submit")}
+          </Button>
+        </FieldGroup>
+      </FieldSet>
     </form>
   );
 }

@@ -6,6 +6,8 @@ import { clsFetch } from "@/consts/api/fetch";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
+import { tJwt } from "@/validations/jwt";
+
 import { ClsErrorModel } from "@/models/error";
 
 import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
@@ -40,7 +42,7 @@ export async function GET(
       },
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.get(
       `/partner/dashboard/branches/${parsedUuid}`,
       {
@@ -73,7 +75,7 @@ export async function DELETE(
       data: null,
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.delete(
       `/partner/dashboard/branches/${parsedUuid}`,
       {

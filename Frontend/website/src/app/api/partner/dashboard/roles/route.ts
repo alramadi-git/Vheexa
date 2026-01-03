@@ -5,16 +5,18 @@ import { apiCatch } from "@/utilities/api";
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
+import { tNullable } from "@/types/nullish";
+
+import { tJwt } from "@/validations/jwt";
+
 import { tRoleFilter, zRoleFilter } from "@/validations/partner/role";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zRoleCreate } from "@/validations/partner/role";
 
-import { ClsErrorModel } from "@/models/error";
-
-import { tNullable } from "@/types/nullish";
-
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
+
+import { ClsErrorModel } from "@/models/error";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
@@ -212,7 +214,7 @@ export async function GET(
       pagination: { page: 1, pageSize: 10, totalItems: 4 },
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.get(
       `/partner/dashboard/roles${clsQuery.toString()}`,
       {
@@ -245,7 +247,7 @@ export async function POST(
       { status: 201 },
     );
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/roles/`,
       {

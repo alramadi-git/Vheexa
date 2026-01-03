@@ -6,12 +6,14 @@ import { clsFetch } from "@/consts/api/fetch";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
-import { ClsErrorModel } from "@/models/error";
+import { tJwt } from "@/validations/jwt";
 
 import { eRoleStatusModel } from "@/models/partner/role";
 import { eBranchStatusModel } from "@/models/partner/branch";
 
 import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
+
+import { ClsErrorModel } from "@/models/error";
 
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
@@ -82,7 +84,7 @@ export async function GET(
       },
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.get(
       `/partner/dashboard/members/${parsedUuid}`,
       {
@@ -114,7 +116,7 @@ export async function DELETE(
       data: null,
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.delete(
       `/partner/dashboard/members/${parsedUuid}`,
       {

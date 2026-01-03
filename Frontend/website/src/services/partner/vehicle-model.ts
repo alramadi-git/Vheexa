@@ -7,108 +7,24 @@ import {
 import { tUuid, zUuid } from "@/validations/uuid";
 
 import {
-  tVehicleModelCreateForm,
   tVehicleModelCreate,
   tVehicleModelFilter,
-  zVehicleModelCreateForm,
   zVehicleModelCreate,
   zVehicleModelFilter,
 } from "@/validations/partner/vehicle-model";
 
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { ClsImageKitService } from "@/services/imagekit/imagekit";
 import { ClsQuery } from "@/libraries/query";
-
-import { tImageKitAuthenticatorModel } from "@/models/imagekit/authenticator";
-import { UploadResponse } from "@imagekit/next";
 
 import { tVehicleModelModel } from "@/models/partner/vehicle-model";
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsVehicleModelService extends ClsAbstractService {
   public async addAsync(
-    vehicleModelCreateForm: tVehicleModelCreateForm,
+    vehicleModelCreate: tVehicleModelCreate,
   ): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedVehicleModelCreateForm: tVehicleModelCreateForm =
-        zVehicleModelCreateForm.parse(vehicleModelCreateForm);
-
-      const clsImageKitService: ClsImageKitService = new ClsImageKitService();
-
-      const credentials: tImageKitAuthenticatorModel =
-        await clsImageKitService.authenticator();
-
-      const now = Date.now().toString();
-      const thumbnailRequest: Promise<UploadResponse> =
-        clsImageKitService.upload({
-          ...credentials,
-          folder: `/vheexa/assets/vehicles`,
-          file: parsedVehicleModelCreateForm.thumbnail,
-          fileName: `thumbnail-${now}`,
-        });
-
-      const imagesRequest: Promise<UploadResponse>[] =
-        parsedVehicleModelCreateForm.gallery.map((image) =>
-          clsImageKitService.upload({
-            ...credentials,
-            folder: `/vheexa/assets/vehicles`,
-            file: image,
-            fileName: `gallery-${now}`,
-          }),
-        );
-
-      const [
-        thumbnailResult,
-        ...imagesResult
-      ]: PromiseSettledResult<UploadResponse>[] = await Promise.allSettled([
-        thumbnailRequest,
-        ...imagesRequest,
-      ]);
-
-      if (thumbnailResult.status === "rejected") {
-        throw new Error(
-          `Failed to upload thumbnail: ${thumbnailResult.reason instanceof Error ? thumbnailResult.reason.message : String(thumbnailResult.reason)}`,
-        );
-      }
-
-      const rejectedImages = imagesResult.filter(
-        (imageResult) => imageResult.status === "rejected",
-      );
-      if (rejectedImages.length > 0) {
-        const errorText = rejectedImages
-          .map((rejectedImage) =>
-            rejectedImage.reason instanceof Error
-              ? rejectedImage.reason.message
-              : String(rejectedImage.reason),
-          )
-          .join(", ");
-
-        throw new Error(`Failed to upload some images: ${errorText}`);
-      }
-
-      const thumbnailUrl: string = thumbnailResult.value.url ?? "";
-      const imagesUrls: string[] = (
-        imagesResult as PromiseFulfilledResult<UploadResponse>[]
-      ).map((imageResult) => imageResult.value.url ?? "");
-
-      const vehicleModelCreate: tVehicleModelCreate = {
-        thumbnail: thumbnailUrl,
-        gallery: imagesUrls,
-        name: vehicleModelCreateForm.name,
-        description: vehicleModelCreateForm.description,
-        category: vehicleModelCreateForm.category,
-        manufacturer: vehicleModelCreateForm.manufacturer,
-        marketLaunch: vehicleModelCreateForm.marketLaunch,
-        capacity: vehicleModelCreateForm.capacity,
-        transmission: vehicleModelCreateForm.transmission,
-        fuel: vehicleModelCreateForm.fuel,
-        colors: vehicleModelCreateForm.colors,
-        price: vehicleModelCreateForm.price,
-        discount: vehicleModelCreateForm.discount,
-        tags: vehicleModelCreateForm.tags,
-        status: vehicleModelCreateForm.status,
-      };
       const parsedVehicleModelCreate: tVehicleModelCreate =
         zVehicleModelCreate.parse(vehicleModelCreate);
 
