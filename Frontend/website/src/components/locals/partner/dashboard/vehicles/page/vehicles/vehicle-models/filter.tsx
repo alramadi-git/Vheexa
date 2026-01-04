@@ -6,11 +6,7 @@ import { useQuery } from "@/hooks/query";
 
 import { useEffect, useId, useMemo, useRef } from "react";
 
-import {
-  FieldError as FieldErrorType,
-  useForm,
-  Controller,
-} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -18,7 +14,7 @@ import {
   zVehicleModelFilter,
 } from "@/validations/partner/vehicle-model";
 
-import { LuX } from "react-icons/lu";
+import { LuCheck, LuX } from "react-icons/lu";
 
 import { Card, CardContent } from "@/components/shadcn/card";
 import {
@@ -39,22 +35,26 @@ import {
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
 import {
+  FieldMultiSelect,
   FieldNumberMinMax,
   FieldSearch,
+  FieldTags,
+  tFieldMultiSelectRef,
   tFieldNumberMinMaxRef,
+  tFieldTagsRef,
 } from "@/components/locals/blocks/fields";
 import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
 import { eLocale } from "@/i18n/routing";
-import { tNullable, tUndefinable } from "@/types/nullish";
+import { tNullable } from "@/types/nullish";
+import { CommandGroup, CommandItem } from "@/components/shadcn/command";
 
-type tTransmission = {
-  "select-placeholder": string;
-  "search-placeholder": string;
-  value: number;
-  transmissions: {
-    key: string;
-    value: string;
-  }[];
+type tGroup<gtOption extends tOption> = {
+  value: string;
+  options: gtOption[];
+};
+type tOption = {
+  value: string;
+  label: string;
 };
 
 type tStatues = {
@@ -70,19 +70,22 @@ export default function Filter() {
   const id = useId();
   const query = useQuery();
 
+  const locale = useLocale() as eLocale;
+  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
+
+  const categoriesRef = useRef<tFieldMultiSelectRef<tOption>>(null);
+
   const capacityRef = useRef<tFieldNumberMinMaxRef>(null);
+  const transmissionsRef = useRef<tFieldTagsRef>(null);
+  const fuelsRef = useRef<tFieldTagsRef>(null);
 
   const priceRef = useRef<tFieldNumberMinMaxRef>(null);
   const discountRef = useRef<tFieldNumberMinMaxRef>(null);
-
-  const locale = useLocale() as eLocale;
-  const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
 
   const {
     formState,
     control,
     setValue,
-    watch,
     trigger,
     reset: handleReset,
     handleSubmit,
@@ -109,17 +112,12 @@ export default function Filter() {
     resolver: zodResolver(zVehicleModelFilter),
   });
 
-  const categories = watch("categories");
-
-  const transmissions: tTransmission[] = useMemo(
-    () =>
-      (
-        tFilter.raw(
-          "specifications.transmission.transmissions",
-        ) as tTransmission[]
-      ).filter((manufacturer) => categories.includes(manufacturer.value)),
-    [tFilter, categories],
-  );
+  const categoryGroups: tGroup<tOption> = useMemo(() => {
+    return {
+      value: "0",
+      options: tFilter.raw("information.categories.categories"),
+    };
+  }, [tFilter]);
   const statuses: tStatues[] = tFilter.raw("status.statuses");
 
   const [
@@ -139,10 +137,15 @@ export default function Filter() {
   useEffect(() => {
     setValue("search", query.get("filter.search") ?? undefined);
 
-    setValue(
-      "categories",
-      query.getAll("filter.categories").map((category) => Number(category)),
-    );
+    const categories = query
+      .getAll("filter.categories")
+      .map((category) => Number(category));
+    const categoryOptions = categoryGroups.options.filter((category) => {
+      return categories.includes(Number(category.value));
+    });
+
+    setValue("categories", categories);
+    categoriesRef.current?.change(categoryOptions);
 
     setValue("price.min", priceMin !== null ? Number(priceMin) : undefined);
     setValue("price.max", priceMax !== null ? Number(priceMax) : undefined);
@@ -162,21 +165,45 @@ export default function Filter() {
   function reset() {
     handleReset();
 
-    priceRef.current?.reset(formState.defaultValues?.price);
-    discountRef.current?.reset(formState.defaultValues?.discount);
+    categoriesRef.current?.reset();
+
+    capacityRef.current?.reset();
+    transmissionsRef.current?.reset();
+    fuelsRef.current?.reset();
+
+    priceRef.current?.reset();
+    discountRef.current?.reset();
   }
 
   function submit(data: tVehicleModelFilter) {
     query.remove("filter.search");
+    query.remove("filter.categories");
+    query.remove("filter.capacity.min");
+    query.remove("filter.capacity.max");
+    query.remove("filter.transmissions");
+    query.remove("filter.fuels");
     query.remove("filter.price.min");
     query.remove("filter.price.max");
     query.remove("filter.discount.min");
     query.remove("filter.discount.max");
     query.remove("filter.status");
-
     query.remove("pagination.page");
 
     query.set("filter.search", data.search);
+    query.set(
+      "filter.categories",
+      data.categories.map((category) => category.toString()),
+    );
+    query.set("filter.capacity.min", data.capacity.min?.toString());
+    query.set("filter.capacity.max", data.capacity.min?.toString());
+    query.set(
+      "filter.transmissions",
+      data.transmissions.map((transmission) => transmission.toString()),
+    );
+    query.set(
+      "filter.fuels",
+      data.fuels.map((fuel) => fuel.toString()),
+    );
     query.set("filter.price.min", data.price.min?.toString());
     query.set("filter.price.max", data.price.max?.toString());
     query.set("filter.discount.min", data.discount.min?.toString());
@@ -228,6 +255,72 @@ export default function Filter() {
                   </Field>
                 )}
               />
+              <Controller
+                control={control}
+                name="categories"
+                render={({
+                  field: { onChange: setValue },
+                  fieldState: { invalid, error },
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-categories`}
+                      className="max-w-fit"
+                    >
+                      {tFilter("information.categories.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldMultiSelect<tGroup<tOption>, tOption>
+                        ref={categoriesRef}
+                        aria-invalid={invalid}
+                        id={`${id}-categories`}
+                        search-placeholder={tFilter("information.categories.search-placeholder")}
+                        select-placeholder={tFilter("information.categories.select-placeholder")}
+                        groups={[categoryGroups]}
+                        renderTrigger={(option) => option.label}
+                        renderGroup={(
+                          group,
+                          selectedOptions,
+                          toggleSelection,
+                        ) => (
+                          <CommandGroup key={group.value}>
+                            {group.options.map((option) => {
+                              const isSelected = selectedOptions.some(
+                                (selectedOption) =>
+                                  selectedOption.value === option.value,
+                              );
+
+                              return (
+                                <CommandItem
+                                  asChild
+                                  key={option.value}
+                                  value={option.label}
+                                  onSelect={() =>
+                                    toggleSelection(option, isSelected)
+                                  }
+                                >
+                                  <button
+                                    type="button"
+                                    className="w-full justify-between"
+                                  >
+                                    {option.label}
+                                    {isSelected && <LuCheck size={16} />}
+                                  </button>
+                                </CommandItem>
+                              );
+                            })}
+                          </CommandGroup>
+                        )}
+                        onChange={(options) =>
+                          setValue(options.map((option) => option.value))
+                        }
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </FieldSet>
 
@@ -237,7 +330,7 @@ export default function Filter() {
                 control={control}
                 name="capacity"
                 render={({
-                  field: { value: capacity, onChange: setValue },
+                  field: { value, onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
                   <Field>
@@ -256,16 +349,16 @@ export default function Filter() {
                         min-placeholder={tFilter(
                           "specifications.capacity.min.placeholder",
                         )}
-                        min={capacity.min}
-                        onMinChange={(value) =>
-                          setValue({ ...capacity, min: value })
+                        min={value.min}
+                        onMinChange={(_value) =>
+                          setValue({ ...value, min: _value })
                         }
                         max-placeholder={tFilter(
                           "specifications.capacity.max.placeholder",
                         )}
-                        max={capacity.max}
-                        onMaxChange={(value) =>
-                          setValue({ ...capacity, max: value })
+                        max={value.max}
+                        onMaxChange={(_value) =>
+                          setValue({ ...value, max: _value })
                         }
                       />
                     </FieldContent>
@@ -273,7 +366,7 @@ export default function Filter() {
                   </Field>
                 )}
               />
-              {/* <Controller
+              <Controller
                 control={control}
                 name="transmissions"
                 render={({
@@ -286,49 +379,53 @@ export default function Filter() {
                       htmlFor={`${id}-transmission`}
                       className="max-w-fit"
                     >
-                      {tAddNew("content.form.specification.transmission.label")}
+                      {tFilter("specifications.transmissions.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <SearchableSelect
-                        triggerRender={() => (
-                          <Button
-                            id={`${id}-transmission`}
-                            variant="outline"
-                            className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
-                          >
-                            {value === "" ? (
-                              <span className="text-muted-foreground truncate">
-                                {transmissions?.["select-placeholder"]}
-                              </span>
-                            ) : (
-                              value
-                            )}
-                            <LuChevronDown
-                              size={16}
-                              className="text-muted-foreground/80 ms-auto shrink-0"
-                            />
-                          </Button>
+                      <FieldTags
+                        ref={transmissionsRef}
+                        id={`${id}-transmission`}
+                        placeholder={tFilter(
+                          "specifications.transmissions.placeholder",
                         )}
-                        value={value}
-                        inputProps={{
-                          placeholder: transmissions?.["search-placeholder"],
-                        }}
-                        onSelect={setValue}
-                        list={transmissions?.transmissions ?? []}
-                        itemRender={(item) => (
-                          <button className="w-full">{item.value}</button>
-                        )}
-                        whenNoResultRender={() =>
-                          tAddNew(
-                            "content.form.specification.transmission.when-no-result",
-                          )
-                        }
+                        tags={value}
+                        onTagsChange={(value) => setValue(value)}
                       />
                     </FieldContent>
                     <FieldError errors={error} />
                   </Field>
                 )}
-              /> */}
+              />
+              <Controller
+                control={control}
+                name="fuels"
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState: { invalid, error },
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-fuels`}
+                      className="max-w-fit"
+                    >
+                      {tFilter("specifications.fuels.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldTags
+                        ref={fuelsRef}
+                        id={`${id}-fuels`}
+                        placeholder={tFilter(
+                          "specifications.fuels.placeholder",
+                        )}
+                        tags={value}
+                        onTagsChange={(value) => setValue(value)}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </FieldSet>
 

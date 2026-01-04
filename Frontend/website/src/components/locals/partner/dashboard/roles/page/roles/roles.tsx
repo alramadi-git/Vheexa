@@ -6,7 +6,7 @@ import { ClsRoleService } from "@/services/partner/role";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,6 +56,7 @@ import { Pagination } from "@/components/locals/blocks/pagination";
 import {
   FieldMultiSelect,
   FieldSearch,
+  tFieldMultiSelectRef,
 } from "@/components/locals/blocks/fields";
 import {
   Select,
@@ -65,6 +66,7 @@ import {
   SelectValue,
 } from "@/components/shadcn/select";
 import { toast } from "sonner";
+import { CommandGroup, CommandItem } from "@/components/shadcn/command";
 
 export default function Roles() {
   const { isLoading, result } = useRoles();
@@ -103,7 +105,13 @@ export default function Roles() {
     </Section>
   );
 }
-type tPermission = {
+
+type tPermissionGroup = {
+  value: string;
+  label: string;
+  options: tPermissionOption[];
+};
+type tPermissionOption = {
   value: string;
   label: string;
   description: string;
@@ -118,6 +126,8 @@ function AddNew() {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const permissionsRef = useRef<tFieldMultiSelectRef<tPermissionOption>>(null);
 
   const {
     formState,
@@ -137,7 +147,7 @@ function AddNew() {
     "app.partner.dashboard.roles.page.roles.add-new",
   );
 
-  const permissions: tPermission[] = tAddNew.raw(
+  const permissionGroups: tPermissionGroup[] = tAddNew.raw(
     "content.form.permissions.permissions",
   );
   const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
@@ -234,42 +244,87 @@ function AddNew() {
                 control={control}
                 name="permissions"
                 render={({
-                  field: { onChange: setValue, ...field },
-                  fieldState,
+                  field: { value, onChange: setValue },
+                  fieldState: { invalid, error },
                 }) => (
                   <Field>
                     <FieldLabel
-                      aria-invalid={fieldState.invalid}
+                      aria-invalid={invalid}
                       htmlFor={`${id}-permissions`}
                       className="max-w-fit"
                     >
                       {tAddNew("content.form.permissions.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <FieldMultiSelect
+                      <FieldMultiSelect<tPermissionGroup, tPermissionOption>
+                        ref={permissionsRef}
                         id={`${id}-permissions`}
-                        placeholder={tAddNew(
-                          "content.form.permissions.placeholder",
+                        maxShownItems={5}
+                        select-placeholder={tAddNew(
+                          "content.form.permissions.select-placeholder",
                         )}
-                        options={permissions}
-                        values={field.value.map((val) => val.toString())}
-                        setValues={(values) =>
-                          setValue(values.map((value) => Number(value)))
-                        }
-                        renderGroup={(option, isSelected) => (
-                          <div className="flex w-full justify-between gap-3">
-                            <div>
-                              {option.label}
-                              <p className="text-muted-foreground line-clamp-1">
-                                {option.description}
-                              </p>
-                            </div>
-                            {isSelected && <LuCheck size={16} />}
-                          </div>
+                        search-placeholder={tAddNew(
+                          "content.form.permissions.search-placeholder",
                         )}
+                        groups={permissionGroups}
+                        values={permissionGroups
+                          .flatMap((group) => group.options)
+                          .filter(
+                            (option) =>
+                              value?.includes(Number(option.value)) ?? false,
+                          )}
+                        renderTrigger={(option) => option.label}
+                        renderGroup={(
+                          group,
+                          selectedItems,
+                          toggleSelection,
+                        ) => {
+                          return (
+                            <CommandGroup
+                              key={group.value}
+                              heading={group.label}
+                            >
+                              {group.options.map((option) => {
+                                const isSelected = selectedItems.some(
+                                  (selectedItem) =>
+                                    selectedItem.value === option.value,
+                                );
+
+                                return (
+                                  <CommandItem
+                                    asChild
+                                    key={option.value}
+                                    value={option.label}
+                                    onSelect={() =>
+                                      toggleSelection(option, isSelected)
+                                    }
+                                  >
+                                    <button
+                                      type="button"
+                                      className="w-full justify-between"
+                                    >
+                                      <span className="text-start">
+                                        {option.label}
+                                        <p className="text-muted-foreground line-clamp-1">
+                                          {option.description}
+                                        </p>
+                                      </span>
+                                      {isSelected && <LuCheck size={16} />}
+                                    </button>
+                                  </CommandItem>
+                                );
+                              })}
+                            </CommandGroup>
+                          );
+                        }}
+                        onChange={(options) => {
+                          setValue(
+                            options.map((option) => Number(option.value)),
+                          );
+                        }}
                       />
                     </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[error]} />
                   </Field>
                 )}
               />

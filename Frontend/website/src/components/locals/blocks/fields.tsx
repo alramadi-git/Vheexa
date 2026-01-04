@@ -13,16 +13,15 @@ import { useLocale, useTranslations } from "next-intl";
 
 import {
   ComponentProps,
-  ReactNode,
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  forwardRef,
-  useImperativeHandle,
-  ChangeEvent,
-  KeyboardEvent,
+  RefAttributes,
   ReactElement,
+  KeyboardEvent,
+  forwardRef,
+  useState,
+  useCallback,
+  useImperativeHandle,
+  Fragment,
+  ChangeEvent,
 } from "react";
 
 import {
@@ -31,7 +30,6 @@ import {
   ControllerRenderProps,
   ControllerFieldState,
   UseFormStateReturn,
-  FieldPath,
 } from "react-hook-form";
 
 import {
@@ -46,6 +44,7 @@ import {
   LuX,
   LuPhone,
   LuChevronDown,
+  LuUser,
 } from "react-icons/lu";
 
 import { CountryCode, AsYouType, formatNumber } from "libphonenumber-js";
@@ -96,36 +95,53 @@ import {
   TagsInputRoot,
 } from "@diceui/tags-input";
 
-type tInputProps = ComponentProps<typeof Input>;
-type tControllerRenderProps<
-  TFieldValues extends FieldValues,
-  TName extends Path<TFieldValues>,
-> = {
-  field: ControllerRenderProps<TFieldValues, TName>;
-  fieldState: ControllerFieldState;
-  formState: UseFormStateReturn<TFieldValues>;
+type tFieldSearchProps = Omit<
+  ComponentProps<typeof Input>,
+  "type" | "className"
+> & {
+  onChange?: (value: string) => void;
 };
+function FieldSearch({ onChange: onChangeProp, ...props }: tFieldSearchProps) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChangeProp?.(event.currentTarget.value);
+  }
 
-type tFieldSearchProps = Omit<tInputProps, "type" | "className">;
-function FieldSearch({
-  "aria-invalid": isInvalid,
-  ...props
-}: tFieldSearchProps) {
   return (
     <div className="relative">
-      <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
-        <LuSearch
-          aria-invalid={isInvalid}
-          className="aria-invalid:text-destructive/80 size-4"
-        />
-        <span className="sr-only">Search</span>
-      </div>
-      <Input
-        {...props}
-        aria-invalid={isInvalid}
-        type="search"
-        className="peer px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
-      />
+      <span
+        aria-invalid={props["aria-invalid"]}
+        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
+      >
+        <LuSearch size={16} />
+      </span>
+      <Input {...props} type="search" className="ps-9" onChange={onChange} />
+    </div>
+  );
+}
+
+type tFieldUsernameProps = Omit<
+  ComponentProps<typeof Input>,
+  "type" | "className"
+> & {
+  onChange?: (value: string) => void;
+};
+function FieldUsername({
+  onChange: onChangeProp,
+  ...props
+}: tFieldUsernameProps) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChangeProp?.(event.currentTarget.value);
+  }
+
+  return (
+    <div className="relative">
+      <span
+        aria-invalid={props["aria-invalid"]}
+        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
+      >
+        <LuUser size={16} />
+      </span>
+      <Input {...props} type="text" className="ps-9" onChange={onChange} />
     </div>
   );
 }
@@ -152,7 +168,6 @@ const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
     }
 
     function changeTags(tags: string[]) {
-      console.log(tags);
       _setTags(tags);
       onTagsChange?.(tags);
     }
@@ -178,8 +193,9 @@ const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
           ))}
           <TagsInputInput
             id={id}
+            autoCapitalize="none"
             placeholder={placeholder}
-            className="flex-1 truncate bg-transparent outline-hidden placeholder:text-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-zinc-400"
+            className="max-w-full flex-1 bg-transparent outline-hidden placeholder:text-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-zinc-400"
           />
         </div>
       </TagsInputRoot>
@@ -517,40 +533,44 @@ const FieldPhoneNumber = forwardRef<
 });
 FieldPhoneNumber.displayName = "FieldPhoneNumber";
 
-type tFieldEmailProps = Omit<ComponentProps<typeof Input>, "type">;
-function FieldEmail({ className, ...props }: tFieldEmailProps) {
+type tFieldEmailProps = Omit<
+  ComponentProps<typeof Input>,
+  "type" | "className"
+> & {
+  onChange?: (value: string) => void;
+};
+function FieldEmail({ onChange: onChangeProp, ...props }: tFieldEmailProps) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChangeProp?.(event.currentTarget.value);
+  }
+
   return (
     <div className="relative">
-      <Input type="email" className={cn("peer pe-9", className)} {...props} />
-      <div
-        className={cn(
-          "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",
-          {
-            "text-destructive": props["aria-invalid"],
-          },
-        )}
+      <Input
+        {...props}
+        type="email"
+        className="peer pe-9"
+        onChange={onChange}
+      />
+      <span
+        aria-invalid={props["aria-invalid"]}
+        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50"
       >
-        <LuMail size={16} aria-hidden="true" />
-      </div>
+        <LuMail size={16} />
+      </span>
     </div>
   );
 }
 
-type tFieldPasswordProps = {
-  controller: tControllerRenderProps<
-    {
-      password: tPassword;
-    },
-    "password"
-  >;
-  inputProps?: Omit<
-    tInputProps,
-    "ref" | "type" | "name" | "disabled" | "value" | "onChange" | "onBlur"
-  >;
+type tFieldPasswordProps = Omit<
+  ComponentProps<typeof Input>,
+  "type" | "className"
+> & {
+  onChange?: (value: string) => void;
 };
 function FieldPassword({
-  controller,
-  inputProps: { id, className, ...inputProps } = {},
+  onChange: onChangeProp,
+  ...props
 }: tFieldPasswordProps) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -558,214 +578,198 @@ function FieldPassword({
     setIsVisible((prevState) => !prevState);
   }
 
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChangeProp?.(event.currentTarget.value);
+  }
+
   return (
     <div className="relative">
       <Input
-        id={id}
+        {...props}
         type={isVisible ? "text" : "password"}
-        className={cn("pe-9", className)}
-        {...controller.field}
-        {...inputProps}
+        className="pe-9"
+        onChange={onChange}
       />
-
+      {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
       <button
-        aria-pressed={isVisible}
-        aria-label={isVisible ? "Hide" : "Show"}
-        aria-controls="password"
+        aria-invalid={props["aria-invalid"]}
+        disabled={props.disabled}
         type="button"
-        className={cn(
-          "text-muted-foreground/80 hover:text-foreground absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-          {
-            "text-destructive/80 hover:text-destructive":
-              controller.fieldState.invalid,
-          },
-        )}
+        className="text-muted-foreground/80 aria-invalid:text-destructive/80 absolute inset-y-0 end-0 flex items-center justify-center pe-3 disabled:opacity-50"
         onClick={toggleVisibility}
       >
-        {isVisible ? (
-          <LuEyeOff size={16} aria-hidden="true" />
-        ) : (
-          <LuEye size={16} aria-hidden="true" />
-        )}
+        {isVisible ? <LuEyeOff size={16} /> : <LuEye size={16} />}
       </button>
     </div>
   );
 }
 
-type tGroup = {
+type tGroup<gOption extends tOption> = {
   value: string;
-  label: string;
-  options: tOption[];
+  options: gOption[];
 };
 type tOption = {
   value: string;
   label: string;
 };
 
-type tFieldMultiSelectRef = {
-  reset: () => void;
+type tFieldMultiSelectRef<gOption extends tOption> = {
+  reset: (options?: gOption[]) => void;
+  change: (options: gOption[]) => void;
 };
-type tFieldMultiSelectProps<oGroup extends tGroup> = {
+type tFieldMultiSelectProps<
+  gGroup extends tGroup<gOption>,
+  gOption extends tOption,
+> = {
   id?: string;
   maxShownItems?: number;
-  placeholder?: string;
-  groups: oGroup[];
-  values?: oGroup[];
-  onChange?: (groups: oGroup[]) => void;
-  renderTrigger: (option: oGroup["options"][number]) => string;
+  "select-placeholder"?: string;
+  "search-placeholder"?: string;
+  groups: gGroup[];
+  values?: gOption[];
+  onChange?: (options: gOption[]) => void;
+  renderTrigger: (option: gOption) => string;
   renderGroup: (
-    group: oGroup,
-    selectedItems: oGroup[],
-    toggleSelection: (
-      groupValue: oGroup["value"],
-      optionToToggle: oGroup["options"][number],
-      isSelected: boolean,
-    ) => void,
+    group: gGroup,
+    selectedOptions: gOption[],
+    toggleSelection: (optionToToggle: gOption, isSelected: boolean) => void,
   ) => ReactElement<typeof CommandGroup>;
 };
 
-function FieldMultiSelect<oGroup extends tGroup>({
-  id,
-  maxShownItems = 2,
-  placeholder,
-  groups,
-  values: _values = [],
-  onChange,
-  renderTrigger,
-  renderGroup,
-}: tFieldMultiSelectProps<oGroup>) {
-  const tFieldMultiSelect = useTranslations("components.fields.multiselect");
+const FieldMultiSelect = forwardRef(
+  <gGroup extends tGroup<gOption>, gOption extends tOption>(
+    {
+      id,
+      maxShownItems = 2,
+      "select-placeholder": selectPlaceholder,
+      "search-placeholder": searchPlaceholder,
+      groups,
+      values: _values = [],
+      onChange,
+      renderTrigger,
+      renderGroup,
+    }: tFieldMultiSelectProps<gGroup, gOption>,
+    ref: React.Ref<tFieldMultiSelectRef<gOption>>,
+  ) => {
+    const tFieldMultiSelect = useTranslations("components.fields.multiselect");
 
-  const [values, setValues] = useState<oGroup[]>(_values);
+    const [values, setValues] = useState<gOption[]>(_values);
 
-  const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
-  const visibleGroups: oGroup[] = expanded
-    ? values
-    : values.slice(0, maxShownItems);
+    const visibleGroups: gOption[] = isExpanded
+      ? values
+      : values.slice(0, maxShownItems);
 
-  const hiddenCount = values.length - visibleGroups.length;
+    const hiddenCount = values.length - visibleGroups.length;
 
-  function toggleSelection(
-    groupValue: oGroup["value"],
-    optionToToggle: tOption,
-    isSelected: boolean,
-  ) {
-    setValues((prev) => {
-      const newValues = prev.map((group) => {
-        if (group.value !== groupValue) return group;
-        const newGroup = structuredClone(group);
+    function change(options: gOption[]) {
+      console.log("updating", options);
+      setValues(options);
+    }
 
-        if (isSelected)
-          newGroup.options = newGroup.options.filter(
-            (option) => option.value !== optionToToggle.value,
-          );
-        else newGroup.options.push(optionToToggle);
+    function reset(options: gOption[] = []) {
+      setValues(options);
+    }
+    useImperativeHandle(ref, () => ({
+      change,
+      reset,
+    }));
 
-        return newGroup;
-      });
+    function toggleSelection(optionToToggle: gOption, isSelected: boolean) {
+      if (isSelected) {
+        const options = values.filter((option) => option !== optionToToggle);
 
-      onChange?.(newValues);
-      return newValues;
-    });
-  }
+        setValues(options);
+        onChange?.(options);
+        return;
+      }
 
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          id={id}
-          aria-expanded={open}
-          role="combobox"
-          variant="outline"
-          className="h-auto min-h-8 w-full justify-between hover:bg-transparent"
-        >
-          <div className="flex flex-wrap items-center gap-1 truncate pr-2.5">
-            {values.length > 0 ? (
-              <>
-                {visibleGroups.map((visibleGroup) => {
-                  return (
-                    <Badge
-                      key={visibleGroup.value}
-                      variant="outline"
-                      className="rounded"
-                    >
-                      {renderTrigger(
-                        visibleGroup,
-                        hiddenCount,
-                        toggleSelection,
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-4"
-                        onClick={() =>
-                          toggleSelection(
-                            visibleGroup.value,
-                            visibleGroup.options[0],
-                            true,
-                          )
-                        }
+      const options = [...values, optionToToggle];
+      setValues(options);
+      onChange?.(options);
+    }
+
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            id={id}
+            aria-expanded={isOpen}
+            role="combobox"
+            variant="outline"
+            className="h-auto min-h-8 w-full justify-between hover:bg-transparent"
+          >
+            <div className="flex flex-wrap items-center gap-1">
+              {values.length > 0 ? (
+                <Fragment>
+                  {visibleGroups.flatMap((option) => (
+                    <Badge key={option.value} variant="outline" className="">
+                      {renderTrigger(option)}
+                      <span
+                        className="hover:bg-foreground/10 inline-flex size-4 items-center justify-center rounded duration-100"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleSelection(option, true);
+                        }}
                       >
                         <LuX className="size-3" />
-                      </Button>
+                      </span>
                     </Badge>
-                  );
-                })}
-                {hiddenCount > 0 || expanded ? (
-                  <Badge
-                    variant="outline"
-                    className="rounded"
-                    onClick={() => setExpanded((prev) => !prev)}
-                  >
-                    {expanded
-                      ? tFieldMultiSelect("show-less")
-                      : tFieldMultiSelect("show-more", {
-                          count: hiddenCount,
-                        })}
-                  </Badge>
-                ) : null}
-              </>
-            ) : (
-              <span className="text-muted-foreground">{placeholder}</span>
-            )}
-          </div>
-          <LuChevronsUpDown
-            className="text-muted-foreground/80 shrink-0"
-            aria-hidden="true"
-          />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-(--radix-popper-anchor-width) p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandList>
-            <CommandEmpty>{tFieldMultiSelect("when-no-results")}</CommandEmpty>
-            {groups.map((group) => renderGroup(group, values, toggleSelection))}
-            {/* <CommandGroup>
-              {options.map((option) => {
-                const isSelected: boolean = values.some(
-                  (value) => value === option.value,
-                );
+                  ))}
+                  {hiddenCount > 0 || isExpanded ? (
+                    <Badge
+                      variant="outline"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setIsExpanded((prev) => !prev);
+                      }}
+                    >
+                      {isExpanded
+                        ? tFieldMultiSelect("show-less")
+                        : tFieldMultiSelect("show-more", {
+                            count: hiddenCount,
+                          })}
+                    </Badge>
+                  ) : null}
+                </Fragment>
+              ) : (
+                <span className="text-muted-foreground line-clamp-1 text-start text-sm text-wrap">
+                  {selectPlaceholder}
+                </span>
+              )}
+            </div>
+            <LuChevronsUpDown
+              className="text-muted-foreground/80 shrink-0"
+              aria-hidden="true"
+            />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-(--radix-popper-anchor-width) p-0">
+          <Command>
+            <CommandInput placeholder={searchPlaceholder} />
+            <CommandList>
+              <CommandEmpty>
+                {tFieldMultiSelect("when-no-results")}
+              </CommandEmpty>
+              {groups.map((group) =>
+                renderGroup(group, values, toggleSelection),
+              )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  },
+) as <gGroup extends tGroup<gOption>, gOption extends tOption>(
+  props: tFieldMultiSelectProps<gGroup, gOption> &
+    RefAttributes<tFieldMultiSelectRef<gOption>>,
+) => ReactElement;
 
-                return (
-                  <CommandItem
-                    key={option.value}
-                    value={option.label}
-                    onSelect={() => toggleSelection(option.value, isSelected)}
-                  >
-                    {render(option, isSelected)}
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup> */}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-}
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+FieldMultiSelect.displayName = "FieldMultiSelect";
 
 type tFieldDatePickerRef = {
   reset: (date?: Date) => void;
@@ -1024,17 +1028,19 @@ export type {
   tFieldTagsRef,
   tFieldNumberMinMaxRef,
   tFieldPhoneNumberRef,
+  tFieldMultiSelectRef,
   tFieldDatePickerRef,
   tFileUploadRef,
 };
 export {
   FieldSearch,
+  FieldUsername,
   FieldTags,
+  FieldEmail,
+  FieldPassword,
+  FieldPhoneNumber,
   FieldNumber,
   FieldNumberMinMax,
-  FieldPhoneNumber,
-  FieldPassword,
-  FieldEmail,
   FieldMultiSelect,
   FieldDatePicker,
   FieldFileUpload,

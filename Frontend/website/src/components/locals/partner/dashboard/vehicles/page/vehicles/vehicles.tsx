@@ -1,6 +1,6 @@
 "use client";
 
-import { tNullable, tUndefinable } from "@/types/nullish";
+import { tUndefinable } from "@/types/nullish";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -101,7 +101,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/shadcn/table";
-import { SearchableSelect } from "@/components/locals/blocks/selects";
+import { FieldFreeSearchableSelect } from "@/components/locals/blocks/selects";
 import { ColorCreator } from "@/components/locals/blocks/color-pickers";
 
 import { Input } from "@/components/shadcn/input";
@@ -486,7 +486,7 @@ function AddNewVehicleModel() {
                         {tAddNew("content.form.information.manufacturer.label")}
                       </FieldLabel>
                       <FieldContent>
-                        <SearchableSelect
+                        <FieldFreeSearchableSelect
                           triggerRender={() => (
                             <Button
                               id={`${id}-manufacturer`}
@@ -515,7 +515,7 @@ function AddNewVehicleModel() {
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
                           )}
-                          whenNoResultRender={() =>
+                          whenEmptyRender={() =>
                             tAddNew(
                               "content.form.information.manufacturer.when-no-result",
                             )
@@ -604,7 +604,9 @@ function AddNewVehicleModel() {
                           htmlFor={`${id}-capacity`}
                           className="w-fit"
                         >
-                          {tAddNew("content.form.specifications.capacity.label")}
+                          {tAddNew(
+                            "content.form.specifications.capacity.label",
+                          )}
                         </FieldLabel>
                         <FieldContent>
                           <FieldNumber
@@ -638,7 +640,7 @@ function AddNewVehicleModel() {
                         )}
                       </FieldLabel>
                       <FieldContent>
-                        <SearchableSelect
+                        <FieldFreeSearchableSelect
                           triggerRender={() => (
                             <Button
                               id={`${id}-transmission`}
@@ -667,7 +669,7 @@ function AddNewVehicleModel() {
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
                           )}
-                          whenNoResultRender={() =>
+                          whenEmptyRender={() =>
                             tAddNew(
                               "content.form.specifications.transmission.when-no-result",
                             )
@@ -694,7 +696,7 @@ function AddNewVehicleModel() {
                         {tAddNew("content.form.specifications.fuel.label")}
                       </FieldLabel>
                       <FieldContent>
-                        <SearchableSelect
+                        <FieldFreeSearchableSelect
                           triggerRender={() => (
                             <Button
                               id={`${id}-fuel`}
@@ -723,7 +725,7 @@ function AddNewVehicleModel() {
                           itemRender={(item) => (
                             <button className="w-full">{item.value}</button>
                           )}
-                          whenNoResultRender={() =>
+                          whenEmptyRender={() =>
                             tAddNew(
                               "content.form.specifications.fuel.when-no-result",
                             )
@@ -737,7 +739,7 @@ function AddNewVehicleModel() {
                 <Controller
                   control={control}
                   name="colors"
-                  render={({ field, fieldState: {invalid, error} }) => (
+                  render={({ field, fieldState: { invalid, error } }) => (
                     <Field>
                       <FieldLabel
                         aria-invalid={invalid}

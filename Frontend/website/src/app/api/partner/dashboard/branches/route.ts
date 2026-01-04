@@ -9,20 +9,20 @@ import { tBranchFilter, zBranchFilter } from "@/validations/partner/branch";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zBranchCreate } from "@/validations/partner/branch";
-import { ClsErrorModel } from "@/models/error";
-
-import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
 
 import { tNullable } from "@/types/nullish";
 
+import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
+
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
+import { ClsErrorModel } from "@/models/error";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseManyModel<tBranchModel>>> {
   return await apiCatch<tBranchModel>(async () => {
-    const [status, page, pageSize]: tNullable<string>[] = [
+    const [statusQuery, pageQuery, pageSizeQuery]: tNullable<string>[] = [
       request.nextUrl.searchParams.get("filter.status"),
       request.nextUrl.searchParams.get("pagination.page"),
       request.nextUrl.searchParams.get("pagination.page-size"),
@@ -30,11 +30,11 @@ export async function GET(
 
     const filter: tBranchFilter = {
       search: request.nextUrl.searchParams.get("filter.search") ?? undefined,
-      status: status !== null ? Number(status) : undefined,
+      status: statusQuery !== null ? Number(statusQuery) : undefined,
     };
     const pagination: tPagination = {
-      page: page === null ? undefined : Number(page),
-      pageSize: pageSize === null ? undefined : Number(pageSize),
+      page: pageQuery === null ? undefined : Number(pageQuery),
+      pageSize: pageSizeQuery === null ? undefined : Number(pageSizeQuery),
     };
 
     const parsedFilter: tBranchFilter = zBranchFilter.parse(filter);

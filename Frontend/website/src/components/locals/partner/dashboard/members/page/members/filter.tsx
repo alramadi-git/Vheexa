@@ -38,17 +38,7 @@ import {
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
 import { CommandGroup, CommandItem } from "@/components/shadcn/command";
-
-type tPermissionGroup = {
-  value: string;
-  label: string;
-  options: tPermissionOption[];
-};
-type tPermissionOption = {
-  value: string;
-  label: string;
-  description: string;
-};
+import { tMemberFilter, zMemberFilter } from "@/validations/partner/member";
 
 type tStatues = {
   value: string;
@@ -56,74 +46,44 @@ type tStatues = {
 };
 
 export default function Filter() {
+  const tFilter = useTranslations(
+    "app.partner.dashboard.members.page.members.filter",
+  );
+
   const id = useId();
   const query = useQuery();
 
-  const tFilter = useTranslations(
-    "app.partner.dashboard.roles.page.roles.filter",
-  );
-
   const {
     control,
-    formState,
     setValue,
     reset: handleReset,
     handleSubmit,
-  } = useForm<tRoleFilter>({
+  } = useForm<tMemberFilter>({
     defaultValues: {
-      name: undefined,
-      permissions: [],
+      search: undefined,
+      roles: [],
+      branches: [],
       status: undefined,
     },
-    resolver: zodResolver(zRoleFilter),
+    resolver: zodResolver(zMemberFilter),
   });
 
-  const permissionsRef = useRef<tFieldMultiSelectRef<tPermissionOption>>(null);
-
-  const permissionGroups: tPermissionGroup[] = useMemo(
-    () => tFilter.raw("permissions.permissions") satisfies tPermissionGroup[],
-    [tFilter],
-  );
   const statuses: tStatues[] = tFilter.raw("status.statuses");
 
   const [statusQuery] = [query.get("filter.status")];
 
   useEffect(() => {
-    setValue("name", query.get("filter.name") ?? undefined);
-
-    const permissions = query
-      .getAll("filter.permissions")
-      .map((permission) => Number(permission));
-
-    setValue("permissions", permissions);
-    permissionsRef.current?.change(
-      permissionGroups
-        .flatMap((group) => group.options)
-        .filter(
-          (option) => permissions.includes(Number(option.value)) ?? false,
-        ),
-    );
-
     setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
   }, []);
 
   function reset() {
     handleReset();
-    permissionsRef.current?.reset();
   }
 
-  function submit(data: tRoleFilter) {
-    query.remove("filter.name");
-    query.remove("filter.permissions");
+  function submit(data: tMemberFilter) {
     query.remove("filter.status");
-
     query.remove("pagination.page");
 
-    query.set("filter.name", data.name);
-    query.set(
-      "filter.permissions",
-      data.permissions.map((permission) => permission.toString()),
-    );
     query.set("filter.status", data.status?.toString());
 
     query.apply();
@@ -141,7 +101,7 @@ export default function Filter() {
             <FieldGroup className="grid-cols-3">
               <Controller
                 control={control}
-                name="name"
+                name="search"
                 render={({
                   field: { value, onChange: setValue, ...field },
                   fieldState,
@@ -149,16 +109,16 @@ export default function Filter() {
                   <Field>
                     <FieldLabel
                       aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-name`}
+                      htmlFor={`${id}-search`}
                       className="max-w-fit"
                     >
-                      {tFilter("name.label")}
+                      {tFilter("search.label")}
                     </FieldLabel>
                     <FieldContent>
                       <FieldSearch
                         {...field}
-                        id={`${id}-name`}
-                        placeholder={tFilter("name.placeholder")}
+                        id={`${id}-search`}
+                        placeholder={tFilter("search.placeholder")}
                         value={value ?? ""}
                         onChange={(event) =>
                           event.currentTarget.value === ""
@@ -171,94 +131,7 @@ export default function Filter() {
                   </Field>
                 )}
               />
-              <Controller
-                control={control}
-                name="permissions"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-permissions`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("permissions.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldMultiSelect<tPermissionGroup, tPermissionOption>
-                        ref={permissionsRef}
-                        id={`${id}-permissions`}
-                        maxShownItems={5}
-                        select-placeholder={tFilter(
-                          "permissions.select-placeholder",
-                        )}
-                        search-placeholder={tFilter(
-                          "permissions.search-placeholder",
-                        )}
-                        groups={permissionGroups}
-                        values={permissionGroups
-                          .flatMap((group) => group.options)
-                          .filter(
-                            (option) =>
-                              value?.includes(Number(option.value)) ?? false,
-                          )}
-                        renderTrigger={(option) => option.label}
-                        renderGroup={(
-                          group,
-                          selectedItems,
-                          toggleSelection,
-                        ) => {
-                          return (
-                            <CommandGroup
-                              key={group.value}
-                              heading={group.label}
-                            >
-                              {group.options.map((option) => {
-                                const isSelected = selectedItems.some(
-                                  (selectedItem) =>
-                                    selectedItem.value === option.value,
-                                );
-
-                                return (
-                                  <CommandItem
-                                    asChild
-                                    key={option.value}
-                                    value={option.label}
-                                    onSelect={() =>
-                                      toggleSelection(option, isSelected)
-                                    }
-                                  >
-                                    <button
-                                      type="button"
-                                      className="w-full justify-between"
-                                    >
-                                      <span className="text-start">
-                                        {option.label}
-                                        <p className="text-muted-foreground">
-                                          {option.description}
-                                        </p>
-                                      </span>
-                                      {isSelected && <LuCheck size={16} />}
-                                    </button>
-                                  </CommandItem>
-                                );
-                              })}
-                            </CommandGroup>
-                          );
-                        }}
-                        onChange={(options) => {
-                          setValue(
-                            options.map((option) => Number(option.value)),
-                          );
-                        }}
-                      />
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
+          
               <Controller
                 control={control}
                 name="status"

@@ -10,8 +10,6 @@ import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zMemberCreate } from "@/validations/partner/member";
 
-import { ClsErrorModel } from "@/models/error";
-
 import { tNullable } from "@/types/nullish";
 
 import { eRoleStatusModel } from "@/models/partner/role";
@@ -21,20 +19,13 @@ import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
+import { ClsErrorModel } from "@/models/error";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseManyModel<tMemberModel>>> {
   return await apiCatch<tMemberModel>(async () => {
-    const [
-      minBirthday,
-      maxBirthday,
-      status,
-      page,
-      pageSize,
-    ]: tNullable<string>[] = [
-      request.nextUrl.searchParams.get("filter.birthday.min"),
-      request.nextUrl.searchParams.get("filter.birthday.max"),
+    const [statusQuery, pageQuery, pageSizeQuery]: tNullable<string>[] = [
       request.nextUrl.searchParams.get("filter.status"),
       request.nextUrl.searchParams.get("pagination.page"),
       request.nextUrl.searchParams.get("pagination.page-size"),
@@ -42,17 +33,13 @@ export async function GET(
 
     const filter: tMemberFilter = {
       search: request.nextUrl.searchParams.get("filter.search") ?? undefined,
-      location:
-        request.nextUrl.searchParams.get("filter.location") ?? undefined,
-      birthday: {
-        min: minBirthday !== null ? new Date(minBirthday) : undefined,
-        max: maxBirthday !== null ? new Date(maxBirthday) : undefined,
-      },
-      status: status !== null ? Number(status) : undefined,
+      roles: request.nextUrl.searchParams.getAll("filter.roles"),
+      branches: request.nextUrl.searchParams.getAll("filter.branches"),
+      status: statusQuery !== null ? Number(statusQuery) : undefined,
     };
     const pagination: tPagination = {
-      page: page === null ? undefined : Number(page),
-      pageSize: pageSize === null ? undefined : Number(pageSize),
+      page: pageQuery === null ? undefined : Number(pageQuery),
+      pageSize: pageSizeQuery === null ? undefined : Number(pageSizeQuery),
     };
 
     const parsedFilter: tMemberFilter = zMemberFilter.parse(filter);
@@ -62,16 +49,9 @@ export async function GET(
 
     clsQuery.set("Filter.Search.Value", parsedFilter.search);
 
-    clsQuery.set("Filter.Location.Value", parsedFilter.location);
+    clsQuery.set("Filter.Roles.Value", parsedFilter.roles);
 
-    clsQuery.set(
-      "Filter.Birthday.Min.Value",
-      parsedFilter.birthday.min?.toString(),
-    );
-    clsQuery.set(
-      "Filter.Birthday.Max.Value",
-      parsedFilter.birthday.max?.toString(),
-    );
+    clsQuery.set("Filter.Branches.Value", parsedFilter.branches);
 
     clsQuery.set("Filter.Status.Value", parsedFilter.status?.toString());
 
@@ -89,17 +69,7 @@ export async function GET(
             uuid: "a1b2c3d4-1111-4aaa-9999-0e1f2a3b4c5d",
             url: "https://avatar.vercel.sh/james_wilson.svg?size=200",
           },
-          location: {
-            uuid: "b2c3d4e5-2222-4bbb-8888-1f2a3b4c5d6e",
-            country: "United States",
-            city: "Austin",
-            street: "201 E 6th St",
-            latitude: 30.267153,
-            longitude: -97.743094,
-          },
           username: "james.wilson",
-          birthday: "1988-04-12",
-          phoneNumber: "+1 512-555-0198",
           email: "james.wilson@partnerfleet.com",
           role: {
             uuid: "c3d4e5f6-3333-4ccc-7777-2a3b4c5d6e7f",
@@ -128,7 +98,7 @@ export async function GET(
             latitude: 30.267153,
             longitude: -97.743094,
             name: "Austin Downtown Branch",
-            phoneNumber: "+1 512-555-0198",
+            phoneNumber: "+14155552671",
             email: "austin.downtown@partnerfleet.com",
             status: eBranchStatusModel.active,
             createdAt: "2023-06-12T10:30:00Z",
@@ -144,17 +114,7 @@ export async function GET(
             uuid: "g7h8i9j0-7777-4ggg-3333-6e7f8a9b0c1d",
             url: "https://avatar.vercel.sh/lena_schmidt.svg?size=200&text=LS",
           },
-          location: {
-            uuid: "h8i9j0k1-8888-4hhh-2222-7f8a9b0c1d2e",
-            country: "Germany",
-            city: "Berlin",
-            street: "Friedrichstraße 68",
-            latitude: 52.517036,
-            longitude: 13.38886,
-          },
           username: "lena.schmidt",
-          birthday: "1992-07-23",
-          phoneNumber: "+49 30 55578901",
           email: "lena.schmidt@partnerfleet.eu",
           role: {
             uuid: "i9j0k1l2-9999-4iii-1111-8a9b0c1d2e3f",
@@ -183,7 +143,7 @@ export async function GET(
             latitude: 52.517036,
             longitude: 13.38886,
             name: "Berlin Mitte Hub",
-            phoneNumber: "+49 30 55578901",
+            phoneNumber: "+14155552671",
             email: "berlin.mitte@partnerfleet.eu",
             status: eBranchStatusModel.active,
             createdAt: "2023-08-05T09:15:00Z",
@@ -196,17 +156,7 @@ export async function GET(
         {
           uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
           avatar: null,
-          location: {
-            uuid: "m3n4o5p6-dddd-4mmm-dddd-2e3f4a5b6c7d",
-            country: "Canada",
-            city: "Toronto",
-            street: "123 Queen St W",
-            latitude: 43.648749,
-            longitude: -79.380432,
-          },
           username: "michael.toronto",
-          birthday: "1985-11-30",
-          phoneNumber: "+1 416-555-0134",
           email: "michael.toronto@partnerfleet.ca",
           role: {
             uuid: "n4o5p6q7-eeee-4nnn-cccc-3f4a5b6c7d8e",
@@ -235,7 +185,7 @@ export async function GET(
             latitude: 43.648749,
             longitude: -79.380432,
             name: "Toronto Financial District",
-            phoneNumber: "+1 416-555-0134",
+            phoneNumber: "+14155552671",
             email: "toronto.fd@partnerfleet.ca",
             status: eBranchStatusModel.active,
             createdAt: "2023-11-20T13:45:00Z",
@@ -251,17 +201,7 @@ export async function GET(
             uuid: "r8s9t0u1-iiii-4rrr-8888-7d8e9f0a1b2c",
             url: "https://avatar.vercel.sh/sarah_sydney.svg?size=200&text=SS",
           },
-          location: {
-            uuid: "s9t0u1v2-jjjj-4sss-7777-8e9f0a1b2c3d",
-            country: "Australia",
-            city: "Sydney",
-            street: "456 George St",
-            latitude: -33.865004,
-            longitude: 151.208336,
-          },
           username: "sarah.sydney",
-          birthday: "1990-02-14",
-          phoneNumber: "+61 2 5550 1923",
           email: "sarah.sydney@partnerfleet.com.au",
           role: {
             uuid: "t0u1v2w3-kkkk-4ttt-6666-9f0a1b2c3d4e",
@@ -290,7 +230,7 @@ export async function GET(
             latitude: -33.865004,
             longitude: 151.208336,
             name: "Sydney Central Branch",
-            phoneNumber: "+61 2 5550 1923",
+            phoneNumber: "+14155552671",
             email: "sydney.central@partnerfleet.com.au",
             status: eBranchStatusModel.inactive,
             createdAt: "2023-05-18T08:20:00Z",
@@ -306,17 +246,7 @@ export async function GET(
             uuid: "x4y5z6a7-oooo-4xxx-2222-3d4e5f6a7b8c",
             url: "https://avatar.vercel.sh/ahmed_dubai.svg?size=200&text=AD",
           },
-          location: {
-            uuid: "y5z6a7b8-pppp-4yyy-1111-4e5f6a7b8c9d",
-            country: "United Arab Emirates",
-            city: "Dubai",
-            street: "Sheikh Zayed Rd, Business Bay",
-            latitude: 25.189827,
-            longitude: 55.273522,
-          },
           username: "ahmed.dubai",
-          birthday: "1987-09-03",
-          phoneNumber: "+971 4 555 0187",
           email: "ahmed.dubai@partnerfleet.ae",
           role: {
             uuid: "z6a7b8c9-qqqq-4zzz-0000-5f6a7b8c9d0e",
@@ -345,7 +275,7 @@ export async function GET(
             latitude: 25.189827,
             longitude: 55.273522,
             name: "Dubai Business Bay Office",
-            phoneNumber: "+971 4 555 0187",
+            phoneNumber: "+14155552671",
             email: "dubai.bb@partnerfleet.ae",
             status: eBranchStatusModel.active,
             createdAt: "2024-01-10T11:00:00Z",
@@ -358,17 +288,7 @@ export async function GET(
         {
           uuid: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
           avatar: null,
-          location: {
-            uuid: "d0e1f2a3-uuuu-4ddd-cccc-9d0e1f2a3b4c",
-            country: "Brazil",
-            city: "São Paulo",
-            street: "Av. Paulista, 1000",
-            latitude: -23.561238,
-            longitude: -46.65551,
-          },
           username: "carlos.sp",
-          birthday: "1993-12-07",
-          phoneNumber: "+55 11 5555-0176",
           email: "carlos.sp@partnerfleet.br",
           role: {
             uuid: "e1f2a3b4-vvvv-4eee-bbbb-0e1f2a3b4c5d",
@@ -397,7 +317,7 @@ export async function GET(
             latitude: -23.561238,
             longitude: -46.65551,
             name: "São Paulo Paulista Branch",
-            phoneNumber: "+55 11 5555-0176",
+            phoneNumber: "+14155552671",
             email: "saopaulo.paulista@partnerfleet.br",
             status: eBranchStatusModel.inactive,
             createdAt: "2023-07-22T15:30:00Z",
@@ -413,17 +333,7 @@ export async function GET(
             uuid: "i5d6e7f8-zzzz-4iii-7777-4c5d6e7f8a9b",
             url: "https://avatar.vercel.sh/emily_van.svg?size=200&text=EV",
           },
-          location: {
-            uuid: "j6e7f8g9-1111-4jjj-6666-5d6e7f8a9b0c",
-            country: "Canada",
-            city: "Vancouver",
-            street: "789 Granville St",
-            latitude: 49.2819,
-            longitude: -123.1187,
-          },
           username: "emily.vancouver",
-          birthday: "1991-06-18",
-          phoneNumber: "+1 604-555-0142",
           email: "emily.vancouver@partnerfleet.ca",
           role: {
             uuid: "k7f8g9h0-2222-4kkk-5555-6e7f8a9b0c1d",
@@ -452,7 +362,7 @@ export async function GET(
             latitude: 49.2819,
             longitude: -123.1187,
             name: "Vancouver Downtown Office",
-            phoneNumber: "+1 604-555-0142",
+            phoneNumber: "+14155552671",
             email: "vancouver.dt@partnerfleet.ca",
             status: eBranchStatusModel.active,
             createdAt: "2023-10-05T12:00:00Z",
@@ -468,17 +378,7 @@ export async function GET(
             uuid: "o1j2k3l4-6666-4ooo-1111-0c1d2e3f4a5b",
             url: "https://avatar.vercel.sh/thomas_berlin.svg?size=200&text=TB",
           },
-          location: {
-            uuid: "p2k3l4m5-7777-4ppp-0000-1d2e3f4a5b6c",
-            country: "Germany",
-            city: "Munich",
-            street: "Marienplatz 8",
-            latitude: 48.137154,
-            longitude: 11.576124,
-          },
           username: "thomas.munich",
-          birthday: "1989-03-22",
-          phoneNumber: "+49 89 55567890",
           email: "thomas.munich@partnerfleet.eu",
           role: {
             uuid: "q3l4m5n6-8888-4qqq-ffff-2e3f4a5b6c7d",
@@ -507,7 +407,7 @@ export async function GET(
             latitude: 48.137154,
             longitude: 11.576124,
             name: "Munich City Center",
-            phoneNumber: "+49 89 55567890",
+            phoneNumber: "+14155552671",
             email: "munich.cc@partnerfleet.eu",
             status: eBranchStatusModel.active,
             createdAt: "2024-02-14T10:00:00Z",
@@ -520,17 +420,7 @@ export async function GET(
         {
           uuid: "h8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
           avatar: null,
-          location: {
-            uuid: "u7p8q9r0-cccc-4uuu-bbbb-6c7d8e9f0a1b",
-            country: "United States",
-            city: "New York",
-            street: "350 5th Ave",
-            latitude: 40.748441,
-            longitude: -73.985664,
-          },
           username: "david.nyc",
-          birthday: "1986-08-15",
-          phoneNumber: "+1 212-555-0167",
           email: "david.nyc@partnerfleet.com",
           role: {
             uuid: "v8q9r0s1-dddd-4vvv-aaaa-7d8e9f0a1b2c",
@@ -559,7 +449,7 @@ export async function GET(
             latitude: 40.748441,
             longitude: -73.985664,
             name: "NYC Midtown Branch",
-            phoneNumber: "+1 212-555-0167",
+            phoneNumber: "+14155552671",
             email: "nyc.midtown@partnerfleet.com",
             status: eBranchStatusModel.active,
             createdAt: "2023-09-01T11:30:00Z",
@@ -575,17 +465,7 @@ export async function GET(
             uuid: "z2u3v4w5-hhhh-4zzz-6666-1b2c3d4e5f6a",
             url: "https://avatar.vercel.sh/anna_melb.svg?size=200&text=AM",
           },
-          location: {
-            uuid: "a3v4w5x6-iiii-4aaa-5555-2c3d4e5f6a7b",
-            country: "Australia",
-            city: "Melbourne",
-            street: "120 Collins St",
-            latitude: -37.818264,
-            longitude: 144.968789,
-          },
           username: "anna.melbourne",
-          birthday: "1994-01-30",
-          phoneNumber: "+61 3 5550 1987",
           email: "anna.melbourne@partnerfleet.com.au",
           role: {
             uuid: "b4w5x6y7-jjjj-4bbb-4444-3d4e5f6a7b8c",
@@ -614,7 +494,7 @@ export async function GET(
             latitude: -37.818264,
             longitude: 144.968789,
             name: "Melbourne CBD Office",
-            phoneNumber: "+61 3 5550 1987",
+            phoneNumber: "+14155552671",
             email: "melbourne cbd@partnerfleet.com.au",
             status: eBranchStatusModel.active,
             createdAt: "2023-11-10T13:00:00Z",

@@ -126,7 +126,6 @@
           "template": "%s | Vheexa"
         },
         "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — with competitive prices and a seamless booking experience in minutes.",
-
         "icons": {
           "icon": [
             {
@@ -313,12 +312,10 @@
               }
             ]
           },
-
           "navigation-menu": [
             {
               "id": 1,
               "label": "Quick Links",
-
               "submenu": [
                 {
                   "id": 1,
@@ -354,16 +351,13 @@
             }
           ]
         },
-
         "footer": {
           "logo": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
             "alt": "Vheexa Company Logo"
           },
-
           "title": "Vheexa",
           "description": "A platform for renting all types of vehicles easily and quickly, offering you diverse options at competitive prices, with a safe and comfortable booking experience.",
-
           "quick-links": [
             {
               "label": "Our Services",
@@ -458,16 +452,13 @@
               ]
             }
           ],
-
           "outro": "<copyright></copyright> <time></time> <span>Vheexa LLC, All rights reserved.</span>"
         }
       },
-
       "page": {
         "hero": {
           "title": "Rent Any Vehicle, Quickly and Easily",
           "description": "Vheexa is a leading platform for renting all types of vehicles — from cars to trucks and bikes — at competitive prices with a smooth booking experience in just minutes.",
-
           "actions": {
             "book-now": {
               "href": "/user/vehicles",
@@ -478,10 +469,8 @@
               "label": "Learn More"
             }
           },
-
           "partners": {
             "label": "Trusted for Every Journey",
-
             "logos": [
               {
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
@@ -518,14 +507,11 @@
             ]
           }
         },
-
         "stats": {
           "title": "Vheexa Vehicle Rentals",
           "description": "Vheexa is more than just a vehicle rental platform — it's a complete ecosystem of services. From cars to bikes and trucks, backed by modern technologies that help individuals and businesses innovate and simplify mobility.",
-
           "metrics": {
             "description": "A complete ecosystem backed by numbers that reflect the trust of our clients and partners.",
-
             "items": [
               {
                 "label": "Partners",
@@ -545,7 +531,6 @@
               }
             ]
           },
-
           "testimonial": {
             "quote": "Using Vheexa was like discovering a new power in mobility management. The platform combines simplicity and flexibility, enabling us to deliver safe and practical solutions to users.",
             "author": {
@@ -558,16 +543,13 @@
             }
           }
         },
-
         "features": {
           "title": "Vheexa Features",
           "description": "Vheexa is an all-in-one platform for renting any type of vehicle quickly and easily. It offers a seamless and secure booking experience with diverse options tailored to your needs and budget, plus full support and premium customer service.",
-
           "illustration": {
             "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alt": "Placeholder illustration"
           },
-
           "highlights": [
             {
               "label": "Ease of Use",
@@ -587,11 +569,9 @@
             }
           ]
         },
-
         "how-it-works": {
           "title": "How Does Vheexa Work?",
           "description": "Simple and quick steps to rent any vehicle through our platform — no hassle.",
-
           "steps": [
             {
               "label": "Book",
@@ -619,11 +599,9 @@
             }
           ]
         },
-
         "faqs": {
           "title": "Frequently Asked Questions",
           "description": "Answers to the most common questions about Vheexa and vehicle rentals.",
-
           "questions": [
             {
               "id": "faq-booking",
@@ -651,11 +629,9 @@
               "answer": "You can pick up the vehicle at the designated point or request delivery. After your booking, return it to the same point or request pickup from your location."
             }
           ],
-
           "help": "Didn't find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we'll be happy to assist you."
         }
       },
-
       "vehicles": {
         "layout": {
           "metadata": {
@@ -663,20 +639,16 @@
             "description": "Browse all vehicle types available on Vheexa — from cars and bikes to trucks and luxury vehicles — with search and filter options to match your needs."
           }
         },
-
         "page": {
           "hero": {
             "badge": "All options at your fingertips <ArrowUpRight></ArrowUpRight>",
-
             "title": "Choose Your Perfect Vehicle",
             "description": "Explore our wide selection of vehicles for rent. Whether you're looking for an affordable car, a motorcycle for fun, a truck for work, or a luxury vehicle for special occasions — Vheexa has everything you need, quickly and easily.",
-
             "image": {
               "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
               "alt": "Placeholder image"
             }
           },
-
           "products": {
             "form": {
               "search": {
@@ -691,7 +663,6 @@
                 "label": "Fuel",
                 "placeholder": "Want a specific type of fuel..."
               },
-
               "min-capacity": {
                 "label": "Min Capacity",
                 "placeholder": "How many people you wanna carry..."
@@ -700,7 +671,6 @@
                 "label": "Max Capacity",
                 "placeholder": "How many people you don't need to carry..."
               },
-
               "min-price": {
                 "label": "Min Price",
                 "placeholder": "How much do you want it..."
@@ -709,24 +679,20 @@
                 "label": "Max Price",
                 "placeholder": "How much you last..."
               },
-
               "has-discount": {
                 "label": "Only show vehicles with discounts",
                 "description": " When checked, only show vehicles with discounts, otherwise show alls"
               }
             },
-
             "product": {
               "specifications": {
                 "capacity": "Capacity"
               },
-
               "price-per": "A day",
               "view-details": "View Details"
             }
           }
         },
-
         "uuid": {
           "page": {
             "product": {
@@ -734,11 +700,9 @@
                 "src": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
                 "alt": "Placeholder image"
               },
-
               "tabs": {
                 "specifications": {
                   "label": "Specifications",
-
                   "content": {
                     "transmission": "Transmission",
                     "fuel": "Fuel",
@@ -750,7 +714,6 @@
                 },
                 "comments-and-reviews": {
                   "label": "Comments & Reviews",
-
                   "content": "Coming soon...."
                 }
               }
@@ -758,7 +721,6 @@
           }
         }
       },
-
       "authentication": {
         "layout": {
           "metadata": {
@@ -768,38 +730,32 @@
             },
             "description": "Access your Vheexa account to manage bookings and rents easily and securely."
           },
-
           "illustration": {
             "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alternate": "placeholder"
           }
         },
-
         "login": {
           "page": {
             "metadata": {
               "title": "Login",
               "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
             },
-
             "form": {
               "title": "Welcome back",
               "description": "Login to your Vheexa account",
-
               "email": {
                 "label": "Email",
                 "placeholder": "account@vheexa.com",
                 "default-value": "user@vheexa.com",
                 "description": "Enter your email address"
               },
-
               "password": {
                 "label": "Password",
                 "placeholder": "********",
                 "default-value": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
                 "description": "Enter your password"
               },
-
               "submit": "Login"
             }
           }
@@ -874,123 +830,160 @@
                     },
                     "permissions": {
                       "label": "Permissions",
-                      "placeholder": "Enter permission (e.g., Create, Read, Update, Delete)",
+                      "select-placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
+                      "search-placeholder": "Search permission (e.g., Create, Read, Update, Delete)",
                       "when-no-results": "No results found",
                       "permissions": [
                         {
                           "value": "0",
-                          "label": "Partner Read",
-                          "description": "View partner details and information."
+                          "label": "Partner",
+                          "options": [
+                            {
+                              "value": "0",
+                              "label": "Partner Read",
+                              "description": "View partner details and information."
+                            },
+                            {
+                              "value": "1",
+                              "label": "Partner Update",
+                              "description": "Edit or modify partner account details."
+                            },
+                            {
+                              "value": "2",
+                              "label": "Partner Delete",
+                              "description": "Permanently remove a partner from the system."
+                            }
+                          ]
                         },
                         {
                           "value": "1",
-                          "label": "Partner Update",
-                          "description": "Edit or modify partner account details."
+                          "label": "Roles",
+                          "options": [
+                            {
+                              "value": "3",
+                              "label": "Roles Create",
+                              "description": "Create new user roles with custom permissions."
+                            },
+                            {
+                              "value": "4",
+                              "label": "Roles Read",
+                              "description": "View existing roles and their assigned permissions."
+                            },
+                            {
+                              "value": "5",
+                              "label": "Roles Update",
+                              "description": "Modify permissions or settings of existing roles."
+                            },
+                            {
+                              "value": "6",
+                              "label": "Roles Delete",
+                              "description": "Remove unused or obsolete roles."
+                            }
+                          ]
                         },
                         {
                           "value": "2",
-                          "label": "Partner Delete",
-                          "description": "Permanently remove a partner from the system."
+                          "label": "Branches",
+                          "options": [
+                            {
+                              "value": "7",
+                              "label": "Branches Create",
+                              "description": "Add new branch or location records."
+                            },
+                            {
+                              "value": "8",
+                              "label": "Branches Read",
+                              "description": "View branch details, status, and related data."
+                            },
+                            {
+                              "value": "9",
+                              "label": "Branches Update",
+                              "description": "Edit branch information such as address or contact."
+                            },
+                            {
+                              "value": "10",
+                              "label": "Branches Delete",
+                              "description": "Remove a branch from the organization."
+                            }
+                          ]
                         },
                         {
                           "value": "3",
-                          "label": "Roles Create",
-                          "description": "Create new user roles with custom permissions."
+                          "label": "Members",
+                          "options": [
+                            {
+                              "value": "11",
+                              "label": "Members Create",
+                              "description": "Invite or add new team members to the system."
+                            },
+                            {
+                              "value": "12",
+                              "label": "Members Read",
+                              "description": "View member profiles, roles, and activity."
+                            },
+                            {
+                              "value": "13",
+                              "label": "Members Update",
+                              "description": "Update member details, roles, or access levels."
+                            },
+                            {
+                              "value": "14",
+                              "label": "Members Delete",
+                              "description": "Deactivate or remove a member from the platform."
+                            }
+                          ]
                         },
                         {
                           "value": "4",
-                          "label": "Roles Read",
-                          "description": "View existing roles and their assigned permissions."
+                          "label": "Vehicle Models",
+                          "options": [
+                            {
+                              "value": "15",
+                              "label": "Vehicle Models Create",
+                              "description": "Define new vehicle model templates (e.g., make, type)."
+                            },
+                            {
+                              "value": "16",
+                              "label": "Vehicle Models Read",
+                              "description": "Browse available vehicle model specifications."
+                            },
+                            {
+                              "value": "17",
+                              "label": "Vehicle Models Update",
+                              "description": "Edit vehicle model attributes or capabilities."
+                            },
+                            {
+                              "value": "18",
+                              "label": "Vehicle Models Delete",
+                              "description": "Remove outdated or unused vehicle models."
+                            }
+                          ]
                         },
                         {
                           "value": "5",
-                          "label": "Roles Update",
-                          "description": "Modify permissions or settings of existing roles."
-                        },
-                        {
-                          "value": "6",
-                          "label": "Roles Delete",
-                          "description": "Remove unused or obsolete roles."
-                        },
-                        {
-                          "value": "7",
-                          "label": "Branches Create",
-                          "description": "Add new branch or location records."
-                        },
-                        {
-                          "value": "8",
-                          "label": "Branches Read",
-                          "description": "View branch details, status, and related data."
-                        },
-                        {
-                          "value": "9",
-                          "label": "Branches Update",
-                          "description": "Edit branch information such as address or contact."
-                        },
-                        {
-                          "value": "10",
-                          "label": "Branches Delete",
-                          "description": "Remove a branch from the organization."
-                        },
-                        {
-                          "value": "11",
-                          "label": "Members Create",
-                          "description": "Invite or add new team members to the system."
-                        },
-                        {
-                          "value": "12",
-                          "label": "Members Read",
-                          "description": "View member profiles, roles, and activity."
-                        },
-                        {
-                          "value": "13",
-                          "label": "Members Update",
-                          "description": "Update member details, roles, or access levels."
-                        },
-                        {
-                          "value": "14",
-                          "label": "Members Delete",
-                          "description": "Deactivate or remove a member from the platform."
-                        },
-                        {
-                          "value": "15",
-                          "label": "Vehicle Models Create",
-                          "description": "Define new vehicle model templates (e.g., make, type)."
-                        },
-                        {
-                          "value": "16",
-                          "label": "Vehicle Models Read",
-                          "description": "Browse available vehicle model specifications."
-                        },
-                        {
-                          "value": "17",
-                          "label": "Vehicle Models Update",
-                          "description": "Edit vehicle model attributes or capabilities."
-                        },
-                        {
-                          "value": "18",
-                          "label": "Vehicle Models Delete",
-                          "description": "Remove outdated or unused vehicle models."
-                        },
-                        {
-                          "value": "19",
-                          "label": "Vehicle Instances Create",
-                          "description": "Register a new physical vehicle unit into the fleet."
-                        },
-                        {
-                          "value": "20",
-                          "label": "Vehicle Instances Read",
-                          "description": "View details of specific vehicles (VIN, status, location)."
-                        },
-                        {
-                          "value": "21",
-                          "label": "Vehicle Instances Update",
-                          "description": "Update information for a registered vehicle unit."
-                        },
-                        {
-                          "value": "22",
-                          "label": "Vehicle Instances Delete",
-                          "description": "Decommission or remove a vehicle from the fleet."
+                          "label": "Vehicle Instances",
+                          "options": [
+                            {
+                              "value": "19",
+                              "label": "Vehicle Instances Create",
+                              "description": "Register a new physical vehicle unit into the fleet."
+                            },
+                            {
+                              "value": "20",
+                              "label": "Vehicle Instances Read",
+                              "description": "View details of specific vehicles (VIN, status, location)."
+                            },
+                            {
+                              "value": "21",
+                              "label": "Vehicle Instances Update",
+                              "description": "Update information for a registered vehicle unit."
+                            },
+                            {
+                              "value": "22",
+                              "label": "Vehicle Instances Delete",
+                              "description": "Decommission or remove a vehicle from the fleet."
+                            }
+                          ]
                         }
                       ]
                     },
@@ -1025,7 +1018,8 @@
                 },
                 "permissions": {
                   "label": "Permissions",
-                  "placeholder": "Enter permission (e.g., Create, Read, Update, Delete)",
+                  "select-placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
+                  "search-placeholder": "Search permission (e.g., Create, Read, Update, Delete)",
                   "when-no-results": "No results found",
                   "permissions": [
                     {
@@ -1409,6 +1403,177 @@
                 "when-error": {
                   "title": "Something went wrong",
                   "description": "We couldn't load the branches. Please try again later."
+                }
+              }
+            }
+          }
+        },
+        "members": {
+          "page": {
+            "members": {
+              "title": "Members",
+              "description": "Manage your members easily and efficiently.",
+              "add-new": {
+                "trigger": "Add new Member",
+                "content": {
+                  "title": "Add New Member",
+                  "description": "Create a new member with custom permissions.",
+                  "form": {
+                    "avatar": {
+                      "label": "Avatar"
+                    },
+                    "username": {
+                      "label": "Username",
+                      "placeholder": "Enter username"
+                    },
+                    "role": {
+                      "label": "Role",
+                      "placeholder": "Select role (e.g., owner, manager, etc...)",
+                      "roles": {
+                        "search-placeholder": "Select role (e.g., owner, manager, etc...)",
+                        "when-loading": "Searching for roles...",
+                        "when-empty": {
+                          "label": "No roles were found",
+                          "description": "Try adjusting your search or add a new role."
+                        },
+                        "when-error": {
+                          "label": "Something went wrong",
+                          "description": "We couldn't load the roles. Please try again later."
+                        }
+                      }
+                    },
+                    "branch": {
+                      "label": "Branch",
+                      "placeholder": "Select branch (e.g., owner, manager, etc...)",
+                      "branches": {
+                        "search-placeholder": "Select branch (e.g., owner, manager, etc...)",
+                        "when-loading": "Searching for branches...",
+                        "when-empty": {
+                          "label": "No branches were found",
+                          "description": "Try adjusting your search or add a new branch."
+                        },
+                        "when-error": {
+                          "label": "Something went wrong",
+                          "description": "We couldn't load the branches. Please try again later."
+                        }
+                      }
+                    },
+                    "email": {
+                      "label": "Email",
+                      "placeholder": "Enter email (e.g., member@vheexa.com, etc...)"
+                    },
+                    "password": {
+                      "label": "Password",
+                      "placeholder": "Enter password (e.g., Aa1!Bb2@, etc...)"
+                    },
+                    "status": {
+                      "label": "Status",
+                      "statuses": [
+                        {
+                          "value": "0",
+                          "label": "Active"
+                        },
+                        {
+                          "value": "1",
+                          "label": "Inactive"
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "submit": "Submit",
+                      "reset": "Reset",
+                      "toasts": {
+                        "when-success": "Role was successfully added",
+                        "when-error": "Something went wrong while adding the role"
+                      }
+                    }
+                  }
+                }
+              },
+              "filter": {
+                "search": {
+                  "label": "Search",
+                  "placeholder": "Search by member (e.g., username or email)"
+                },
+                "role": {
+                  "label": "Role",
+                  "placeholder": "Select role (e.g., owner, manager, etc...)"
+                },
+                "branch": {
+                  "label": "Branch",
+                  "placeholder": "Select branch (e.g., Downtown Hub, Riverside Office, etc...)"
+                },
+                "status": {
+                  "label": "Status",
+                  "placeholder": "Enter status (e.g., Active, Inactive)",
+                  "statuses": [
+                    {
+                      "value": "0",
+                      "label": "Active"
+                    },
+                    {
+                      "value": "1",
+                      "label": "Inactive"
+                    }
+                  ]
+                },
+                "actions": {
+                  "reset": "Reset",
+                  "submit": "Filter"
+                }
+              },
+              "table": {
+                "uuid": {
+                  "header": "UUID"
+                },
+                "member": {
+                  "header": "Member"
+                },
+                "permissions": {
+                  "header": "Permissions",
+                  "cell": "+{count} More"
+                },
+                "members": {
+                  "header": "Members",
+                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
+                },
+                "status": {
+                  "header": "Status",
+                  "cell": "{status, select, 0 {Active} 1 {Inactive} other {Unknown}}"
+                },
+                "updated-at": {
+                  "header": "Updated At"
+                },
+                "created-at": {
+                  "header": "Created At"
+                },
+                "actions": {
+                  "header": "Actions",
+                  "cell": {
+                    "view": {
+                      "label": "View more",
+                      "info": "View member is coming soon..."
+                    },
+                    "edit": {
+                      "label": "Edit",
+                      "info": "Edit member is coming soon..."
+                    },
+                    "remove": {
+                      "label": "Remove",
+                      "toasts": {
+                        "when-success": "Member was successfully deleted",
+                        "when-error": "Something went wrong while deleting the member"
+                      }
+                    }
+                  }
+                },
+                "when-empty": {
+                  "title": "No members were found",
+                  "description": "Try adjusting your search or add a new member."
+                },
+                "when-error": {
+                  "title": "Something went wrong",
+                  "description": "We couldn't load the members. Please try again later."
                 }
               }
             }
@@ -2419,6 +2584,45 @@
                       "search": {
                         "label": "Search",
                         "placeholder": "Search by Vehicle Model (e.g., Name, etc...)"
+                      },
+                      "categories": {
+                        "label": "Categories",
+                        "select-placeholder": "Select Vehicle Model (e.g., Car, Motorcycle, etc...)",
+                        "search-placeholder": "Search Vehicle Model (e.g., Car, Motorcycle, etc...)",
+                        "categories": [
+                          {
+                            "value": 0,
+                            "label": "Cars"
+                          },
+                          {
+                            "value": 1,
+                            "label": "Vans"
+                          },
+                          {
+                            "value": 2,
+                            "label": "Trucks"
+                          },
+                          {
+                            "value": 3,
+                            "label": "Motorcycles"
+                          },
+                          {
+                            "value": 4,
+                            "label": "Boats"
+                          },
+                          {
+                            "value": 5,
+                            "label": "Yachts"
+                          },
+                          {
+                            "value": 6,
+                            "label": "Jet Skis"
+                          },
+                          {
+                            "value": 7,
+                            "label": "Helicopters"
+                          }
+                        ]
                       }
                     },
                     "specifications": {
@@ -2431,441 +2635,13 @@
                           "placeholder": "Enter max capacity"
                         }
                       },
-                      "transmission": {
-                        "label": "Transmission",
-                        "transmissions": [
-                          {
-                            "select-placeholder": "Select car transmission (e.g., Manual, Automatic, CVT, etc...)",
-                            "search-placeholder": "Search or add car transmission (e.g., Automatic, Dual-Clutch, CVT, etc...)",
-                            "value": 0,
-                            "transmissions": [
-                              {
-                                "key": "Manual",
-                                "value": "Manual"
-                              },
-                              {
-                                "key": "Automatic",
-                                "value": "Automatic"
-                              },
-                              {
-                                "key": "CVT",
-                                "value": "CVT"
-                              },
-                              {
-                                "key": "Dual-Clutch (DSG/DCT)",
-                                "value": "Dual-Clutch (DSG/DCT)"
-                              },
-                              {
-                                "key": "Semi-Automatic",
-                                "value": "Semi-Automatic"
-                              },
-                              {
-                                "key": "Tiptronic",
-                                "value": "Tiptronic"
-                              },
-                              {
-                                "key": "Automated Manual (AMT)",
-                                "value": "Automated Manual (AMT)"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select van transmission (e.g., Manual, Automatic, etc...)",
-                            "search-placeholder": "Search or add van transmission (e.g., Manual, AMT, etc...)",
-                            "value": 1,
-                            "transmissions": [
-                              {
-                                "key": "Manual",
-                                "value": "Manual"
-                              },
-                              {
-                                "key": "Automatic",
-                                "value": "Automatic"
-                              },
-                              {
-                                "key": "Semi-Automatic",
-                                "value": "Semi-Automatic"
-                              },
-                              {
-                                "key": "Automated Manual (AMT)",
-                                "value": "Automated Manual (AMT)"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select truck transmission (e.g., Eaton Fuller, Allison, etc...)",
-                            "search-placeholder": "Search or add truck transmission (e.g., AMT, Powershift, etc...)",
-                            "value": 2,
-                            "transmissions": [
-                              {
-                                "key": "Manual",
-                                "value": "Manual"
-                              },
-                              {
-                                "key": "Automatic",
-                                "value": "Automatic"
-                              },
-                              {
-                                "key": "Automated Manual (AMT)",
-                                "value": "Automated Manual (AMT)"
-                              },
-                              {
-                                "key": "Powershift",
-                                "value": "Powershift"
-                              },
-                              {
-                                "key": "Eaton Fuller",
-                                "value": "Eaton Fuller"
-                              },
-                              {
-                                "key": "Allison",
-                                "value": "Allison"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select motorcycle transmission (e.g., Sequential, DCT, etc...)",
-                            "search-placeholder": "Search or add motorcycle transmission (e.g., CVT, Semi-Automatic, etc...)",
-                            "value": 3,
-                            "transmissions": [
-                              {
-                                "key": "Manual (Sequential)",
-                                "value": "Manual (Sequential)"
-                              },
-                              {
-                                "key": "Automatic (CVT)",
-                                "value": "Automatic (CVT)"
-                              },
-                              {
-                                "key": "Dual-Clutch (DCT)",
-                                "value": "Dual-Clutch (DCT)"
-                              },
-                              {
-                                "key": "Semi-Automatic",
-                                "value": "Semi-Automatic"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select boat drive type (e.g., Outboard, Inboard, etc...)",
-                            "search-placeholder": "Search or add boat drive type (e.g., Jet Drive, V-Drive, etc...)",
-                            "value": 4,
-                            "transmissions": [
-                              {
-                                "key": "Outboard",
-                                "value": "Outboard"
-                              },
-                              {
-                                "key": "Inboard",
-                                "value": "Inboard"
-                              },
-                              {
-                                "key": "Sterndrive (I/O)",
-                                "value": "Sterndrive (I/O)"
-                              },
-                              {
-                                "key": "Jet Drive",
-                                "value": "Jet Drive"
-                              },
-                              {
-                                "key": "Pod Drive (IPS)",
-                                "value": "Pod Drive (IPS)"
-                              },
-                              {
-                                "key": "Sail Drive",
-                                "value": "Sail Drive"
-                              },
-                              {
-                                "key": "V-Drive",
-                                "value": "V-Drive"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select yacht drive system (e.g., Shaft Drive, Pod Drive, etc...)",
-                            "search-placeholder": "Search or add yacht drive system (e.g., IPS, Jet Drive, etc...)",
-                            "value": 5,
-                            "transmissions": [
-                              {
-                                "key": "Inboard Diesel",
-                                "value": "Inboard Diesel"
-                              },
-                              {
-                                "key": "Pod Drive (IPS/ASD)",
-                                "value": "Pod Drive (IPS/ASD)"
-                              },
-                              {
-                                "key": "Shaft Drive",
-                                "value": "Shaft Drive"
-                              },
-                              {
-                                "key": "V-Drive",
-                                "value": "V-Drive"
-                              },
-                              {
-                                "key": "Jet Drive",
-                                "value": "Jet Drive"
-                              },
-                              {
-                                "key": "Sail with Inboard",
-                                "value": "Sail with Inboard"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select jet ski drive type (e.g., Jet Pump, Direct Drive, etc...)",
-                            "search-placeholder": "Search or add jet ski drive type (e.g., CVT, etc...)",
-                            "value": 6,
-                            "transmissions": [
-                              {
-                                "key": "Direct Drive",
-                                "value": "Direct Drive"
-                              },
-                              {
-                                "key": "Jet Pump",
-                                "value": "Jet Pump"
-                              },
-                              {
-                                "key": "CVT (some models)",
-                                "value": "CVT (some models)"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select helicopter transmission system (e.g., Planetary Gear, etc...)",
-                            "search-placeholder": "Search or add helicopter transmission system (e.g., Planetary Gear, etc...)",
-                            "value": 7,
-                            "transmissions": [
-                              {
-                                "key": "Main Rotor Transmission",
-                                "value": "Main Rotor Transmission"
-                              },
-                              {
-                                "key": "Tail Rotor Drive",
-                                "value": "Tail Rotor Drive"
-                              },
-                              {
-                                "key": "Planetary Gear System",
-                                "value": "Planetary Gear System"
-                              },
-                              {
-                                "key": "Freewheeling Unit",
-                                "value": "Freewheeling Unit"
-                              },
-                              {
-                                "key": "Combined Transmission",
-                                "value": "Combined Transmission"
-                              }
-                            ]
-                          }
-                        ],
-                        "when-no-result": "No Match where found"
+                      "transmissions": {
+                        "label": "Transmissions",
+                        "placeholder": "Enter transmissions (e.g., Manual, Automatic, CVT, etc...)"
                       },
-                      "fuel": {
-                        "label": "Fuel",
-                        "fuels": [
-                          {
-                            "select-placeholder": "Select fuel type (e.g., Petrol 95, Diesel, etc...)",
-                            "search-placeholder": "Search or add fuel type (e.g., Electric, Hybrid, etc...)",
-                            "value": 0,
-                            "fuels": [
-                              {
-                                "key": "Petrol 91",
-                                "value": "Petrol 91"
-                              },
-                              {
-                                "key": "Petrol 95",
-                                "value": "Petrol 95"
-                              },
-                              {
-                                "key": "Petrol 98",
-                                "value": "Petrol 98"
-                              },
-                              {
-                                "key": "Diesel",
-                                "value": "Diesel"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              },
-                              {
-                                "key": "Hybrid",
-                                "value": "Hybrid"
-                              },
-                              {
-                                "key": "Plug-in Hybrid",
-                                "value": "Plug-in Hybrid"
-                              },
-                              {
-                                "key": "CNG",
-                                "value": "CNG"
-                              },
-                              {
-                                "key": "LPG",
-                                "value": "LPG"
-                              },
-                              {
-                                "key": "Hydrogen",
-                                "value": "Hydrogen"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select van fuel type (e.g., Petrol 91, Diesel, etc...)",
-                            "search-placeholder": "Search or add van fuel type (e.g., CNG, LPG, etc...)",
-                            "value": 1,
-                            "fuels": [
-                              {
-                                "key": "Petrol 91",
-                                "value": "Petrol 91"
-                              },
-                              {
-                                "key": "Petrol 95",
-                                "value": "Petrol 95"
-                              },
-                              {
-                                "key": "Diesel",
-                                "value": "Diesel"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              },
-                              {
-                                "key": "CNG",
-                                "value": "CNG"
-                              },
-                              {
-                                "key": "LPG",
-                                "value": "LPG"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select truck fuel type (e.g., Diesel, etc...)",
-                            "search-placeholder": "Search or add truck fuel type (e.g., Biodiesel, LNG, etc...)",
-                            "value": 2,
-                            "fuels": [
-                              {
-                                "key": "Diesel",
-                                "value": "Diesel"
-                              },
-                              {
-                                "key": "Biodiesel",
-                                "value": "Biodiesel"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              },
-                              {
-                                "key": "CNG",
-                                "value": "CNG"
-                              },
-                              {
-                                "key": "LNG",
-                                "value": "LNG"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select motorcycle fuel type (e.g., Petrol 91, etc...)",
-                            "search-placeholder": "Search or add motorcycle fuel type (e.g., Electric, etc...)",
-                            "value": 3,
-                            "fuels": [
-                              {
-                                "key": "Petrol 91",
-                                "value": "Petrol 91"
-                              },
-                              {
-                                "key": "Petrol 95",
-                                "value": "Petrol 95"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select boat fuel type (e.g., Petrol, Marine Diesel, etc...)",
-                            "search-placeholder": "Search or add boat fuel type",
-                            "value": 4,
-                            "fuels": [
-                              {
-                                "key": "Petrol",
-                                "value": "Petrol"
-                              },
-                              {
-                                "key": "Diesel",
-                                "value": "Diesel"
-                              },
-                              {
-                                "key": "Marine Diesel",
-                                "value": "Marine Diesel"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select yacht fuel type (e.g., Diesel, etc...)",
-                            "search-placeholder": "Search or add yacht fuel type (e.g., Hybrid, etc...)",
-                            "value": 5,
-                            "fuels": [
-                              {
-                                "key": "Diesel",
-                                "value": "Diesel"
-                              },
-                              {
-                                "key": "Marine Diesel",
-                                "value": "Marine Diesel"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              },
-                              {
-                                "key": "Hybrid",
-                                "value": "Hybrid"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select jet ski fuel type (e.g., Petrol, etc...)",
-                            "search-placeholder": "Search or add jet ski fuel type (e.g., Electric, etc...)",
-                            "value": 6,
-                            "fuels": [
-                              {
-                                "key": "Petrol",
-                                "value": "Petrol"
-                              },
-                              {
-                                "key": "Electric",
-                                "value": "Electric"
-                              }
-                            ]
-                          },
-                          {
-                            "select-placeholder": "Select helicopter fuel type (e.g., Jet Fuel, etc...)",
-                            "search-placeholder": "Search or add helicopter fuel type (e.g., Avgas, etc...)",
-                            "value": 7,
-                            "fuels": [
-                              {
-                                "key": "Jet Fuel",
-                                "value": "Jet Fuel"
-                              },
-                              {
-                                "key": "Avgas",
-                                "value": "Avgas"
-                              }
-                            ]
-                          }
-                        ],
-                        "when-no-result": "No Match where found"
+                      "fuels": {
+                        "label": "Fuels",
+                        "placeholder": "Enter fuels (e.g., Petrol 95, Diesel, etc...)"
                       }
                     },
                     "pricing": {
@@ -2990,38 +2766,32 @@
             },
             "description": "Access your Vheexa account to manage bookings and rents easily and securely."
           },
-
           "illustration": {
             "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
             "alternate": "placeholder"
           }
         },
-
         "login": {
           "page": {
             "metadata": {
               "title": "Login",
               "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
             },
-
             "form": {
               "title": "Welcome back",
               "description": "Login to your Vheexa account",
-
               "email": {
                 "label": "Email",
                 "placeholder": "account@vheexa.com",
                 "default-value": "partner@vheexa.com",
                 "description": "Enter your email address"
               },
-
               "password": {
                 "label": "Password",
                 "placeholder": "********",
                 "default-value": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
                 "description": "Enter your password"
               },
-
               "submit": "Login"
             }
           }

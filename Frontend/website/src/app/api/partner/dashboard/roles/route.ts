@@ -10,7 +10,6 @@ import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zRoleCreate } from "@/validations/partner/role";
 
-import { ClsErrorModel } from "@/models/error";
 
 import { tNullable } from "@/types/nullish";
 
@@ -18,12 +17,13 @@ import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
+import { ClsErrorModel } from "@/models/error";
 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<tResponseManyModel<tRoleModel>>> {
   return await apiCatch<tRoleModel>(async () => {
-    const [status, page, pageSize]: tNullable<string>[] = [
+    const [statusQuery, pageQuery, pageSizeQuery]: tNullable<string>[] = [
       request.nextUrl.searchParams.get("filter.status"),
       request.nextUrl.searchParams.get("pagination.page"),
       request.nextUrl.searchParams.get("pagination.page-size"),
@@ -34,11 +34,11 @@ export async function GET(
       permissions: request.nextUrl.searchParams
         .getAll("filter.permissions")
         .map((permission) => Number(permission)),
-      status: status !== null ? Number(status) : undefined,
+      status: statusQuery !== null ? Number(statusQuery) : undefined,
     };
     const pagination: tPagination = {
-      page: page === null ? undefined : Number(page),
-      pageSize: pageSize === null ? undefined : Number(pageSize),
+      page: pageQuery === null ? undefined : Number(pageQuery),
+      pageSize: pageSizeQuery === null ? undefined : Number(pageSizeQuery),
     };
 
     const parsedFilter: tRoleFilter = zRoleFilter.parse(filter);

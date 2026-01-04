@@ -41,7 +41,13 @@ type tRoleCreate = z.infer<typeof zRoleCreate>;
 
 const zRoleFilter = z
   .object({
-    name: z.optional(z.string().trim()),
+    name: z.optional(
+      z
+        .string()
+        .nonempty(
+          "role name can only either be undefined or a non-empty string.",
+        ),
+    ),
     permissions: z.array(
       z.enum(ePartnerRoleCreatePermission, "invalid permission."),
     ),

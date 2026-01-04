@@ -20,7 +20,11 @@ type tBranchCreate = z.infer<typeof zBranchCreate>;
 
 const zBranchFilter = z
   .object({
-    search: z.optional(z.string().trim().nonempty("search can only either be undefined or a  non-empty string.")),
+    search: z.optional(
+      z
+        .string()
+        .nonempty("search can only either be undefined or a non-empty string."),
+    ),
     status: z.optional(z.enum(eBranchStatusModel, "invalid status.")),
   })
   .strict();

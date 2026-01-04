@@ -30,15 +30,15 @@ export async function GET(
 ): Promise<NextResponse<tResponseManyModel<tVehicleModelModel>>> {
   return await apiCatch<tVehicleModelModel>(async () => {
     const [
-      minCapacity,
-      maxCapacity,
-      minPrice,
-      maxPrice,
-      minDiscount,
-      maxDiscount,
-      status,
-      page,
-      pageSize,
+      minCapacityQuery,
+      maxCapacityQuery,
+      minPriceQuery,
+      maxPriceQuery,
+      minDiscountQuery,
+      maxDiscountQuery,
+      statusQuery,
+      pageQuery,
+      pageSizeQuery,
     ]: tNullable<string>[] = [
       request.nextUrl.searchParams.get("filter.capacity.min"),
       request.nextUrl.searchParams.get("filter.capacity.max"),
@@ -57,26 +57,26 @@ export async function GET(
         .getAll("filter.categories")
         .map((category) => Number(category)),
       capacity: {
-        min: minCapacity === null ? undefined : Number(minCapacity),
-        max: maxCapacity === null ? undefined : Number(maxCapacity),
+        min: minCapacityQuery === null ? undefined : Number(minCapacityQuery),
+        max: maxCapacityQuery === null ? undefined : Number(maxCapacityQuery),
       },
       transmissions: request.nextUrl.searchParams.getAll(
         "filter.transmissions",
       ),
       fuels: request.nextUrl.searchParams.getAll("filter.model-years"),
       price: {
-        min: minPrice === null ? undefined : Number(minPrice),
-        max: maxPrice === null ? undefined : Number(maxPrice),
+        min: minPriceQuery === null ? undefined : Number(minPriceQuery),
+        max: maxPriceQuery === null ? undefined : Number(maxPriceQuery),
       },
       discount: {
-        min: minDiscount === null ? undefined : Number(minDiscount),
-        max: maxDiscount === null ? undefined : Number(maxDiscount),
+        min: minDiscountQuery === null ? undefined : Number(minDiscountQuery),
+        max: maxDiscountQuery === null ? undefined : Number(maxDiscountQuery),
       },
-      status: status === null ? undefined : Number(status),
+      status: statusQuery === null ? undefined : Number(statusQuery),
     };
     const pagination: tPagination = {
-      page: page === null ? undefined : Number(page),
-      pageSize: pageSize === null ? undefined : Number(pageSize),
+      page: pageQuery === null ? undefined : Number(pageQuery),
+      pageSize: pageSizeQuery === null ? undefined : Number(pageSizeQuery),
     };
 
     const parsedFilter: tVehicleModelFilter = zVehicleModelFilter.parse(filter);

@@ -139,4 +139,8 @@
   :disabled {
     @apply cursor-not-allowed opacity-50 select-none;
   }
+
+  ::placeholder {
+    @apply truncate;
+  }
 }

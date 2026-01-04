@@ -32,6 +32,7 @@ import {
   LuCircleX,
 } from "react-icons/lu";
 import { MdOutlineDiscount } from "react-icons/md";
+import { FaCarTunnel, FaCarBurst } from "react-icons/fa6";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 import {
@@ -82,9 +83,7 @@ export default function Table({
   return (
     <BlockTable<tVehicleModelModel>
       isLoading={isLoading}
-      loadingRender={<Loading />}
       isSuccess={isSuccess}
-      errorRender={<Error />}
       data={data}
       header={
         <TableHeader>
@@ -104,7 +103,6 @@ export default function Table({
           </TableRow>
         </TableHeader>
       }
-      emptyRender={<Empty />}
       bodyRowRender={(vehicleModel) => (
         <TableRow key={vehicleModel.uuid}>
           <TableCell>
@@ -243,6 +241,9 @@ export default function Table({
           </TableCell>
         </TableRow>
       )}
+      loadingRender={<Loading />}
+      errorRender={<Error />}
+      emptyRender={<Empty />}
     />
   );
 }
@@ -286,14 +287,14 @@ function Loading() {
 
 function Empty() {
   const tEmpty = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicle-models.content.table.when-empty",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.when-empty",
   );
 
   return (
     <TableRow>
-      <TableCell colSpan={8} className="py-12">
+      <TableCell colSpan={10} className="py-12">
         <div className="flex flex-col items-center gap-3">
-          {/* <LuShieldAlert size={32} /> */}
+          <FaCarTunnel size={32} />
           <h3 className="text-lg">{tEmpty("title")}</h3>
           <p className="text-muted-foreground">{tEmpty("description")}</p>
         </div>
@@ -303,14 +304,14 @@ function Empty() {
 }
 function Error() {
   const tError = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicle-models.content.table.when-error",
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.when-error",
   );
 
   return (
     <TableRow>
-      <TableCell colSpan={8} className="py-12">
+      <TableCell colSpan={10} className="py-12">
         <div className="flex flex-col items-center gap-3">
-          {/* <LuShieldX size={32} /> */}
+          <FaCarBurst size={32} />
           <h3 className="text-lg">{tError("title")}</h3>
           <p className="text-muted-foreground">{tError("description")}</p>
         </div>

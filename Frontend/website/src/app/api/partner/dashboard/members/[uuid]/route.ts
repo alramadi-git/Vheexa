@@ -6,8 +6,6 @@ import { clsFetch } from "@/consts/api/fetch";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
-import { ClsErrorModel } from "@/models/error";
-
 import { eRoleStatusModel } from "@/models/partner/role";
 import { eBranchStatusModel } from "@/models/partner/branch";
 
@@ -15,6 +13,7 @@ import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
 
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
+import { ClsErrorModel } from "@/models/error";
 
 export async function GET(
   request: NextRequest,
@@ -31,17 +30,7 @@ export async function GET(
           uuid: "a1b2c3d4-1111-4aaa-9999-0e1f2a3b4c5d",
           url: "https://avatar.vercel.sh/james_wilson.svg?size=200",
         },
-        location: {
-          uuid: "b2c3d4e5-2222-4bbb-8888-1f2a3b4c5d6e",
-          country: "United States",
-          city: "Austin",
-          street: "201 E 6th St",
-          latitude: 30.267153,
-          longitude: -97.743094,
-        },
         username: "james.wilson",
-        birthday: "1988-04-12",
-        phoneNumber: "+1 512-555-0198",
         email: "james.wilson@partnerfleet.com",
         role: {
           uuid: "c3d4e5f6-3333-4ccc-7777-2a3b4c5d6e7f",
@@ -70,7 +59,7 @@ export async function GET(
           latitude: 30.267153,
           longitude: -97.743094,
           name: "Austin Downtown Branch",
-          phoneNumber: "+1 512-555-0198",
+          phoneNumber: "+14155552671",
           email: "austin.downtown@partnerfleet.com",
           status: eBranchStatusModel.active,
           createdAt: "2023-06-12T10:30:00Z",

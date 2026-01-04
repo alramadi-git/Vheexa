@@ -78,16 +78,9 @@ class ClsMemberService extends ClsAbstractService {
 
       clsQuery.set("filter.search", parsedFilter.search);
 
-      clsQuery.set("filter.location", parsedFilter.location);
+      clsQuery.set("filter.roles", parsedFilter.roles);
 
-      clsQuery.set(
-        "filter.birthday.min",
-        parsedFilter.birthday.min?.toString(),
-      );
-      clsQuery.set(
-        "filter.birthday.max",
-        parsedFilter.birthday.max?.toString(),
-      );
+      clsQuery.set("filter.branches", parsedFilter.branches);
 
       clsQuery.set("filter.status", parsedFilter.status?.toString());
 

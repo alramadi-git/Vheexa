@@ -6,12 +6,11 @@ import { clsFetch } from "@/consts/api/fetch";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
-import { ClsErrorModel } from "@/models/error";
-
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
 import { tSuccessOneModel } from "@/models/success";
 import { tResponseOneModel } from "@/models/response";
+import { ClsErrorModel } from "@/models/error";
 
 export async function GET(
   request: NextRequest,
