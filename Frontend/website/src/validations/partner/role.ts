@@ -30,7 +30,7 @@ enum ePartnerRoleCreatePermission {
 
 const zRoleCreate = z
   .object({
-    name: z.string().nonempty("role name is required."),
+    name: z.string().nonempty("role name must not be empty."),
     permissions: z
       .array(z.enum(ePartnerRoleCreatePermission, "invalid permission."))
       .min(1, "at least one permission is required."),
@@ -45,7 +45,7 @@ const zRoleFilter = z
       z
         .string()
         .nonempty(
-          "role name can only either be undefined or a non-empty string.",
+          "roles name must not be empty.",
         ),
     ),
     permissions: z.array(

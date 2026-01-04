@@ -23,11 +23,7 @@ import {
   FieldSet,
 } from "@/components/shadcn/field";
 
-import {
-  FieldSearch,
-  FieldMultiSelect,
-  tFieldMultiSelectRef,
-} from "@/components/locals/blocks/fields";
+import { FieldSearch } from "@/components/locals/blocks/fields";
 
 import {
   Select,
@@ -38,15 +34,17 @@ import {
 } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
 import { CommandGroup, CommandItem } from "@/components/shadcn/command";
+import {
+  tGroup,
+  tOption,
+  tFieldMultiSelectRef,
+  FieldMultiSelect,
+} from "@/components/locals/blocks/selects";
 
-type tPermissionGroup = {
-  value: string;
+type tPermissionGroup = tGroup<tPermissionOption> & {
   label: string;
-  options: tPermissionOption[];
 };
-type tPermissionOption = {
-  value: string;
-  label: string;
+type tPermissionOption = tOption & {
   description: string;
 };
 
@@ -65,16 +63,10 @@ export default function Filter() {
 
   const {
     control,
-    formState,
     setValue,
     reset: handleReset,
     handleSubmit,
   } = useForm<tRoleFilter>({
-    defaultValues: {
-      name: undefined,
-      permissions: [],
-      status: undefined,
-    },
     resolver: zodResolver(zRoleFilter),
   });
 
@@ -86,25 +78,31 @@ export default function Filter() {
   );
   const statuses: tStatues[] = tFilter.raw("status.statuses");
 
-  const [statusQuery] = [query.get("filter.status")];
-
   useEffect(() => {
-    setValue("name", query.get("filter.name") ?? undefined);
+    const [nameQuery, permissionsQuery, statusQuery] = [
+      query.get("filter.name"),
+      query.getAll("filter.permissions"),
+      query.get("filter.status"),
+    ];
 
-    const permissions = query
-      .getAll("filter.permissions")
-      .map((permission) => Number(permission));
+    const [name, permissions, status] = [
+      nameQuery !== null ? nameQuery : undefined,
+      permissionsQuery.map((permission) => Number(permission)),
+      statusQuery !== null ? Number(statusQuery) : undefined,
+    ];
+
+    setValue("name", name);
 
     setValue("permissions", permissions);
     permissionsRef.current?.change(
-      permissionGroups
-        .flatMap((group) => group.options)
-        .filter(
-          (option) => permissions.includes(Number(option.value)) ?? false,
-        ),
+      permissions.length > 0
+        ? permissionGroups
+            .flatMap((group) => group.options)
+            .filter((option) => permissions.includes(Number(option.value)))
+        : [],
     );
 
-    setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
+    setValue("status", status);
   }, []);
 
   function reset() {
@@ -116,7 +114,6 @@ export default function Filter() {
     query.remove("filter.name");
     query.remove("filter.permissions");
     query.remove("filter.status");
-
     query.remove("pagination.page");
 
     query.set("filter.name", data.name);
@@ -137,138 +134,125 @@ export default function Filter() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <FieldSet>
-            <FieldGroup className="grid-cols-3">
-              <Controller
-                control={control}
-                name="name"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-name`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("name.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldSearch
-                        {...field}
-                        id={`${id}-name`}
-                        placeholder={tFilter("name.placeholder")}
-                        value={value ?? ""}
-                        onChange={(event) =>
-                          event.currentTarget.value === ""
-                            ? setValue(undefined)
-                            : setValue(event)
-                        }
-                      />
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="permissions"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-permissions`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("permissions.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldMultiSelect<tPermissionGroup, tPermissionOption>
-                        ref={permissionsRef}
-                        id={`${id}-permissions`}
-                        maxShownItems={5}
-                        select-placeholder={tFilter(
-                          "permissions.select-placeholder",
+          <FieldGroup className="grid-cols-3">
+            <Controller
+              control={control}
+              name="name"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-name`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("name.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSearch
+                      aria-invalid={invalid}
+                      id={`${id}-name`}
+                      placeholder={tFilter("name.placeholder")}
+                      value={value ?? ""}
+                      onChange={(value) =>
+                        value === "" ? setValue(undefined) : setValue(value)
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="permissions"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-permissions`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("permissions.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    {/* <FieldMultiSelect<tPermissionGroup, tPermissionOption>
+                      ref={permissionsRef}
+                      isInvalid={invalid}
+                      id={`${id}-permissions`}
+                      maxShownItems={5}
+                      placeholder={tFilter("permissions.select-placeholder")}
+                      searchPlaceholder={tFilter(
+                        "permissions.search-placeholder",
+                      )}
+                      defaultValues={permissionGroups
+                        .flatMap((group) => group.options)
+                        .filter(
+                          (option) =>
+                            value?.includes(Number(option.value)) ?? false,
                         )}
-                        search-placeholder={tFilter(
-                          "permissions.search-placeholder",
-                        )}
-                        groups={permissionGroups}
-                        values={permissionGroups
-                          .flatMap((group) => group.options)
-                          .filter(
-                            (option) =>
-                              value?.includes(Number(option.value)) ?? false,
-                          )}
-                        renderTrigger={(option) => option.label}
-                        renderGroup={(
-                          group,
-                          selectedItems,
-                          toggleSelection,
-                        ) => {
-                          return (
-                            <CommandGroup
-                              key={group.value}
-                              heading={group.label}
-                            >
-                              {group.options.map((option) => {
-                                const isSelected = selectedItems.some(
-                                  (selectedItem) =>
-                                    selectedItem.value === option.value,
-                                );
+                      groups={permissionGroups}
+                      groupRender={(group, selectedItems, toggleSelection) => {
+                        return (
+                          <CommandGroup key={group.value} heading={group.label}>
+                            {group.options.map((option) => {
+                              const isSelected = selectedItems.some(
+                                (selectedItem) =>
+                                  selectedItem.value === option.value,
+                              );
 
-                                return (
-                                  <CommandItem
-                                    asChild
-                                    key={option.value}
-                                    value={option.label}
-                                    onSelect={() =>
-                                      toggleSelection(option, isSelected)
-                                    }
+                              return (
+                                <CommandItem
+                                  asChild
+                                  key={option.value}
+                                  value={option.label}
+                                  onSelect={() =>
+                                    toggleSelection(option, isSelected)
+                                  }
+                                >
+                                  <button
+                                    type="button"
+                                    className="w-full justify-between"
                                   >
-                                    <button
-                                      type="button"
-                                      className="w-full justify-between"
-                                    >
-                                      <span className="text-start">
-                                        {option.label}
-                                        <p className="text-muted-foreground">
-                                          {option.description}
-                                        </p>
-                                      </span>
-                                      {isSelected && <LuCheck size={16} />}
-                                    </button>
-                                  </CommandItem>
-                                );
-                              })}
-                            </CommandGroup>
-                          );
-                        }}
-                        onChange={(options) => {
-                          setValue(
-                            options.map((option) => Number(option.value)),
-                          );
-                        }}
-                      />
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="status"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
+                                    <span className="text-start">
+                                      {option.label}
+                                      <p className="text-muted-foreground">
+                                        {option.description}
+                                      </p>
+                                    </span>
+                                    {isSelected && <LuCheck size={16} />}
+                                  </button>
+                                </CommandItem>
+                              );
+                            })}
+                          </CommandGroup>
+                        );
+                      }}
+                      onToggle={(options) => {
+                        setValue(options.map((option) => Number(option.value)));
+                      }}
+                    /> */}
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="status"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => {
+                return (
                   <Field>
                     <FieldLabel
-                      aria-invalid={fieldState.invalid}
+                      aria-invalid={invalid}
                       htmlFor={`${id}-status`}
                       className="max-w-fit"
                     >
@@ -276,16 +260,10 @@ export default function Filter() {
                     </FieldLabel>
                     <FieldContent>
                       <Select
-                        {...field}
-                        value={value?.toString() ?? ""}
-                        onValueChange={(val) => {
-                          if (value === undefined) {
-                            setValue(Number(val));
-                            return;
-                          }
-
-                          if (value.toString() === val) setValue(undefined);
-                          else setValue(Number(val));
+                        value={value?.toString()}
+                        onValueChange={(value) => {
+                          console.log(value);
+                          setValue(Number(value));
                         }}
                       >
                         <div className="flex items-center gap-1.5">
@@ -314,12 +292,13 @@ export default function Filter() {
                         </SelectContent>
                       </Select>
                     </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={error} />
                   </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
+                );
+              }}
+            />
+          </FieldGroup>
+
           <FieldSet>
             <FieldGroup className="grid-cols-2">
               <Button variant="outline" type="reset">

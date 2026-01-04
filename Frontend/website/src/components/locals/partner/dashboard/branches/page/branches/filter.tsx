@@ -14,6 +14,7 @@ import { tBranchFilter, zBranchFilter } from "@/validations/partner/branch";
 import { LuX } from "react-icons/lu";
 
 import { Card, CardContent } from "@/components/shadcn/card";
+
 import {
   FieldGroup,
   Field,
@@ -22,6 +23,7 @@ import {
   FieldError,
   FieldSet,
 } from "@/components/shadcn/field";
+import { FieldSearch } from "@/components/locals/blocks/fields";
 
 import {
   Select,
@@ -30,8 +32,8 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/shadcn/select";
+
 import { Button } from "@/components/shadcn/button";
-import { FieldSearch } from "@/components/locals/blocks/fields";
 
 type tStatues = {
   value: string;
@@ -56,8 +58,11 @@ export default function Filter() {
   });
 
   const [statusQuery] = [query.get("filter.status")];
+
   useEffect(() => {
     setValue("search", query.get("filter.search") ?? undefined);
+    setValue("", query.get("filter.search") ?? undefined);
+    
     setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
   }, []);
 

@@ -4,8 +4,6 @@ import { eLocale } from "@/i18n/routing";
 
 import { tUndefinable } from "@/types/nullish";
 
-import { tPassword } from "@/validations/authentication-credentials";
-
 import { cn } from "@/utilities/cn";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
@@ -22,15 +20,8 @@ import {
   useImperativeHandle,
   Fragment,
   ChangeEvent,
+  Ref,
 } from "react";
-
-import {
-  FieldValues,
-  Path,
-  ControllerRenderProps,
-  ControllerFieldState,
-  UseFormStateReturn,
-} from "react-hook-form";
 
 import {
   LuMail,
@@ -110,7 +101,7 @@ function FieldSearch({ onChange: onChangeProp, ...props }: tFieldSearchProps) {
     <div className="relative">
       <span
         aria-invalid={props["aria-invalid"]}
-        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
+        className="text-muted-foreground/80 aria-invalid:text-destructive/60 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
       >
         <LuSearch size={16} />
       </span>
@@ -604,173 +595,6 @@ function FieldPassword({
   );
 }
 
-type tGroup<gOption extends tOption> = {
-  value: string;
-  options: gOption[];
-};
-type tOption = {
-  value: string;
-  label: string;
-};
-
-type tFieldMultiSelectRef<gOption extends tOption> = {
-  reset: (options?: gOption[]) => void;
-  change: (options: gOption[]) => void;
-};
-type tFieldMultiSelectProps<
-  gGroup extends tGroup<gOption>,
-  gOption extends tOption,
-> = {
-  id?: string;
-  maxShownItems?: number;
-  "select-placeholder"?: string;
-  "search-placeholder"?: string;
-  groups: gGroup[];
-  values?: gOption[];
-  onChange?: (options: gOption[]) => void;
-  renderTrigger: (option: gOption) => string;
-  renderGroup: (
-    group: gGroup,
-    selectedOptions: gOption[],
-    toggleSelection: (optionToToggle: gOption, isSelected: boolean) => void,
-  ) => ReactElement<typeof CommandGroup>;
-};
-
-const FieldMultiSelect = forwardRef(
-  <gGroup extends tGroup<gOption>, gOption extends tOption>(
-    {
-      id,
-      maxShownItems = 2,
-      "select-placeholder": selectPlaceholder,
-      "search-placeholder": searchPlaceholder,
-      groups,
-      values: _values = [],
-      onChange,
-      renderTrigger,
-      renderGroup,
-    }: tFieldMultiSelectProps<gGroup, gOption>,
-    ref: React.Ref<tFieldMultiSelectRef<gOption>>,
-  ) => {
-    const tFieldMultiSelect = useTranslations("components.fields.multiselect");
-
-    const [values, setValues] = useState<gOption[]>(_values);
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
-
-    const visibleGroups: gOption[] = isExpanded
-      ? values
-      : values.slice(0, maxShownItems);
-
-    const hiddenCount = values.length - visibleGroups.length;
-
-    function change(options: gOption[]) {
-      console.log("updating", options);
-      setValues(options);
-    }
-
-    function reset(options: gOption[] = []) {
-      setValues(options);
-    }
-    useImperativeHandle(ref, () => ({
-      change,
-      reset,
-    }));
-
-    function toggleSelection(optionToToggle: gOption, isSelected: boolean) {
-      if (isSelected) {
-        const options = values.filter((option) => option !== optionToToggle);
-
-        setValues(options);
-        onChange?.(options);
-        return;
-      }
-
-      const options = [...values, optionToToggle];
-      setValues(options);
-      onChange?.(options);
-    }
-
-    return (
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            id={id}
-            aria-expanded={isOpen}
-            role="combobox"
-            variant="outline"
-            className="h-auto min-h-8 w-full justify-between hover:bg-transparent"
-          >
-            <div className="flex flex-wrap items-center gap-1">
-              {values.length > 0 ? (
-                <Fragment>
-                  {visibleGroups.flatMap((option) => (
-                    <Badge key={option.value} variant="outline" className="">
-                      {renderTrigger(option)}
-                      <span
-                        className="hover:bg-foreground/10 inline-flex size-4 items-center justify-center rounded duration-100"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          toggleSelection(option, true);
-                        }}
-                      >
-                        <LuX className="size-3" />
-                      </span>
-                    </Badge>
-                  ))}
-                  {hiddenCount > 0 || isExpanded ? (
-                    <Badge
-                      variant="outline"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setIsExpanded((prev) => !prev);
-                      }}
-                    >
-                      {isExpanded
-                        ? tFieldMultiSelect("show-less")
-                        : tFieldMultiSelect("show-more", {
-                            count: hiddenCount,
-                          })}
-                    </Badge>
-                  ) : null}
-                </Fragment>
-              ) : (
-                <span className="text-muted-foreground line-clamp-1 text-start text-sm text-wrap">
-                  {selectPlaceholder}
-                </span>
-              )}
-            </div>
-            <LuChevronsUpDown
-              className="text-muted-foreground/80 shrink-0"
-              aria-hidden="true"
-            />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-(--radix-popper-anchor-width) p-0">
-          <Command>
-            <CommandInput placeholder={searchPlaceholder} />
-            <CommandList>
-              <CommandEmpty>
-                {tFieldMultiSelect("when-no-results")}
-              </CommandEmpty>
-              {groups.map((group) =>
-                renderGroup(group, values, toggleSelection),
-              )}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    );
-  },
-) as <gGroup extends tGroup<gOption>, gOption extends tOption>(
-  props: tFieldMultiSelectProps<gGroup, gOption> &
-    RefAttributes<tFieldMultiSelectRef<gOption>>,
-) => ReactElement;
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-FieldMultiSelect.displayName = "FieldMultiSelect";
-
 type tFieldDatePickerRef = {
   reset: (date?: Date) => void;
 };
@@ -1028,7 +852,6 @@ export type {
   tFieldTagsRef,
   tFieldNumberMinMaxRef,
   tFieldPhoneNumberRef,
-  tFieldMultiSelectRef,
   tFieldDatePickerRef,
   tFileUploadRef,
 };
@@ -1041,7 +864,6 @@ export {
   FieldPhoneNumber,
   FieldNumber,
   FieldNumberMinMax,
-  FieldMultiSelect,
   FieldDatePicker,
   FieldFileUpload,
 };

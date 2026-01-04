@@ -61,7 +61,7 @@
       "multiselect": {
         "show-more": "+{count} more",
         "show-less": "Show Less",
-        "when-no-results": "No Match where found"
+        "when-empty": "No Matches were found"
       },
       "file-upload": {
         "title": "Drag & drop files here",
@@ -832,13 +832,12 @@
                   "form": {
                     "name": {
                       "label": "Role Name",
-                      "placeholder": "Enter role name"
+                      "placeholder": "Enter role name (e.g, Owner, Manager, Etc...)"
                     },
                     "permissions": {
                       "label": "Permissions",
-                      "select-placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
+                      "placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
                       "search-placeholder": "Search permission (e.g., Create, Read, Update, Delete)",
-                      "when-no-results": "No results found",
                       "permissions": [
                         {
                           "value": "0",
@@ -995,6 +994,7 @@
                     },
                     "status": {
                       "label": "Status",
+                      "placeholder": "Enter status (e.g., Active, Inactive)",
                       "statuses": [
                         {
                           "value": "0",
@@ -1026,7 +1026,6 @@
                   "label": "Permissions",
                   "select-placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
                   "search-placeholder": "Search permission (e.g., Create, Read, Update, Delete)",
-                  "when-no-results": "No results found",
                   "permissions": [
                     {
                       "value": "0",

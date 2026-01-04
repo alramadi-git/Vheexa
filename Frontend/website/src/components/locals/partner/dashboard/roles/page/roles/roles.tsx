@@ -15,6 +15,9 @@ import { useForm, Controller } from "react-hook-form";
 
 import { LuCheck, LuPlus, LuLoader } from "react-icons/lu";
 
+import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
+
 import {
   Card,
   CardContent,
@@ -40,34 +43,32 @@ import {
   FieldError,
   FieldSet,
 } from "@/components/shadcn/field";
-import { Separator } from "@/components/shadcn/separator";
+import { FieldSearch } from "@/components/locals/blocks/fields";
+
+import {
+  tGroup,
+  tOption,
+  tFieldSelectRef,
+  tFieldMultiSelectRef,
+  FieldSelect,
+  FieldMultiSelect,
+} from "@/components/locals/blocks/selects";
+
+import { CommandGroup, CommandItem } from "@/components/shadcn/command";
 
 import { Section, Intro } from "@/components/locals/blocks/typography";
-import { Toast } from "@/components/locals/blocks/toasts";
 import {
   Title,
   Description,
 } from "@/components/locals/partner/dashboard/blocks/typographies";
+
+import { Separator } from "@/components/shadcn/separator";
 
 import { Button } from "@/components/shadcn/button";
 
 import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
-import {
-  FieldMultiSelect,
-  FieldSearch,
-  tFieldMultiSelectRef,
-} from "@/components/locals/blocks/fields";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/select";
-import { toast } from "sonner";
-import { CommandGroup, CommandItem } from "@/components/shadcn/command";
 
 export default function Roles() {
   const { isLoading, result } = useRoles();
@@ -107,19 +108,11 @@ export default function Roles() {
   );
 }
 
-type tPermissionGroup = {
-  value: string;
+type tPermissionGroup = tGroup<tPermissionOption> & {
   label: string;
-  options: tPermissionOption[];
 };
-type tPermissionOption = {
-  value: string;
-  label: string;
+type tPermissionOption = tOption & {
   description: string;
-};
-type tStatues = {
-  value: string;
-  label: string;
 };
 
 function AddNew() {
@@ -128,7 +121,9 @@ function AddNew() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const permissionsRef = useRef<tFieldMultiSelectRef<tPermissionOption>>(null);
+  const tAddNew = useTranslations(
+    "app.partner.dashboard.roles.page.roles.add-new",
+  );
 
   const {
     formState,
@@ -144,20 +139,28 @@ function AddNew() {
     resolver: zodResolver(zRoleCreate),
   });
 
-  const tAddNew = useTranslations(
-    "app.partner.dashboard.roles.page.roles.add-new",
-  );
+  const permissionsRef = useRef<tFieldMultiSelectRef<tPermissionOption>>(null);
+  const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
   const permissionGroups: tPermissionGroup[] = tAddNew.raw(
     "content.form.permissions.permissions",
   );
-  const statuses: tStatues[] = tAddNew.raw("content.form.status.statuses");
+  const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
 
   const clsRoleService = new ClsRoleService();
 
   function reset(): void {
     handleReset();
+
+    permissionsRef.current?.reset();
+    statusRef.current?.reset(
+      statuses.find(
+        (status) =>
+          status.value === formState.defaultValues?.status?.toString(),
+      ),
+    );
   }
+
   async function submit(data: tRoleCreate): Promise<void> {
     const result = await clsRoleService.addAsync(data);
 
@@ -211,179 +214,144 @@ function AddNew() {
           onSubmit={handleSubmit(submit)}
           className="flex grow flex-col gap-6"
         >
-          <FieldSet>
-            <FieldGroup className="grid-cols-3">
-              <Controller
-                control={control}
-                name="name"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-name`}
-                      className="max-w-fit"
-                    >
-                      {tAddNew("content.form.name.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldSearch
-                        {...field}
-                        id={`${id}-name`}
-                        placeholder={tAddNew("content.form.name.placeholder")}
-                        value={value}
-                        onChange={setValue}
-                      />
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="permissions"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
+          <FieldGroup className="grid-cols-3">
+            <Controller
+              control={control}
+              name="name"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-name`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.name.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSearch
                       aria-invalid={invalid}
-                      htmlFor={`${id}-permissions`}
-                      className="max-w-fit"
-                    >
-                      {tAddNew("content.form.permissions.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldMultiSelect<tPermissionGroup, tPermissionOption>
-                        ref={permissionsRef}
-                        id={`${id}-permissions`}
-                        maxShownItems={5}
-                        select-placeholder={tAddNew(
-                          "content.form.permissions.select-placeholder",
+                      id={`${id}-name`}
+                      placeholder={tAddNew("content.form.name.placeholder")}
+                      value={value}
+                      onChange={setValue}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="permissions"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-permissions`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.permissions.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldMultiSelect<tPermissionGroup, tPermissionOption>
+                      ref={permissionsRef}
+                      isInvalid={invalid}
+                      id={`${id}-permissions`}
+                      placeholder={tAddNew(
+                        "content.form.permissions.placeholder",
+                      )}
+                      defaultValues={permissionGroups
+                        .flatMap((group) => group.options)
+                        .filter(
+                          (option) =>
+                            value?.includes(Number(option.value)) ?? false,
                         )}
-                        search-placeholder={tAddNew(
-                          "content.form.permissions.search-placeholder",
-                        )}
-                        groups={permissionGroups}
-                        values={permissionGroups
-                          .flatMap((group) => group.options)
-                          .filter(
-                            (option) =>
-                              value?.includes(Number(option.value)) ?? false,
-                          )}
-                        renderTrigger={(option) => option.label}
-                        renderGroup={(
-                          group,
-                          selectedItems,
-                          toggleSelection,
-                        ) => {
-                          return (
-                            <CommandGroup
-                              key={group.value}
-                              heading={group.label}
-                            >
-                              {group.options.map((option) => {
-                                const isSelected = selectedItems.some(
-                                  (selectedItem) =>
-                                    selectedItem.value === option.value,
-                                );
+                      groups={permissionGroups}
+                      searchPlaceholder={tAddNew(
+                        "content.form.permissions.search-placeholder",
+                      )}
+                      groupRender={(group) => group.label}
+                      optionRender={(option, isSelected) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          className="justify-between"
+                        >
+                          <span className="text-start">
+                            {option.label}
+                            <p className="text-muted-foreground line-clamp-1">
+                              {option.description}
+                            </p>
+                          </span>
+                          {isSelected && <LuCheck />}
+                        </button>
+                      )}
+                      onToggle={(values) => {
+                        setValue(values.map((option) => Number(option.value)));
+                      }}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="status"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-status`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.status.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSelect<tOption>
+                      ref={statusRef}
+                      isInvalid={invalid}
+                      placeholder={tAddNew("content.form.status.placeholder")}
+                      defaultValue={statuses.find(
+                        (status) => status.value === value.toString(),
+                      )}
+                      onSelect={(option) =>
+                        setValue(option && Number(option.value))
+                      }
+                      options={statuses}
+                      optionRender={(option, isSelected) => (
+                        <button type="button">
+                          {option.label}
+                          {isSelected && <LuCheck className="ms-auto" />}
+                        </button>
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
 
-                                return (
-                                  <CommandItem
-                                    asChild
-                                    key={option.value}
-                                    value={option.label}
-                                    onSelect={() =>
-                                      toggleSelection(option, isSelected)
-                                    }
-                                  >
-                                    <button
-                                      type="button"
-                                      className="w-full justify-between"
-                                    >
-                                      <span className="text-start">
-                                        {option.label}
-                                        <p className="text-muted-foreground line-clamp-1">
-                                          {option.description}
-                                        </p>
-                                      </span>
-                                      {isSelected && <LuCheck size={16} />}
-                                    </button>
-                                  </CommandItem>
-                                );
-                              })}
-                            </CommandGroup>
-                          );
-                        }}
-                        onChange={(options) => {
-                          setValue(
-                            options.map((option) => Number(option.value)),
-                          );
-                        }}
-                      />
-                    </FieldContent>
-                    <FieldError errors={[error]} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="status"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-status`}
-                      className="max-w-fit"
-                    >
-                      {tAddNew("content.form.status.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <Select
-                        {...field}
-                        value={value.toString()}
-                        onValueChange={(val) => setValue(Number(val))}
-                      >
-                        <SelectTrigger id={`${id}-status`} className="w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {statuses.map((status) => (
-                            <SelectItem key={status.value} value={status.value}>
-                              {status.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
-
-          <FieldSet>
+          <FieldSet className="mt-auto">
             <FieldGroup className="grid-cols-2">
               <Button
-                variant="outline"
                 disabled={formState.isSubmitting}
+                variant="outline"
                 type="reset"
-                className="mt-auto"
               >
                 {tAddNew("content.form.actions.reset")}
               </Button>
-              <Button
-                disabled={formState.isSubmitting}
-                type="submit"
-                className="mt-auto"
-              >
+              <Button disabled={formState.isSubmitting} type="submit">
                 {formState.isSubmitting && (
                   <LuLoader size={16} className="animate-spin" />
                 )}
