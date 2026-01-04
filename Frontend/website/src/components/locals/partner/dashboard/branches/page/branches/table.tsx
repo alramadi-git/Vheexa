@@ -43,7 +43,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 
-import { Badge, Toast } from "@/components/locals/blocks/typography";
+import { Badge } from "@/components/locals/blocks/typography";
+import { Toast } from "@/components/locals/blocks/toasts";
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 

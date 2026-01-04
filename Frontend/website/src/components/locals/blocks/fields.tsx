@@ -74,7 +74,7 @@ import {
 import { Calendar } from "@/components/shadcn/calendar";
 
 import { toast } from "sonner";
-import { Toast } from "./typography";
+import { Toast } from "./toasts";
 
 import { Badge } from "@/components/shadcn/badge";
 import { Input } from "@/components/shadcn/input";

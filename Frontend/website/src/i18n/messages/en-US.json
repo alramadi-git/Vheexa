@@ -41,6 +41,12 @@
       }
     },
     "fields": {
+      "email": {
+        "placeholder": "Enter email (e.g, partner@vheexa.com, etc...)"
+      },
+      "password": {
+        "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+      },
       "phone-number": {
         "placeholder": "Enter a phone number (e.g., 5551234567, 5559876543, etc...)",
         "country": {
@@ -2761,7 +2767,6 @@
         "layout": {
           "metadata": {
             "title": {
-              "absolute": "Auth | Vheexa",
               "template": "%s | Vheexa Partner Auth"
             },
             "description": "Access your Vheexa account to manage bookings and rents easily and securely."
@@ -2782,17 +2787,80 @@
               "description": "Login to your Vheexa account",
               "email": {
                 "label": "Email",
-                "placeholder": "account@vheexa.com",
-                "default-value": "partner@vheexa.com",
-                "description": "Enter your email address"
+                "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
               },
               "password": {
                 "label": "Password",
-                "placeholder": "********",
-                "default-value": "8nJgDY9uCGe*w24veL69YPS$Li*G^mHv",
-                "description": "Enter your password"
+                "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
               },
-              "submit": "Login"
+              "actions": {
+                "reset": "Reset",
+                "submit": "Login",
+                "when-success": "Logging to vheexa account was successfully succeeded",
+                "when-error": "Something went wrong while fetching your vheexa account"
+              }
+            }
+          }
+        },
+        "register": {
+          "page": {
+            "metadata": {
+              "title": "Register",
+              "description": "Create your vVheexa account and manage your rentals seamlessly."
+            },
+            "form": {
+              "title": "Hello there!",
+              "description": "create your vheexa account",
+              "partner": {
+                "logo": {
+                  "label": "Logo"
+                },
+                "banner": {
+                  "label": "Banner"
+                },
+                "handle": {
+                  "label": "Handle",
+                  "placeholder": "Enter handle (e.g, vheexa, etc...)"
+                },
+                "name": {
+                  "label": "Name",
+                  "placeholder": "Enter name (e.g, Vheexa, etc...)"
+                },
+                "phone-number": {
+                  "label": "Phone-number"
+                },
+                "email": {
+                  "label": "Email"
+                },
+                "password": {
+                  "label": "Password"
+                }
+              },
+              "branch": {
+                "name": {
+                  "label": "Name",
+                  "placeholder": "Enter name (e.g, , etc...)"
+                },
+                "location": {},
+                "phone-number": {
+                  "label": "Phone-number"
+                },
+                "email": {
+                  "label": "Email"
+                }
+              },
+              "member": {},
+              "remember-me": {
+                "label": "Remember me",
+                "title": "",
+                "description": ""
+              },
+              "actions": {
+                "reset": "Reset",
+                "submit": "Register",
+                "when-success": "Vheexa account was successfully created",
+                "when-error": "Something went wrong while adding your vheexa account"
+              }
             }
           }
         }

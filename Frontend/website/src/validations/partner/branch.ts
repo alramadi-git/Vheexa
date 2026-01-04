@@ -8,14 +8,13 @@ import { zEmail } from "../authentication-credentials";
 
 import { eBranchStatusModel } from "@/models/partner/branch";
 
-const zBranchCreate = z
-  .object({
-    name: z.string().nonempty("branch name is required."),
-    phoneNumber: zPhoneNumber,
-    email: zEmail,
-    status: z.enum(eBranchStatusModel, "invalid status."),
-  })
-  .extend(zLocationCreate.shape);
+const zBranchCreate = z.object({
+  name: z.string().nonempty("branch name is required."),
+  location: zLocationCreate,
+  phoneNumber: zPhoneNumber,
+  email: zEmail,
+  status: z.enum(eBranchStatusModel, "invalid status."),
+});
 type tBranchCreate = z.infer<typeof zBranchCreate>;
 
 const zBranchFilter = z

@@ -4,19 +4,36 @@ import { useTranslations } from "next-intl";
 
 import { Container, Section } from "@/components/locals/blocks/typography";
 import { FullHDImage } from "@/components/locals/blocks/images";
+import { Button } from "@/components/shadcn/button";
+import { Link } from "@/components/locals/blocks/links";
 
 export default function NotFound() {
   const tNotFound = useTranslations("app.not-found");
 
   return (
-    <Section className="h-dvh">
-      <Container className="flex size-full items-center justify-center">
+    <Section className="h-dvh grid grid-cols-1 items-center  lg:grid-cols-2">
+      <div className="space-y-6 px-4 py-8 text-center">
+        <h2 className="text-5xl font-semibold">{tNotFound("title")}</h2>
+        <h3 className="mb-1.5 text-3xl font-semibold">
+          {tNotFound("subtitle")}
+        </h3>
+        <p className="text-muted-foreground mx-auto max-w-sm">
+          {tNotFound("description")}
+        </p>
+
+        <Button asChild size="lg" className="rounded-lg text-base">
+          <Link href="/partner/dashboard">{tNotFound("go-back-to-home")}</Link>
+        </Button>
+      </div>
+
+      <div className="relative size-full max-lg:hidden">
+        <div className="bg-primary size-full rounded-2xl"></div>
         <FullHDImage
           src={tNotFound("illustration.url")}
           alt={tNotFound("illustration.alternate")}
-          className="size-full object-contain"
+          className="absolute top-1/2 left-1/2 h-64 -translate-x-1/2 -translate-y-1/2 object-contain"
         />
-      </Container>
+      </div>
     </Section>
   );
 }

@@ -2,9 +2,9 @@ import z from "zod";
 
 const zLocationCreate = z
   .object({
-    country: z.string().nonempty("country is required."),
-    city: z.string().nonempty("city is required."),
-    street: z.string().nonempty("street is required."),
+    country: z.string("country is required.").nonempty("country must not be empty."),
+    city: z.string("city is required.").nonempty("city must not be empty."),
+    street: z.string("street is required.").nonempty("street must not be empty."),
     latitude: z
       .number()
       .min(-90, "latitude must be between -90 and 90.")

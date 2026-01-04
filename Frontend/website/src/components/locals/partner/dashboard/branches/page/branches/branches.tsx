@@ -18,7 +18,8 @@ import { LuPlus, LuLoader } from "react-icons/lu";
 
 import { toast } from "sonner";
 
-import { Section, Intro, Toast } from "@/components/locals/blocks/typography";
+import { Section, Intro } from "@/components/locals/blocks/typography";
+import { Toast } from "@/components/locals/blocks/toasts";
 import {
   Title,
   Description,

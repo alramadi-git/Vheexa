@@ -42,7 +42,8 @@ import {
 } from "@/components/shadcn/field";
 import { Separator } from "@/components/shadcn/separator";
 
-import { Section, Intro, Toast } from "@/components/locals/blocks/typography";
+import { Section, Intro } from "@/components/locals/blocks/typography";
+import { Toast } from "@/components/locals/blocks/toasts";
 import {
   Title,
   Description,
