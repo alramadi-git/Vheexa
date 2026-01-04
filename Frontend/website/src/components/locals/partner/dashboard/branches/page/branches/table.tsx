@@ -1,20 +1,18 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
-
 import { eLocale } from "@/i18n/routing";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+
+import { useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
-
-import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
-
-import { ClsDateFormatter } from "@/libraries/date-formatter";
 import { ClsBranchService } from "@/services/partner/branch";
 
 import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
 
 import { GiAncientRuins, GiIsland } from "react-icons/gi";
 import {
@@ -29,12 +27,14 @@ import {
   LuTrash2,
 } from "react-icons/lu";
 
+import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 import {
   TableHeader,
   TableRow,
   TableHead,
   TableCell,
 } from "@/components/shadcn/table";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,11 +44,12 @@ import {
 } from "@/components/shadcn/dropdown-menu";
 
 import { Badge } from "@/components/locals/blocks/typography";
-import { Toast } from "@/components/locals/blocks/toasts";
+
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { useState } from "react";
 
 type tTableProps = {
   isLoading: boolean;
@@ -66,9 +67,7 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   return (
     <BlockTable<tBranchModel>
       isLoading={isLoading}
-      loadingRender={<Loading />}
       isSuccess={isSuccess}
-      errorRender={<Error />}
       data={data}
       header={
         <TableHeader>
@@ -88,7 +87,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableRow>
         </TableHeader>
       }
-      emptyRender={<Empty />}
       bodyRowRender={(item) => (
         <TableRow key={item.uuid}>
           <TableCell>
@@ -145,10 +143,15 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             {clsDateFormatter.format(new Date(item.createdAt))}
           </TableCell>
           <TableCell>
-            <Actions branch={item} />
+            <div className="flex justify-end">
+              <Actions branch={item} />
+            </div>
           </TableCell>
         </TableRow>
       )}
+      loadingRender={<Loading />}
+      errorRender={<Error />}
+      emptyRender={<Empty />}
     />
   );
 }
@@ -252,6 +255,7 @@ type tActionsProps = {
 };
 function Actions({ branch }: tActionsProps) {
   const router = useRouter();
+
   const clsBranchService = new ClsBranchService();
 
   const tAction = useTranslations(
@@ -264,6 +268,7 @@ function Actions({ branch }: tActionsProps) {
   function edit() {
     toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
+
   async function remove() {
     const result = await clsBranchService.deleteOneAsync(branch.uuid);
 
@@ -283,42 +288,37 @@ function Actions({ branch }: tActionsProps) {
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
+
     router.refresh();
   }
 
   return (
     <DropdownMenu>
-      <div className="flex w-full">
-        <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="View, edit and delete"
-            variant="ghost"
-            size="icon"
-            className="ms-auto"
-          >
-            <LuEllipsisVertical size={16} />
-          </Button>
-        </DropdownMenuTrigger>
-      </div>
+      <DropdownMenuTrigger asChild>
+        <Button type="button" variant="ghost" size="icon">
+          <LuEllipsisVertical />
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <button className="size-full" onClick={() => view()}>
+          <button type="button" className="size-full" onClick={() => view()}>
             <LuBookOpenText size={16} />
             {tAction("view.label")}
           </button>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <button
-            className="size-full text-blue-500! hover:bg-blue-500/10!"
+            type="button"
+            className="size-full text-sky-500! hover:bg-sky-500/10!"
             onClick={() => edit()}
           >
-            <LuPenLine size={16} className="text-blue-500" />
+            <LuPenLine size={16} className="text-sky-500" />
             {tAction("edit.label")}
           </button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" asChild>
-          <button className="size-full" onClick={() => remove()}>
+          <button type="button" className="size-full" onClick={() => remove()}>
             <LuTrash2 />
             {tAction("remove.label")}
           </button>

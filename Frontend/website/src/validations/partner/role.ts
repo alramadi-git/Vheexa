@@ -45,7 +45,7 @@ const zRoleFilter = z
       z
         .string()
         .nonempty(
-          "roles name must not be empty.",
+          "role name must not be empty.",
         ),
     ),
     permissions: z.array(

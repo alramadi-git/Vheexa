@@ -344,16 +344,16 @@ export default function Filter() {
                     <FieldContent>
                       <FieldNumberMinMax
                         ref={capacityRef}
-                        aria-invalid={invalid}
+                        isInvalid={invalid}
                         id={`${id}-capacity`}
-                        min-placeholder={tFilter(
+                        minPlaceholder={tFilter(
                           "specifications.capacity.min.placeholder",
                         )}
                         min={value.min}
                         onMinChange={(_value) =>
                           setValue({ ...value, min: _value })
                         }
-                        max-placeholder={tFilter(
+                        maxPlaceholder={tFilter(
                           "specifications.capacity.max.placeholder",
                         )}
                         max={value.max}
@@ -451,8 +451,8 @@ export default function Filter() {
                       <FieldNumberMinMax
                         ref={priceRef}
                         id={`${id}-price`}
-                        aria-invalid={invalid}
-                        min-placeholder={tFilter(
+                        isInvalid={invalid}
+                        minPlaceholder={tFilter(
                           "pricing.price.min.placeholder",
                         )}
                         min={price.min}
@@ -460,7 +460,7 @@ export default function Filter() {
                           setValue({ ...price, min: value });
                           if (isSubmitted) trigger("discount");
                         }}
-                        max-placeholder={tFilter(
+                        maxPlaceholder={tFilter(
                           "pricing.price.max.placeholder",
                         )}
                         max={price.max}
@@ -498,15 +498,15 @@ export default function Filter() {
                       <FieldNumberMinMax
                         ref={discountRef}
                         id={`${id}-discount`}
-                        aria-invalid={invalid}
-                        min-placeholder={tFilter(
+                        isInvalid={invalid}
+                        minPlaceholder={tFilter(
                           "pricing.discount.min.placeholder",
                         )}
                         min={discount.min}
                         onMinChange={(value) =>
                           setValue({ ...discount, min: value })
                         }
-                        max-placeholder={tFilter(
+                        maxPlaceholder={tFilter(
                           "pricing.discount.max.placeholder",
                         )}
                         max={discount.max}

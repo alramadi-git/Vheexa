@@ -1,17 +1,15 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-
-// import { useDebouncedCallback } from "use-debounce";
-
 import { tUndefinable } from "@/types/nullish";
+
 import { tResponseManyService } from "@/services/service";
 
 import {
-  ComponentProps,
   Ref,
+  ComponentProps,
   ReactNode,
   ReactElement,
+  JSX,
   forwardRef,
   useState,
   useEffect,
@@ -21,15 +19,10 @@ import {
 
 import { useTranslations } from "next-intl";
 
-import { LuArrowRight, LuCheck, LuChevronsUpDown, LuX } from "react-icons/lu";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce, useDebouncedCallback } from "use-debounce";
 
-import {
-  Select as ShadcnSelect,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/shadcn/select";
+import { LuArrowRight, LuChevronsUpDown, LuX } from "react-icons/lu";
 
 import {
   Popover,
@@ -41,13 +34,15 @@ import {
   CommandInput,
   CommandList,
   CommandEmpty,
-  CommandItem,
   CommandGroup,
+  CommandItem,
 } from "@/components/shadcn/command";
 
-import { Button } from "@/components/shadcn/button";
-import { Skeleton } from "@/components/shadcn/skeleton";
 import { Badge } from "@/components/shadcn/badge";
+import { Button } from "@/components/shadcn/button";
+
+import { Skeleton } from "@/components/shadcn/skeleton";
+import { eDuration } from "@/enums/duration";
 
 type tGroup<gtOption extends tOption> = {
   value: string;
@@ -64,8 +59,8 @@ type tFieldSelectRef<gtOption extends tOption> = {
   reset: (defaultValue?: gtOption) => void;
 };
 type tFieldSelectProps<gtOption extends tOption> = {
-  isInvalid?: boolean;
   id?: string;
+  isInvalid?: boolean;
   placeholder?: string;
   defaultValue?: gtOption;
   options: gtOption[];
@@ -79,8 +74,8 @@ type tFieldSelectProps<gtOption extends tOption> = {
 const FieldSelect = forwardRef(
   <gtOption extends tOption>(
     {
-      isInvalid,
       id,
+      isInvalid,
       placeholder,
       defaultValue: defaultOptionProp,
       options,
@@ -181,7 +176,7 @@ const FieldSelect = forwardRef(
   props: tFieldSelectProps<gtOption> & {
     ref?: Ref<tFieldSelectRef<gtOption>>;
   },
-) => ReactElement<typeof ShadcnSelect>;
+) => JSX.Element;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -209,6 +204,7 @@ type tFieldMultiSelectProps<
   ) => ReactElement<"button">;
   onToggle?: (values: gtOption[]) => void;
 };
+
 const FieldMultiSelect = forwardRef(
   <gtGroup extends tGroup<gtOption>, gtOption extends tOption>(
     {
@@ -360,7 +356,7 @@ const FieldMultiSelect = forwardRef(
   props: tFieldMultiSelectProps<gtGroup, gtOption> & {
     ref?: Ref<tFieldMultiSelectRef<gtOption>>;
   },
-) => ReactElement;
+) => JSX.Element;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -442,182 +438,202 @@ function FieldFreeSearchableSelect<gtOption extends tOption>({
   );
 }
 
-// type tFieldAsyncSelectRef = {
-//   reset: (defaultValue?: tOption) => void;
-// };
-// type tFieldAsyncSelectProps = {
-//   isInvalid?: boolean;
-//   id: string;
-//   placeholder: string;
-//   value?: tOption;
-//   triggerRender: (value: tOption) => ReactNode;
-//   cacheKey: string;
-//   fetch: (
-//     search: string,
-//     page: number,
-//   ) => Promise<tResponseManyService<tOption>>;
-//   inputProps?: ComponentProps<typeof CommandInput>;
-//   whenEmptyRender: () => ReactNode;
-//   optionRender: (item: tOption) => ReactElement<"button">;
-//   whenErrorRender: () => ReactNode;
-//   onSelect?: (option: tOption) => void;
-// };
+type tFieldAsyncSelectRef<gtOption extends tOption> = {
+  change: (value: gtOption) => void;
+  reset: (defaultValue?: gtOption) => void;
+};
+type tFieldAsyncSelectProps<gtOption extends tOption> = {
+  id: string;
+  isInvalid?: boolean;
+  placeholder: string;
+  defaultValue?: gtOption;
+  triggerRender: (value: gtOption) => ReactNode;
+  searchPlaceholder: string;
+  cacheKey: string;
+  fetch: (
+    search: string,
+    page: number,
+  ) => Promise<tResponseManyService<gtOption>>;
+  optionRender: (item: gtOption) => ReactElement<"button">;
+  whenEmptyRender: () => ReactNode;
+  whenErrorRender: () => ReactNode;
+  onSelect?: (option?: gtOption) => void;
+};
 
-// const FieldAsyncSelect = forwardRef<
-//   tFieldAsyncSelectRef,
-//   tFieldAsyncSelectProps
-// >(
-//   (
-//     {
-//       isInvalid,
-//       id,
-//       placeholder,
-//       value: valueProp,
-//       triggerRender,
-//       cacheKey,
-//       fetch,
-//       inputProps,
-//       whenEmptyRender,
-//       optionRender,
-//       whenErrorRender,
-//       onSelect,
-//     },
-//     ref,
-//   ) => {
-//     const [isOpen, setIsOpen] = useState<boolean>(false);
+const FieldAsyncSelect = forwardRef(
+  <gtOption extends tOption>(
+    {
+      id,
+      isInvalid,
+      placeholder,
+      defaultValue,
+      triggerRender,
+      searchPlaceholder,
+      cacheKey,
+      fetch,
+      optionRender,
+      whenEmptyRender,
+      whenErrorRender,
+      onSelect,
+    }: tFieldAsyncSelectProps<gtOption>,
+    ref: Ref<tFieldAsyncSelectRef<gtOption>>,
+  ) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-//     const [search, setSearch] = useState<string>("");
-//     const [page, setPage] = useState<number>(1);
-//     const [value, setValue] = useState<tUndefinable<tOption>>(valueProp);
+    const [value, setValue] = useState<tUndefinable<gtOption>>(defaultValue);
 
-//     const {
-//       isLoading,
-//       data: result,
-//       refetch: refetchQuery,
-//     } = useQuery({
-//       enabled: false,
-//       placeholderData: (result) => result,
-//       queryKey: ["async-select", cacheKey, search, page],
-//       queryFn: async () => fetch(search, page),
-//     });
+    const [search, setSearch] = useState<string>("");
+    const [page, setPage] = useState<number>(1);
 
-//     function reset() {
-//       setValue(undefined);
-//     }
+    const [debouncedSearch] = useDebounce(search, 300);
 
-//     useImperativeHandle(ref, () => ({
-//       reset,
-//     }));
+    const {
+      isLoading,
+      isFetching,
+      data: result,
+    } = useQuery({
+      enabled: isOpen,
+      placeholderData: (prev) => prev,
+      queryKey: ["async-select", cacheKey, debouncedSearch, page],
+      queryFn: async () => fetch(debouncedSearch, page),
+    });
 
-//     useEffect(() => {
-//       refetchQuery();
-//     }, []);
+    function change(value: gtOption) {
+      setValue(value);
+    }
 
-//     const refetch = useDebouncedCallback(() => {
-//       refetchQuery();
-//     }, 500);
+    function reset(defaultValue?: gtOption) {
+      setValue(defaultValue);
+    }
 
-//     function Select(option: tOption) {
-//       setIsOpen(false);
+    useImperativeHandle(ref, () => ({
+      change,
+      reset,
+    }));
 
-//       setSearch("");
+    function Select(option: gtOption) {
+      if (value === undefined) {
+        setValue(option);
+        onSelect?.(option);
 
-//       setValue(option);
-//       onSelect?.(option);
-//     }
+        setIsOpen(false);
 
-//     function onValueChange(search: string) {
-//       setSearch(search);
-//       refetch();
-//     }
+        return;
+      }
 
-//     return (
-//       <Popover open={isOpen} onOpenChange={setIsOpen}>
-//         <PopoverTrigger asChild>
-//           <Button
-//             aria-invalid={isInvalid}
-//             id={id}
-//             variant="outline"
-//             className="justify-between text-start"
-//           >
-//             {value ? (
-//               triggerRender(value)
-//             ) : (
-//               <span
-//                 aria-invalid={isInvalid}
-//                 className="text-muted-foreground aria-invalid:text-destructive truncate"
-//               >
-//                 {isInvalid}
-//                 {placeholder}
-//               </span>
-//             )}
-//             <LuChevronsUpDown size={16} className="opacity-50" />
-//           </Button>
-//         </PopoverTrigger>
-//         <PopoverContent
-//           align="start"
-//           className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
-//         >
-//           <Command className="rounded">
-//             <CommandInput
-//               {...inputProps}
-//               value={search}
-//               onValueChange={onValueChange}
-//             />
-//             <CommandList className="flex flex-col p-3">
-//               <CommandEmpty className="py-0">
-//                 {isLoading ? (
-//                   <FieldAsyncSelectLoading />
-//                 ) : result?.isSuccess ? (
-//                   whenEmptyRender()
-//                 ) : (
-//                   whenErrorRender()
-//                 )}
-//               </CommandEmpty>
-//               {result?.isSuccess &&
-//                 result.data.map((option) => (
-//                   <CommandItem
-//                     asChild
-//                     key={option.value}
-//                     value={option.label}
-//                     className="w-full cursor-pointer gap-2.5 rounded"
-//                     onSelect={() => Select(option)}
-//                   >
-//                     {optionRender(option)}
-//                   </CommandItem>
-//                 ))}
-//             </CommandList>
-//           </Command>
-//         </PopoverContent>
-//       </Popover>
-//     );
-//   },
-// );
+      if (option.value === value.value) {
+        setValue(undefined);
+        onSelect?.(undefined);
 
-// FieldAsyncSelect.displayName = "FieldDynamicSelect";
+        setIsOpen(false);
 
-// function FieldAsyncSelectLoading() {
-//   return (
-//     <div className="flex flex-col gap-2">
-//       <Skeleton className="h-8" />
-//       <Skeleton className="h-8" />
-//       <Skeleton className="h-8" />
-//       <Skeleton className="h-8" />
-//       <Skeleton className="h-8" />
-//     </div>
-//   );
-// }
+        return;
+      }
+
+      setValue(option);
+      onSelect?.(option);
+
+      setIsOpen(false);
+    }
+
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            id={id}
+            aria-invalid={isInvalid}
+            variant="outline"
+            className="justify-between text-start"
+          >
+            {value ? (
+              triggerRender(value)
+            ) : (
+              <span
+                aria-invalid={isInvalid}
+                className="text-muted-foreground aria-invalid:text-destructive truncate"
+              >
+                {isInvalid}
+                {placeholder}
+              </span>
+            )}
+            <LuChevronsUpDown size={16} className="opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+        >
+          <Command shouldFilter={false} className="rounded">
+            <CommandInput
+              placeholder={searchPlaceholder}
+              value={search}
+              onValueChange={setSearch}
+            />
+            <CommandList className="flex flex-col p-3">
+              <CommandEmpty className="py-0">
+                {isLoading || isFetching ? (
+                  <FieldAsyncSelectLoading />
+                ) : result?.isSuccess ? (
+                  whenEmptyRender()
+                ) : (
+                  whenErrorRender()
+                )}
+              </CommandEmpty>
+              {isLoading || isFetching
+                ? null
+                : result?.isSuccess && (
+                    <>
+                      {result.data.map((option) => (
+                        <CommandItem
+                          asChild
+                          key={option.value}
+                          value={option.label}
+                          className="w-full cursor-pointer gap-2.5 rounded"
+                          onSelect={() => Select(option)}
+                        >
+                          {optionRender(option)}
+                        </CommandItem>
+                      ))}
+                    </>
+                  )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  },
+) as <gtOption extends tOption>(
+  props: tFieldAsyncSelectProps<gtOption> & {
+    ref?: Ref<tFieldAsyncSelectRef<gtOption>>;
+  },
+) => JSX.Element;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+FieldAsyncSelect.displayName = "FieldAsyncSelect";
+
+function FieldAsyncSelectLoading() {
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
+    </div>
+  );
+}
 
 export type {
   tGroup,
   tOption,
   tFieldSelectRef,
   tFieldMultiSelectRef,
-  /** tFieldAsyncSelectRef */
+  tFieldAsyncSelectRef,
 };
 export {
   FieldSelect,
   FieldMultiSelect,
   FieldFreeSearchableSelect,
-  /** FieldAsyncSelect */
+  FieldAsyncSelect,
 };

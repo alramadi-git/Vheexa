@@ -21,6 +21,7 @@ import {
   Fragment,
   ChangeEvent,
   Ref,
+  useRef,
 } from "react";
 
 import {
@@ -235,12 +236,12 @@ type tFieldNumberMinMaxRef = {
 };
 type tFieldNumberMinMaxProps = {
   id?: string;
-  "aria-invalid"?: boolean;
-  "min-placeholder"?: string;
+  isInvalid?: boolean;
+  minPlaceholder?: string;
   min?: number;
-  onMinChange?: (value?: number) => void;
-  "max-placeholder"?: string;
+  maxPlaceholder?: string;
   max?: number;
+  onMinChange?: (value?: number) => void;
   onMaxChange?: (value?: number) => void;
   formatter?: (value?: number) => string;
 };
@@ -250,26 +251,26 @@ const FieldNumberMinMax = forwardRef<
 >(
   (
     {
-      "aria-invalid": isInvalid,
       id,
-      "min-placeholder": minPlaceholder,
-      min: _min,
-      onMinChange: _onMinChange,
-      "max-placeholder": maxPlaceholder,
-      max: _max,
+      isInvalid,
+      minPlaceholder,
+      min: minProp,
+      maxPlaceholder,
+      max: maxProp,
       onMaxChange: _onMaxChange,
+      onMinChange: _onMinChange,
       formatter,
     },
     ref,
   ) => {
-    const [min, setMin] = useState<number>(_min ?? 0);
+    const [min, setMin] = useState<number>(minProp ?? 0);
     const [minValue, setMinValue] = useState<string>(
-      formatter?.(_min) ?? _min?.toString() ?? "",
+      formatter?.(minProp) ?? minProp?.toString() ?? "",
     );
 
-    const [max, setMax] = useState<number>(_max ?? 0);
+    const [max, setMax] = useState<number>(maxProp ?? 0);
     const [maxValue, setMaxValue] = useState<string>(
-      formatter?.(_max) ?? _max?.toString() ?? "",
+      formatter?.(maxProp) ?? maxProp?.toString() ?? "",
     );
 
     function change(minMax?: tMinMax) {
@@ -308,11 +309,11 @@ const FieldNumberMinMax = forwardRef<
       if (event.key === "Enter") event.currentTarget.blur();
     }
 
-    function onChange(field: "min" | "max", value: string) {
-      if (field === "min") setMinValue(value);
-      else setMaxValue(value);
+    function onBlur(field: "min" | "max", value: string) {
+      const parsedValue = value === "" ? undefined : Number(value);
+      if (field === "min") onMinBlur(parsedValue);
+      else onMaxBlur(parsedValue);
     }
-
     function onMinBlur(value?: number) {
       if (Number.isNaN(value)) {
         setMin(0);
@@ -340,24 +341,23 @@ const FieldNumberMinMax = forwardRef<
       _onMaxChange?.(value);
     }
 
-    function onBlur(field: "min" | "max", value: string) {
-      const parsedValue = value === "" ? undefined : Number(value);
-      if (field === "min") onMinBlur(parsedValue);
-      else onMaxBlur(parsedValue);
+    function changeMinMax(field: "min" | "max", value: string) {
+      if (field === "min") setMinValue(value);
+      else setMaxValue(value);
     }
 
     return (
       <div className="flex">
         <Input
-          aria-invalid={isInvalid}
           id={id}
+          aria-invalid={isInvalid}
           type="text"
           placeholder={minPlaceholder}
           className="rounded-e-none"
           value={minValue}
           onFocus={() => onFocus("min")}
           onKeyDown={onKeyDown}
-          onChange={(event) => onChange("min", event.currentTarget.value)}
+          onChange={(event) => changeMinMax("min", event.currentTarget.value)}
           onBlur={(event) => onBlur("min", event.currentTarget.value)}
         />
         <Input
@@ -368,7 +368,7 @@ const FieldNumberMinMax = forwardRef<
           value={maxValue}
           onFocus={() => onFocus("max")}
           onKeyDown={onKeyDown}
-          onChange={(event) => onChange("max", event.currentTarget.value)}
+          onChange={(event) => changeMinMax("max", event.currentTarget.value)}
           onBlur={(event) => onBlur("max", event.currentTarget.value)}
         />
       </div>
@@ -383,7 +383,7 @@ type tCountry = {
 };
 
 type tFieldPhoneNumberRef = {
-  reset: () => void;
+  reset: (defaultValue?: string) => void;
 };
 type tFieldPhoneNumberProps = {
   isInvalid?: boolean;
@@ -397,44 +397,44 @@ const FieldPhoneNumber = forwardRef<
   tFieldPhoneNumberRef,
   tFieldPhoneNumberProps
 >(({ isInvalid, isRequired, id, value, setValue }, ref) => {
-  const tFieldPhoneNumber = useTranslations("components.fields.phone-number");
-
-  const countryDefaultValue = tFieldPhoneNumber.raw("country.default-value");
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [phoneNumber, setPhoneNumber] = useState<string>(value);
-  const [selectedCountry, setSelectedCountry] =
-    useState<tCountry>(countryDefaultValue);
+
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
+
+  const tFieldPhoneNumber = useTranslations("components.fields.phone-number");
+  const countryDefaultValue = tFieldPhoneNumber.raw("country.default-value");
+
+  const [country, setCountry] = useState<tCountry>(countryDefaultValue);
+
+  function reset(defaultValue: string = ""): void {
+    setPhoneNumber(defaultValue);
+    setCountry(countryDefaultValue);
+  }
 
   useImperativeHandle(ref, () => ({
     reset,
   }));
 
-  function reset(): void {
-    setPhoneNumber("");
-    setSelectedCountry(countryDefaultValue);
-  }
-
-  function changePhoneInput(phoneNumber: string): void {
+  function changePhoneNumber(phoneNumber: string): void {
     const formattedPhoneNumber = new AsYouType(
-      selectedCountry.iso.toUpperCase() as CountryCode,
+      country.iso.toUpperCase() as CountryCode,
     ).input(phoneNumber);
 
     setPhoneNumber(formattedPhoneNumber);
     setValue(
-      formatNumber(
-        `+${selectedCountry["country-code"]}${phoneNumber}`,
-        "E.164",
-      ),
+      formatNumber(`+${country["country-code"]}${phoneNumber}`, "E.164"),
     );
   }
 
   function selectCountry(country: tCountry): void {
+    changePhoneNumber(phoneNumber);
+    setCountry(country);
+
     setIsOpen(false);
 
-    setSelectedCountry(country);
-    changePhoneInput(phoneNumber);
+    phoneNumberRef.current?.focus();
   }
 
   return (
@@ -443,16 +443,15 @@ const FieldPhoneNumber = forwardRef<
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            role="combobox"
             className={cn(
-              "border-input w-28 justify-between rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]",
+              "border-input rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]",
               {
                 "border-destructive": isInvalid,
               },
             )}
           >
-            <FlagImage iso2={selectedCountry.iso} size={24} />
-            <span>+{selectedCountry["country-code"]}</span>
+            <FlagImage iso2={country.iso} size={24} />
+            <span>+{country["country-code"]}</span>
             <LuChevronDown
               className="text-muted-foreground/80"
               aria-hidden="true"
@@ -468,24 +467,26 @@ const FieldPhoneNumber = forwardRef<
               <CommandEmpty>
                 {tFieldPhoneNumber("country.when-empty")}
               </CommandEmpty>
-              {defaultCountries.map((country) => (
+              {defaultCountries.map((_country) => (
                 <CommandItem
-                  key={country[1]}
-                  value={`${country[0]}-${country[1]}-${country[2]}`}
+                  key={_country[1]}
+                  value={`${_country[0]}-${_country[1]}-${_country[2]}`}
                   onSelect={() => {
                     selectCountry({
-                      iso: country[1],
-                      "country-code": country[2],
+                      iso: _country[1],
+                      "country-code": _country[2],
                     });
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <FlagImage iso2={country[1]} size={24} />
-                    {country[0]}
-                    <span className="text-muted-foreground">+{country[2]}</span>
+                    <FlagImage iso2={_country[1]} size={24} />
+                    {_country[0]}
+                    <span className="text-muted-foreground">
+                      +{_country[2]}
+                    </span>
                   </div>
 
-                  {selectedCountry.iso === country[1] && (
+                  {country.iso === _country[1] && (
                     <LuCheck size={16} className="ml-auto" />
                   )}
                 </CommandItem>
@@ -496,18 +497,18 @@ const FieldPhoneNumber = forwardRef<
       </Popover>
       <div className="relative grow">
         <Input
-          id={id}
+          ref={phoneNumberRef}
           aria-invalid={isInvalid}
           required={isRequired}
+          id={id}
           type="tel"
           placeholder={tFieldPhoneNumber("placeholder")}
           className="rounded-s-none pe-8"
           value={phoneNumber}
           onChange={(e) => {
-            changePhoneInput(e.currentTarget.value);
+            changePhoneNumber(e.currentTarget.value);
           }}
         />
-
         <div
           className={cn(
             "text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50",

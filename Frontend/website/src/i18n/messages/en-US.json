@@ -25,30 +25,9 @@
     "account": {
       "logout": "Logout"
     },
-    "colors": {
-      "color-creator": {
-        "trigger": "Add",
-        "content": {
-          "name": {
-            "placeholder": "Enter color name: e.g., Black, White, Red, etc..."
-          },
-          "tags": {
-            "placeholder": "Enter tags for better search: (e.g., Black, Dark, Night, etc..."
-          },
-          "save": "Save",
-          "reset": "Reset"
-        }
-      }
-    },
     "fields": {
-      "email": {
-        "placeholder": "Enter email (e.g, partner@vheexa.com, etc...)"
-      },
-      "password": {
-        "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
-      },
       "phone-number": {
-        "placeholder": "Enter a phone number (e.g., 5551234567, 5559876543, etc...)",
+        "placeholder": "Enter phone number (e.g., +12125550123, +14155550198, etc...)",
         "country": {
           "default-value": {
             "iso": "us",
@@ -57,6 +36,12 @@
           "placeholder": "Search by county (e.g., name, iso or code)",
           "when-empty": "No matching countries found "
         }
+      },
+      "email": {
+        "placeholder": "Enter email (e.g, partner@vheexa.com, etc...)"
+      },
+      "password": {
+        "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
       },
       "multiselect": {
         "show-more": "+{count} more",
@@ -71,6 +56,21 @@
           "when-duplicate-names": "{filename} has already been added"
         },
         "when-reject": "{filename} has been rejected"
+      }
+    },
+    "colors": {
+      "color-creator": {
+        "trigger": "Add",
+        "content": {
+          "name": {
+            "placeholder": "Enter color name: e.g., Black, White, Red, etc..."
+          },
+          "tags": {
+            "placeholder": "Enter tags for better search: (e.g., Black, Dark, Night, etc..."
+          },
+          "save": "Save",
+          "reset": "Reset"
+        }
       }
     },
     "list": {
@@ -1024,7 +1024,7 @@
                 },
                 "permissions": {
                   "label": "Permissions",
-                  "select-placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
+                  "placeholder": "Select permission (e.g., Create, Read, Update, Delete)",
                   "search-placeholder": "Search permission (e.g., Create, Read, Update, Delete)",
                   "permissions": [
                     {
@@ -1270,31 +1270,29 @@
                     "information": {
                       "name": {
                         "label": "Branch Name",
-                        "placeholder": "Enter branch name"
+                        "placeholder": "Enter branch name (e.g, Main Branch, Downtown Branch, etc...)"
                       },
                       "phone-number": {
                         "label": "Phone Number"
                       },
                       "email": {
                         "label": "Email",
-                        "placeholder": "Enter email address (e.g., branch@vheexa.com, branch2@vheexa.com, etc...)"
+                        "placeholder": "Enter email address (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
                       }
                     },
                     "location": {
                       "country": {
                         "label": "Country",
-                        "placeholder": "Enter a country (e.g., United States)"
+                        "placeholder": "Enter country (e.g., United States)"
                       },
                       "city": {
                         "label": "City",
-                        "placeholder": "Enter a city (e.g., New York, Los Angeles, etc...)"
+                        "placeholder": "Enter city (e.g., New York, Los Angeles, etc...)"
                       },
                       "street": {
                         "label": "Street",
-                        "placeholder": "Enter a street (e.g., Main Street, 5th Avenue, etc...)"
-                      }
-                    },
-                    "coordinates": {
+                        "placeholder": "Enter street (e.g., Main Street, 5th Avenue, etc...)"
+                      },
                       "latitude": {
                         "label": "Latitude"
                       },
@@ -1304,6 +1302,7 @@
                     },
                     "status": {
                       "label": "Status",
+                      "placeholder": "Enter status (e.g., Active, Inactive)",
                       "statuses": [
                         {
                           "value": "0",
@@ -1463,16 +1462,19 @@
                         }
                       }
                     },
-                    "email": {
-                      "label": "Email",
-                      "placeholder": "Enter email (e.g., member@vheexa.com, etc...)"
-                    },
-                    "password": {
-                      "label": "Password",
-                      "placeholder": "Enter password (e.g., Aa1!Bb2@, etc...)"
+                    "credentials": {
+                      "email": {
+                        "label": "Email",
+                        "placeholder": "Enter email (e.g., member@vheexa.com, etc...)"
+                      },
+                      "password": {
+                        "label": "Password",
+                        "placeholder": "Enter password (e.g., Aa1!Bb2@, etc...)"
+                      }
                     },
                     "status": {
                       "label": "Status",
+                      "placeholder": "Enter status (e.g., Active, Inactive)",
                       "statuses": [
                         {
                           "value": "0",

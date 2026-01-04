@@ -46,6 +46,7 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 import { Button } from "@/components/shadcn/button";
 import { Badge } from "@/components/locals/blocks/typography";
 import { Toast } from "@/components/locals/blocks/toasts";
+import { useState } from "react";
 
 type tTableProps = {
   isLoading: boolean;
@@ -63,9 +64,7 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
   return (
     <BlockTable<tRoleModel>
       isLoading={isLoading}
-      loadingRender={<Loading />}
       isSuccess={isSuccess}
-      errorRender={<Error />}
       data={data}
       header={
         <TableHeader>
@@ -85,7 +84,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableRow>
         </TableHeader>
       }
-      emptyRender={<Empty />}
       bodyRowRender={(item) => (
         <TableRow key={item.uuid}>
           <TableCell>
@@ -128,10 +126,15 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             {clsDateFormatter.format(new Date(item.createdAt))}
           </TableCell>
           <TableCell>
-            <Actions role={item} />
+            <div className="flex justify-end">
+              <Actions role={item} />
+            </div>
           </TableCell>
         </TableRow>
       )}
+      loadingRender={<Loading />}
+      emptyRender={<Empty />}
+      errorRender={<Error />}
     />
   );
 }
@@ -241,11 +244,12 @@ type tActionsProps = {
 };
 function Actions({ role }: tActionsProps) {
   const router = useRouter();
-  const clsRoleService = new ClsRoleService();
 
   const tAction = useTranslations(
     "app.partner.dashboard.roles.page.roles.table.actions.cell",
   );
+
+  const clsRoleService = new ClsRoleService();
 
   function view() {
     toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
@@ -253,6 +257,7 @@ function Actions({ role }: tActionsProps) {
   function edit() {
     toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
+
   async function remove() {
     const result = await clsRoleService.deleteOneAsync(role.uuid);
 
@@ -272,42 +277,37 @@ function Actions({ role }: tActionsProps) {
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
+
     router.refresh();
   }
 
   return (
     <DropdownMenu>
-      <div className="flex w-full">
-        <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="View, edit and delete"
-            variant="ghost"
-            size="icon"
-            className="ms-auto"
-          >
-            <LuEllipsisVertical size={16} />
-          </Button>
-        </DropdownMenuTrigger>
-      </div>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <LuEllipsisVertical />
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <button className="size-full" onClick={() => view()}>
-            <LuBookOpenText size={16} />
+          <button type="button" className="size-full" onClick={() => view()}>
+            <LuBookOpenText />
             {tAction("view.label")}
           </button>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <button
-            className="size-full text-blue-500! hover:bg-blue-500/10!"
+            type="button"
+            className="size-full text-sky-500! hover:bg-sky-500/10!"
             onClick={() => edit()}
           >
-            <LuPenLine size={16} className="text-blue-500" />
+            <LuPenLine className="text-sky-500" />
             {tAction("edit.label")}
           </button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" asChild>
-          <button className="size-full" onClick={() => remove()}>
+        <DropdownMenuItem asChild variant="destructive">
+          <button type="button" className="size-full" onClick={() => remove()}>
             <LuTrash2 />
             {tAction("remove.label")}
           </button>

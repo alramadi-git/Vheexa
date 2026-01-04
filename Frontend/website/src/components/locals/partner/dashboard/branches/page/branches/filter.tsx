@@ -2,19 +2,17 @@
 
 import { useTranslations } from "next-intl";
 
+import { useId, useRef, useEffect } from "react";
 import { useQuery } from "@/hooks/query";
 
-import { useEffect, useId } from "react";
+import { tBranchFilter, zBranchFilter } from "@/validations/partner/branch";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { tBranchFilter, zBranchFilter } from "@/validations/partner/branch";
-
-import { LuX } from "react-icons/lu";
+import { LuCheck } from "react-icons/lu";
 
 import { Card, CardContent } from "@/components/shadcn/card";
-
 import {
   FieldGroup,
   Field,
@@ -23,26 +21,24 @@ import {
   FieldError,
   FieldSet,
 } from "@/components/shadcn/field";
+
 import { FieldSearch } from "@/components/locals/blocks/fields";
 
 import {
-  Select,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-} from "@/components/shadcn/select";
+  tOption,
+  tFieldSelectRef,
+  FieldSelect,
+} from "@/components/locals/blocks/selects";
 
 import { Button } from "@/components/shadcn/button";
-
-type tStatues = {
-  value: string;
-  label: string;
-};
 
 export default function Filter() {
   const id = useId();
   const query = useQuery();
+
+  const tFilter = useTranslations(
+    "app.partner.dashboard.branches.page.branches.filter",
+  );
 
   const {
     control,
@@ -57,29 +53,37 @@ export default function Filter() {
     resolver: zodResolver(zBranchFilter),
   });
 
-  const [statusQuery] = [query.get("filter.status")];
+  const statusRef = useRef<tFieldSelectRef<tOption>>(null);
+
+  const statuses: tOption[] = tFilter.raw("status.statuses");
 
   useEffect(() => {
-    setValue("search", query.get("filter.search") ?? undefined);
-    setValue("", query.get("filter.search") ?? undefined);
-    
-    setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
+    const [searchQuery, statusQuery] = [
+      query.get("filter.search"),
+      query.get("filter.status"),
+    ];
+
+    const [search, status] = [
+      searchQuery !== null ? searchQuery : undefined,
+      statusQuery !== null ? Number(statusQuery) : undefined,
+    ];
+
+    setValue("search", search);
+    setValue("status", status);
+    statusRef.current?.change(
+      statuses.find((_status) => _status.value === status?.toString()),
+    );
   }, []);
-
-  const tFilter = useTranslations(
-    "app.partner.dashboard.branches.page.branches.filter",
-  );
-
-  const statuses: tStatues[] = tFilter.raw("status.statuses");
 
   function reset() {
     handleReset();
+
+    statusRef.current?.reset();
   }
 
   function submit(data: tBranchFilter) {
     query.remove("filter.search");
     query.remove("filter.status");
-
     query.remove("pagination.page");
 
     query.set("filter.search", data.search);
@@ -96,100 +100,76 @@ export default function Filter() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <FieldSet>
-            <FieldGroup className="grid-cols-2">
-              <Controller
-                control={control}
-                name="search"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-search`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("search.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldSearch
-                        {...field}
-                        id={`${id}-search`}
-                        placeholder={tFilter("search.placeholder")}
-                        value={value ?? ""}
-                        onChange={(event) => {
-                          const value = event.currentTarget.value;
-                          setValue(value === "" ? undefined : value);
-                        }}
-                      />
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="status"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-status`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("status.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <Select
-                        {...field}
-                        value={value?.toString() ?? ""}
-                        onValueChange={(val) => {
-                          if (value === undefined) {
-                            setValue(Number(val));
-                            return;
-                          }
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="search"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-search`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("search.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSearch
+                      id={`${id}-search`}
+                      aria-invalid={invalid}
+                      placeholder={tFilter("search.placeholder")}
+                      value={value ?? ""}
+                      onChange={(value) =>
+                        setValue(value === "" ? undefined : value)
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="status"
+              render={({
+                field: { onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-status`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("status.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSelect<tOption>
+                      ref={statusRef}
+                      id={`${id}-status`}
+                      isInvalid={invalid}
+                      placeholder={tFilter("status.placeholder")}
+                      onSelect={(option) =>
+                        setValue(option && Number(option.value))
+                      }
+                      options={statuses}
+                      optionRender={(option, isSelected) => (
+                        <button type="button">
+                          {option.label}
+                          {isSelected && <LuCheck className="ms-auto" />}
+                        </button>
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
 
-                          if (value.toString() === val) setValue(undefined);
-                          else setValue(Number(val));
-                        }}
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <SelectTrigger id={`${id}-status`} className="w-full">
-                            <SelectValue
-                              placeholder={tFilter("status.placeholder")}
-                            />
-                          </SelectTrigger>
-                          {value !== undefined && (
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              type="button"
-                              onClick={() => setValue(undefined)}
-                            >
-                              <LuX size={16} />
-                            </Button>
-                          )}
-                        </div>
-                        <SelectContent>
-                          {statuses.map((status) => (
-                            <SelectItem key={status.value} value={status.value}>
-                              {status.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
           <FieldSet>
             <FieldGroup className="grid-cols-2">
               <Button variant="outline" type="reset">

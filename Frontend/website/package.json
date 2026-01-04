@@ -1,6 +1,7 @@
 {
-  "name": "website",
   "version": "0.1.0",
+  "name": "website",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 5173",

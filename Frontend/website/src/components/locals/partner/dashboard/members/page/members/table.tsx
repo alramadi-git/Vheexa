@@ -7,11 +7,10 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
-import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
-
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 import { ClsRoleService } from "@/services/partner/role";
 
+import { Toast } from "@/components/locals/blocks/toasts";
 import { toast } from "sonner";
 
 import {
@@ -28,12 +27,14 @@ import {
   LuTrash2,
 } from "react-icons/lu";
 
+import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 import {
   TableHeader,
   TableRow,
   TableHead,
   TableCell,
 } from "@/components/shadcn/table";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,9 +43,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 
-import { Skeleton } from "@/components/shadcn/skeleton";
+import { Badge } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
-import { Badge, Toast } from "@/components/locals/blocks/typography";
+
+import { Skeleton } from "@/components/shadcn/skeleton";
 
 type tTableProps = {
   isLoading: boolean;

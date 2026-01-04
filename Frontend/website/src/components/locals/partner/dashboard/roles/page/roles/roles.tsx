@@ -1,17 +1,17 @@
 "use client";
 
-import useRoles from "@/hooks/partner/roles";
-import { ClsRoleService } from "@/services/partner/role";
-
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
 import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
-import { zodResolver } from "@hookform/resolvers/zod";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
+
+import { ClsRoleService } from "@/services/partner/role";
+import useRoles from "@/hooks/partner/roles";
 
 import { LuCheck, LuPlus, LuLoader } from "react-icons/lu";
 
@@ -36,13 +36,14 @@ import {
 } from "@/components/shadcn/dialog";
 
 import {
+  FieldSet,
   FieldGroup,
   Field,
   FieldLabel,
   FieldContent,
   FieldError,
-  FieldSet,
 } from "@/components/shadcn/field";
+
 import { FieldSearch } from "@/components/locals/blocks/fields";
 
 import {
@@ -53,8 +54,6 @@ import {
   FieldSelect,
   FieldMultiSelect,
 } from "@/components/locals/blocks/selects";
-
-import { CommandGroup, CommandItem } from "@/components/shadcn/command";
 
 import { Section, Intro } from "@/components/locals/blocks/typography";
 import {
@@ -72,6 +71,7 @@ import { Pagination } from "@/components/locals/blocks/pagination";
 
 export default function Roles() {
   const { isLoading, result } = useRoles();
+
   const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
 
   return (
@@ -119,7 +119,7 @@ function AddNew() {
   const id = useId();
   const router = useRouter();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const tAddNew = useTranslations(
     "app.partner.dashboard.roles.page.roles.add-new",
@@ -142,7 +142,7 @@ function AddNew() {
   const permissionsRef = useRef<tFieldMultiSelectRef<tPermissionOption>>(null);
   const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
-  const permissionGroups: tPermissionGroup[] = tAddNew.raw(
+  const permissions: tPermissionGroup[] = tAddNew.raw(
     "content.form.permissions.permissions",
   );
   const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
@@ -153,12 +153,7 @@ function AddNew() {
     handleReset();
 
     permissionsRef.current?.reset();
-    statusRef.current?.reset(
-      statuses.find(
-        (status) =>
-          status.value === formState.defaultValues?.status?.toString(),
-      ),
-    );
+    statusRef.current?.reset(statuses.find((status) => status.value === "0"));
   }
 
   async function submit(data: tRoleCreate): Promise<void> {
@@ -181,9 +176,9 @@ function AddNew() {
       />
     ));
 
+    reset();
     setIsOpen(false);
 
-    reset();
     router.refresh();
   }
 
@@ -233,6 +228,7 @@ function AddNew() {
                   <FieldContent>
                     <FieldSearch
                       aria-invalid={invalid}
+                      required
                       id={`${id}-name`}
                       placeholder={tAddNew("content.form.name.placeholder")}
                       value={value}
@@ -266,13 +262,13 @@ function AddNew() {
                       placeholder={tAddNew(
                         "content.form.permissions.placeholder",
                       )}
-                      defaultValues={permissionGroups
+                      defaultValues={permissions
                         .flatMap((group) => group.options)
                         .filter(
                           (option) =>
                             value?.includes(Number(option.value)) ?? false,
                         )}
-                      groups={permissionGroups}
+                      groups={permissions}
                       searchPlaceholder={tAddNew(
                         "content.form.permissions.search-placeholder",
                       )}
@@ -319,6 +315,7 @@ function AddNew() {
                   <FieldContent>
                     <FieldSelect<tOption>
                       ref={statusRef}
+                      id={`${id}-status`}
                       isInvalid={invalid}
                       placeholder={tAddNew("content.form.status.placeholder")}
                       defaultValue={statuses.find(
@@ -353,7 +350,7 @@ function AddNew() {
               </Button>
               <Button disabled={formState.isSubmitting} type="submit">
                 {formState.isSubmitting && (
-                  <LuLoader size={16} className="animate-spin" />
+                  <LuLoader className="animate-spin" />
                 )}
                 {tAddNew("content.form.actions.submit")}
               </Button>
