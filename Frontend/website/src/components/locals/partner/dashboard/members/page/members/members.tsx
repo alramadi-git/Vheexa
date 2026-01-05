@@ -93,7 +93,7 @@ export default function Members() {
     "app.partner.dashboard.members.page.members",
   );
 
-  console.log(result)
+  console.log(result);
 
   return (
     <Section className="h-fullscreen">
@@ -251,10 +251,7 @@ function AddNew() {
             <Controller
               control={control}
               name="avatar"
-              render={({
-                field: { onChange: setValue },
-                fieldState: { invalid, error },
-              }) => (
+              render={({ field: {}, fieldState: { invalid, error } }) => (
                 <Field>
                   <FieldLabel
                     aria-invalid={invalid}

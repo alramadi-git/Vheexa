@@ -14,24 +14,19 @@ import { Toast } from "@/components/locals/blocks/toasts";
 import { toast } from "sonner";
 
 import {
-  LuShieldAlert,
-  LuShieldX,
-  LuCheck,
+  LuHash,
   LuUser,
-  LuUsers,
   LuCircleCheck,
   LuCircleX,
   LuEllipsisVertical,
   LuBookOpenText,
   LuPenLine,
   LuTrash2,
-  LuUserSearch,
-  LuUserX,
   LuShield,
   LuBuilding,
-  LuHash,
   LuCalendar,
-  LuSettings,
+  LuUserSearch,
+  LuUserX,
 } from "react-icons/lu";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
