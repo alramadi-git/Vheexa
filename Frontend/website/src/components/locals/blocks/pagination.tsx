@@ -19,6 +19,7 @@ import {
   PaginationItem,
   PaginationButton,
 } from "@/components/shadcn/pagination";
+
 import {
   Select,
   SelectContent,
@@ -26,13 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/select";
+import { tOption } from "./selects";
 
-type tOption = {
-  value: ePageSize;
-  label: string;
-};
-
-class clsPagination {
+class ClsPagination {
   public readonly page: number;
   public readonly pageSize: number;
   public readonly totalItems: number;
@@ -53,38 +50,42 @@ class clsPagination {
     return this.page >= this.totalPages;
   }
 
-  nextPage(): clsPagination {
-    return new clsPagination({
-      page: this.page + 1,
-      pageSize: this.pageSize,
-      totalItems: this.totalItems,
-    });
-  }
-  previousPage(): clsPagination {
-    return new clsPagination({
-      page: this.page - 1,
-      pageSize: this.pageSize,
-      totalItems: this.totalItems,
-    });
-  }
-
-  firstPage(): clsPagination {
-    return new clsPagination({
+  firstPage(): ClsPagination {
+    return new ClsPagination({
       page: 1,
       pageSize: this.pageSize,
       totalItems: this.totalItems,
     });
   }
-  lastPage(): clsPagination {
-    return new clsPagination({
+  lastPage(): ClsPagination {
+    return new ClsPagination({
       page: this.totalPages,
       pageSize: this.pageSize,
       totalItems: this.totalItems,
     });
   }
 
-  public selectPageSize(pageSize: ePageSize): clsPagination {
-    return new clsPagination({
+  previousPage(): ClsPagination {
+    if (this.isFirst()) return this;
+
+    return new ClsPagination({
+      page: this.page - 1,
+      pageSize: this.pageSize,
+      totalItems: this.totalItems,
+    });
+  }
+  nextPage(): ClsPagination {
+    if (this.isLast()) return this;
+
+    return new ClsPagination({
+      page: this.page + 1,
+      pageSize: this.pageSize,
+      totalItems: this.totalItems,
+    });
+  }
+  
+  public selectPageSize(pageSize: ePageSize): ClsPagination {
+    return new ClsPagination({
       page: this.page,
       pageSize: pageSize,
       totalItems: this.totalItems,
@@ -101,21 +102,16 @@ export function Pagination(props: tPaginationProps) {
   const tPagination = useTranslations("components.pagination");
 
   const options: tOption[] = tPagination.raw("page-size.options");
+  const pagination = new ClsPagination(props.pagination);
 
-  const pagination = new clsPagination(props.pagination);
+  function setPagination(pagination: ClsPagination) {
+    if (pagination.isFirst()) searchParams.remove("pagination.page");
+    else searchParams.set("pagination.page", pagination.page.toString());
 
-  function setPagination(pagination: clsPagination) {
-    if (pagination.isFirst()) {
-      searchParams.remove("pagination.page");
-    } else {
-      searchParams.set("pagination.page", pagination.page.toString());
-    }
-
-    if (pagination.pageSize === ePageSize.ten) {
+    if (pagination.pageSize === ePageSize.ten)
       searchParams.remove("pagination.page-size");
-    } else {
+    else
       searchParams.set("pagination.page-size", pagination.pageSize.toString());
-    }
 
     searchParams.apply();
   }
@@ -126,58 +122,42 @@ export function Pagination(props: tPaginationProps) {
         <PaginationItem>
           <PaginationButton
             variant="outline"
-            aria-label="Go to first page"
             aria-disabled={pagination.isFirst() ? true : undefined}
-            role={pagination.isFirst() ? "link" : undefined}
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => {
-              setPagination(pagination.firstPage());
-            }}
+            onClick={() => setPagination(pagination.firstPage())}
           >
-            <LuChevronFirst size={16} aria-hidden="true" />
+            <LuChevronFirst />
           </PaginationButton>
         </PaginationItem>
         <PaginationItem>
           <PaginationButton
-            aria-label="Go to previous page"
             aria-disabled={pagination.isFirst() ? true : undefined}
-            role={pagination.isFirst() ? "link" : undefined}
             variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => {
-              setPagination(pagination.previousPage());
-            }}
+            onClick={() => setPagination(pagination.previousPage())}
           >
-            <LuChevronLeft size={16} aria-hidden="true" />
+            <LuChevronLeft />
           </PaginationButton>
         </PaginationItem>
 
         <PaginationItem>
           <PaginationButton
-            aria-label="Go to next page"
             aria-disabled={pagination.isLast() ? true : undefined}
-            role={pagination.isLast() ? "link" : undefined}
             variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => {
-              setPagination(pagination.nextPage());
-            }}
+            onClick={() => setPagination(pagination.nextPage())}
           >
-            <LuChevronRight size={16} aria-hidden="true" />
+            <LuChevronRight />
           </PaginationButton>
         </PaginationItem>
         <PaginationItem>
           <PaginationButton
-            aria-label="Go to last page"
             aria-disabled={pagination.isLast() ? true : undefined}
-            role={pagination.isLast() ? "link" : undefined}
             variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => {
-              setPagination(pagination.lastPage());
-            }}
+            onClick={() => setPagination(pagination.lastPage())}
           >
-            <LuChevronLast size={16} aria-hidden="true" />
+            <LuChevronLast />
           </PaginationButton>
         </PaginationItem>
       </PaginationContent>
@@ -220,3 +200,5 @@ export function Pagination(props: tPaginationProps) {
     </ShadcnPagination>
   );
 }
+
+export { ClsPagination };

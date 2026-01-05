@@ -2,8 +2,6 @@
 
 import { tUndefinable } from "@/types/nullish";
 
-import { tResponseManyService } from "@/services/service";
-
 import {
   Ref,
   ComponentProps,
@@ -17,12 +15,20 @@ import {
   Fragment,
 } from "react";
 
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "use-debounce";
+
 import { useTranslations } from "next-intl";
 
-import { useQuery } from "@tanstack/react-query";
-import { useDebounce, useDebouncedCallback } from "use-debounce";
-
-import { LuArrowRight, LuChevronsUpDown, LuX } from "react-icons/lu";
+import {
+  LuChevronsUpDown,
+  LuArrowRight,
+  LuX,
+  LuChevronFirst,
+  LuChevronLeft,
+  LuChevronRight,
+  LuChevronLast,
+} from "react-icons/lu";
 
 import {
   Popover,
@@ -38,11 +44,21 @@ import {
   CommandItem,
 } from "@/components/shadcn/command";
 
-import { Badge } from "@/components/shadcn/badge";
-import { Button } from "@/components/shadcn/button";
+import { tResponseManyService } from "@/services/service";
+
+import {
+  Pagination as ShadcnPagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationButton,
+} from "@/components/shadcn/pagination";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
-import { eDuration } from "@/enums/duration";
+
+import { Badge } from "@/components/shadcn/badge";
+import { Button } from "@/components/shadcn/button";
+import { tPaginationModel } from "@/models/pagination";
+import { ClsPagination } from "./pagination";
 
 type tGroup<gtOption extends tOption> = {
   value: string;
@@ -193,7 +209,7 @@ type tFieldMultiSelectProps<
   id?: string;
   isInvalid?: boolean;
   placeholder?: string;
-  maxShownItems?: number;
+  maxShownOptions?: number;
   defaultValues?: gtOption[];
   groups: gtGroup[];
   searchPlaceholder?: string;
@@ -210,7 +226,7 @@ const FieldMultiSelect = forwardRef(
     {
       id,
       isInvalid,
-      maxShownItems = 3,
+      maxShownOptions = 3,
       placeholder,
       defaultValues = [],
       groups,
@@ -230,7 +246,7 @@ const FieldMultiSelect = forwardRef(
 
     const visibleValues: gtOption[] = isExpanded
       ? values
-      : values.slice(0, maxShownItems);
+      : values.slice(0, maxShownOptions);
 
     const hiddenCount = values.length - visibleValues.length;
 
@@ -249,14 +265,16 @@ const FieldMultiSelect = forwardRef(
 
     function toggle(option: gtOption, isSelected: boolean) {
       if (isSelected) {
-        const options = values.filter((opt) => opt !== option);
+        const options = values.filter((value) => value !== option);
 
         setValues(options);
         onToggle?.(options);
+
         return;
       }
 
       const options = [...values, option];
+
       setValues(options);
       onToggle?.(options);
     }
@@ -275,21 +293,21 @@ const FieldMultiSelect = forwardRef(
             <div className="flex flex-wrap items-center gap-1">
               {values.length > 0 ? (
                 <Fragment>
-                  {visibleValues.flatMap((option) => (
-                    <Badge key={option.value} variant="outline">
-                      {option.label}
+                  {visibleValues.flatMap((value) => (
+                    <Badge key={value.value} variant="outline">
+                      {value.label}
                       <span
                         className="hover:bg-foreground/10 inline-flex size-4 items-center justify-center rounded duration-100"
                         onClick={(event) => {
                           event.stopPropagation();
-                          toggle(option, true);
+                          toggle(value, true);
                         }}
                       >
                         <LuX className="size-3" />
                       </span>
                     </Badge>
                   ))}
-                  {hiddenCount > 0 || isExpanded ? (
+                  {hiddenCount > 0 && (
                     <Badge
                       variant="outline"
                       onClick={(event) => {
@@ -303,7 +321,7 @@ const FieldMultiSelect = forwardRef(
                             count: hiddenCount,
                           })}
                     </Badge>
-                  ) : null}
+                  )}
                 </Fragment>
               ) : (
                 <span
@@ -447,14 +465,17 @@ type tFieldAsyncSelectProps<gtOption extends tOption> = {
   isInvalid?: boolean;
   placeholder: string;
   defaultValue?: gtOption;
-  triggerRender: (value: gtOption) => ReactNode;
+  valueRender: (value: gtOption) => ReactNode;
   searchPlaceholder: string;
   cacheKey: string;
   fetch: (
     search: string,
     page: number,
   ) => Promise<tResponseManyService<gtOption>>;
-  optionRender: (item: gtOption) => ReactElement<"button">;
+  optionRender: (
+    option: gtOption,
+    isSelected: boolean,
+  ) => ReactElement<"button">;
   whenEmptyRender: () => ReactNode;
   whenErrorRender: () => ReactNode;
   onSelect?: (option?: gtOption) => void;
@@ -467,7 +488,7 @@ const FieldAsyncSelect = forwardRef(
       isInvalid,
       placeholder,
       defaultValue,
-      triggerRender,
+      valueRender,
       searchPlaceholder,
       cacheKey,
       fetch,
@@ -546,13 +567,12 @@ const FieldAsyncSelect = forwardRef(
             className="justify-between text-start"
           >
             {value ? (
-              triggerRender(value)
+              valueRender(value)
             ) : (
               <span
                 aria-invalid={isInvalid}
                 className="text-muted-foreground aria-invalid:text-destructive truncate"
               >
-                {isInvalid}
                 {placeholder}
               </span>
             )}
@@ -591,9 +611,13 @@ const FieldAsyncSelect = forwardRef(
                           className="w-full cursor-pointer gap-2.5 rounded"
                           onSelect={() => Select(option)}
                         >
-                          {optionRender(option)}
+                          {optionRender(option, option.value === value?.value)}
                         </CommandItem>
                       ))}
+                      <Pagination
+                        pagination={result.pagination}
+                        onPageChange={setPage}
+                      />
                     </>
                   )}
             </CommandList>
@@ -612,6 +636,237 @@ const FieldAsyncSelect = forwardRef(
 // @ts-expect-error
 FieldAsyncSelect.displayName = "FieldAsyncSelect";
 
+type tFieldMultiAsyncSelectRef<gtOption extends tOption> = {
+  change: (setValues: gtOption[]) => void;
+  reset: (defaultValues?: gtOption[]) => void;
+};
+type tFieldMultiAsyncSelectProps<gtOption extends tOption> = {
+  id: string;
+  isInvalid?: boolean;
+  placeholder?: string;
+  maxShownOptions?: number;
+  defaultValues?: gtOption[];
+  valueRender: (value: gtOption) => ReactNode;
+  searchPlaceholder?: string;
+  cacheKey: string;
+  fetch: (
+    search: string,
+    page: number,
+  ) => Promise<tResponseManyService<gtOption>>;
+  optionRender: (
+    option: gtOption,
+    isSelected: boolean,
+  ) => ReactElement<"button">;
+  whenEmptyRender: () => ReactNode;
+  whenErrorRender: () => ReactNode;
+  onToggle?: (options?: gtOption[]) => void;
+};
+
+const FieldMultiAsyncSelect = forwardRef(
+  <gtOption extends tOption>(
+    {
+      id,
+      isInvalid,
+      placeholder,
+      maxShownOptions = 3,
+      defaultValues = [],
+      valueRender,
+      searchPlaceholder,
+      cacheKey,
+      fetch,
+      optionRender,
+      whenEmptyRender,
+      whenErrorRender,
+      onToggle,
+    }: tFieldMultiAsyncSelectProps<gtOption>,
+    ref: Ref<tFieldMultiAsyncSelectRef<gtOption>>,
+  ) => {
+    const tFieldMultiAsyncSelect = useTranslations(
+      "components.fields.multi-async-select",
+    );
+
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+    const [values, setValues] = useState<gtOption[]>(defaultValues);
+
+    const visibleValues: gtOption[] = isExpanded
+      ? values
+      : values.slice(0, maxShownOptions);
+
+    const hiddenCount = values.length - visibleValues.length;
+
+    const [search, setSearch] = useState<string>("");
+    const [page, setPage] = useState<number>(1);
+
+    const [debouncedSearch] = useDebounce(search, 300);
+
+    const {
+      isLoading,
+      isFetching,
+      data: result,
+    } = useQuery({
+      enabled: isOpen,
+      placeholderData: (prev) => prev,
+      queryKey: ["async-select", cacheKey, debouncedSearch, page],
+      queryFn: async () => fetch(debouncedSearch, page),
+    });
+
+    function change(values: gtOption[]) {
+      setValues(values);
+    }
+
+    function reset(defaultValues: gtOption[] = []) {
+      setValues(defaultValues);
+    }
+
+    useImperativeHandle(ref, () => ({
+      change,
+      reset,
+    }));
+
+    function toggle(option: gtOption, isSelected: boolean) {
+      if (isSelected) {
+        const filteredValues = values.filter(
+          (value) => value.value !== option.value,
+        );
+
+        setValues(filteredValues);
+        onToggle?.(filteredValues);
+
+        return;
+      }
+
+      setValues([...values, option]);
+      onToggle?.([...values, option]);
+    }
+
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            id={id}
+            aria-invalid={isInvalid}
+            variant="outline"
+            className="justify-between text-start"
+          >
+            {values.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-1">
+                {values.length > 0 ? (
+                  <Fragment>
+                    {visibleValues.flatMap((value) => (
+                      <Badge key={value.value} variant="outline">
+                        {valueRender(value)}
+                        <span
+                          className="hover:bg-foreground/10 inline-flex size-4 items-center justify-center rounded duration-100"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            toggle(value, true);
+                          }}
+                        >
+                          <LuX className="size-3" />
+                        </span>
+                      </Badge>
+                    ))}
+                    {hiddenCount > 0 && (
+                      <Badge
+                        variant="outline"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setIsExpanded((prev) => !prev);
+                        }}
+                      >
+                        {isExpanded
+                          ? tFieldMultiAsyncSelect("show-less")
+                          : tFieldMultiAsyncSelect("show-more", {
+                              count: hiddenCount,
+                            })}
+                      </Badge>
+                    )}
+                  </Fragment>
+                ) : (
+                  <span
+                    aria-invalid={isInvalid}
+                    className="text-muted-foreground aria-invalid:text-destructive/80 line-clamp-1 text-start text-sm text-wrap"
+                  >
+                    {placeholder}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <span
+                aria-invalid={isInvalid}
+                className="text-muted-foreground aria-invalid:text-destructive truncate"
+              >
+                {placeholder}
+              </span>
+            )}
+            <LuChevronsUpDown size={16} className="opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+        >
+          <Command shouldFilter={false} className="rounded">
+            <CommandInput
+              placeholder={searchPlaceholder}
+              value={search}
+              onValueChange={setSearch}
+            />
+            <CommandList className="flex flex-col p-3">
+              <CommandEmpty className="py-0">
+                {isLoading || isFetching ? (
+                  <FieldAsyncSelectLoading />
+                ) : result?.isSuccess ? (
+                  whenEmptyRender()
+                ) : (
+                  whenErrorRender()
+                )}
+              </CommandEmpty>
+              {isLoading || isFetching
+                ? null
+                : result?.isSuccess && (
+                    <>
+                      {result.data.map((option) => {
+                        const isSelected = values.some(
+                          (value) => value.value === option.value,
+                        );
+
+                        return (
+                          <CommandItem
+                            asChild
+                            key={option.value}
+                            value={option.label}
+                            className="w-full cursor-pointer gap-2.5 rounded"
+                            onSelect={() => toggle(option, isSelected)}
+                          >
+                            {optionRender(option, isSelected)}
+                          </CommandItem>
+                        );
+                      })}
+                      <Pagination
+                        pagination={result.pagination}
+                        onPageChange={setPage}
+                      />
+                    </>
+                  )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  },
+) as <gtOption extends tOption>(
+  props: tFieldMultiAsyncSelectProps<gtOption> & {
+    ref?: Ref<tFieldMultiAsyncSelectRef<gtOption>>;
+  },
+) => JSX.Element;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+FieldMultiAsyncSelect.displayName = "FieldMultiAsyncSelect";
+
 function FieldAsyncSelectLoading() {
   return (
     <div className="flex flex-col gap-2">
@@ -624,16 +879,96 @@ function FieldAsyncSelectLoading() {
   );
 }
 
+type tPagination = {
+  pagination: tPaginationModel;
+  onPageChange?: (page: number) => void;
+};
+function Pagination({ pagination, onPageChange }: tPagination) {
+  const tPagination = useTranslations(
+    "components.fields.async-select.pagination",
+  );
+
+  const clsPagination = new ClsPagination(pagination);
+
+  function changePage(page: number) {
+    onPageChange?.(page);
+  }
+
+  return (
+    <ShadcnPagination className="mt-3 gap-3">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationButton
+            size="icon"
+            variant="outline"
+            disabled={clsPagination.isFirst() ? true : undefined}
+            onClick={() => changePage(clsPagination.firstPage().page)}
+          >
+            <LuChevronFirst />
+          </PaginationButton>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationButton
+            size="icon"
+            variant="outline"
+            disabled={clsPagination.isFirst() ? true : undefined}
+            onClick={() => changePage(clsPagination.previousPage().page)}
+          >
+            <LuChevronLeft />
+          </PaginationButton>
+        </PaginationItem>
+
+        <PaginationItem>
+          <PaginationButton
+            size="icon"
+            variant="outline"
+            disabled={clsPagination.isLast() ? true : undefined}
+            onClick={() => changePage(clsPagination.nextPage().page)}
+          >
+            <LuChevronRight />
+          </PaginationButton>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationButton
+            size="icon"
+            variant="outline"
+            disabled={clsPagination.isLast() ? true : undefined}
+            onClick={() => changePage(clsPagination.lastPage().page)}
+          >
+            <LuChevronLast />
+          </PaginationButton>
+        </PaginationItem>
+      </PaginationContent>
+
+      <p
+        className="text-muted-foreground ms-auto text-sm whitespace-nowrap"
+        aria-live="polite"
+      >
+        {tPagination.rich("page-details", {
+          page: () => (
+            <span className="text-foreground">{clsPagination.page}</span>
+          ),
+          totalPages: () => (
+            <span className="text-foreground">{clsPagination.totalPages}</span>
+          ),
+        })}
+      </p>
+    </ShadcnPagination>
+  );
+}
+
 export type {
   tGroup,
   tOption,
   tFieldSelectRef,
   tFieldMultiSelectRef,
   tFieldAsyncSelectRef,
+  tFieldMultiAsyncSelectRef,
 };
 export {
   FieldSelect,
   FieldMultiSelect,
   FieldFreeSearchableSelect,
   FieldAsyncSelect,
+  FieldMultiAsyncSelect,
 };

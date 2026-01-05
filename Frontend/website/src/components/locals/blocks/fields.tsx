@@ -11,16 +11,12 @@ import { useLocale, useTranslations } from "next-intl";
 
 import {
   ComponentProps,
-  RefAttributes,
-  ReactElement,
   KeyboardEvent,
   forwardRef,
   useState,
   useCallback,
   useImperativeHandle,
-  Fragment,
   ChangeEvent,
-  Ref,
   useRef,
 } from "react";
 
@@ -31,7 +27,6 @@ import {
   LuCalendar,
   LuUpload,
   LuSearch,
-  LuChevronsUpDown,
   LuCheck,
   LuX,
   LuPhone,
@@ -50,11 +45,10 @@ import {
 
 import {
   Command,
-  CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
+  CommandItem,
+  CommandEmpty,
 } from "@/components/shadcn/command";
 
 import {
@@ -68,10 +62,10 @@ import { Calendar } from "@/components/shadcn/calendar";
 import { toast } from "sonner";
 import { Toast } from "./toasts";
 
-import { Badge } from "@/components/shadcn/badge";
 import { Input } from "@/components/shadcn/input";
 
 import { Button } from "@/components/shadcn/button";
+
 import {
   NumberField,
   NumberFieldDecrement,
@@ -79,6 +73,7 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from "@/components/shadcn/number-field";
+
 import {
   TagsInputInput,
   TagsInputItem,
@@ -717,7 +712,6 @@ type tFileUploadRef = {
   reset: (files?: File[]) => void;
   changeValue: (value: File[]) => void;
 };
-
 type tFileUploadProps = Omit<
   ComponentProps<typeof FileUpload>,
   "onFileReject"
@@ -725,6 +719,7 @@ type tFileUploadProps = Omit<
   "aria-invalid"?: boolean;
   setValue?: (value: File[]) => void;
 };
+
 const FieldFileUpload = forwardRef<tFileUploadRef, tFileUploadProps>(
   (
     {
@@ -847,6 +842,7 @@ const FieldFileUpload = forwardRef<tFileUploadRef, tFileUploadProps>(
     );
   },
 );
+
 FieldFileUpload.displayName = "FieldFileUpload";
 
 export type {

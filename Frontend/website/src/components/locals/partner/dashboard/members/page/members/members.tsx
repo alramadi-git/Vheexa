@@ -58,6 +58,7 @@ import {
   FieldUsername,
   FieldEmail,
   FieldPassword,
+  FieldFileUpload,
 } from "@/components/locals/blocks/fields";
 
 import {
@@ -81,14 +82,16 @@ import { Button } from "@/components/shadcn/button";
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
 
-// import Filter from "./filter";
+import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 
 export default function Members() {
   const { isLoading, result } = useRoles();
 
-  const tRoles = useTranslations("app.partner.dashboard.roles.page.roles");
+  const tMembers = useTranslations(
+    "app.partner.dashboard.members.page.members",
+  );
 
   return (
     <Section className="h-fullscreen">
@@ -96,16 +99,16 @@ export default function Members() {
         <CardHeader className="flex items-end justify-between">
           <Intro className="space-y-1">
             <CardTitle>
-              <Title heading="h1">{tRoles("title")}</Title>
+              <Title heading="h1">{tMembers("title")}</Title>
             </CardTitle>
             <CardDescription>
-              <Description>{tRoles("description")}</Description>
+              <Description>{tMembers("description")}</Description>
             </CardDescription>
           </Intro>
           <AddNew />
         </CardHeader>
         <CardContent className="block space-y-6">
-          {/* <Filter /> */}
+          <Filter />
           <Card>
             <CardContent className="space-y-6">
               <Table
@@ -164,6 +167,7 @@ function AddNew() {
     branchRef.current?.reset();
     statusRef.current?.reset(statuses.find((status) => status.value === "0"));
   }
+
   async function submit(data: tMemberCreate): Promise<void> {
     const result = await clsMemberService.addAsync(data);
 
@@ -174,6 +178,7 @@ function AddNew() {
           label={tAddNew("content.form.actions.toasts.when-error")}
         />
       ));
+
       return;
     }
 
@@ -214,6 +219,7 @@ function AddNew() {
 
     return result;
   }
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -256,7 +262,9 @@ function AddNew() {
                   >
                     {tAddNew("content.form.avatar.label")}
                   </FieldLabel>
-                  <FieldContent></FieldContent>
+                  <FieldContent>
+                    <FieldFileUpload maxFiles={1} />
+                  </FieldContent>
                   <FieldError errors={[error]} />
                 </Field>
               )}
@@ -309,12 +317,12 @@ function AddNew() {
                       {tAddNew("content.form.role.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <FieldAsyncSelect
+                      <FieldAsyncSelect<tOption>
                         ref={roleRef}
-                        isInvalid={invalid}
                         id={`${id}-role`}
+                        isInvalid={invalid}
                         placeholder={tAddNew("content.form.role.placeholder")}
-                        triggerRender={(option) => (
+                        valueRender={(option) => (
                           <span className="inline-flex items-center gap-1.5">
                             <LuShield />
                             <span className="line-clamp-1 text-wrap">
@@ -323,24 +331,27 @@ function AddNew() {
                           </span>
                         )}
                         searchPlaceholder={tAddNew(
-                          "content.form.role.roles.search-placeholder",
+                          "content.form.role.roles.placeholder",
                         )}
                         cacheKey="roles"
                         fetch={(search, page) => fetch("roles", search, page)}
-                        optionRender={(option) => (
+                        optionRender={(option, isSelected) => (
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1.5"
+                            className="inline-flex justify-between gap-1.5"
                           >
-                            <LuShield />
-                            <span className="line-clamp-1 text-wrap">
-                              {option.label}
-                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <LuShield />
+                              <span className="line-clamp-1 text-wrap">
+                                {option.label}
+                              </span>
+                            </div>
+                            {isSelected && <LuCheck />}
                           </button>
                         )}
                         whenEmptyRender={() => (
                           <div className="flex items-center gap-3">
-                            <GiAncientRuins size={24} />
+                            <LuShieldAlert size={24} />
                             <div>
                               <p className="text-sm">
                                 {tAddNew(
@@ -357,7 +368,7 @@ function AddNew() {
                         )}
                         whenErrorRender={() => (
                           <div className="flex items-center gap-3">
-                            <GiIsland size={24} />
+                            <LuShieldX size={24} />
                             <div>
                               <p className="text-sm">
                                 {tAddNew(
@@ -383,10 +394,10 @@ function AddNew() {
                 control={control}
                 name="branch"
                 render={({
-                  field: { value, onChange: setValue },
+                  field: { onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
-                  <Field className="col-span-2">
+                  <Field className="col-span-2 mt-auto">
                     <FieldLabel
                       aria-invalid={invalid}
                       htmlFor={`${id}-branch`}
@@ -395,12 +406,12 @@ function AddNew() {
                       {tAddNew("content.form.branch.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <FieldAsyncSelect
+                      <FieldAsyncSelect<tOption>
                         ref={branchRef}
-                        isInvalid={invalid}
                         id={`${id}-branch`}
+                        isInvalid={invalid}
                         placeholder={tAddNew("content.form.branch.placeholder")}
-                        triggerRender={(option) => (
+                        valueRender={(option) => (
                           <span className="inline-flex items-center gap-1.5">
                             <LuBuilding2 />
                             <span className="line-clamp-1 text-wrap">
@@ -409,13 +420,13 @@ function AddNew() {
                           </span>
                         )}
                         searchPlaceholder={tAddNew(
-                          "content.form.branch.branches.search-placeholder",
+                          "content.form.branch.branches.placeholder",
                         )}
                         cacheKey="branches"
                         fetch={(search, page) =>
                           fetch("branches", search, page)
                         }
-                        optionRender={(option) => (
+                        optionRender={(option, isSelected) => (
                           <button
                             type="button"
                             className="inline-flex justify-between gap-1.5"
@@ -426,12 +437,12 @@ function AddNew() {
                                 {option.label}
                               </span>
                             </div>
-                            {option.value === value && <LuCheck />}
+                            {isSelected && <LuCheck />}
                           </button>
                         )}
                         whenEmptyRender={() => (
                           <div className="flex items-center gap-3">
-                            <LuShieldAlert size={24} />
+                            <GiAncientRuins size={24} />
                             <div>
                               <p className="text-sm">
                                 {tAddNew(
@@ -448,7 +459,7 @@ function AddNew() {
                         )}
                         whenErrorRender={() => (
                           <div className="flex items-center gap-3">
-                            <LuShieldX size={24} />
+                            <GiIsland size={24} />
                             <div>
                               <p className="text-sm">
                                 {tAddNew(
@@ -494,7 +505,9 @@ function AddNew() {
                         id={`${id}-email`}
                         aria-invalid={invalid}
                         required
-                        placeholder={tAddNew("content.form.credentials.email.placeholder")}
+                        placeholder={tAddNew(
+                          "content.form.credentials.email.placeholder",
+                        )}
                         onChange={setValue}
                       />
                     </FieldContent>

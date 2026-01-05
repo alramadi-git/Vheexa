@@ -48,6 +48,15 @@
         "show-less": "Show Less",
         "when-empty": "No Matches were found"
       },
+      "multi-async-select": {
+        "show-more": "+{count} more",
+        "show-less": "Show Less"
+      },
+      "async-select": {
+        "pagination": {
+          "page-details": "Page <page></page> of <totalPages></totalPages>"
+        }
+      },
       "file-upload": {
         "title": "Drag & drop files here",
         "subtitle": "Or click to browse",
@@ -1434,7 +1443,7 @@
                       "label": "Role",
                       "placeholder": "Select role (e.g., owner, manager, etc...)",
                       "roles": {
-                        "search-placeholder": "Select role (e.g., owner, manager, etc...)",
+                        "placeholder": "Select role (e.g., owner, manager, etc...)",
                         "when-loading": "Searching for roles...",
                         "when-empty": {
                           "label": "No roles were found",
@@ -1450,7 +1459,7 @@
                       "label": "Branch",
                       "placeholder": "Select branch (e.g., owner, manager, etc...)",
                       "branches": {
-                        "search-placeholder": "Select branch (e.g., owner, manager, etc...)",
+                        "placeholder": "Select branch (e.g., owner, manager, etc...)",
                         "when-loading": "Searching for branches...",
                         "when-empty": {
                           "label": "No branches were found",
@@ -1502,13 +1511,37 @@
                   "label": "Search",
                   "placeholder": "Search by member (e.g., username or email)"
                 },
-                "role": {
+                "roles": {
                   "label": "Role",
-                  "placeholder": "Select role (e.g., owner, manager, etc...)"
+                  "placeholder": "Select role (e.g., owner, manager, etc...)",
+                  "roles": {
+                    "placeholder": "Select role (e.g., owner, manager, etc...)",
+                    "when-loading": "Searching for roles...",
+                    "when-empty": {
+                      "label": "No roles were found",
+                      "description": "Try adjusting your search or add a new role."
+                    },
+                    "when-error": {
+                      "label": "Something went wrong",
+                      "description": "We couldn't load the roles. Please try again later."
+                    }
+                  }
                 },
-                "branch": {
+                "branches": {
                   "label": "Branch",
-                  "placeholder": "Select branch (e.g., Downtown Hub, Riverside Office, etc...)"
+                  "placeholder": "Select branch (e.g., owner, manager, etc...)",
+                  "branches": {
+                    "placeholder": "Select branch (e.g., owner, manager, etc...)",
+                    "when-loading": "Searching for branches...",
+                    "when-empty": {
+                      "label": "No branches were found",
+                      "description": "Try adjusting your search or add a new branch."
+                    },
+                    "when-error": {
+                      "label": "Something went wrong",
+                      "description": "We couldn't load the branches. Please try again later."
+                    }
+                  }
                 },
                 "status": {
                   "label": "Status",

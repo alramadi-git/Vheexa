@@ -1,10 +1,7 @@
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
 import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
 import { cva, VariantProps } from "class-variance-authority";
-import { LuCheck, LuInfo, LuTriangleAlert, LuCircleX } from "react-icons/lu";
-import { IconType } from "react-icons/lib";
-import { Alert, AlertTitle, AlertDescription } from "@/components/shadcn/alert";
 
 const sectionClassName: string = "px-8 py-16 lg:px-12 lg:py-24";
 function Section({ className, children, ...props }: ComponentProps<"section">) {
@@ -132,7 +129,6 @@ function Blockquote({
   );
 }
 
-
 export { sectionClassName };
 export {
   Section,
@@ -144,4 +140,3 @@ export {
   Kbd,
   Blockquote,
 };
-
