@@ -235,7 +235,7 @@ function AddNew() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -261,7 +261,7 @@ function AddNew() {
                         setValue={field.onChange}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -288,7 +288,7 @@ function AddNew() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -319,7 +319,7 @@ function AddNew() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -346,7 +346,7 @@ function AddNew() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -373,7 +373,7 @@ function AddNew() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -400,7 +400,7 @@ function AddNew() {
                         onValueChange={(number) => setValue(number ?? 0)}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -427,7 +427,7 @@ function AddNew() {
                         onValueChange={(number) => setValue(number ?? 0)}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />

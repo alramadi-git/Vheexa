@@ -5,27 +5,42 @@ import { apiCatch } from "@/utilities/api";
 import { ClsQuery } from "@/libraries/query";
 import { clsFetch } from "@/consts/api/fetch";
 
-import { tUuid, zUuid } from "@/validations/uuid";
+import { tPagination, zPagination } from "@/validations/pagination";
+
+import { tUndefinable, tNullable } from "@/types/nullish";
 
 import { tJwt } from "@/validations/jwt";
 import { tOptionModel } from "@/models/partner/option";
 
-import { tSuccessOneModel } from "@/models/success";
-import { tResponseOneModel } from "@/models/response";
+import { tSuccessManyModel } from "@/models/success";
+import { tResponseManyModel } from "@/models/response";
 import { ClsErrorModel } from "@/models/error";
 
 export async function GET(
   request: NextRequest,
-): Promise<NextResponse<tResponseOneModel<tOptionModel[]>>> {
-  return await apiCatch<tOptionModel[]>(async () => {
-    const uuids: string[] = request.nextUrl.searchParams.getAll("filter.uuids");
-    const parsedUuids: tUuid[] = zUuid.array().parse(uuids);
+): Promise<NextResponse<tResponseManyModel<tOptionModel>>> {
+  return await apiCatch<tOptionModel>(async () => {
+    const [pageQuery]: tNullable<string>[] = [
+      request.nextUrl.searchParams.get("pagination.page"),
+    ];
+
+    const search: tUndefinable<string> =
+      request.nextUrl.searchParams.get("filter.search") ?? undefined;
+
+    const page: tUndefinable<tPagination["page"]> =
+      pageQuery === null ? undefined : Number(pageQuery);
+
+    const parsedSearch: tUndefinable<string> = search?.trim();
+    const parsedPage: tUndefinable<tPagination["page"]> =
+      zPagination.shape.page.parse(page);
 
     const clsQuery: ClsQuery = new ClsQuery();
 
-    clsQuery.set("Filter.UUIDs.Value", parsedUuids);
+    clsQuery.set("Filter.Search.Value", parsedSearch);
 
-    return NextResponse.json<tSuccessOneModel<tOptionModel[]>>({
+    clsQuery.set("Pagination.Page.Value", parsedPage?.toString());
+
+    return NextResponse.json<tSuccessManyModel<tOptionModel>>({
       data: [
         {
           uuid: "8d3c9f1e-6f3a-4c2b-9a12-91c8c8c9a111",
@@ -39,7 +54,8 @@ export async function GET(
           uuid: "7c4d8a9e-3f1b-4c7a-9e2b-91d0e8a3b333",
           name: "West Logistics Hub",
         },
-      ].filter((role) => parsedUuids.some((uuid) => uuid === role.uuid)),
+      ],
+      pagination: { page: 1, pageSize: 10, totalItems: 2 },
     });
 
     const token: tJwt = request.cookies.get("partner-token")!.value;
@@ -55,9 +71,9 @@ export async function GET(
       throw new ClsErrorModel(backendResponse.status, errorText);
     }
 
-    const response: tSuccessOneModel<tOptionModel[]> =
+    const response: tSuccessManyModel<tOptionModel> =
       await backendResponse.json();
-    return NextResponse.json<tSuccessOneModel<tOptionModel[]>>(response, {
+    return NextResponse.json<tSuccessManyModel<tOptionModel>>(response, {
       status: backendResponse.status,
     });
   });

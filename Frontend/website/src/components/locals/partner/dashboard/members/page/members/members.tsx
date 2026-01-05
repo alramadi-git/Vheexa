@@ -1,6 +1,6 @@
 "use client";
 
-import useRoles from "@/hooks/partner/roles";
+import useMembers from "@/hooks/partner/member";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
@@ -87,11 +87,13 @@ import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 
 export default function Members() {
-  const { isLoading, result } = useRoles();
+  const { isLoading, result } = useMembers();
 
   const tMembers = useTranslations(
     "app.partner.dashboard.members.page.members",
   );
+
+  console.log(result)
 
   return (
     <Section className="h-fullscreen">
@@ -196,7 +198,6 @@ function AddNew() {
   }
 
   const clsOptionsService = new ClsOptionsService();
-
   async function fetch(
     type: "roles" | "branches",
     search: string,
@@ -204,8 +205,8 @@ function AddNew() {
   ): Promise<tResponseManyService<tOption>> {
     const serviceResult: tResponseManyService<tOptionModel> = await (type ===
     "roles"
-      ? clsOptionsService.getRolesAsync(search, page)
-      : clsOptionsService.getBranchesAsync(search, page));
+      ? clsOptionsService.getRolesBeSearchAsync(search, page)
+      : clsOptionsService.getBranchesBySearchAsync(search, page));
 
     const result: tResponseManyService<tOption> = !serviceResult.isSuccess
       ? serviceResult
@@ -265,7 +266,7 @@ function AddNew() {
                   <FieldContent>
                     <FieldFileUpload maxFiles={1} />
                   </FieldContent>
-                  <FieldError errors={[error]} />
+                  <FieldError errors={error} />
                 </Field>
               )}
             />
@@ -297,7 +298,7 @@ function AddNew() {
                         onChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -386,7 +387,7 @@ function AddNew() {
                         onSelect={(option) => setValue(option?.value)}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -477,7 +478,7 @@ function AddNew() {
                         onSelect={(option) => setValue(option?.value)}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -511,7 +512,7 @@ function AddNew() {
                         onChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
@@ -541,7 +542,7 @@ function AddNew() {
                         onChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={[error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />

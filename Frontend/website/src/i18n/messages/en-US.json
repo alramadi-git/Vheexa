@@ -1569,13 +1569,11 @@
                 "member": {
                   "header": "Member"
                 },
-                "permissions": {
-                  "header": "Permissions",
-                  "cell": "+{count} More"
+                "role": {
+                  "header": "Role"
                 },
-                "members": {
-                  "header": "Members",
-                  "cell": "{count, plural, =0 {<users></users> No members} =1 {<user></user> 1 Member} other {<users></users> # Members}}"
+                "branch": {
+                  "header": "Branch"
                 },
                 "status": {
                   "header": "Status",

@@ -72,7 +72,7 @@ export async function GET(
             uuid: "a1b2c3d4-1111-4aaa-9999-0e1f2a3b4c5d",
             url: "https://avatar.vercel.sh/james_wilson.svg?size=200",
           },
-          username: "james.wilson",
+          username: "james wilson",
           email: "james.wilson@partnerfleet.com",
           role: {
             uuid: "c3d4e5f6-3333-4ccc-7777-2a3b4c5d6e7f",
@@ -113,11 +113,8 @@ export async function GET(
         },
         {
           uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-          avatar: {
-            uuid: "g7h8i9j0-7777-4ggg-3333-6e7f8a9b0c1d",
-            url: "https://avatar.vercel.sh/lena_schmidt.svg?size=200&text=LS",
-          },
-          username: "lena.schmidt",
+          avatar: null,
+          username: "lena schmidt",
           email: "lena.schmidt@partnerfleet.eu",
           role: {
             uuid: "i9j0k1l2-9999-4iii-1111-8a9b0c1d2e3f",
@@ -159,7 +156,7 @@ export async function GET(
         {
           uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
           avatar: null,
-          username: "michael.toronto",
+          username: "michael toronto",
           email: "michael.toronto@partnerfleet.ca",
           role: {
             uuid: "n4o5p6q7-eeee-4nnn-cccc-3f4a5b6c7d8e",
@@ -204,7 +201,7 @@ export async function GET(
             uuid: "r8s9t0u1-iiii-4rrr-8888-7d8e9f0a1b2c",
             url: "https://avatar.vercel.sh/sarah_sydney.svg?size=200&text=SS",
           },
-          username: "sarah.sydney",
+          username: "sarah sydney",
           email: "sarah.sydney@partnerfleet.com.au",
           role: {
             uuid: "t0u1v2w3-kkkk-4ttt-6666-9f0a1b2c3d4e",
@@ -249,7 +246,7 @@ export async function GET(
             uuid: "x4y5z6a7-oooo-4xxx-2222-3d4e5f6a7b8c",
             url: "https://avatar.vercel.sh/ahmed_dubai.svg?size=200&text=AD",
           },
-          username: "ahmed.dubai",
+          username: "ahmed dubai",
           email: "ahmed.dubai@partnerfleet.ae",
           role: {
             uuid: "z6a7b8c9-qqqq-4zzz-0000-5f6a7b8c9d0e",
@@ -291,7 +288,7 @@ export async function GET(
         {
           uuid: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
           avatar: null,
-          username: "carlos.sp",
+          username: "carlos sp",
           email: "carlos.sp@partnerfleet.br",
           role: {
             uuid: "e1f2a3b4-vvvv-4eee-bbbb-0e1f2a3b4c5d",
@@ -332,11 +329,8 @@ export async function GET(
         },
         {
           uuid: "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
-          avatar: {
-            uuid: "i5d6e7f8-zzzz-4iii-7777-4c5d6e7f8a9b",
-            url: "https://avatar.vercel.sh/emily_van.svg?size=200&text=EV",
-          },
-          username: "emily.vancouver",
+          avatar: null,
+          username: "emily vancouver",
           email: "emily.vancouver@partnerfleet.ca",
           role: {
             uuid: "k7f8g9h0-2222-4kkk-5555-6e7f8a9b0c1d",
@@ -381,7 +375,7 @@ export async function GET(
             uuid: "o1j2k3l4-6666-4ooo-1111-0c1d2e3f4a5b",
             url: "https://avatar.vercel.sh/thomas_berlin.svg?size=200&text=TB",
           },
-          username: "thomas.munich",
+          username: "thomas munich",
           email: "thomas.munich@partnerfleet.eu",
           role: {
             uuid: "q3l4m5n6-8888-4qqq-ffff-2e3f4a5b6c7d",
@@ -423,7 +417,7 @@ export async function GET(
         {
           uuid: "h8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
           avatar: null,
-          username: "david.nyc",
+          username: "david nyc",
           email: "david.nyc@partnerfleet.com",
           role: {
             uuid: "v8q9r0s1-dddd-4vvv-aaaa-7d8e9f0a1b2c",
@@ -464,11 +458,8 @@ export async function GET(
         },
         {
           uuid: "i9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
-          avatar: {
-            uuid: "z2u3v4w5-hhhh-4zzz-6666-1b2c3d4e5f6a",
-            url: "https://avatar.vercel.sh/anna_melb.svg?size=200&text=AM",
-          },
-          username: "anna.melbourne",
+          avatar: null,
+          username: "anna melbourne",
           email: "anna.melbourne@partnerfleet.com.au",
           role: {
             uuid: "b4w5x6y7-jjjj-4bbb-4444-3d4e5f6a7b8c",

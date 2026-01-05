@@ -10,9 +10,7 @@ export default function useMembers() {
   const searchParams = useSearchParams();
   const clsMemberService = new ClsMemberService();
 
-  const [minBirthday, maxBirthday, status, page, pageSize] = [
-    searchParams.get("filter.birthday.min"),
-    searchParams.get("filter.birthday.max"),
+  const [status, page, pageSize] = [
     searchParams.get("filter.status"),
     searchParams.get("pagination.page"),
     searchParams.get("pagination.page-size"),
@@ -20,11 +18,8 @@ export default function useMembers() {
 
   const filter: tMemberFilter = {
     search: searchParams.get("filter.search") ?? undefined,
-    location: searchParams.get("filter.location") ?? undefined,
-    birthday: {
-      min: minBirthday !== null ? new Date(minBirthday) : undefined,
-      max: maxBirthday !== null ? new Date(maxBirthday) : undefined,
-    },
+    roles: searchParams.getAll("filter.roles"),
+    branches: searchParams.getAll("filter.branches"),
     status: status !== null ? Number(status) : undefined,
   };
   const pagination: tPagination = {
@@ -36,8 +31,8 @@ export default function useMembers() {
     queryKey: [
       "members",
       filter.search,
-      filter.birthday.min,
-      filter.birthday.max,
+      filter.roles,
+      filter.branches,
       filter.status,
       pagination.page,
       pagination.pageSize,

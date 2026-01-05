@@ -11,13 +11,19 @@ import { tMemberFilter, zMemberFilter } from "@/validations/partner/member";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { tOptionModel } from "@/models/partner/option";
+import { tResponseManyService } from "@/services/service";
+
+import { ClsOptionsService } from "@/services/partner/options";
+
 import {
   LuCheck,
   LuShield,
   LuShieldAlert,
   LuShieldX,
-  LuX,
+  LuBuilding2,
 } from "react-icons/lu";
+import { GiIsland, GiAncientRuins } from "react-icons/gi";
 
 import { Card, CardContent } from "@/components/shadcn/card";
 
@@ -32,24 +38,17 @@ import {
 
 import { FieldSearch } from "@/components/locals/blocks/fields";
 
-import { Button } from "@/components/shadcn/button";
 import {
-  FieldAsyncSelect,
-  FieldMultiAsyncSelect,
-  FieldSelect,
-  tFieldMultiAsyncSelectRef,
-  tFieldSelectRef,
   tOption,
+  tFieldSelectRef,
+  tFieldMultiAsyncSelectRef,
+  FieldSelect,
+  FieldMultiAsyncSelect,
 } from "@/components/locals/blocks/selects";
-import { GiIsland } from "react-icons/gi";
-import { tResponseManyService } from "@/services/service";
-import { tOptionModel } from "@/models/partner/option";
-import { ClsOptionsService } from "@/services/partner/options";
 
-type tStatues = {
-  value: string;
-  label: string;
-};
+import { Button } from "@/components/shadcn/button";
+import { Toast } from "@/components/locals/blocks/toasts";
+import { toast } from "sonner";
 
 export default function Filter() {
   const id = useId();
@@ -78,7 +77,9 @@ export default function Filter() {
   const branchesRef = useRef<tFieldMultiAsyncSelectRef<tOption>>(null);
   const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
-  const statuses: tStatues[] = tFilter.raw("status.statuses");
+  const statuses: tOption[] = tFilter.raw("status.statuses");
+
+  const clsOptionsService = new ClsOptionsService();
 
   useEffect(() => {
     const [searchQuery, rolesQuery, branchesQuery, statusQuery] = [
@@ -100,8 +101,45 @@ export default function Filter() {
     setValue("branches", branches);
     setValue("status", status);
 
-    // rolesRef
-    // branchesRef
+    Promise.all([
+      clsOptionsService.getRolesAsync(roles),
+      clsOptionsService.getBranchesAsync(branches),
+    ]).then(([rolesResult, branchesResult]) => {
+      if (!rolesResult.isSuccess) {
+        toast.custom(() => (
+          <Toast
+            variant="destructive"
+            label={tFilter("roles.roles.when-error.description")}
+          />
+        ));
+
+        setValue("roles", []);
+      } else
+        rolesRef.current?.change(
+          rolesResult.data.map((option) => ({
+            value: option.uuid,
+            label: option.name,
+          })),
+        );
+
+      if (!branchesResult.isSuccess) {
+        toast.custom(() => (
+          <Toast
+            variant="destructive"
+            label={tFilter("branches.branches.when-error.description")}
+          />
+        ));
+
+        setValue("branches", []);
+      } else
+        branchesRef.current?.change(
+          branchesResult.data.map((option) => ({
+            value: option.uuid,
+            label: option.name,
+          })),
+        );
+    });
+
     statusRef.current?.change(
       statuses.find((_status) => _status.value === status?.toString()),
     );
@@ -130,8 +168,6 @@ export default function Filter() {
     query.apply();
   }
 
-  const clsOptionsService = new ClsOptionsService();
-
   async function fetch(
     type: "roles" | "branches",
     search: string,
@@ -139,8 +175,8 @@ export default function Filter() {
   ): Promise<tResponseManyService<tOption>> {
     const serviceResult: tResponseManyService<tOptionModel> = await (type ===
     "roles"
-      ? clsOptionsService.getRolesAsync(search, page)
-      : clsOptionsService.getBranchesAsync(search, page));
+      ? clsOptionsService.getRolesBeSearchAsync(search, page)
+      : clsOptionsService.getBranchesBySearchAsync(search, page));
 
     const result: tResponseManyService<tOption> = !serviceResult.isSuccess
       ? serviceResult
@@ -163,103 +199,6 @@ export default function Filter() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          {/* 
-            <FieldGroup className="grid-cols-3">
-              <Controller
-                control={control}
-                name="search"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-search`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("search.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldSearch
-                        {...field}
-                        id={`${id}-search`}
-                        placeholder={tFilter("search.placeholder")}
-                        value={value ?? ""}
-                        onChange={(event) =>
-                          event.currentTarget.value === ""
-                            ? setValue(undefined)
-                            : setValue(event)
-                        }
-                      />
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-
-              <Controller
-                control={control}
-                name="status"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState,
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-status`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("status.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <Select
-                        {...field}
-                        value={value?.toString() ?? ""}
-                        onValueChange={(val) => {
-                          if (value === undefined) {
-                            setValue(Number(val));
-                            return;
-                          }
-
-                          if (value.toString() === val) setValue(undefined);
-                          else setValue(Number(val));
-                        }}
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <SelectTrigger id={`${id}-status`} className="w-full">
-                            <SelectValue
-                              placeholder={tFilter("status.placeholder")}
-                            />
-                          </SelectTrigger>
-                          {value !== undefined && (
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              type="button"
-                              onClick={() => setValue(undefined)}
-                            >
-                              <LuX size={16} />
-                            </Button>
-                          )}
-                        </div>
-                        <SelectContent>
-                          {statuses.map((status) => (
-                            <SelectItem key={status.value} value={status.value}>
-                              {status.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-        */}
-
           <Controller
             control={control}
             name="search"
@@ -290,92 +229,176 @@ export default function Filter() {
               </Field>
             )}
           />
-
-          <Controller
-            control={control}
-            name="roles"
-            render={({
-              field: { onChange: setValues },
-              fieldState: { invalid, error },
-            }) => (
-              <Field>
-                <FieldLabel
-                  aria-invalid={invalid}
-                  htmlFor={`${id}-role`}
-                  className="max-w-fit"
-                >
-                  {tFilter("roles.label")}
-                </FieldLabel>
-                <FieldContent>
-                  <FieldMultiAsyncSelect<tOption>
-                    ref={rolesRef}
-                    id={`${id}-role`}
-                    isInvalid={invalid}
-                    placeholder={tFilter("roles.placeholder")}
-                    valueRender={(value) => (
-                      <span className="inline-flex items-center gap-1.5">
-                        <LuShield />
-                        <span className="line-clamp-1 text-wrap">
-                          {value.label}
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="roles"
+              render={({
+                field: { onChange: setValues },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-roles`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("roles.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldMultiAsyncSelect<tOption>
+                      ref={rolesRef}
+                      id={`${id}-roles`}
+                      isInvalid={invalid}
+                      placeholder={tFilter("roles.placeholder")}
+                      valueRender={(value) => (
+                        <span className="inline-flex items-center gap-1.5">
+                          <LuShield />
+                          <span className="line-clamp-1 text-wrap">
+                            {value.label}
+                          </span>
                         </span>
-                      </span>
-                    )}
-                    searchPlaceholder={tFilter("roles.roles.placeholder")}
-                    cacheKey="roles"
-                    fetch={(search, page) => fetch("roles", search, page)}
-                    optionRender={(option) => (
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-1.5"
-                      >
-                        <LuShield />
-                        <span className="line-clamp-1 text-wrap">
-                          {option.label}
+                      )}
+                      searchPlaceholder={tFilter("roles.roles.placeholder")}
+                      cacheKey="roles"
+                      fetch={(search, page) => fetch("roles", search, page)}
+                      optionRender={(option, isSelected) => (
+                        <button
+                          type="button"
+                          className="inline-flex justify-between gap-1.5"
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <LuShield />
+                            <span className="line-clamp-1 text-wrap">
+                              {option.label}
+                            </span>
+                          </div>
+                          {isSelected && <LuCheck />}
+                        </button>
+                      )}
+                      whenEmptyRender={() => (
+                        <div className="flex items-center gap-3">
+                          <LuShieldAlert size={24} />
+                          <div>
+                            <p className="text-sm">
+                              {tFilter("roles.roles.when-empty.label")}
+                            </p>
+                            <p className="text-muted-foreground line-clamp-1 text-xs">
+                              {tFilter("roles.roles.when-empty.description")}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      whenErrorRender={() => (
+                        <div className="flex items-center gap-3">
+                          <LuShieldX size={24} />
+                          <div>
+                            <p className="text-sm">
+                              {tFilter("roles.roles.when-error.label")}
+                            </p>
+                            <p className="text-muted-foreground line-clamp-1 text-xs">
+                              {tFilter("roles.roles.when-error.description")}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      onToggle={(options) =>
+                        setValues(options?.map((option) => option.value))
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="branches"
+              render={({
+                field: { onChange: setValues },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-branches`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("branches.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldMultiAsyncSelect<tOption>
+                      ref={branchesRef}
+                      id={`${id}-branches`}
+                      isInvalid={invalid}
+                      placeholder={tFilter("branches.placeholder")}
+                      valueRender={(value) => (
+                        <span className="inline-flex items-center gap-1.5">
+                          <LuBuilding2 />
+                          <span className="line-clamp-1 text-wrap">
+                            {value.label}
+                          </span>
                         </span>
-                      </button>
-                    )}
-                    whenEmptyRender={() => (
-                      <div className="flex items-center gap-3">
-                        <LuShieldAlert size={24} />
-                        <div>
-                          <p className="text-sm">
-                            {tFilter(
-                              "roles.roles.when-empty.label",
-                            )}
-                          </p>
-                          <p className="text-muted-foreground line-clamp-1 text-xs">
-                            {tFilter(
-                              "roles.roles.when-empty.description",
-                            )}
-                          </p>
+                      )}
+                      searchPlaceholder={tFilter(
+                        "branches.branches.placeholder",
+                      )}
+                      cacheKey="branches"
+                      fetch={(search, page) => fetch("branches", search, page)}
+                      optionRender={(option, isSelected) => (
+                        <button
+                          type="button"
+                          className="inline-flex justify-between gap-1.5"
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <LuBuilding2 />
+                            <span className="line-clamp-1 text-wrap">
+                              {option.label}
+                            </span>
+                          </div>
+                          {isSelected && <LuCheck />}
+                        </button>
+                      )}
+                      whenEmptyRender={() => (
+                        <div className="flex items-center gap-3">
+                          <GiAncientRuins size={24} />
+                          <div>
+                            <p className="text-sm">
+                              {tFilter("branches.branches.when-empty.label")}
+                            </p>
+                            <p className="text-muted-foreground line-clamp-1 text-xs">
+                              {tFilter(
+                                "branches.branches.when-empty.description",
+                              )}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    whenErrorRender={() => (
-                      <div className="flex items-center gap-3">
-                        <LuShieldX size={24} />
-                        <div>
-                          <p className="text-sm">
-                            {tFilter(
-                              "roles.roles.when-error.label",
-                            )}
-                          </p>
-                          <p className="text-muted-foreground line-clamp-1 text-xs">
-                            {tFilter(
-                              "roles.roles.when-error.description",
-                            )}
-                          </p>
+                      )}
+                      whenErrorRender={() => (
+                        <div className="flex items-center gap-3">
+                          <GiIsland size={24} />
+                          <div>
+                            <p className="text-sm">
+                              {tFilter("branches.branches.when-error.label")}
+                            </p>
+                            <p className="text-muted-foreground line-clamp-1 text-xs">
+                              {tFilter(
+                                "branches.branches.when-error.description",
+                              )}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    onToggle={(options) => setValues(options)}
-                  />
-                </FieldContent>
-                <FieldError errors={[error]} />
-              </Field>
-            )}
-          />
-
+                      )}
+                      onToggle={(options) =>
+                        setValues(options?.map((option) => option.value))
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
           <Controller
             control={control}
             name="status"

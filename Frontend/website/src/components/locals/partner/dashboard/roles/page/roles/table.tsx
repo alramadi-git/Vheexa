@@ -13,6 +13,7 @@ import { ClsDateFormatter } from "@/libraries/date-formatter";
 import { ClsRoleService } from "@/services/partner/role";
 
 import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
 
 import {
   LuShieldAlert,
@@ -43,10 +44,9 @@ import {
 } from "@/components/shadcn/dropdown-menu";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
+
 import { Button } from "@/components/shadcn/button";
 import { Badge } from "@/components/locals/blocks/typography";
-import { Toast } from "@/components/locals/blocks/toasts";
-import { useState } from "react";
 
 type tTableProps = {
   isLoading: boolean;

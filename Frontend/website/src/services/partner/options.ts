@@ -1,4 +1,8 @@
-import { tResponseManyService, ClsAbstractService } from "@/services/service";
+import {
+  tResponseManyService,
+  ClsAbstractService,
+  tResponseOneService,
+} from "@/services/service";
 
 import { tPagination, zPagination } from "@/validations/pagination";
 
@@ -7,10 +11,37 @@ import { ClsQuery } from "@/libraries/query";
 import { tUndefinable } from "@/types/nullish";
 
 import { tOptionModel } from "@/models/partner/option";
-import { tSuccessManyModel } from "@/models/success";
+import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
+import { tUuid, zUuid } from "@/validations/uuid";
 
 class ClsOptionsService extends ClsAbstractService {
   public async getRolesAsync(
+    uuids: tUuid[],
+  ): Promise<tResponseOneService<tOptionModel[]>> {
+    return await this._catchAsync<tOptionModel[]>(async () => {
+      const parsedUuids: tUuid[] = zUuid.array().parse(uuids);
+
+      const clsQuery: ClsQuery = new ClsQuery();
+
+      clsQuery.set("filter.uuids", parsedUuids);
+
+      const response: Response = await this._fetch.get(
+        `/partner/dashboard/options/roles${clsQuery.toString()}`,
+      );
+
+      if (!response.ok) {
+        const errorText: string = await response.text();
+        throw new Error(errorText);
+      }
+
+      const data: tSuccessOneModel<tOptionModel[]> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
+  }
+  public async getRolesBeSearchAsync(
     search: string,
     page: tPagination["page"],
   ): Promise<tResponseManyService<tOptionModel>> {
@@ -26,7 +57,7 @@ class ClsOptionsService extends ClsAbstractService {
       clsQuery.set("pagination.page", parsedPage?.toString());
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/options/roles${clsQuery.toString()}`,
+        `/partner/dashboard/options/roles/search${clsQuery.toString()}`,
       );
 
       if (!response.ok) {
@@ -42,7 +73,34 @@ class ClsOptionsService extends ClsAbstractService {
       };
     });
   }
+
   public async getBranchesAsync(
+    uuids: tUuid[],
+  ): Promise<tResponseOneService<tOptionModel[]>> {
+    return await this._catchAsync<tOptionModel[]>(async () => {
+      const parsedUuids: tUuid[] = zUuid.array().parse(uuids);
+
+      const clsQuery: ClsQuery = new ClsQuery();
+
+      clsQuery.set("filter.uuids", parsedUuids);
+
+      const response: Response = await this._fetch.get(
+        `/partner/dashboard/options/branches${clsQuery.toString()}`,
+      );
+
+      if (!response.ok) {
+        const errorText: string = await response.text();
+        throw new Error(errorText);
+      }
+
+      const data: tSuccessOneModel<tOptionModel[]> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
+  }
+  public async getBranchesBySearchAsync(
     search?: string,
     page?: tPagination["page"],
   ): Promise<tResponseManyService<tOptionModel>> {
@@ -58,7 +116,7 @@ class ClsOptionsService extends ClsAbstractService {
       clsQuery.set("pagination.page", parsedPage?.toString());
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/options/branches${clsQuery.toString()}`,
+        `/partner/dashboard/options/branches/search${clsQuery.toString()}`,
       );
 
       if (!response.ok) {
