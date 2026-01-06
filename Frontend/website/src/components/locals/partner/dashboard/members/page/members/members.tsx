@@ -17,6 +17,9 @@ import { tMemberCreate, zMemberCreate } from "@/validations/partner/member";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
+import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
+
 import {
   LuPlus,
   LuCheck,
@@ -58,8 +61,12 @@ import {
   FieldUsername,
   FieldEmail,
   FieldPassword,
-  FieldFileUpload,
 } from "@/components/locals/blocks/fields";
+
+import {
+  FieldFileUpload,
+  tFieldFileUploadRef,
+} from "@/components/locals/blocks/file-uploads";
 
 import {
   tFieldAsyncSelectRef,
@@ -79,12 +86,10 @@ import { Separator } from "@/components/shadcn/separator";
 
 import { Button } from "@/components/shadcn/button";
 
-import { toast } from "sonner";
-import { Toast } from "@/components/locals/blocks/toasts";
-
 import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
+
 
 export default function Members() {
   const { isLoading, result } = useMembers();
@@ -92,8 +97,6 @@ export default function Members() {
   const tMembers = useTranslations(
     "app.partner.dashboard.members.page.members",
   );
-
-  console.log(result);
 
   return (
     <Section className="h-fullscreen">
@@ -154,6 +157,7 @@ function AddNew() {
     resolver: zodResolver(zMemberCreate),
   });
 
+  const avatarRef = useRef<tFieldFileUploadRef>(null);
   const roleRef = useRef<tFieldAsyncSelectRef<tOption>>(null);
   const branchRef = useRef<tFieldAsyncSelectRef<tOption>>(null);
   const statusRef = useRef<tFieldSelectRef<tOption>>(null);
@@ -165,6 +169,7 @@ function AddNew() {
   function reset(): void {
     handleReset();
 
+    avatarRef.current?.reset();
     roleRef.current?.reset();
     branchRef.current?.reset();
     statusRef.current?.reset(statuses.find((status) => status.value === "0"));
@@ -251,7 +256,10 @@ function AddNew() {
             <Controller
               control={control}
               name="avatar"
-              render={({ field: {}, fieldState: { invalid, error } }) => (
+              render={({
+                field: { onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
                 <Field>
                   <FieldLabel
                     aria-invalid={invalid}
@@ -261,7 +269,13 @@ function AddNew() {
                     {tAddNew("content.form.avatar.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <FieldFileUpload maxFiles={1} />
+                    <FieldFileUpload
+                      ref={avatarRef}
+                      id={`${id}-avatar`}
+                      isInvalid={invalid}
+                      imageClassName="max-h-[183px]"
+                      onValueChange={setValue}
+                    />
                   </FieldContent>
                   <FieldError errors={error} />
                 </Field>

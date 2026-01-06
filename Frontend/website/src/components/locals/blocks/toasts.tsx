@@ -62,8 +62,10 @@ function Toast({ variant = "default", label, icon, children }: tToastProps) {
 
   return (
     <Alert className={cn(toastVariants({ variant }))}>
+      <AlertTitle className="inline-flex items-center gap-1.5">
       {icon?.({ size: 16 })}
-      <AlertTitle>{label}</AlertTitle>
+        
+        {label}</AlertTitle>
       <AlertDescription className={cn(toastDescriptionVariants({ variant }))}>
         {children}
       </AlertDescription>

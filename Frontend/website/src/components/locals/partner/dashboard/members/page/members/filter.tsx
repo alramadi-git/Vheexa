@@ -12,7 +12,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { tOptionModel } from "@/models/partner/option";
-import { tResponseManyService } from "@/services/service";
+import { tResponseManyService, tResponseOneService } from "@/services/service";
 
 import { ClsOptionsService } from "@/services/partner/options";
 
@@ -49,6 +49,8 @@ import {
 import { Button } from "@/components/shadcn/button";
 import { Toast } from "@/components/locals/blocks/toasts";
 import { toast } from "sonner";
+import { tUndefinable } from "@/types/nullish";
+import { tResponseOneModel } from "@/models/response";
 
 export default function Filter() {
   const id = useId();
@@ -102,42 +104,48 @@ export default function Filter() {
     setValue("status", status);
 
     Promise.all([
-      clsOptionsService.getRolesAsync(roles),
-      clsOptionsService.getBranchesAsync(branches),
+      roles.length !== 0 ? clsOptionsService.getRolesAsync(roles) : undefined,
+      branches.length !== 0
+        ? clsOptionsService.getBranchesAsync(branches)
+        : undefined,
     ]).then(([rolesResult, branchesResult]) => {
-      if (!rolesResult.isSuccess) {
-        toast.custom(() => (
-          <Toast
-            variant="destructive"
-            label={tFilter("roles.roles.when-error.description")}
-          />
-        ));
+      if (rolesResult !== undefined) {
+        if (!rolesResult.isSuccess) {
+          toast.custom(() => (
+            <Toast
+              variant="destructive"
+              label={tFilter("roles.roles.when-error.description")}
+            />
+          ));
 
-        setValue("roles", []);
-      } else
-        rolesRef.current?.change(
-          rolesResult.data.map((option) => ({
-            value: option.uuid,
-            label: option.name,
-          })),
-        );
+          setValue("roles", []);
+        } else
+          rolesRef.current?.change(
+            rolesResult.data.map((option) => ({
+              value: option.uuid,
+              label: option.name,
+            })),
+          );
+      }
 
-      if (!branchesResult.isSuccess) {
-        toast.custom(() => (
-          <Toast
-            variant="destructive"
-            label={tFilter("branches.branches.when-error.description")}
-          />
-        ));
+      if (branchesResult !== undefined) {
+        if (!branchesResult.isSuccess) {
+          toast.custom(() => (
+            <Toast
+              variant="destructive"
+              label={tFilter("branches.branches.when-error.description")}
+            />
+          ));
 
-        setValue("branches", []);
-      } else
-        branchesRef.current?.change(
-          branchesResult.data.map((option) => ({
-            value: option.uuid,
-            label: option.name,
-          })),
-        );
+          setValue("branches", []);
+        } else
+          branchesRef.current?.change(
+            branchesResult.data.map((option) => ({
+              value: option.uuid,
+              label: option.name,
+            })),
+          );
+      }
     });
 
     statusRef.current?.change(

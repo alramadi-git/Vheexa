@@ -748,7 +748,7 @@ const FieldMultiAsyncSelect = forwardRef(
             id={id}
             aria-invalid={isInvalid}
             variant="outline"
-            className="justify-between text-start"
+            className="justify-between text-start h-auto"
           >
             {values.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1">
