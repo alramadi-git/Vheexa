@@ -193,9 +193,9 @@ export async function POST(
     const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/branches/`,
+      JSON.stringify(parsedBranchCreate),
       {
         Authorization: `Bearer ${token}`,
-        body: JSON.stringify(parsedBranchCreate),
       },
     );
 

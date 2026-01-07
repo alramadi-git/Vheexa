@@ -25,7 +25,9 @@ export async function GET(
 
     const backendResponse: Response = await clsFetch.get(
       "/partner/authentication/me",
-      { Authorization: `Bearer ${parsedToken}` },
+      {
+        Authorization: `Bearer ${parsedToken}`,
+      },
     );
 
     if (!backendResponse.ok) {

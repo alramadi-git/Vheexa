@@ -12,9 +12,12 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { tOptionModel } from "@/models/partner/option";
-import { tResponseManyService, tResponseOneService } from "@/services/service";
+import { tResponseManyService } from "@/services/service";
 
 import { ClsOptionsService } from "@/services/partner/options";
+
+import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
 
 import {
   LuCheck,
@@ -47,10 +50,6 @@ import {
 } from "@/components/locals/blocks/selects";
 
 import { Button } from "@/components/shadcn/button";
-import { Toast } from "@/components/locals/blocks/toasts";
-import { toast } from "sonner";
-import { tUndefinable } from "@/types/nullish";
-import { tResponseOneModel } from "@/models/response";
 
 export default function Filter() {
   const id = useId();

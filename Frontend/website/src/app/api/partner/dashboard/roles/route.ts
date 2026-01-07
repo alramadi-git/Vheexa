@@ -16,7 +16,6 @@ import { zRoleCreate } from "@/validations/partner/role";
 
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
-
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 import { tResponseOneModel, tResponseManyModel } from "@/models/response";
 import { ClsErrorModel } from "@/models/error";
@@ -250,9 +249,9 @@ export async function POST(
     const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/roles/`,
+      JSON.stringify(parsedRoleCreate),
       {
         Authorization: `Bearer ${token}`,
-        body: JSON.stringify(parsedRoleCreate),
       },
     );
 

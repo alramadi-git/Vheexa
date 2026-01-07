@@ -16,11 +16,13 @@ import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
 
 import {
+  LuHash,
+  LuShield,
+  LuUsers,
+  LuCalendar,
   LuShieldAlert,
   LuShieldX,
   LuCheck,
-  LuUser,
-  LuUsers,
   LuCircleCheck,
   LuCircleX,
   LuEllipsisVertical,
@@ -28,6 +30,7 @@ import {
   LuPenLine,
   LuTrash2,
 } from "react-icons/lu";
+import { GrInsecure } from "react-icons/gr";
 
 import {
   TableHeader,
@@ -69,15 +72,43 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
       header={
         <TableHeader>
           <TableRow>
-            <TableHead>{tTable("uuid.header")}</TableHead>
-            <TableHead>{tTable("role-name.header")}</TableHead>
-            <TableHead className="w-79">
-              {tTable("permissions.header")}
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuHash className="size-4" />
+                {tTable("uuid.header")}
+              </div>
             </TableHead>
-            <TableHead>{tTable("members.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuShield className="size-4" />
+                {tTable("role-name.header")}
+              </div>
+            </TableHead>
+            <TableHead className="w-79">
+              <div className="flex items-center gap-1.5">
+                <GrInsecure className="size-4" />
+                {tTable("permissions.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuUsers className="size-4" />
+                {tTable("members.header")}
+              </div>
+            </TableHead>
             <TableHead>{tTable("status.header")}</TableHead>
-            <TableHead>{tTable("updated-at.header")}</TableHead>
-            <TableHead>{tTable("created-at.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("updated-at.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("created-at.header")}
+              </div>
+            </TableHead>
             <TableHead className="text-end">
               {tTable("actions.header")}
             </TableHead>
@@ -94,13 +125,9 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             <Permissions permissions={item.permissions} />
           </TableCell>
           <TableCell>
-            <span className="flex items-center gap-1.5">
-              {tTable.rich("members.cell", {
-                count: item.assignedCount,
-                user: () => <LuUser size={16} />,
-                users: () => <LuUsers size={16} />,
-              })}
-            </span>
+            {tTable("members.cell", {
+              count: item.assignedCount,
+            })}
           </TableCell>
           <TableCell>
             <Badge

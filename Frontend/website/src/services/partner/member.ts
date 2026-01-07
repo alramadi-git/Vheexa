@@ -29,7 +29,6 @@ class ClsMemberService extends ClsAbstractService {
         zMemberCreate.parse(memberCreate);
 
       const formData: FormData = new FormData();
-
       formData.append("avatar", parsedMemberCreate.avatar);
       formData.append("role", parsedMemberCreate.role);
       formData.append("branch", parsedMemberCreate.branch);

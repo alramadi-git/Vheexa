@@ -532,9 +532,7 @@ export async function POST(
 ): Promise<NextResponse<tResponseOneModel<null>>> {
   return await apiCatch<null>(async () => {
     const memberFormData: FormData = await request.formData();
-
-    const memberObject = Object.fromEntries(memberFormData.entries());
-    zMemberCreate.parse(memberObject);
+    zMemberCreate.parse(Object.fromEntries(memberFormData.entries()));
 
     return NextResponse.json<tSuccessOneModel<null>>(
       { data: null },

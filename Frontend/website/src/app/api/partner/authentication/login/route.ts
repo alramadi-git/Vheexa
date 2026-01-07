@@ -29,7 +29,7 @@ export async function POST(
 
     const backendResponse: Response = await clsFetch.post(
       "/partner/authentication/login",
-      parsedLoginCredentials,
+      JSON.stringify(parsedLoginCredentials),
     );
 
     if (!backendResponse.ok) {

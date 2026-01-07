@@ -22,14 +22,14 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<tPartnerAccountModel["account"]>>> {
   return await apiCatch<tPartnerAccountModel["account"]>(async () => {
-    const registerCredentials: unknown = await request.json();
-
-    const parsedRegisterCredentials: tRegisterCredentials =
-      zRegisterCredentials.parse(registerCredentials);
+    const registerCredentialsFormData: FormData = await request.formData();
+    zRegisterCredentials.parse(
+      Object.fromEntries(registerCredentialsFormData.entries()),
+    );
 
     const backendResponse: Response = await clsFetch.post(
       "/partner/authentication/register",
-      parsedRegisterCredentials,
+      registerCredentialsFormData,
     );
 
     if (!backendResponse.ok) {
@@ -51,7 +51,7 @@ export async function POST(
       priority: "high",
       sameSite: "strict",
       path: "/partner",
-      maxAge: parsedRegisterCredentials.rememberMe
+      maxAge: registerCredentialsFormData.get("rememberMe")
         ? eDuration.month
         : undefined,
     });

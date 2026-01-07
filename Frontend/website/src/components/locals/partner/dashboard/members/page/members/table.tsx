@@ -16,15 +16,15 @@ import { toast } from "sonner";
 import {
   LuHash,
   LuUser,
+  LuShield,
+  LuBuilding2,
+  LuCalendar,
   LuCircleCheck,
   LuCircleX,
   LuEllipsisVertical,
   LuBookOpenText,
   LuPenLine,
   LuTrash2,
-  LuShield,
-  LuBuilding,
-  LuCalendar,
   LuUserSearch,
   LuUserX,
 } from "react-icons/lu";
@@ -99,7 +99,7 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             </TableHead>
             <TableHead>
               <div className="flex items-center gap-1.5">
-                <LuBuilding className="size-4" />
+                <LuBuilding2 className="size-4" />
                 {tTable("branch.header")}
               </div>
             </TableHead>

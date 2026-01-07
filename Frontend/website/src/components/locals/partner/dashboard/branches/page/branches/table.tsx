@@ -16,9 +16,11 @@ import { Toast } from "@/components/locals/blocks/toasts";
 
 import { GiAncientRuins, GiIsland } from "react-icons/gi";
 import {
-  LuUser,
+  LuHash,
+  LuBuilding2,
   LuUsers,
   LuCar,
+  LuCalendar,
   LuCircleCheck,
   LuCircleX,
   LuEllipsisVertical,
@@ -26,6 +28,8 @@ import {
   LuPenLine,
   LuTrash2,
 } from "react-icons/lu";
+import { BiLocationPlus } from "react-icons/bi";
+import { RiContactsBookLine } from "react-icons/ri";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 import {
@@ -49,7 +53,6 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
-import { useState } from "react";
 
 type tTableProps = {
   isLoading: boolean;
@@ -72,15 +75,55 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
       header={
         <TableHeader>
           <TableRow>
-            <TableHead>{tTable("uuid.header")}</TableHead>
-            <TableHead>{tTable("name.header")}</TableHead>
-            <TableHead>{tTable("location.header")}</TableHead>
-            <TableHead>{tTable("members.header")}</TableHead>
-            <TableHead>{tTable("vehicles.header")}</TableHead>
-            <TableHead>{tTable("contacts.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuHash className="size-4" />
+                {tTable("uuid.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuBuilding2 className="size-4" />
+                {tTable("name.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <BiLocationPlus className="size-4" />
+                {tTable("location.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuUsers className="size-4" />
+                {tTable("members.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCar className="size-4" />
+                {tTable("vehicles.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <RiContactsBookLine />
+                {tTable("contacts.header")}
+              </div>
+            </TableHead>
             <TableHead>{tTable("status.header")}</TableHead>
-            <TableHead>{tTable("updated-at.header")}</TableHead>
-            <TableHead>{tTable("created-at.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("updated-at.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("created-at.header")}
+              </div>
+            </TableHead>
             <TableHead className="text-end">
               {tTable("actions.header")}
             </TableHead>
@@ -100,21 +143,14 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             </span>
           </TableCell>
           <TableCell>
-            <span className="flex items-center gap-1">
-              {tTable.rich("members.cell", {
-                count: item.memberCount,
-                user: () => <LuUser size={16} />,
-                users: () => <LuUsers size={16} />,
-              })}
-            </span>
+            {tTable.rich("members.cell", {
+              count: item.memberCount,
+            })}
           </TableCell>
           <TableCell>
-            <span className="flex items-center gap-1">
-              <LuCar size={16} />
-              {tTable.rich("vehicles.cell", {
-                count: item.memberCount,
-              })}
-            </span>
+            {tTable.rich("vehicles.cell", {
+              count: item.memberCount,
+            })}
           </TableCell>
           <TableCell>
             <Contacts phoneNumber={item.phoneNumber} email={item.email} />

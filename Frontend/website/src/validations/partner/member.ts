@@ -15,8 +15,8 @@ const zMemberCreate = z
     username: z
       .string("username is required.")
       .nonempty("username must not be empty.")
-      .min(2,"username must not be at least 2 characters.")
-      .max(20,"username must not be at most 20 characters.")
+      .min(2, "username must not be at least 2 characters.")
+      .max(20, "username must not be at most 20 characters.")
       .regex(/^[a-zA-Z\s]+$/, "username must be only letters and spaces."),
     email: zEmail,
     password: zPassword,
