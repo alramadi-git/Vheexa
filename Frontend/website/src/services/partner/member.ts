@@ -28,9 +28,19 @@ class ClsMemberService extends ClsAbstractService {
       const parsedMemberCreate: tMemberCreate =
         zMemberCreate.parse(memberCreate);
 
+      const formData: FormData = new FormData();
+
+      formData.append("avatar", parsedMemberCreate.avatar);
+      formData.append("role", parsedMemberCreate.role);
+      formData.append("branch", parsedMemberCreate.branch);
+      formData.append("username", parsedMemberCreate.username);
+      formData.append("email", parsedMemberCreate.email);
+      formData.append("password", parsedMemberCreate.password);
+      formData.append("status", parsedMemberCreate.status.toString());
+
       const response: Response = await this._fetch.post(
         "/partner/dashboard/members",
-        parsedMemberCreate,
+        formData,
       );
 
       if (!response.ok) {

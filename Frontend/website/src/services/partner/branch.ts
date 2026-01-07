@@ -30,7 +30,7 @@ class ClsBranchService extends ClsAbstractService {
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/branches",
-        parsedBranchCreate,
+        JSON.stringify(parsedBranchCreate),
       );
 
       if (!response.ok) {

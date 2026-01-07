@@ -20,7 +20,6 @@ class ClsFetch {
     this._basePath = basePath;
     this._baseUrl = `${this._domain}$${this._basePath}`;
     this._headers = {
-      "Content-Type": "application/json",
       Accept: "application/json",
       ...headers,
     };
@@ -42,25 +41,25 @@ class ClsFetch {
 
   public async post(
     path: string,
-    data: unknown,
+    data: BodyInit,
     headers: RequestInit["headers"] = {},
   ): Promise<Response> {
     return await fetch(this._generateUrl(path), {
       method: "POST",
       headers: { ...this._headers, ...headers },
-      body: JSON.stringify(data),
+      body: data,
     });
   }
 
   public async patch(
     path: string,
-    data: unknown,
+    data: BodyInit,
     headers: RequestInit["headers"] = {},
   ): Promise<Response> {
     return await fetch(this._generateUrl(path), {
       method: "PATCH",
       headers: { ...this._headers, ...headers },
-      body: JSON.stringify(data),
+      body: data,
     });
   }
 

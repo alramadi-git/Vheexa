@@ -19,6 +19,33 @@ class ClsAuthenticationService extends ClsAbstractService {
     return this._catchAsync<tPartnerAccountModel["account"]>(async () => {
       const parsedCredentials = zRegisterCredentials.parse(credentials);
 
+      const credentialsFormData =new FormData();
+
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.", parsedCredentials.partner.);
+
+      credentialsFormData.append("branch", parsedCredentials.branch.);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
+      credentialsFormData.append("branch", parsedCredentials.branch.);
+      credentialsFormData.append("branch", parsedCredentials.branch.);
+
+      credentialsFormData.append("member.", parsedCredentials.member.);
+      credentialsFormData.append("member.", parsedCredentials.member.);
+      credentialsFormData.append("member.", parsedCredentials.member.);
+      credentialsFormData.append("member.", parsedCredentials.member.);
+
+      credentialsFormData.append("rememberMe", parsedCredentials.rememberMe);
+
+
       const response: Response = await this._fetch.post(
         "/partner/authentication/register",
         parsedCredentials,

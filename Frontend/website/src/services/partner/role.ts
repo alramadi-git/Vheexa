@@ -30,7 +30,7 @@ class ClsRoleService extends ClsAbstractService {
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/roles",
-        parsedRoleCreate,
+        JSON.stringify(parsedRoleCreate),
       );
 
       if (!response.ok) {

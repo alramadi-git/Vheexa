@@ -9,7 +9,11 @@ import { tNullable } from "@/types/nullish";
 
 import { tJwt } from "@/validations/jwt";
 
-import { tMemberFilter, zMemberFilter } from "@/validations/partner/member";
+import {
+  tMemberCreate,
+  tMemberFilter,
+  zMemberFilter,
+} from "@/validations/partner/member";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { zMemberCreate } from "@/validations/partner/member";
@@ -527,8 +531,10 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<null>>> {
   return await apiCatch<null>(async () => {
-    const memberCreate = await request.json();
-    const parsedMemberCreate = zMemberCreate.parse(memberCreate);
+    const memberFormData: FormData = await request.formData();
+
+    const memberObject = Object.fromEntries(memberFormData.entries());
+    zMemberCreate.parse(memberObject);
 
     return NextResponse.json<tSuccessOneModel<null>>(
       { data: null },
@@ -538,9 +544,9 @@ export async function POST(
     const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/members/`,
+      memberFormData,
       {
         Authorization: `Bearer ${token}`,
-        body: JSON.stringify(parsedMemberCreate),
       },
     );
 
