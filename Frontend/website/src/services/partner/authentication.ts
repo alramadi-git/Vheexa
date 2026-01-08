@@ -21,22 +21,22 @@ class ClsAuthenticationService extends ClsAbstractService {
 
       const credentialsFormData =new FormData();
 
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
-      credentialsFormData.append("partner.", parsedCredentials.partner.);
+      credentialsFormData.append("partner.logo", parsedCredentials.partner.logo);
+      credentialsFormData.append("partner.banner", parsedCredentials.partner.banner);
+      credentialsFormData.append("partner.handle", parsedCredentials.partner.handle);
+      credentialsFormData.append("partner.name", parsedCredentials.partner.name);
+      credentialsFormData.append("partner.phoneNumber", parsedCredentials.partner.phoneNumber);
+      credentialsFormData.append("partner.email", parsedCredentials.partner.email);
+      credentialsFormData.append("partner.password", parsedCredentials.partner.password);
 
-      credentialsFormData.append("branch", parsedCredentials.branch.);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.);
-      credentialsFormData.append("branch", parsedCredentials.branch.);
-      credentialsFormData.append("branch", parsedCredentials.branch.);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.city);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.country);
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.latitude.toString());
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.longitude.toString());
+      credentialsFormData.append("branch.location", parsedCredentials.branch.location.street);
+      credentialsFormData.append("branch", parsedCredentials.branch.name);
+      credentialsFormData.append("branch", parsedCredentials.branch.phoneNumber);
+      credentialsFormData.append("branch", parsedCredentials.branch.email);
 
       credentialsFormData.append("member.", parsedCredentials.member.);
       credentialsFormData.append("member.", parsedCredentials.member.);
