@@ -2,35 +2,30 @@
 
 import { tUndefinable } from "@/types/nullish";
 
-import { useLocale, useTranslations } from "next-intl";
-
-import { eLocale } from "@/i18n/routing";
-import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
-import { useId, useMemo, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import {
   eVehicleModelCategoryModel,
   eVehicleModelStatusModel,
 } from "@/models/partner/vehicle-model";
+
 import {
-  tVehicleModelCreateForm,
-  zVehicleModelCreateForm,
+  tVehicleModelCreate,
+  zVehicleModelCreate,
 } from "@/validations/partner/vehicle-model";
 
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
-import {
-  LuChevronDown,
-  LuGripVertical,
-  LuPlus,
-  LuTrash,
-  LuX,
-} from "react-icons/lu";
+import { LuCheck, LuChevronDown, LuPlus } from "react-icons/lu";
+
+import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
 
 import {
   Tabs as ShadcnTabs,
@@ -46,6 +41,12 @@ import {
   CardTitle,
 } from "@/components/shadcn/card";
 
+import { Section, Intro } from "@/components/locals/blocks/typography";
+import { Description, Title } from "../../../blocks/typographies";
+
+import VehicleModels from "./vehicle-models/vehicle-models";
+import VehicleInstances from "./vehicle-instances/vehicle-instances";
+
 import {
   Dialog,
   DialogContent,
@@ -54,10 +55,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/dialog";
-
-import { Section, Intro } from "@/components/locals/blocks/typography";
-import { Toast } from "@/components/locals/blocks/toasts";
-import { Description, Title } from "../../../blocks/typographies";
 
 import { Button } from "@/components/shadcn/button";
 import { Separator } from "@/components/shadcn/separator";
@@ -70,51 +67,30 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/shadcn/field";
+
 import {
-  FieldDatePicker,
-  FieldFileUpload,
-  FieldNumber,
-  FieldTags,
   tFieldDatePickerRef,
-  tFieldNumberMinMaxRef,
-  tFileUploadRef,
+  FieldTags,
+  FieldNumber,
+  FieldDatePicker,
 } from "@/components/locals/blocks/fields";
+
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/select";
+  tOption,
+  tFieldSelectRef,
+  tFieldFreeSelectRef,
+  FieldSelect,
+  FieldFreeSelect,
+} from "@/components/locals/blocks/selects";
+
 import {
-  Sortable,
-  SortableContent,
-  SortableItem,
-  SortableItemHandle,
-  SortableOverlay,
-} from "@/components/shadcn/sortable";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/shadcn/table";
-import { FieldFreeSearchableSelect } from "@/components/locals/blocks/selects";
-import { ColorCreator } from "@/components/locals/blocks/color-pickers";
+  FieldFileUpload,
+  tFieldFileUploadRef,
+  tFieldFileUploadsRef,
+} from "@/components/locals/blocks/file-uploads";
 
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
-import { Badge } from "@/components/shadcn/badge";
-import { FullHDImage } from "@/components/locals/blocks/images";
-
-import { cn } from "@/utilities/cn";
-import { toast } from "sonner";
-
-import VehicleModels from "./vehicle-models/vehicle-models";
-import VehicleInstances from "./vehicle-instances/vehicle-instances";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(
@@ -163,40 +139,22 @@ export default function Vehicles() {
   );
 }
 
-type tEnumOption = {
-  value: number;
-  label: string;
+type tGroup = {
+  value: string;
+  placeholder: string;
+  "search-placeholder": string;
+  options: string[];
 };
 
-type tManufacturer = {
-  "select-placeholder": string;
-  "search-placeholder": string;
-  value: number;
-  manufacturers: {
-    key: string;
-    value: string;
-  }[];
-};
-
-type tTransmission = {
-  "select-placeholder": string;
-  "search-placeholder": string;
-  value: number;
-  transmissions: {
-    key: string;
-    value: string;
-  }[];
-};
-
-type tFuel = {
-  "select-placeholder": string;
-  "search-placeholder": string;
-  value: number;
-  fuels: {
-    key: string;
-    value: string;
-  }[];
-};
+// type tFuel = {
+//   "select-placeholder": string;
+//   "search-placeholder": string;
+//   value: number;
+//   fuels: {
+//     key: string;
+//     value: string;
+//   }[];
+// };
 
 function AddNewVehicleModel() {
   const id = useId();
@@ -204,105 +162,91 @@ function AddNewVehicleModel() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const marketLaunchRef = useRef<tFieldDatePickerRef>(null);
-  const thumbnailRef = useRef<tFileUploadRef>(null);
-  const galleryRef = useRef<tFileUploadRef>(null);
-
-  const locale = useLocale() as eLocale;
-
-  const clsDateFormatter = new ClsDateFormatter(locale);
+  const tAddNew = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
+  );
 
   const {
-    control,
     formState,
+    control,
     watch,
     setValue,
     trigger,
     reset: handleReset,
     handleSubmit,
-  } = useForm<tVehicleModelCreateForm>({
+  } = useForm<tVehicleModelCreate>({
     defaultValues: {
       name: "",
       description: "",
-      tags: [],
       marketLaunch: new Date(),
-      category: eVehicleModelCategoryModel.car,
-      manufacturer: "",
       capacity: 1,
-      transmission: "",
-      fuel: "",
       colors: [],
-      thumbnail: undefined,
-      gallery: [],
       price: 1,
       discount: 0,
       status: eVehicleModelStatusModel.active,
     },
-    resolver: zodResolver(zVehicleModelCreateForm),
+    resolver: zodResolver(zVehicleModelCreate),
   });
+  // const colors = useFieldArray({
+  //   control: control,
+  //   name: "colors",
+  // });
 
-  const tAddNew = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
-  );
+  const thumbnailRef = useRef<tFieldFileUploadRef>(null);
+  const galleryRef = useRef<tFieldFileUploadsRef>(null);
 
-  const colors = useFieldArray({
-    control: control,
-    name: "colors",
-  });
+  const categoryRef = useRef<tFieldSelectRef<tOption>>(null);
+
+  const marketLaunchRef = useRef<tFieldDatePickerRef>(null);
+  const manufacturerRef = useRef<tFieldFreeSelectRef>(null);
+
+  const transmissionRef = useRef<tFieldSelectRef<tOption>>(null);
+  const fuelRef = useRef<tFieldSelectRef<tOption>>(null);
+
+  const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
   const category = watch("category");
-  const categories: tEnumOption[] = tAddNew.raw(
-    "content.form.information.category.categories",
-  );
+  const categories: tOption[] = tAddNew.raw("content.form.category.categories");
 
-  const manufacturers: tUndefinable<tManufacturer> = useMemo(
-    () =>
-      (
-        tAddNew.raw(
-          "content.form.information.manufacturer.manufacturers",
-        ) as tManufacturer[]
-      ).find((manufacturer) => manufacturer.value === category),
-    [tAddNew, category],
-  );
-  const transmissions: tUndefinable<tTransmission> = useMemo(
-    () =>
-      (
-        tAddNew.raw(
-          "content.form.specifications.transmission.transmissions",
-        ) as tTransmission[]
-      ).find((manufacturer) => manufacturer.value === category),
-    [tAddNew, category],
-  );
-  const fuels: tUndefinable<tFuel> = useMemo(
-    () =>
-      (tAddNew.raw("content.form.specifications.fuel.fuels") as tFuel[]).find(
-        (manufacturer) => manufacturer.value === category,
-      ),
-    [tAddNew, category],
-  );
+  const manufacturers: tUndefinable<tGroup> = (
+    tAddNew.raw("content.form.manufacturer.manufacturers") as tManufacturer[]
+  ).find((manufacturer) => manufacturer.value === category?.toString());
 
-  const statuses: tEnumOption[] = tAddNew.raw("content.form.status.statuses");
+  const transmissions: tUndefinable<tGroup> = (
+    tAddNew.raw("content.form.transmission.transmissions") as tGroup[]
+  ).find((manufacturer) => manufacturer.value === category?.toString());
 
-  const galleryHeaders: string[] = tAddNew.raw(
-    "content.form.media.gallery.table.headers",
-  );
+  const fuels: tUndefinable<tGroup> = (
+    tAddNew.raw("content.form.fuel.fuels") as tGroup[]
+  ).find((manufacturer) => manufacturer.value === category?.toString());
 
-  const clsVehicleModelService = new ClsVehicleModelService();
+  const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
 
   function reset(): void {
     handleReset();
 
-    marketLaunchRef.current?.reset(formState.defaultValues?.marketLaunch);
+    thumbnailRef.current?.reset();
+    galleryRef.current?.reset();
 
-    thumbnailRef.current?.reset(
-      formState.defaultValues?.thumbnail && [formState.defaultValues.thumbnail],
-    );
-    galleryRef.current?.reset(
-      formState.defaultValues?.gallery as tUndefinable<File[]>,
+    categoryRef.current?.reset();
+
+    marketLaunchRef.current?.reset(formState.defaultValues?.marketLaunch);
+    manufacturerRef.current?.reset();
+
+    transmissionRef.current?.reset();
+    fuelRef.current?.reset();
+
+    statusRef.current?.reset(
+      statuses.find(
+        (status) =>
+          status.value === formState.defaultValues?.status?.toString(),
+      ),
     );
   }
 
-  async function submit(data: tVehicleModelCreateForm): Promise<void> {
+  const clsVehicleModelService = new ClsVehicleModelService();
+
+  async function submit(data: tVehicleModelCreate): Promise<void> {
     const result = await clsVehicleModelService.addAsync(data);
     if (!result.isSuccess) {
       toast.custom(() => (
@@ -335,7 +279,7 @@ function AddNewVehicleModel() {
       </DialogTrigger>
       <DialogContent
         showCloseButton
-        className="h-[calc(100vh-2rem)] min-w-[calc(100vw-2rem)] overflow-auto"
+        className="flex h-[calc(100vh-2rem)] min-w-[calc(100vw-2rem)] flex-col overflow-auto"
       >
         <DialogHeader className="gap-0.5">
           <DialogTitle className="text-3xl">
@@ -348,755 +292,655 @@ function AddNewVehicleModel() {
         <Separator className="mt-1 mb-6" />
 
         <form
-          className="grid grow gap-6 2xl:grid-cols-3"
+          className="flex grow flex-col space-y-6"
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <FieldGroup className="2xl:col-span-2">
-            <FieldSet className="grid grid-cols-3 gap-6">
-              <FieldGroup className="flex justify-between">
-                <Controller
-                  control={control}
-                  name="name"
-                  render={({ field, fieldState }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor={`${id}-name`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.information.name.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <Input
-                          {...field}
-                          required
-                          aria-invalid={fieldState.invalid}
-                          id={`${id}-name`}
-                          placeholder={tAddNew(
-                            "content.form.information.name.placeholder",
-                          )}
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="marketLaunch"
-                  render={({
-                    field: { value, onChange: setValue },
-                    fieldState,
-                  }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor={`${id}-market-launch`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew(
-                          "content.form.information.market-launch.label",
-                        )}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldDatePicker
-                          ref={marketLaunchRef}
-                          aria-invalid={fieldState.invalid}
-                          isRequired
-                          id={`${id}-market-launch`}
-                          placeholder={tAddNew(
-                            "content.form.information.market-launch.placeholder",
-                          )}
-                          value={value}
-                          setValue={setValue}
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="category"
-                  render={({
-                    field: { value, onChange: setValue, ...field },
-                    fieldState,
-                  }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor={`${id}-category`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.information.category.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <Select
-                          {...field}
-                          value={value.toString()}
-                          onValueChange={(value) => {
-                            setValue("manufacturer", "");
-                            setValue("transmission", "");
-                            setValue("fuel", "");
-
-                            if (formState.isSubmitted) {
-                              trigger("manufacturer");
-                              trigger("transmission");
-                              trigger("fuel");
-                            }
-
-                            setValue(Number(value));
-                          }}
-                        >
-                          <SelectTrigger
-                            id={`${id}-category`}
-                            className="w-full"
-                          >
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map((category) => (
-                              <SelectItem
-                                key={category.value}
-                                value={category.value.toString()}
-                              >
-                                {category.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="manufacturer"
-                  render={({
-                    field: { value, onChange: setValue },
-                    fieldState: { invalid, error },
-                  }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={invalid}
-                        htmlFor={`${id}-manufacturer`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.information.manufacturer.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldFreeSearchableSelect
-                          triggerRender={() => (
-                            <Button
-                              id={`${id}-manufacturer`}
-                              variant="outline"
-                              className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
-                            >
-                              {value === "" ? (
-                                <span className="text-muted-foreground truncate">
-                                  {manufacturers?.["select-placeholder"]}
-                                </span>
-                              ) : (
-                                value
-                              )}
-                              <LuChevronDown
-                                size={16}
-                                className="text-muted-foreground/80 ms-auto shrink-0"
-                              />
-                            </Button>
-                          )}
-                          value={value}
-                          inputProps={{
-                            placeholder: manufacturers?.["search-placeholder"],
-                          }}
-                          onSelect={setValue}
-                          list={manufacturers?.manufacturers ?? []}
-                          itemRender={(item) => (
-                            <button className="w-full">{item.value}</button>
-                          )}
-                          whenEmptyRender={() =>
-                            tAddNew(
-                              "content.form.information.manufacturer.when-no-result",
-                            )
-                          }
-                        />
-                      </FieldContent>
-                      <FieldError errors={error} />
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-
-              <FieldGroup className="col-span-2 flex flex-col">
-                <Controller
-                  control={control}
-                  name="description"
-                  render={({ field, fieldState }) => (
-                    <Field className="grow">
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor={`${id}-description`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.information.description.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <Textarea
-                          {...field}
-                          required
-                          id={`${id}-description`}
-                          placeholder={tAddNew(
-                            "content.form.information.description.placeholder",
-                          )}
-                          className="h-full resize-none"
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="tags"
-                  render={({
-                    field: { value, onChange: setValue },
-                    fieldState,
-                  }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor={`${id}-tags`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.information.tags.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldTags
-                          id={`${id}-tags`}
-                          placeholder={tAddNew(
-                            "content.form.information.tags.placeholder",
-                          )}
-                          tags={value}
-                          onTagsChange={setValue}
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-
-            <FieldSet>
-              <FieldGroup className="grid-cols-2">
-                <Controller
-                  control={control}
-                  name="capacity"
-                  render={({
-                    field: { onChange: setValue, ...field },
-                    fieldState: { invalid, error },
-                  }) => (
-                    <Field>
-                      <Field>
-                        <FieldLabel
-                          aria-invalid={invalid}
-                          htmlFor={`${id}-capacity`}
-                          className="w-fit"
-                        >
-                          {tAddNew(
-                            "content.form.specifications.capacity.label",
-                          )}
-                        </FieldLabel>
-                        <FieldContent>
-                          <FieldNumber
-                            {...field}
-                            required
-                            aria-invalid={invalid}
-                            id={`${id}-capacity`}
-                            onValueChange={(number) => setValue(number ?? 0)}
-                          />
-                        </FieldContent>
-                        <FieldError errors={error} />
-                      </Field>
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="transmission"
-                  render={({
-                    field: { value, onChange: setValue },
-                    fieldState: { invalid, error },
-                  }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={invalid}
-                        htmlFor={`${id}-transmission`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew(
-                          "content.form.specifications.transmission.label",
-                        )}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldFreeSearchableSelect
-                          triggerRender={() => (
-                            <Button
-                              id={`${id}-transmission`}
-                              variant="outline"
-                              className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
-                            >
-                              {value === "" ? (
-                                <span className="text-muted-foreground truncate">
-                                  {transmissions?.["select-placeholder"]}
-                                </span>
-                              ) : (
-                                value
-                              )}
-                              <LuChevronDown
-                                size={16}
-                                className="text-muted-foreground/80 ms-auto shrink-0"
-                              />
-                            </Button>
-                          )}
-                          value={value}
-                          inputProps={{
-                            placeholder: transmissions?.["search-placeholder"],
-                          }}
-                          onSelect={setValue}
-                          list={transmissions?.transmissions ?? []}
-                          itemRender={(item) => (
-                            <button className="w-full">{item.value}</button>
-                          )}
-                          whenEmptyRender={() =>
-                            tAddNew(
-                              "content.form.specifications.transmission.when-no-result",
-                            )
-                          }
-                        />
-                      </FieldContent>
-                      <FieldError errors={error} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="fuel"
-                  render={({
-                    field: { value, onChange: setValue },
-                    fieldState: { invalid, error },
-                  }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={invalid}
-                        htmlFor={`${id}-fuel`}
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.specifications.fuel.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldFreeSearchableSelect
-                          triggerRender={() => (
-                            <Button
-                              id={`${id}-fuel`}
-                              variant="outline"
-                              className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
-                            >
-                              {value === "" ? (
-                                <span className="text-muted-foreground truncate">
-                                  {fuels?.["select-placeholder"]}
-                                </span>
-                              ) : (
-                                value
-                              )}
-                              <LuChevronDown
-                                size={16}
-                                className="text-muted-foreground/80 ms-auto shrink-0"
-                              />
-                            </Button>
-                          )}
-                          value={value}
-                          inputProps={{
-                            placeholder: fuels?.["search-placeholder"],
-                          }}
-                          onSelect={setValue}
-                          list={fuels?.fuels ?? []}
-                          itemRender={(item) => (
-                            <button className="w-full">{item.value}</button>
-                          )}
-                          whenEmptyRender={() =>
-                            tAddNew(
-                              "content.form.specifications.fuel.when-no-result",
-                            )
-                          }
-                        />
-                      </FieldContent>
-                      <FieldError errors={error} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="colors"
-                  render={({ field, fieldState: { invalid, error } }) => (
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={invalid}
-                        htmlFor="colors"
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.specifications.colors.label")}
-                      </FieldLabel>
-                      <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
-                        {field.value.length === 0 ? (
-                          <span className="text-muted-foreground truncate">
-                            {tAddNew(
-                              "content.form.specifications.colors.placeholder",
-                            )}
-                          </span>
-                        ) : (
-                          <ul className="flex items-center gap-2 overflow-x-auto ps-px">
-                            {field.value.map((color, index) => (
-                              <li key={index}>
-                                <Badge
-                                  variant="outline"
-                                  style={{ color: color.hexCode }}
-                                  className="border-muted-foreground text-shadow-primary inline-flex items-center gap-2 border font-bold uppercase text-shadow-2xs"
-                                >
-                                  {color.name
-                                    .split(" ")
-                                    .map((chunk) => chunk.at(0))
-                                    .join("")}
-
-                                  <button
-                                    type="button"
-                                    className="border-primary text-primary rounded border p-px"
-                                    onClick={() => {
-                                      colors.remove(index);
-                                    }}
-                                  >
-                                    <LuX />
-                                  </button>
-                                </Badge>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
-                        <ColorCreator
-                          id="colors"
-                          onSave={(value) => colors.append(value)}
-                        />
-                      </FieldContent>
-                      <FieldError errors={error} />
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </FieldGroup>
-
-          <FieldSet>
-            <FieldGroup>
+          <FieldGroup className="grid grid-cols-3 gap-6">
+            <FieldGroup className="flex justify-between">
               <Controller
                 control={control}
-                name="thumbnail"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState,
-                }) => (
+                name="name"
+                render={({ field, fieldState: { invalid, error } }) => (
                   <Field>
                     <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-thumbnail`}
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-name`}
                       className="max-w-fit"
                     >
-                      {tAddNew("content.form.media.thumbnail.label")}
+                      {tAddNew("content.form.name.label")}
                     </FieldLabel>
                     <FieldContent>
-                      {value ? (
-                        <div className="relative rounded p-px">
-                          <FullHDImage
-                            src={URL.createObjectURL(value)}
-                            alt={value.name}
-                            className="dark:bg-sidebar-border h-68 rounded bg-black object-contain brightness-75"
-                          />
-                          <button
-                            type="button"
-                            className="light:text-white absolute top-2 right-2"
-                            onClick={() => {
-                              setValue(undefined);
-                              thumbnailRef.current?.changeValue([]);
-                            }}
-                          >
-                            <LuX size={24} />
-                          </button>
-                        </div>
-                      ) : (
-                        <FieldFileUpload
-                          aria-invalid={fieldState.invalid}
-                          id={`${id}-thumbnail`}
-                          accept="image/*"
-                          maxFiles={1}
-                          value={value === undefined ? [] : [value]}
-                          setValue={(files) => setValue(files[0])}
-                        />
-                      )}
+                      <Input
+                        {...field}
+                        required
+                        id={`${id}-name`}
+                        aria-invalid={invalid}
+                        placeholder={tAddNew("content.form.name.placeholder")}
+                      />
                     </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
               <Controller
                 control={control}
-                name="gallery"
+                name="marketLaunch"
                 render={({
                   field: { value, onChange: setValue },
-                  fieldState,
+                  fieldState: { invalid, error },
                 }) => (
                   <Field>
                     <FieldLabel
-                      aria-invalid={fieldState.invalid}
-                      htmlFor={`${id}-gallery`}
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-market-launch`}
                       className="max-w-fit"
                     >
-                      {tAddNew("content.form.media.gallery.label")}
+                      {tAddNew("content.form.market-launch.label")}
                     </FieldLabel>
                     <FieldContent>
-                      <Sortable
-                        orientation="mixed"
+                      <FieldDatePicker
+                        ref={marketLaunchRef}
+                        isRequired
+                        id={`${id}-market-launch`}
+                        aria-invalid={invalid}
+                        placeholder={tAddNew(
+                          "content.form.market-launch.placeholder",
+                        )}
                         value={value}
-                        getItemValue={(value) => value.name}
-                        onValueChange={(value) => {
-                          setValue(value);
-                          galleryRef.current?.changeValue(value);
-                        }}
-                      >
-                        <Table className="rounded-none border">
-                          <TableHeader>
-                            <TableRow className="bg-accent/50">
-                              {galleryHeaders.map((header) => (
-                                <TableHead
-                                  key={header}
-                                  className="bg-transparent"
-                                >
-                                  {header}
-                                </TableHead>
-                              ))}
-                            </TableRow>
-                          </TableHeader>
-                          <SortableContent asChild>
-                            <TableBody>
-                              {value.map((file) => (
-                                <SortableItem
-                                  asChild
-                                  key={file.name}
-                                  value={file.name}
-                                >
-                                  <TableRow>
-                                    <TableCell className="w-[50px]">
-                                      <SortableItemHandle asChild>
-                                        <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="size-8"
-                                        >
-                                          <LuGripVertical className="h-4 w-4" />
-                                        </Button>
-                                      </SortableItemHandle>
-                                    </TableCell>
-                                    <TableCell className="max-w-16 truncate font-medium">
-                                      {file.name}
-                                    </TableCell>
-                                    <TableCell className="text-muted-foreground">
-                                      {tAddNew(
-                                        "content.form.media.gallery.table.cells.file-size",
-                                        {
-                                          size: (file.size / 1024).toFixed(2),
-                                        },
-                                      )}
-                                    </TableCell>
-                                    <TableCell className="text-muted-foreground">
-                                      {clsDateFormatter.format(
-                                        new Date(file.lastModified),
-                                      )}
-                                    </TableCell>
-                                    <TableCell className="text-muted-foreground">
-                                      <Button
-                                        aria-invalid
-                                        variant="ghost"
-                                        type="button"
-                                        onClick={() => {
-                                          const files = value.filter(
-                                            (f) => f.name !== file.name,
-                                          );
-
-                                          setValue(files);
-                                          galleryRef.current?.changeValue(
-                                            files,
-                                          );
-                                        }}
-                                      >
-                                        <LuTrash />
-                                      </Button>
-                                    </TableCell>
-                                  </TableRow>
-                                </SortableItem>
-                              ))}
-                            </TableBody>
-                          </SortableContent>
-                          <TableFooter>
-                            <TableRow>
-                              <TableCell colSpan={5}>
-                                <FieldFileUpload
-                                  multiple
-                                  ref={galleryRef}
-                                  id={`${id}-gallery`}
-                                  accept="image/*"
-                                  maxFiles={25}
-                                  className={cn({
-                                    "cursor-not-allowed opacity-50":
-                                      value.length === 25,
-                                  })}
-                                  disabled={value.length === 25}
-                                  value={value}
-                                  setValue={setValue}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          </TableFooter>
-                        </Table>
-                        <SortableOverlay>
-                          <div className="bg-primary/10 size-full rounded" />
-                        </SortableOverlay>
-                      </Sortable>
+                        setValue={setValue}
+                      />
                     </FieldContent>
-                    <FieldError errors={[fieldState.error]} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
-
-          <FieldSet className="2xl:col-span-3">
-            <FieldGroup className="grid-cols-2">
-              <Controller
-                control={control}
-                name="price"
-                render={({
-                  field: { onChange: setValue, ...field },
-                  fieldState,
-                  formState: { isSubmitted },
-                }) => (
-                  <Field>
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor="price"
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.pricing.price.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldNumber
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                          id={`${id}-price`}
-                          onValueChange={(number) => {
-                            setValue(number ?? 0);
-                            if (isSubmitted) trigger("discount");
-                          }}
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
               <Controller
                 control={control}
-                name="discount"
+                name="category"
                 render={({
-                  field: { onChange: setValue, ...field },
-                  fieldState,
+                  field: { onChange: setValue },
+                  fieldState: { invalid, error },
                 }) => (
                   <Field>
-                    <Field>
-                      <FieldLabel
-                        aria-invalid={fieldState.invalid}
-                        htmlFor="discount"
-                        className="max-w-fit"
-                      >
-                        {tAddNew("content.form.pricing.discount.label")}
-                      </FieldLabel>
-                      <FieldContent>
-                        <FieldNumber
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                          id={`${id}-discount`}
-                          onValueChange={(number) => setValue(number ?? 0)}
-                        />
-                      </FieldContent>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-category`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.category.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldSelect<tOption>
+                        ref={categoryRef}
+                        id={`${id}-category`}
+                        isInvalid={invalid}
+                        placeholder={tAddNew(
+                          "content.form.category.placeholder",
+                        )}
+                        onSelect={(option) =>
+                          setValue(option && Number(option.value))
+                        }
+                        options={categories}
+                        optionRender={(option, isSelected) => (
+                          <button type="button">
+                            {option.label}
+                            {isSelected && <LuCheck className="ms-auto" />}
+                          </button>
+                        )}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="manufacturer"
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState: { invalid, error },
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-manufacturer`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.manufacturer.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldFreeSelect
+                        ref={manufacturerRef}
+                        id={`${id}-manufacturer`}
+                        isInvalid={invalid}
+                        placeholder={
+                          manufacturers?.placeholder ??
+                          tAddNew("content.form.manufacturer.placeholder")
+                        }
+                        searchPlaceholder={
+                          manufacturers?.["search-placeholder"] ??
+                          tAddNew(
+                            "content.form.manufacturer.search-placeholder",
+                          )
+                        }
+                        defaultValue={value}
+                        onSelect={setValue}
+                        options={manufacturers?.options ?? []}
+                        optionRender={(option, isSelected) => (
+                          <button type="button">
+                            {option}
+                            {isSelected && <LuCheck className="ms-auto" />}
+                          </button>
+                        )}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
                   </Field>
                 )}
               />
             </FieldGroup>
-          </FieldSet>
 
+            <FieldGroup className="col-span-2 flex flex-col">
+              <Controller
+                control={control}
+                name="description"
+                render={({ field, fieldState: { invalid, error } }) => (
+                  <Field className="grow">
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-description`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.description.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <Textarea
+                        {...field}
+                        required
+                        id={`${id}-description`}
+                        aria-invalid={invalid}
+                        placeholder={tAddNew(
+                          "content.form.description.placeholder",
+                        )}
+                        className="h-full resize-none"
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="tags"
+                render={({
+                  field: { value, onChange: setValue },
+                  fieldState: { invalid, error },
+                }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-tags`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.tags.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldTags
+                        id={`${id}-tags`}
+                        placeholder={tAddNew("content.form.tags.placeholder")}
+                        tags={value}
+                        onTagsChange={setValue}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldGroup>
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="capacity"
+              render={({
+                field: { onChange: setValue, ...field },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-capacity`}
+                      className="w-fit"
+                    >
+                      {tAddNew("content.form.capacity.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldNumber
+                        {...field}
+                        required
+                        id={`${id}-capacity`}
+                        aria-invalid={invalid}
+                        onValueChange={(number) => setValue(number ?? 0)}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="transmission"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-transmission`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.transmission.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldFreeSelect
+                      ref={manufacturerRef}
+                      id={`${id}-transmission`}
+                      isInvalid={invalid}
+                      placeholder={
+                        transmissions?.placeholder ??
+                        tAddNew("content.form.transmission.placeholder")
+                      }
+                      searchPlaceholder={
+                        transmissions?.["search-placeholder"] ??
+                        tAddNew("content.form.transmission.search-placeholder")
+                      }
+                      defaultValue={value}
+                      onSelect={setValue}
+                      options={transmissions?.options ?? []}
+                      optionRender={(option, isSelected) => (
+                        <button type="button">
+                          {option}
+                          {isSelected && <LuCheck className="ms-auto" />}
+                        </button>
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="fuel"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-fuel`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.fuel.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldFreeSelect
+                      ref={manufacturerRef}
+                      id={`${id}-fuel`}
+                      isInvalid={invalid}
+                      placeholder={
+                        fuels?.placeholder ??
+                        tAddNew("content.form.fuel.placeholder")
+                      }
+                      searchPlaceholder={
+                        fuels?.["search-placeholder"] ??
+                        tAddNew("content.form.fuel.search-placeholder")
+                      }
+                      defaultValue={value}
+                      onSelect={setValue}
+                      options={fuels?.options ?? []}
+                      optionRender={(option, isSelected) => (
+                        <button type="button">
+                          {option}
+                          {isSelected && <LuCheck className="ms-auto" />}
+                        </button>
+                      )}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            {/* <Controller
+                control={control}
+                name="colors"
+                render={({ field, fieldState: { invalid, error } }) => (
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor="colors"
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.colors.label")}
+                    </FieldLabel>
+                    <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
+                      {field.value.length === 0 ? (
+                        <span className="text-muted-foreground truncate">
+                          {tAddNew(
+                            "content.form.colors.placeholder",
+                          )}
+                        </span>
+                      ) : (
+                        <ul className="flex items-center gap-2 overflow-x-auto ps-px">
+                          {field.value.map((color, index) => (
+                            <li key={index}>
+                              <Badge
+                                variant="outline"
+                                style={{ color: color.hexCode }}
+                                className="border-muted-foreground text-shadow-primary inline-flex items-center gap-2 border font-bold uppercase text-shadow-2xs"
+                              >
+                                {color.name
+                                  .split(" ")
+                                  .map((chunk) => chunk.at(0))
+                                  .join("")}
+
+                                <button
+                                  type="button"
+                                  className="border-primary text-primary rounded border p-px"
+                                  onClick={() => {
+                                    colors.remove(index);
+                                  }}
+                                >
+                                  <LuX />
+                                </button>
+                              </Badge>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <ColorCreator
+                        id="colors"
+                        onSave={(value) => colors.append(value)}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                )}
+              /> */}
+          </FieldGroup>
+          <FieldGroup>
+            <Controller
+              control={control}
+              name="thumbnail"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-thumbnail`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.thumbnail.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldFileUpload
+                      ref={thumbnailRef}
+                      id={`${id}-thumbnail`}
+                      isInvalid={invalid}
+                      defaultValue={value}
+                      onValueChange={setValue}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            {/* <Controller
+              control={control}
+              name="gallery"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-gallery`}
+                    className="max-w-fit"
+                  >
+                    {tAddNew("content.form.gallery.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <Sortable
+                      orientation="mixed"
+                      value={value}
+                      getItemValue={(value) => value.name}
+                      onValueChange={(value) => {
+                        setValue(value);
+                        galleryRef.current?.changeValue(value);
+                      }}
+                    >
+                      <Table className="rounded-none border">
+                        <TableHeader>
+                          <TableRow className="bg-accent/50">
+                            {galleryHeaders.map((header) => (
+                              <TableHead
+                                key={header}
+                                // className="bg-transparent"
+                              >
+                                {header}
+                              </TableHead>
+                            ))}
+                          </TableRow>
+                        </TableHeader>
+                        <SortableContent asChild>
+                          <TableBody>
+                            {value.map((file) => (
+                              <SortableItem
+                                asChild
+                                key={file.name}
+                                value={file.name}
+                              >
+                                <TableRow>
+                                  <TableCell className="w-[50px]">
+                                    <SortableItemHandle asChild>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="size-8"
+                                      >
+                                        <LuGripVertical className="h-4 w-4" />
+                                      </Button>
+                                    </SortableItemHandle>
+                                  </TableCell>
+                                  <TableCell className="max-w-16 truncate font-medium">
+                                    {file.name}
+                                  </TableCell>
+                                  <TableCell className="text-muted-foreground">
+                                    {tAddNew(
+                                      "content.form.gallery.table.cells.file-size",
+                                      {
+                                        size: (file.size / 1024).toFixed(2),
+                                      },
+                                    )}
+                                  </TableCell>
+                                  <TableCell className="text-muted-foreground">
+                                    {clsDateFormatter.format(
+                                      new Date(file.lastModified),
+                                    )}
+                                  </TableCell>
+                                  <TableCell className="text-muted-foreground">
+                                    <Button
+                                      aria-invalid
+                                      variant="ghost"
+                                      type="button"
+                                      onClick={() => {
+                                        const files = value.filter(
+                                          (f) => f.name !== file.name,
+                                        );
+
+                                        setValue(files);
+                                        galleryRef.current?.changeValue(files);
+                                      }}
+                                    >
+                                      <LuTrash />
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              </SortableItem>
+                            ))}
+                          </TableBody>
+                        </SortableContent>
+                        <TableFooter>
+                          <TableRow>
+                            <TableCell colSpan={5}>
+                              <FieldFileUpload
+                                multiple
+                                ref={galleryRef}
+                                id={`${id}-gallery`}
+                                accept="image/*"
+                                maxFiles={25}
+                                className={cn({
+                                  "cursor-not-allowed opacity-50":
+                                    value.length === 25,
+                                })}
+                                disabled={value.length === 25}
+                                value={value}
+                                setValue={setValue}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        </TableFooter>
+                      </Table>
+                      <SortableOverlay>
+                        <div className="bg-primary/10 size-full rounded" />
+                      </SortableOverlay>
+                    </Sortable>
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            /> */}
+          </FieldGroup>
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="price"
+              render={({
+                field: { onChange: setValue, ...field },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-price`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.pricing.price.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldNumber
+                        {...field}
+                        aria-invalid={invalid}
+                        id={`${id}-price`}
+                        onValueChange={(number) => {
+                          setValue(number ?? 0);
+                          if (formState.isSubmitted) trigger("discount");
+                        }}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="discount"
+              render={({
+                field: { onChange: setValue, ...field },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <Field>
+                    <FieldLabel
+                      aria-invalid={invalid}
+                      htmlFor={`${id}-discount`}
+                      className="max-w-fit"
+                    >
+                      {tAddNew("content.form.pricing.discount.label")}
+                    </FieldLabel>
+                    <FieldContent>
+                      <FieldNumber
+                        {...field}
+                        id={`${id}-discount`}
+                        aria-invalid={invalid}
+                        onValueChange={(number) => setValue(number ?? 0)}
+                      />
+                    </FieldContent>
+                    <FieldError errors={error} />
+                  </Field>
+                </Field>
+              )}
+            />
+          </FieldGroup>
           <Controller
             control={control}
             name="status"
             render={({
-              field: { value, onChange: setValue, ...field },
-              fieldState,
+              field: { value, onChange: setValue },
+              fieldState: { invalid, error },
             }) => (
               <Field>
                 <FieldLabel
-                  aria-invalid={fieldState.invalid}
+                  aria-invalid={invalid}
                   htmlFor={`${id}-status`}
                   className="max-w-fit"
                 >
                   {tAddNew("content.form.status.label")}
                 </FieldLabel>
                 <FieldContent>
-                  <Select
-                    {...field}
-                    value={value.toString()}
-                    onValueChange={(value) => setValue(Number(value))}
-                  >
-                    <SelectTrigger id={`${id}-status`} className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {statuses.map((status) => (
-                        <SelectItem
-                          key={status.value}
-                          value={status.value.toString()}
-                        >
-                          {status.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FieldSelect<tOption>
+                    ref={statusRef}
+                    id={`${id}-status`}
+                    isInvalid={invalid}
+                    placeholder={tAddNew("content.form.status.placeholder")}
+                    defaultValue={statuses.find(
+                      (status) => status.value === value.toString(),
+                    )}
+                    onSelect={(option) =>
+                      setValue(option && Number(option.value))
+                    }
+                    options={statuses}
+                    optionRender={(option, isSelected) => (
+                      <button type="button">
+                        {option.label}
+                        {isSelected && <LuCheck className="ms-auto" />}
+                      </button>
+                    )}
+                  />
                 </FieldContent>
-                <FieldError errors={[fieldState.error]} />
+                <FieldError errors={error} />
               </Field>
             )}
           />
-          <FieldSet>
-            <FieldGroup className="grid-cols-2">
-              <Button variant="outline" type="reset">
-                {tAddNew("content.form.actions.reset")}
-              </Button>
-              <Button type="submit">
-                {tAddNew("content.form.actions.submit")}
-              </Button>
-            </FieldGroup>
-          </FieldSet>
+          <FieldGroup className="mt-auto grid-cols-2">
+            <Button variant="outline" type="reset">
+              {tAddNew("content.form.actions.reset")}
+            </Button>
+            <Button type="submit">
+              {tAddNew("content.form.actions.submit")}
+            </Button>
+          </FieldGroup>
         </form>
       </DialogContent>
     </Dialog>

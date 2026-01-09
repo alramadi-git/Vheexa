@@ -1,29 +1,27 @@
 import {
+  tResponseOneService,
   tResponseManyService,
   ClsAbstractService,
-  tResponseOneService,
 } from "@/services/service";
 
-import { tPagination, zPagination } from "@/validations/pagination";
+import { tUuid, zUuid } from "@/validations/uuid";
+import { zPagination } from "@/validations/pagination";
 
 import { ClsQuery } from "@/libraries/query";
 
-import { tUndefinable } from "@/types/nullish";
-
 import { tOptionModel } from "@/models/partner/option";
-import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
-import { tUuid, zUuid } from "@/validations/uuid";
+import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsOptionsService extends ClsAbstractService {
   public async getRolesAsync(
     uuids: tUuid[],
   ): Promise<tResponseOneService<tOptionModel[]>> {
     return await this._catchAsync<tOptionModel[]>(async () => {
-      const parsedUuids: tUuid[] = zUuid.array().parse(uuids);
+      zUuid.array().parse(uuids);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.uuids", parsedUuids);
+      clsQuery.set("filter.uuids", uuids);
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/options/roles${clsQuery.toString()}`,
@@ -43,18 +41,17 @@ class ClsOptionsService extends ClsAbstractService {
   }
   public async getRolesBeSearchAsync(
     search: string,
-    page: tPagination["page"],
+    page: number,
   ): Promise<tResponseManyService<tOptionModel>> {
     return await this._catchAsync<tOptionModel>(async () => {
-      const parsedSearch: tUndefinable<string> = search?.trim();
-      const parsedPage: tUndefinable<tPagination["page"]> =
-        zPagination.shape.page.parse(page);
+      search = search.trim();
+      zPagination.shape.page.parse(page);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.search", parsedSearch);
+      clsQuery.set("filter.search", search);
 
-      clsQuery.set("pagination.page", parsedPage?.toString());
+      clsQuery.set("pagination.page", page.toString());
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/options/roles/search${clsQuery.toString()}`,
@@ -78,11 +75,11 @@ class ClsOptionsService extends ClsAbstractService {
     uuids: tUuid[],
   ): Promise<tResponseOneService<tOptionModel[]>> {
     return await this._catchAsync<tOptionModel[]>(async () => {
-      const parsedUuids: tUuid[] = zUuid.array().parse(uuids);
+      zUuid.array().parse(uuids);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.uuids", parsedUuids);
+      clsQuery.set("filter.uuids", uuids);
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/options/branches${clsQuery.toString()}`,
@@ -101,19 +98,18 @@ class ClsOptionsService extends ClsAbstractService {
     });
   }
   public async getBranchesBySearchAsync(
-    search?: string,
-    page?: tPagination["page"],
+    search: string,
+    page: number,
   ): Promise<tResponseManyService<tOptionModel>> {
     return await this._catchAsync<tOptionModel>(async () => {
-      const parsedSearch: tUndefinable<string> = search?.trim();
-      const parsedPage: tUndefinable<tPagination["page"]> =
-        zPagination.shape.page.parse(page);
+      search = search.trim();
+      zPagination.shape.page.parse(page);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.search", parsedSearch);
+      clsQuery.set("filter.search", search);
 
-      clsQuery.set("pagination.page", parsedPage?.toString());
+      clsQuery.set("pagination.page", page.toString());
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/options/branches/search${clsQuery.toString()}`,

@@ -147,7 +147,7 @@ export default function Filter() {
       }
     });
 
-    statusRef.current?.change(
+    statusRef.current?.setValue(
       statuses.find((_status) => _status.value === status?.toString()),
     );
   }, []);

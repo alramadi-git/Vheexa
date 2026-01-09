@@ -22,15 +22,14 @@ import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsBranchService extends ClsAbstractService {
   public async addAsync(
-    branchCreate: tBranchCreate,
+    branch: tBranchCreate,
   ): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedBranchCreate: tBranchCreate =
-        zBranchCreate.parse(branchCreate);
+      zBranchCreate.parse(branch);
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/branches",
-        JSON.stringify(parsedBranchCreate),
+        JSON.stringify(branch),
       );
 
       if (!response.ok) {
@@ -48,10 +47,10 @@ class ClsBranchService extends ClsAbstractService {
     uuid: tUuid,
   ): Promise<tResponseOneService<tBranchModel>> {
     return await this._catchAsync<tBranchModel>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+      zUuid.parse(uuid);
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/branches/${parsedUuid}`,
+        `/partner/dashboard/branches/${uuid}`,
       );
 
       if (!response.ok) {
@@ -71,20 +70,17 @@ class ClsBranchService extends ClsAbstractService {
     pagination: tPagination,
   ): Promise<tResponseManyService<tBranchModel>> {
     return await this._catchAsync<tBranchModel>(async () => {
-      const parsedFilter: tBranchFilter = zBranchFilter.parse(filter);
-      const parsedPagination: tPagination = zPagination.parse(pagination);
+      zBranchFilter.parse(filter);
+      zPagination.parse(pagination);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.search", parsedFilter.search);
+      clsQuery.set("filter.search", filter.search);
 
-      clsQuery.set("filter.status", parsedFilter.status?.toString());
+      clsQuery.set("filter.status", filter.status?.toString());
 
-      clsQuery.set("pagination.page", parsedPagination.page?.toString());
-      clsQuery.set(
-        "pagination.page-size",
-        parsedPagination.pageSize?.toString(),
-      );
+      clsQuery.set("pagination.page", pagination.page?.toString());
+      clsQuery.set("pagination.page-size", pagination.pageSize?.toString());
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/branches${clsQuery.toString()}`,
@@ -105,10 +101,10 @@ class ClsBranchService extends ClsAbstractService {
   }
   public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+      zUuid.parse(uuid);
 
       const response: Response = await this._fetch.delete(
-        `/partner/dashboard/branches/${parsedUuid}`,
+        `/partner/dashboard/branches/${uuid}`,
       );
 
       if (!response.ok) {

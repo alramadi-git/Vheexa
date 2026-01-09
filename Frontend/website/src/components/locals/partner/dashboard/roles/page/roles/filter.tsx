@@ -87,7 +87,7 @@ export default function Filter() {
 
     setValue("name", name);
     setValue("permissions", permissions);
-    permissionsRef.current?.change(
+    permissionsRef.current?.setValue(
       permissions.length > 0
         ? permissionGroups
             .flatMap((group) => group.options)
@@ -95,7 +95,7 @@ export default function Filter() {
         : [],
     );
     setValue("status", status);
-    statusRef.current?.change(
+    statusRef.current?.setValue(
       statuses.find((_status) => _status.value === status?.toString()),
     );
   }, []);

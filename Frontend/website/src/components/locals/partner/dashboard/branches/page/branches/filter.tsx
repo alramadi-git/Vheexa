@@ -70,7 +70,7 @@ export default function Filter() {
 
     setValue("search", search);
     setValue("status", status);
-    statusRef.current?.change(
+    statusRef.current?.setValue(
       statuses.find((_status) => _status.value === status?.toString()),
     );
   }, []);

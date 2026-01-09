@@ -22,20 +22,19 @@ import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsMemberService extends ClsAbstractService {
   public async addAsync(
-    memberCreate: tMemberCreate,
+    member: tMemberCreate,
   ): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedMemberCreate: tMemberCreate =
-        zMemberCreate.parse(memberCreate);
+      zMemberCreate.parse(member);
 
       const formData: FormData = new FormData();
-      formData.append("avatar", parsedMemberCreate.avatar);
-      formData.append("role", parsedMemberCreate.role);
-      formData.append("branch", parsedMemberCreate.branch);
-      formData.append("username", parsedMemberCreate.username);
-      formData.append("email", parsedMemberCreate.email);
-      formData.append("password", parsedMemberCreate.password);
-      formData.append("status", parsedMemberCreate.status.toString());
+      formData.append("avatar", member.avatar);
+      formData.append("role", member.role);
+      formData.append("branch", member.branch);
+      formData.append("username", member.username);
+      formData.append("email", member.email);
+      formData.append("password", member.password);
+      formData.append("status", member.status.toString());
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/members",
@@ -57,10 +56,10 @@ class ClsMemberService extends ClsAbstractService {
     uuid: tUuid,
   ): Promise<tResponseOneService<tMemberModel>> {
     return await this._catchAsync<tMemberModel>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+      zUuid.parse(uuid);
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/members/${parsedUuid}`,
+        `/partner/dashboard/members/${uuid}`,
       );
 
       if (!response.ok) {
@@ -80,24 +79,21 @@ class ClsMemberService extends ClsAbstractService {
     pagination: tPagination,
   ): Promise<tResponseManyService<tMemberModel>> {
     return await this._catchAsync<tMemberModel>(async () => {
-      const parsedFilter: tMemberFilter = zMemberFilter.parse(filter);
-      const parsedPagination: tPagination = zPagination.parse(pagination);
+      zMemberFilter.parse(filter);
+      zPagination.parse(pagination);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.search", parsedFilter.search);
+      clsQuery.set("filter.search", filter.search);
 
-      clsQuery.set("filter.roles", parsedFilter.roles);
+      clsQuery.set("filter.roles", filter.roles);
 
-      clsQuery.set("filter.branches", parsedFilter.branches);
+      clsQuery.set("filter.branches", filter.branches);
 
-      clsQuery.set("filter.status", parsedFilter.status?.toString());
+      clsQuery.set("filter.status", filter.status?.toString());
 
-      clsQuery.set("pagination.page", parsedPagination.page?.toString());
-      clsQuery.set(
-        "pagination.page-size",
-        parsedPagination.pageSize?.toString(),
-      );
+      clsQuery.set("pagination.page", pagination.page?.toString());
+      clsQuery.set("pagination.page-size", pagination.pageSize?.toString());
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/members${clsQuery.toString()}`,
@@ -118,10 +114,10 @@ class ClsMemberService extends ClsAbstractService {
   }
   public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+      zUuid.parse(uuid);
 
       const response: Response = await this._fetch.delete(
-        `/partner/dashboard/members/${parsedUuid}`,
+        `/partner/dashboard/members/${uuid}`,
       );
 
       if (!response.ok) {

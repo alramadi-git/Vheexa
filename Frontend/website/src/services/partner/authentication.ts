@@ -9,47 +9,94 @@ import {
   zLoginCredentials,
 } from "@/validations/authentication-credentials";
 
-import { tSuccessOneModel } from "@/models/success";
 import { tPartnerAccountModel } from "@/models/partner/account";
+import { tSuccessOneModel } from "@/models/success";
 
 class ClsAuthenticationService extends ClsAbstractService {
   public async registerAsync(
     credentials: tRegisterCredentials,
   ): Promise<tResponseOneService<tPartnerAccountModel["account"]>> {
     return this._catchAsync<tPartnerAccountModel["account"]>(async () => {
-      const parsedCredentials = zRegisterCredentials.parse(credentials);
+      zRegisterCredentials.parse(credentials);
 
-      const credentialsFormData =new FormData();
+      const formData = new FormData();
+      formData.append(
+        "partner.logo",
+        credentials.partner.logo,
+      );
+      formData.append(
+        "partner.banner",
+        credentials.partner.banner,
+      );
+      formData.append(
+        "partner.handle",
+        credentials.partner.handle,
+      );
+      formData.append(
+        "partner.name",
+        credentials.partner.name,
+      );
+      formData.append(
+        "partner.phoneNumber",
+        credentials.partner.phoneNumber,
+      );
+      formData.append(
+        "partner.email",
+        credentials.partner.email,
+      );
+      formData.append(
+        "partner.password",
+        credentials.partner.password,
+      );
 
-      credentialsFormData.append("partner.logo", parsedCredentials.partner.logo);
-      credentialsFormData.append("partner.banner", parsedCredentials.partner.banner);
-      credentialsFormData.append("partner.handle", parsedCredentials.partner.handle);
-      credentialsFormData.append("partner.name", parsedCredentials.partner.name);
-      credentialsFormData.append("partner.phoneNumber", parsedCredentials.partner.phoneNumber);
-      credentialsFormData.append("partner.email", parsedCredentials.partner.email);
-      credentialsFormData.append("partner.password", parsedCredentials.partner.password);
+      formData.append(
+        "branch.location.country",
+        credentials.branch.location.country,
+      );
+      formData.append(
+        "branch.location.city",
+        credentials.branch.location.city,
+      );
+      formData.append(
+        "branch.location.street",
+        credentials.branch.location.street,
+      );
+      formData.append(
+        "branch.location.latitude",
+        credentials.branch.location.latitude.toString(),
+      );
+      formData.append(
+        "branch.location.longitude",
+        credentials.branch.location.longitude.toString(),
+      );
+      formData.append("branch.name", credentials.branch.name);
+      formData.append(
+        "branch.phoneNumber",
+        credentials.branch.phoneNumber,
+      );
+      formData.append("branch.email", credentials.branch.email);
 
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.city);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.country);
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.latitude.toString());
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.longitude.toString());
-      credentialsFormData.append("branch.location", parsedCredentials.branch.location.street);
-      credentialsFormData.append("branch", parsedCredentials.branch.name);
-      credentialsFormData.append("branch", parsedCredentials.branch.phoneNumber);
-      credentialsFormData.append("branch", parsedCredentials.branch.email);
+      formData.append("member.avatar", credentials.member.avatar);
+      formData.append(
+        "member.username",
+        credentials.member.username,
+      );
+      formData.append("member.email", credentials.member.email);
+      formData.append(
+        "member.password",
+        credentials.member.password,
+      );
 
-      credentialsFormData.append("member.", parsedCredentials.member.);
-      credentialsFormData.append("member.", parsedCredentials.member.);
-      credentialsFormData.append("member.", parsedCredentials.member.);
-      credentialsFormData.append("member.", parsedCredentials.member.);
-
-      credentialsFormData.append("rememberMe", parsedCredentials.rememberMe);
-
+      formData.append(
+        "rememberMe",
+        credentials.rememberMe.toString(),
+      );
 
       const response: Response = await this._fetch.post(
         "/partner/authentication/register",
-        parsedCredentials,
+        formData,
       );
+
       if (!response.ok) {
         const errorText: string = await response.text();
         throw new Error(`Registration failed: ${errorText}`);
@@ -69,12 +116,13 @@ class ClsAuthenticationService extends ClsAbstractService {
     credentials: tLoginCredentials,
   ): Promise<tResponseOneService<tPartnerAccountModel["account"]>> {
     return this._catchAsync<tPartnerAccountModel["account"]>(async () => {
-      const parsedCredentials = zLoginCredentials.parse(credentials);
+      zLoginCredentials.parse(credentials);
 
       const response: Response = await this._fetch.post(
         "/partner/authentication/login",
-        parsedCredentials,
+        JSON.stringify(credentials),
       );
+
       if (!response.ok) {
         const errorText: string = await response.text();
         throw new Error(errorText);
@@ -97,6 +145,7 @@ class ClsAuthenticationService extends ClsAbstractService {
       const response: Response = await this._fetch.get(
         "/partner/authentication/me",
       );
+
       if (!response.ok) {
         const errorText: string = await response.text();
         throw new Error(errorText);

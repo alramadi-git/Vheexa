@@ -60,11 +60,23 @@
       "file-upload": {
         "title": "Drag & drop files here",
         "subtitle": "Or click to browse",
+        "trigger": "Browse files"
+      },
+      "file-uploads": {
+        "title": "Drag & drop files here",
+        "subtitle": "Or click to browse",
         "trigger": "Browse files",
-        "validations": {
-          "when-duplicate-names": "{filename} has already been added"
-        },
-        "when-reject": "{filename} has been rejected"
+        "table": {
+          "headers": [
+            "File Name",
+            "File Size",
+            "Last Modified",
+            "Action"
+          ],
+          "cells": {
+            "file-size": "{size} KB"
+          }
+        }
       }
     },
     "colors": {
@@ -1631,949 +1643,441 @@
                       "title": "Add New Vehicle Model",
                       "description": "Add a new vehicle model to your inventory.",
                       "form": {
-                        "information": {
-                          "name": {
-                            "label": "Name",
-                            "placeholder": "Enter vehicle name"
-                          },
-                          "market-launch": {
-                            "label": "Market Launch",
-                            "placeholder": "Enter or select market launch (e.g., 1980 or later...)"
-                          },
-                          "category": {
-                            "label": "Category",
-                            "categories": [
-                              {
-                                "value": 0,
-                                "label": "Cars"
-                              },
-                              {
-                                "value": 1,
-                                "label": "Vans"
-                              },
-                              {
-                                "value": 2,
-                                "label": "Trucks"
-                              },
-                              {
-                                "value": 3,
-                                "label": "Motorcycles"
-                              },
-                              {
-                                "value": 4,
-                                "label": "Boats"
-                              },
-                              {
-                                "value": 5,
-                                "label": "Yachts"
-                              },
-                              {
-                                "value": 6,
-                                "label": "Jet Skis"
-                              },
-                              {
-                                "value": 7,
-                                "label": "Helicopters"
-                              }
-                            ]
-                          },
-                          "manufacturer": {
-                            "label": "Manufacturer",
-                            "manufacturers": [
-                              {
-                                "select-placeholder": "Select car brand (e.g., Toyota, BMW, Mercedes)",
-                                "search-placeholder": "Search or add car brand (e.g., Audi, BMW, Mercedes-Benz)",
-                                "value": 0,
-                                "manufacturers": [
-                                  {
-                                    "key": "Audi",
-                                    "value": "Audi"
-                                  },
-                                  {
-                                    "key": "BMW",
-                                    "value": "BMW"
-                                  },
-                                  {
-                                    "key": "Mercedes-Benz",
-                                    "value": "Mercedes-Benz"
-                                  },
-                                  {
-                                    "key": "Toyota",
-                                    "value": "Toyota"
-                                  },
-                                  {
-                                    "key": "Honda",
-                                    "value": "Honda"
-                                  },
-                                  {
-                                    "key": "Ford",
-                                    "value": "Ford"
-                                  },
-                                  {
-                                    "key": "Volkswagen",
-                                    "value": "Volkswagen"
-                                  },
-                                  {
-                                    "key": "Nissan",
-                                    "value": "Nissan"
-                                  },
-                                  {
-                                    "key": "Chevrolet",
-                                    "value": "Chevrolet"
-                                  },
-                                  {
-                                    "key": "Kia",
-                                    "value": "Kia"
-                                  },
-                                  {
-                                    "key": "Hyundai",
-                                    "value": "Hyundai"
-                                  },
-                                  {
-                                    "key": "Mazda",
-                                    "value": "Mazda"
-                                  },
-                                  {
-                                    "key": "Peugeot",
-                                    "value": "Peugeot"
-                                  },
-                                  {
-                                    "key": "Renault",
-                                    "value": "Renault"
-                                  },
-                                  {
-                                    "key": "Volvo",
-                                    "value": "Volvo"
-                                  },
-                                  {
-                                    "key": "Subaru",
-                                    "value": "Subaru"
-                                  },
-                                  {
-                                    "key": "Jaguar",
-                                    "value": "Jaguar"
-                                  },
-                                  {
-                                    "key": "Land Rover",
-                                    "value": "Land Rover"
-                                  },
-                                  {
-                                    "key": "Tesla",
-                                    "value": "Tesla"
-                                  },
-                                  {
-                                    "key": "Mitsubishi",
-                                    "value": "Mitsubishi"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select van brand (e.g., Ford, Mercedes-Benz, Volkswagen)",
-                                "search-placeholder": "Search or add van brand (e.g., Ford, Mercedes-Benz, Volkswagen)",
-                                "value": 1,
-                                "manufacturers": [
-                                  {
-                                    "key": "Ford",
-                                    "value": "Ford"
-                                  },
-                                  {
-                                    "key": "Mercedes-Benz",
-                                    "value": "Mercedes-Benz"
-                                  },
-                                  {
-                                    "key": "Volkswagen",
-                                    "value": "Volkswagen"
-                                  },
-                                  {
-                                    "key": "Toyota",
-                                    "value": "Toyota"
-                                  },
-                                  {
-                                    "key": "Nissan",
-                                    "value": "Nissan"
-                                  },
-                                  {
-                                    "key": "Renault",
-                                    "value": "Renault"
-                                  },
-                                  {
-                                    "key": "Peugeot",
-                                    "value": "Peugeot"
-                                  },
-                                  {
-                                    "key": "Fiat",
-                                    "value": "Fiat"
-                                  },
-                                  {
-                                    "key": "Citroën",
-                                    "value": "Citroën"
-                                  },
-                                  {
-                                    "key": "Hyundai",
-                                    "value": "Hyundai"
-                                  },
-                                  {
-                                    "key": "Chevrolet",
-                                    "value": "Chevrolet"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select truck brand (e.g., Volvo, Scania, MAN)",
-                                "search-placeholder": "Search or add truck brand (e.g., Volvo, Scania, MAN)",
-                                "value": 2,
-                                "manufacturers": [
-                                  {
-                                    "key": "Volvo",
-                                    "value": "Volvo"
-                                  },
-                                  {
-                                    "key": "Scania",
-                                    "value": "Scania"
-                                  },
-                                  {
-                                    "key": "MAN",
-                                    "value": "MAN"
-                                  },
-                                  {
-                                    "key": "Ford",
-                                    "value": "Ford"
-                                  },
-                                  {
-                                    "key": "Mercedes-Benz",
-                                    "value": "Mercedes-Benz"
-                                  },
-                                  {
-                                    "key": "Isuzu",
-                                    "value": "Isuzu"
-                                  },
-                                  {
-                                    "key": "DAF",
-                                    "value": "DAF"
-                                  },
-                                  {
-                                    "key": "Kenworth",
-                                    "value": "Kenworth"
-                                  },
-                                  {
-                                    "key": "Peterbilt",
-                                    "value": "Peterbilt"
-                                  },
-                                  {
-                                    "key": "Mack",
-                                    "value": "Mack"
-                                  },
-                                  {
-                                    "key": "Iveco",
-                                    "value": "Iveco"
-                                  },
-                                  {
-                                    "key": "Hino",
-                                    "value": "Hino"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select motorcycle brand (e.g., Honda, Yamaha, Ducati)",
-                                "search-placeholder": "Search or add motorcycle brand (e.g., Honda, Yamaha, Ducati)",
-                                "value": 3,
-                                "manufacturers": [
-                                  {
-                                    "key": "Honda",
-                                    "value": "Honda"
-                                  },
-                                  {
-                                    "key": "Yamaha",
-                                    "value": "Yamaha"
-                                  },
-                                  {
-                                    "key": "Kawasaki",
-                                    "value": "Kawasaki"
-                                  },
-                                  {
-                                    "key": "Ducati",
-                                    "value": "Ducati"
-                                  },
-                                  {
-                                    "key": "BMW",
-                                    "value": "BMW"
-                                  },
-                                  {
-                                    "key": "Suzuki",
-                                    "value": "Suzuki"
-                                  },
-                                  {
-                                    "key": "Harley-Davidson",
-                                    "value": "Harley-Davidson"
-                                  },
-                                  {
-                                    "key": "Triumph",
-                                    "value": "Triumph"
-                                  },
-                                  {
-                                    "key": "KTM",
-                                    "value": "KTM"
-                                  },
-                                  {
-                                    "key": "Royal Enfield",
-                                    "value": "Royal Enfield"
-                                  },
-                                  {
-                                    "key": "Aprilia",
-                                    "value": "Aprilia"
-                                  },
-                                  {
-                                    "key": "Victory",
-                                    "value": "Victory"
-                                  },
-                                  {
-                                    "key": "Moto Guzzi",
-                                    "value": "Moto Guzzi"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select boat brand (e.g., Bayliner, Sea Ray, Yamaha)",
-                                "search-placeholder": "Search or add boat brand (e.g., Bayliner, Sea Ray, Yamaha)",
-                                "value": 4,
-                                "manufacturers": [
-                                  {
-                                    "key": "Bayliner",
-                                    "value": "Bayliner"
-                                  },
-                                  {
-                                    "key": "Yamaha",
-                                    "value": "Yamaha"
-                                  },
-                                  {
-                                    "key": "Sea Ray",
-                                    "value": "Sea Ray"
-                                  },
-                                  {
-                                    "key": "Boston Whaler",
-                                    "value": "Boston Whaler"
-                                  },
-                                  {
-                                    "key": "Chaparral",
-                                    "value": "Chaparral"
-                                  },
-                                  {
-                                    "key": "Tracker",
-                                    "value": "Tracker"
-                                  },
-                                  {
-                                    "key": "Beneteau",
-                                    "value": "Beneteau"
-                                  },
-                                  {
-                                    "key": "Jeanneau",
-                                    "value": "Jeanneau"
-                                  },
-                                  {
-                                    "key": "MasterCraft",
-                                    "value": "MasterCraft"
-                                  },
-                                  {
-                                    "key": "Four Winns",
-                                    "value": "Four Winns"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select yacht brand (e.g., Sunseeker, Azimut, Ferretti)",
-                                "search-placeholder": "Search or add yacht brand (e.g., Sunseeker, Azimut, Ferretti)",
-                                "value": 5,
-                                "manufacturers": [
-                                  {
-                                    "key": "Sunseeker",
-                                    "value": "Sunseeker"
-                                  },
-                                  {
-                                    "key": "Azimut",
-                                    "value": "Azimut"
-                                  },
-                                  {
-                                    "key": "Ferretti",
-                                    "value": "Ferretti"
-                                  },
-                                  {
-                                    "key": "Beneteau",
-                                    "value": "Beneteau"
-                                  },
-                                  {
-                                    "key": "Princess Yachts",
-                                    "value": "Princess Yachts"
-                                  },
-                                  {
-                                    "key": "Riva",
-                                    "value": "Riva"
-                                  },
-                                  {
-                                    "key": "Sanlorenzo",
-                                    "value": "Sanlorenzo"
-                                  },
-                                  {
-                                    "key": "Pershing",
-                                    "value": "Pershing"
-                                  },
-                                  {
-                                    "key": "Heesen",
-                                    "value": "Heesen"
-                                  },
-                                  {
-                                    "key": "Oceanco",
-                                    "value": "Oceanco"
-                                  },
-                                  {
-                                    "key": "Fairline",
-                                    "value": "Fairline"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select jet ski brand (e.g., Kawasaki, Yamaha, Sea-Doo)",
-                                "search-placeholder": "Search or add jet ski brand (e.g., Kawasaki, Yamaha, Sea-Doo)",
-                                "value": 6,
-                                "manufacturers": [
-                                  {
-                                    "key": "Kawasaki",
-                                    "value": "Kawasaki"
-                                  },
-                                  {
-                                    "key": "Yamaha",
-                                    "value": "Yamaha"
-                                  },
-                                  {
-                                    "key": "Sea-Doo",
-                                    "value": "Sea-Doo"
-                                  },
-                                  {
-                                    "key": "BRP",
-                                    "value": "BRP"
-                                  },
-                                  {
-                                    "key": "Honda",
-                                    "value": "Honda"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select helicopter brand (e.g., Bell, Sikorsky, Airbus Helicopters)",
-                                "search-placeholder": "Search or add helicopter brand (e.g., Bell, Sikorsky, Airbus Helicopters)",
-                                "value": 7,
-                                "manufacturers": [
-                                  {
-                                    "key": "Bell",
-                                    "value": "Bell"
-                                  },
-                                  {
-                                    "key": "Airbus Helicopters",
-                                    "value": "Airbus Helicopters"
-                                  },
-                                  {
-                                    "key": "Robinson",
-                                    "value": "Robinson"
-                                  },
-                                  {
-                                    "key": "Sikorsky",
-                                    "value": "Sikorsky"
-                                  },
-                                  {
-                                    "key": "AgustaWestland",
-                                    "value": "AgustaWestland"
-                                  },
-                                  {
-                                    "key": "Enstrom",
-                                    "value": "Enstrom"
-                                  },
-                                  {
-                                    "key": "MD Helicopters",
-                                    "value": "MD Helicopters"
-                                  },
-                                  {
-                                    "key": "Kamov",
-                                    "value": "Kamov"
-                                  },
-                                  {
-                                    "key": "Eurocopter",
-                                    "value": "Eurocopter"
-                                  }
-                                ]
-                              }
-                            ],
-                            "when-no-result": "No Match where found"
-                          },
-                          "description": {
-                            "label": "Description",
-                            "placeholder": "Enter description"
-                          },
-                          "tags": {
-                            "label": "Tags",
-                            "placeholder": "Enter tags for better reach (e.g., SUV, electric, automatic, 5-seater, red, etc...)"
-                          }
+                        "name": {
+                          "label": "Name",
+                          "placeholder": "Enter vehicle name"
                         },
-                        "specifications": {
-                          "capacity": {
-                            "label": "Capacity"
-                          },
-                          "transmission": {
-                            "label": "Transmission",
-                            "transmissions": [
-                              {
-                                "select-placeholder": "Select car transmission (e.g., Manual, Automatic, CVT, etc...)",
-                                "search-placeholder": "Search or add car transmission (e.g., Automatic, Dual-Clutch, CVT, etc...)",
-                                "value": 0,
-                                "transmissions": [
-                                  {
-                                    "key": "Manual",
-                                    "value": "Manual"
-                                  },
-                                  {
-                                    "key": "Automatic",
-                                    "value": "Automatic"
-                                  },
-                                  {
-                                    "key": "CVT",
-                                    "value": "CVT"
-                                  },
-                                  {
-                                    "key": "Dual-Clutch (DSG/DCT)",
-                                    "value": "Dual-Clutch (DSG/DCT)"
-                                  },
-                                  {
-                                    "key": "Semi-Automatic",
-                                    "value": "Semi-Automatic"
-                                  },
-                                  {
-                                    "key": "Tiptronic",
-                                    "value": "Tiptronic"
-                                  },
-                                  {
-                                    "key": "Automated Manual (AMT)",
-                                    "value": "Automated Manual (AMT)"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select van transmission (e.g., Manual, Automatic, etc...)",
-                                "search-placeholder": "Search or add van transmission (e.g., Manual, AMT, etc...)",
-                                "value": 1,
-                                "transmissions": [
-                                  {
-                                    "key": "Manual",
-                                    "value": "Manual"
-                                  },
-                                  {
-                                    "key": "Automatic",
-                                    "value": "Automatic"
-                                  },
-                                  {
-                                    "key": "Semi-Automatic",
-                                    "value": "Semi-Automatic"
-                                  },
-                                  {
-                                    "key": "Automated Manual (AMT)",
-                                    "value": "Automated Manual (AMT)"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select truck transmission (e.g., Eaton Fuller, Allison, etc...)",
-                                "search-placeholder": "Search or add truck transmission (e.g., AMT, Powershift, etc...)",
-                                "value": 2,
-                                "transmissions": [
-                                  {
-                                    "key": "Manual",
-                                    "value": "Manual"
-                                  },
-                                  {
-                                    "key": "Automatic",
-                                    "value": "Automatic"
-                                  },
-                                  {
-                                    "key": "Automated Manual (AMT)",
-                                    "value": "Automated Manual (AMT)"
-                                  },
-                                  {
-                                    "key": "Powershift",
-                                    "value": "Powershift"
-                                  },
-                                  {
-                                    "key": "Eaton Fuller",
-                                    "value": "Eaton Fuller"
-                                  },
-                                  {
-                                    "key": "Allison",
-                                    "value": "Allison"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select motorcycle transmission (e.g., Sequential, DCT, etc...)",
-                                "search-placeholder": "Search or add motorcycle transmission (e.g., CVT, Semi-Automatic, etc...)",
-                                "value": 3,
-                                "transmissions": [
-                                  {
-                                    "key": "Manual (Sequential)",
-                                    "value": "Manual (Sequential)"
-                                  },
-                                  {
-                                    "key": "Automatic (CVT)",
-                                    "value": "Automatic (CVT)"
-                                  },
-                                  {
-                                    "key": "Dual-Clutch (DCT)",
-                                    "value": "Dual-Clutch (DCT)"
-                                  },
-                                  {
-                                    "key": "Semi-Automatic",
-                                    "value": "Semi-Automatic"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select boat drive type (e.g., Outboard, Inboard, etc...)",
-                                "search-placeholder": "Search or add boat drive type (e.g., Jet Drive, V-Drive, etc...)",
-                                "value": 4,
-                                "transmissions": [
-                                  {
-                                    "key": "Outboard",
-                                    "value": "Outboard"
-                                  },
-                                  {
-                                    "key": "Inboard",
-                                    "value": "Inboard"
-                                  },
-                                  {
-                                    "key": "Sterndrive (I/O)",
-                                    "value": "Sterndrive (I/O)"
-                                  },
-                                  {
-                                    "key": "Jet Drive",
-                                    "value": "Jet Drive"
-                                  },
-                                  {
-                                    "key": "Pod Drive (IPS)",
-                                    "value": "Pod Drive (IPS)"
-                                  },
-                                  {
-                                    "key": "Sail Drive",
-                                    "value": "Sail Drive"
-                                  },
-                                  {
-                                    "key": "V-Drive",
-                                    "value": "V-Drive"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select yacht drive system (e.g., Shaft Drive, Pod Drive, etc...)",
-                                "search-placeholder": "Search or add yacht drive system (e.g., IPS, Jet Drive, etc...)",
-                                "value": 5,
-                                "transmissions": [
-                                  {
-                                    "key": "Inboard Diesel",
-                                    "value": "Inboard Diesel"
-                                  },
-                                  {
-                                    "key": "Pod Drive (IPS/ASD)",
-                                    "value": "Pod Drive (IPS/ASD)"
-                                  },
-                                  {
-                                    "key": "Shaft Drive",
-                                    "value": "Shaft Drive"
-                                  },
-                                  {
-                                    "key": "V-Drive",
-                                    "value": "V-Drive"
-                                  },
-                                  {
-                                    "key": "Jet Drive",
-                                    "value": "Jet Drive"
-                                  },
-                                  {
-                                    "key": "Sail with Inboard",
-                                    "value": "Sail with Inboard"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select jet ski drive type (e.g., Jet Pump, Direct Drive, etc...)",
-                                "search-placeholder": "Search or add jet ski drive type (e.g., CVT, etc...)",
-                                "value": 6,
-                                "transmissions": [
-                                  {
-                                    "key": "Direct Drive",
-                                    "value": "Direct Drive"
-                                  },
-                                  {
-                                    "key": "Jet Pump",
-                                    "value": "Jet Pump"
-                                  },
-                                  {
-                                    "key": "CVT (some models)",
-                                    "value": "CVT (some models)"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select helicopter transmission system (e.g., Planetary Gear, etc...)",
-                                "search-placeholder": "Search or add helicopter transmission system (e.g., Planetary Gear, etc...)",
-                                "value": 7,
-                                "transmissions": [
-                                  {
-                                    "key": "Main Rotor Transmission",
-                                    "value": "Main Rotor Transmission"
-                                  },
-                                  {
-                                    "key": "Tail Rotor Drive",
-                                    "value": "Tail Rotor Drive"
-                                  },
-                                  {
-                                    "key": "Planetary Gear System",
-                                    "value": "Planetary Gear System"
-                                  },
-                                  {
-                                    "key": "Freewheeling Unit",
-                                    "value": "Freewheeling Unit"
-                                  },
-                                  {
-                                    "key": "Combined Transmission",
-                                    "value": "Combined Transmission"
-                                  }
-                                ]
-                              }
-                            ],
-                            "when-no-result": "No Match where found"
-                          },
-                          "fuel": {
-                            "label": "Fuel",
-                            "fuels": [
-                              {
-                                "select-placeholder": "Select fuel type (e.g., Petrol 95, Diesel, etc...)",
-                                "search-placeholder": "Search or add fuel type (e.g., Electric, Hybrid, etc...)",
-                                "value": 0,
-                                "fuels": [
-                                  {
-                                    "key": "Petrol 91",
-                                    "value": "Petrol 91"
-                                  },
-                                  {
-                                    "key": "Petrol 95",
-                                    "value": "Petrol 95"
-                                  },
-                                  {
-                                    "key": "Petrol 98",
-                                    "value": "Petrol 98"
-                                  },
-                                  {
-                                    "key": "Diesel",
-                                    "value": "Diesel"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  },
-                                  {
-                                    "key": "Hybrid",
-                                    "value": "Hybrid"
-                                  },
-                                  {
-                                    "key": "Plug-in Hybrid",
-                                    "value": "Plug-in Hybrid"
-                                  },
-                                  {
-                                    "key": "CNG",
-                                    "value": "CNG"
-                                  },
-                                  {
-                                    "key": "LPG",
-                                    "value": "LPG"
-                                  },
-                                  {
-                                    "key": "Hydrogen",
-                                    "value": "Hydrogen"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select van fuel type (e.g., Petrol 91, Diesel, etc...)",
-                                "search-placeholder": "Search or add van fuel type (e.g., CNG, LPG, etc...)",
-                                "value": 1,
-                                "fuels": [
-                                  {
-                                    "key": "Petrol 91",
-                                    "value": "Petrol 91"
-                                  },
-                                  {
-                                    "key": "Petrol 95",
-                                    "value": "Petrol 95"
-                                  },
-                                  {
-                                    "key": "Diesel",
-                                    "value": "Diesel"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  },
-                                  {
-                                    "key": "CNG",
-                                    "value": "CNG"
-                                  },
-                                  {
-                                    "key": "LPG",
-                                    "value": "LPG"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select truck fuel type (e.g., Diesel, etc...)",
-                                "search-placeholder": "Search or add truck fuel type (e.g., Biodiesel, LNG, etc...)",
-                                "value": 2,
-                                "fuels": [
-                                  {
-                                    "key": "Diesel",
-                                    "value": "Diesel"
-                                  },
-                                  {
-                                    "key": "Biodiesel",
-                                    "value": "Biodiesel"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  },
-                                  {
-                                    "key": "CNG",
-                                    "value": "CNG"
-                                  },
-                                  {
-                                    "key": "LNG",
-                                    "value": "LNG"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select motorcycle fuel type (e.g., Petrol 91, etc...)",
-                                "search-placeholder": "Search or add motorcycle fuel type (e.g., Electric, etc...)",
-                                "value": 3,
-                                "fuels": [
-                                  {
-                                    "key": "Petrol 91",
-                                    "value": "Petrol 91"
-                                  },
-                                  {
-                                    "key": "Petrol 95",
-                                    "value": "Petrol 95"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select boat fuel type (e.g., Petrol, Marine Diesel, etc...)",
-                                "search-placeholder": "Search or add boat fuel type",
-                                "value": 4,
-                                "fuels": [
-                                  {
-                                    "key": "Petrol",
-                                    "value": "Petrol"
-                                  },
-                                  {
-                                    "key": "Diesel",
-                                    "value": "Diesel"
-                                  },
-                                  {
-                                    "key": "Marine Diesel",
-                                    "value": "Marine Diesel"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select yacht fuel type (e.g., Diesel, etc...)",
-                                "search-placeholder": "Search or add yacht fuel type (e.g., Hybrid, etc...)",
-                                "value": 5,
-                                "fuels": [
-                                  {
-                                    "key": "Diesel",
-                                    "value": "Diesel"
-                                  },
-                                  {
-                                    "key": "Marine Diesel",
-                                    "value": "Marine Diesel"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  },
-                                  {
-                                    "key": "Hybrid",
-                                    "value": "Hybrid"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select jet ski fuel type (e.g., Petrol, etc...)",
-                                "search-placeholder": "Search or add jet ski fuel type (e.g., Electric, etc...)",
-                                "value": 6,
-                                "fuels": [
-                                  {
-                                    "key": "Petrol",
-                                    "value": "Petrol"
-                                  },
-                                  {
-                                    "key": "Electric",
-                                    "value": "Electric"
-                                  }
-                                ]
-                              },
-                              {
-                                "select-placeholder": "Select helicopter fuel type (e.g., Jet Fuel, etc...)",
-                                "search-placeholder": "Search or add helicopter fuel type (e.g., Avgas, etc...)",
-                                "value": 7,
-                                "fuels": [
-                                  {
-                                    "key": "Jet Fuel",
-                                    "value": "Jet Fuel"
-                                  },
-                                  {
-                                    "key": "Avgas",
-                                    "value": "Avgas"
-                                  }
-                                ]
-                              }
-                            ],
-                            "when-no-result": "No Match where found"
-                          },
-                          "colors": {
-                            "label": "Colors",
-                            "placeholder": "Enter color (e.g., Black, White, etc...)"
-                          }
+                        "market-launch": {
+                          "label": "Market Launch",
+                          "placeholder": "Enter or select market launch (e.g., 1980 or later...)"
                         },
-                        "media": {
-                          "thumbnail": {
-                            "label": "Thumbnail"
-                          },
-                          "gallery": {
-                            "label": "Gallery",
-                            "table": {
-                              "headers": [
-                                "",
-                                "File Name",
-                                "File Size",
-                                "Last Modified",
-                                "Action"
-                              ],
-                              "cells": {
-                                "file-size": "{size} KB"
-                              }
+                        "category": {
+                          "label": "Category",
+                          "placeholder": "Select category (e.g., Cars, Vans, etc...)",
+                          "categories": [
+                            {
+                              "value": "0",
+                              "label": "Cars"
+                            },
+                            {
+                              "value": "1",
+                              "label": "Vans"
+                            },
+                            {
+                              "value": "2",
+                              "label": "Trucks"
+                            },
+                            {
+                              "value": "3",
+                              "label": "Motorcycles"
+                            },
+                            {
+                              "value": "4",
+                              "label": "Boats"
+                            },
+                            {
+                              "value": "5",
+                              "label": "Yachts"
+                            },
+                            {
+                              "value": "6",
+                              "label": "Jet Skis"
+                            },
+                            {
+                              "value": "7",
+                              "label": "Helicopters"
+                            }
+                          ]
+                        },
+                        "manufacturer": {
+                          "label": "Manufacturer",
+                          "placeholder": "Select manufacturer (e.g., Toyota, Ford, etc...)",
+                          "search-placeholder": "Search or add manufacturer (e.g., Toyota, Ford, etc...)",
+                          "manufacturers": [
+                            {
+                              "value": "0",
+                              "placeholder": "Select car manufacturer (e.g., Toyota, BMW, Mercedes)",
+                              "search-placeholder": "Search or add car manufacturer (e.g., Audi, BMW, Mercedes-Benz)",
+                              "options": [
+                                "Audi",
+                                "BMW",
+                                "Mercedes-Benz",
+                                "Toyota",
+                                "Honda",
+                                "Ford",
+                                "Volkswagen",
+                                "Nissan",
+                                "Chevrolet",
+                                "Kia",
+                                "Hyundai",
+                                "Mazda",
+                                "Peugeot",
+                                "Renault",
+                                "Volvo",
+                                "Subaru",
+                                "Jaguar",
+                                "Land Rover",
+                                "Tesla",
+                                "Mitsubishi"
+                              ]
+                            },
+                            {
+                              "value": "1",
+                              "placeholder": "Select van manufacturer (e.g., Ford, Mercedes-Benz, Volkswagen)",
+                              "search-placeholder": "Search or add van manufacturer (e.g., Ford, Mercedes-Benz, Volkswagen)",
+                              "options": [
+                                "Ford",
+                                "Mercedes-Benz",
+                                "Volkswagen",
+                                "Toyota",
+                                "Nissan",
+                                "Renault",
+                                "Peugeot",
+                                "Fiat",
+                                "Citroën",
+                                "Hyundai",
+                                "Chevrolet"
+                              ]
+                            },
+                            {
+                              "value": "2",
+                              "placeholder": "Select truck manufacturer (e.g., Volvo, Scania, MAN)",
+                              "search-placeholder": "Search or add truck manufacturer (e.g., Volvo, Scania, MAN)",
+                              "options": [
+                                "Volvo",
+                                "Scania",
+                                "MAN",
+                                "Ford",
+                                "Mercedes-Benz",
+                                "Isuzu",
+                                "DAF",
+                                "Kenworth",
+                                "Peterbilt",
+                                "Mack",
+                                "Iveco",
+                                "Hino"
+                              ]
+                            },
+                            {
+                              "value": "3",
+                              "placeholder": "Select motorcycle manufacturer (e.g., Honda, Yamaha, Ducati)",
+                              "search-placeholder": "Search or add motorcycle manufacturer (e.g., Honda, Yamaha, Ducati)",
+                              "options": [
+                                "Honda",
+                                "Yamaha",
+                                "Kawasaki",
+                                "Ducati",
+                                "BMW",
+                                "Suzuki",
+                                "Harley-Davidson",
+                                "Triumph",
+                                "KTM",
+                                "Royal Enfield",
+                                "Aprilia",
+                                "Victory",
+                                "Moto Guzzi"
+                              ]
+                            },
+                            {
+                              "value": "4",
+                              "placeholder": "Select boat manufacturer (e.g., Bayliner, Sea Ray, Yamaha)",
+                              "search-placeholder": "Search or add boat manufacturer (e.g., Bayliner, Sea Ray, Yamaha)",
+                              "options": [
+                                "Bayliner",
+                                "Yamaha",
+                                "Sea Ray",
+                                "Boston Whaler",
+                                "Chaparral",
+                                "Tracker",
+                                "Beneteau",
+                                "Jeanneau",
+                                "MasterCraft",
+                                "Four Winns"
+                              ]
+                            },
+                            {
+                              "value": "5",
+                              "placeholder": "Select yacht manufacturer (e.g., Sunseeker, Azimut, Ferretti)",
+                              "search-placeholder": "Search or add yacht manufacturer (e.g., Sunseeker, Azimut, Ferretti)",
+                              "options": [
+                                "Sunseeker",
+                                "Azimut",
+                                "Ferretti",
+                                "Beneteau",
+                                "Princess Yachts",
+                                "Riva",
+                                "Sanlorenzo",
+                                "Pershing",
+                                "Heesen",
+                                "Oceanco",
+                                "Fairline"
+                              ]
+                            },
+                            {
+                              "value": "6",
+                              "placeholder": "Select jet ski manufacturer (e.g., Kawasaki, Yamaha, Sea-Doo)",
+                              "search-placeholder": "Search or add jet ski manufacturer (e.g., Kawasaki, Yamaha, Sea-Doo)",
+                              "options": [
+                                "Kawasaki",
+                                "Yamaha",
+                                "Sea-Doo",
+                                "BRP",
+                                "Honda"
+                              ]
+                            },
+                            {
+                              "value": "7",
+                              "placeholder": "Select helicopter manufacturer (e.g., Bell, Sikorsky, Airbus Helicopters)",
+                              "search-placeholder": "Search or add helicopter manufacturer (e.g., Bell, Sikorsky, Airbus Helicopters)",
+                              "options": [
+                                "Bell",
+                                "Airbus Helicopters",
+                                "Robinson",
+                                "Sikorsky",
+                                "AgustaWestland",
+                                "Enstrom",
+                                "MD Helicopters",
+                                "Kamov",
+                                "Eurocopter"
+                              ]
+                            }
+                          ]
+                        },
+                        "description": {
+                          "label": "Description",
+                          "placeholder": "Enter description"
+                        },
+                        "tags": {
+                          "label": "Tags",
+                          "placeholder": "Enter tags for better reach (e.g., SUV, electric, automatic, 5-seater, red, etc...)"
+                        },
+                        "capacity": {
+                          "label": "Capacity"
+                        },
+                        "transmission": {
+                          "label": "Transmission",
+                          "placeholder": "Select transmission (e.g., Manual, Automatic, CVT, etc...)",
+                          "search-placeholder": "Search transmission (e.g, Manual, Automatic, etc...)",
+                          "transmissions": [
+                            {
+                              "value": "0",
+                              "placeholder": "Select car transmission (e.g., Manual, Automatic, CVT, etc...)",
+                              "search-placeholder": "Search or add car transmission (e.g., Automatic, Dual-Clutch, CVT, etc...)",
+                              "options": [
+                                "Manual",
+                                "Automatic",
+                                "CVT",
+                                "Dual-Clutch (DSG/DCT)",
+                                "Semi-Automatic",
+                                "Tiptronic",
+                                "Automated Manual (AMT)"
+                              ]
+                            },
+                            {
+                              "value": "1",
+                              "placeholder": "Select van transmission (e.g., Manual, Automatic, etc...)",
+                              "search-placeholder": "Search or add van transmission (e.g., Manual, AMT, etc...)",
+                              "options": [
+                                "Manual",
+                                "Automatic",
+                                "Semi-Automatic",
+                                "Automated Manual (AMT)"
+                              ]
+                            },
+                            {
+                              "value": "2",
+                              "placeholder": "Select truck transmission (e.g., Eaton Fuller, Allison, etc...)",
+                              "search-placeholder": "Search or add truck transmission (e.g., AMT, Powershift, etc...)",
+                              "options": [
+                                "Manual",
+                                "Automatic",
+                                "Automated Manual (AMT)",
+                                "Powershift",
+                                "Eaton Fuller",
+                                "Allison"
+                              ]
+                            },
+                            {
+                              "value": "3",
+                              "placeholder": "Select motorcycle transmission (e.g., Sequential, DCT, etc...)",
+                              "search-placeholder": "Search or add motorcycle transmission (e.g., CVT, Semi-Automatic, etc...)",
+                              "options": [
+                                "Manual (Sequential)",
+                                "Automatic (CVT)",
+                                "Dual-Clutch (DCT)",
+                                "Semi-Automatic"
+                              ]
+                            },
+                            {
+                              "value": "4",
+                              "placeholder": "Select boat drive type (e.g., Outboard, Inboard, etc...)",
+                              "search-placeholder": "Search or add boat drive type (e.g., Jet Drive, V-Drive, etc...)",
+                              "options": [
+                                "Outboard",
+                                "Inboard",
+                                "Sterndrive (I/O)",
+                                "Jet Drive",
+                                "Pod Drive (IPS)",
+                                "Sail Drive",
+                                "V-Drive"
+                              ]
+                            },
+                            {
+                              "value": "5",
+                              "placeholder": "Select yacht drive system (e.g., Shaft Drive, Pod Drive, etc...)",
+                              "search-placeholder": "Search or add yacht drive system (e.g., IPS, Jet Drive, etc...)",
+                              "options": [
+                                "Inboard Diesel",
+                                "Pod Drive (IPS/ASD)",
+                                "Shaft Drive",
+                                "V-Drive",
+                                "Jet Drive",
+                                "Sail with Inboard"
+                              ]
+                            },
+                            {
+                              "value": "6",
+                              "placeholder": "Select jet ski drive type (e.g., Jet Pump, Direct Drive, etc...)",
+                              "search-placeholder": "Search or add jet ski drive type (e.g., CVT, etc...)",
+                              "options": [
+                                "Direct Drive",
+                                "Jet Pump",
+                                "CVT (some models)"
+                              ]
+                            },
+                            {
+                              "value": "7",
+                              "placeholder": "Select helicopter transmission system (e.g., Planetary Gear, etc...)",
+                              "search-placeholder": "Search or add helicopter transmission system (e.g., Planetary Gear, etc...)",
+                              "options": [
+                                "Main Rotor Transmission",
+                                "Tail Rotor Drive",
+                                "Planetary Gear System",
+                                "Freewheeling Unit",
+                                "Combined Transmission"
+                              ]
+                            }
+                          ]
+                        },
+                        "fuel": {
+                          "label": "Fuel",
+                          "placeholder": "Select fuel (e.g., Petrol 95, Diesel, etc...)",
+                          "search-placeholder": "Search or add fuel (e.g., Electric, Hybrid, etc...)",
+                          "fuels": [
+                            {
+                              "value": "0",
+                              "placeholder": "Select car fuel (e.g., Petrol 95, Diesel, etc...)",
+                              "search-placeholder": "Search or add car fuel (e.g., Electric, Hybrid, etc...)",
+                              "options": [
+                                "Petrol 91",
+                                "Petrol 95",
+                                "Petrol 98",
+                                "Diesel",
+                                "Electric",
+                                "Hybrid",
+                                "Plug-in Hybrid",
+                                "CNG",
+                                "LPG",
+                                "Hydrogen"
+                              ]
+                            },
+                            {
+                              "value": "1",
+                              "placeholder": "Select van fuel (e.g., Petrol 91, Diesel, etc...)",
+                              "search-placeholder": "Search or add van fuel (e.g., CNG, LPG, etc...)",
+                              "options": [
+                                "Petrol 91",
+                                "Petrol 95",
+                                "Diesel",
+                                "Electric",
+                                "CNG",
+                                "LPG"
+                              ]
+                            },
+                            {
+                              "value": "2",
+                              "placeholder": "Select truck fuel (e.g., Diesel, etc...)",
+                              "search-placeholder": "Search or add truck fuel (e.g., Biodiesel, LNG, etc...)",
+                              "options": [
+                                "Diesel",
+                                "Biodiesel",
+                                "Electric",
+                                "CNG",
+                                "LNG"
+                              ]
+                            },
+                            {
+                              "value": "3",
+                              "placeholder": "Select motorcycle fuel (e.g., Petrol 91, etc...)",
+                              "search-placeholder": "Search or add motorcycle fuel (e.g., Electric, etc...)",
+                              "options": [
+                                "Petrol 91",
+                                "Petrol 95",
+                                "Electric"
+                              ]
+                            },
+                            {
+                              "value": "4",
+                              "placeholder": "Select boat fuel (e.g., Petrol, Marine Diesel, etc...)",
+                              "search-placeholder": "Search or add boat fuel",
+                              "options": [
+                                "Petrol",
+                                "Diesel",
+                                "Marine Diesel",
+                                "Electric"
+                              ]
+                            },
+                            {
+                              "value": "5",
+                              "placeholder": "Select yacht fuel (e.g., Diesel, etc...)",
+                              "search-placeholder": "Search or add yacht fuel (e.g., Hybrid, etc...)",
+                              "options": [
+                                "Diesel",
+                                "Marine Diesel",
+                                "Electric",
+                                "Hybrid"
+                              ]
+                            },
+                            {
+                              "value": "6",
+                              "placeholder": "Select jet ski fuel (e.g., Petrol, etc...)",
+                              "search-placeholder": "Search or add jet ski fuel (e.g., Electric, etc...)",
+                              "options": [
+                                "Petrol",
+                                "Electric"
+                              ]
+                            },
+                            {
+                              "value": "7",
+                              "placeholder": "Select helicopter fuel (e.g., Jet Fuel, etc...)",
+                              "search-placeholder": "Search or add helicopter fuel (e.g., Avgas, etc...)",
+                              "options": [
+                                "Jet Fuel",
+                                "Avgas"
+                              ]
+                            }
+                          ],
+                          "when-no-result": "No Match where found"
+                        },
+                        "colors": {
+                          "label": "Colors",
+                          "placeholder": "Enter color (e.g., Black, White, etc...)"
+                        },
+                        "thumbnail": {
+                          "label": "Thumbnail"
+                        },
+                        "gallery": {
+                          "label": "Gallery",
+                          "table": {
+                            "headers": [
+                              "",
+                              "File Name",
+                              "File Size",
+                              "Last Modified",
+                              "Action"
+                            ],
+                            "cells": {
+                              "file-size": "{size} KB"
                             }
                           }
                         },
@@ -2587,13 +2091,14 @@
                         },
                         "status": {
                           "label": "Status",
+                          "placeholder": "Enter status (e.g., Active, Inactive)",
                           "statuses": [
                             {
-                              "value": 0,
+                              "value": "0",
                               "label": "Active"
                             },
                             {
-                              "value": 1,
+                              "value": "1",
                               "label": "Inactive"
                             }
                           ]

@@ -90,7 +90,6 @@ import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 
-
 export default function Members() {
   const { isLoading, result } = useMembers();
 
@@ -236,7 +235,7 @@ function AddNew() {
       </DialogTrigger>
       <DialogContent
         showCloseButton
-        className="flex h-[calc(100vh-2rem)] min-w-[calc(100vw-2rem)] flex-col overflow-auto p-12"
+        className="flex h-[calc(100vh-2rem)] min-w-[calc(100vw-2rem)] flex-col overflow-auto"
       >
         <DialogHeader>
           <DialogTitle className="text-4xl">
@@ -248,9 +247,9 @@ function AddNew() {
         </DialogHeader>
         <Separator className="mt-1 mb-6" />
         <form
+          className="flex grow flex-col space-y-6"
           onReset={reset}
           onSubmit={handleSubmit(submit)}
-          className="flex grow flex-col gap-6"
         >
           <FieldGroup className="grid-cols-4">
             <Controller
@@ -273,7 +272,6 @@ function AddNew() {
                       ref={avatarRef}
                       id={`${id}-avatar`}
                       isInvalid={invalid}
-                      imageClassName="max-h-[183px]"
                       onValueChange={setValue}
                     />
                   </FieldContent>

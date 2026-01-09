@@ -10,13 +10,12 @@ import { tNullable } from "@/types/nullish";
 import { tJwt } from "@/validations/jwt";
 
 import {
-  tMemberCreate,
   tMemberFilter,
+  tMemberCreate,
   zMemberFilter,
+  zMemberCreate,
 } from "@/validations/partner/member";
 import { tPagination, zPagination } from "@/validations/pagination";
-
-import { zMemberCreate } from "@/validations/partner/member";
 
 import { eRoleStatusModel } from "@/models/partner/role";
 import { eBranchStatusModel } from "@/models/partner/branch";
@@ -531,8 +530,18 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<null>>> {
   return await apiCatch<null>(async () => {
-    const memberFormData: FormData = await request.formData();
-    zMemberCreate.parse(Object.fromEntries(memberFormData.entries()));
+    const formData: FormData = await request.formData();
+    const member: tMemberCreate = {
+      avatar: formData.get("avatar") as File,
+      role: formData.get("role") as string,
+      branch: formData.get("branch") as string,
+      username: formData.get("username") as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      status: Number(formData.get("status") as string),
+    };
+
+    zMemberCreate.parse(member);
 
     return NextResponse.json<tSuccessOneModel<null>>(
       { data: null },
@@ -542,7 +551,7 @@ export async function POST(
     const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/members/`,
-      memberFormData,
+      formData,
       {
         Authorization: `Bearer ${token}`,
       },

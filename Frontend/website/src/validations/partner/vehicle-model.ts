@@ -29,7 +29,7 @@ const zVehicleModelCreate = z
     category: z.enum(eVehicleModelCategoryModel, "invalid category."),
     manufacturer: z.string().nonempty("manufacturer cannot be empty."),
     marketLaunch: z
-      .date()
+      .date("market launch is required.")
       .min(new Date(1980, 0, 1), "model year cannot be older than 1980.")
       .refine(
         (value) => value <= new Date(),
@@ -79,11 +79,7 @@ type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;
 
 const zVehicleModelFilter = z
   .object({
-    search: z.optional(
-      z
-        .string()
-        .nonempty("search can only either be undefined or a non-empty string."),
-    ),
+    search: z.optional(z.string().nonempty("search can't be empty string.")),
     categories: z.array(
       z.enum(eVehicleModelCategoryModel, "invalid category."),
     ),

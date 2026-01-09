@@ -59,6 +59,7 @@ import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
 import { tPaginationModel } from "@/models/pagination";
 import { ClsPagination } from "./pagination";
+import { cn } from "@/utilities/cn";
 
 type tGroup<gtOption extends tOption> = {
   value: string;
@@ -71,7 +72,7 @@ type tOption = {
 };
 
 type tFieldSelectRef<gtOption extends tOption> = {
-  change: (value: tUndefinable<gtOption>) => void;
+  setValue: (value: tUndefinable<gtOption>) => void;
   reset: (defaultValue?: gtOption) => void;
 };
 type tFieldSelectProps<gtOption extends tOption> = {
@@ -105,17 +106,17 @@ const FieldSelect = forwardRef(
     const [value, setValue] =
       useState<tUndefinable<gtOption>>(defaultOptionProp);
 
-    function change(value: tUndefinable<gtOption>) {
+    function imperativeSetValue(value: tUndefinable<gtOption>) {
       setValue(value);
     }
 
-    function reset(defaultValue?: gtOption) {
+    function imperativeReset(defaultValue?: gtOption) {
       setValue(defaultValue);
     }
 
     useImperativeHandle(ref, () => ({
-      change,
-      reset,
+      setValue: imperativeSetValue,
+      reset: imperativeReset,
     }));
 
     function select(option: gtOption) {
@@ -199,8 +200,8 @@ const FieldSelect = forwardRef(
 FieldSelect.displayName = "FieldSelect";
 
 type tFieldMultiSelectRef<gtOption extends tOption> = {
+  setValue: (values: gtOption[]) => void;
   reset: (defaultValues?: gtOption[]) => void;
-  change: (values: gtOption[]) => void;
 };
 type tFieldMultiSelectProps<
   gtGroup extends tGroup<gtOption>,
@@ -250,17 +251,17 @@ const FieldMultiSelect = forwardRef(
 
     const hiddenCount = values.length - visibleValues.length;
 
-    function change(options: gtOption[]) {
+    function imperativeSetValue(options: gtOption[]) {
       setValues(options);
     }
 
-    function reset(defaultValues: gtOption[] = []) {
+    function imperativeReset(defaultValues: gtOption[] = []) {
       setValues(defaultValues);
     }
 
     useImperativeHandle(ref, () => ({
-      change,
-      reset,
+      setValue: imperativeSetValue,
+      reset: imperativeReset,
     }));
 
     function toggle(option: gtOption, isSelected: boolean) {
@@ -380,81 +381,153 @@ const FieldMultiSelect = forwardRef(
 // @ts-expect-error
 FieldMultiSelect.displayName = "FieldMultiSelect";
 
-type tFieldFreeSearchableSelectProps<gtOption extends tOption> = {
-  inputProps: ComponentProps<typeof CommandInput>;
-  value: string;
-  list: gtOption[];
-  triggerRender: () => ReactNode;
-  itemRender: (item: gtOption) => ReactNode;
-  whenEmptyRender: () => ReactNode;
-  onSelect: (string: string) => void;
+type tFieldFreeSelectRef = {
+  setValue: (value: tUndefinable<string>) => void;
+  reset: (defaultValue?: string) => void;
 };
-function FieldFreeSearchableSelect<gtOption extends tOption>({
-  triggerRender,
-  value,
-  inputProps,
-  list,
-  itemRender,
-  whenEmptyRender,
-  onSelect,
-}: tFieldFreeSearchableSelectProps<gtOption>) {
-  const [inputValue, setInputValue] = useState<string>(value);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+type tFieldFreeSelectProps = {
+  id?: string;
+  isInvalid?: boolean;
+  placeholder?: string;
+  searchPlaceholder?: string;
+  defaultValue?: string;
+  options: string[];
+  optionRender: (option: string, isSelected: boolean) => ReactElement<"button">;
+  onSelect?: (option: tUndefinable<string>) => void;
+};
 
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+const FieldFreeSelect = forwardRef<tFieldFreeSelectRef, tFieldFreeSelectProps>(
+  (
+    {
+      id,
+      isInvalid,
+      placeholder,
+      searchPlaceholder,
+      defaultValue: defaultOptionProp,
+      options,
+      optionRender,
+      onSelect,
+    },
+    ref,
+  ) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  function onEnter() {
-    _onSelect(inputValue);
-  }
-  function _onSelect(value: string) {
-    onSelect(value);
-    setIsOpen(false);
-  }
+    const [value, setValue] = useState<tUndefinable<string>>(defaultOptionProp);
+    const [search, setSearch] = useState<string>("");
 
-  return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>{triggerRender()}</PopoverTrigger>
-      <PopoverContent className="border-input w-full min-w-[var(--radix-popper-anchor-width)] rounded p-0">
-        <Command className="rounded">
-          <CommandInput
-            value={inputValue}
-            onValueChange={(value) => setInputValue(value)}
-            onKeyDown={(e) => {
-              if (e.code === "Enter") {
-                e.currentTarget.blur();
-                onEnter();
-              }
-            }}
-            {...inputProps}
+    function imperativeSetValue(value: tUndefinable<string>) {
+      setValue(value);
+    }
+
+    function imperativeReset(defaultValue?: string) {
+      setValue(defaultValue);
+    }
+
+    useImperativeHandle(ref, () => ({
+      setValue: imperativeSetValue,
+      reset: imperativeReset,
+    }));
+
+    function select(option: tUndefinable<string>) {
+      if (value === undefined) {
+        setValue(option);
+        onSelect?.(option);
+
+        setIsOpen(false);
+
+        return;
+      }
+
+      if (option === value) {
+        setValue(undefined);
+        onSelect?.(undefined);
+
+        setIsOpen(false);
+
+        return;
+      }
+
+      setValue(option);
+      onSelect?.(option);
+
+      setIsOpen(false);
+    }
+
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            aria-invalid={isInvalid}
+            id={id}
+            variant="outline"
+            className="justify-between text-start"
           >
-            <button type="button" onClick={onEnter} className="mr-2">
-              <LuArrowRight
-                size={16}
-                className="text-muted-foreground/80 hover:text-primary/80"
-              />
-            </button>
-          </CommandInput>
-          <CommandList>
-            <CommandEmpty>{whenEmptyRender()}</CommandEmpty>
-            {list.map((item) => (
-              <CommandItem
-                asChild
-                key={item.value}
-                value={item.label}
-                className="cursor-pointer gap-2.5 rounded"
-                onSelect={() => _onSelect(item.label)}
+            {value ? (
+              value
+            ) : (
+              <span
+                aria-invalid={isInvalid}
+                className="text-muted-foreground aria-invalid:text-destructive/80 truncate"
               >
-                {itemRender(item)}
-              </CommandItem>
-            ))}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-}
+                {placeholder}
+              </span>
+            )}
+            <LuChevronsUpDown size={16} className="opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+        >
+          <Command className="rounded">
+            <CommandInput
+              placeholder={searchPlaceholder}
+              value={search}
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  e.currentTarget.blur();
+                  select(search);
+                }
+              }}
+              onValueChange={setSearch}
+            >
+              <button
+                aria-hidden={search === ""}
+                type="button"
+                className="aria-hidden:hidden"
+                onClick={() => setSearch("")}
+              >
+                <LuX
+                  size={16}
+                  className="text-muted-foreground/80 hover:text-primary/80"
+                />
+              </button>
+            </CommandInput>
+            <CommandList
+              className={cn("flex flex-col p-1", {
+                "p-0": options.length === 0,
+              })}
+            >
+              {options.map((option) => (
+                <CommandItem
+                  asChild
+                  key={option}
+                  value={option}
+                  className="w-full cursor-pointer gap-2.5 rounded"
+                  onSelect={() => select(option)}
+                >
+                  {optionRender(option, option === value)}
+                </CommandItem>
+              ))}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  },
+);
+
+FieldFreeSelect.displayName = "FieldFreeSelect";
 
 type tFieldAsyncSelectRef<gtOption extends tOption> = {
   change: (value: gtOption) => void;
@@ -748,7 +821,7 @@ const FieldMultiAsyncSelect = forwardRef(
             id={id}
             aria-invalid={isInvalid}
             variant="outline"
-            className="justify-between text-start h-auto"
+            className="h-auto justify-between text-start"
           >
             {values.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1">
@@ -962,13 +1035,14 @@ export type {
   tOption,
   tFieldSelectRef,
   tFieldMultiSelectRef,
+  tFieldFreeSelectRef,
   tFieldAsyncSelectRef,
   tFieldMultiAsyncSelectRef,
 };
 export {
   FieldSelect,
   FieldMultiSelect,
-  FieldFreeSearchableSelect,
+  FieldFreeSelect,
   FieldAsyncSelect,
   FieldMultiAsyncSelect,
 };

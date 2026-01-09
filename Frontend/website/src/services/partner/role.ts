@@ -21,16 +21,13 @@ import { tRoleModel } from "@/models/partner/role";
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsRoleService extends ClsAbstractService {
-  public async addAsync(
-    roleCreate: tRoleCreate,
-  ): Promise<tResponseOneService<null>> {
+  public async addAsync(role: tRoleCreate): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedRoleCreate: tRoleCreate =
-        zRoleCreate.parse(roleCreate);
+      zRoleCreate.parse(role);
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/roles",
-        JSON.stringify(parsedRoleCreate),
+        JSON.stringify(role),
       );
 
       if (!response.ok) {
@@ -48,10 +45,10 @@ class ClsRoleService extends ClsAbstractService {
     uuid: tUuid,
   ): Promise<tResponseOneService<tRoleModel>> {
     return await this._catchAsync<tRoleModel>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+      zUuid.parse(uuid);
 
       const response: Response = await this._fetch.get(
-        `/partner/dashboard/roles/${parsedUuid}`,
+        `/partner/dashboard/roles/${uuid}`,
       );
 
       if (!response.ok) {
@@ -71,28 +68,22 @@ class ClsRoleService extends ClsAbstractService {
     pagination: tPagination,
   ): Promise<tResponseManyService<tRoleModel>> {
     return await this._catchAsync<tRoleModel>(async () => {
-      const parsedFilter: tRoleFilter = zRoleFilter.parse(filter);
-      const parsedPagination: tPagination = zPagination.parse(pagination);
+      zRoleFilter.parse(filter);
+      zPagination.parse(pagination);
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("filter.name", parsedFilter.name);
+      clsQuery.set("filter.name", filter.name);
 
       clsQuery.set(
         "filter.permissions",
-        parsedFilter.permissions.map((permission) => permission.toString()),
+        filter.permissions.map((permission) => permission.toString()),
       );
 
-      clsQuery.set(
-        "filter.status",
-        parsedFilter.status?.toString(),
-      );
+      clsQuery.set("filter.status", filter.status?.toString());
 
-      clsQuery.set("pagination.page", parsedPagination.page?.toString());
-      clsQuery.set(
-        "pagination.page-size",
-        parsedPagination.pageSize?.toString(),
-      );
+      clsQuery.set("pagination.page", pagination.page?.toString());
+      clsQuery.set("pagination.page-size", pagination.pageSize?.toString());
 
       const response: Response = await this._fetch.get(
         `/partner/dashboard/roles${clsQuery.toString()}`,
@@ -113,10 +104,10 @@ class ClsRoleService extends ClsAbstractService {
   }
   public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+      zUuid.parse(uuid);
 
       const response: Response = await this._fetch.delete(
-        `/partner/dashboard/roles/${parsedUuid}`,
+        `/partner/dashboard/roles/${uuid}`,
       );
 
       if (!response.ok) {
