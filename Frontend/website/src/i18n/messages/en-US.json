@@ -77,11 +77,9 @@
             "file-size": "{size} KB"
           }
         }
-      }
-    },
-    "colors": {
-      "color-creator": {
-        "trigger": "Add",
+      },
+      "color-picker": {
+        "placeholder": "Enter color (e.g., Black, White, etc...)",
         "content": {
           "name": {
             "placeholder": "Enter color name: e.g., Black, White, Red, etc..."
@@ -2060,8 +2058,7 @@
                           "when-no-result": "No Match where found"
                         },
                         "colors": {
-                          "label": "Colors",
-                          "placeholder": "Enter color (e.g., Black, White, etc...)"
+                          "label": "Colors"
                         },
                         "thumbnail": {
                           "label": "Thumbnail"

@@ -21,10 +21,9 @@ const zVehicleModelCreate = z
           }),
       )
       .max(25, "you can upload a maximum of 25 images."),
-    name: z.string().nonempty("name cannot be empty."),
+    name: z.string("name is required.").nonempty("name cannot be empty."),
     description: z
       .string()
-      .nonempty("description cannot be empty.")
       .max(750, "description cannot be longer than 750 characters."),
     category: z.enum(eVehicleModelCategoryModel, "invalid category."),
     manufacturer: z.string().nonempty("manufacturer cannot be empty."),
@@ -35,18 +34,26 @@ const zVehicleModelCreate = z
         (value) => value <= new Date(),
         "model year cannot be in the future.",
       ),
-    capacity: z.number().min(1, "capacity cannot be less than 1."),
-    transmission: z.string().nonempty("transmission cannot be empty."),
-    fuel: z.string().nonempty("fuel cannot be empty."),
+    capacity: z
+      .number("capacity is required.")
+      .min(1, "capacity cannot be less than 1."),
+    transmission: z
+      .string("transmission is required.")
+      .nonempty("transmission cannot be empty."),
+    fuel: z.string("fuel is required.").nonempty("fuel cannot be empty."),
     colors: z
       .array(
         z.object({
-          hexCode: z.string().regex(/^#([0-9a-fA-F]{6})$/, "invalid hex code."),
-          name: z.string().nonempty("color name cannot be empty."),
+          hexCode: z
+            .string("hex code is required.")
+            .regex(/^#([0-9a-fA-F]{6})$/, "invalid hex code."),
+          name: z
+            .string("color name is required.")
+            .nonempty("color name cannot be empty."),
           tags: z
             .array(
               z
-                .string()
+                .string("color tag is required.")
                 .nonempty("tag cannot be empty.")
                 .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
                   error:
@@ -65,12 +72,12 @@ const zVehicleModelCreate = z
           new Set(colors.map((color) => color.hexCode)).size === colors.length,
         "colors must be hex codes unique.",
       ),
-    price: z.number().min(1, "price cannot be less than 1."),
-    discount: z.number().nonnegative("discount cannot be negative."),
+    price: z.number("price is required.").min(1, "price cannot be less than 1."),
+    discount: z.number("discount is required.").nonnegative("discount cannot be negative."),
     tags: z.array(z.string().nonempty("tag cannot be empty.")),
     status: z.enum(eVehicleModelStatusModel, "invalid status."),
   })
-  .refine((value) => value.price - 0.99 > value.discount, {
+  .refine((value) => value?.price - 0.99 > value?.discount, {
     path: ["discount"],
     error: "discount should be less than the price at least 1 dollar.",
   })

@@ -91,6 +91,10 @@ import {
 
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
+import {
+  FieldColorPickers,
+  tFieldColorPickersRef,
+} from "@/components/locals/blocks/color-pickers";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(
@@ -176,6 +180,7 @@ function AddNewVehicleModel() {
     handleSubmit,
   } = useForm<tVehicleModelCreate>({
     defaultValues: {
+      gallery: [],
       name: "",
       description: "",
       marketLaunch: new Date(),
@@ -183,6 +188,7 @@ function AddNewVehicleModel() {
       colors: [],
       price: 1,
       discount: 0,
+      tags: [],
       status: eVehicleModelStatusModel.active,
     },
     resolver: zodResolver(zVehicleModelCreate),
@@ -203,13 +209,15 @@ function AddNewVehicleModel() {
   const transmissionRef = useRef<tFieldSelectRef<tOption>>(null);
   const fuelRef = useRef<tFieldSelectRef<tOption>>(null);
 
+  const colorsRef = useRef<tFieldColorPickersRef>(null);
+
   const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
   const category = watch("category");
   const categories: tOption[] = tAddNew.raw("content.form.category.categories");
 
   const manufacturers: tUndefinable<tGroup> = (
-    tAddNew.raw("content.form.manufacturer.manufacturers") as tManufacturer[]
+    tAddNew.raw("content.form.manufacturer.manufacturers") as tGroup[]
   ).find((manufacturer) => manufacturer.value === category?.toString());
 
   const transmissions: tUndefinable<tGroup> = (
@@ -235,6 +243,8 @@ function AddNewVehicleModel() {
 
     transmissionRef.current?.reset();
     fuelRef.current?.reset();
+
+    colorsRef.current?.reset();
 
     statusRef.current?.reset(
       statuses.find(
@@ -616,63 +626,41 @@ function AddNewVehicleModel() {
                 </Field>
               )}
             />
-            {/* <Controller
-                control={control}
-                name="colors"
-                render={({ field, fieldState: { invalid, error } }) => (
+            <Controller
+              control={control}
+              name="colors"
+              render={({
+                field: { onChange: setValues },
+                fieldState: { invalid, error },
+              }) => {
+                return (
                   <Field>
                     <FieldLabel
                       aria-invalid={invalid}
-                      htmlFor="colors"
+                      htmlFor={`${id}-colors`}
                       className="max-w-fit"
                     >
                       {tAddNew("content.form.colors.label")}
                     </FieldLabel>
-                    <FieldContent className="flex flex-row items-center justify-between rounded border ps-3">
-                      {field.value.length === 0 ? (
-                        <span className="text-muted-foreground truncate">
-                          {tAddNew(
-                            "content.form.colors.placeholder",
-                          )}
-                        </span>
-                      ) : (
-                        <ul className="flex items-center gap-2 overflow-x-auto ps-px">
-                          {field.value.map((color, index) => (
-                            <li key={index}>
-                              <Badge
-                                variant="outline"
-                                style={{ color: color.hexCode }}
-                                className="border-muted-foreground text-shadow-primary inline-flex items-center gap-2 border font-bold uppercase text-shadow-2xs"
-                              >
-                                {color.name
-                                  .split(" ")
-                                  .map((chunk) => chunk.at(0))
-                                  .join("")}
-
-                                <button
-                                  type="button"
-                                  className="border-primary text-primary rounded border p-px"
-                                  onClick={() => {
-                                    colors.remove(index);
-                                  }}
-                                >
-                                  <LuX />
-                                </button>
-                              </Badge>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      <ColorCreator
-                        id="colors"
-                        onSave={(value) => colors.append(value)}
+                    <FieldContent>
+                      <FieldColorPickers
+                        id={`${id}-colors`}
+                        ref={colorsRef}
+                        isInvalid={invalid}
+                        onValuesChange={(values) => setValues(values)}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError
+                      errors={
+                        !Array.isArray(error)
+                          ? error
+                          : error.flatMap((error) => Object.values(error))
+                      }
+                    />
                   </Field>
-                )}
-              /> */}
+                );
+              }}
+            />
           </FieldGroup>
           <FieldGroup>
             <Controller
@@ -850,8 +838,8 @@ function AddNewVehicleModel() {
                     <FieldContent>
                       <FieldNumber
                         {...field}
-                        aria-invalid={invalid}
                         id={`${id}-price`}
+                        aria-invalid={invalid}
                         onValueChange={(number) => {
                           setValue(number ?? 0);
                           if (formState.isSubmitted) trigger("discount");
