@@ -2,14 +2,9 @@
 
 import { useTranslations } from "next-intl";
 
-import {
-  ComponentProps,
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, useState, useImperativeHandle } from "react";
 
-import { IoColorPalette, IoColorPaletteOutline } from "react-icons/io5";
+import { IoColorPaletteOutline } from "react-icons/io5";
 import { LuX } from "react-icons/lu";
 
 import {
@@ -32,7 +27,6 @@ import {
 
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-import { Badge } from "@/components/shadcn/badge";
 
 type tColor = {
   hexCode: string;

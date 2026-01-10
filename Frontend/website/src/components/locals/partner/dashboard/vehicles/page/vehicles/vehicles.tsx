@@ -7,10 +7,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
-import {
-  eVehicleModelCategoryModel,
-  eVehicleModelStatusModel,
-} from "@/models/partner/vehicle-model";
+import { eVehicleModelStatusModel } from "@/models/partner/vehicle-model";
 
 import {
   tVehicleModelCreate,
@@ -22,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
-import { LuCheck, LuChevronDown, LuPlus } from "react-icons/lu";
+import { LuCheck, LuPlus } from "react-icons/lu";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -60,12 +57,11 @@ import { Button } from "@/components/shadcn/button";
 import { Separator } from "@/components/shadcn/separator";
 
 import {
+  FieldGroup,
   Field,
+  FieldLabel,
   FieldContent,
   FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
 } from "@/components/shadcn/field";
 
 import {
@@ -84,9 +80,10 @@ import {
 } from "@/components/locals/blocks/selects";
 
 import {
-  FieldFileUpload,
   tFieldFileUploadRef,
   tFieldFileUploadsRef,
+  FieldFileUpload,
+  FieldFileUploads,
 } from "@/components/locals/blocks/file-uploads";
 
 import { Input } from "@/components/shadcn/input";
@@ -150,16 +147,6 @@ type tGroup = {
   options: string[];
 };
 
-// type tFuel = {
-//   "select-placeholder": string;
-//   "search-placeholder": string;
-//   value: number;
-//   fuels: {
-//     key: string;
-//     value: string;
-//   }[];
-// };
-
 function AddNewVehicleModel() {
   const id = useId();
   const router = useRouter();
@@ -174,7 +161,6 @@ function AddNewVehicleModel() {
     formState,
     control,
     watch,
-    setValue,
     trigger,
     reset: handleReset,
     handleSubmit,
@@ -193,10 +179,6 @@ function AddNewVehicleModel() {
     },
     resolver: zodResolver(zVehicleModelCreate),
   });
-  // const colors = useFieldArray({
-  //   control: control,
-  //   name: "colors",
-  // });
 
   const thumbnailRef = useRef<tFieldFileUploadRef>(null);
   const galleryRef = useRef<tFieldFileUploadsRef>(null);
