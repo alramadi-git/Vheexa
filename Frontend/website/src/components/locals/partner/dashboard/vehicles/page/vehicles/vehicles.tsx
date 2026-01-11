@@ -244,7 +244,7 @@ function AddNewVehicleModel() {
       toast.custom(() => (
         <Toast
           variant="destructive"
-          label={tAddNew("content.form.toasts.when-error")}
+          label={tAddNew("content.form.actions.toasts.when-error")}
         />
       ));
       return;
@@ -253,12 +253,12 @@ function AddNewVehicleModel() {
     toast.custom(() => (
       <Toast
         variant="success"
-        label={tAddNew("content.form.toasts.when-success")}
+        label={tAddNew("content.form.actions.toasts.when-success")}
       />
     ));
 
-    setIsOpen(false);
-    router.refresh();
+    // setIsOpen(false);
+    // router.refresh();
   }
 
   return (
@@ -673,11 +673,11 @@ function AddNewVehicleModel() {
                 </Field>
               )}
             />
-            {/* <Controller
+            <Controller
               control={control}
               name="gallery"
               render={({
-                field: { value, onChange: setValue },
+                field: { value: values, onChange: setValues },
                 fieldState: { invalid, error },
               }) => (
                 <Field>
@@ -689,116 +689,19 @@ function AddNewVehicleModel() {
                     {tAddNew("content.form.gallery.label")}
                   </FieldLabel>
                   <FieldContent>
-                    <Sortable
-                      orientation="mixed"
-                      value={value}
-                      getItemValue={(value) => value.name}
-                      onValueChange={(value) => {
-                        setValue(value);
-                        galleryRef.current?.changeValue(value);
-                      }}
-                    >
-                      <Table className="rounded-none border">
-                        <TableHeader>
-                          <TableRow className="bg-accent/50">
-                            {galleryHeaders.map((header) => (
-                              <TableHead
-                                key={header}
-                                // className="bg-transparent"
-                              >
-                                {header}
-                              </TableHead>
-                            ))}
-                          </TableRow>
-                        </TableHeader>
-                        <SortableContent asChild>
-                          <TableBody>
-                            {value.map((file) => (
-                              <SortableItem
-                                asChild
-                                key={file.name}
-                                value={file.name}
-                              >
-                                <TableRow>
-                                  <TableCell className="w-[50px]">
-                                    <SortableItemHandle asChild>
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="size-8"
-                                      >
-                                        <LuGripVertical className="h-4 w-4" />
-                                      </Button>
-                                    </SortableItemHandle>
-                                  </TableCell>
-                                  <TableCell className="max-w-16 truncate font-medium">
-                                    {file.name}
-                                  </TableCell>
-                                  <TableCell className="text-muted-foreground">
-                                    {tAddNew(
-                                      "content.form.gallery.table.cells.file-size",
-                                      {
-                                        size: (file.size / 1024).toFixed(2),
-                                      },
-                                    )}
-                                  </TableCell>
-                                  <TableCell className="text-muted-foreground">
-                                    {clsDateFormatter.format(
-                                      new Date(file.lastModified),
-                                    )}
-                                  </TableCell>
-                                  <TableCell className="text-muted-foreground">
-                                    <Button
-                                      aria-invalid
-                                      variant="ghost"
-                                      type="button"
-                                      onClick={() => {
-                                        const files = value.filter(
-                                          (f) => f.name !== file.name,
-                                        );
-
-                                        setValue(files);
-                                        galleryRef.current?.changeValue(files);
-                                      }}
-                                    >
-                                      <LuTrash />
-                                    </Button>
-                                  </TableCell>
-                                </TableRow>
-                              </SortableItem>
-                            ))}
-                          </TableBody>
-                        </SortableContent>
-                        <TableFooter>
-                          <TableRow>
-                            <TableCell colSpan={5}>
-                              <FieldFileUpload
-                                multiple
-                                ref={galleryRef}
-                                id={`${id}-gallery`}
-                                accept="image/*"
-                                maxFiles={25}
-                                className={cn({
-                                  "cursor-not-allowed opacity-50":
-                                    value.length === 25,
-                                })}
-                                disabled={value.length === 25}
-                                value={value}
-                                setValue={setValue}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        </TableFooter>
-                      </Table>
-                      <SortableOverlay>
-                        <div className="bg-primary/10 size-full rounded" />
-                      </SortableOverlay>
-                    </Sortable>
+                    <FieldFileUploads
+                      id={`${id}-gallery`}
+                      ref={galleryRef}
+                      isInvalid={invalid}
+                      defaultValues={values}
+                      onValuesChange={setValues}
+                    />
                   </FieldContent>
                   <FieldError errors={error} />
                 </Field>
               )}
-            /> */}
+            />
+    
           </FieldGroup>
           <FieldGroup className="grid-cols-2">
             <Controller

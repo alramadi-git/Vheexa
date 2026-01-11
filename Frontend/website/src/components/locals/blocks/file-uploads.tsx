@@ -14,7 +14,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Toast } from "./toasts";
 
-import { LuGripVertical, LuUpload } from "react-icons/lu";
+import { LuGripVertical, LuTrash, LuUpload } from "react-icons/lu";
 
 import {
   FileUpload,
@@ -27,12 +27,14 @@ import {
   SortableContent,
   SortableItem,
   SortableItemHandle,
+  SortableOverlay,
 } from "@/components/shadcn/sortable";
 
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -40,9 +42,10 @@ import {
 
 import { Button } from "@/components/shadcn/button";
 
-import { tUndefinable } from "@/types/nullish";
+import { tNullish, tUndefinable } from "@/types/nullish";
 
 import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { cn } from "@/utilities/cn";
 
 type tFieldFileUploadRef = {
   setValue: (value: tUndefinable<File>) => void;
@@ -148,7 +151,7 @@ type tFieldFileUploadsProps = {
   id?: string;
   isInvalid?: boolean;
   defaultValues?: File[];
-  onValuesChange?: (values: File[]) => void;
+  onValuesChange?: (value: File[]) => void;
 };
 
 const FieldFileUploads = forwardRef<
@@ -162,10 +165,8 @@ const FieldFileUploads = forwardRef<
     const locale = useLocale() as eLocale;
     const clsDateFormatter = new ClsDateFormatter(locale);
 
-    const tFileUpload = useTranslations("components.fields.file-uploads");
-    const headers: string[] = tFileUpload.raw(
-      "components.fields.file-uploads.table.headers",
-    );
+    const tFileUploads = useTranslations("components.fields.file-uploads");
+    const headers: string[] = tFileUploads.raw("table.headers");
 
     const [values, setValues] = useState<File[]>(defaultValues);
 
@@ -182,38 +183,41 @@ const FieldFileUploads = forwardRef<
       reset: imperativeReset,
     }));
 
-    const changeValue = useCallback(
-      (files: File[]) => {
+    const changeValues = useCallback(
+      (files: File[]): void => {
         setValues(files);
         onValuesChangeProp?.(files);
       },
       [setValues, onValuesChangeProp],
     );
 
-    const onValuesChange = useCallback(
-      (files: File[]): void => changeValue(files),
-      [changeValue],
-    );
-
-    const onFileReject = useCallback((file: File, message: string) => {
+    const onFileReject = useCallback((file: File, message: string): void => {
       toast.custom(() => <Toast variant="destructive" label={message} />);
     }, []);
+
+    const onFileValidate = useCallback(
+      (file: File): tNullish<string> => {
+        if (values.find((value) => value.name === file.name))
+          return tFileUploads("when-duplicates");
+
+        return null;
+      },
+      [values, tFileUploads],
+    );
 
     return (
       <Sortable
         orientation="mixed"
         value={values}
         getItemValue={(value) => value.name}
-        onValueChange={onValuesChange}
+        onValueChange={(values) => changeValues([...values])}
       >
         <Table className="rounded-none border">
           <TableHeader>
             <TableRow className="bg-accent/50">
-              <TableHead className="bg-transparent" />
+              <TableHead />
               {headers.map((header) => (
-                <TableHead key={header} className="bg-transparent">
-                  {header}
-                </TableHead>
+                <TableHead key={header}>{header}</TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -229,11 +233,11 @@ const FieldFileUploads = forwardRef<
                         </Button>
                       </SortableItemHandle>
                     </TableCell>
-                    <TableCell className="max-w-16 truncate font-medium">
+                    <TableCell className="truncate font-medium">
                       {value.name}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {tFileUpload("cells.file-size", {
+                      {tFileUploads("table.cells.file-size", {
                         size: (value.size / 1024).toFixed(2),
                       })}
                     </TableCell>
@@ -244,15 +248,12 @@ const FieldFileUploads = forwardRef<
                       <Button
                         aria-invalid
                         variant="ghost"
-                        type="button"
-                        onClick={() => {
-                          const files = value.filter(
-                            (f) => f.name !== value.name,
-                          );
-
-                          setValue(files);
-                          galleryRef.current?.changeValue(files);
-                        }}
+                        size="icon"
+                        onClick={() =>
+                          changeValues(
+                            values.filter(({ name }) => name !== value.name),
+                          )
+                        }
                       >
                         <LuTrash />
                       </Button>
@@ -265,19 +266,51 @@ const FieldFileUploads = forwardRef<
           <TableFooter>
             <TableRow>
               <TableCell colSpan={5}>
-                <FieldFileUpload
+                <FileUpload
+                  id={id}
+                  disabled={values.length === 25}
                   multiple
-                  ref={galleryRef}
-                  id={`${id}-gallery`}
-                  accept="image/*"
                   maxFiles={25}
-                  className={cn({
-                    "cursor-not-allowed opacity-50": value.length === 25,
-                  })}
-                  disabled={value.length === 25}
-                  value={value}
-                  setValue={setValue}
-                />
+                  accept="image/*"
+                  value={values}
+                  onFileValidate={onFileValidate}
+                  onFileReject={onFileReject}
+                  onValueChange={changeValues}
+                >
+                  <FileUploadDropzone
+                    aria-invalid={isInvalid}
+                    className="aria-invalid:border-destructive aria-invalid:ring-destructive/20 size-full space-y-1 text-center"
+                  >
+                    <LuUpload
+                      aria-invalid={isInvalid}
+                      size={46}
+                      className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
+                    />
+                    <p
+                      aria-invalid={isInvalid}
+                      className="aria-invalid:text-destructive max-w-fll line-clamp-1 text-sm font-medium"
+                    >
+                      {tFileUploads("title")}
+                    </p>
+                    <p
+                      aria-invalid={isInvalid}
+                      className="aria-invalid:text-destructive/80 text-muted-foreground line-clamp-1 text-xs"
+                    >
+                      {tFileUploads("subtitle")}
+                    </p>
+                    <FileUploadTrigger asChild>
+                      <Button
+                        id={id}
+                        aria-invalid={isInvalid}
+                        variant="outline"
+                        size="sm"
+                        className="mt-2 line-clamp-1 max-w-full text-wrap"
+                      >
+                        {tFileUploads("trigger")}
+                      </Button>
+                    </FileUploadTrigger>
+                  </FileUploadDropzone>
+                </FileUpload>
               </TableCell>
             </TableRow>
           </TableFooter>
@@ -286,46 +319,6 @@ const FieldFileUploads = forwardRef<
           <div className="bg-primary/10 size-full rounded" />
         </SortableOverlay>
       </Sortable>
-
-      // <FileUpload
-      //   value={values}
-      //   onValueChange={onValueChange}
-      //   onFileReject={onFileReject}
-      // >
-      //   <FileUploadDropzone
-      //     aria-invalid={isInvalid}
-      //     className="aria-invalid:border-destructive aria-invalid:ring-destructive/20 size-full space-y-1 text-center"
-      //   >
-      //     <LuUpload
-      //       aria-invalid={isInvalid}
-      //       size={46}
-      //       className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
-      //     />
-      //     <p
-      //       aria-invalid={isInvalid}
-      //       className="aria-invalid:text-destructive max-w-fll line-clamp-1 text-sm font-medium"
-      //     >
-      //       {tFileUpload("title")}
-      //     </p>
-      //     <p
-      //       aria-invalid={isInvalid}
-      //       className="aria-invalid:text-destructive/80 text-muted-foreground line-clamp-1 text-xs"
-      //     >
-
-      //     </p>
-      //     <FileUploadTrigger asChild>
-      //       <Button
-      //         id={id}
-      //         aria-invalid={isInvalid}
-      //         variant="outline"
-      //         size="sm"
-      //         className="mt-2 line-clamp-1 max-w-full text-wrap"
-      //       >
-      //         {tFileUpload("trigger")}
-      //       </Button>
-      //     </FileUploadTrigger>
-      //   </FileUploadDropzone>
-      // </FileUpload>
     );
   },
 );

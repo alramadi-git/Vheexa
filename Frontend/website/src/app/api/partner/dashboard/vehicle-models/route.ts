@@ -523,7 +523,7 @@ export async function GET(
       pagination: { page: 1, pageSize: 10, totalItems: 10 },
     });
 
-    const token: string = request.cookies.get("partner-token")!.value;
+    const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.get(
       `/partner/dashboard/vehicle-models${clsQuery.toString()}`,
       {
@@ -548,9 +548,7 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<tResponseOneModel<null>>> {
   return await apiCatch<null>(async () => {
-    const vehicleModelCreate = await request.json();
-    const parsedVehicleModelCreate =
-      zVehicleModelCreate.parse(vehicleModelCreate);
+    const formData = await request.formData();
 
     return NextResponse.json<tSuccessOneModel<null>>(
       { data: null },
@@ -560,9 +558,9 @@ export async function POST(
     const token: tJwt = request.cookies.get("partner-token")!.value;
     const backendResponse: Response = await clsFetch.post(
       `/partner/dashboard/vehicle-models/`,
+      formData,
       {
         Authorization: `Bearer ${token}`,
-        body: JSON.stringify(parsedVehicleModelCreate),
       },
     );
 

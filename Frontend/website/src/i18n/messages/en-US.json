@@ -58,7 +58,7 @@
         }
       },
       "file-upload": {
-        "title": "Drag & drop files here",
+        "title": "Drag & drop file here",
         "subtitle": "Or click to browse",
         "trigger": "Browse files"
       },
@@ -76,7 +76,8 @@
           "cells": {
             "file-size": "{size} KB"
           }
-        }
+        },
+        "when-duplicates": "No duplicates allowed"
       },
       "color-picker": {
         "placeholder": "Enter color (e.g., Black, White, etc...)",

@@ -22,15 +22,50 @@ import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
 class ClsVehicleModelService extends ClsAbstractService {
   public async addAsync(
-    vehicleModelCreate: tVehicleModelCreate,
+    vehicleModel: tVehicleModelCreate,
   ): Promise<tResponseOneService<null>> {
     return await this._catchAsync<null>(async () => {
-      const parsedVehicleModelCreate: tVehicleModelCreate =
-        zVehicleModelCreate.parse(vehicleModelCreate);
+      zVehicleModelCreate.parse(vehicleModel);
+
+      const formData = new FormData();
+      formData.append("thumbnail", vehicleModel.thumbnail);
+      vehicleModel.gallery.forEach((image, index) =>
+        formData.append(`gallery[${index}]`, image),
+      );
+
+      formData.append("name", vehicleModel.name);
+      formData.append("description", vehicleModel.description);
+
+      formData.append("category", vehicleModel.category.toString());
+
+      formData.append("marketLaunch", vehicleModel.marketLaunch.toISOString());
+      formData.append("manufacturer", vehicleModel.manufacturer);
+
+      formData.append("capacity", vehicleModel.capacity.toString());
+      formData.append("transmission", vehicleModel.transmission);
+      formData.append("fuel", vehicleModel.fuel);
+
+      vehicleModel.colors.forEach((color, index) => {
+        formData.append(`colors[${index}].hexCode`, color.hexCode);
+        formData.append(`colors[${index}].name`, color.name);
+
+        color.tags.forEach((tag, _index) =>
+          formData.append(`colors[${index}].tags[${_index}]`, tag),
+        );
+      });
+
+      formData.append("price", vehicleModel.price.toString());
+      formData.append("discount", vehicleModel.discount.toString());
+
+      vehicleModel.tags.forEach((tag, _index) =>
+        formData.append(`tags[${_index}]`, tag),
+      );
+
+      formData.append("status", vehicleModel.status.toString());
 
       const response: Response = await this._fetch.post(
         "/partner/dashboard/vehicle-models",
-        parsedVehicleModelCreate,
+        formData,
       );
 
       if (!response.ok) {
