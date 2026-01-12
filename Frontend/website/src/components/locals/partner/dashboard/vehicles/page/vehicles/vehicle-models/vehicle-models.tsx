@@ -19,13 +19,13 @@ export default function VehicleModels() {
 
   return (
     <TabsContent value={tVehicleModels("label")} className="space-y-3">
-      {/* <Filter />
+      {/* <Filter /> */}
       <Table
         isLoading={isLoading}
         isSuccess={result?.isSuccess || false}
         data={result?.isSuccess ? result.data : []}
       />
-      {result?.isSuccess && <Pagination pagination={result.pagination} />} */}
+      {result?.isSuccess && <Pagination pagination={result.pagination} />}
     </TabsContent>
   );
 }

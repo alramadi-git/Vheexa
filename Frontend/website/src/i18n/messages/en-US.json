@@ -2258,10 +2258,10 @@
                       "header": "Created At"
                     },
                     "actions": {
-                      "header": "Action",
+                      "header": "Actions",
                       "cell": {
                         "view": {
-                          "label": "View",
+                          "label": "View more",
                           "info": "View vehicle model is coming soon..."
                         },
                         "edit": {
@@ -2271,20 +2271,20 @@
                         "remove": {
                           "label": "Remove",
                           "toasts": {
-                            "when-success": "Branch was successfully removed",
-                            "when-error": "Something went wrong while removing the branch"
+                            "when-success": "Vehicle model was successfully deleted",
+                            "when-error": "Something went wrong while deleting the vehicle model"
                           }
                         }
                       }
-                    },
-                    "when-empty": {
-                      "title": "No vehicle models were found",
-                      "description": "Try adjusting your search or add a new vehicle model."
-                    },
-                    "when-error": {
-                      "title": "Something went wrong",
-                      "description": "We couldn't load the vehicle models. Please try again later."
                     }
+                  },
+                  "when-empty": {
+                    "title": "No vehicle models were found",
+                    "description": "Try adjusting your search or add a new vehicle model."
+                  },
+                  "when-error": {
+                    "title": "Something went wrong",
+                    "description": "We couldn't load the vehicle models. Please try again later."
                   }
                 }
               },
@@ -2297,119 +2297,119 @@
             }
           }
         }
-      },
-      "authentication": {
-        "layout": {
-          "metadata": {
-            "title": {
-              "template": "%s | Vheexa Partner Auth"
-            },
-            "description": "Access your Vheexa account to manage bookings and rents easily and securely."
+      }
+    },
+    "authentication": {
+      "layout": {
+        "metadata": {
+          "title": {
+            "template": "%s | Vheexa Partner Auth"
           },
-          "illustration": {
-            "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-            "alternate": "placeholder"
-          }
+          "description": "Access your Vheexa account to manage bookings and rents easily and securely."
         },
-        "login": {
-          "page": {
-            "metadata": {
-              "title": "Login",
-              "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
+        "illustration": {
+          "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+          "alternate": "placeholder"
+        }
+      },
+      "login": {
+        "page": {
+          "metadata": {
+            "title": "Login",
+            "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
+          },
+          "form": {
+            "title": "Welcome back",
+            "description": "Login to your Vheexa account",
+            "email": {
+              "label": "Email",
+              "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
             },
-            "form": {
-              "title": "Welcome back",
-              "description": "Login to your Vheexa account",
-              "email": {
-                "label": "Email",
-                "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
-              },
-              "password": {
-                "label": "Password",
-                "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
-              },
-              "actions": {
-                "reset": "Reset",
-                "submit": "Login",
-                "when-success": "Logging to vheexa account was successfully succeeded",
-                "when-error": "Something went wrong while fetching your vheexa account"
-              }
+            "password": {
+              "label": "Password",
+              "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+            },
+            "actions": {
+              "reset": "Reset",
+              "submit": "Login",
+              "when-success": "Logging to vheexa account was successfully succeeded",
+              "when-error": "Something went wrong while fetching your vheexa account"
             }
           }
-        },
-        "register": {
-          "page": {
-            "metadata": {
-              "title": "Register",
-              "description": "Create your vVheexa account and manage your rentals seamlessly."
-            },
-            "form": {
-              "title": "Hello there!",
-              "description": "create your vheexa account",
-              "partner": {
-                "logo": {
-                  "label": "Logo"
-                },
-                "banner": {
-                  "label": "Banner"
-                },
-                "handle": {
-                  "label": "Handle",
-                  "placeholder": "Enter handle (e.g, vheexa, etc...)"
-                },
-                "name": {
-                  "label": "Name",
-                  "placeholder": "Enter name (e.g, Vheexa, etc...)"
-                },
-                "phone-number": {
-                  "label": "Phone-number"
-                },
-                "email": {
-                  "label": "Email"
-                },
-                "password": {
-                  "label": "Password"
-                }
+        }
+      },
+      "register": {
+        "page": {
+          "metadata": {
+            "title": "Register",
+            "description": "Create your vVheexa account and manage your rentals seamlessly."
+          },
+          "form": {
+            "title": "Hello there!",
+            "description": "create your vheexa account",
+            "partner": {
+              "logo": {
+                "label": "Logo"
               },
-              "branch": {
-                "name": {
-                  "label": "Name",
-                  "placeholder": "Enter name (e.g, , etc...)"
-                },
-                "location": {},
-                "phone-number": {
-                  "label": "Phone-number"
-                },
-                "email": {
-                  "label": "Email"
-                }
+              "banner": {
+                "label": "Banner"
               },
-              "member": {},
-              "remember-me": {
-                "label": "Remember me",
-                "title": "",
-                "description": ""
+              "handle": {
+                "label": "Handle",
+                "placeholder": "Enter handle (e.g, vheexa, etc...)"
               },
-              "actions": {
-                "reset": "Reset",
-                "submit": "Register",
-                "when-success": "Vheexa account was successfully created",
-                "when-error": "Something went wrong while adding your vheexa account"
+              "name": {
+                "label": "Name",
+                "placeholder": "Enter name (e.g, Vheexa, etc...)"
+              },
+              "phone-number": {
+                "label": "Phone-number"
+              },
+              "email": {
+                "label": "Email"
+              },
+              "password": {
+                "label": "Password"
               }
+            },
+            "branch": {
+              "name": {
+                "label": "Name",
+                "placeholder": "Enter name (e.g, , etc...)"
+              },
+              "location": {},
+              "phone-number": {
+                "label": "Phone-number"
+              },
+              "email": {
+                "label": "Email"
+              }
+            },
+            "member": {},
+            "remember-me": {
+              "label": "Remember me",
+              "title": "",
+              "description": ""
+            },
+            "actions": {
+              "reset": "Reset",
+              "submit": "Register",
+              "when-success": "Vheexa account was successfully created",
+              "when-error": "Something went wrong while adding your vheexa account"
             }
           }
         }
       }
-    },
-    "not-found": {
-      "title": "Whoops!",
-      "subtitle": "Something went wrong",
-      "description": " The page you're looking for isn't found, we suggest you back to home.",
-      "go-back-to-home": "Go Back to Home",
-      "illustration": {
-        "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
-        "alternate": "404 Not Found Illustration"
-      }
+    }
+  },
+  "not-found": {
+    "title": "Whoops!",
+    "subtitle": "Something went wrong",
+    "description": " The page you're looking for isn't found, we suggest you back to home.",
+    "go-back-to-home": "Go Back to Home",
+    "illustration": {
+      "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+      "alternate": "404 Not Found Illustration"
     }
   }
 }

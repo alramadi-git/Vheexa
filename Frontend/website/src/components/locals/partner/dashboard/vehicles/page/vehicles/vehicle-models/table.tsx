@@ -28,8 +28,13 @@ import {
   LuTrash2,
   LuCircleCheck,
   LuCircleX,
+  LuCalendar,
+  LuHash,
+  LuCar,
+  LuSettings,
+  LuDollarSign,
+  LuTags,
 } from "react-icons/lu";
-import { MdOutlineDiscount } from "react-icons/md";
 import { FaCarTunnel, FaCarBurst } from "react-icons/fa6";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
@@ -63,6 +68,7 @@ import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
 
 import { Button } from "@/components/shadcn/button";
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { IoColorPaletteOutline } from "react-icons/io5";
 
 type tVehicleModelsProps = {
   isLoading: boolean;
@@ -92,15 +98,55 @@ export default function Table({
       header={
         <TableHeader>
           <TableRow>
-            <TableHead>{tTable("uuid.header")}</TableHead>
-            <TableHead>{tTable("vehicle-model.header")}</TableHead>
-            <TableHead>{tTable("specifications.header")}</TableHead>
-            <TableHead>{tTable("colors.header")}</TableHead>
-            <TableHead>{tTable("price.header")}</TableHead>
-            <TableHead>{tTable("discount.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuHash className="size-4" />
+                {tTable("uuid.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCar className="size-4" />
+                {tTable("vehicle-model.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuSettings className="size-4" />
+                {tTable("specifications.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <IoColorPaletteOutline className="size-4" />
+                {tTable("colors.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuDollarSign className="size-4" />
+                {tTable("price.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuTags className="size-4" />
+                {tTable("discount.header")}
+              </div>
+            </TableHead>
             <TableHead>{tTable("status.header")}</TableHead>
-            <TableHead>{tTable("updated-at.header")}</TableHead>
-            <TableHead>{tTable("created-at.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("updated-at.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("created-at.header")}
+              </div>
+            </TableHead>
             <TableHead className="text-end">
               {tTable("actions.header")}
             </TableHead>
@@ -132,23 +178,23 @@ export default function Table({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <LuUsers size={16} />
+                  <LuUsers className="size-4" />
                   {tTable("specifications.cell.capacity", {
                     capacity: vehicleModel.capacity,
                   })}
                 </BreadcrumbItem>
                 <BreadcrumbSeparator>
-                  <LuDot size={16} />
+                  <LuDot className="size-4" />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <LuActivity size={16} />
+                  <LuActivity className="size-4" />
                   {vehicleModel.transmission}
                 </BreadcrumbItem>
                 <BreadcrumbSeparator>
-                  <LuDot size={16} />
+                  <LuDot className="size-4" />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <LuFuel size={16} />
+                  <LuFuel className="size-4" />
                   {vehicleModel.fuel}
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -212,7 +258,7 @@ export default function Table({
               })}
             >
               {clsMonyFormatter.format(vehicleModel.discount)}
-              <MdOutlineDiscount size={16} />
+              <LuTags className="size-4" />
             </span>
           </TableCell>
           <TableCell>
@@ -328,13 +374,12 @@ type tActionsProps = {
   vehicleModel: tVehicleModelModel;
 };
 function Actions({ vehicleModel }: tActionsProps) {
-  const router = useRouter();
-
-  const clsVehicleModelService = new ClsVehicleModelService();
-
   const tAction = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.actions.cell",
   );
+
+  const router = useRouter();
+  const clsVehicleModelService = new ClsVehicleModelService();
 
   function view() {
     toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
@@ -342,6 +387,7 @@ function Actions({ vehicleModel }: tActionsProps) {
   function edit() {
     toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
+
   async function remove() {
     const result = await clsVehicleModelService.deleteOneAsync(
       vehicleModel.uuid,
@@ -363,6 +409,7 @@ function Actions({ vehicleModel }: tActionsProps) {
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
+
     router.refresh();
   }
 

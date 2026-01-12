@@ -15,8 +15,6 @@ import {
 } from "@/validations/partner/vehicle-model";
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { zVehicleModelCreate } from "@/validations/partner/vehicle-model";
-
 import {
   eVehicleModelStatusModel,
   tVehicleModelModel,

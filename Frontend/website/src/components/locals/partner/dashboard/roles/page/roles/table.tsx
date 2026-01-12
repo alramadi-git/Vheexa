@@ -270,12 +270,11 @@ type tActionsProps = {
   role: tRoleModel;
 };
 function Actions({ role }: tActionsProps) {
-  const router = useRouter();
-
   const tAction = useTranslations(
     "app.partner.dashboard.roles.page.roles.table.actions.cell",
   );
 
+  const router = useRouter();
   const clsRoleService = new ClsRoleService();
 
   function view() {
