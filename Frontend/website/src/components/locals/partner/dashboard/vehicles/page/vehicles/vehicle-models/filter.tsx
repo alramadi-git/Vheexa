@@ -1,89 +1,65 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useId, useRef, useEffect } from "react";
 
 import { useQuery } from "@/hooks/query";
-
-import { useEffect, useId, useMemo, useRef } from "react";
-
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   tVehicleModelFilter,
   zVehicleModelFilter,
 } from "@/validations/partner/vehicle-model";
 
-import { LuCheck, LuX } from "react-icons/lu";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { eLocale } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
+
+import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
+
+import { LuCheck } from "react-icons/lu";
 
 import { Card, CardContent } from "@/components/shadcn/card";
+
 import {
   FieldGroup,
   Field,
   FieldLabel,
   FieldContent,
   FieldError,
-  FieldSet,
 } from "@/components/shadcn/field";
 
 import {
-  Select,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-} from "@/components/shadcn/select";
-import { Button } from "@/components/shadcn/button";
-import {
-  FieldMultiSelect,
-  FieldNumberMinMax,
+  tFieldTagsRef,
+  tFieldNumberMinMaxRef,
   FieldSearch,
   FieldTags,
-  tFieldMultiSelectRef,
-  tFieldNumberMinMaxRef,
-  tFieldTagsRef,
+  FieldNumberMinMax,
 } from "@/components/locals/blocks/fields";
-import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
-import { eLocale } from "@/i18n/routing";
-import { tNullable } from "@/types/nullish";
-import { CommandGroup, CommandItem } from "@/components/shadcn/command";
 
-type tGroup<gtOption extends tOption> = {
-  value: string;
-  options: gtOption[];
-};
-type tOption = {
-  value: string;
-  label: string;
-};
+import {
+  tGroup,
+  tOption,
+  tFieldSelectRef,
+  tFieldMultiSelectRef,
+  FieldSelect,
+  FieldMultiSelect,
+} from "@/components/locals/blocks/selects";
 
-type tStatues = {
-  value: string;
-  label: string;
-};
+import { Button } from "@/components/shadcn/button";
 
 export default function Filter() {
-  const tFilter = useTranslations(
-    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.filter",
-  );
-
   const id = useId();
   const query = useQuery();
 
   const locale = useLocale() as eLocale;
   const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
 
-  const categoriesRef = useRef<tFieldMultiSelectRef<tOption>>(null);
-
-  const capacityRef = useRef<tFieldNumberMinMaxRef>(null);
-  const transmissionsRef = useRef<tFieldTagsRef>(null);
-  const fuelsRef = useRef<tFieldTagsRef>(null);
-
-  const priceRef = useRef<tFieldNumberMinMaxRef>(null);
-  const discountRef = useRef<tFieldNumberMinMaxRef>(null);
+  const tFilter = useTranslations(
+    "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.filter",
+  );
 
   const {
-    formState,
     control,
     setValue,
     trigger,
@@ -112,54 +88,82 @@ export default function Filter() {
     resolver: zodResolver(zVehicleModelFilter),
   });
 
-  const categoryGroups: tGroup<tOption> = useMemo(() => {
-    return {
-      value: "0",
-      options: tFilter.raw("information.categories.categories"),
-    };
-  }, [tFilter]);
-  const statuses: tStatues[] = tFilter.raw("status.statuses");
+  const categoriesRef = useRef<tFieldMultiSelectRef<tOption>>(null);
 
-  const [
-    priceMin,
-    priceMax,
-    discountMin,
-    discountMax,
-    statusQuery,
-  ]: tNullable<string>[] = [
-    query.get("filter.price.min"),
-    query.get("filter.price.max"),
-    query.get("filter.discount.min"),
-    query.get("filter.discount.max"),
-    query.get("filter.status"),
-  ];
+  const capacityRef = useRef<tFieldNumberMinMaxRef>(null);
+  const transmissionsRef = useRef<tFieldTagsRef>(null);
+  const fuelsRef = useRef<tFieldTagsRef>(null);
+
+  const priceRef = useRef<tFieldNumberMinMaxRef>(null);
+  const discountRef = useRef<tFieldNumberMinMaxRef>(null);
+
+  const statusRef = useRef<tFieldSelectRef<tOption>>(null);
+
+  const categoryGroup: tGroup<tOption> = {
+    value: "0",
+    options: tFilter.raw("categories.categories"),
+  };
+
+  const statuses: tOption[] = tFilter.raw("status.statuses");
 
   useEffect(() => {
-    setValue("search", query.get("filter.search") ?? undefined);
+    const [
+      searchQuery,
+      categoriesQuery,
+      priceMinQuery,
+      priceMaxQuery,
+      discountMinQuery,
+      discountMaxQuery,
+      statusQuery,
+    ] = [
+      query.get("filter.search"),
+      query.getAll("filter.categories"),
+      query.get("filter.price.min"),
+      query.get("filter.price.max"),
+      query.get("filter.discount.min"),
+      query.get("filter.discount.max"),
+      query.get("filter.status"),
+    ];
 
-    const categories = query
-      .getAll("filter.categories")
-      .map((category) => Number(category));
-    const categoryOptions = categoryGroups.options.filter((category) => {
-      return categories.includes(Number(category.value));
-    });
+    const [
+      search,
+      categories,
+      priceMin,
+      priceMax,
+      discountMin,
+      discountMax,
+      status,
+    ] = [
+      searchQuery !== null ? searchQuery : undefined,
+      categoriesQuery !== null
+        ? categoriesQuery.map((category) => Number(category))
+        : [],
+      priceMinQuery !== null ? Number(priceMinQuery) : undefined,
+      priceMaxQuery !== null ? Number(priceMaxQuery) : undefined,
+      discountMinQuery !== null ? Number(discountMinQuery) : undefined,
+      discountMaxQuery !== null ? Number(discountMaxQuery) : undefined,
+      statusQuery !== null ? Number(discountMaxQuery) : undefined,
+    ];
+
+    setValue("search", search);
 
     setValue("categories", categories);
-    categoriesRef.current?.change(categoryOptions);
-
-    setValue("price.min", priceMin !== null ? Number(priceMin) : undefined);
-    setValue("price.max", priceMax !== null ? Number(priceMax) : undefined);
-
-    setValue(
-      "discount.min",
-      discountMin !== null ? Number(discountMin) : undefined,
-    );
-    setValue(
-      "discount.max",
-      discountMax !== null ? Number(discountMax) : undefined,
+    categoriesRef.current?.setValue(
+      categoryGroup.options.filter((category) =>
+        categories.includes(Number(category.value)),
+      ),
     );
 
-    setValue("status", statusQuery !== null ? Number(statusQuery) : undefined);
+    setValue("price.min", priceMin);
+    setValue("price.max", priceMax);
+
+    setValue("discount.min", discountMin);
+    setValue("discount.max", discountMax);
+
+    setValue("status", status);
+    statusRef.current?.setValue(
+      statuses.find((_status) => _status.value === status?.toString()),
+    );
   }, []);
 
   function reset() {
@@ -173,6 +177,8 @@ export default function Filter() {
 
     priceRef.current?.reset();
     discountRef.current?.reset();
+
+    statusRef.current?.reset();
   }
 
   function submit(data: tVehicleModelFilter) {
@@ -221,317 +227,272 @@ export default function Filter() {
           onReset={reset}
           onSubmit={handleSubmit(submit)}
         >
-          <FieldSet>
-            <FieldGroup className="grid-cols-2">
-              <Controller
-                control={control}
-                name="search"
-                render={({
-                  field: { value, onChange: setValue, ...field },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="search"
+              render={({
+                field: { value, onChange: setValue, ...field },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-search`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("search.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldSearch
+                      {...field}
+                      id={`${id}-search`}
                       aria-invalid={invalid}
-                      htmlFor={`${id}-search`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("information.search.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldSearch
-                        {...field}
-                        aria-invalid={invalid}
-                        id={`${id}-search`}
-                        placeholder={tFilter("information.search.placeholder")}
-                        value={value ?? ""}
-                        onChange={(event) => {
-                          const value = event.currentTarget.value;
-                          setValue(value === "" ? undefined : value);
-                        }}
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="categories"
-                render={({
-                  field: { onChange: setValue },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-categories`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("information.categories.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldMultiSelect<tGroup<tOption>, tOption>
-                        ref={categoriesRef}
-                        aria-invalid={invalid}
-                        id={`${id}-categories`}
-                        search-placeholder={tFilter("information.categories.search-placeholder")}
-                        select-placeholder={tFilter("information.categories.select-placeholder")}
-                        groups={[categoryGroups]}
-                        renderTrigger={(option) => option.label}
-                        renderGroup={(
-                          group,
-                          selectedOptions,
-                          toggleSelection,
-                        ) => (
-                          <CommandGroup key={group.value}>
-                            {group.options.map((option) => {
-                              const isSelected = selectedOptions.some(
-                                (selectedOption) =>
-                                  selectedOption.value === option.value,
-                              );
+                      placeholder={tFilter("search.placeholder")}
+                      value={value ?? ""}
+                      onChange={(value) =>
+                        setValue(value === "" ? undefined : value)
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="categories"
+              render={({
+                field: { onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-categories`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("categories.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldMultiSelect<tGroup<tOption>, tOption>
+                      id={`${id}-categories`}
+                      ref={categoriesRef}
+                      isInvalid={invalid}
+                      placeholder={tFilter("categories.placeholder")}
+                      searchPlaceholder={tFilter(
+                        "categories.search-placeholder",
+                      )}
+                      groups={[categoryGroup]}
+                      groupRender={() => ""}
+                      optionRender={(option, isSelected) => (
+                        <button
+                          type="button"
+                          className="w-full justify-between"
+                        >
+                          {option.label}
+                          {isSelected && <LuCheck className="size-4" />}
+                        </button>
+                      )}
+                      onToggle={(values) =>
+                        setValue(values.map(({ value }) => Number(value)))
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
 
-                              return (
-                                <CommandItem
-                                  asChild
-                                  key={option.value}
-                                  value={option.label}
-                                  onSelect={() =>
-                                    toggleSelection(option, isSelected)
-                                  }
-                                >
-                                  <button
-                                    type="button"
-                                    className="w-full justify-between"
-                                  >
-                                    {option.label}
-                                    {isSelected && <LuCheck size={16} />}
-                                  </button>
-                                </CommandItem>
-                              );
-                            })}
-                          </CommandGroup>
-                        )}
-                        onChange={(options) =>
-                          setValue(options.map((option) => option.value))
-                        }
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
+          <FieldGroup className="grid-cols-3">
+            <Controller
+              control={control}
+              name="capacity"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-capacity`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("capacity.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldNumberMinMax
+                      ref={capacityRef}
+                      isInvalid={invalid}
+                      id={`${id}-capacity`}
+                      minPlaceholder={tFilter("capacity.min.placeholder")}
+                      min={value.min}
+                      onMinChange={(_value) =>
+                        setValue({ ...value, min: _value })
+                      }
+                      maxPlaceholder={tFilter("capacity.max.placeholder")}
+                      max={value.max}
+                      onMaxChange={(_value) =>
+                        setValue({ ...value, max: _value })
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="transmissions"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-transmission`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("transmissions.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldTags
+                      ref={transmissionsRef}
+                      id={`${id}-transmission`}
+                      placeholder={tFilter("transmissions.placeholder")}
+                      tags={value}
+                      onTagsChange={(value) => setValue(value)}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="fuels"
+              render={({
+                field: { value, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-fuels`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("fuels.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldTags
+                      ref={fuelsRef}
+                      id={`${id}-fuels`}
+                      placeholder={tFilter("fuels.placeholder")}
+                      tags={value}
+                      onTagsChange={(value) => setValue(value)}
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
 
-          <FieldSet>
-            <FieldGroup className="grid-cols-3">
-              <Controller
-                control={control}
-                name="capacity"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-capacity`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("specifications.capacity.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldNumberMinMax
-                        ref={capacityRef}
-                        isInvalid={invalid}
-                        id={`${id}-capacity`}
-                        minPlaceholder={tFilter(
-                          "specifications.capacity.min.placeholder",
-                        )}
-                        min={value.min}
-                        onMinChange={(_value) =>
-                          setValue({ ...value, min: _value })
-                        }
-                        maxPlaceholder={tFilter(
-                          "specifications.capacity.max.placeholder",
-                        )}
-                        max={value.max}
-                        onMaxChange={(_value) =>
-                          setValue({ ...value, max: _value })
-                        }
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="transmissions"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-transmission`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("specifications.transmissions.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldTags
-                        ref={transmissionsRef}
-                        id={`${id}-transmission`}
-                        placeholder={tFilter(
-                          "specifications.transmissions.placeholder",
-                        )}
-                        tags={value}
-                        onTagsChange={(value) => setValue(value)}
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="fuels"
-                render={({
-                  field: { value, onChange: setValue },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-fuels`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("specifications.fuels.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldTags
-                        ref={fuelsRef}
-                        id={`${id}-fuels`}
-                        placeholder={tFilter(
-                          "specifications.fuels.placeholder",
-                        )}
-                        tags={value}
-                        onTagsChange={(value) => setValue(value)}
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
-
-          <FieldSet>
-            <FieldGroup className="grid-cols-2">
-              <Controller
-                control={control}
-                name="price"
-                render={({
-                  field: { value: price, onChange: setValue },
-                  fieldState: { invalid, error },
-                  formState: { isSubmitted },
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-price`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("pricing.price.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldNumberMinMax
-                        ref={priceRef}
-                        id={`${id}-price`}
-                        isInvalid={invalid}
-                        minPlaceholder={tFilter(
-                          "pricing.price.min.placeholder",
-                        )}
-                        min={price.min}
-                        onMinChange={(value) => {
-                          setValue({ ...price, min: value });
-                          if (isSubmitted) trigger("discount");
-                        }}
-                        maxPlaceholder={tFilter(
-                          "pricing.price.max.placeholder",
-                        )}
-                        max={price.max}
-                        onMaxChange={(value) => {
-                          setValue({ ...price, max: value });
-                          if (isSubmitted) trigger("discount");
-                        }}
-                        formatter={(value) =>
-                          value === undefined
-                            ? ""
-                            : clsMonyFormatter.format(value)
-                        }
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="discount"
-                render={({
-                  field: { value: discount, onChange: setValue },
-                  fieldState: { invalid, error },
-                }) => (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-discount`}
-                      className="max-w-fit"
-                    >
-                      {tFilter("pricing.discount.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldNumberMinMax
-                        ref={discountRef}
-                        id={`${id}-discount`}
-                        isInvalid={invalid}
-                        minPlaceholder={tFilter(
-                          "pricing.discount.min.placeholder",
-                        )}
-                        min={discount.min}
-                        onMinChange={(value) =>
-                          setValue({ ...discount, min: value })
-                        }
-                        maxPlaceholder={tFilter(
-                          "pricing.discount.max.placeholder",
-                        )}
-                        max={discount.max}
-                        onMaxChange={(value) =>
-                          setValue({ ...discount, max: value })
-                        }
-                        formatter={(value) =>
-                          value === undefined
-                            ? ""
-                            : clsMonyFormatter.format(value)
-                        }
-                      />
-                    </FieldContent>
-                    <FieldError errors={error} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </FieldSet>
+          <FieldGroup className="grid-cols-2">
+            <Controller
+              control={control}
+              name="price"
+              render={({
+                field: { value: price, onChange: setValue },
+                fieldState: { invalid, error },
+                formState: { isSubmitted },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-price`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("price.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldNumberMinMax
+                      ref={priceRef}
+                      id={`${id}-price`}
+                      isInvalid={invalid}
+                      minPlaceholder={tFilter("price.min.placeholder")}
+                      min={price.min}
+                      onMinChange={(value) => {
+                        setValue({ ...price, min: value });
+                        if (isSubmitted) trigger("discount");
+                      }}
+                      maxPlaceholder={tFilter("price.max.placeholder")}
+                      max={price.max}
+                      onMaxChange={(value) => {
+                        setValue({ ...price, max: value });
+                        if (isSubmitted) trigger("discount");
+                      }}
+                      formatter={(value) =>
+                        value === undefined
+                          ? ""
+                          : clsMonyFormatter.format(value)
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="discount"
+              render={({
+                field: { value: discount, onChange: setValue },
+                fieldState: { invalid, error },
+              }) => (
+                <Field>
+                  <FieldLabel
+                    aria-invalid={invalid}
+                    htmlFor={`${id}-discount`}
+                    className="max-w-fit"
+                  >
+                    {tFilter("discount.label")}
+                  </FieldLabel>
+                  <FieldContent>
+                    <FieldNumberMinMax
+                      ref={discountRef}
+                      id={`${id}-discount`}
+                      isInvalid={invalid}
+                      minPlaceholder={tFilter("discount.min.placeholder")}
+                      min={discount.min}
+                      onMinChange={(value) =>
+                        setValue({ ...discount, min: value })
+                      }
+                      maxPlaceholder={tFilter("discount.max.placeholder")}
+                      max={discount.max}
+                      onMaxChange={(value) =>
+                        setValue({ ...discount, max: value })
+                      }
+                      formatter={(value) =>
+                        value === undefined
+                          ? ""
+                          : clsMonyFormatter.format(value)
+                      }
+                    />
+                  </FieldContent>
+                  <FieldError errors={error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
 
           <Controller
             control={control}
             name="status"
             render={({
-              field: { value, onChange: setValue, ...field },
+              field: { onChange: setValue },
               fieldState: { invalid, error },
             }) => (
               <Field>
@@ -543,58 +504,34 @@ export default function Filter() {
                   {tFilter("status.label")}
                 </FieldLabel>
                 <FieldContent>
-                  <Select
-                    {...field}
-                    value={value?.toString() ?? ""}
-                    onValueChange={(val) => {
-                      if (value === undefined) {
-                        setValue(Number(val));
-                        return;
-                      }
-
-                      if (value.toString() === val) setValue(undefined);
-                      else setValue(Number(val));
-                    }}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <SelectTrigger id={`${id}-status`} className="w-full">
-                        <SelectValue
-                          placeholder={tFilter("status.placeholder")}
-                        />
-                      </SelectTrigger>
-                      {value !== undefined && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          type="button"
-                          onClick={() => setValue(undefined)}
-                        >
-                          <LuX size={16} />
-                        </Button>
-                      )}
-                    </div>
-                    <SelectContent>
-                      {statuses.map((status) => (
-                        <SelectItem key={status.value} value={status.value}>
-                          {status.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FieldSelect<tOption>
+                    ref={statusRef}
+                    id={`${id}-status`}
+                    isInvalid={invalid}
+                    placeholder={tFilter("status.placeholder")}
+                    onSelect={(option) =>
+                      setValue(option && Number(option.value))
+                    }
+                    options={statuses}
+                    optionRender={(option, isSelected) => (
+                      <button type="button">
+                        {option.label}
+                        {isSelected && <LuCheck className="ms-auto" />}
+                      </button>
+                    )}
+                  />
                 </FieldContent>
                 <FieldError errors={error} />
               </Field>
             )}
           />
 
-          <FieldSet>
-            <FieldGroup className="grid-cols-2">
-              <Button variant="outline" type="reset">
-                {tFilter("actions.reset")}
-              </Button>
-              <Button type="submit">{tFilter("actions.submit")}</Button>
-            </FieldGroup>
-          </FieldSet>
+          <FieldGroup className="grid-cols-2">
+            <Button variant="outline" type="reset">
+              {tFilter("actions.reset")}
+            </Button>
+            <Button type="submit">{tFilter("actions.submit")}</Button>
+          </FieldGroup>
         </form>
       </CardContent>
     </Card>

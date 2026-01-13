@@ -1,3 +1,4 @@
+import { Container } from "@/components/locals/blocks/typography";
 import type { Metadata } from "next";
 
 import { getTranslations } from "next-intl/server";
@@ -16,7 +17,7 @@ export default async function Page() {
   );
 
   return (
-    <div className="flex flex-col justify-between gap-6 p-6">
+    <Container className="flex size-full flex-col justify-between gap-6 p-12">
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold">{tForm("title")}</h1>
         <p className="text-muted-foreground text-balance">
@@ -25,6 +26,6 @@ export default async function Page() {
       </div>
 
       {/* <Form /> */}
-    </div>
+    </Container>
   );
 }

@@ -2121,88 +2121,82 @@
                     }
                   },
                   "filter": {
-                    "information": {
-                      "search": {
-                        "label": "Search",
-                        "placeholder": "Search by Vehicle Model (e.g., Name, etc...)"
+                    "search": {
+                      "label": "Search",
+                      "placeholder": "Search by Vehicle Model (e.g., Name, etc...)"
+                    },
+                    "categories": {
+                      "label": "Categories",
+                      "placeholder": "Select Vehicle Model (e.g., Car, Motorcycle, etc...)",
+                      "search-placeholder": "Search Vehicle Model (e.g., Car, Motorcycle, etc...)",
+                      "categories": [
+                        {
+                          "value": "0",
+                          "label": "Cars"
+                        },
+                        {
+                          "value": "1",
+                          "label": "Vans"
+                        },
+                        {
+                          "value": "2",
+                          "label": "Trucks"
+                        },
+                        {
+                          "value": "3",
+                          "label": "Motorcycles"
+                        },
+                        {
+                          "value": "4",
+                          "label": "Boats"
+                        },
+                        {
+                          "value": "5",
+                          "label": "Yachts"
+                        },
+                        {
+                          "value": "6",
+                          "label": "Jet Skis"
+                        },
+                        {
+                          "value": "7",
+                          "label": "Helicopters"
+                        }
+                      ]
+                    },
+                    "capacity": {
+                      "label": "Capacity (Min/Max)",
+                      "min": {
+                        "placeholder": "Enter min capacity"
                       },
-                      "categories": {
-                        "label": "Categories",
-                        "select-placeholder": "Select Vehicle Model (e.g., Car, Motorcycle, etc...)",
-                        "search-placeholder": "Search Vehicle Model (e.g., Car, Motorcycle, etc...)",
-                        "categories": [
-                          {
-                            "value": 0,
-                            "label": "Cars"
-                          },
-                          {
-                            "value": 1,
-                            "label": "Vans"
-                          },
-                          {
-                            "value": 2,
-                            "label": "Trucks"
-                          },
-                          {
-                            "value": 3,
-                            "label": "Motorcycles"
-                          },
-                          {
-                            "value": 4,
-                            "label": "Boats"
-                          },
-                          {
-                            "value": 5,
-                            "label": "Yachts"
-                          },
-                          {
-                            "value": 6,
-                            "label": "Jet Skis"
-                          },
-                          {
-                            "value": 7,
-                            "label": "Helicopters"
-                          }
-                        ]
+                      "max": {
+                        "placeholder": "Enter max capacity"
                       }
                     },
-                    "specifications": {
-                      "capacity": {
-                        "label": "Capacity (Min/Max)",
-                        "min": {
-                          "placeholder": "Enter min capacity"
-                        },
-                        "max": {
-                          "placeholder": "Enter max capacity"
-                        }
+                    "transmissions": {
+                      "label": "Transmissions",
+                      "placeholder": "Enter transmissions (e.g., Manual, Automatic, CVT, etc...)"
+                    },
+                    "fuels": {
+                      "label": "Fuels",
+                      "placeholder": "Enter fuels (e.g., Petrol 95, Diesel, etc...)"
+                    },
+                    "price": {
+                      "label": "Price (Min/Max)",
+                      "min": {
+                        "placeholder": "Enter min price"
                       },
-                      "transmissions": {
-                        "label": "Transmissions",
-                        "placeholder": "Enter transmissions (e.g., Manual, Automatic, CVT, etc...)"
-                      },
-                      "fuels": {
-                        "label": "Fuels",
-                        "placeholder": "Enter fuels (e.g., Petrol 95, Diesel, etc...)"
+                      "max": {
+                        "placeholder": "Enter max price"
                       }
                     },
-                    "pricing": {
-                      "price": {
-                        "label": "Price (Min/Max)",
-                        "min": {
-                          "placeholder": "Enter min price"
-                        },
-                        "max": {
-                          "placeholder": "Enter max price"
-                        }
+                    "discount": {
+                      "label": "Discount (Min/Max)",
+                      "min": {
+                        "placeholder": "Enter min discount"
                       },
-                      "discount": {
-                        "label": "Discount (Min/Max)",
-                        "min": {
-                          "placeholder": "Enter min discount"
-                        },
-                        "max": {
-                          "placeholder": "Enter max discount"
-                        }
+                      "max": {
+                        "placeholder": "Enter max discount"
                       }
                     },
                     "status": {
@@ -2297,107 +2291,115 @@
             }
           }
         }
+      },
+      "authentication": {
+        "layout": {
+          "metadata": {
+            "title": {
+              "template": "%s | Vheexa Partner Auth"
+            }
+          }
+        },
+        "login": {
+          "page": {
+            "metadata": {
+              "title": "Login",
+              "description": "Enter your credentials to access your member Vheexa account and manage your rentals seamlessly."
+            },
+            "form": {
+              "title": "Welcome back",
+              "description": "Login to your Vheexa account",
+              "email": {
+                "label": "Email",
+                "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
+              },
+              "password": {
+                "label": "Password",
+                "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+              },
+              "actions": {
+                "reset": "Reset",
+                "submit": "Login",
+                "when-success": "Logging to vheexa account was successfully succeeded",
+                "when-error": "Something went wrong while fetching your vheexa account"
+              }
+            }
+          }
+        },
+        "register": {
+          "page": {
+            "metadata": {
+              "title": "Register",
+              "description": "Create your vVheexa account and manage your rentals seamlessly."
+            },
+            "form": {
+              "title": "Hello there!",
+              "description": "create your vheexa account",
+              "partner": {
+                "logo": {
+                  "label": "Logo"
+                },
+                "banner": {
+                  "label": "Banner"
+                },
+                "handle": {
+                  "label": "Handle",
+                  "placeholder": "Enter handle (e.g, vheexa, etc...)"
+                },
+                "name": {
+                  "label": "Name",
+                  "placeholder": "Enter name (e.g, Vheexa, etc...)"
+                },
+                "phone-number": {
+                  "label": "Phone-number"
+                },
+                "email": {
+                  "label": "Email"
+                },
+                "password": {
+                  "label": "Password"
+                }
+              },
+              "branch": {
+                "name": {
+                  "label": "Name",
+                  "placeholder": "Enter name (e.g, , etc...)"
+                },
+                "location": {},
+                "phone-number": {
+                  "label": "Phone-number"
+                },
+                "email": {
+                  "label": "Email"
+                }
+              },
+              "member": {},
+              "remember-me": {
+                "label": "Remember me",
+                "title": "",
+                "description": ""
+              },
+              "actions": {
+                "reset": "Reset",
+                "submit": "Register",
+                "when-success": "Vheexa account was successfully created",
+                "when-error": "Something went wrong while adding your vheexa account"
+              }
+            }
+          }
+        }
       }
     },
     "authentication": {
       "layout": {
         "metadata": {
           "title": {
-            "template": "%s | Vheexa Partner Auth"
-          },
-          "description": "Access your Vheexa account to manage bookings and rents easily and securely."
+            "template": "%s | Vheexa Auth"
+          }
         },
         "illustration": {
           "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
           "alternate": "placeholder"
-        }
-      },
-      "login": {
-        "page": {
-          "metadata": {
-            "title": "Login",
-            "description": "Enter your credentials to access your Vheexa account and manage your rentals seamlessly."
-          },
-          "form": {
-            "title": "Welcome back",
-            "description": "Login to your Vheexa account",
-            "email": {
-              "label": "Email",
-              "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
-            },
-            "password": {
-              "label": "Password",
-              "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
-            },
-            "actions": {
-              "reset": "Reset",
-              "submit": "Login",
-              "when-success": "Logging to vheexa account was successfully succeeded",
-              "when-error": "Something went wrong while fetching your vheexa account"
-            }
-          }
-        }
-      },
-      "register": {
-        "page": {
-          "metadata": {
-            "title": "Register",
-            "description": "Create your vVheexa account and manage your rentals seamlessly."
-          },
-          "form": {
-            "title": "Hello there!",
-            "description": "create your vheexa account",
-            "partner": {
-              "logo": {
-                "label": "Logo"
-              },
-              "banner": {
-                "label": "Banner"
-              },
-              "handle": {
-                "label": "Handle",
-                "placeholder": "Enter handle (e.g, vheexa, etc...)"
-              },
-              "name": {
-                "label": "Name",
-                "placeholder": "Enter name (e.g, Vheexa, etc...)"
-              },
-              "phone-number": {
-                "label": "Phone-number"
-              },
-              "email": {
-                "label": "Email"
-              },
-              "password": {
-                "label": "Password"
-              }
-            },
-            "branch": {
-              "name": {
-                "label": "Name",
-                "placeholder": "Enter name (e.g, , etc...)"
-              },
-              "location": {},
-              "phone-number": {
-                "label": "Phone-number"
-              },
-              "email": {
-                "label": "Email"
-              }
-            },
-            "member": {},
-            "remember-me": {
-              "label": "Remember me",
-              "title": "",
-              "description": ""
-            },
-            "actions": {
-              "reset": "Reset",
-              "submit": "Register",
-              "when-success": "Vheexa account was successfully created",
-              "when-error": "Something went wrong while adding your vheexa account"
-            }
-          }
         }
       }
     }

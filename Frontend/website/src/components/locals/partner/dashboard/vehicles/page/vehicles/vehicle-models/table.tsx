@@ -5,6 +5,8 @@ import { eLocale } from "@/i18n/routing";
 import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
+import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
+
 import { useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -14,8 +16,6 @@ import {
   eVehicleModelStatusModel,
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
-
-import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
 
 import {
   LuDot,
@@ -36,11 +36,13 @@ import {
   LuTags,
 } from "react-icons/lu";
 import { FaCarTunnel, FaCarBurst } from "react-icons/fa6";
+import { IoColorPaletteOutline } from "react-icons/io5";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
+
 import {
-  TableRow,
   TableHeader,
+  TableRow,
   TableHead,
   TableCell,
 } from "@/components/shadcn/table";
@@ -63,12 +65,11 @@ import {
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
 
-import { Badge } from "@/components/locals/blocks/typography";
 import { Badge as ShadcnBadge } from "@/components/shadcn/badge";
+import { Badge } from "@/components/locals/blocks/typography";
 
 import { Button } from "@/components/shadcn/button";
 import { Skeleton } from "@/components/shadcn/skeleton";
-import { IoColorPaletteOutline } from "react-icons/io5";
 
 type tVehicleModelsProps = {
   isLoading: boolean;

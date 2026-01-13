@@ -19,7 +19,7 @@ export default function VehicleModels() {
 
   return (
     <TabsContent value={tVehicleModels("label")} className="space-y-3">
-      {/* <Filter /> */}
+      <Filter />
       <Table
         isLoading={isLoading}
         isSuccess={result?.isSuccess || false}
