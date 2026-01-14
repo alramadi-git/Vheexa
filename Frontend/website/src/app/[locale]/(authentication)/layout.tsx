@@ -5,7 +5,8 @@ import { getTranslations } from "next-intl/server";
 
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 
-import { FullHDImage } from "@/components/locals/blocks/images";
+import { FullHDImage, HDImage } from "@/components/locals/blocks/images";
+import { Container } from "@/components/locals/blocks/typography";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +28,17 @@ export default async function Layout({
           numSquares={64}
           className="-z-10 skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
         />
-        {children}
+        <Container className="flex size-full flex-col justify-center gap-6 p-12">
+          <div className="flex items-end gap-1">
+            <HDImage
+              src={tLayout("logo.url")}
+              alt={tLayout("logo.alternate")}
+              className="size-12"
+            />
+            <h2 className="text-4xl font-bold">{tLayout("logo.label")}</h2>
+          </div>
+          {children}
+        </Container>
       </div>
       <FullHDImage
         priority

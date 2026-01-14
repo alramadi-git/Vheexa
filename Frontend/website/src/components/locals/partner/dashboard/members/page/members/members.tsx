@@ -548,7 +548,7 @@ function AddNew() {
                         placeholder={tAddNew(
                           "content.form.credentials.password.placeholder",
                         )}
-                        onChange={setValue}
+                        onValueChange={setValue}
                       />
                     </FieldContent>
                     <FieldError errors={error} />

@@ -520,76 +520,157 @@ const FieldPhoneNumber = forwardRef<
 });
 FieldPhoneNumber.displayName = "FieldPhoneNumber";
 
-type tFieldEmailProps = Omit<
-  ComponentProps<typeof Input>,
-  "type" | "className"
-> & {
-  onChange?: (value: string) => void;
+type tFieldEmailRef = {
+  setValue: (value: string) => void;
+  reset: (defaultValue?: string) => void;
 };
-function FieldEmail({ onChange: onChangeProp, ...props }: tFieldEmailProps) {
-  function onChange(event: ChangeEvent<HTMLInputElement>) {
-    onChangeProp?.(event.currentTarget.value);
-  }
 
-  return (
-    <div className="relative">
-      <Input
-        {...props}
-        type="email"
-        className="peer pe-9"
-        onChange={onChange}
-      />
-      <span
-        aria-invalid={props["aria-invalid"]}
-        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50"
-      >
-        <LuMail size={16} />
-      </span>
-    </div>
-  );
-}
-
-type tFieldPasswordProps = Omit<
-  ComponentProps<typeof Input>,
-  "type" | "className"
-> & {
-  onChange?: (value: string) => void;
+type tFieldEmailProps = {
+  id?: string;
+  isInvalid?: boolean;
+  isRequired?: boolean;
+  placeholder?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
 };
-function FieldPassword({
-  onChange: onChangeProp,
-  ...props
-}: tFieldPasswordProps) {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  function toggleVisibility() {
-    setIsVisible((prevState) => !prevState);
-  }
+const FieldEmail = forwardRef<tFieldEmailRef, tFieldEmailProps>(
+  (
+    {
+      id,
+      isInvalid,
+      isRequired,
+      placeholder,
+      defaultValue = "",
+      onValueChange: onValueChangeProp,
+    },
+    ref,
+  ) => {
+    const [value, setValue] = useState<string>(defaultValue);
 
-  function onChange(event: ChangeEvent<HTMLInputElement>) {
-    onChangeProp?.(event.currentTarget.value);
-  }
+    function imperativeSetValue(value: string) {
+      setValue(value);
+    }
+    function imperativeRest(defaultValue: string = "") {
+      setValue(defaultValue);
+    }
 
-  return (
-    <div className="relative">
-      <Input
-        {...props}
-        type={isVisible ? "text" : "password"}
-        className="pe-9"
-        onChange={onChange}
-      />
-      {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
-      <button
-        aria-invalid={props["aria-invalid"]}
-        disabled={props.disabled}
-        type="button"
-        className="text-muted-foreground/80 aria-invalid:text-destructive/80 absolute inset-y-0 end-0 flex items-center justify-center pe-3 disabled:opacity-50"
-        onClick={toggleVisibility}
-      >
-        {isVisible ? <LuEyeOff size={16} /> : <LuEye size={16} />}
-      </button>
-    </div>
-  );
-}
+    useImperativeHandle(ref, () => ({
+      setValue: imperativeSetValue,
+      reset: imperativeRest,
+    }));
+
+    function changeValue(value: string) {
+      setValue(value);
+      onValueChangeProp?.(value);
+    }
+
+    return (
+      <div className="relative">
+        <Input
+          id={id}
+          aria-invalid={isInvalid}
+          required={isRequired}
+          type="email"
+          placeholder={placeholder}
+          className="pe-9"
+          value={value}
+          onChange={(event) => changeValue(event.currentTarget.value)}
+        />
+        <span
+          aria-invalid={isInvalid}
+          className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50"
+        >
+          <LuMail className="size-4" />
+        </span>
+      </div>
+    );
+  },
+);
+
+FieldEmail.displayName = "FieldEmail";
+
+type tFieldPasswordRef = {
+  setValue: (value: string) => void;
+  reset: (defaultValue?: string) => void;
+};
+
+type tFieldPasswordProps = {
+  id?: string;
+  isInvalid?: boolean;
+  isRequired?: boolean;
+  placeholder?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+};
+
+const FieldPassword = forwardRef<tFieldPasswordRef, tFieldPasswordProps>(
+  (
+    {
+      id,
+      isInvalid,
+      isRequired,
+      placeholder,
+      defaultValue = "",
+      onValueChange: onValueChangeProp,
+    },
+    ref,
+  ) => {
+    const [value, setValue] = useState<string>(defaultValue);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+
+    function imperativeSetValue(value: string) {
+      setValue(value);
+    }
+    function imperativeRest(defaultValue: string = "") {
+      setValue(defaultValue);
+    }
+
+    useImperativeHandle(ref, () => ({
+      setValue: imperativeSetValue,
+      reset: imperativeRest,
+    }));
+
+    function toggleVisibility() {
+      setIsVisible((prevState) => !prevState);
+    }
+
+    function changeValue(value: string) {
+      setValue(value);
+      onValueChangeProp?.(value);
+    }
+
+    return (
+      <div className="relative">
+        <Input
+          id={id}
+          aria-invalid={isInvalid}
+          required={isRequired}
+          type={isVisible ? "text" : "password"}
+          placeholder={placeholder}
+          className="pe-9"
+          value={value}
+          onChange={(event) => changeValue(event.currentTarget.value)}
+        />
+        {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
+        <button
+          aria-invalid={isInvalid}
+          type="button"
+          className="text-muted-foreground/80 aria-invalid:text-destructive/80 absolute inset-y-0 end-0 flex items-center justify-center pe-3 disabled:opacity-50"
+          onClick={toggleVisibility}
+        >
+          {isVisible ? (
+            <LuEyeOff className="size-4" />
+          ) : (
+            <LuEye className="size-4" />
+          )}
+        </button>
+      </div>
+    );
+  },
+);
+
+FieldPassword.displayName = "FieldPassword";
 
 type tFieldDatePickerRef = {
   reset: (date?: Date) => void;
@@ -709,6 +790,8 @@ const FieldDatePicker = forwardRef<tFieldDatePickerRef, tFieldDatePickerProps>(
 FieldDatePicker.displayName = "FieldDatePicker";
 
 export type {
+  tFieldEmailRef,
+  tFieldPasswordRef,
   tFieldTagsRef,
   tFieldNumberMinMaxRef,
   tFieldPhoneNumberRef,
@@ -717,9 +800,9 @@ export type {
 export {
   FieldSearch,
   FieldUsername,
-  FieldTags,
   FieldEmail,
   FieldPassword,
+  FieldTags,
   FieldPhoneNumber,
   FieldNumber,
   FieldNumberMinMax,

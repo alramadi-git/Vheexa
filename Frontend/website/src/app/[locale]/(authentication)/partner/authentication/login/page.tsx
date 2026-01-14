@@ -1,8 +1,9 @@
-import { Container } from "@/components/locals/blocks/typography";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 
 import { getTranslations } from "next-intl/server";
-// import Form from "@/components/locals/partner/authentication/login/page/form";
+
+import { Fragment } from "react";
+import Form from "@/components/locals/partner/authentication/login/page/form";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,20 +13,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const tForm = await getTranslations(
-    "app.partner.authentication.login.page.form",
+  const tLogin = await getTranslations(
+    "app.partner.authentication.login.page",
   );
 
   return (
-    <Container className="flex size-full flex-col justify-between gap-6 p-12">
+    <Fragment>
       <div className="flex flex-col">
-        <h1 className="text-2xl font-bold">{tForm("title")}</h1>
+        <h1 className="text-2xl font-bold">{tLogin("title")}</h1>
         <p className="text-muted-foreground text-balance">
-          {tForm("description")}
+          {tLogin("description")}
         </p>
       </div>
 
-      {/* <Form /> */}
-    </Container>
+      <Form />
+    </Fragment>
   );
 }

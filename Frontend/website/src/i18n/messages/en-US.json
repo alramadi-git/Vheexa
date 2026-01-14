@@ -2306,9 +2306,9 @@
               "title": "Login",
               "description": "Enter your credentials to access your member Vheexa account and manage your rentals seamlessly."
             },
+            "title": "Welcome back",
+            "description": "Login to your Vheexa account",
             "form": {
-              "title": "Welcome back",
-              "description": "Login to your Vheexa account",
               "email": {
                 "label": "Email",
                 "placeholder": "Enter Email (e.g, member@vheexa.com, etc...)"
@@ -2316,6 +2316,10 @@
               "password": {
                 "label": "Password",
                 "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+              },
+              "remember-me": {
+                "label": "Remember me",
+                "description": "Keeps you logged in on this device for 30 days."
               },
               "actions": {
                 "reset": "Reset",
@@ -2396,6 +2400,11 @@
           "title": {
             "template": "%s | Vheexa Auth"
           }
+        },
+        "logo": {
+          "label": "Vheexa",
+          "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+          "alternate": "Vheexa Logo"
         },
         "illustration": {
           "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
