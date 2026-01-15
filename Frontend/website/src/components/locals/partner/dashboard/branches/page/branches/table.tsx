@@ -130,57 +130,57 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableRow>
         </TableHeader>
       }
-      bodyRowRender={(item) => (
-        <TableRow key={item.uuid}>
+      bodyRowRender={(branch) => (
+        <TableRow key={branch.uuid}>
           <TableCell>
-            <Badge variant="muted">{item.uuid.slice(0, 8)}</Badge>
+            <Badge variant="muted">{branch.uuid.slice(0, 8)}</Badge>
           </TableCell>
-          <TableCell>{item.name}</TableCell>
+          <TableCell>{branch.name}</TableCell>
           <TableCell>
             <span className="flex flex-col">
-              {item.country}, {item.city}
-              <span className="text-muted-foreground">{item.street}</span>
+              {branch.location.country}, {branch.location.city}
+              <span className="text-muted-foreground">{branch.location.street}</span>
             </span>
           </TableCell>
           <TableCell>
             {tTable.rich("members.cell", {
-              count: item.memberCount,
+              count: branch.memberCount,
             })}
           </TableCell>
           <TableCell>
             {tTable.rich("vehicles.cell", {
-              count: item.memberCount,
+              count: branch.memberCount,
             })}
           </TableCell>
           <TableCell>
-            <Contacts phoneNumber={item.phoneNumber} email={item.email} />
+            <Contacts phoneNumber={branch.phoneNumber} email={branch.email} />
           </TableCell>
           <TableCell>
             <Badge
               variant={
-                item.status === eBranchStatusModel.active ? "success" : "muted"
+                branch.status === eBranchStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {item.status === eBranchStatusModel.active ? (
+              {branch.status === eBranchStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />
               )}
               {tTable("status.cell", {
-                status: item.status,
+                status: branch.status,
               })}
             </Badge>
           </TableCell>
           <TableCell>
-            {clsDateFormatter.format(new Date(item.updatedAt))}
+            {clsDateFormatter.format(new Date(branch.updatedAt))}
           </TableCell>
           <TableCell>
-            {clsDateFormatter.format(new Date(item.createdAt))}
+            {clsDateFormatter.format(new Date(branch.createdAt))}
           </TableCell>
           <TableCell>
             <div className="flex justify-end">
-              <Actions branch={item} />
+              <Actions branch={branch} />
             </div>
           </TableCell>
         </TableRow>

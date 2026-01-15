@@ -1,18 +1,18 @@
 import { create } from "zustand";
 
 import { tNullable } from "@/types/nullish";
-import { tPartnerAccountModel } from "@/models/partner/account";
+import { tAccountModel } from "@/models/partner/account";
 
 type tUseAccountStore = {
-  account: tNullable<tPartnerAccountModel["account"]>;
-  login: (account: tPartnerAccountModel["account"]) => void;
+  account: tNullable<tAccountModel["account"]>;
+  login: (account: tAccountModel["account"]) => void;
   logout: () => void;
 };
 
 const useAccountStore = create<tUseAccountStore>((set, get) => {
   return {
     account: null,
-    login: (account: tPartnerAccountModel["account"]) => {
+    login: (account: tAccountModel["account"]) => {
       if (get().account !== null) return;
 
       set({ account });

@@ -115,46 +115,46 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableRow>
         </TableHeader>
       }
-      bodyRowRender={(item) => (
-        <TableRow key={item.uuid}>
+      bodyRowRender={(role) => (
+        <TableRow key={role.uuid}>
           <TableCell>
-            <Badge variant="muted">{item.uuid.slice(0, 8)}</Badge>
+            <Badge variant="muted">{role.uuid.slice(0, 8)}</Badge>
           </TableCell>
-          <TableCell>{item.name}</TableCell>
+          <TableCell>{role.name}</TableCell>
           <TableCell>
-            <Permissions permissions={item.permissions} />
+            <Permissions permissions={role.permissions} />
           </TableCell>
           <TableCell>
             {tTable("members.cell", {
-              count: item.assignedCount,
+              count: role.assignedCount,
             })}
           </TableCell>
           <TableCell>
             <Badge
               variant={
-                item.status === eRoleStatusModel.active ? "success" : "muted"
+                role.status === eRoleStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {item.status === eRoleStatusModel.active ? (
+              {role.status === eRoleStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />
               )}
               {tTable("status.cell", {
-                status: item.status,
+                status: role.status,
               })}
             </Badge>
           </TableCell>
           <TableCell>
-            {clsDateFormatter.format(new Date(item.updatedAt))}
+            {clsDateFormatter.format(new Date(role.updatedAt))}
           </TableCell>
           <TableCell>
-            {clsDateFormatter.format(new Date(item.createdAt))}
+            {clsDateFormatter.format(new Date(role.createdAt))}
           </TableCell>
           <TableCell>
             <div className="flex justify-end">
-              <Actions role={item} />
+              <Actions role={role} />
             </div>
           </TableCell>
         </TableRow>

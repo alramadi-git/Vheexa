@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { tAccountModel } from "@/models/account";
+import { tBaseAccountModel } from "@/models/account";
 import { tUserModel } from "@/models/user/user";
 
 import {
@@ -48,7 +48,7 @@ export async function POST(
 
     const {
       data: { account, token },
-    }: tSuccessOneModel<tAccountModel<tUserModel>> = await data.json();
+    }: tSuccessOneModel<tBaseAccountModel<tUserModel>> = await data.json();
 
     const response = new NextResponse<tSuccessOneModel<tUserModel>>(
       JSON.stringify({ data: account }),

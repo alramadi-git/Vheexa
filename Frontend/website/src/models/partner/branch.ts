@@ -5,7 +5,9 @@ enum eBranchStatusModel {
   inactive,
 }
 
-type tBranchModel = tLocationModel & {
+type tBranchModel = {
+  uuid: string;
+  location: tLocationModel;
   name: string;
   phoneNumber: string;
   email: string;

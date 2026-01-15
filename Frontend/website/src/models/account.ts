@@ -1,6 +1,6 @@
-type tAccountModel<tAccount> = {
+type tBaseAccountModel<tAccount> = {
   account: tAccount;
   token: string;
 };
 
-export type { tAccountModel };
+export type { tBaseAccountModel };

@@ -26,11 +26,14 @@ export async function GET(
     return NextResponse.json<tSuccessOneModel<tBranchModel>>({
       data: {
         uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-        country: "United States",
-        city: "Austin",
-        street: "201 E 6th St",
-        latitude: 30.2672,
-        longitude: -97.7431,
+        location: {
+          uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          country: "United States",
+          city: "Austin",
+          street: "201 E 6th St",
+          latitude: 30.2672,
+          longitude: -97.7431,
+        },
         name: "Austin Downtown Branch",
         phoneNumber: "+1 512-555-0198",
         email: "austin.downtown@partnerfleet.com",

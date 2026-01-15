@@ -1,31 +1,25 @@
 "use client";
 
-import useAccountStore from "@/stores/partner/account-store";
-import { useEffect } from "react";
+import { tAccountModel } from "@/models/partner/account";
 
-import { deleteCookie, getCookie } from "cookies-next/client";
+import useLocalStorageState from "use-local-storage-state";
+import { deleteCookie } from "cookies-next/client";
 
 export default function useAccount() {
-  const account = useAccountStore((store) => store.account);
+  const [account, setAccount, { removeItem: removeAccount }] =
+    useLocalStorageState("member-account");
 
-  const login = useAccountStore((store) => store.login);
-  const logoutStore = useAccountStore((store) => store.logout);
+  function login(account: tAccountModel) {
+    if (account !== undefined) return;
 
-  useEffect(() => {
-    const cookie = getCookie("partner-account");
-    if (cookie === undefined) return;
-
-    const cookieAccount = JSON.parse(cookie);
-    login(cookieAccount);
-  }, [login]);
+    setAccount(account);
+  }
 
   function logout() {
     if (account === undefined) return;
 
-    deleteCookie("partner-account");
+    removeAccount();
     deleteCookie("partner-token");
-
-    logoutStore();
   }
 
   return {

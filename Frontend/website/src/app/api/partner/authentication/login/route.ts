@@ -11,7 +11,7 @@ import {
 
 import { eDuration } from "@/enums/duration";
 
-import { tPartnerAccountModel } from "@/models/partner/account";
+import { tAccountModel } from "@/models/partner/account";
 
 import { ClsErrorModel } from "@/models/error";
 
@@ -20,8 +20,8 @@ import { tResponseOneModel } from "@/models/response";
 
 export async function POST(
   request: NextRequest,
-): Promise<NextResponse<tResponseOneModel<tPartnerAccountModel["account"]>>> {
-  return await apiCatch<tPartnerAccountModel["account"]>(async () => {
+): Promise<NextResponse<tResponseOneModel<tAccountModel["account"]>>> {
+  return await apiCatch<tAccountModel["account"]>(async () => {
     const loginCredentials: unknown = await request.json();
 
     const parsedLoginCredentials: tLoginCredentials =
@@ -39,10 +39,10 @@ export async function POST(
 
     const {
       data: { account, token },
-    }: tSuccessOneModel<tPartnerAccountModel> = await backendResponse.json();
+    }: tSuccessOneModel<tAccountModel> = await backendResponse.json();
 
     const response = NextResponse.json<
-      tSuccessOneModel<tPartnerAccountModel["account"]>
+      tSuccessOneModel<tAccountModel["account"]>
     >({ data: account }, { status: backendResponse.status });
 
     response.cookies.set("partner-token", token, {

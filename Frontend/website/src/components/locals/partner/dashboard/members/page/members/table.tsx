@@ -123,39 +123,39 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
         </TableHeader>
       }
       emptyRender={<Empty />}
-      bodyRowRender={(item) => (
-        <TableRow key={item.uuid}>
+      bodyRowRender={(member) => (
+        <TableRow key={member.uuid}>
           <TableCell>
-            <Badge variant="muted">{item.uuid.slice(0, 8)}</Badge>
+            <Badge variant="muted">{member.uuid.slice(0, 8)}</Badge>
           </TableCell>
           <TableCell>
             <div className="flex gap-1.5">
               <Avatar className="bg-sidebar size-9">
                 <AvatarFallback>
-                  {item.username
+                  {member.username
                     .split(" ")
                     .map((n) => n[0].toUpperCase())
                     .join("")}
                 </AvatarFallback>
-                <AvatarImage src={item.avatar?.url} alt={item.username} />
+                <AvatarImage src={member.avatar?.url} alt={member.username} />
               </Avatar>
               <div>
-                <p>{item.username}</p>
-                <p className="text-muted-foreground text-xs">{item.email}</p>
+                <p>{member.username}</p>
+                <p className="text-muted-foreground text-xs">{member.email}</p>
               </div>
             </div>
           </TableCell>
           <TableCell>
             <Badge variant="info" className="flex items-center gap-1.5">
-              {item.role.name}
+              {member.role.name}
             </Badge>
           </TableCell>
           <TableCell>
             <div className="flex items-center gap-1.5">
               <div>
-                <p>{item.branch.name}</p>
+                <p>{member.branch.name}</p>
                 <p className="text-muted-foreground text-xs">
-                  {item.branch.country},{item.branch.city},{item.branch.street}
+                  {member.branch.location.country},{member.branch.location.city},{member.branch.location.street}
                 </p>
               </div>
             </div>
@@ -163,29 +163,29 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <Badge
               variant={
-                item.status === eMemberStatusModel.active ? "success" : "muted"
+                member.status === eMemberStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {item.status === eMemberStatusModel.active ? (
+              {member.status === eMemberStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />
               )}
               {tTable("status.cell", {
-                status: item.status,
+                status: member.status,
               })}
             </Badge>
           </TableCell>
           <TableCell>
-            {clsDateFormatter.format(new Date(item.updatedAt))}
+            {clsDateFormatter.format(new Date(member.updatedAt))}
           </TableCell>
           <TableCell>
-            {clsDateFormatter.format(new Date(item.createdAt))}
+            {clsDateFormatter.format(new Date(member.createdAt))}
           </TableCell>
           <TableCell>
             <div className="flex justify-end">
-              <Actions member={item} />
+              <Actions member={member} />
             </div>
           </TableCell>
         </TableRow>

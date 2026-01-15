@@ -2326,7 +2326,8 @@
                 "submit": "Login",
                 "when-success": "Logging to vheexa account was successfully succeeded",
                 "when-error": "Something went wrong while fetching your vheexa account"
-              }
+              },
+              "register": "New on our platform? <link>Create one</link>"
             }
           }
         },

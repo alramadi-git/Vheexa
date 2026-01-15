@@ -9,14 +9,14 @@ import {
   zLoginCredentials,
 } from "@/validations/authentication-credentials";
 
-import { tPartnerAccountModel } from "@/models/partner/account";
+import { tAccountModel } from "@/models/partner/account";
 import { tSuccessOneModel } from "@/models/success";
 
 class ClsAuthenticationService extends ClsAbstractService {
   public async registerAsync(
     credentials: tRegisterCredentials,
-  ): Promise<tResponseOneService<tPartnerAccountModel["account"]>> {
-    return this._catchAsync<tPartnerAccountModel["account"]>(async () => {
+  ): Promise<tResponseOneService<tAccountModel["account"]>> {
+    return this._catchAsync<tAccountModel["account"]>(async () => {
       zRegisterCredentials.parse(credentials);
 
       const formData = new FormData();
@@ -102,7 +102,7 @@ class ClsAuthenticationService extends ClsAbstractService {
         throw new Error(`Registration failed: ${errorText}`);
       }
 
-      const data: tSuccessOneModel<tPartnerAccountModel["account"]> =
+      const data: tSuccessOneModel<tAccountModel["account"]> =
         await response.json();
 
       return {
@@ -114,8 +114,8 @@ class ClsAuthenticationService extends ClsAbstractService {
 
   public async loginAsync(
     credentials: tLoginCredentials,
-  ): Promise<tResponseOneService<tPartnerAccountModel["account"]>> {
-    return this._catchAsync<tPartnerAccountModel["account"]>(async () => {
+  ): Promise<tResponseOneService<tAccountModel["account"]>> {
+    return this._catchAsync<tAccountModel["account"]>(async () => {
       zLoginCredentials.parse(credentials);
 
       const response: Response = await this._fetch.post(
@@ -128,7 +128,7 @@ class ClsAuthenticationService extends ClsAbstractService {
         throw new Error(errorText);
       }
 
-      const data: tSuccessOneModel<tPartnerAccountModel["account"]> =
+      const data: tSuccessOneModel<tAccountModel["account"]> =
         await response.json();
 
       return {
@@ -139,9 +139,9 @@ class ClsAuthenticationService extends ClsAbstractService {
   }
 
   public async getAccount(): Promise<
-    tResponseOneService<tPartnerAccountModel["account"]>
+    tResponseOneService<tAccountModel["account"]>
   > {
-    return this._catchAsync<tPartnerAccountModel["account"]>(async () => {
+    return this._catchAsync<tAccountModel["account"]>(async () => {
       const response: Response = await this._fetch.get(
         "/partner/authentication/me",
       );
@@ -151,7 +151,7 @@ class ClsAuthenticationService extends ClsAbstractService {
         throw new Error(errorText);
       }
 
-      const data: tSuccessOneModel<tPartnerAccountModel["account"]> =
+      const data: tSuccessOneModel<tAccountModel["account"]> =
         await response.json();
 
       return {

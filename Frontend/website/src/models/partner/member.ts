@@ -12,7 +12,9 @@ enum eMemberStatusModel {
 type tMemberModel = {
   uuid: string;
   avatar: tNullable<tImageModel>;
-  role: Omit<tRoleModel, "assignedCount">;
+  role: Omit<tRoleModel, "permissions" | "assignedCount"> & {
+    permissions: string[];
+  };
   branch: Omit<tBranchModel, "memberCount" | "vehicleInstanceCount">;
   username: string;
   email: string;

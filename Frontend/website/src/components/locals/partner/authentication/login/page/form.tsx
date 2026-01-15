@@ -39,6 +39,7 @@ import {
 
 import { Button } from "@/components/shadcn/button";
 import { Checkbox } from "@/components/shadcn/checkbox";
+import { Link } from "@/components/locals/blocks/links";
 
 export default function Form() {
   const id = useId();
@@ -83,7 +84,6 @@ export default function Form() {
       return;
     }
 
-    return;
     login(response.data);
     router.push("/partner/dashboard");
   }
@@ -150,20 +150,23 @@ export default function Form() {
           fieldState: { invalid, error },
         }) => (
           <Field data-invalid={invalid}>
-            <FieldLabel htmlFor={`${id}-remember-me`} className="max-w-fit">
-              {tForm("remember-me.label")}
-            </FieldLabel>
-            <FieldContent className="flex items-start gap-2">
-              <Checkbox id={id} defaultChecked />
-              <div className="grid gap-2">
-                <Label htmlFor={id} className="leading-4">
-                  Accept terms and conditions
-                </Label>
-                <p className="text-muted-foreground text-xs">
-                  By clicking this checkbox, you agree to the terms and
-                  conditions.
-                </p>
-              </div>
+            <FieldContent>
+              <FieldLabel
+                htmlFor={`${id}-remember-me`}
+                className="hover:bg-accent/50 w-full cursor-pointer flex-row items-start gap-2 rounded border p-3"
+              >
+                <Checkbox
+                  id={`${id}-remember-me`}
+                  checked={value}
+                  onCheckedChange={setValue}
+                />
+                <div className="grid gap-2">
+                  <p className="leading-4">{tForm("remember-me.label")}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {tForm("remember-me.description")}
+                  </p>
+                </div>
+              </FieldLabel>
             </FieldContent>
             <FieldError errors={error} />
           </Field>
@@ -172,21 +175,33 @@ export default function Form() {
       <FieldGroup className="grid-cols-2 gap-3">
         <Button
           disabled={formState.isSubmitting}
-          type="reset"
-          variant="outline"
-          className="justify-start gap-1.5"
-        >
-          {tForm("actions.reset")}
-        </Button>
-        <Button
-          disabled={formState.isSubmitting}
           type="submit"
           className="justify-start gap-1.5"
         >
           {formState.isSubmitting && <LuLoader className="animate-spin" />}
           {tForm("actions.submit")}
         </Button>
+        <Button
+          disabled={formState.isSubmitting}
+          type="reset"
+          variant="outline"
+          className="justify-start gap-1.5"
+        >
+          {tForm("actions.reset")}
+        </Button>
       </FieldGroup>
+      <p className="text-muted-foreground">
+        {tForm.rich("register", {
+          link: (chunk) => (
+            <Link
+              href="/partner/authentication/register"
+              className="text-card-foreground hover:underline"
+            >
+              {chunk}
+            </Link>
+          ),
+        })}
+      </p>
     </form>
   );
 }
