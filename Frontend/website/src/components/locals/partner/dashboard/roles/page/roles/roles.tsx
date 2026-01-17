@@ -10,13 +10,13 @@ import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import { ClsRoleService } from "@/services/partner/role";
+import useRoleService from "@/services/partner/role";
 import useRoles from "@/hooks/partner/roles";
-
-import { LuCheck, LuPlus, LuLoader } from "react-icons/lu";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
+
+import { LuCheck, LuPlus, LuLoader } from "react-icons/lu";
 
 import {
   Card,
@@ -147,7 +147,7 @@ function AddNew() {
   );
   const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
 
-  const clsRoleService = new ClsRoleService();
+  const roleService = useRoleService();
 
   function reset(): void {
     handleReset();
@@ -157,7 +157,7 @@ function AddNew() {
   }
 
   async function submit(data: tRoleCreate): Promise<void> {
-    const result = await clsRoleService.addAsync(data);
+    const result = await roleService.create(data);
 
     if (!result.isSuccess) {
       toast.custom(() => (

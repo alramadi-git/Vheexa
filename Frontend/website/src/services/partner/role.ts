@@ -1,7 +1,7 @@
 "use client";
 
 import useToken from "@/hooks/partner/token";
-import useService from "../helper";
+import useService from "../hook";
 
 import { ClsQuery } from "@/libraries/query";
 

@@ -10,7 +10,7 @@ import { tBranchCreate, zBranchCreate } from "@/validations/partner/branch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import { ClsBranchService } from "@/services/partner/branch";
+import useBranchService from "@/services/partner/branch";
 import useBranches from "@/hooks/partner/branches";
 
 import { LuPlus, LuCheck, LuLoader } from "react-icons/lu";
@@ -150,7 +150,7 @@ function AddNew() {
 
   const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
 
-  const clsBranchService = new ClsBranchService();
+  const branchService = useBranchService();
 
   function reset(): void {
     handleReset();
@@ -161,7 +161,7 @@ function AddNew() {
   }
 
   async function submit(data: tBranchCreate): Promise<void> {
-    const result = await clsBranchService.create(data);
+    const result = await branchService.create(data);
 
     if (!result.isSuccess) {
       toast.custom(() => (

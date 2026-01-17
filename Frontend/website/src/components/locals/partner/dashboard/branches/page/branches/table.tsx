@@ -8,8 +8,9 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
+import useBranchService from "@/services/partner/branch";
+
 import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
-import { ClsBranchService } from "@/services/partner/branch";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -139,7 +140,9 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <span className="flex flex-col">
               {branch.location.country}, {branch.location.city}
-              <span className="text-muted-foreground">{branch.location.street}</span>
+              <span className="text-muted-foreground">
+                {branch.location.street}
+              </span>
             </span>
           </TableCell>
           <TableCell>
@@ -158,7 +161,9 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <Badge
               variant={
-                branch.status === eBranchStatusModel.active ? "success" : "muted"
+                branch.status === eBranchStatusModel.active
+                  ? "success"
+                  : "muted"
               }
               className="flex items-center gap-1"
             >
@@ -292,7 +297,7 @@ type tActionsProps = {
 function Actions({ branch }: tActionsProps) {
   const router = useRouter();
 
-  const clsBranchService = new ClsBranchService();
+  const branchService = useBranchService();
 
   const tAction = useTranslations(
     "app.partner.dashboard.branches.page.branches.table.actions.cell",
@@ -306,7 +311,7 @@ function Actions({ branch }: tActionsProps) {
   }
 
   async function remove() {
-    const result = await clsBranchService.delete(branch.uuid);
+    const result = await branchService.delete(branch.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

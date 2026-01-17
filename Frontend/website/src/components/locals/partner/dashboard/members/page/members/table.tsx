@@ -5,10 +5,11 @@ import { useRouter } from "@/i18n/navigation";
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+
 import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
 
-import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { ClsMemberService } from "@/services/partner/member";
+import useMemberService from "@/services/partner/member";
 
 import { Toast } from "@/components/locals/blocks/toasts";
 import { toast } from "sonner";
@@ -137,7 +138,10 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
                     .map((n) => n[0].toUpperCase())
                     .join("")}
                 </AvatarFallback>
-                <AvatarImage src={member.avatar?.url} alt={member.username} />
+                <AvatarImage
+                  src={member.avatar ?? undefined}
+                  alt={member.username}
+                />
               </Avatar>
               <div>
                 <p>{member.username}</p>
@@ -155,7 +159,8 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
               <div>
                 <p>{member.branch.name}</p>
                 <p className="text-muted-foreground text-xs">
-                  {member.branch.location.country},{member.branch.location.city},{member.branch.location.street}
+                  {member.branch.location.country},{member.branch.location.city}
+                  ,{member.branch.location.street}
                 </p>
               </div>
             </div>
@@ -163,7 +168,9 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <Badge
               variant={
-                member.status === eMemberStatusModel.active ? "success" : "muted"
+                member.status === eMemberStatusModel.active
+                  ? "success"
+                  : "muted"
               }
               className="flex items-center gap-1"
             >
@@ -265,7 +272,7 @@ type tActionsProps = {
 };
 function Actions({ member }: tActionsProps) {
   const router = useRouter();
-  const clsMemberService = new ClsMemberService();
+  const memberService = useMemberService();
 
   const tAction = useTranslations(
     "app.partner.dashboard.members.page.members.table.actions.cell",
@@ -278,7 +285,7 @@ function Actions({ member }: tActionsProps) {
     toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
   async function remove() {
-    const result = await clsMemberService.delete(member.uuid);
+    const result = await memberService.delete(member.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

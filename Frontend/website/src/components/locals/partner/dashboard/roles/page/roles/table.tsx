@@ -4,13 +4,11 @@ import { useRouter } from "@/i18n/navigation";
 
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+
+import useRoleService from "@/services/partner/role";
 
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
-
-import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
-
-import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { ClsRoleService } from "@/services/partner/role";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -31,6 +29,8 @@ import {
   LuTrash2,
 } from "react-icons/lu";
 import { GrInsecure } from "react-icons/gr";
+
+import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 
 import {
   TableHeader,
@@ -275,7 +275,7 @@ function Actions({ role }: tActionsProps) {
   );
 
   const router = useRouter();
-  const clsRoleService = new ClsRoleService();
+  const roleService = useRoleService();
 
   function view() {
     toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
@@ -285,7 +285,7 @@ function Actions({ role }: tActionsProps) {
   }
 
   async function remove() {
-    const result = await clsRoleService.deleteOneAsync(role.uuid);
+    const result = await roleService.delete(role.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { tOptionModel } from "@/models/partner/option";
 import { tResponseManyService } from "@/services/service";
 
-import { ClsOptionsService } from "@/services/partner/options";
+import useOptionsService from "@/services/partner/options";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -80,7 +80,7 @@ export default function Filter() {
 
   const statuses: tOption[] = tFilter.raw("status.statuses");
 
-  const clsOptionsService = new ClsOptionsService();
+  const optionsService = useOptionsService();
 
   useEffect(() => {
     const [searchQuery, rolesQuery, branchesQuery, statusQuery] = [
@@ -103,9 +103,9 @@ export default function Filter() {
     setValue("status", status);
 
     Promise.all([
-      roles.length !== 0 ? clsOptionsService.getRolesAsync(roles) : undefined,
+      roles.length !== 0 ? optionsService.readRolesByUuid(roles) : undefined,
       branches.length !== 0
-        ? clsOptionsService.getBranchesAsync(branches)
+        ? optionsService.readBranchesByUuid(branches)
         : undefined,
     ]).then(([rolesResult, branchesResult]) => {
       if (rolesResult !== undefined) {
@@ -182,8 +182,8 @@ export default function Filter() {
   ): Promise<tResponseManyService<tOption>> {
     const serviceResult: tResponseManyService<tOptionModel> = await (type ===
     "roles"
-      ? clsOptionsService.getRolesBeSearchAsync(search, page)
-      : clsOptionsService.getBranchesBySearchAsync(search, page));
+      ? optionsService.readRoles(search, page)
+      : optionsService.readBranches(search, page));
 
     const result: tResponseManyService<tOption> = !serviceResult.isSuccess
       ? serviceResult

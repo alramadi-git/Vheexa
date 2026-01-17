@@ -9,13 +9,13 @@ import { useId, useRef, useState } from "react";
 import { tOptionModel } from "@/models/partner/option";
 import { tResponseManyService } from "@/services/service";
 
-import { ClsOptionsService } from "@/services/partner/options";
-import { ClsMemberService } from "@/services/partner/member";
-
 import { tMemberCreate, zMemberCreate } from "@/validations/partner/member";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
+
+import useMemberService from "@/services/partner/member";
+import useOptionsService from "@/services/partner/options";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -54,7 +54,6 @@ import {
   FieldLabel,
   FieldContent,
   FieldError,
-  FieldSet,
 } from "@/components/shadcn/field";
 
 import {
@@ -170,7 +169,8 @@ function AddNew() {
 
   const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
 
-  const clsMemberService = new ClsMemberService();
+  const memberService = useMemberService();
+  const optionsService = useOptionsService();
 
   function reset(): void {
     handleReset();
@@ -184,7 +184,7 @@ function AddNew() {
   }
 
   async function submit(data: tMemberCreate): Promise<void> {
-    const result = await clsMemberService.create(data);
+    const result = await memberService.create(data);
 
     if (!result.isSuccess) {
       toast.custom(() => (
@@ -210,7 +210,6 @@ function AddNew() {
     router.refresh();
   }
 
-  const clsOptionsService = new ClsOptionsService();
   async function fetch(
     type: "roles" | "branches",
     search: string,
@@ -218,8 +217,8 @@ function AddNew() {
   ): Promise<tResponseManyService<tOption>> {
     const serviceResult: tResponseManyService<tOptionModel> = await (type ===
     "roles"
-      ? clsOptionsService.getRolesBeSearchAsync(search, page)
-      : clsOptionsService.getBranchesBySearchAsync(search, page));
+      ? optionsService.readRoles(search, page)
+      : optionsService.readBranches(search, page));
 
     const result: tResponseManyService<tOption> = !serviceResult.isSuccess
       ? serviceResult
@@ -276,7 +275,7 @@ function AddNew() {
                   >
                     {tAddNew("content.form.avatar.label")}
                   </FieldLabel>
-                  <FieldContent>
+                  <FieldContent className="h-full">
                     <FieldFileUpload
                       ref={avatarRef}
                       id={`${id}-avatar`}
@@ -500,10 +499,6 @@ function AddNew() {
                   </Field>
                 )}
               />
-            </FieldGroup>
-          </FieldGroup>
-          <FieldSet>
-            <FieldGroup className="grid-cols-2">
               <Controller
                 control={control}
                 name="email"
@@ -567,7 +562,7 @@ function AddNew() {
                 )}
               />
             </FieldGroup>
-          </FieldSet>
+          </FieldGroup>
           <Controller
             control={control}
             name="status"
@@ -608,23 +603,19 @@ function AddNew() {
               </Field>
             )}
           />
-          <FieldSet className="mt-auto">
-            <FieldGroup className="grid-cols-2">
-              <Button
-                disabled={formState.isSubmitting}
-                variant="outline"
-                type="reset"
-              >
-                {tAddNew("content.form.actions.reset")}
-              </Button>
-              <Button disabled={formState.isSubmitting} type="submit">
-                {formState.isSubmitting && (
-                  <LuLoader className="animate-spin" />
-                )}
-                {tAddNew("content.form.actions.submit")}
-              </Button>
-            </FieldGroup>
-          </FieldSet>
+          <FieldGroup className="mt-auto grid-cols-2">
+            <Button
+              disabled={formState.isSubmitting}
+              variant="outline"
+              type="reset"
+            >
+              {tAddNew("content.form.actions.reset")}
+            </Button>
+            <Button disabled={formState.isSubmitting} type="submit">
+              {formState.isSubmitting && <LuLoader className="animate-spin" />}
+              {tAddNew("content.form.actions.submit")}
+            </Button>
+          </FieldGroup>
         </form>
       </DialogContent>
     </Dialog>

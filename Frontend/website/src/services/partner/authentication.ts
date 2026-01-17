@@ -1,6 +1,6 @@
 "use client";
 
-import useService from "../helper";
+import useService from "../hook";
 
 import {
   tRegisterCredentials,
