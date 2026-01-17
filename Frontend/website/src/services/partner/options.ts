@@ -1,3 +1,5 @@
+"use client";
+
 import {
   tResponseOneService,
   tResponseManyService,
@@ -16,7 +18,7 @@ class ClsOptionsService extends ClsAbstractService {
   public async getRolesAsync(
     uuids: tUuid[],
   ): Promise<tResponseOneService<tOptionModel[]>> {
-    return await this._catchAsync<tOptionModel[]>(async () => {
+    return await this._catch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
       const clsQuery: ClsQuery = new ClsQuery();
@@ -43,7 +45,7 @@ class ClsOptionsService extends ClsAbstractService {
     search: string,
     page: number,
   ): Promise<tResponseManyService<tOptionModel>> {
-    return await this._catchAsync<tOptionModel>(async () => {
+    return await this._catch<tOptionModel>(async () => {
       search = search.trim();
       zPagination.shape.page.parse(page);
 
@@ -74,7 +76,7 @@ class ClsOptionsService extends ClsAbstractService {
   public async getBranchesAsync(
     uuids: tUuid[],
   ): Promise<tResponseOneService<tOptionModel[]>> {
-    return await this._catchAsync<tOptionModel[]>(async () => {
+    return await this._catch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
       const clsQuery: ClsQuery = new ClsQuery();
@@ -101,7 +103,7 @@ class ClsOptionsService extends ClsAbstractService {
     search: string,
     page: number,
   ): Promise<tResponseManyService<tOptionModel>> {
-    return await this._catchAsync<tOptionModel>(async () => {
+    return await this._catch<tOptionModel>(async () => {
       search = search.trim();
       zPagination.shape.page.parse(page);
 

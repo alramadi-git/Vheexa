@@ -6,7 +6,7 @@ import { tUserModel } from "@/models/user/user";
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/authentication-credentials";
+} from "@/validations/credentials";
 
 import { tSuccessOneModel } from "@/models/success";
 import { tFailedModel, ClsFailedModel } from "@/models/error";

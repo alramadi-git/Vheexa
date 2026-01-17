@@ -306,7 +306,7 @@ function Actions({ branch }: tActionsProps) {
   }
 
   async function remove() {
-    const result = await clsBranchService.deleteOneAsync(branch.uuid);
+    const result = await clsBranchService.delete(branch.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

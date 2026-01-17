@@ -1,5 +1,3 @@
-import { tLocationModel } from "../location";
-
 enum eBranchStatusModel {
   active,
   inactive,
@@ -7,7 +5,13 @@ enum eBranchStatusModel {
 
 type tBranchModel = {
   uuid: string;
-  location: tLocationModel;
+  location: {
+    country: string;
+    city: string;
+    street: string;
+    latitude: number;
+    longitude: number;
+  };
   name: string;
   phoneNumber: string;
   email: string;

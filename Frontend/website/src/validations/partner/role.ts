@@ -30,24 +30,20 @@ enum ePartnerRoleCreatePermission {
 
 const zRoleCreate = z
   .object({
-    name: z.string().nonempty("role name must not be empty."),
+    name: z
+      .string("role name is required.")
+      .nonempty("role name cannot be empty."),
     permissions: z
       .array(z.enum(ePartnerRoleCreatePermission, "invalid permission."))
-      .min(1, "at least one permission is required."),
-    status: z.enum(eRoleStatusModel, "invalid status."),
+      .min(1, "at least 1 permission is required."),
+    status: z.enum(eRoleStatusModel, "status is required."),
   })
   .strict();
 type tRoleCreate = z.infer<typeof zRoleCreate>;
 
 const zRoleFilter = z
   .object({
-    name: z.optional(
-      z
-        .string()
-        .nonempty(
-          "role name must not be empty.",
-        ),
-    ),
+    name: z.optional(z.string().nonempty("role name cannot be empty.")),
     permissions: z.array(
       z.enum(ePartnerRoleCreatePermission, "invalid permission."),
     ),

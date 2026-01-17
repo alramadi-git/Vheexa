@@ -61,6 +61,8 @@ import {
   FieldUsername,
   FieldEmail,
   FieldPassword,
+  tFieldEmailRef,
+  tFieldPasswordRef,
 } from "@/components/locals/blocks/fields";
 
 import {
@@ -157,8 +159,13 @@ function AddNew() {
   });
 
   const avatarRef = useRef<tFieldFileUploadRef>(null);
+
   const roleRef = useRef<tFieldAsyncSelectRef<tOption>>(null);
   const branchRef = useRef<tFieldAsyncSelectRef<tOption>>(null);
+
+  const emailRef = useRef<tFieldEmailRef>(null);
+  const passwordRef = useRef<tFieldPasswordRef>(null);
+
   const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
   const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
@@ -171,11 +178,13 @@ function AddNew() {
     avatarRef.current?.reset();
     roleRef.current?.reset();
     branchRef.current?.reset();
+    emailRef.current?.reset();
+    passwordRef.current?.reset();
     statusRef.current?.reset(statuses.find((status) => status.value === "0"));
   }
 
   async function submit(data: tMemberCreate): Promise<void> {
-    const result = await clsMemberService.addAsync(data);
+    const result = await clsMemberService.create(data);
 
     if (!result.isSuccess) {
       toast.custom(() => (
@@ -512,13 +521,14 @@ function AddNew() {
                     </FieldLabel>
                     <FieldContent>
                       <FieldEmail
+                        ref={emailRef}
                         id={`${id}-email`}
-                        aria-invalid={invalid}
-                        required
+                        isRequired
+                        isInvalid={invalid}
                         placeholder={tAddNew(
                           "content.form.credentials.email.placeholder",
                         )}
-                        onChange={setValue}
+                        onValueChange={setValue}
                       />
                     </FieldContent>
                     <FieldError errors={error} />
@@ -542,9 +552,10 @@ function AddNew() {
                     </FieldLabel>
                     <FieldContent>
                       <FieldPassword
+                        ref={passwordRef}
                         id={`${id}-password`}
-                        aria-invalid={invalid}
-                        required
+                        isRequired
+                        isInvalid={invalid}
                         placeholder={tAddNew(
                           "content.form.credentials.password.placeholder",
                         )}

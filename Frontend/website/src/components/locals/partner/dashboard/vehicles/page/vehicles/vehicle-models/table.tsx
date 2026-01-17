@@ -390,7 +390,7 @@ function Actions({ vehicleModel }: tActionsProps) {
   }
 
   async function remove() {
-    const result = await clsVehicleModelService.deleteOneAsync(
+    const result = await clsVehicleModelService.delete(
       vehicleModel.uuid,
     );
 

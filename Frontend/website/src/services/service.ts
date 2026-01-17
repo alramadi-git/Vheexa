@@ -1,6 +1,7 @@
 import { tPaginationModel } from "@/models/pagination";
 
 import { ClsFetch } from "@/libraries/fetch";
+import { ClsAuthenticationService } from "./partner/authentication";
 
 type tSuccessOneService<tData> = {
   isSuccess: true;
@@ -22,17 +23,16 @@ type tFailedService = {
 
 abstract class ClsAbstractService {
   protected readonly _fetch = new ClsFetch(
-    process.env.NEXT_PUBLIC_BASE_DOMAIN!,
-    "/api",
+    process.env.NEXT_PUBLIC_BACKEND_API!,
   );
 
-  protected async _catchAsync<tData>(
+  protected async _catch<tData>(
     callback: () => Promise<tSuccessOneService<tData>>,
   ): Promise<tResponseOneService<tData>>;
-  protected async _catchAsync<tData>(
+  protected async _catch<tData>(
     callback: () => Promise<tSuccessManyService<tData>>,
   ): Promise<tResponseManyService<tData>>;
-  protected async _catchAsync<tData>(
+  protected async _catch<tData>(
     callback: () => Promise<
       tResponseOneService<tData> | tResponseManyService<tData>
     >,
@@ -40,8 +40,25 @@ abstract class ClsAbstractService {
     try {
       return await callback();
     } catch (error: unknown) {
-      const message =
+      let message =
         error instanceof Error ? error.message : "Something went wrong.";
+
+      if (message === "Access token missing or expired.")
+        try {
+          const response: Response = await this._fetch.get(
+            "/partner/authentication/refresh",
+          );
+          if (!response.ok) return { isSuccess: false, message: message };
+
+          return await callback();
+        } catch (error: unknown) {
+          if (
+            error instanceof Error &&
+            error.message !== "Refresh token missing or expired."
+          )
+            message = error.message;
+        }
+
       return { isSuccess: false, message: message };
     }
   }

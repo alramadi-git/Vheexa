@@ -1,28 +1,39 @@
-import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+"use client";
 
-import { ClsBranchService } from "@/services/partner/branch";
+import { useSearchParams } from "next/navigation";
+import useBranchService from "@/services/partner/branch";
+
+import { useQuery } from "@tanstack/react-query";
 
 import { tBranchFilter } from "@/validations/partner/branch";
 import { tPagination } from "@/validations/pagination";
 
 export default function useBranches() {
   const searchParams = useSearchParams();
-  const clsBranchService = new ClsBranchService();
+  const branchService = useBranchService();
 
-  const [status, page, pageSize] = [
+  const [searchQuery, statusQuery, pageQuery, pageSizeQuery] = [
+    searchParams.get("filter.search"),
     searchParams.get("filter.status"),
     searchParams.get("pagination.page"),
     searchParams.get("pagination.page-size"),
   ];
 
+  const [search, status, page, pageSize] = [
+    searchQuery ?? undefined,
+    statusQuery !== null ? Number(statusQuery) : undefined,
+    pageQuery !== null ? Number(pageQuery) : undefined,
+    pageSizeQuery !== null ? Number(pageSizeQuery) : undefined,
+  ];
+
   const filter: tBranchFilter = {
-    search: searchParams.get("filter.search") ?? undefined,
-    status: status !== null ? Number(status) : undefined,
+    search,
+    status,
   };
+
   const pagination: tPagination = {
-    page: page !== null ? Number(page) : undefined,
-    pageSize: pageSize !== null ? Number(pageSize) : undefined,
+    page,
+    pageSize,
   };
 
   const { isLoading, data: result } = useQuery({
@@ -33,7 +44,7 @@ export default function useBranches() {
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => clsBranchService.getManyAsync(filter, pagination),
+    queryFn: () => branchService.readMany(filter, pagination),
   });
 
   return {

@@ -1,9 +1,5 @@
 import { tNullable } from "@/types/nullish";
 
-import { tImageModel } from "../image";
-import { tRoleModel } from "./role";
-import { tBranchModel } from "./branch";
-
 enum eMemberStatusModel {
   active,
   inactive,
@@ -11,11 +7,23 @@ enum eMemberStatusModel {
 
 type tMemberModel = {
   uuid: string;
-  avatar: tNullable<tImageModel>;
-  role: Omit<tRoleModel, "permissions" | "assignedCount"> & {
+  avatar: tNullable<string>;
+  role: {
+    name: string;
     permissions: string[];
   };
-  branch: Omit<tBranchModel, "memberCount" | "vehicleInstanceCount">;
+  branch: {
+    location: {
+      country: string;
+      city: string;
+      street: string;
+      latitude: number;
+      longitude: number;
+    };
+    name: string;
+    phoneNumber: string;
+    email: string;
+  };
   username: string;
   email: string;
   status: eMemberStatusModel;

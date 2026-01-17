@@ -1,54 +1,54 @@
-import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+"use client";
 
-import { ClsRoleService } from "@/services/partner/role";
+import { useSearchParams } from "next/navigation";
+import useRoleService from "@/services/partner/role";
+
+import { useQuery } from "@tanstack/react-query";
 
 import { tRoleFilter } from "@/validations/partner/role";
 import { tPagination } from "@/validations/pagination";
 
 export default function useRoles() {
   const searchParams = useSearchParams();
-  const clsRoleService = new ClsRoleService();
+  const roleService = useRoleService();
 
-  const [status, page, pageSize] = [
+  const [nameQuery, permissionsQuery, statusQuery, pageQuery, pageSizeQuery] = [
+    searchParams.get("filter.name"),
+    searchParams.getAll("filter.permissions"),
     searchParams.get("filter.status"),
     searchParams.get("pagination.page"),
     searchParams.get("pagination.page-size"),
   ];
 
+  const [name, permissions, status, page, pageSize] = [
+    nameQuery ?? undefined,
+    permissionsQuery.map((permission) => Number(permission)),
+    statusQuery !== null ? Number(statusQuery) : undefined,
+    pageQuery !== null ? Number(pageQuery) : undefined,
+    pageSizeQuery !== null ? Number(pageSizeQuery) : undefined,
+  ];
+
   const filter: tRoleFilter = {
-    name: searchParams.get("filter.name") ?? undefined,
-    permissions: searchParams
-      .getAll("filter.permissions")
-      .map((permission) => Number(permission)),
-    status: status !== null ? Number(status) : undefined,
+    name,
+    permissions,
+    status,
   };
+
   const pagination: tPagination = {
-    page: page !== null ? Number(page) : undefined,
-    pageSize: pageSize !== null ? Number(pageSize) : undefined,
+    page,
+    pageSize,
   };
 
   const { isLoading, data: result } = useQuery({
     queryKey: [
       "roles",
       filter.name,
-      filter.permissions,
+      filter.permissions.join(", "),
       filter.status,
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => clsRoleService.getManyAsync(filter, pagination),
-  });
-  const d = useQuery({
-    queryKey: [
-      "roles",
-      filter.name,
-      filter.permissions,
-      filter.status,
-      pagination.page,
-      pagination.pageSize,
-    ],
-    queryFn: () => clsRoleService.getManyAsync(filter, pagination),
+    queryFn: () => roleService.readMany(filter, pagination),
   });
 
   return {

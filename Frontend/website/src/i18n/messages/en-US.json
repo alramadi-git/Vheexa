@@ -1287,38 +1287,34 @@
                   "title": "Add New Branch",
                   "description": "Create a new branch with custom permissions.",
                   "form": {
-                    "information": {
-                      "name": {
-                        "label": "Branch Name",
-                        "placeholder": "Enter branch name (e.g, Main Branch, Downtown Branch, etc...)"
-                      },
-                      "phone-number": {
-                        "label": "Phone Number"
-                      },
-                      "email": {
-                        "label": "Email",
-                        "placeholder": "Enter email address (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
-                      }
+                    "name": {
+                      "label": "Branch Name",
+                      "placeholder": "Enter branch name (e.g, Main Branch, Downtown Branch, etc...)"
                     },
-                    "location": {
-                      "country": {
-                        "label": "Country",
-                        "placeholder": "Enter country (e.g., United States)"
-                      },
-                      "city": {
-                        "label": "City",
-                        "placeholder": "Enter city (e.g., New York, Los Angeles, etc...)"
-                      },
-                      "street": {
-                        "label": "Street",
-                        "placeholder": "Enter street (e.g., Main Street, 5th Avenue, etc...)"
-                      },
-                      "latitude": {
-                        "label": "Latitude"
-                      },
-                      "longitude": {
-                        "label": "Longitude"
-                      }
+                    "phone-number": {
+                      "label": "Phone Number"
+                    },
+                    "email": {
+                      "label": "Email",
+                      "placeholder": "Enter email address (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
+                    },
+                    "country": {
+                      "label": "Country",
+                      "placeholder": "Enter country (e.g., United States, etc...)"
+                    },
+                    "city": {
+                      "label": "City",
+                      "placeholder": "Enter city (e.g., New York, Los Angeles, etc...)"
+                    },
+                    "street": {
+                      "label": "Street",
+                      "placeholder": "Enter street (e.g., Main Street, 5th Avenue, etc...)"
+                    },
+                    "latitude": {
+                      "label": "Latitude"
+                    },
+                    "longitude": {
+                      "label": "Longitude"
                     },
                     "status": {
                       "label": "Status",
@@ -2270,15 +2266,15 @@
                           }
                         }
                       }
+                    },
+                    "when-empty": {
+                      "title": "No vehicle models were found",
+                      "description": "Try adjusting your search or add a new vehicle model."
+                    },
+                    "when-error": {
+                      "title": "Something went wrong",
+                      "description": "We couldn't load the vehicle models. Please try again later."
                     }
-                  },
-                  "when-empty": {
-                    "title": "No vehicle models were found",
-                    "description": "Try adjusting your search or add a new vehicle model."
-                  },
-                  "when-error": {
-                    "title": "Something went wrong",
-                    "description": "We couldn't load the vehicle models. Please try again later."
                   }
                 }
               },

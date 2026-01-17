@@ -21,6 +21,10 @@ export function useQuery() {
     setQuery(new ClsQuery(searchParams.toString()));
   }, [searchParams]);
 
+  function toString(): string {
+    return query.toString();
+  }
+
   function get(key: string): tNullable<string> {
     return query.get(key);
   }
@@ -44,10 +48,6 @@ export function useQuery() {
     setQuery(new ClsQuery());
   }
 
-  function toString(): string {
-    return query.toString();
-  }
-
   function apply(options?: Parameters<typeof router.push>["1"]): void {
     router.push(`${pathname}${toString()}`, options);
   }
@@ -56,10 +56,8 @@ export function useQuery() {
     get,
     getAll,
     set,
-    setArray: set,
     remove,
     clear,
-    toString,
     apply,
   };
 }

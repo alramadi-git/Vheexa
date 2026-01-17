@@ -3,32 +3,32 @@ import z from "zod";
 import { zLocationCreate } from "../location";
 
 import { zPhoneNumber } from "../phone-number";
-import { zEmail, zPassword } from "../authentication-credentials";
+import { zEmail, zPassword } from "../credentials";
 
 const zRegisterCredentials = z
   .object({
     partner: z
       .object({
-        logo: z
-          .file("expected logo file (e.g. png, jpg, etc...)")
-          .refine((value) => value.type.startsWith("image/"), {
-            error: "only images are allowed",
+        logo: z.nullable(
+          z.file().refine((value) => value.type.startsWith("image/"), {
+            error: "logo can only be an image(e.g, png, jpg, etc...).",
           }),
-        banner: z
-          .file("expected banner file (e.g. png, jpg, etc...)")
-          .refine((value) => value.type.startsWith("image/"), {
-            error: "only images are allowed",
+        ),
+        banner: z.nullable(
+          z.file().refine((value) => value.type.startsWith("image/"), {
+            error: "banner can only be an image(e.g, png, jpg, etc...).",
           }),
+        ),
         handle: z
-          .string("partner handle is required.")
-          .nonempty("partner must not be empty.")
+          .string("handle is required.")
+          .nonempty("handle cannot be empty.")
           .regex(
             /^[a-z0-9-_]+$/,
             "handle can only contain lowercase letters, numbers, hyphens and underscores.",
           ),
         name: z
           .string("partner name is required.")
-          .nonempty("partner name must not be empty."),
+          .nonempty("partner name cannot be empty."),
         phoneNumber: zPhoneNumber,
         email: zEmail,
         password: zPassword,
@@ -36,24 +36,24 @@ const zRegisterCredentials = z
       .strict(),
     branch: z
       .object({
+        location: zLocationCreate,
         name: z
           .string("branch name is required.")
-          .nonempty("branch name must not be empty."),
-        location: zLocationCreate,
+          .nonempty("branch name cannot be empty."),
         phoneNumber: zPhoneNumber,
         email: zEmail,
       })
       .strict(),
     member: z
       .object({
-        avatar: z
-          .file("expected thumbnail file (e.g. png, jpg, etc...)")
-          .refine((value) => value.type.startsWith("image/"), {
-            error: "only images are allowed",
+        avatar: z.nullable(
+          z.file().refine((value) => value.type.startsWith("image/"), {
+            error: "avatar can only be an image(e.g, png, jpg, etc...).",
           }),
+        ),
         username: z
           .string("username is required.")
-          .nonempty("username must be not empty."),
+          .nonempty("username cannot be empty."),
         email: zEmail,
         password: zPassword,
       })

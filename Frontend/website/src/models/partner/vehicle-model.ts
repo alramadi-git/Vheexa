@@ -1,8 +1,3 @@
-import { tImageModel } from "../image";
-
-import { tVehicleImageModel } from "./vehicle-image";
-import { tVehicleColorModel } from "./vehicle-color";
-
 enum eVehicleModelCategoryModel {
   car,
   van,
@@ -21,8 +16,11 @@ enum eVehicleModelStatusModel {
 
 type tVehicleModelModel = {
   uuid: string;
-  thumbnail: tImageModel;
-  gallery: tVehicleImageModel[];
+  thumbnail: string;
+  gallery: {
+    uuid: string;
+    url: string;
+  }[];
   name: string;
   description: string;
   category: eVehicleModelCategoryModel;
@@ -31,7 +29,12 @@ type tVehicleModelModel = {
   capacity: number;
   transmission: string;
   fuel: string;
-  colors: tVehicleColorModel[];
+  colors: {
+    uuid: string;
+    hexCode: string;
+    name: string;
+    tags: string;
+  }[];
   price: number;
   discount: number;
   tags: string;

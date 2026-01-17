@@ -1,20 +1,35 @@
 import { tNullable } from "@/types/nullish";
-import { tMemberModel } from "./member";
-import { tImageModel } from "../image";
 
 type tAccountModel = {
+  uuid: string;
   partner: {
     uuid: string;
-    logo: tNullable<tImageModel>;
-    banner: tNullable<tImageModel>;
+    logo: tNullable<string>;
+    banner: tNullable<string>;
     handle: string;
     name: string;
     phoneNumber: string;
     email: string;
-    updatedAt: string;
-    createdAt: string;
   };
-  member: tMemberModel;
+  avatar: tNullable<string>;
+  role: {
+    name: string;
+    permissions: string[];
+  };
+  branch: {
+    location: {
+      country: string;
+      city: string;
+      street: string;
+      latitude: number;
+      longitude: number;
+    };
+    name: string;
+    phoneNumber: string;
+    email: string;
+  };
+  username: string;
+  email: string;
 };
 
 export type { tAccountModel };

@@ -278,7 +278,7 @@ function Actions({ member }: tActionsProps) {
     toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
   }
   async function remove() {
-    const result = await clsMemberService.deleteOneAsync(member.uuid);
+    const result = await clsMemberService.delete(member.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

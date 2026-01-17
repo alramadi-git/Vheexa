@@ -1,53 +1,50 @@
 import z from "zod";
 
-import { zEmail } from "../authentication-credentials";
-
-import { eMemberStatusModel } from "@/models/partner/member";
-import { eRoleStatusModel } from "@/models/partner/role";
-import { eBranchStatusModel } from "@/models/partner/branch";
+import { zPhoneNumber } from "../phone-number";
+import { zEmail } from "../credentials";
 
 const zAccount = z
   .object({
     uuid: z.uuid(),
-    avatar: z.nullable(
-      z.object({
-        uuid: z.uuid(),
-        url: z.url(),
-      }),
-    ),
-    role: z.object({
+    partner: z.object({
       uuid: z.uuid(),
-      name: z.string(),
-      permissions: z.array(z.string()),
-      status: z.enum(eRoleStatusModel),
-      createdAt: z.date(),
-      updatedAt: z.date(),
+      logo: z.nullable(z.url()),
+      banner: z.nullable(z.url()),
+      handle: z
+        .string()
+        .nonempty()
+        .regex(/^[a-z0-9-_]+$/),
+      name: z.string().nonempty(),
+      phoneNumber: zPhoneNumber,
+      email: zEmail,
+    }),
+    avatar: z.nullable(z.url()),
+    role: z.object({
+      name: z.string().nonempty(),
+      permissions: z.array(z.string().nonempty()).min(1),
     }),
     branch: z.object({
-      uuid: z.uuid(),
       location: z.object({
-        uuid: z.uuid(),
-        country: z.string(),
-        city: z.string(),
-        street: z.string(),
-        latitude: z.number(),
-        longitude: z.number(),
+        country: z.string().nonempty(),
+        city: z.string().nonempty(),
+        street: z.string().nonempty(),
+        latitude: z.number().min(-90).max(90),
+        longitude: z.number().min(-180).max(180),
       }),
-      name: z.string(),
-      phoneNumber: z.string(),
-      email: z.string(),
-      status: z.enum(eBranchStatusModel, "invalid status."),
-      createdAt: z.date(),
-      updatedAt: z.date(),
+      name: z.string().nonempty(),
+      phoneNumber: zPhoneNumber,
+      email: zEmail,
     }),
-    username: z.string(),
+    username: z
+      .string()
+      .nonempty()
+      .min(2)
+      .max(20)
+      .regex(/^[a-zA-Z\s]+$/),
     email: zEmail,
-    status: z.enum(eMemberStatusModel),
-    createdAt: z.date(),
-    updatedAt: z.date(),
   })
   .strict();
 type tAccount = z.infer<typeof zAccount>;
 
-export type { tAccount as tMemberCreate };
-export { zAccount as zMemberCreate };
+export type { tAccount };
+export { zAccount };

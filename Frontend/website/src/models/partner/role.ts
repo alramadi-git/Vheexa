@@ -1,11 +1,15 @@
-import { tRoleModel as tBasedRoleModel } from "../role";
-
 enum eRoleStatusModel {
   active,
   inactive,
 }
 
-type tRoleModel = tBasedRoleModel & {
+type tRoleModel = {
+  uuid: string;
+  name: string;
+  permissions: {
+    uuid: string;
+    name: string;
+  }[];
   assignedCount: number;
   status: eRoleStatusModel;
   createdAt: string;

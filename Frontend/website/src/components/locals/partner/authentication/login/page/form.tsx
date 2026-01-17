@@ -1,18 +1,16 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
-
-import { useId, useRef } from "react";
-
 import { useTranslations } from "next-intl";
 
-import useAccountStore from "@/stores/partner/account-store";
+import { useId, useRef } from "react";
+import { useRouter } from "@/i18n/navigation";
+
 import { ClsAuthenticationService } from "@/services/partner/authentication";
 
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/authentication-credentials";
+} from "@/validations/credentials";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
@@ -37,15 +35,22 @@ import {
   FieldPassword,
 } from "@/components/locals/blocks/fields";
 
-import { Button } from "@/components/shadcn/button";
 import { Checkbox } from "@/components/shadcn/checkbox";
+
+import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
+import useAccount from "@/hooks/partner/account";
 
 export default function Form() {
   const id = useId();
-  const router = useRouter();
 
   const tForm = useTranslations("app.partner.authentication.login.page.form");
+
+  const emailRef = useRef<tFieldEmailRef>(null);
+  const passwordRef = useRef<tFieldPasswordRef>(null);
+
+  const router = useRouter();
+  const { login } = useAccount();
 
   const {
     formState,
@@ -61,9 +66,6 @@ export default function Form() {
     resolver: zodResolver(zLoginCredentials),
   });
 
-  const emailRef = useRef<tFieldEmailRef>(null);
-  const passwordRef = useRef<tFieldPasswordRef>(null);
-
   function reset() {
     handleReset();
 
@@ -71,12 +73,10 @@ export default function Form() {
     passwordRef.current?.reset();
   }
 
-  const login = useAccountStore((store) => store.login);
-  const authenticationService = new ClsAuthenticationService();
-
   async function submit(credentials: tLoginCredentials) {
-    const response = await authenticationService.loginAsync(credentials);
-    if (!response.isSuccess) {
+    const isSuccess = await login(credentials);
+
+    if (!isSuccess) {
       toast.custom(() => (
         <Toast variant="destructive" label={tForm("actions.when-error")} />
       ));
@@ -84,8 +84,7 @@ export default function Form() {
       return;
     }
 
-    login(response.data);
-    router.push("/partner/dashboard");
+    // router.push("/partner/dashboard");
   }
 
   return (

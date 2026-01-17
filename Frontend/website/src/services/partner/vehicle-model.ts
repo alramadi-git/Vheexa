@@ -1,8 +1,9 @@
-import {
-  tResponseOneService,
-  tResponseManyService,
-  ClsAbstractService,
-} from "@/services/service";
+"use client";
+
+import useToken from "@/hooks/partner/token";
+import useService from "../helper";
+
+import { ClsQuery } from "@/libraries/query";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
@@ -15,20 +16,34 @@ import {
 
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { ClsQuery } from "@/libraries/query";
+import { eEnvironment } from "@/enums/environment";
 
 import { tVehicleModelModel } from "@/models/partner/vehicle-model";
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
 
-class ClsVehicleModelService extends ClsAbstractService {
-  public async addAsync(
+import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tResponseOneService, tResponseManyService } from "@/services/service";
+
+export default function useRoleService() {
+  const { token } = useToken();
+  const service = useService();
+
+  async function create(
     vehicleModel: tVehicleModelCreate,
   ): Promise<tResponseOneService<null>> {
-    return await this._catchAsync<null>(async () => {
+    return await service.catch<null>(async () => {
       zVehicleModelCreate.parse(vehicleModel);
 
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
       const formData = new FormData();
+
       formData.append("thumbnail", vehicleModel.thumbnail);
+
       vehicleModel.gallery.forEach((image, index) =>
         formData.append(`gallery[${index}]`, image),
       );
@@ -45,32 +60,32 @@ class ClsVehicleModelService extends ClsAbstractService {
       formData.append("transmission", vehicleModel.transmission);
       formData.append("fuel", vehicleModel.fuel);
 
-      vehicleModel.colors.forEach((color, index) => {
-        formData.append(`colors[${index}].hexCode`, color.hexCode);
-        formData.append(`colors[${index}].name`, color.name);
+      vehicleModel.colors.forEach((color, colorIndex) => {
+        formData.append(`colors[${colorIndex}].hexCode`, color.hexCode);
+        formData.append(`colors[${colorIndex}].name`, color.name);
 
-        color.tags.forEach((tag, _index) =>
-          formData.append(`colors[${index}].tags[${_index}]`, tag),
+        color.tags.forEach((tag, tagIndex) =>
+          formData.append(`colors[${colorIndex}].tags[${tagIndex}]`, tag),
         );
       });
 
       formData.append("price", vehicleModel.price.toString());
       formData.append("discount", vehicleModel.discount.toString());
 
-      vehicleModel.tags.forEach((tag, _index) =>
-        formData.append(`tags[${_index}]`, tag),
+      vehicleModel.tags.forEach((tag, index) =>
+        formData.append(`tags[${index}]`, tag),
       );
 
       formData.append("status", vehicleModel.status.toString());
 
-      const response: Response = await this._fetch.post(
+      const response = await service.fetch.post(
         "/partner/dashboard/vehicle-models",
         formData,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
       return {
@@ -79,33 +94,44 @@ class ClsVehicleModelService extends ClsAbstractService {
       };
     });
   }
-  public async getOneAsync(
+
+  async function readOne(
     uuid: tUuid,
   ): Promise<tResponseOneService<tVehicleModelModel>> {
-    return await this._catchAsync<tVehicleModelModel>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
+    return await service.catch<tVehicleModelModel>(async () => {
+      zUuid.parse(uuid);
 
-      const response: Response = await this._fetch.get(
-        `/partner/dashboard/vehicle-models/${parsedUuid}`,
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const response = await service.fetch.get(
+        `/partner/dashboard/vehicle-models/${uuid}`,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
-      const data: tSuccessOneModel<tVehicleModelModel> = await response.json();
+      const result: tSuccessOneModel<tVehicleModelModel> =
+        await response.json();
+
       return {
         isSuccess: true,
-        data: data.data,
+        ...result,
       };
     });
   }
-  public async getManyAsync(
+
+  async function readMany(
     filter: tVehicleModelFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModelModel>> {
-    return await this._catchAsync<tVehicleModelModel>(async () => {
+    return await service.catch<tVehicleModelModel>(async () => {
       const parsedFilter: tVehicleModelFilter =
         zVehicleModelFilter.parse(filter);
       const parsedPagination: tPagination = zPagination.parse(pagination);
@@ -163,34 +189,43 @@ class ClsVehicleModelService extends ClsAbstractService {
         parsedPagination.pageSize?.toString(),
       );
 
-      const response: Response = await this._fetch.get(
+      const response = await service.fetch.get(
         `/partner/dashboard/vehicle-models${clsQuery.toString()}`,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
-      const data: tSuccessManyModel<tVehicleModelModel> = await response.json();
+      const result: tSuccessManyModel<tVehicleModelModel> =
+        await response.json();
+
       return {
         isSuccess: true,
-        data: data.data,
-        pagination: data.pagination,
+        ...result,
       };
     });
   }
-  public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
-    return await this._catchAsync<null>(async () => {
-      const parsedUuid: tUuid = zUuid.parse(uuid);
 
-      const response: Response = await this._fetch.delete(
-        `/partner/dashboard/vehicle-models/${parsedUuid}`,
+  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+    return await service.catch<null>(async () => {
+      zUuid.parse(uuid);
+
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const response = await service.fetch.delete(
+        `/partner/dashboard/vehicle-models/${uuid}`,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
       return {
@@ -199,6 +234,11 @@ class ClsVehicleModelService extends ClsAbstractService {
       };
     });
   }
-}
 
-export { ClsVehicleModelService };
+  return {
+    create,
+    readOne,
+    readMany,
+    delete: _delete,
+  };
+}

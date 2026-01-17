@@ -239,7 +239,7 @@ function AddNewVehicleModel() {
   const clsVehicleModelService = new ClsVehicleModelService();
 
   async function submit(data: tVehicleModelCreate): Promise<void> {
-    const result = await clsVehicleModelService.addAsync(data);
+    const result = await clsVehicleModelService.create(data);
     if (!result.isSuccess) {
       toast.custom(() => (
         <Toast

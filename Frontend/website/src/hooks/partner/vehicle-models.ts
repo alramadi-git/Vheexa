@@ -1,28 +1,38 @@
-import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+"use client";
 
-import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
+import { useSearchParams } from "next/navigation";
+import useVehicleModelService from "@/services/partner/vehicle-model";
+
+import { useQuery } from "@tanstack/react-query";
 
 import { tVehicleModelFilter } from "@/validations/partner/vehicle-model";
 import { tPagination } from "@/validations/pagination";
 
 export default function useVehicleModels() {
   const searchParams = useSearchParams();
-  const clsVehicleModelService = new ClsVehicleModelService();
+  const vehicleModelService = useVehicleModelService();
 
   const [
-    minCapacity,
-    maxCapacity,
-    minPrice,
-    maxPrice,
-    minDiscount,
-    maxDiscount,
-    status,
-    page,
-    pageSize,
+    searchQuery,
+    categoriesQuery,
+    minCapacityQuery,
+    maxCapacityQuery,
+    transmissionsQuery,
+    fuelsQuery,
+    minPriceQuery,
+    maxPriceQuery,
+    minDiscountQuery,
+    maxDiscountQuery,
+    statusQuery,
+    pageQuery,
+    pageSizeQuery,
   ] = [
+    searchParams.get("vehicle-model-filter.search"),
+    searchParams.getAll("vehicle-model-filter.categories"),
     searchParams.get("vehicle-model-filter.capacity.min"),
     searchParams.get("vehicle-model-filter.capacity.max"),
+    searchParams.getAll("vehicle-model-filter.transmissions"),
+    searchParams.getAll("vehicle-model-filter.fuels"),
     searchParams.get("vehicle-model-filter.price.min"),
     searchParams.get("vehicle-model-filter.price.max"),
     searchParams.get("vehicle-model-filter.discount.min"),
@@ -32,27 +42,56 @@ export default function useVehicleModels() {
     searchParams.get("pagination.page-size"),
   ];
 
+  const [
+    search,
+    categories,
+    minCapacity,
+    maxCapacity,
+    transmissions,
+    fuels,
+    minPrice,
+    maxPrice,
+    minDiscount,
+    maxDiscount,
+    status,
+    page,
+    pageSize,
+  ] = [
+    searchQuery ?? undefined,
+    categoriesQuery.map((category) => Number(category)),
+    minCapacityQuery !== null ? Number(minCapacityQuery) : undefined,
+    maxCapacityQuery !== null ? Number(maxCapacityQuery) : undefined,
+    transmissionsQuery,
+    fuelsQuery,
+    minPriceQuery !== null ? Number(minPriceQuery) : undefined,
+    maxPriceQuery !== null ? Number(maxPriceQuery) : undefined,
+    minDiscountQuery !== null ? Number(minDiscountQuery) : undefined,
+    maxDiscountQuery !== null ? Number(maxDiscountQuery) : undefined,
+    statusQuery !== null ? Number(statusQuery) : undefined,
+    pageQuery !== null ? Number(pageQuery) : undefined,
+    pageSizeQuery !== null ? Number(pageSizeQuery) : undefined,
+  ];
+
   const filter: tVehicleModelFilter = {
-    search: searchParams.get("vehicle-model-filter.search") ?? undefined,
-    categories: searchParams
-      .getAll("vehicle-model-filter.categories")
-      .map((category) => Number(category)),
+    search,
+    categories,
     capacity: {
-      min: minCapacity !== null ? Number(minCapacity) : undefined,
-      max: maxCapacity !== null ? Number(maxCapacity) : undefined,
+      min: minCapacity,
+      max: maxCapacity,
     },
-    transmissions: searchParams.getAll("vehicle-model-filter.transmissions"),
-    fuels: searchParams.getAll("vehicle-model-filter.model-years"),
+    transmissions,
+    fuels,
     price: {
-      min: minPrice !== null ? Number(minPrice) : undefined,
-      max: maxPrice !== null ? Number(maxPrice) : undefined,
+      min: minPrice,
+      max: maxPrice,
     },
     discount: {
-      min: minDiscount !== null ? Number(minDiscount) : undefined,
-      max: maxDiscount !== null ? Number(maxDiscount) : undefined,
+      min: minDiscount,
+      max: maxDiscount,
     },
-    status: status !== null ? Number(status) : undefined,
+    status,
   };
+
   const pagination: tPagination = {
     page: page !== null ? Number(page) : undefined,
     pageSize: pageSize !== null ? Number(pageSize) : undefined,
@@ -62,16 +101,20 @@ export default function useVehicleModels() {
     queryKey: [
       "vehicle-models",
       filter.search,
-      filter.capacity,
-      filter.transmissions,
-      filter.fuels,
-      filter.price,
-      filter.discount,
+      filter.categories.join(", "),
+      filter.capacity.min,
+      filter.capacity.max,
+      filter.transmissions.join(", "),
+      filter.fuels.join(", "),
+      filter.price.min,
+      filter.price.max,
+      filter.discount.min,
+      filter.discount.max,
       filter.status,
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => clsVehicleModelService.getManyAsync(filter, pagination),
+    queryFn: () => vehicleModelService.readMany(filter, pagination),
   });
 
   return {

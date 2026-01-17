@@ -1,43 +1,65 @@
-import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+"use client";
 
-import { ClsMemberService } from "@/services/partner/member";
+import { useSearchParams } from "next/navigation";
+import useMemberService from "@/services/partner/member";
+
+import { useQuery } from "@tanstack/react-query";
 
 import { tMemberFilter } from "@/validations/partner/member";
 import { tPagination } from "@/validations/pagination";
 
 export default function useMembers() {
   const searchParams = useSearchParams();
-  const clsMemberService = new ClsMemberService();
+  const memberService = useMemberService();
 
-  const [status, page, pageSize] = [
+  const [
+    searchQuery,
+    rolesQuery,
+    branchesQuery,
+    statusQuery,
+    pageQuery,
+    pageSizeQuery,
+  ] = [
+    searchParams.get("filter.search"),
+    searchParams.getAll("filter.roles"),
+    searchParams.getAll("filter.branches"),
     searchParams.get("filter.status"),
     searchParams.get("pagination.page"),
     searchParams.get("pagination.page-size"),
   ];
 
+  const [search, roles, branches, status, page, pageSize] = [
+    searchQuery ?? undefined,
+    rolesQuery,
+    branchesQuery,
+    statusQuery !== null ? Number(statusQuery) : undefined,
+    pageQuery !== null ? Number(pageQuery) : undefined,
+    pageSizeQuery !== null ? Number(pageSizeQuery) : undefined,
+  ];
+
   const filter: tMemberFilter = {
-    search: searchParams.get("filter.search") ?? undefined,
-    roles: searchParams.getAll("filter.roles"),
-    branches: searchParams.getAll("filter.branches"),
-    status: status !== null ? Number(status) : undefined,
+    search,
+    roles,
+    branches,
+    status,
   };
+
   const pagination: tPagination = {
-    page: page !== null ? Number(page) : undefined,
-    pageSize: pageSize !== null ? Number(pageSize) : undefined,
+    page,
+    pageSize,
   };
 
   const { isLoading, data: result } = useQuery({
     queryKey: [
       "members",
       filter.search,
-      filter.roles,
-      filter.branches,
+      filter.roles.join(", "),
+      filter.branches.join(", "),
       filter.status,
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => clsMemberService.getManyAsync(filter, pagination),
+    queryFn: () => memberService.readMany(filter, pagination),
   });
 
   return {

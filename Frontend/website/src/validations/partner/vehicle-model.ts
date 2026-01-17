@@ -8,17 +8,15 @@ import {
 const zVehicleModelCreate = z
   .object({
     thumbnail: z
-      .file("expected thumbnail file (e.g. png, jpg, etc...)")
+      .file("thumbnail is required.")
       .refine((value) => value.type.startsWith("image/"), {
-        error: "only images are allowed",
+        error: "thumbnail can only be an image(e.g, png, jpg, etc...).",
       }),
     gallery: z
       .array(
-        z
-          .file("expected thumbnail file (e.g. png, jpg, etc...)")
-          .refine((value) => value.type.startsWith("image/"), {
-            error: "only images are allowed",
-          }),
+        z.file().refine((value) => value.type.startsWith("image/"), {
+          error: "gallery image can only be an image(e.g, png, jpg, etc...).",
+        }),
       )
       .max(25, "you can upload a maximum of 25 images."),
     name: z.string("name is required.").nonempty("name cannot be empty."),
@@ -72,10 +70,14 @@ const zVehicleModelCreate = z
           new Set(colors.map((color) => color.hexCode)).size === colors.length,
         "colors must be hex codes unique.",
       ),
-    price: z.number("price is required.").min(1, "price cannot be less than 1."),
-    discount: z.number("discount is required.").nonnegative("discount cannot be negative."),
+    price: z
+      .number("price is required.")
+      .min(1, "price cannot be less than 1."),
+    discount: z
+      .number("discount is required.")
+      .nonnegative("discount cannot be negative."),
     tags: z.array(z.string().nonempty("tag cannot be empty.")),
-    status: z.enum(eVehicleModelStatusModel, "invalid status."),
+    status: z.enum(eVehicleModelStatusModel, "status is required."),
   })
   .refine((value) => value?.price - 0.99 > value?.discount, {
     path: ["discount"],

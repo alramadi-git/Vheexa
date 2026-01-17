@@ -60,7 +60,7 @@ export default function Form() {
 
   async function submit(registerCredentials: tRegisterCredentials) {
     const response =
-      await authenticationService.registerAsync(registerCredentials);
+      await authenticationService.register(registerCredentials);
     if (!response.isSuccess) {
       console.error("error: ", response.message);
 

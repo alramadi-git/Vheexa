@@ -6,7 +6,7 @@ import { zBirthday, zBirthdayMin, zBirthdayMax } from "./birthday";
 
 import { zPhoneNumber } from "./phone-number";
 
-import { zEmail, zPassword } from "./authentication-credentials";
+import { zEmail, zPassword } from "./credentials";
 
 const zHumanCreateForm = z
   .object({

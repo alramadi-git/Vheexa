@@ -1,8 +1,9 @@
-import {
-  tResponseOneService,
-  tResponseManyService,
-  ClsAbstractService,
-} from "@/services/service";
+"use client";
+
+import useToken from "@/hooks/partner/token";
+import useService from "../helper";
+
+import { ClsQuery } from "@/libraries/query";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
@@ -15,20 +16,35 @@ import {
 
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { ClsQuery } from "@/libraries/query";
+import { eEnvironment } from "@/enums/environment";
+import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
 
-import { tMemberModel } from "@/models/partner/member";
 import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tResponseOneService, tResponseManyService } from "@/services/service";
 
-class ClsMemberService extends ClsAbstractService {
-  public async addAsync(
+export default function useMemberService() {
+  const { token } = useToken();
+  const service = useService();
+
+  async function create(
     member: tMemberCreate,
   ): Promise<tResponseOneService<null>> {
-    return await this._catchAsync<null>(async () => {
+    return await service.catch<null>(async () => {
       zMemberCreate.parse(member);
 
-      const formData: FormData = new FormData();
-      formData.append("avatar", member.avatar);
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const formData = new FormData();
+
+      if (member.avatar) {
+        formData.append("avatar", member.avatar);
+      }
+
       formData.append("role", member.role);
       formData.append("branch", member.branch);
       formData.append("username", member.username);
@@ -36,14 +52,14 @@ class ClsMemberService extends ClsAbstractService {
       formData.append("password", member.password);
       formData.append("status", member.status.toString());
 
-      const response: Response = await this._fetch.post(
+      const response = await service.fetch.post(
         "/partner/dashboard/members",
         formData,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
       return {
@@ -52,77 +68,391 @@ class ClsMemberService extends ClsAbstractService {
       };
     });
   }
-  public async getOneAsync(
+
+  async function readOne(
     uuid: tUuid,
   ): Promise<tResponseOneService<tMemberModel>> {
-    return await this._catchAsync<tMemberModel>(async () => {
+    return await service.catch<tMemberModel>(async () => {
       zUuid.parse(uuid);
 
-      const response: Response = await this._fetch.get(
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: {
+            uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            avatar: null,
+            username: "james wilson",
+            email: "james.wilson@partnerfleet.com",
+            role: {
+              name: "Vehicle Operator",
+              permissions: [
+                "Vehicle Instances Create",
+                "Vehicle Instances Update",
+              ],
+            },
+            branch: {
+              location: {
+                country: "United States",
+                city: "Austin",
+                street: "201 E 6th St",
+                latitude: 30.267153,
+                longitude: -97.743094,
+              },
+              name: "Austin Downtown Branch",
+              phoneNumber: "+14155552671",
+              email: "austin.downtown@partnerfleet.com",
+            },
+            status: eMemberStatusModel.active,
+            createdAt: "2024-01-10T08:30:00Z",
+            updatedAt: "2024-12-01T09:15:22Z",
+          },
+        };
+      }
+
+      const response = await service.fetch.get(
         `/partner/dashboard/members/${uuid}`,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
-      const data: tSuccessOneModel<tMemberModel> = await response.json();
+      const result: tSuccessOneModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
-        data: data.data,
+        ...result,
       };
     });
   }
-  public async getManyAsync(
+
+  async function readMany(
     filter: tMemberFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tMemberModel>> {
-    return await this._catchAsync<tMemberModel>(async () => {
+    return await service.catch<tMemberModel>(async () => {
       zMemberFilter.parse(filter);
       zPagination.parse(pagination);
 
-      const clsQuery: ClsQuery = new ClsQuery();
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: [
+            {
+              uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+              avatar: null,
+              username: "james wilson",
+              email: "james.wilson@partnerfleet.com",
+              role: {
+                name: "Vehicle Operator",
+                permissions: [
+                  "Vehicle Instances Create",
+                  "Vehicle Instances Update",
+                ],
+              },
+              branch: {
+                location: {
+                  country: "United States",
+                  city: "Austin",
+                  street: "201 E 6th St",
+                  latitude: 30.267153,
+                  longitude: -97.743094,
+                },
+                name: "Austin Downtown Branch",
+                phoneNumber: "+14155552671",
+                email: "austin.downtown@partnerfleet.com",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2024-01-10T08:30:00Z",
+              updatedAt: "2024-12-01T09:15:22Z",
+            },
+            {
+              uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              avatar: null,
+              username: "lena schmidt",
+              email: "lena.schmidt@partnerfleet.eu",
+              role: {
+                name: "HR Specialist",
+                permissions: ["Members Create", "Members Update"],
+              },
+              branch: {
+                location: {
+                  country: "Germany",
+                  city: "Berlin",
+                  street: "Friedrichstraße 68",
+                  latitude: 52.517036,
+                  longitude: 13.38886,
+                },
+                name: "Berlin Mitte Hub",
+                phoneNumber: "+14155552671",
+                email: "berlin.mitte@partnerfleet.eu",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2023-09-18T11:20:00Z",
+              updatedAt: "2024-11-02T13:10:45Z",
+            },
+            {
+              uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+              avatar: null,
+              username: "michael toronto",
+              email: "michael.toronto@partnerfleet.ca",
+              role: {
+                name: "Branch Coordinator",
+                permissions: ["Branches Read", "Branches Update"],
+              },
+              branch: {
+                location: {
+                  country: "Canada",
+                  city: "Toronto",
+                  street: "123 Queen St W",
+                  latitude: 43.648749,
+                  longitude: -79.380432,
+                },
+                name: "Toronto Financial District",
+                phoneNumber: "+14155552671",
+                email: "toronto.fd@partnerfleet.ca",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2023-11-25T10:00:00Z",
+              updatedAt: "2024-10-14T16:22:30Z",
+            },
+            {
+              uuid: "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+              avatar: null,
+              username: "sarah sydney",
+              email: "sarah.sydney@partnerfleet.com.au",
+              role: {
+                name: "Fleet Supervisor",
+                permissions: [
+                  "Vehicle Instances Read",
+                  "Vehicle Models Update",
+                ],
+              },
+              branch: {
+                location: {
+                  country: "Australia",
+                  city: "Sydney",
+                  street: "456 George St",
+                  latitude: -33.865004,
+                  longitude: 151.208336,
+                },
+                name: "Sydney Central Branch",
+                phoneNumber: "+14155552671",
+                email: "sydney.central@partnerfleet.com.au",
+              },
+              status: eMemberStatusModel.inactive,
+              createdAt: "2023-05-20T09:10:00Z",
+              updatedAt: "2024-09-12T11:30:00Z",
+            },
+            {
+              uuid: "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+              avatar: null,
+              username: "ahmed dubai",
+              email: "ahmed.dubai@partnerfleet.ae",
+              role: {
+                name: "Partner Administrator",
+                permissions: ["Partner Update", "Roles Create"],
+              },
+              branch: {
+                location: {
+                  country: "United Arab Emirates",
+                  city: "Dubai",
+                  street: "Sheikh Zayed Rd, Business Bay",
+                  latitude: 25.189827,
+                  longitude: 55.273522,
+                },
+                name: "Dubai Business Bay Office",
+                phoneNumber: "+14155552671",
+                email: "dubai.bb@partnerfleet.ae",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2024-01-12T10:30:00Z",
+              updatedAt: "2024-12-06T08:45:10Z",
+            },
+            {
+              uuid: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+              avatar: null,
+              username: "carlos sp",
+              email: "carlos.sp@partnerfleet.br",
+              role: {
+                name: "HR Specialist",
+                permissions: ["Members Delete", "Members Read"],
+              },
+              branch: {
+                location: {
+                  country: "Brazil",
+                  city: "São Paulo",
+                  street: "Av. Paulista, 1000",
+                  latitude: -23.561238,
+                  longitude: -46.65551,
+                },
+                name: "São Paulo Paulista Branch",
+                phoneNumber: "+14155552671",
+                email: "saopaulo.paulista@partnerfleet.br",
+              },
+              status: eMemberStatusModel.inactive,
+              createdAt: "2023-07-25T14:20:00Z",
+              updatedAt: "2024-08-15T09:10:00Z",
+            },
+            {
+              uuid: "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
+              avatar: null,
+              username: "emily vancouver",
+              email: "emily.vancouver@partnerfleet.ca",
+              role: {
+                name: "Vehicle Operator",
+                permissions: [
+                  "Vehicle Models Create",
+                  "Vehicle Instances Create",
+                ],
+              },
+              branch: {
+                location: {
+                  country: "Canada",
+                  city: "Vancouver",
+                  street: "789 Granville St",
+                  latitude: 49.2819,
+                  longitude: -123.1187,
+                },
+                name: "Vancouver Downtown Office",
+                phoneNumber: "+14155552671",
+                email: "vancouver.dt@partnerfleet.ca",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2023-10-10T11:15:00Z",
+              updatedAt: "2024-11-22T10:30:00Z",
+            },
+            {
+              uuid: "g7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d",
+              avatar: null,
+              username: "thomas munich",
+              email: "thomas.munich@partnerfleet.eu",
+              role: {
+                name: "Branch Coordinator",
+                permissions: ["Branches Create", "Branches Delete"],
+              },
+              branch: {
+                location: {
+                  country: "Germany",
+                  city: "Munich",
+                  street: "Marienplatz 8",
+                  latitude: 48.137154,
+                  longitude: 11.576124,
+                },
+                name: "Munich City Center",
+                phoneNumber: "+14155552671",
+                email: "munich.cc@partnerfleet.eu",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2024-02-20T09:45:00Z",
+              updatedAt: "2024-11-29T11:15:30Z",
+            },
+            {
+              uuid: "h8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
+              avatar: null,
+              username: "david nyc",
+              email: "david.nyc@partnerfleet.com",
+              role: {
+                name: "Fleet Supervisor",
+                permissions: [
+                  "Vehicle Instances Update",
+                  "Vehicle Models Read",
+                ],
+              },
+              branch: {
+                location: {
+                  country: "United States",
+                  city: "New York",
+                  street: "350 5th Ave",
+                  latitude: 40.748441,
+                  longitude: -73.985664,
+                },
+                name: "NYC Midtown Branch",
+                phoneNumber: "+14155552671",
+                email: "nyc.midtown@partnerfleet.com",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2023-09-05T10:00:00Z",
+              updatedAt: "2024-12-04T09:25:15Z",
+            },
+            {
+              uuid: "i9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
+              avatar: null,
+              username: "anna melbourne",
+              email: "anna.melbourne@partnerfleet.com.au",
+              role: {
+                name: "HR Specialist",
+                permissions: ["Members Create", "Members Update"],
+              },
+              branch: {
+                location: {
+                  country: "Australia",
+                  city: "Melbourne",
+                  street: "120 Collins St",
+                  latitude: -37.818264,
+                  longitude: 144.968789,
+                },
+                name: "Melbourne CBD Office",
+                phoneNumber: "+14155552671",
+                email: "melbourne.cbd@partnerfleet.com.au",
+              },
+              status: eMemberStatusModel.active,
+              createdAt: "2023-11-15T10:30:00Z",
+              updatedAt: "2024-11-26T14:20:00Z",
+            },
+          ],
+          pagination: { page: 1, pageSize: 10, totalItems: 10 },
+        };
+      }
 
-      clsQuery.set("filter.search", filter.search);
+      const clsQuery = new ClsQuery();
 
-      clsQuery.set("filter.roles", filter.roles);
+      clsQuery.set("Filter.Search", filter.search);
 
-      clsQuery.set("filter.branches", filter.branches);
+      clsQuery.set("Filter.Roles", filter.roles);
 
-      clsQuery.set("filter.status", filter.status?.toString());
+      clsQuery.set("Filter.Branches", filter.branches);
 
-      clsQuery.set("pagination.page", pagination.page?.toString());
-      clsQuery.set("pagination.page-size", pagination.pageSize?.toString());
+      clsQuery.set("Filter.Status", filter.status?.toString());
 
-      const response: Response = await this._fetch.get(
+      clsQuery.set("Pagination.Page", pagination.page?.toString());
+      clsQuery.set("Pagination.PageSize", pagination.pageSize?.toString());
+
+      const response = await service.fetch.get(
         `/partner/dashboard/members${clsQuery.toString()}`,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
-      const data: tSuccessManyModel<tMemberModel> = await response.json();
+      const result: tSuccessManyModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
-        data: data.data,
-        pagination: data.pagination,
+        ...result,
       };
     });
   }
-  public async deleteOneAsync(uuid: tUuid): Promise<tResponseOneService<null>> {
-    return await this._catchAsync<null>(async () => {
+
+  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+    return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
-      const response: Response = await this._fetch.delete(
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const response = await service.fetch.delete(
         `/partner/dashboard/members/${uuid}`,
+        token,
       );
 
       if (!response.ok) {
-        const errorText: string = await response.text();
-        throw new Error(errorText);
+        throw new Error(await response.text());
       }
 
       return {
@@ -131,6 +461,11 @@ class ClsMemberService extends ClsAbstractService {
       };
     });
   }
-}
 
-export { ClsMemberService };
+  return {
+    create,
+    readOne,
+    readMany,
+    delete: _delete,
+  };
+}

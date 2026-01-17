@@ -1,75 +1,57 @@
 class ClsFetch {
   protected readonly _domain: string;
-  protected readonly _basePath: string;
-  protected readonly _baseUrl: string;
-
-  protected readonly _headers: RequestInit["headers"];
-
-  public constructor(domain: string, basePath: string);
-  public constructor(
-    domain: string,
-    basePath: string,
-    headers: RequestInit["headers"],
-  );
-  public constructor(
-    domain: string,
-    basePath: string,
-    headers: RequestInit["headers"] = {},
-  ) {
+  public constructor(domain: string) {
     this._domain = domain;
-    this._basePath = basePath;
-    this._baseUrl = `${this._domain}$${this._basePath}`;
-    this._headers = {
-      Accept: "application/json",
-      ...headers,
-    };
   }
 
-  protected _generateUrl(path: string): string {
-    return `${this._domain}${this._basePath}${path}`;
-  }
-
-  public async get(
-    path: string,
-    headers: RequestInit["headers"] = {},
-  ): Promise<Response> {
-    return await fetch(this._generateUrl(path), {
+  public async get(path: string, token?: string): Promise<Response> {
+    return await fetch(`${this._domain}${path}`, {
       method: "GET",
-      headers: { ...this._headers, ...headers },
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : undefined,
     });
   }
-
   public async post(
     path: string,
     data: BodyInit,
-    headers: RequestInit["headers"] = {},
+    token?: string,
   ): Promise<Response> {
-    return await fetch(this._generateUrl(path), {
+    return await fetch(`${this._domain}${path}`, {
       method: "POST",
-      headers: { ...this._headers, ...headers },
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : undefined,
       body: data,
     });
   }
-
   public async patch(
     path: string,
     data: BodyInit,
-    headers: RequestInit["headers"] = {},
+    token?: string,
   ): Promise<Response> {
-    return await fetch(this._generateUrl(path), {
+    return await fetch(`${this._domain}${path}`, {
       method: "PATCH",
-      headers: { ...this._headers, ...headers },
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : undefined,
       body: data,
     });
   }
-
-  public async delete(
-    path: string,
-    headers: RequestInit["headers"] = {},
-  ): Promise<Response> {
-    return await fetch(this._generateUrl(path), {
+  public async delete(path: string, token?: string): Promise<Response> {
+    return await fetch(`${this._domain}${path}`, {
       method: "DELETE",
-      headers: { ...this._headers, ...headers },
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : undefined,
     });
   }
 }
