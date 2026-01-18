@@ -91,7 +91,9 @@ export default function Filter() {
   const categoriesRef = useRef<tFieldMultiSelectRef<tOption>>(null);
 
   const capacityRef = useRef<tFieldNumberMinMaxRef>(null);
+
   const transmissionsRef = useRef<tFieldTagsRef>(null);
+  
   const fuelsRef = useRef<tFieldTagsRef>(null);
 
   const priceRef = useRef<tFieldNumberMinMaxRef>(null);
@@ -110,40 +112,56 @@ export default function Filter() {
     const [
       searchQuery,
       categoriesQuery,
+      capacityMinQuery,
+      capacityMaxQuery,
+      transmissionsQuery,
+      fuelsQuery,
       priceMinQuery,
       priceMaxQuery,
       discountMinQuery,
       discountMaxQuery,
       statusQuery,
     ] = [
-      query.get("filter.search"),
-      query.getAll("filter.categories"),
-      query.get("filter.price.min"),
-      query.get("filter.price.max"),
-      query.get("filter.discount.min"),
-      query.get("filter.discount.max"),
-      query.get("filter.status"),
-    ];
+        query.get("filter.search"),
+        query.getAll("filter.categories"),
+        query.get("filter.capacity.min"),
+        query.get("filter.capacity.max"),
+        query.getAll("filter.transmissions"),
+        query.getAll("filter.fuels"),
+        query.get("filter.price.min"),
+        query.get("filter.price.max"),
+        query.get("filter.discount.min"),
+        query.get("filter.discount.max"),
+        query.get("filter.status"),
+      ];
 
     const [
       search,
       categories,
+      capacityMin,
+      capacityMax,
+      transmissions,
+      fuels,
       priceMin,
       priceMax,
       discountMin,
       discountMax,
       status,
     ] = [
-      searchQuery !== null ? searchQuery : undefined,
-      categoriesQuery !== null
-        ? categoriesQuery.map((category) => Number(category))
-        : [],
-      priceMinQuery !== null ? Number(priceMinQuery) : undefined,
-      priceMaxQuery !== null ? Number(priceMaxQuery) : undefined,
-      discountMinQuery !== null ? Number(discountMinQuery) : undefined,
-      discountMaxQuery !== null ? Number(discountMaxQuery) : undefined,
-      statusQuery !== null ? Number(discountMaxQuery) : undefined,
-    ];
+        searchQuery !== null ? searchQuery : undefined,
+        categoriesQuery !== null
+          ? categoriesQuery.map((category) => Number(category))
+          : [],
+        capacityMinQuery !== null ? Number(capacityMinQuery) : undefined,
+        capacityMaxQuery !== null ? Number(capacityMaxQuery) : undefined,
+        transmissionsQuery,
+        fuelsQuery,
+        priceMinQuery !== null ? Number(priceMinQuery) : undefined,
+        priceMaxQuery !== null ? Number(priceMaxQuery) : undefined,
+        discountMinQuery !== null ? Number(discountMinQuery) : undefined,
+        discountMaxQuery !== null ? Number(discountMaxQuery) : undefined,
+        statusQuery !== null ? Number(discountMaxQuery) : undefined,
+      ];
 
     setValue("search", search);
 
@@ -154,11 +172,23 @@ export default function Filter() {
       ),
     );
 
+    setValue("capacity.min", capacityMin);
+    setValue("capacity.max", capacityMax);
+    capacityRef.current?.setValue({ min: capacityMin, max: capacityMax });
+
+    setValue("transmissions", transmissions);
+    transmissionsRef.current?.setValues(transmissions);
+
+    setValue("fuels", fuels);
+    fuelsRef.current?.setValues(fuels);
+
     setValue("price.min", priceMin);
     setValue("price.max", priceMax);
+    priceRef.current?.setValue({ min: priceMin, max: priceMax });
 
     setValue("discount.min", discountMin);
     setValue("discount.max", discountMax);
+    discountRef.current?.setValue({ min: discountMin, max: discountMax });
 
     setValue("status", status);
     statusRef.current?.setValue(
@@ -362,8 +392,8 @@ export default function Filter() {
                       ref={transmissionsRef}
                       id={`${id}-transmission`}
                       placeholder={tFilter("transmissions.placeholder")}
-                      tags={value}
-                      onTagsChange={(value) => setValue(value)}
+                      defaultValues={value}
+                      onValuesChange={(value) => setValue(value)}
                     />
                   </FieldContent>
                   <FieldError errors={error} />
@@ -390,8 +420,8 @@ export default function Filter() {
                       ref={fuelsRef}
                       id={`${id}-fuels`}
                       placeholder={tFilter("fuels.placeholder")}
-                      tags={value}
-                      onTagsChange={(value) => setValue(value)}
+                      defaultValues={value}
+                      onValuesChange={(value) => setValue(value)}
                     />
                   </FieldContent>
                   <FieldError errors={error} />

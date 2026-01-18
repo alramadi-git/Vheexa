@@ -98,10 +98,9 @@ export default function Filter() {
     ];
 
     setValue("search", search);
+    
     setValue("roles", roles);
     setValue("branches", branches);
-    setValue("status", status);
-
     Promise.all([
       roles.length !== 0 ? optionsService.readRolesByUuid(roles) : undefined,
       branches.length !== 0
@@ -147,6 +146,7 @@ export default function Filter() {
       }
     });
 
+    setValue("status", status);
     statusRef.current?.setValue(
       statuses.find((_status) => _status.value === status?.toString()),
     );

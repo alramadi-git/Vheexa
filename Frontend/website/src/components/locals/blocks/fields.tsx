@@ -134,39 +134,46 @@ function FieldUsername({
 }
 
 type tFieldTagsRef = {
-  reset: (tags?: string[]) => void;
+  setValues: (values: string[]) => void;
+  reset: (defaultValues?: string[]) => void;
 };
 type tFieldTagsProps = {
   id?: string;
   placeholder?: string;
-  tags?: string[];
-  onTagsChange?: (values: string[]) => void;
+  defaultValues?: string[];
+  onValuesChange?: (values: string[]) => void;
 };
 const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
-  ({ id, placeholder, tags, onTagsChange }, ref) => {
-    const [_tags, _setTags] = useState<string[]>(tags ?? []);
+  ({ id, placeholder, defaultValues, onValuesChange }, ref) => {
+    const [values, setValues] = useState<string[]>(defaultValues ?? []);
 
-    useImperativeHandle(ref, () => ({
-      reset,
-    }));
-
-    function reset(tags: string[] = []) {
-      _setTags(tags);
+    function imperativeSetValue(values: string[]) {
+      setValues(values);
     }
 
-    function changeTags(tags: string[]) {
-      _setTags(tags);
-      onTagsChange?.(tags);
+    function imperativeReset(defaultValues: string[] = []) {
+      setValues(defaultValues);
+    }
+
+    useImperativeHandle(ref, () => ({
+      setValues: imperativeSetValue,
+      reset: imperativeReset,
+    }));
+
+
+    function changeValues(tags: string[]) {
+      setValues(tags);
+      onValuesChange?.(tags);
     }
 
     return (
       <TagsInputRoot
-        value={tags}
-        onValueChange={changeTags}
+        value={defaultValues}
+        onValueChange={changeValues}
         className="flex flex-col gap-2"
       >
         <div className="border-input bg-background flex flex-wrap items-center gap-1.5 rounded border px-2.5 py-1 text-sm focus-within:ring-1 focus-within:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-within:ring-zinc-400">
-          {_tags.map((tag) => (
+          {values.map((tag) => (
             <TagsInputItem
               key={tag}
               value={tag}
@@ -226,8 +233,8 @@ type tMinMax = {
   max?: number;
 };
 type tFieldNumberMinMaxRef = {
-  change: (minMax?: tMinMax) => void;
-  reset: (minMax?: tMinMax) => void;
+  setValue: (value?: tMinMax) => void;
+  reset: (defaultValue?: tMinMax) => void;
 };
 type tFieldNumberMinMaxProps = {
   id?: string;
@@ -268,9 +275,9 @@ const FieldNumberMinMax = forwardRef<
       formatter?.(maxProp) ?? maxProp?.toString() ?? "",
     );
 
-    function change(minMax?: tMinMax) {
-      const min = minMax?.min;
-      const max = minMax?.max;
+    function imperativeChange(value?: tMinMax) {
+      const min = value?.min;
+      const max = value?.max;
 
       setMin(min ?? 0);
       setMinValue(formatter?.(min) ?? min?.toString() ?? "");
@@ -279,9 +286,9 @@ const FieldNumberMinMax = forwardRef<
       setMaxValue(formatter?.(max) ?? max?.toString() ?? "");
     }
 
-    function reset(minMax?: tMinMax) {
-      const min = minMax?.min;
-      const max = minMax?.max;
+    function imperativeReset(defaultValue?: tMinMax) {
+      const min = defaultValue?.min;
+      const max = defaultValue?.max;
 
       setMin(min ?? 0);
       setMinValue(formatter?.(min) ?? min?.toString() ?? "");
@@ -291,8 +298,8 @@ const FieldNumberMinMax = forwardRef<
     }
 
     useImperativeHandle(ref, () => ({
-      change,
-      reset,
+      setValue: imperativeChange,
+      reset: imperativeReset,
     }));
 
     function onFocus(field: "min" | "max") {
@@ -309,6 +316,7 @@ const FieldNumberMinMax = forwardRef<
       if (field === "min") onMinBlur(parsedValue);
       else onMaxBlur(parsedValue);
     }
+
     function onMinBlur(value?: number) {
       if (Number.isNaN(value)) {
         setMin(0);
@@ -322,6 +330,8 @@ const FieldNumberMinMax = forwardRef<
       setMinValue(formatter?.(value) ?? value?.toString() ?? "");
       _onMinChange?.(value);
     }
+
+
     function onMaxBlur(value?: number) {
       if (Number.isNaN(value)) {
         setMax(0);
@@ -336,7 +346,7 @@ const FieldNumberMinMax = forwardRef<
       _onMaxChange?.(value);
     }
 
-    function changeMinMax(field: "min" | "max", value: string) {
+    function changeValue(field: "min" | "max", value: string) {
       if (field === "min") setMinValue(value);
       else setMaxValue(value);
     }
@@ -352,7 +362,7 @@ const FieldNumberMinMax = forwardRef<
           value={minValue}
           onFocus={() => onFocus("min")}
           onKeyDown={onKeyDown}
-          onChange={(event) => changeMinMax("min", event.currentTarget.value)}
+          onChange={(event) => changeValue("min", event.currentTarget.value)}
           onBlur={(event) => onBlur("min", event.currentTarget.value)}
         />
         <Input
@@ -363,7 +373,7 @@ const FieldNumberMinMax = forwardRef<
           value={maxValue}
           onFocus={() => onFocus("max")}
           onKeyDown={onKeyDown}
-          onChange={(event) => changeMinMax("max", event.currentTarget.value)}
+          onChange={(event) => changeValue("max", event.currentTarget.value)}
           onBlur={(event) => onBlur("max", event.currentTarget.value)}
         />
       </div>

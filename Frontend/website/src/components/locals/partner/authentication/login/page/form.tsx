@@ -5,8 +5,6 @@ import { useTranslations } from "next-intl";
 import { useId, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
 
-import { ClsAuthenticationService } from "@/services/partner/authentication";
-
 import {
   tLoginCredentials,
   zLoginCredentials,
@@ -83,8 +81,12 @@ export default function Form() {
 
       return;
     }
+    
+    toast.custom(() => (
+      <Toast variant="success" label={tForm("actions.when-success")} />
+    ));
 
-    // router.push("/partner/dashboard");
+    router.push("/partner/dashboard");
   }
 
   return (

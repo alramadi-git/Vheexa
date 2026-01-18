@@ -27,7 +27,7 @@ export default function useAuthenticationService() {
     return service.catch<tBaseAccountModel<tAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
 
-      if (process.env.NEXT_PUBLIC_ENVIRONMENT === "development") {
+      if (process.env.NODE_ENV === "development") {
         return {
           isSuccess: true,
           data: {
@@ -163,7 +163,7 @@ export default function useAuthenticationService() {
     return service.catch<tBaseAccountModel<tAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
 
-      if (process.env.NEXT_PUBLIC_ENVIRONMENT === "development") {
+      if (process.env.NODE_ENV === "development") {
         return {
           isSuccess: true,
           data: {
@@ -249,7 +249,7 @@ export default function useAuthenticationService() {
 
   async function logout(): Promise<tResponseOneService<null>> {
     return service.catch<null>(async () => {
-      if (process.env.NEXT_PUBLIC_ENVIRONMENT === "development") {
+      if (process.env.NODE_ENV === "development") {
         return {
           isSuccess: true,
           data: null,

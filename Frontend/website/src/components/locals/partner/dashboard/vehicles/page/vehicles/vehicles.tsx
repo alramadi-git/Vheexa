@@ -17,7 +17,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
+import useVehicleModelService from "@/services/partner/vehicle-model";
 
 import { LuCheck, LuPlus } from "react-icons/lu";
 
@@ -151,11 +151,14 @@ function AddNewVehicleModel() {
   const id = useId();
   const router = useRouter();
 
+  const vehicleModelService = useVehicleModelService();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const tAddNew = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
   );
+
 
   const {
     formState,
@@ -236,10 +239,9 @@ function AddNewVehicleModel() {
     );
   }
 
-  const clsVehicleModelService = new ClsVehicleModelService();
 
   async function submit(data: tVehicleModelCreate): Promise<void> {
-    const result = await clsVehicleModelService.create(data);
+    const result = await vehicleModelService.create(data);
     if (!result.isSuccess) {
       toast.custom(() => (
         <Toast
@@ -257,8 +259,8 @@ function AddNewVehicleModel() {
       />
     ));
 
-    // setIsOpen(false);
-    // router.refresh();
+    setIsOpen(false);
+    router.refresh();
   }
 
   return (
@@ -481,8 +483,8 @@ function AddNewVehicleModel() {
                       <FieldTags
                         id={`${id}-tags`}
                         placeholder={tAddNew("content.form.tags.placeholder")}
-                        tags={value}
-                        onTagsChange={setValue}
+                        defaultValues={value}
+                        onValuesChange={setValue}
                       />
                     </FieldContent>
                     <FieldError errors={error} />
@@ -701,7 +703,7 @@ function AddNewVehicleModel() {
                 </Field>
               )}
             />
-    
+
           </FieldGroup>
           <FieldGroup className="grid-cols-2">
             <Controller

@@ -798,6 +798,16 @@
             }
           },
           "sidebar": {
+            "header": {
+              "account": {
+                "navigation-menu": [
+                  {
+                    "url": "/partner/profile",
+                    "label": "Profile"
+                  }
+                ]
+              }
+            },
             "content": [
               {
                 "label": "General",
@@ -829,14 +839,7 @@
                   }
                 ]
               }
-            ],
-            "footer": {
-              "news": {
-                "label": "Subscribe to our News",
-                "description": "Opt-in to receive updates and News about Vheexa.",
-                "subscribe": "Subscribe now"
-              }
-            }
+            ]
           }
         },
         "roles": {

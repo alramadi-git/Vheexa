@@ -5,10 +5,10 @@ import { eLocale } from "@/i18n/routing";
 import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import { ClsVehicleModelService } from "@/services/partner/vehicle-model";
-
 import { useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
+
+import useVehicleModelService from "@/services/partner/vehicle-model";
 
 import { cn } from "@/utilities/cn";
 
@@ -207,7 +207,8 @@ export default function Table({
                 <li
                   key={color.uuid}
                   style={{
-                    background: `color-mix(in oklab, ${color.hexCode} 20%, transparent)`,
+                    filter: "brightness(0.8)",
+                    background: `color-mix(in oklab, ${color.hexCode} 45%, transparent)`,
                     color: color.hexCode,
                   }}
                   className="flex items-center justify-center rounded p-1 text-xs font-medium"
@@ -380,7 +381,7 @@ function Actions({ vehicleModel }: tActionsProps) {
   );
 
   const router = useRouter();
-  const clsVehicleModelService = new ClsVehicleModelService();
+  const vehicleModelService = useVehicleModelService();
 
   function view() {
     toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
@@ -390,7 +391,7 @@ function Actions({ vehicleModel }: tActionsProps) {
   }
 
   async function remove() {
-    const result = await clsVehicleModelService.delete(
+    const result = await vehicleModelService.delete(
       vehicleModel.uuid,
     );
 

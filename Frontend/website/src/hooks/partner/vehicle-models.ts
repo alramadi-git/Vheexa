@@ -27,20 +27,20 @@ export default function useVehicleModels() {
     pageQuery,
     pageSizeQuery,
   ] = [
-    searchParams.get("vehicle-model-filter.search"),
-    searchParams.getAll("vehicle-model-filter.categories"),
-    searchParams.get("vehicle-model-filter.capacity.min"),
-    searchParams.get("vehicle-model-filter.capacity.max"),
-    searchParams.getAll("vehicle-model-filter.transmissions"),
-    searchParams.getAll("vehicle-model-filter.fuels"),
-    searchParams.get("vehicle-model-filter.price.min"),
-    searchParams.get("vehicle-model-filter.price.max"),
-    searchParams.get("vehicle-model-filter.discount.min"),
-    searchParams.get("vehicle-model-filter.discount.max"),
-    searchParams.get("vehicle-model-filter.status"),
-    searchParams.get("pagination.page"),
-    searchParams.get("pagination.page-size"),
-  ];
+      searchParams.get("filter.search"),
+      searchParams.getAll("filter.categories"),
+      searchParams.get("filter.capacity.min"),
+      searchParams.get("filter.capacity.max"),
+      searchParams.getAll("filter.transmissions"),
+      searchParams.getAll("filter.fuels"),
+      searchParams.get("filter.price.min"),
+      searchParams.get("filter.price.max"),
+      searchParams.get("filter.discount.min"),
+      searchParams.get("filter.discount.max"),
+      searchParams.get("filter.status"),
+      searchParams.get("pagination.page"),
+      searchParams.get("pagination.page-size"),
+    ];
 
   const [
     search,
@@ -57,20 +57,20 @@ export default function useVehicleModels() {
     page,
     pageSize,
   ] = [
-    searchQuery ?? undefined,
-    categoriesQuery.map((category) => Number(category)),
-    minCapacityQuery !== null ? Number(minCapacityQuery) : undefined,
-    maxCapacityQuery !== null ? Number(maxCapacityQuery) : undefined,
-    transmissionsQuery,
-    fuelsQuery,
-    minPriceQuery !== null ? Number(minPriceQuery) : undefined,
-    maxPriceQuery !== null ? Number(maxPriceQuery) : undefined,
-    minDiscountQuery !== null ? Number(minDiscountQuery) : undefined,
-    maxDiscountQuery !== null ? Number(maxDiscountQuery) : undefined,
-    statusQuery !== null ? Number(statusQuery) : undefined,
-    pageQuery !== null ? Number(pageQuery) : undefined,
-    pageSizeQuery !== null ? Number(pageSizeQuery) : undefined,
-  ];
+      searchQuery ?? undefined,
+      categoriesQuery.map((category) => Number(category)),
+      minCapacityQuery !== null ? Number(minCapacityQuery) : undefined,
+      maxCapacityQuery !== null ? Number(maxCapacityQuery) : undefined,
+      transmissionsQuery,
+      fuelsQuery,
+      minPriceQuery !== null ? Number(minPriceQuery) : undefined,
+      maxPriceQuery !== null ? Number(maxPriceQuery) : undefined,
+      minDiscountQuery !== null ? Number(minDiscountQuery) : undefined,
+      maxDiscountQuery !== null ? Number(maxDiscountQuery) : undefined,
+      statusQuery !== null ? Number(statusQuery) : undefined,
+      pageQuery !== null ? Number(pageQuery) : undefined,
+      pageSizeQuery !== null ? Number(pageSizeQuery) : undefined,
+    ];
 
   const filter: tVehicleModelFilter = {
     search,
@@ -93,8 +93,8 @@ export default function useVehicleModels() {
   };
 
   const pagination: tPagination = {
-    page: page !== null ? Number(page) : undefined,
-    pageSize: pageSize !== null ? Number(pageSize) : undefined,
+    page,
+    pageSize,
   };
 
   const { isLoading, data: result } = useQuery({
