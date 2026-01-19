@@ -1,14 +1,17 @@
 import { tNullable } from "@/types/nullish";
 
-import { tImageModel } from "../image";
-import { tLocationModel } from "../location";
-
 type tUserModel = {
   uuid: string;
-  avatar: tNullable<tImageModel>;
-  location: tLocationModel;
+  avatar: tNullable<string>;
+  location: {
+    country: string;
+    city: string;
+    street: string;
+    latitude: number;
+    longitude: number;
+  };
   username: string;
-  dateOfBirth: string;
+  birthday: string;
   phoneNumber: string;
   email: string;
   updatedAt: string;

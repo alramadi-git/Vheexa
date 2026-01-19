@@ -4,11 +4,7 @@ import { useTranslations } from "next-intl";
 
 import useAccount from "@/hooks/partner/account";
 
-import {
-  LuChevronsUpDown,
-  LuUser,
-  LuLogOut,
-} from "react-icons/lu";
+import { LuChevronsUpDown, LuUser, LuLogOut } from "react-icons/lu";
 
 import {
   SidebarHeader as ShadcnSidebarHeader,
@@ -61,29 +57,35 @@ function SidebarAccount() {
       <DropdownMenuTrigger asChild>
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent items-end"
+          className="data-[state=open]:bg-sidebar-accent items-center"
         >
           <Avatar className="size-8 bg-transparent">
-            <AvatarImage src={account.avatar ?? undefined} alt={account.username} />
+            <AvatarImage
+              src={account.avatar ?? undefined}
+              alt={account.username}
+            />
             <AvatarFallback>
               <LuUser size={20} />
             </AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-medium">{account.username}</span>
-            <span className="truncate text-xs">{account.email}</span>
+            <p className="truncate font-medium">{account.username}</p>
+            <p className="text-muted-foreground truncate text-xs">
+              {account.email}
+            </p>
           </div>
           <LuChevronsUpDown className="ml-auto size-4" />
         </SidebarMenuButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        sideOffset={6}
         side="bottom"
         className="bg-sidebar w-(--radix-dropdown-menu-trigger-width) min-w-56 border p-1"
       >
         <DropdownMenuLabel>
           <p className="truncate font-medium">{account.username}</p>
-          <p className="truncate text-xs font-normal">{account.email}</p>
+          <p className="text-muted-foreground truncate text-xs font-normal">
+            {account.email}
+          </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild variant="destructive">

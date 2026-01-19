@@ -2289,6 +2289,16 @@
               }
             }
           }
+        },
+        "not-found": {
+          "title": "Whoops!",
+          "subtitle": "Something went wrong",
+          "description": " The page you're looking for isn't found, we suggest you back to home.",
+          "go-back-to-dashboard": "Go Back to Dashboard",
+          "illustration": {
+            "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+            "alternate": "404 Not Found Illustration"
+          }
         }
       },
       "authentication": {
@@ -2336,9 +2346,28 @@
               "title": "Register",
               "description": "Create your Vheexa account and manage your rentals seamlessly."
             },
+            "title": "Hello there!",
+            "description": "create your vheexa account",
             "form": {
-              "title": "Hello there!",
-              "description": "create your vheexa account",
+              "steps": [
+                {
+                  "value": "Partner",
+                  "label": "Partner Info",
+                  "description": "Enter your partner information"
+                },
+                {
+                  "value": "Branch",
+                  "label": "Branch Info",
+                  "description": "Enter your branch information"
+                },
+                {
+                  "value": "Member",
+                  "label": "Member Info",
+                  "description": "Enter your member information"
+                }
+              ],
+              "back": "",
+              "next": "",
               "partner": {
                 "logo": {
                   "label": "Logo"
@@ -2380,16 +2409,26 @@
               "member": {},
               "remember-me": {
                 "label": "Remember me",
-                "title": "",
-                "description": ""
+                "description": "Keeps you logged in on this device for 30 days."
               },
               "actions": {
                 "reset": "Reset",
                 "submit": "Register",
                 "when-success": "Vheexa account was successfully created",
-                "when-error": "Something went wrong while adding your vheexa account"
-              }
+                "when-error": "Something went wrong while creating your vheexa account"
+              },
+              "login": "Already have an account? <link>Login</link>"
             }
+          }
+        },
+        "not-found": {
+          "title": "Whoops!",
+          "subtitle": "Something went wrong",
+          "description": " The page you're looking for isn't found, we suggest you back to home.",
+          "go-back-to-login-page": "Go Back to Login Page",
+          "illustration": {
+            "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+            "alternate": "404 Not Found Illustration"
           }
         }
       }
@@ -2411,16 +2450,16 @@
           "alternate": "placeholder"
         }
       }
-    }
-  },
-  "not-found": {
-    "title": "Whoops!",
-    "subtitle": "Something went wrong",
-    "description": " The page you're looking for isn't found, we suggest you back to home.",
-    "go-back-to-home": "Go Back to Home",
-    "illustration": {
-      "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
-      "alternate": "404 Not Found Illustration"
+    },
+    "not-found": {
+      "title": "Whoops!",
+      "subtitle": "Something went wrong",
+      "description": " The page you're looking for isn't found, we suggest you back to home.",
+      "go-back-to-home": "Go Back to Home",
+      "illustration": {
+        "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+        "alternate": "404 Not Found Illustration"
+      }
     }
   }
 }

@@ -119,6 +119,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+  ::placeholder {
+    @apply truncate;
+  }
+  :disabled {
+    @apply cursor-not-allowed opacity-50 select-none;
+  }
   body {
     @apply bg-background text-foreground;
   }
@@ -131,16 +137,10 @@
   a {
     @apply cursor-pointer;
   }
-
+  .h-fullscreen {
+    @apply h-dvh;
+  }
   .dashboard .h-fullscreen {
     @apply min-h-[calc(100dvh-64px)];
-  }
-
-  :disabled {
-    @apply cursor-not-allowed opacity-50 select-none;
-  }
-
-  ::placeholder {
-    @apply truncate;
   }
 }

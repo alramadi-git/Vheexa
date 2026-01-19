@@ -2,13 +2,15 @@
 
 import { useTranslations } from "next-intl";
 
-import { Container, Section } from "@/components/locals/blocks/typography";
+import { Section } from "@/components/locals/blocks/typography";
+
 import { FullHDImage } from "@/components/locals/blocks/images";
+
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 export default function NotFound() {
-  const tNotFound = useTranslations("app.not-found");
+  const tNotFound = useTranslations("app.partner.dashboard.not-found");
 
   return (
     <Section className="h-fullscreen grid grid-cols-1 items-center lg:grid-cols-2">
@@ -22,7 +24,7 @@ export default function NotFound() {
         </p>
 
         <Button asChild size="lg" className="rounded-lg text-base">
-          <Link href="/partner/dashboard">{tNotFound("go-back-to-home")}</Link>
+          <Link href="/partner/dashboard">{tNotFound("go-back-to-dashboard")}</Link>
         </Button>
       </div>
 

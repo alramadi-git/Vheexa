@@ -448,12 +448,12 @@ function AddNewVehicleModel() {
                     >
                       {tAddNew("content.form.description.label")}
                     </FieldLabel>
-                    <FieldContent>
+                    <FieldContent className="h-full">
                       <Textarea
                         {...field}
-                        required
                         id={`${id}-description`}
                         aria-invalid={invalid}
+                        required
                         placeholder={tAddNew(
                           "content.form.description.placeholder",
                         )}

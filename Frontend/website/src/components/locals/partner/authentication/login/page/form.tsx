@@ -13,6 +13,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
+import useAccount from "@/hooks/partner/account";
+
 import { LuLoader } from "react-icons/lu";
 
 import { toast } from "sonner";
@@ -37,7 +39,6 @@ import { Checkbox } from "@/components/shadcn/checkbox";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
-import useAccount from "@/hooks/partner/account";
 
 export default function Form() {
   const id = useId();
@@ -81,7 +82,7 @@ export default function Form() {
 
       return;
     }
-    
+
     toast.custom(() => (
       <Toast variant="success" label={tForm("actions.when-success")} />
     ));

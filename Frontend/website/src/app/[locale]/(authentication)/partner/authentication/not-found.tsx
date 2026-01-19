@@ -1,0 +1,28 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
+import { Section } from "@/components/locals/blocks/typography";
+
+import { Button } from "@/components/shadcn/button";
+import { Link } from "@/components/locals/blocks/links";
+
+export default function NotFound() {
+  const tNotFound = useTranslations("app.partner.authentication.not-found");
+
+  return (
+    <Section className="flex h-full flex-col items-start justify-center gap-6 p-0!">
+      <h2 className="text-5xl font-semibold">{tNotFound("title")}</h2>
+      <h3 className="mb-1.5 text-3xl font-semibold">{tNotFound("subtitle")}</h3>
+      <p className="text-muted-foreground max-w-sm">
+        {tNotFound("description")}
+      </p>
+
+      <Button asChild size="lg" className="rounded-lg text-base">
+        <Link href="/partner/authentication/login">
+          {tNotFound("go-back-to-login-page")}
+        </Link>
+      </Button>
+    </Section>
+  );
+}

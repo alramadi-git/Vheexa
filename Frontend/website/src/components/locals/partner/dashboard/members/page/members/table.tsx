@@ -159,8 +159,8 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
               <div>
                 <p>{member.branch.name}</p>
                 <p className="text-muted-foreground text-xs">
-                  {member.branch.location.country},{member.branch.location.city}
-                  ,{member.branch.location.street}
+                  {member.branch.location.country},{" "}
+                  {member.branch.location.city}, {member.branch.location.street}
                 </p>
               </div>
             </div>

@@ -25,7 +25,6 @@ export default async function Page() {
           {tLogin("description")}
         </p>
       </div>
-
       <Form />
     </Fragment>
   );
