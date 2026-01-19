@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { useCallback, useId, useRef } from "react";
+import { useId, useCallback } from "react";
 import { useRouter } from "@/i18n/navigation";
 
 import {
@@ -15,13 +15,13 @@ import { useForm, Controller, Control } from "react-hook-form";
 
 import useAccount from "@/hooks/partner/account";
 
-import { LuBuilding2, LuLoader, LuUserPlus } from "react-icons/lu";
+import { FaRegHandshake } from "react-icons/fa6";
+import { LuBuilding2, LuUserPlus } from "react-icons/lu";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
 
 import {
-  StepperProps,
   Stepper,
   StepperList,
   StepperItem,
@@ -30,7 +30,6 @@ import {
   StepperSeparator,
   StepperContent,
   StepperNext,
-  StepperPrev,
 } from "@/components/shadcn/stepper";
 
 import {
@@ -41,25 +40,17 @@ import {
   FieldError,
 } from "@/components/shadcn/field";
 
+import { FieldFileUpload } from "@/components/locals/blocks/file-uploads";
 import {
-  tFieldEmailRef,
-  tFieldPasswordRef,
+  FieldIconInput,
+  FieldHandle,
+  FieldPhoneNumber,
   FieldEmail,
   FieldPassword,
-  FieldHandle,
-  FieldIconInput,
-  FieldPhoneNumber,
 } from "@/components/locals/blocks/fields";
-
-import { Checkbox } from "@/components/shadcn/checkbox";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
-import { FaRegHandshake } from "react-icons/fa6";
-import {
-  FieldFileUpload,
-  tFieldFileUploadRef,
-} from "@/components/locals/blocks/file-uploads";
 
 type tStep = {
   value: "partner" | "branch" | "member";
@@ -71,10 +62,8 @@ type tStep = {
 const icons = [FaRegHandshake, LuBuilding2, LuUserPlus];
 
 export default function Form() {
-  const id = useId();
-
-  const router = useRouter();
   const { register } = useAccount();
+  const router = useRouter();
 
   const tForm = useTranslations(
     "app.partner.authentication.register.page.form",
@@ -83,9 +72,6 @@ export default function Form() {
   const steps = (tForm.raw("steps") as tStep[]).map((step) => ({
     ...step,
   }));
-
-  const emailRef = useRef<tFieldEmailRef>(null);
-  const passwordRef = useRef<tFieldPasswordRef>(null);
 
   const { control, trigger, handleSubmit } = useForm<tRegisterCredentials>({
     defaultValues: {

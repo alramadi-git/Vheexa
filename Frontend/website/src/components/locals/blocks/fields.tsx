@@ -35,11 +35,7 @@ import {
   LuAtSign,
 } from "react-icons/lu";
 
-import {
-  CountryCode,
-  formatNumber,
-  parsePhoneNumberFromString,
-} from "libphonenumber-js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { defaultCountries, FlagImage } from "react-international-phone";
 
 import {
