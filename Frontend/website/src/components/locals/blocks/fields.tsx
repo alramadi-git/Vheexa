@@ -14,10 +14,11 @@ import {
   KeyboardEvent,
   forwardRef,
   useState,
-  useCallback,
   useImperativeHandle,
   ChangeEvent,
   useRef,
+  ReactNode,
+  useEffect,
 } from "react";
 
 import {
@@ -25,16 +26,20 @@ import {
   LuEye,
   LuEyeOff,
   LuCalendar,
-  LuUpload,
   LuSearch,
   LuCheck,
   LuX,
   LuPhone,
   LuChevronDown,
   LuUser,
+  LuAtSign,
 } from "react-icons/lu";
 
-import { CountryCode, AsYouType, formatNumber } from "libphonenumber-js";
+import {
+  CountryCode,
+  formatNumber,
+  parsePhoneNumberFromString,
+} from "libphonenumber-js";
 import { defaultCountries, FlagImage } from "react-international-phone";
 
 import {
@@ -51,16 +56,7 @@ import {
   CommandEmpty,
 } from "@/components/shadcn/command";
 
-import {
-  FileUpload,
-  FileUploadTrigger,
-  FileUploadDropzone,
-} from "@/components/shadcn/file-upload";
-
 import { Calendar } from "@/components/shadcn/calendar";
-
-import { toast } from "sonner";
-import { Toast } from "./toasts";
 
 import { Input } from "@/components/shadcn/input";
 
@@ -82,6 +78,35 @@ import {
   TagsInputRoot,
 } from "@diceui/tags-input";
 
+type tFieldIconInputProps = Omit<
+  ComponentProps<typeof Input>,
+  "type" | "className"
+> & {
+  icon: ReactNode;
+  onChange?: (value: string) => void;
+};
+function FieldIconInput({
+  icon,
+  onChange: onChangeProp,
+  ...props
+}: tFieldIconInputProps) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChangeProp?.(event.currentTarget.value);
+  }
+
+  return (
+    <div className="relative">
+      <span
+        aria-invalid={props["aria-invalid"]}
+        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
+      >
+        {icon}
+      </span>
+      <Input {...props} type="text" className="ps-9" onChange={onChange} />
+    </div>
+  );
+}
+
 type tFieldSearchProps = Omit<
   ComponentProps<typeof Input>,
   "type" | "className"
@@ -99,9 +124,33 @@ function FieldSearch({ onChange: onChangeProp, ...props }: tFieldSearchProps) {
         aria-invalid={props["aria-invalid"]}
         className="text-muted-foreground/80 aria-invalid:text-destructive/60 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
       >
-        <LuSearch size={16} />
+        <LuSearch className="size-4" />
       </span>
       <Input {...props} type="search" className="ps-9" onChange={onChange} />
+    </div>
+  );
+}
+
+type tFieldHandleProps = Omit<
+  ComponentProps<typeof Input>,
+  "type" | "className"
+> & {
+  onChange?: (value: string) => void;
+};
+function FieldHandle({ onChange: onChangeProp, ...props }: tFieldHandleProps) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChangeProp?.(event.currentTarget.value);
+  }
+
+  return (
+    <div className="relative">
+      <span
+        aria-invalid={props["aria-invalid"]}
+        className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
+      >
+        <LuAtSign className="size-4" />
+      </span>
+      <Input {...props} type="text" className="ps-9" onChange={onChange} />
     </div>
   );
 }
@@ -126,7 +175,7 @@ function FieldUsername({
         aria-invalid={props["aria-invalid"]}
         className="text-muted-foreground/80 aria-invalid:text-destructive/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50"
       >
-        <LuUser size={16} />
+        <LuUser className="size-4" />
       </span>
       <Input {...props} type="text" className="ps-9" onChange={onChange} />
     </div>
@@ -160,7 +209,6 @@ const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
       reset: imperativeReset,
     }));
 
-
     function changeValues(tags: string[]) {
       setValues(tags);
       onValuesChange?.(tags);
@@ -181,7 +229,7 @@ const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
             >
               <TagsInputItemText className="truncate" />
               <TagsInputItemDelete className="size-4 shrink-0 rounded opacity-70 ring-offset-zinc-950 transition-opacity hover:opacity-100">
-                <LuX size={16} />
+                <LuX className="size-4" />
               </TagsInputItemDelete>
             </TagsInputItem>
           ))}
@@ -331,7 +379,6 @@ const FieldNumberMinMax = forwardRef<
       _onMinChange?.(value);
     }
 
-
     function onMaxBlur(value?: number) {
       if (Number.isNaN(value)) {
         setMax(0);
@@ -391,55 +438,81 @@ type tFieldPhoneNumberRef = {
   reset: (defaultValue?: string) => void;
 };
 type tFieldPhoneNumberProps = {
-  isInvalid?: boolean;
-  isRequired?: boolean;
   id?: string;
-  value: string;
-  setValue: (value: string) => void;
+  isRequired?: boolean;
+  isInvalid?: boolean;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
 };
 
 const FieldPhoneNumber = forwardRef<
   tFieldPhoneNumberRef,
   tFieldPhoneNumberProps
->(({ isInvalid, isRequired, id, value, setValue }, ref) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const [phoneNumber, setPhoneNumber] = useState<string>(value);
-
+>(({ id, isRequired, isInvalid, defaultValue = "", onValueChange }, ref) => {
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const tFieldPhoneNumber = useTranslations("components.fields.phone-number");
-  const countryDefaultValue = tFieldPhoneNumber.raw("country.default-value");
+  const defaultCountry: tCountry = tFieldPhoneNumber.raw(
+    "country.default-value",
+  );
 
-  const [country, setCountry] = useState<tCountry>(countryDefaultValue);
+  const [country, setCountry] = useState<tCountry>(defaultCountry);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
 
-  function reset(defaultValue: string = ""): void {
-    setPhoneNumber(defaultValue);
-    setCountry(countryDefaultValue);
+  useEffect(() => {
+    const parsedPhoneNumber = parsePhoneNumberFromString(defaultValue);
+    if (!parsedPhoneNumber) {
+      setPhoneNumber(defaultValue);
+
+      return;
+    }
+
+    setCountry({
+      iso: parsedPhoneNumber.country!.toLocaleLowerCase(),
+      "country-code": parsedPhoneNumber.countryCallingCode,
+    });
+    setPhoneNumber(parsedPhoneNumber.nationalNumber);
+  }, []);
+
+  function imperativeReset(defaultValue: string = ""): void {
+    const parsedPhoneNumber = parsePhoneNumberFromString(defaultValue);
+    if (!parsedPhoneNumber) {
+      setPhoneNumber(defaultValue);
+      return;
+    }
+
+    setCountry({
+      iso: parsedPhoneNumber.country!,
+      "country-code": parsedPhoneNumber.countryCallingCode,
+    });
+    setPhoneNumber(parsedPhoneNumber.nationalNumber);
   }
 
   useImperativeHandle(ref, () => ({
-    reset,
+    reset: imperativeReset,
   }));
 
-  function changePhoneNumber(phoneNumber: string): void {
-    const formattedPhoneNumber = new AsYouType(
-      country.iso.toUpperCase() as CountryCode,
-    ).input(phoneNumber);
-
-    setPhoneNumber(formattedPhoneNumber);
-    setValue(
-      formatNumber(`+${country["country-code"]}${phoneNumber}`, "E.164"),
-    );
-  }
-
   function selectCountry(country: tCountry): void {
-    changePhoneNumber(phoneNumber);
     setCountry(country);
 
     setIsOpen(false);
-
     phoneNumberRef.current?.focus();
+  }
+
+  function saveValue() {
+    const parsedPhoneNumber = parsePhoneNumberFromString(
+      `+${country["country-code"]}${phoneNumber}`,
+    );
+    if (!parsedPhoneNumber) {
+      setPhoneNumber("");
+      onValueChange?.("");
+      return;
+    }
+
+    setPhoneNumber(parsedPhoneNumber.nationalNumber);
+    onValueChange?.(parsedPhoneNumber.number);
   }
 
   return (
@@ -492,7 +565,7 @@ const FieldPhoneNumber = forwardRef<
                   </div>
 
                   {country.iso === _country[1] && (
-                    <LuCheck size={16} className="ml-auto" />
+                    <LuCheck className="ml-auto size-4" />
                   )}
                 </CommandItem>
               ))}
@@ -511,8 +584,9 @@ const FieldPhoneNumber = forwardRef<
           className="rounded-s-none pe-8"
           value={phoneNumber}
           onChange={(e) => {
-            changePhoneNumber(e.currentTarget.value);
+            setPhoneNumber(e.currentTarget.value);
           }}
+          onBlur={saveValue}
         />
         <div
           className={cn(
@@ -522,12 +596,13 @@ const FieldPhoneNumber = forwardRef<
             },
           )}
         >
-          <LuPhone size={16} aria-hidden="true" />
+          <LuPhone className="size-4" aria-hidden="true" />
         </div>
       </div>
     </div>
   );
 });
+
 FieldPhoneNumber.displayName = "FieldPhoneNumber";
 
 type tFieldEmailRef = {
@@ -775,7 +850,7 @@ const FieldDatePicker = forwardRef<tFieldDatePickerRef, tFieldDatePickerProps>(
               variant="ghost"
               className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
             >
-              <LuCalendar size={16} />
+              <LuCalendar className="size-4" />
             </Button>
           </PopoverTrigger>
           <PopoverContent
@@ -808,7 +883,9 @@ export type {
   tFieldDatePickerRef,
 };
 export {
+  FieldIconInput,
   FieldSearch,
+  FieldHandle,
   FieldUsername,
   FieldEmail,
   FieldPassword,

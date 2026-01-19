@@ -19,7 +19,7 @@ export default async function Layout({
   const tLayout = await getTranslations("app.authentication.layout");
 
   return (
-    <main className="grid h-dvh overflow-hidden lg:grid-cols-2">
+    <main className="grid h-fullscreen overflow-hidden xl:grid-cols-2">
       <div className="relative">
         <AnimatedGridPattern
           duration={3}

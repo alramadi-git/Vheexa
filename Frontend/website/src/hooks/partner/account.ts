@@ -58,7 +58,6 @@ export default function useAccount() {
     credentials: tLoginCredentials,
   ): Promise<tResponseOneService<null>> {
     const response = await authenticationService.login(credentials);
-    console.log(response)
     if (!response.isSuccess) {
       return response;
     }

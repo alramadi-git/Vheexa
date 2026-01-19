@@ -2346,34 +2346,55 @@
               "title": "Register",
               "description": "Create your Vheexa account and manage your rentals seamlessly."
             },
-            "title": "Hello there!",
-            "description": "create your vheexa account",
             "form": {
               "steps": [
                 {
                   "value": "Partner",
                   "label": "Partner Info",
-                  "description": "Enter your partner information"
+                  "description": "Enter your partner information",
+                  "fields": [
+                    "partner.banner",
+                    "partner.logo",
+                    "partner.handle",
+                    "partner.name",
+                    "partner.phoneNumber",
+                    "partner.email",
+                    "partner.password"
+                  ]
                 },
                 {
                   "value": "Branch",
                   "label": "Branch Info",
-                  "description": "Enter your branch information"
+                  "description": "Enter your branch information",
+                  "fields": [
+                    "branch.location",
+                    "branch.location.country",
+                    "branch.location.city",
+                    "branch.location.street",
+                    "branch.location.latitude",
+                    "branch.location.longitude",
+                    "branch.name",
+                    "branch.phoneNumber",
+                    "branch.email"
+                  ]
                 },
                 {
                   "value": "Member",
                   "label": "Member Info",
-                  "description": "Enter your member information"
+                  "description": "Enter your member information",
+                  "fields": [
+                    "member.username",
+                    "member.email",
+                    "member.password"
+                  ]
                 }
               ],
-              "back": "",
-              "next": "",
               "partner": {
-                "logo": {
-                  "label": "Logo"
-                },
                 "banner": {
                   "label": "Banner"
+                },
+                "logo": {
+                  "label": "Logo"
                 },
                 "handle": {
                   "label": "Handle",
@@ -2384,14 +2405,17 @@
                   "placeholder": "Enter name (e.g, Vheexa, etc...)"
                 },
                 "phone-number": {
-                  "label": "Phone-number"
+                  "label": "Phone Number"
                 },
                 "email": {
-                  "label": "Email"
+                  "label": "Email",
+                  "placeholder": "Enter email (e.g, partner@vheexa.com, etc...)"
                 },
                 "password": {
-                  "label": "Password"
-                }
+                  "label": "Password",
+                  "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+                },
+                "next": "Next"
               },
               "branch": {
                 "name": {
@@ -2417,7 +2441,11 @@
                 "when-success": "Vheexa account was successfully created",
                 "when-error": "Something went wrong while creating your vheexa account"
               },
-              "login": "Already have an account? <link>Login</link>"
+              "login": "Already have an account? <link>Login</link>",
+              "when-step-validation-error": {
+                "label": "Please complete all required fields to continue",
+                "description": "Fix the validation errors and try again."
+              }
             }
           }
         },
@@ -2430,6 +2458,16 @@
             "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
             "alternate": "404 Not Found Illustration"
           }
+        }
+      },
+      "not-found": {
+        "title": "Whoops!",
+        "subtitle": "Something went wrong",
+        "description": " The page you're looking for isn't found, we suggest you back to home.",
+        "go-back-to-dashboard": "Go Back to dashboard",
+        "illustration": {
+          "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+          "alternate": "404 Not Found Illustration"
         }
       }
     },

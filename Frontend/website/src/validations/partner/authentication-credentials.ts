@@ -9,12 +9,12 @@ const zRegisterCredentials = z
   .object({
     partner: z
       .object({
-        logo: z.nullable(
+        logo: z.optional(
           z.file().refine((value) => value.type.startsWith("image/"), {
             error: "logo can only be an image(e.g, png, jpg, etc...).",
           }),
         ),
-        banner: z.nullable(
+        banner: z.optional(
           z.file().refine((value) => value.type.startsWith("image/"), {
             error: "banner can only be an image(e.g, png, jpg, etc...).",
           }),
@@ -46,7 +46,7 @@ const zRegisterCredentials = z
       .strict(),
     member: z
       .object({
-        avatar: z.nullable(
+        avatar: z.optional(
           z.file().refine((value) => value.type.startsWith("image/"), {
             error: "avatar can only be an image(e.g, png, jpg, etc...).",
           }),

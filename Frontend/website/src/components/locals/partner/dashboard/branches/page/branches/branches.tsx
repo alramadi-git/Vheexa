@@ -256,8 +256,8 @@ function AddNew() {
                       isRequired
                       isInvalid={invalid}
                       id={`${id}-phone-number`}
-                      value={field.value}
-                      setValue={field.onChange}
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
                     />
                   </FieldContent>
                   <FieldError errors={error} />
