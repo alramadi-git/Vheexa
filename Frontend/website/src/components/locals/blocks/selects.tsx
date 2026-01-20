@@ -4,13 +4,11 @@ import { tUndefinable } from "@/types/nullish";
 
 import {
   Ref,
-  ComponentProps,
   ReactNode,
   ReactElement,
   JSX,
   forwardRef,
   useState,
-  useEffect,
   useImperativeHandle,
   Fragment,
 } from "react";
@@ -20,9 +18,10 @@ import { useDebounce } from "use-debounce";
 
 import { useTranslations } from "next-intl";
 
+import { cn } from "@/utilities/cn";
+
 import {
   LuChevronsUpDown,
-  LuArrowRight,
   LuX,
   LuChevronFirst,
   LuChevronLeft,
@@ -46,6 +45,10 @@ import {
 
 import { tResponseManyService } from "@/services/service";
 
+import { tPaginationModel } from "@/models/pagination";
+
+import { ClsPagination } from "./pagination";
+
 import {
   Pagination as ShadcnPagination,
   PaginationContent,
@@ -57,9 +60,6 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 
 import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
-import { tPaginationModel } from "@/models/pagination";
-import { ClsPagination } from "./pagination";
-import { cn } from "@/utilities/cn";
 
 type tGroup<gtOption extends tOption> = {
   value: string;

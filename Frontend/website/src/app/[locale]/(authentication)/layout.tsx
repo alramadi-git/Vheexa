@@ -19,16 +19,18 @@ export default async function Layout({
   const tLayout = await getTranslations("app.authentication.layout");
 
   return (
-    <main className="h-fullscreen grid xl:grid-cols-2">
-      <div className="relative overflow-hidden">
-        <AnimatedGridPattern
-          duration={3}
-          repeatDelay={1}
-          maxOpacity={0.1}
-          numSquares={64}
-          className="-z-10 skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
-        />
-        <Container className="flex h-3000 size-full flex-col justify-center gap-6 p-12">
+    <main className="authentication grid xl:grid-cols-2">
+      <div className="h-fullscreen overflow-y-auto">
+        <div className="relative overflow-hidden">
+          <AnimatedGridPattern
+            duration={3}
+            repeatDelay={1}
+            maxOpacity={0.1}
+            numSquares={64}
+            className="-z-10 skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
+          />
+        </div>
+        <Container className="flex h-full flex-col gap-6 p-12">
           <div className="flex items-end gap-1">
             <HDImage
               src={tLayout("logo.url")}
@@ -37,7 +39,7 @@ export default async function Layout({
             />
             <h2 className="text-4xl font-bold">{tLayout("logo.label")}</h2>
           </div>
-          {children}
+          <div className="mt-auto">{children}</div>
         </Container>
       </div>
       <FullHDImage

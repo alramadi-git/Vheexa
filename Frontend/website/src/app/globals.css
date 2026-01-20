@@ -140,6 +140,9 @@
   .h-fullscreen {
     @apply min-h-dvh;
   }
+  .authentication .h-fullscreen {
+    @apply min-h-dvh max-h-dvh;
+  }
   .dashboard .h-fullscreen {
     @apply min-h-[calc(100dvh-64px)];
   }

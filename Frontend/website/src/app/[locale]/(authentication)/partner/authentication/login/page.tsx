@@ -19,7 +19,7 @@ export default async function Page() {
 
   return (
     <Fragment>
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-6">
         <h1 className="text-2xl font-bold">{tLogin("title")}</h1>
         <p className="text-muted-foreground text-balance">
           {tLogin("description")}

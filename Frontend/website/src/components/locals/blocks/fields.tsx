@@ -429,8 +429,8 @@ const FieldNumberMinMax = forwardRef<
 FieldNumberMinMax.displayName = "FieldNumberMinMaxMinMax";
 
 type tCountry = {
-  iso: string;
-  "country-code": string;
+  country: string;
+  "country-calling-code": string;
 };
 
 type tFieldPhoneNumberRef = {
@@ -469,8 +469,8 @@ const FieldPhoneNumber = forwardRef<
     }
 
     setCountry({
-      iso: parsedPhoneNumber.country!.toLocaleLowerCase(),
-      "country-code": parsedPhoneNumber.countryCallingCode,
+      country: parsedPhoneNumber.country!.toLocaleLowerCase(),
+      "country-calling-code": parsedPhoneNumber.countryCallingCode,
     });
     setPhoneNumber(parsedPhoneNumber.nationalNumber);
   }, []);
@@ -483,8 +483,8 @@ const FieldPhoneNumber = forwardRef<
     }
 
     setCountry({
-      iso: parsedPhoneNumber.country!,
-      "country-code": parsedPhoneNumber.countryCallingCode,
+      country: parsedPhoneNumber.country!,
+      "country-calling-code": parsedPhoneNumber.countryCallingCode,
     });
     setPhoneNumber(parsedPhoneNumber.nationalNumber);
   }
@@ -501,7 +501,7 @@ const FieldPhoneNumber = forwardRef<
   }
 
   function saveValue() {
-    if (!isValidPhoneNumber(`+${country["country-code"]}${phoneNumber}`)) {
+    if (!isValidPhoneNumber(`+${country["country-calling-code"]}${phoneNumber}`)) {
       setPhoneNumber("");
       onValueChange?.("");
 
@@ -509,7 +509,7 @@ const FieldPhoneNumber = forwardRef<
     }
 
     const parsedPhoneNumber = parsePhoneNumberFromString(
-      `+${country["country-code"]}${phoneNumber}`,
+      `+${country["country-calling-code"]}${phoneNumber}`,
     );
     if (!parsedPhoneNumber) {
       setPhoneNumber("");
@@ -530,8 +530,8 @@ const FieldPhoneNumber = forwardRef<
             variant="outline"
             className="border-input rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]"
           >
-            <FlagImage iso2={country.iso} size={24} />
-            <p className="text-muted-foreground">+{country["country-code"]}</p>
+            <FlagImage iso2={country.country} size={24} />
+            <p className="text-muted-foreground">+{country["country-calling-code"]}</p>
             <LuChevronDown
               aria-hidden="true"
               className="text-muted-foreground/80"
@@ -553,8 +553,8 @@ const FieldPhoneNumber = forwardRef<
                   value={`${_country[0]}-${_country[1]}-${_country[2]}`}
                   onSelect={() => {
                     selectCountry({
-                      iso: _country[1],
-                      "country-code": _country[2],
+                      country: _country[1],
+                      "country-calling-code": _country[2],
                     });
                   }}
                 >
@@ -566,7 +566,7 @@ const FieldPhoneNumber = forwardRef<
                     </span>
                   </div>
 
-                  {country.iso === _country[1] && (
+                  {country.country === _country[1] && (
                     <LuCheck className="ml-auto size-4" />
                   )}
                 </CommandItem>

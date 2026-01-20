@@ -30,8 +30,8 @@
         "placeholder": "Enter phone number (e.g., +12125550123, +14155550198, etc...)",
         "country": {
           "default-value": {
-            "iso": "us",
-            "country-code": "1"
+            "country": "us",
+            "country-calling-code": "1"
           },
           "placeholder": "Search by county (e.g., name, iso or code)",
           "when-empty": "No matching countries found "
@@ -2400,9 +2400,9 @@
                   "label": "Handle",
                   "placeholder": "Enter handle (e.g, vheexa, etc...)"
                 },
-                "name": {
-                  "label": "Name",
-                  "placeholder": "Enter name (e.g, Vheexa, etc...)"
+                "organization-name": {
+                  "label": "Organization Name",
+                  "placeholder": "Enter organization name (e.g, Vheexa, etc...)"
                 },
                 "phone-number": {
                   "label": "Phone Number"
@@ -2418,13 +2418,32 @@
                 "next": "Next"
               },
               "branch": {
-                "location": {},
                 "name": {
-                  "label": "Name",
-                  "placeholder": "Enter name (e.g, Main Branch, Downtown Branch, etc...)"
+                  "label": "Branch Name",
+                  "placeholder": "Enter branch name (e.g, Main Branch, Downtown Branch, etc...)"
+                },
+                "location": {
+                  "country": {
+                    "label": "Country",
+                    "placeholder": "Enter country (e.g., United States, etc...)"
+                  },
+                  "city": {
+                    "label": "City",
+                    "placeholder": "Enter city (e.g., New York, Los Angeles, etc...)"
+                  },
+                  "street": {
+                    "label": "Street",
+                    "placeholder": "Enter street (e.g., Main Street, 5th Avenue, etc...)"
+                  },
+                  "latitude": {
+                    "label": "Latitude"
+                  },
+                  "longitude": {
+                    "label": "Longitude"
+                  }
                 },
                 "phone-number": {
-                  "label": "Phone-number"
+                  "label": "Phone Number"
                 },
                 "email": {
                   "label": "Email",
@@ -2434,12 +2453,27 @@
                 "next": "Next"
               },
               "member": {
+                "avatar": {
+                  "label": "Avatar"
+                },
+                "username": {
+                  "label": "Username",
+                  "placeholder": "Enter username (e.g, Vheexa, etc...)"
+                },
+                "email": {
+                  "label": "Email",
+                  "placeholder": "Enter email (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
+                },
+                "password": {
+                  "label": "Password",
+                  "placeholder": "Enter password (e.g, Aa1!Bb2@, etc...)"
+                },
+                "remember-me": {
+                  "label": "Remember me",
+                  "description": "Keeps you logged in on this device for 30 days."
+                },
                 "back": "Back",
                 "confirm": "Confirm"
-              },
-              "remember-me": {
-                "label": "Remember me",
-                "description": "Keeps you logged in on this device for 30 days."
               },
               "actions": {
                 "reset": "Reset",

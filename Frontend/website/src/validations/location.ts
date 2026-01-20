@@ -10,11 +10,11 @@ const zLocationCreate = z
     latitude: z
       .number("Latitude is required.")
       .min(-90, "latitude cannot be less than -90.")
-      .max(90, "latitude cannot be more than 90."),
+      .max(90, "latitude cannot be greater than 90."),
     longitude: z
       .number("Longitude is required.")
       .min(-180, "longitude cannot be less than -180.")
-      .max(180, "longitude cannot be more than 180."),
+      .max(180, "longitude cannot be greater than 180."),
   })
   .strict();
 type tLocationCreate = z.infer<typeof zLocationCreate>;
