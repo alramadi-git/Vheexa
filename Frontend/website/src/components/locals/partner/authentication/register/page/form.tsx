@@ -16,7 +16,12 @@ import { useForm, Controller, Control } from "react-hook-form";
 import useAccount from "@/hooks/partner/account";
 
 import { FaRegHandshake } from "react-icons/fa6";
-import { LuBuilding2, LuUserPlus } from "react-icons/lu";
+import {
+  LuArrowLeft,
+  LuArrowRight,
+  LuBuilding2,
+  LuUserPlus,
+} from "react-icons/lu";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -30,6 +35,7 @@ import {
   StepperSeparator,
   StepperContent,
   StepperNext,
+  StepperPrev,
 } from "@/components/shadcn/stepper";
 
 import {
@@ -76,11 +82,11 @@ export default function Form() {
   const { control, trigger, handleSubmit } = useForm<tRegisterCredentials>({
     defaultValues: {
       partner: {
-        handle: "",
-        name: "",
-        phoneNumber: "",
-        email: "",
-        password: "",
+        handle: "vheexa",
+        name: "Vheexa",
+        phoneNumber: "+966530531618",
+        email: "partner@vheexa.com",
+        password: "Aa1!Aa1!",
       },
       branch: {
         location: {
@@ -107,7 +113,12 @@ export default function Form() {
   const onValidate = useCallback(
     async (value: string, direction: "prev" | "next") => {
       if (direction === "prev") return true;
-      value = value === "Branch" ? "Partner" : "Branch";
+      value =
+        value === "branch"
+          ? "partner"
+          : value === "member"
+            ? "branch"
+            : "member";
 
       const fields = steps.find((step) => step.value === value)?.fields ?? [];
       const isValid = await trigger(
@@ -152,11 +163,10 @@ export default function Form() {
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submit)}>
-      <Stepper defaultValue="Partner" onValidate={onValidate}>
-        <StepperList>
+      <Stepper defaultValue="partner" onValidate={onValidate}>
+        <StepperList className="flex-wrap gap-3">
           {steps.map((step, index) => (
-            <StepperItem key={step.value} value={step.value}>
-              <StepperTrigger>
+            <StepperItem key={step.value} value={step.value} className="space-x-3">
                 <StepperIndicator className="size-10 rounded p-2">
                   {icons[index]({
                     className: "size-full",
@@ -168,14 +178,14 @@ export default function Form() {
                     {step.description}
                   </p>
                 </div>
-              </StepperTrigger>
-              <StepperSeparator className="mx-4" />
+              {/* <StepperTrigger>
+              </StepperTrigger> */}
             </StepperItem>
           ))}
         </StepperList>
         <PartnerStep control={control} />
-        <BranchStep />
-        <MemberStep />
+        <BranchStep control={control} />
+        <MemberStep control={control} />
       </Stepper>
       <p className="text-muted-foreground">
         {tForm.rich("login", {
@@ -205,7 +215,7 @@ function PartnerStep({ control }: tStepProps) {
   );
 
   return (
-    <StepperContent value="Partner" className="space-y-3">
+    <StepperContent value="partner" className="space-y-3">
       <Controller
         control={control}
         name="partner.banner"
@@ -395,37 +405,60 @@ function PartnerStep({ control }: tStepProps) {
         />
       </FieldGroup>
       <StepperNext asChild>
-        <Button className="w-full">{tPartnerStep("next")}</Button>
+        <Button className="w-full">
+          {tPartnerStep("next")}
+          <LuArrowRight className="size-4" />
+        </Button>
       </StepperNext>
     </StepperContent>
   );
 }
 
-function BranchStep() {
-  return <StepperContent value="Branch"></StepperContent>;
+function BranchStep({ control }: tStepProps) {
+  const id = useId();
+
+  const tBranchStep = useTranslations(
+    "app.partner.authentication.register.page.form.branch",
+  );
+
+  return (
+    <StepperContent value="branch" className="space-y-3">
+      <FieldGroup className="grid-cols-2">
+        <StepperPrev asChild>
+          <Button className="w-full">
+            <LuArrowLeft className="size-4" />
+            {tBranchStep("back")}
+          </Button>
+        </StepperPrev>
+        <StepperNext asChild>
+          <Button className="w-full">
+            {tBranchStep("next")}
+            <LuArrowRight className="size-4" />
+          </Button>
+        </StepperNext>
+      </FieldGroup>
+    </StepperContent>
+  );
 }
 
-function MemberStep() {
+function MemberStep({ control }: tStepProps) {
+  const id = useId();
+
+  const tMemberStep = useTranslations(
+    "app.partner.authentication.register.page.form.member",
+  );
+
   return (
-    <StepperContent value="Member">
-      {/* <FieldGroup className="grid-cols-2 gap-3">
-        <Button
-          disabled={formState.isSubmitting}
-          type="submit"
-          className="justify-start gap-1.5"
-        >
-          {formState.isSubmitting && <LuLoader className="animate-spin" />}
-          {tForm("actions.submit")}
-        </Button>
-        <Button
-          disabled={formState.isSubmitting}
-          type="reset"
-          variant="outline"
-          className="justify-start gap-1.5"
-        >
-          {tForm("actions.reset")}
-        </Button>
-      </FieldGroup> */}
+    <StepperContent value="member" className="space-y-3">
+      <FieldGroup className="grid-cols-2">
+        <StepperPrev asChild>
+          <Button className="w-full">
+            <LuArrowLeft className="size-4" />
+            {tMemberStep("back")}
+          </Button>
+        </StepperPrev>
+        <Button className="w-full">{tMemberStep("confirm")}</Button>
+      </FieldGroup>
     </StepperContent>
   );
 }

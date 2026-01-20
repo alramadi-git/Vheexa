@@ -1299,7 +1299,7 @@
                     },
                     "email": {
                       "label": "Email",
-                      "placeholder": "Enter email address (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
+                      "placeholder": "Enter email (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
                     },
                     "country": {
                       "label": "Country",
@@ -2349,7 +2349,7 @@
             "form": {
               "steps": [
                 {
-                  "value": "Partner",
+                  "value": "partner",
                   "label": "Partner Info",
                   "description": "Enter your partner information",
                   "fields": [
@@ -2363,7 +2363,7 @@
                   ]
                 },
                 {
-                  "value": "Branch",
+                  "value": "branch",
                   "label": "Branch Info",
                   "description": "Enter your branch information",
                   "fields": [
@@ -2379,7 +2379,7 @@
                   ]
                 },
                 {
-                  "value": "Member",
+                  "value": "member",
                   "label": "Member Info",
                   "description": "Enter your member information",
                   "fields": [
@@ -2418,19 +2418,25 @@
                 "next": "Next"
               },
               "branch": {
+                "location": {},
                 "name": {
                   "label": "Name",
-                  "placeholder": "Enter name (e.g, , etc...)"
+                  "placeholder": "Enter name (e.g, Main Branch, Downtown Branch, etc...)"
                 },
-                "location": {},
                 "phone-number": {
                   "label": "Phone-number"
                 },
                 "email": {
-                  "label": "Email"
-                }
+                  "label": "Email",
+                  "placeholder": "Enter email (e.g., main.branch@vheexa.com, downtown.branch@vheexa.com, etc...)"
+                },
+                "back": "Back",
+                "next": "Next"
               },
-              "member": {},
+              "member": {
+                "back": "Back",
+                "confirm": "Confirm"
+              },
               "remember-me": {
                 "label": "Remember me",
                 "description": "Keeps you logged in on this device for 30 days."

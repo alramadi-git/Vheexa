@@ -35,7 +35,10 @@ import {
   LuAtSign,
 } from "react-icons/lu";
 
-import { parsePhoneNumberFromString } from "libphonenumber-js";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberFromString,
+} from "libphonenumber-js";
 import { defaultCountries, FlagImage } from "react-international-phone";
 
 import {
@@ -498,12 +501,20 @@ const FieldPhoneNumber = forwardRef<
   }
 
   function saveValue() {
+    if (!isValidPhoneNumber(`+${country["country-code"]}${phoneNumber}`)) {
+      setPhoneNumber("");
+      onValueChange?.("");
+
+      return;
+    }
+
     const parsedPhoneNumber = parsePhoneNumberFromString(
       `+${country["country-code"]}${phoneNumber}`,
     );
     if (!parsedPhoneNumber) {
       setPhoneNumber("");
       onValueChange?.("");
+
       return;
     }
 
@@ -517,18 +528,13 @@ const FieldPhoneNumber = forwardRef<
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={cn(
-              "border-input rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]",
-              {
-                "border-destructive": isInvalid,
-              },
-            )}
+            className="border-input rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]"
           >
             <FlagImage iso2={country.iso} size={24} />
-            <span>+{country["country-code"]}</span>
+            <p className="text-muted-foreground">+{country["country-code"]}</p>
             <LuChevronDown
-              className="text-muted-foreground/80"
               aria-hidden="true"
+              className="text-muted-foreground/80"
             />
           </Button>
         </PopoverTrigger>
@@ -579,9 +585,10 @@ const FieldPhoneNumber = forwardRef<
           placeholder={tFieldPhoneNumber("placeholder")}
           className="rounded-s-none pe-8"
           value={phoneNumber}
-          onChange={(e) => {
-            setPhoneNumber(e.currentTarget.value);
-          }}
+          onKeyDown={(event) =>
+            event.key === "Enter" && event.currentTarget.blur()
+          }
+          onChange={(event) => setPhoneNumber(event.currentTarget.value)}
           onBlur={saveValue}
         />
         <div
