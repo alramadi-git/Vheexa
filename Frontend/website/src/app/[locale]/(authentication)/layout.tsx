@@ -19,8 +19,8 @@ export default async function Layout({
   const tLayout = await getTranslations("app.authentication.layout");
 
   return (
-    <main className="h-fullscreen grid overflow-hidden xl:grid-cols-2">
-      <div className="relative">
+    <main className="h-fullscreen grid xl:grid-cols-2">
+      <div className="relative overflow-hidden">
         <AnimatedGridPattern
           duration={3}
           repeatDelay={1}
@@ -28,7 +28,7 @@ export default async function Layout({
           numSquares={64}
           className="-z-10 skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
         />
-        <Container className="flex size-full flex-col justify-center gap-6 p-12 overflow-auto">
+        <Container className="flex h-3000 size-full flex-col justify-center gap-6 p-12">
           <div className="flex items-end gap-1">
             <HDImage
               src={tLayout("logo.url")}
@@ -44,7 +44,7 @@ export default async function Layout({
         priority
         src={tLayout("illustration.url")}
         alt={tLayout("illustration.alternate")}
-        className="hidden size-full rounded-e-sm object-cover lg:block dark:brightness-[0.2] dark:grayscale"
+        className="hidden size-full rounded-e-sm object-cover xl:block dark:brightness-[0.2] dark:grayscale"
       />
     </main>
   );
