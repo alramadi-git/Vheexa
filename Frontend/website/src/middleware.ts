@@ -9,14 +9,14 @@ export default function middleware(request: NextRequest): NextResponse {
   let middlewares = NextResponse.next();
   if (!request.nextUrl.pathname.startsWith("/api", 6)) {
     middlewares = nextIntlMiddleware(request);
-    if (middlewares?.ok !== true) return middlewares;
+    if (!middlewares?.ok) return middlewares;
   }
 
-  // middlewares = partnerMiddleware(request);
-  // if (middlewares?.ok !== true) return middlewares;
+  middlewares = partnerMiddleware(request);
+  if (!middlewares?.ok) return middlewares;
 
-  middlewares = userMiddleware(request);
-  if (middlewares?.ok !== true) return middlewares;
+  // middlewares = userMiddleware(request);
+  // if (!middlewares?.ok) return middlewares;
 
   return middlewares;
 }

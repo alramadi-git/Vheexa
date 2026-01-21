@@ -33,7 +33,7 @@ export default function useService() {
             ? error.message
             : "Something went wrong.";
 
-      if (message === "Access token is expired.") {
+      if (message === "Access token is expired." || message === "Access token is missing.") {
         try {
           const response = await clsFetch.get(
             "/partner/authentication/refresh",

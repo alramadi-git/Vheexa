@@ -986,32 +986,6 @@
                               "description": "Remove outdated or unused vehicle models."
                             }
                           ]
-                        },
-                        {
-                          "value": "5",
-                          "label": "Vehicle Instances",
-                          "options": [
-                            {
-                              "value": "19",
-                              "label": "Vehicle Instances Create",
-                              "description": "Register a new physical vehicle unit into the fleet."
-                            },
-                            {
-                              "value": "20",
-                              "label": "Vehicle Instances Read",
-                              "description": "View details of specific vehicles (VIN, status, location)."
-                            },
-                            {
-                              "value": "21",
-                              "label": "Vehicle Instances Update",
-                              "description": "Update information for a registered vehicle unit."
-                            },
-                            {
-                              "value": "22",
-                              "label": "Vehicle Instances Delete",
-                              "description": "Decommission or remove a vehicle from the fleet."
-                            }
-                          ]
                         }
                       ]
                     },
@@ -1172,32 +1146,6 @@
                           "value": "18",
                           "label": "Vehicle Models Delete",
                           "description": "Remove outdated or unused vehicle models."
-                        }
-                      ]
-                    },
-                    {
-                      "value": "5",
-                      "label": "Vehicle Instances",
-                      "options": [
-                        {
-                          "value": "19",
-                          "label": "Vehicle Instances Create",
-                          "description": "Register a new physical vehicle unit into the fleet."
-                        },
-                        {
-                          "value": "20",
-                          "label": "Vehicle Instances Read",
-                          "description": "View details of specific vehicles (VIN, status, location)."
-                        },
-                        {
-                          "value": "21",
-                          "label": "Vehicle Instances Update",
-                          "description": "Update information for a registered vehicle unit."
-                        },
-                        {
-                          "value": "22",
-                          "label": "Vehicle Instances Delete",
-                          "description": "Decommission or remove a vehicle from the fleet."
                         }
                       ]
                     }

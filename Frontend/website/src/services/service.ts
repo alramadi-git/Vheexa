@@ -1,7 +1,7 @@
-import { tPaginationModel } from "@/models/pagination";
-
 import { ClsFetch } from "@/libraries/fetch";
-import { ClsAuthenticationService } from "./partner/authentication";
+
+import { tPaginationModel } from "@/models/pagination";
+import { ZodError } from "zod";
 
 type tSuccessOneService<tData> = {
   isSuccess: true;
@@ -41,23 +41,35 @@ abstract class ClsAbstractService {
       return await callback();
     } catch (error: unknown) {
       let message =
-        error instanceof Error ? error.message : "Something went wrong.";
+        error instanceof ZodError
+          ? "Validation error."
+          : error instanceof Error
+            ? error.message
+            : "Something went wrong.";
 
-      if (message === "Access token missing or expired.")
+      if (message === "Access token is expired." || message === "Access token is missing.") {
         try {
-          const response: Response = await this._fetch.get(
+          const response = await this._fetch.get(
             "/partner/authentication/refresh",
           );
-          if (!response.ok) return { isSuccess: false, message: message };
+
+          if (!response.ok) {
+            return {
+              isSuccess: false,
+              message: await response.text(),
+            };
+          }
 
           return await callback();
         } catch (error: unknown) {
-          if (
-            error instanceof Error &&
-            error.message !== "Refresh token missing or expired."
-          )
-            message = error.message;
+          message =
+            error instanceof ZodError
+              ? "Validation error."
+              : error instanceof Error
+                ? error.message
+                : "Something went wrong.";
         }
+      }
 
       return { isSuccess: false, message: message };
     }

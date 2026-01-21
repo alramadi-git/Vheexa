@@ -22,10 +22,6 @@ enum ePartnerRoleCreatePermission {
   VehicleModelsRead,
   VehicleModelsUpdate,
   VehicleModelsDelete,
-  VehicleInstancesCreate,
-  VehicleInstancesRead,
-  VehicleInstancesUpdate,
-  VehicleInstancesDelete,
 }
 
 const zRoleCreate = z

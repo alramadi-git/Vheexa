@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
 import useAuthenticationService from "@/services/partner/authentication";
 
 import useToken from "./token";
-import useLocalStorageState from "use-local-storage-state";
+
+import {
+  useSetCookie,
+  useGetCookie,
+  useDeleteCookie
+} from "cookies-next/client";
 
 import { zAccount } from "@/validations/partner/account";
 
@@ -14,25 +18,45 @@ import { tRegisterCredentials } from "@/validations/partner/authentication-crede
 import { tLoginCredentials } from "@/validations/credentials";
 
 import { tResponseOneService } from "@/services/service";
+import { eDuration } from "@/enums/duration";
 
 export default function useAccount() {
   const { setToken, removeToken } = useToken();
-  const [account, setAccount, { removeItem: removeAccount }] =
-    useLocalStorageState<tAccountModel>("member-account");
 
-  useEffect(() => {
-    if (account === undefined) {
-      return;
-    }
+  const setCookie = useSetCookie();
+  const getCookie = useGetCookie();
+  const deleteCookie = useDeleteCookie();
+
+  const account = getCookie("member-account");
+
+  function setAccount(account: tAccountModel, token: string, rememberMe: boolean): boolean {
+    removeAccount();
+
+    if (!setToken(token, rememberMe)) {
+      return false;
+    };
 
     const parsedAccount = zAccount.safeParse(account);
-    if (parsedAccount.success) {
-      return;
+    if (!parsedAccount.success) {
+      removeToken();
+      return false;
     }
 
-    removeAccount();
+    setCookie("member-account", JSON.stringify(account), {
+      secure: true,
+      priority: "high",
+      sameSite: "strict",
+      maxAge: rememberMe ? eDuration.month : eDuration.day
+    });
+
+    return true;
+  }
+
+  function removeAccount() {
     removeToken();
-  }, [account]);
+    deleteCookie("member-account");
+  }
+
 
   const authenticationService = useAuthenticationService();
 
@@ -45,8 +69,10 @@ export default function useAccount() {
     }
 
     const { account, token } = response.data;
-    setAccount(account);
-    setToken(token);
+
+    if (!setAccount(account, token, credentials.rememberMe)) {
+      throw new Error("Account or token is invalid.");
+    };
 
     return {
       isSuccess: true,
@@ -62,10 +88,11 @@ export default function useAccount() {
       return response;
     }
 
-
     const { account, token } = response.data;
-    setAccount(account);
-    setToken(token);
+
+    if (!setAccount(account, token, credentials.rememberMe)) {
+      throw new Error("Account or token is invalid.");
+    };
 
     return {
       isSuccess: true,
@@ -80,8 +107,6 @@ export default function useAccount() {
     }
 
     removeAccount();
-    removeToken();
-
     return {
       isSuccess: true,
       data: null,

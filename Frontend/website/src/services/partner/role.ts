@@ -162,26 +162,6 @@ export default function useRoleService() {
                 name: "Vehicle Models Delete",
                 description: "Delete vehicle models from the catalog.",
               },
-              {
-                uuid: "t0i1j2k3-l4m5-4n6o-7p8q-9r0s1t2u3v4w",
-                name: "Vehicle Instances Create",
-                description: "Register new vehicle instances.",
-              },
-              {
-                uuid: "u1j2k3l4-m5n6-4o7p-8q9r-0s1t2u3v4w5x",
-                name: "Vehicle Instances Read",
-                description: "View vehicle instance details and history.",
-              },
-              {
-                uuid: "v2k3l4m5-n6o7-4p8q-9r0s-1t2u3v4w5x6y",
-                name: "Vehicle Instances Update",
-                description: "Update vehicle instance status and information.",
-              },
-              {
-                uuid: "w3l4m5n6-o7p8-4q9r-0s1t-2u3v4w5x6y7z",
-                name: "Vehicle Instances Delete",
-                description: "Remove vehicle instances from the system.",
-              },
             ],
             assignedCount: 1,
             status: eRoleStatusModel.active,
@@ -319,27 +299,6 @@ export default function useRoleService() {
                   name: "Vehicle Models Delete",
                   description: "Delete vehicle models from the catalog.",
                 },
-                {
-                  uuid: "t0i1j2k3-l4m5-4n6o-7p8q-9r0s1t2u3v4w",
-                  name: "Vehicle Instances Create",
-                  description: "Register new vehicle instances.",
-                },
-                {
-                  uuid: "u1j2k3l4-m5n6-4o7p-8q9r-0s1t2u3v4w5x",
-                  name: "Vehicle Instances Read",
-                  description: "View vehicle instance details and history.",
-                },
-                {
-                  uuid: "v2k3l4m5-n6o7-4p8q-9r0s-1t2u3v4w5x6y",
-                  name: "Vehicle Instances Update",
-                  description:
-                    "Update vehicle instance status and information.",
-                },
-                {
-                  uuid: "w3l4m5n6-o7p8-4q9r-0s1t-2u3v4w5x6y7z",
-                  name: "Vehicle Instances Delete",
-                  description: "Remove vehicle instances from the system.",
-                },
               ],
               assignedCount: 1,
               status: eRoleStatusModel.active,
@@ -369,17 +328,6 @@ export default function useRoleService() {
                   uuid: "q7f8g9h0-i1j2-4k3l-4m5n-6o7p8q9r0s1t",
                   name: "Vehicle Models Read",
                   description: "View vehicle model details and specifications.",
-                },
-                {
-                  uuid: "u1j2k3l4-m5n6-4o7p-8q9r-0s1t2u3v4w5x",
-                  name: "Vehicle Instances Read",
-                  description: "View vehicle instance details and history.",
-                },
-                {
-                  uuid: "v2k3l4m5-n6o7-4p8q-9r0s-1t2u3v4w5x6y",
-                  name: "Vehicle Instances Update",
-                  description:
-                    "Update vehicle instance status and information.",
                 },
               ],
               assignedCount: 3,

@@ -201,10 +201,6 @@ export default function useAuthenticationService() {
                   "vehicleModels:read",
                   "vehicleModels:update",
                   "vehicleModels:delete",
-                  "vehicleInstances:create",
-                  "vehicleInstances:read",
-                  "vehicleInstances:update",
-                  "vehicleInstances:delete",
                 ],
               },
               branch: {

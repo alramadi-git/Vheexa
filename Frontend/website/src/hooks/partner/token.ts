@@ -1,26 +1,42 @@
 "use client";
 
-import { useEffect } from "react";
-import useLocalStorageState from "use-local-storage-state";
+import {
+  useSetCookie,
+  useGetCookie,
+  useDeleteCookie
+} from "cookies-next/client";
 
 import { zJwt } from "@/validations/jwt";
+import { eDuration } from "@/enums/duration";
 
 export default function useToken() {
-  const [token, setToken, { removeItem: removeToken }] =
-    useLocalStorageState<string>("member-token");
+  const setCookie = useSetCookie();
+  const getCookie = useGetCookie();
+  const deleteCookie = useDeleteCookie();
 
-  useEffect(() => {
-    if (token === undefined) {
-      return;
-    }
+  const token = getCookie("member-token");
+
+  function setToken(token: string, rememberMe: boolean): boolean {
+    removeToken();
 
     const parsedToken = zJwt.safeParse(token);
-    if (parsedToken.success) {
-      return;
+    if (!parsedToken.success) {
+      return false;
     }
 
-    removeToken();
-  }, [token]);
+    setCookie("member-token", token, {
+      secure: true,
+      priority: "high",
+      sameSite: "strict",
+      maxAge: rememberMe ? eDuration.month : eDuration.day
+    });
+
+    return true;
+  }
+
+  function removeToken() {
+    deleteCookie("member-token");
+  }
 
   return {
     token,
