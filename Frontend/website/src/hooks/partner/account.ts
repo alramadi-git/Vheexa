@@ -7,7 +7,7 @@ import useToken from "./token";
 import {
   useSetCookie,
   useGetCookie,
-  useDeleteCookie
+  useDeleteCookie,
 } from "cookies-next/client";
 
 import { zAccount } from "@/validations/partner/account";
@@ -19,6 +19,7 @@ import { tLoginCredentials } from "@/validations/credentials";
 
 import { tResponseOneService } from "@/services/service";
 import { eDuration } from "@/enums/duration";
+import { tNullable } from "@/types/nullish";
 
 export default function useAccount() {
   const { setToken, removeToken } = useToken();
@@ -27,14 +28,20 @@ export default function useAccount() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const account = getCookie("member-account");
+  const account: tNullable<tAccountModel> = JSON.parse(
+    getCookie("member-account") ?? "null",
+  );
 
-  function setAccount(account: tAccountModel, token: string, rememberMe: boolean): boolean {
+  function setAccount(
+    account: tAccountModel,
+    token: string,
+    rememberMe: boolean,
+  ): boolean {
     removeAccount();
 
     if (!setToken(token, rememberMe)) {
       return false;
-    };
+    }
 
     const parsedAccount = zAccount.safeParse(account);
     if (!parsedAccount.success) {
@@ -46,7 +53,7 @@ export default function useAccount() {
       secure: true,
       priority: "high",
       sameSite: "strict",
-      maxAge: rememberMe ? eDuration.month : eDuration.day
+      maxAge: rememberMe ? eDuration.month : eDuration.day,
     });
 
     return true;
@@ -56,7 +63,6 @@ export default function useAccount() {
     removeToken();
     deleteCookie("member-account");
   }
-
 
   const authenticationService = useAuthenticationService();
 
@@ -72,7 +78,7 @@ export default function useAccount() {
 
     if (!setAccount(account, token, credentials.rememberMe)) {
       throw new Error("Account or token is invalid.");
-    };
+    }
 
     return {
       isSuccess: true,
@@ -92,7 +98,7 @@ export default function useAccount() {
 
     if (!setAccount(account, token, credentials.rememberMe)) {
       throw new Error("Account or token is invalid.");
-    };
+    }
 
     return {
       isSuccess: true,

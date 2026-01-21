@@ -27,6 +27,7 @@ import {
 } from "@/components/shadcn/avatar";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { useRouter } from "@/i18n/navigation";
 
 export default function SidebarHeader() {
   return (
@@ -37,8 +38,10 @@ export default function SidebarHeader() {
 }
 
 function SidebarAccount() {
+  const router = useRouter();
+
   const { account, logout } = useAccount();
-  const tComponentsAccount = useTranslations("components.account");
+  const tAccount = useTranslations("components.account");
 
   if (account === null) {
     return (
@@ -89,9 +92,15 @@ function SidebarAccount() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild variant="destructive">
-          <button className="w-full" onClick={logout}>
+          <button
+            className="w-full"
+            onClick={() => {
+              logout();
+              router.push("/partner/authentication/login");
+            }}
+          >
             <LuLogOut />
-            {tComponentsAccount("logout")}
+            {tAccount("logout")}
           </button>
         </DropdownMenuItem>
       </DropdownMenuContent>

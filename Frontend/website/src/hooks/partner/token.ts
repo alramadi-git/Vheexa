@@ -14,7 +14,7 @@ export default function useToken() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const token = getCookie("member-token");
+  const token = getCookie("member-access-token");
 
   function setToken(token: string, rememberMe: boolean): boolean {
     removeToken();
@@ -24,7 +24,7 @@ export default function useToken() {
       return false;
     }
 
-    setCookie("member-token", token, {
+    setCookie("member-access-token", token, {
       secure: true,
       priority: "high",
       sameSite: "strict",
@@ -35,7 +35,7 @@ export default function useToken() {
   }
 
   function removeToken() {
-    deleteCookie("member-token");
+    deleteCookie("member-access-token");
   }
 
   return {

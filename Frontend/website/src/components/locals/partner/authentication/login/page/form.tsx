@@ -87,7 +87,7 @@ export default function Form() {
       <Toast variant="success" label={tForm("actions.when-success")} />
     ));
 
-    // router.push("/partner/dashboard");
+    router.push("/partner/dashboard");
   }
 
   return (
