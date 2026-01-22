@@ -8,14 +8,9 @@ export default function unauthenticatedMiddleware(
   }
 
   const accessToken = request.cookies.get("member-access-token")?.value;
-  if (accessToken) {
-    return NextResponse.redirect(
-      new URL("/partner/dashboard", request.nextUrl.origin),
-    );
-  }
-
   const account = request.cookies.get("member-account")?.value;
-  if (account) {
+
+  if (accessToken && account) {
     return NextResponse.redirect(
       new URL("/partner/dashboard", request.nextUrl.origin),
     );

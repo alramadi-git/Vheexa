@@ -20,6 +20,7 @@ import { tLoginCredentials } from "@/validations/credentials";
 import { tResponseOneService } from "@/services/service";
 import { eDuration } from "@/enums/duration";
 import { tNullable } from "@/types/nullish";
+import { useMemo } from "react";
 
 export default function useAccount() {
   const { setToken, removeToken } = useToken();
@@ -28,9 +29,13 @@ export default function useAccount() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const account: tNullable<tAccountModel> = JSON.parse(
-    getCookie("member-account") ?? "null",
-  );
+  const account: tNullable<tAccountModel> = useMemo(() => {
+    try {
+      return zAccount.parse(JSON.parse(getCookie("member-account") ?? "null"));
+    } catch {
+      return null;
+    }
+  }, [getCookie]);
 
   function setAccount(
     account: tAccountModel,
@@ -77,7 +82,10 @@ export default function useAccount() {
     const { account, token } = response.data;
 
     if (!setAccount(account, token, credentials.rememberMe)) {
-      throw new Error("Account or token is invalid.");
+      return {
+        isSuccess: false,
+        message: "Account or token is invalid.",
+      };
     }
 
     return {
@@ -97,7 +105,10 @@ export default function useAccount() {
     const { account, token } = response.data;
 
     if (!setAccount(account, token, credentials.rememberMe)) {
-      throw new Error("Account or token is invalid.");
+      return {
+        isSuccess: false,
+        message: "Account or token is invalid.",
+      };
     }
 
     return {
