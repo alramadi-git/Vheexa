@@ -1,27 +1,54 @@
-import type { ComponentProps } from "react";
+import { ComponentProps } from "react";
+
+import { useTranslations } from "next-intl";
 
 import Image from "next/image";
+import { cn } from "@/utilities/cn";
 
-type TReSizedImage = Omit<ComponentProps<typeof Image>, "width" | "height">;
+type tImageProps = Omit<ComponentProps<typeof Image>, "width" | "height">;
+type tImage = {
+  url: string;
+  alternate: string;
+};
 
-function HDImage(props: TReSizedImage) {
+function HDImage(props: tImageProps) {
   // eslint-disable-next-line jsx-a11y/alt-text
   return <Image {...props} width="1280" height="720" />;
 }
 
-function FullHDImage(props: TReSizedImage) {
+function FullHDImage(props: tImageProps) {
   // eslint-disable-next-line jsx-a11y/alt-text
   return <Image {...props} width="1920" height="1080" />;
 }
 
-function _2KImage(props: TReSizedImage) {
-  // eslint-disable-next-line jsx-a11y/alt-text
-  return <Image {...props} width="2560" height="1440" />;
+function Placeholder({
+  className,
+  ...props
+}: Omit<tImageProps, "src" | "alt">) {
+  const placeholder: tImage =
+    useTranslations("components.images").raw("placeholder");
+  return (
+    <FullHDImage
+      src={placeholder.url}
+      alt={placeholder.alternate}
+      className={cn("dark:brightness-[0.2] dark:grayscale", className)}
+      {...props}
+    />
+  );
 }
 
-function _4KImage(props: TReSizedImage) {
-  // eslint-disable-next-line jsx-a11y/alt-text
-  return <Image {...props} width="3840" height="2160" />;
+function Logo({ className, ...props }: Omit<tImageProps, "src" | "alt">) {
+  const logo: tImage = useTranslations("components.images").raw("logo");
+  return (
+    <FullHDImage
+      src={logo.url}
+      alt={logo.alternate}
+      className={cn("invert", className)}
+      {...props}
+    />
+  );
 }
 
-export { HDImage, FullHDImage, _2KImage, _4KImage };
+export { HDImage, FullHDImage };
+
+export { Placeholder, Logo };

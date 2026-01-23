@@ -58,7 +58,7 @@ export default async function Layout({ children }: LayoutProps<"/[locale]">) {
         <ThemeProvider
           enableSystem
           disableTransitionOnChange
-          defaultTheme="light"
+          defaultTheme="dark"
           attribute="class"
         >
           <NextIntlClientProvider

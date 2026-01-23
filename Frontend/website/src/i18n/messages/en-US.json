@@ -22,6 +22,16 @@
     }
   },
   "components": {
+    "images": {
+      "placeholder": {
+        "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
+        "alternate": "Placeholder"
+      },
+      "logo": {
+        "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
+        "alternate": "Vheexa Logo"
+      }
+    },
     "account": {
       "logout": "Logout"
     },
@@ -840,6 +850,43 @@
                 ]
               }
             ]
+          }
+        },
+        "page": {
+          "overview": {
+            "businesses": {
+              "roles": "Roles",
+              "branches": "Branches",
+              "members": "Members",
+              "vehicle-models": "Vehicle Models",
+              "active": "Active",
+              "inactive": "Inactive"
+            },
+            "breakdowns": {
+              "permissions-by-role": {
+                "title": "Permissions by Role",
+                "description": "View the breakdown of permissions by role.",
+                "count": "{count, plural, =1 {# permission} other {# permissions}}"
+              },
+              "members-by-role": {
+                "title": "Members by Role",
+                "description": "View the breakdown of members by role.",
+                "count": "{count, plural, =1 {# member} other {# members}}"
+              },
+              "members-by-branch": {
+                "title": "Members by Branch",
+                "description": "View the breakdown of members by branch.",
+                "count": "{count, plural, =1 {# member} other {# members}}"
+              }
+            },
+            "vehicle-models-price-distribution": {
+              "title": "Vehicles Models Price Distribution",
+              "description": "View the distribution of vehicle models by price.",
+              "min": "Min",
+              "max": "Max",
+              "average": "Average",
+              "count": "{count, plural, =1 {# Vehicle model} other {# Vehicle Models}}"
+            }
           }
         },
         "roles": {
@@ -2467,13 +2514,7 @@
           }
         },
         "logo": {
-          "label": "Vheexa",
-          "url": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-          "alternate": "Vheexa Logo"
-        },
-        "illustration": {
-          "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
-          "alternate": "placeholder"
+          "label": "Vheexa"
         }
       }
     },

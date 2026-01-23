@@ -219,7 +219,7 @@ const FieldTags = forwardRef<tFieldTagsRef, tFieldTagsProps>(
         onValueChange={changeValues}
         className="flex flex-col gap-2"
       >
-        <div className="border-input bg-background flex flex-wrap items-center gap-1.5 rounded border px-2.5 py-1 text-sm focus-within:ring-1 focus-within:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-within:ring-zinc-400">
+        <div className="border-input dark:bg-input/30 flex flex-wrap items-center gap-1.5 rounded border px-2.5 py-1 text-sm focus-within:ring-1 focus-within:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-within:ring-zinc-400">
           {values.map((tag) => (
             <TagsInputItem
               key={tag}
@@ -501,7 +501,9 @@ const FieldPhoneNumber = forwardRef<
   }
 
   function saveValue() {
-    if (!isValidPhoneNumber(`+${country["country-calling-code"]}${phoneNumber}`)) {
+    if (
+      !isValidPhoneNumber(`+${country["country-calling-code"]}${phoneNumber}`)
+    ) {
       setPhoneNumber("");
       onValueChange?.("");
 
@@ -531,7 +533,9 @@ const FieldPhoneNumber = forwardRef<
             className="border-input rounded-e-none border-r-0 px-3 shadow-none outline-offset-0 outline-none focus-visible:outline-[3px]"
           >
             <FlagImage iso2={country.country} size={24} />
-            <p className="text-muted-foreground">+{country["country-calling-code"]}</p>
+            <p className="text-muted-foreground">
+              +{country["country-calling-code"]}
+            </p>
             <LuChevronDown
               aria-hidden="true"
               className="text-muted-foreground/80"

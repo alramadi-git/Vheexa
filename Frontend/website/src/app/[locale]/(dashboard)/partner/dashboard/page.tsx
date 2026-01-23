@@ -1,11 +1,7 @@
 "use client";
 
-import Dashboard from "@/components/locals/partner/dashboard/page/dashboard";
+import Overview from "@/components/locals/partner/dashboard/page/overview";
 
 export default function Page() {
-  return (
-    <main>
-      <Dashboard />
-    </main>
-  );
+  return <Overview />;
 }
