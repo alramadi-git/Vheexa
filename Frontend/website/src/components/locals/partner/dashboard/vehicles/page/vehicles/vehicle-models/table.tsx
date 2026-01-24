@@ -119,12 +119,6 @@ export default function Table({
             </TableHead>
             <TableHead>
               <div className="flex items-center gap-1.5">
-                <IoColorPaletteOutline className="size-4" />
-                {tTable("colors.header")}
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1.5">
                 <LuDollarSign className="size-4" />
                 {tTable("price.header")}
               </div>
@@ -200,23 +194,6 @@ export default function Table({
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-          </TableCell>
-          <TableCell>
-            <ul className="flex gap-1.5">
-              {vehicleModel.colors.map((color) => (
-                <li
-                  key={color.uuid}
-                  style={{
-                    filter: "brightness(0.8)",
-                    background: `color-mix(in oklab, ${color.hexCode} 45%, transparent)`,
-                    color: color.hexCode,
-                  }}
-                  className="flex items-center justify-center rounded p-1 text-xs font-medium"
-                >
-                  {color.name.split(" ").map((chunk) => chunk.at(0))}
-                </li>
-              ))}
-            </ul>
           </TableCell>
           <TableCell>
             {vehicleModel.discount === 0 ? (

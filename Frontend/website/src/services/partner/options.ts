@@ -12,7 +12,7 @@ import { eEnvironment } from "@/enums/environment";
 
 import { tOptionModel } from "@/models/partner/option";
 
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
 import { tResponseOneService, tResponseManyService } from "@/services/service";
 
 export default function useOptionsService() {
@@ -54,7 +54,7 @@ export default function useOptionsService() {
         throw new Error(await response.text());
       }
 
-      const data: tSuccessOneModel<tOptionModel[]> = await response.json();
+      const data: tSuccessModel<tOptionModel[]> = await response.json();
       return {
         isSuccess: true,
         data: data.data,
@@ -101,7 +101,7 @@ export default function useOptionsService() {
         throw new Error(await response.text());
       }
 
-      const data: tSuccessManyModel<tOptionModel> = await response.json();
+      const data: tPaginationSuccessModel<tOptionModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,
@@ -165,7 +165,7 @@ export default function useOptionsService() {
         throw new Error(await response.text());
       }
 
-      const data: tSuccessOneModel<tOptionModel[]> = await response.json();
+      const data: tSuccessModel<tOptionModel[]> = await response.json();
       return {
         isSuccess: true,
         data: data.data,
@@ -232,7 +232,7 @@ export default function useOptionsService() {
         throw new Error(await response.text());
       }
 
-      const data: tSuccessManyModel<tOptionModel> = await response.json();
+      const data: tPaginationSuccessModel<tOptionModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,

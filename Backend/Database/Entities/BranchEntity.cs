@@ -12,6 +12,10 @@ public class BranchEntity
     public PartnerEntity Partner { get; set; }
     public Guid LocationUUID { get; set; }
     public LocationEntity Location { get; set; }
+    public string Name { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Email { get; set; }
+    public int MemberCount { get; set; }
     public STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }

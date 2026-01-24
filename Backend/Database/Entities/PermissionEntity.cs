@@ -5,10 +5,9 @@ public class PermissionEntity
     public enum AUDIENCE
     {
         ADMIN,
-        MEMBER
+        PARTNER
     }
     public Guid UUID { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
     public AUDIENCE Audience { get; set; }
 }

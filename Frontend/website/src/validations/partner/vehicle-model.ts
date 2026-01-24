@@ -39,37 +39,6 @@ const zVehicleModelCreate = z
       .string("transmission is required.")
       .nonempty("transmission cannot be empty."),
     fuel: z.string("fuel is required.").nonempty("fuel cannot be empty."),
-    colors: z
-      .array(
-        z.object({
-          hexCode: z
-            .string("hex code is required.")
-            .regex(/^#([0-9a-fA-F]{6})$/, "invalid hex code."),
-          name: z
-            .string("color name is required.")
-            .nonempty("color name cannot be empty."),
-          tags: z
-            .array(
-              z
-                .string("color tag is required.")
-                .nonempty("tag cannot be empty.")
-                .regex(/^[a-zA-Z]+(, [a-zA-Z]+)*$/, {
-                  error:
-                    "tags must be comma-separated followed by a space and contain only letters.",
-                }),
-            )
-            .refine(
-              (tags) => new Set(tags.map((tag) => tag)).size === tags.length,
-              "colors must be hex codes unique.",
-            ),
-        }),
-      )
-      .min(1, "at least one color is required.")
-      .refine(
-        (colors) =>
-          new Set(colors.map((color) => color.hexCode)).size === colors.length,
-        "colors must be hex codes unique.",
-      ),
     price: z
       .number("price is required.")
       .min(1, "price cannot be less than 1."),

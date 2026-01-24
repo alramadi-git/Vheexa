@@ -7,7 +7,7 @@ import { eEnvironment } from "@/enums/environment";
 
 import { tOverviewModel } from "@/models/partner/overview";
 
-import { tSuccessOneModel } from "@/models/success";
+import { tSuccessModel } from "@/models/success";
 import { tResponseOneService } from "@/services/service";
 
 export default function useOverview() {
@@ -94,7 +94,7 @@ export default function useOverview() {
         throw new Error(await response.text());
       }
 
-      const data: tSuccessOneModel<tOverviewModel> = await response.json();
+      const data: tSuccessModel<tOverviewModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,

@@ -102,12 +102,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
             </TableHead>
             <TableHead>
               <div className="flex items-center gap-1.5">
-                <LuCar className="size-4" />
-                {tTable("vehicles.header")}
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1.5">
                 <RiContactsBookLine />
                 {tTable("contacts.header")}
               </div>
@@ -147,11 +141,6 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           </TableCell>
           <TableCell>
             {tTable.rich("members.cell", {
-              count: branch.memberCount,
-            })}
-          </TableCell>
-          <TableCell>
-            {tTable.rich("vehicles.cell", {
               count: branch.memberCount,
             })}
           </TableCell>

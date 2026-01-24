@@ -8,3 +8,4 @@ public class RolePermissionEntity
     public Guid PermissionUUID { get; set; }
     public PermissionEntity Permission { get; set; }
 }
+

@@ -24,7 +24,7 @@ import {
   tVehicleModelModel,
 } from "@/models/partner/vehicle-model";
 
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
 import { tResponseOneService, tResponseManyService } from "@/services/service";
 
 export default function useVehicleModelService() {
@@ -64,15 +64,6 @@ export default function useVehicleModelService() {
       formData.append("capacity", vehicleModel.capacity.toString());
       formData.append("transmission", vehicleModel.transmission);
       formData.append("fuel", vehicleModel.fuel);
-
-      vehicleModel.colors.forEach((color, colorIndex) => {
-        formData.append(`colors[${colorIndex}].hexCode`, color.hexCode);
-        formData.append(`colors[${colorIndex}].name`, color.name);
-
-        color.tags.forEach((tag, tagIndex) =>
-          formData.append(`colors[${colorIndex}].tags[${tagIndex}]`, tag),
-        );
-      });
 
       formData.append("price", vehicleModel.price.toString());
       formData.append("discount", vehicleModel.discount.toString());
@@ -123,20 +114,6 @@ export default function useVehicleModelService() {
             capacity: 5,
             transmission: "Automatic",
             fuel: "Electric",
-            colors: [
-              {
-                uuid: "d6h1i2j3-4k5l-6m7n-8o9p-1q2r3s4t5u6v",
-                name: "Pearl White",
-                hexCode: "#FFFFFF",
-                tags: "premium, white, popular",
-              },
-              {
-                uuid: "e7j2k3l4-5m6n-7o8p-9q1r-2s3t4u5v6w7x",
-                name: "Midnight Black",
-                hexCode: "#000000",
-                tags: "standard, black, sleek",
-              },
-            ],
             price: 180,
             discount: 30,
             tags: "electric, luxury, sedan, high-performance",
@@ -156,7 +133,7 @@ export default function useVehicleModelService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessOneModel<tVehicleModelModel> =
+      const result: tSuccessModel<tVehicleModelModel> =
         await response.json();
 
       return {
@@ -192,20 +169,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "Automatic",
               fuel: "Electric",
-              colors: [
-                {
-                  uuid: "d6h1i2j3-4k5l-6m7n-8o9p-1q2r3s4t5u6v",
-                  name: "Pearl White",
-                  hexCode: "#FFFFFF",
-                  tags: "premium, white, popular",
-                },
-                {
-                  uuid: "e7j2k3l4-5m6n-7o8p-9q1r-2s3t4u5v6w7x",
-                  name: "Midnight Black",
-                  hexCode: "#000000",
-                  tags: "standard, black, sleek",
-                },
-              ],
               price: 180,
               discount: 30,
               tags: "electric, luxury, sedan, high-performance",
@@ -227,20 +190,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "Manual",
               fuel: "Petrol 95",
-              colors: [
-                {
-                  uuid: "i2j3k4l5-6m7n-8o9p-1q2r-3s4t5u6v7w8x",
-                  name: "Crystal Blue",
-                  hexCode: "#0F8BFF",
-                  tags: "metallic, blue, cool",
-                },
-                {
-                  uuid: "j3k4l5m6-7n8o-9p1q-2r3s-4t5u6v7w8x9y",
-                  name: "Urban Gray",
-                  hexCode: "#808080",
-                  tags: "standard, gray, neutral",
-                },
-              ],
               price: 65,
               discount: 0,
               tags: "sedan, compact, fuel-efficient, reliable",
@@ -262,14 +211,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "Dual Clutch",
               fuel: "Petrol 98",
-              colors: [
-                {
-                  uuid: "m6n7o8p9-1q2r-3s4t-5u6v-7w8x9y0z1a2b",
-                  name: "Imola Red",
-                  hexCode: "#D40000",
-                  tags: "premium, red, performance",
-                },
-              ],
               price: 220,
               discount: 0,
               tags: "performance, luxury, sports, coupe",
@@ -291,14 +232,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "Semi-Automatic",
               fuel: "Petrol 95",
-              colors: [
-                {
-                  uuid: "p9q1r2s3-4t5u-6v7w-8x9y-0z1a2b3c4d5e",
-                  name: "Lapiz Blue",
-                  hexCode: "#2A5CAA",
-                  tags: "metallic, blue, sporty",
-                },
-              ],
               price: 95,
               discount: 15,
               tags: "hot hatch, sport, compact, fun-to-drive",
@@ -320,14 +253,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "CVT",
               fuel: "Hybrid",
-              colors: [
-                {
-                  uuid: "s3t4u5v6-7w8x-9y0z-1a2b-3c4d5e6f7g8h",
-                  name: "Silver Metallic",
-                  hexCode: "#C0C0C0",
-                  tags: "standard, silver, durable",
-                },
-              ],
               price: 75,
               discount: 10,
               tags: "sedan, hybrid, reliable, family",
@@ -349,14 +274,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "CVT",
               fuel: "Petrol 91",
-              colors: [
-                {
-                  uuid: "v6w7x8y9-1z2a-3b4c-5d6e-7f8g9h0i1j2k",
-                  name: "Sapphire Blue",
-                  hexCode: "#0F52BA",
-                  tags: "metallic, blue, outdoor",
-                },
-              ],
               price: 88,
               discount: 12,
               tags: "SUV, AWD, compact, outdoors",
@@ -378,14 +295,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "Automatic",
               fuel: "Diesel",
-              colors: [
-                {
-                  uuid: "y9z0a1b2-3c4d-5e6f-7g8h-9i0j1k2l3m4n",
-                  name: "Oxford White",
-                  hexCode: "#FFFFFF",
-                  tags: "standard, white, rugged",
-                },
-              ],
               price: 130,
               discount: 0,
               tags: "truck, diesel, towing, full-size",
@@ -407,14 +316,6 @@ export default function useVehicleModelService() {
               capacity: 2,
               transmission: "Dual Clutch",
               fuel: "Petrol 98",
-              colors: [
-                {
-                  uuid: "b2c3d4e5-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
-                  name: "Velocity Yellow",
-                  hexCode: "#FFF700",
-                  tags: "premium, yellow, aggressive",
-                },
-              ],
               price: 290,
               discount: 30,
               tags: "sports car, performance, American, coupe",
@@ -436,14 +337,6 @@ export default function useVehicleModelService() {
               capacity: 7,
               transmission: "Automatic",
               fuel: "Hybrid",
-              colors: [
-                {
-                  uuid: "e5f6g7h8-9i0j-1k2l-3m4n-5o6p7q8r9s0t",
-                  name: "Charcoal Grey",
-                  hexCode: "#36454F",
-                  tags: "premium, grey, elegant",
-                },
-              ],
               price: 210,
               discount: 0,
               tags: "luxury, SUV, hybrid, family, safe",
@@ -465,14 +358,6 @@ export default function useVehicleModelService() {
               capacity: 5,
               transmission: "Automatic",
               fuel: "Petrol 91",
-              colors: [
-                {
-                  uuid: "h8i9j0k1-2l3m-4n5o-6p7q-8r9s0t1u2v3w",
-                  name: "Billet Silver",
-                  hexCode: "#C8C8C8",
-                  tags: "standard, silver, muscle",
-                },
-              ],
               price: 145,
               discount: 15,
               tags: "muscle car, V8, American, sedan",
@@ -520,7 +405,7 @@ export default function useVehicleModelService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessManyModel<tVehicleModelModel> =
+      const result: tPaginationSuccessModel<tVehicleModelModel> =
         await response.json();
 
       return {

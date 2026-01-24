@@ -1,0 +1,203 @@
+
+using Microsoft.EntityFrameworkCore;
+
+using Database.Entities;
+using Database.Partner.DTOs;
+using Database.DTOs;
+
+namespace Database.Partner.Repositories;
+
+public class ClsRoleRepository
+{
+    private static readonly Dictionary<ClsRoleCreateDTO.PERMISSION, Guid> PermissionsMap = new()
+    {
+        { ClsRoleCreateDTO.PERMISSION.PARTNER_READ, new Guid("d3b2f1a4-7c6e-4a8d-b5c9-123456789abc") },
+        { ClsRoleCreateDTO.PERMISSION.PARTNER_UPDATE, new Guid("e4c3g2b5-8d7f-5b9e-c6da-23456789abcd") },
+        { ClsRoleCreateDTO.PERMISSION.PARTNER_DELETE, new Guid("f5d4h3c6-9e8g-6c0f-d7eb-3456789abcde") },
+        { ClsRoleCreateDTO.PERMISSION.ROLES_CREATE, new Guid("a6e5i4d7-0f9h-7d1g-e8fc-456789abcdef") },
+        { ClsRoleCreateDTO.PERMISSION.ROLES_READ, new Guid("b7f6j5e8-1g0i-8e2h-f9gd-56789abcdef0") },
+        { ClsRoleCreateDTO.PERMISSION.ROLES_UPDATE, new Guid("c8g7k6f9-2h1j-9f3i-g0he-6789abcdef01") },
+        { ClsRoleCreateDTO.PERMISSION.ROLES_DELETE, new Guid("d9h8l7g0-3i2k-0g4j-h1if-789abcdef012") },
+        { ClsRoleCreateDTO.PERMISSION.BRANCHES_CREATE, new Guid("e0i9m8h1-4j3l-1h5k-i2jg-89abcdef0123") },
+        { ClsRoleCreateDTO.PERMISSION.BRANCHES_READ, new Guid("f1j0n9i2-5k4m-2i6l-j3kh-9abcdef01234") },
+        { ClsRoleCreateDTO.PERMISSION.BRANCHES_UPDATE, new Guid("g2k1o0j3-6l5n-3j7m-k4li-abcdef012345") },
+        { ClsRoleCreateDTO.PERMISSION.BRANCHES_DELETE, new Guid("h3l2p1k4-7m6o-4k8n-l5mj-bcdef0123456") },
+        { ClsRoleCreateDTO.PERMISSION.MEMBERS_CREATE, new Guid("i4m3q2l5-8n7p-5l9o-m6nk-cdef01234567") },
+        { ClsRoleCreateDTO.PERMISSION.MEMBERS_READ, new Guid("j5n4r3m6-9o8q-6m0p-n7ol-def012345678") },
+        { ClsRoleCreateDTO.PERMISSION.MEMBERS_UPDATE, new Guid("k6o5s4n7-0p9r-7n1q-o8pm-ef0123456789") },
+        { ClsRoleCreateDTO.PERMISSION.MEMBERS_DELETE, new Guid("l7p6t5o8-1q0s-8o2r-p9qn-f0123456789a") },
+        { ClsRoleCreateDTO.PERMISSION.VEHICLE_MODELS_CREATE, new Guid("m8q7u6p9-2r1t-9p3s-q0ro-0123456789ab") },
+        { ClsRoleCreateDTO.PERMISSION.VEHICLE_MODELS_READ, new Guid("n9r8v7q0-3s2u-0q4t-r1sp-123456789abc") },
+        { ClsRoleCreateDTO.PERMISSION.VEHICLE_MODELS_UPDATE, new Guid("o0s9w8r1-4t3v-1r5u-s2tq-23456789abcd") },
+        { ClsRoleCreateDTO.PERMISSION.VEHICLE_MODELS_DELETE, new Guid("p1t0x9s2-5u4w-2s6v-t3ur-3456789abcde") }
+    };
+    private readonly AppDBContext _AppDBContext;
+
+    public ClsRoleRepository(AppDBContext appDBContext)
+    {
+        _AppDBContext = appDBContext;
+    }
+
+    public async Task Create(ClsRoleCreateDTO roleCreateDTO, Guid partnerUUID, Guid memberUUID)
+    {
+        using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
+        try
+        {
+            var role = new RoleEntity
+            {
+                UUID = Guid.NewGuid(),
+                Name = roleCreateDTO.Name,
+                IsDefault = false,
+                Audience = RoleEntity.AUDIENCE.PARTNER,
+            };
+            var rolePermissions = roleCreateDTO.Permissions.Select(permission => new RolePermissionEntity
+            {
+                UUID = Guid.NewGuid(),
+                RoleUUID = role.UUID,
+                PermissionUUID = PermissionsMap[permission],
+            }).ToArray();
+            var partnerRole = new PartnerRoleEntity
+            {
+                UUID = Guid.NewGuid(),
+                PartnerUUID = partnerUUID,
+                RoleUUID = role.UUID,
+                AssignedCount = 0,
+                Status = (PartnerRoleEntity.STATUS)roleCreateDTO.Status,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+                DeletedAt = null,
+            };
+
+            var history = new HistoryEntity
+            {
+                UUID = Guid.NewGuid(),
+                Action = HistoryEntity.ACTION.CREATE,
+                Entity = HistoryEntity.ENTITY.PARTNER_ROLES,
+                EntityUUID = partnerRole.UUID,
+            };
+            var memberHistory = new MemberHistoryEntity
+            {
+                UUID = Guid.NewGuid(),
+                HistoryUUID = history.UUID,
+                MemberUUID = memberUUID,
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            _AppDBContext.Roles.Add(role);
+            _AppDBContext.RolePermissions.AddRange(rolePermissions);
+            _AppDBContext.PartnerRoles.Add(partnerRole);
+
+            _AppDBContext.Histories.Add(history);
+            _AppDBContext.MemberHistories.Add(memberHistory);
+
+            await _AppDBContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    public async Task<ClsRoleDTO> Read(Guid roleUUID, Guid partnerUUID)
+    {
+        var role = await _AppDBContext.PartnerRoles
+        .Where(partnerRole =>
+            partnerRole.UUID == roleUUID &&
+            partnerRole.PartnerUUID == partnerUUID &&
+            !partnerRole.IsDeleted
+        )
+        .Select(partnerRole => new ClsRoleDTO
+        {
+            UUID = partnerRole.UUID,
+            Name = partnerRole.Role.Name,
+            Permissions = _AppDBContext.RolePermissions
+            .Where(rolePermission => rolePermission.RoleUUID == partnerRole.RoleUUID)
+            .Select(rolePermission => new ClsRoleDTO.ClsPermissionDTO
+            {
+                UUID = rolePermission.PermissionUUID,
+                Name = rolePermission.Permission.Name
+            })
+            .ToArray(),
+            AssignedCount = partnerRole.AssignedCount,
+            Status = (ClsRoleDTO.STATUS)partnerRole.Status,
+            CreatedAt = partnerRole.CreatedAt,
+            UpdatedAt = partnerRole.UpdatedAt,
+        })
+        .SingleAsync();
+
+        return role;
+    }
+    public async Task<ClsPaginatedDTO<ClsRoleDTO>> Read(Guid partnerUUID)
+    {
+        var roles = await _AppDBContext.PartnerRoles
+        .Where(partnerRole =>
+            partnerRole.PartnerUUID == partnerUUID &&
+            !partnerRole.IsDeleted
+        )
+        .Select(partnerRole => new ClsRoleDTO
+        {
+            UUID = partnerRole.UUID,
+            Name = partnerRole.Role.Name,
+            Permissions = _AppDBContext.RolePermissions
+            .Where(rolePermission => rolePermission.RoleUUID == partnerRole.RoleUUID)
+            .Select(rolePermission => new ClsRoleDTO.ClsPermissionDTO
+            {
+                UUID = rolePermission.PermissionUUID,
+                Name = rolePermission.Permission.Name
+            })
+            .ToArray(),
+            AssignedCount = partnerRole.AssignedCount,
+            Status = (ClsRoleDTO.STATUS)partnerRole.Status,
+            CreatedAt = partnerRole.CreatedAt,
+            UpdatedAt = partnerRole.UpdatedAt,
+        })
+        .ToArrayAsync();
+    }
+
+
+    public async Task Delete(Guid roleUUID, Guid partnerUUID, Guid memberUUID)
+    {
+        using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
+        try
+        {
+            var role = await _AppDBContext.PartnerRoles
+            .SingleAsync(partnerRole =>
+                partnerRole.UUID == roleUUID &&
+                partnerRole.PartnerUUID == partnerUUID &&
+                !partnerRole.IsDeleted
+            );
+            role.IsDeleted = true;
+            role.DeletedAt = DateTime.UtcNow;
+
+            var history = new HistoryEntity
+            {
+                UUID = Guid.NewGuid(),
+                Action = HistoryEntity.ACTION.DELETE,
+                Entity = HistoryEntity.ENTITY.PARTNER_ROLES,
+                EntityUUID = roleUUID,
+
+            };
+            var memberHistory = new MemberHistoryEntity
+            {
+                UUID = Guid.NewGuid(),
+                HistoryUUID = history.UUID,
+                MemberUUID = memberUUID,
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            _AppDBContext.Histories.Add(history);
+            _AppDBContext.MemberHistories.Add(memberHistory);
+
+            await _AppDBContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+};

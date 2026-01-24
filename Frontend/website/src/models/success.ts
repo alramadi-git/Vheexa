@@ -1,12 +1,15 @@
-import { tPaginationModel } from "./pagination";
-
-type tSuccessOneModel<tData> = {
+type tSuccessModel<tData> = {
   data: tData;
 };
 
-type tSuccessManyModel<tData> = {
+type tPaginationModel = {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+};
+type tPaginationSuccessModel<tData> = {
   data: tData[];
   pagination: tPaginationModel;
 };
 
-export type { tSuccessOneModel, tSuccessManyModel };
+export type { tSuccessModel, tPaginationModel, tPaginationSuccessModel };

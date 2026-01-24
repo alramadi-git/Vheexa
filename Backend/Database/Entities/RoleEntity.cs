@@ -5,7 +5,7 @@ public class RoleEntity
     public enum AUDIENCE
     {
         ADMIN,
-        MEMBER
+        PARTNER
     }
     public Guid UUID { get; set; }
     public string Name { get; set; }

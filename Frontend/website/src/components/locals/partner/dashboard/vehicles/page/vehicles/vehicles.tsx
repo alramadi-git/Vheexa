@@ -174,7 +174,6 @@ function AddNewVehicleModel() {
       description: "",
       marketLaunch: new Date(),
       capacity: 1,
-      colors: [],
       price: 1,
       discount: 0,
       tags: [],
@@ -493,7 +492,7 @@ function AddNewVehicleModel() {
               />
             </FieldGroup>
           </FieldGroup>
-          <FieldGroup className="grid-cols-2">
+          <FieldGroup className="grid-cols-3">
             <Controller
               control={control}
               name="capacity"
@@ -609,41 +608,6 @@ function AddNewVehicleModel() {
                   <FieldError errors={error} />
                 </Field>
               )}
-            />
-            <Controller
-              control={control}
-              name="colors"
-              render={({
-                field: { onChange: setValues },
-                fieldState: { invalid, error },
-              }) => {
-                return (
-                  <Field>
-                    <FieldLabel
-                      aria-invalid={invalid}
-                      htmlFor={`${id}-colors`}
-                      className="max-w-fit"
-                    >
-                      {tAddNew("content.form.colors.label")}
-                    </FieldLabel>
-                    <FieldContent>
-                      <FieldColorPickers
-                        id={`${id}-colors`}
-                        ref={colorsRef}
-                        isInvalid={invalid}
-                        onValuesChange={(values) => setValues(values)}
-                      />
-                    </FieldContent>
-                    <FieldError
-                      errors={
-                        !Array.isArray(error)
-                          ? error
-                          : error.flatMap((error) => Object.values(error))
-                      }
-                    />
-                  </Field>
-                );
-              }}
             />
           </FieldGroup>
           <FieldGroup>

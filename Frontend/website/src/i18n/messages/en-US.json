@@ -1377,10 +1377,6 @@
                   "header": "Members",
                   "cell": "{count, plural, =0 {No members} =1 {1 Member} other {# Members}}"
                 },
-                "vehicles": {
-                  "header": "Vehicles",
-                  "cell": "{count, plural, =0 {No vehicles} =1 {1 Vehicle} other {# Vehicles}}"
-                },
                 "contacts": {
                   "header": "Contacts"
                 },
@@ -2117,7 +2113,7 @@
                   "filter": {
                     "search": {
                       "label": "Search",
-                      "placeholder": "Search by Vehicle Model (e.g., Name, etc...)"
+                      "placeholder": "Search by Vehicle Model (e.g., Name, Description, Tags, etc...)"
                     },
                     "categories": {
                       "label": "Categories",
@@ -2224,9 +2220,6 @@
                       "cell": {
                         "capacity": "{capacity, plural, =1 {# Person} other {# people}}"
                       }
-                    },
-                    "colors": {
-                      "header": "Colors"
                     },
                     "price": {
                       "header": "Price",

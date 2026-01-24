@@ -12,6 +12,7 @@ public class PartnerRoleEntity
     public PartnerEntity Partner { get; set; }
     public Guid RoleUUID { get; set; }
     public RoleEntity Role { get; set; }
+    public int AssignedCount { get; set; }
     public STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }

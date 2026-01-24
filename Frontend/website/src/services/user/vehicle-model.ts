@@ -6,7 +6,7 @@ import { tPagination, zPagination } from "@/validations/pagination";
 
 import { tVehicleModelModel } from "@/models/user/vehicle-model";
 
-import { tSuccessManyModel, tSuccessOneModel } from "@/models/success";
+import { tPaginationSuccessModel, tSuccessModel } from "@/models/success";
 import { tFailedModel } from "@/models/error";
 
 import {
@@ -48,7 +48,7 @@ class ClsVehicleModelService extends ClsAbstractService {
       );
     }
 
-    const dataBody: tSuccessOneModel<tVehicleModelModel> = await data.json();
+    const dataBody: tSuccessModel<tVehicleModelModel> = await data.json();
     return {
       isSuccess: true,
       statusCode: data.status,
@@ -118,7 +118,7 @@ class ClsVehicleModelService extends ClsAbstractService {
       );
     }
 
-    const dataBody: tSuccessManyModel<tVehicleModelModel> = await data.json();
+    const dataBody: tPaginationSuccessModel<tVehicleModelModel> = await data.json();
     return {
       isSuccess: true,
       statusCode: data.status,

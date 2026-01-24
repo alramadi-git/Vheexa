@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Database.DTOs;
 using Database.DTOs.Partner;
 using Database.Parameters;
-using Database.DTOs.Response;
 
 namespace Database.Repositories.Partner;
 
@@ -17,7 +16,7 @@ public class AuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneDTO<ClsMemberDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
+    public async Task<ClsSuccessDTO<ClsMemberDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
     {
         var memberQuery = _AppDBContext.Members.AsQueryable();
         memberQuery = memberQuery.Include(member => member.Human).ThenInclude(human => human.Avatar);

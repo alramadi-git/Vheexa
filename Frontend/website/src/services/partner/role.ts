@@ -19,7 +19,7 @@ import { tPagination, zPagination } from "@/validations/pagination";
 import { eEnvironment } from "@/enums/environment";
 import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
 import { tResponseOneService, tResponseManyService } from "@/services/service";
 
 export default function useRoleService() {
@@ -180,7 +180,7 @@ export default function useRoleService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessOneModel<tRoleModel> = await response.json();
+      const result: tSuccessModel<tRoleModel> = await response.json();
       return {
         isSuccess: true,
         ...result,
@@ -363,7 +363,7 @@ export default function useRoleService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessManyModel<tRoleModel> = await response.json();
+      const result: tPaginationSuccessModel<tRoleModel> = await response.json();
       return {
         isSuccess: true,
         ...result,

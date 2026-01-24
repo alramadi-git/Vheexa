@@ -19,7 +19,7 @@ import { tPagination, zPagination } from "@/validations/pagination";
 import { eEnvironment } from "@/enums/environment";
 import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
 
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
 import { tResponseOneService, tResponseManyService } from "@/services/service";
 
 export default function useMemberService() {
@@ -118,7 +118,7 @@ export default function useMemberService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessOneModel<tMemberModel> = await response.json();
+      const result: tSuccessModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
         ...result,
@@ -427,7 +427,7 @@ export default function useMemberService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessManyModel<tMemberModel> = await response.json();
+      const result: tPaginationSuccessModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
         ...result,

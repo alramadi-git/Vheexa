@@ -2,27 +2,7 @@ namespace Database.Entities;
 
 public class VehicleModelEntity
 {
-    public enum TRANSMISSION_MODEL
-    {
-        MANUAL,
-        AUTOMATIC,
-        SEMI_AUTOMATIC,
-        CVT,
-        DUAL_CLUTCH,
-    }
-    public enum FUEL_MODEL
-    {
-        PETROL91,
-        PETROL95,
-        PETROL98,
-        DIESEL,
-        ELECTRIC,
-        HYBRID,
-        CNG,
-        LPG,
-        HYDROGEN,
-    }
-    public enum STATUS
+   public enum STATUS
     {
         ACTIVE,
         INACTIVE
@@ -30,18 +10,17 @@ public class VehicleModelEntity
     public Guid UUID { get; set; }
     public Guid PartnerUUID { get; set; }
     public PartnerEntity Partner { get; set; }
-    public Guid? ThumbnailUUID { get; set; }
-    public ImageEntity? Thumbnail { get; set; }
+    public string? Thumbnail { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public string Manufacturer { get; set; }
-    public DateOnly ModelYear { get; set; }
-    public TRANSMISSION_MODEL Transmission { get; set; }
-    public short Capacity { get; set; }
-    public FUEL_MODEL Fuel { get; set; }
+    public DateOnly MarketLaunch { get; set; }
+    public int Capacity { get; set; }
+    public string Transmission { get; set; }
+    public string Fuel { get; set; }
     public double Price { get; set; }
     public float Discount { get; set; }
-    public string[] Tags { get; set; }
+    public string Tags { get; set; }
     public STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }

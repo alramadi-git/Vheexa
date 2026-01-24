@@ -25,7 +25,7 @@ public class ClsPartnerDTO
         ? null
         : new ClsImageDTO(partner.Banner);
         Handle = partner.Handle;
-        Name = partner.Name;
+        Name = partner.OrganizationName;
         PhoneNumber = partner.PhoneNumber;
         Email = partner.Email;
         UpdatedAt = partner.UpdatedAt;

@@ -6,7 +6,7 @@ using Database.Parameters;
 using Database.Parameters.User;
 
 using Database.DTOs.User;
-using Database.DTOs.Response;
+using Database.DTOs;
 
 namespace Database.Repositories.User;
 
@@ -19,7 +19,7 @@ public class VehicleRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneDTO<ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
+    public async Task<ClsSuccessDTO<ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
     {
         var vehicleQuery = _AppDBContext.VehicleModels.AsQueryable();
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.UUID == vehicleUUID);
@@ -32,10 +32,10 @@ public class VehicleRepository
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.Status == VehicleModelEntity.STATUS.ACTIVE && vehicle.IsDeleted == false);
 
         var vehicle = await vehicleQuery.AsNoTracking().FirstOrDefaultAsync()
-        ?? throw new FailedDTO(HTTP_STATUS_CODE.NOT_FOUND, "No such vehicle.");
+        ?? throw new ClsExceptionDTO(HTTP_STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
-        var vehicleImagesQuery = _AppDBContext.VehicleModelImages.AsQueryable();
-        vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
+        var vehicleImagesQuery = _AppDBContext.VehicleModelGallery.AsQueryable();
+        vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Url);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicleUUID);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
         vehicleImagesQuery = vehicleImagesQuery.OrderBy(vehicleImage => vehicleImage.Index);
@@ -55,10 +55,10 @@ public class VehicleRepository
             vehicleColors
         );
 
-        return new SuccessOneDTO<ClsVehicleModelDTO>(vehicleDTO);
+        return new ClsSuccessDTO<ClsVehicleModelDTO>(vehicleDTO);
     }
 
-    public async Task<SuccessManyDTO<ClsVehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
+    public async Task<ClsPaginationSuccessDTO<ClsVehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
     {
         var vehiclesQuery = _AppDBContext.VehicleModels.AsQueryable();
 
@@ -82,8 +82,8 @@ public class VehicleRepository
         var vehicleUUIDs =
         new HashSet<Guid>(vehicles.Select(vehicle => vehicle.UUID));
 
-        var vehicleImagesQuery = _AppDBContext.VehicleModelImages.AsQueryable();
-        vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Image);
+        var vehicleImagesQuery = _AppDBContext.VehicleModelGallery.AsQueryable();
+        vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Url);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleModelUUID));
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
         vehicleImagesQuery = vehicleImagesQuery.OrderBy(vehicleImage => vehicleImage.Index);
@@ -108,6 +108,6 @@ public class VehicleRepository
             return new ClsVehicleModelDTO(vehicle, images ?? [], colors ?? []);
         }).ToArray();
 
-        return new SuccessManyDTO<ClsVehicleModelDTO>(vehiclesDTO, new PaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));
+        return new ClsPaginationSuccessDTO<ClsVehicleModelDTO>(vehiclesDTO, new ClsPaginationDTO(pagination.Page, (int)pagination.Limit, totalItems));
     }
 };

@@ -1,6 +1,6 @@
-import { tSuccessOneModel, tSuccessManyModel } from "./success";
+import { tSuccessModel, tPaginationSuccessModel } from "./success";
 
-type tResponseOneModel<tData> = tSuccessOneModel<tData> | string;
-type tResponseManyModel<tData> = tSuccessManyModel<tData> | string;
+type tResponseOneModel<tData> = tSuccessModel<tData> | string;
+type tResponseManyModel<tData> = tPaginationSuccessModel<tData> | string;
 
 export type { tResponseOneModel, tResponseManyModel };

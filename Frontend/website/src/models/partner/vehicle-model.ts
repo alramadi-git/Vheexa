@@ -29,12 +29,6 @@ type tVehicleModelModel = {
   capacity: number;
   transmission: string;
   fuel: string;
-  colors: {
-    uuid: string;
-    hexCode: string;
-    name: string;
-    tags: string;
-  }[];
   price: number;
   discount: number;
   tags: string;

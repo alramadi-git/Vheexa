@@ -24,7 +24,7 @@ public class ClsVehicleModelDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public ClsVehicleModelDTO(VehicleModelEntity vehicleModel, VehicleModelImageEntity[] images, VehicleModelColorEntity[] colors)
+    public ClsVehicleModelDTO(VehicleModelEntity vehicleModel, VehicleModelGalleryEntity[] images, VehicleModelColorEntity[] colors)
     {
         UUID = vehicleModel.UUID;
         Partner = new ClsPartnerDTO(vehicleModel.Partner);
@@ -36,7 +36,7 @@ public class ClsVehicleModelDTO
         Name = vehicleModel.Name;
         Description = vehicleModel.Description;
         Manufacturer = vehicleModel.Manufacturer;
-        ModelYear = vehicleModel.ModelYear;
+        ModelYear = vehicleModel.MarketLaunch;
         Transmission = vehicleModel.Transmission;
         Capacity = vehicleModel.Capacity;
         Fuel = vehicleModel.Fuel;

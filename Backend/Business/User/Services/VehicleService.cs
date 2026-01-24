@@ -7,7 +7,6 @@ using Database.Parameters.User;
 using Database.Repositories.User;
 using Database.DTOs.Partner;
 using Database.DTOs.User;
-using Database.DTOs.Response;
 
 namespace Business.User.Services;
 
@@ -25,12 +24,12 @@ public class VehicleService
         _VehicleRepository = vehicleRepository;
     }
 
-    public async Task<SuccessOneDTO<Database.DTOs.User.ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
+    public async Task<ClsSuccessDTO<Database.DTOs.User.ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
     {
         return await _VehicleRepository.GetOneAsync(vehicleUUID);
     }
 
-    public async Task<SuccessManyDTO<Database.DTOs.User.ClsVehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
+    public async Task<ClsPaginationSuccessDTO<Database.DTOs.User.ClsVehicleModelDTO>> GetManyAsync(VehicleFiltersParameter filters, PaginationParameter pagination)
     {
         await _VehicleFiltersValidation.ValidateAndThrowAsync(filters);
         await _PaginationValidation.ValidateAndThrowAsync(pagination);

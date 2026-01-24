@@ -19,7 +19,7 @@ import { tPagination, zPagination } from "@/validations/pagination";
 import { eEnvironment } from "@/enums/environment";
 import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
 
-import { tSuccessOneModel, tSuccessManyModel } from "@/models/success";
+import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
 import { tResponseOneService, tResponseManyService } from "@/services/service";
 
 export default function useBranchService() {
@@ -77,7 +77,6 @@ export default function useBranchService() {
             name: "New York Headquarters",
             phoneNumber: "+12125550123",
             email: "ny.headquarters@vheexa.com",
-            vehicleInstanceCount: 45,
             memberCount: 22,
             status: eBranchStatusModel.active,
             createdAt: "2023-06-12T10:30:00Z",
@@ -95,7 +94,7 @@ export default function useBranchService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessOneModel<tBranchModel> = await response.json();
+      const result: tSuccessModel<tBranchModel> = await response.json();
       return {
         isSuccess: true,
         ...result,
@@ -127,7 +126,6 @@ export default function useBranchService() {
               name: "New York Headquarters",
               phoneNumber: "+12125550123",
               email: "ny.headquarters@vheexa.com",
-              vehicleInstanceCount: 45,
               memberCount: 22,
               status: eBranchStatusModel.active,
               createdAt: "2023-06-12T10:30:00Z",
@@ -145,7 +143,6 @@ export default function useBranchService() {
               name: "Austin Downtown Branch",
               phoneNumber: "+15125550198",
               email: "austin.downtown@vheexa.com",
-              vehicleInstanceCount: 32,
               memberCount: 15,
               status: eBranchStatusModel.active,
               createdAt: "2023-08-05T09:15:00Z",
@@ -163,7 +160,6 @@ export default function useBranchService() {
               name: "Los Angeles West Branch",
               phoneNumber: "+13105550167",
               email: "la.west@vheexa.com",
-              vehicleInstanceCount: 38,
               memberCount: 18,
               status: eBranchStatusModel.active,
               createdAt: "2023-09-22T14:20:00Z",
@@ -181,7 +177,6 @@ export default function useBranchService() {
               name: "Chicago Lakeside Hub",
               phoneNumber: "+13125550145",
               email: "chicago.lakeside@vheexa.com",
-              vehicleInstanceCount: 29,
               memberCount: 12,
               status: eBranchStatusModel.active,
               createdAt: "2023-11-15T11:10:00Z",
@@ -199,7 +194,6 @@ export default function useBranchService() {
               name: "Miami Beach Office",
               phoneNumber: "+13055550132",
               email: "miami.beach@vheexa.com",
-              vehicleInstanceCount: 24,
               memberCount: 10,
               status: eBranchStatusModel.inactive,
               createdAt: "2024-01-08T13:45:00Z",
@@ -217,7 +211,6 @@ export default function useBranchService() {
               name: "Seattle Downtown Center",
               phoneNumber: "+12065550189",
               email: "seattle.downtown@vheexa.com",
-              vehicleInstanceCount: 31,
               memberCount: 14,
               status: eBranchStatusModel.active,
               createdAt: "2024-02-20T10:05:00Z",
@@ -235,7 +228,6 @@ export default function useBranchService() {
               name: "Denver Mountain Hub",
               phoneNumber: "+13035550176",
               email: "denver.mountain@vheexa.com",
-              vehicleInstanceCount: 27,
               memberCount: 11,
               status: eBranchStatusModel.active,
               createdAt: "2024-03-10T08:30:00Z",
@@ -264,7 +256,7 @@ export default function useBranchService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessManyModel<tBranchModel> = await response.json();
+      const result: tPaginationSuccessModel<tBranchModel> = await response.json();
       return {
         isSuccess: true,
         ...result,

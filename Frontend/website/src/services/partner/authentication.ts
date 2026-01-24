@@ -15,7 +15,7 @@ import {
 import { tBaseAccountModel } from "@/models/base-account";
 import { tAccountModel } from "@/models/partner/account";
 
-import { tSuccessOneModel } from "@/models/success";
+import { tSuccessModel } from "@/models/success";
 import { tResponseOneService } from "@/services/service";
 
 export default function useAuthenticationService() {
@@ -147,7 +147,7 @@ export default function useAuthenticationService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessOneModel<tBaseAccountModel<tAccountModel>> =
+      const result: tSuccessModel<tBaseAccountModel<tAccountModel>> =
         await response.json();
 
       return {
@@ -233,7 +233,7 @@ export default function useAuthenticationService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessOneModel<tBaseAccountModel<tAccountModel>> =
+      const result: tSuccessModel<tBaseAccountModel<tAccountModel>> =
         await response.json();
 
       return {

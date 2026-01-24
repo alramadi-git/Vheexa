@@ -4,7 +4,6 @@ using Database.Parameters;
 using Business.Validations;
 using Database.DTOs.User;
 using Database.Repositories.User;
-using Database.DTOs.Response;
 using Database.DTOs.Abstracts;
 
 namespace Business.User.Services;
@@ -20,7 +19,7 @@ public class AuthenticationService
         _AuthenticationRepository = authenticationRepository;
     }
 
-    public async Task<SuccessOneDTO<ClsUserDTO>> LoginAsync(LoginCredentialsParameter LoginCredentials)
+    public async Task<ClsSuccessDTO<ClsUserDTO>> LoginAsync(LoginCredentialsParameter LoginCredentials)
     {
         await _LoginCredentialsValidation.ValidateAndThrowAsync(LoginCredentials);
         return await _AuthenticationRepository.LoginAsync(LoginCredentials);

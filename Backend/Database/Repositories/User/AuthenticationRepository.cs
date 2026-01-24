@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Database.Parameters;
 
 using Database.DTOs.User;
-using Database.DTOs.Response;
 using Database.DTOs.Abstracts;
+using Database.DTOs;
 
 namespace Database.Repositories.User;
 
@@ -18,7 +18,7 @@ public class AuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<SuccessOneDTO<ClsUserDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
+    public async Task<ClsSuccessDTO<ClsUserDTO>> LoginAsync(LoginCredentialsParameter loginCredentials)
     {
         var userQuery = _AppDBContext.Users.AsQueryable();
         userQuery = userQuery.Include(user => user.Human).ThenInclude(human => human.Avatar);
@@ -28,12 +28,12 @@ public class AuthenticationRepository
         userQuery = userQuery.Where((user) => user.IsDeleted == false);
 
         var user = await userQuery.AsNoTracking().FirstOrDefaultAsync()
-        ?? throw new FailedDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "No such user.");
+        ?? throw new ClsExceptionDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "No such user.");
 
         var passwordHasher = new PasswordHasher<object?>();
         var passwordVerifyResult = passwordHasher.VerifyHashedPassword(null, user.Human.Password, loginCredentials.Password);
 
-        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new FailedDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
+        if (passwordVerifyResult == PasswordVerificationResult.Failed) throw new ClsExceptionDTO(HTTP_STATUS_CODE.UNAUTHORIZED, "Incorrect password.");
         if (passwordVerifyResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             var trackingUser = await userQuery.FirstAsync();
@@ -42,6 +42,6 @@ public class AuthenticationRepository
             await _AppDBContext.SaveChangesAsync();
         }
 
-        return new SuccessOneDTO<ClsUserDTO>(new ClsUserDTO(user));
+        return new ClsSuccessDTO<ClsUserDTO>(new ClsUserDTO(user));
     }
 };
