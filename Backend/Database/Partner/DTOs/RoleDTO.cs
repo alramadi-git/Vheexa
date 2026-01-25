@@ -9,10 +9,10 @@ public class ClsRoleDTO
     }
     public class ClsPermissionDTO
     {
-        public Guid UUID { get; set; }
+        public Guid Uuid { get; set; }
         public string Name { get; set; }
     }
-    public Guid UUID { get; set; }
+    public Guid Uuid { get; set; }
     public string Name { get; set; }
     public ClsPermissionDTO[] Permissions { get; set; }
     public int AssignedCount { get; set; }

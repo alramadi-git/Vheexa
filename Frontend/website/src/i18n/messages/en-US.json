@@ -1342,7 +1342,7 @@
               "filter": {
                 "search": {
                   "label": "Search",
-                  "placeholder": "Search by branch (e.g., Name, Location or Contacts)"
+                  "placeholder": "Search by branch (e.g., Name, Location or Email)"
                 },
                 "status": {
                   "label": "Status",

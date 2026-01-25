@@ -5,6 +5,7 @@ using Database.Entities;
 using Database.DTOs;
 using Database.Partner.DTOs;
 using Database.Partner.Enums;
+using System.Collections.Immutable;
 
 namespace Database.Partner.Repositories;
 
@@ -39,7 +40,7 @@ public class ClsRoleRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task Create(ClsRoleCreateDTO roleCreateDTO, Guid partnerUUID, Guid memberUUID)
+    public async Task CreateOneAsync(ClsRoleCreateDTO roleCreateDTO, Guid partnerUuid, Guid memberUuid)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -49,7 +50,7 @@ public class ClsRoleRepository
                 Uuid = Guid.NewGuid(),
                 Name = roleCreateDTO.Name,
                 IsDefault = false,
-                Audience = ClsRoleEntity.AUDIENCE.PARTNER,
+                IsAdmin = false,
             };
             var rolePermissions = roleCreateDTO.Permissions.Select(permission => new ClsRolePermissionEntity
             {
@@ -60,7 +61,7 @@ public class ClsRoleRepository
             var partnerRole = new ClsPartnerRoleEntity
             {
                 Uuid = Guid.NewGuid(),
-                PartnerUuid = partnerUUID,
+                PartnerUuid = partnerUuid,
                 RoleUuid = role.Uuid,
                 AssignedCount = 0,
                 Status = (ClsPartnerRoleEntity.STATUS)roleCreateDTO.Status,
@@ -81,7 +82,7 @@ public class ClsRoleRepository
             {
                 Uuid = Guid.NewGuid(),
                 HistoryUuid = history.Uuid,
-                MemberUuid = memberUUID,
+                MemberUuid = memberUuid,
                 CreatedAt = DateTime.UtcNow,
             };
 
@@ -101,23 +102,23 @@ public class ClsRoleRepository
             throw;
         }
     }
-    public async Task<ClsRoleDTO> Read(Guid roleUUID, Guid partnerUUID)
+    public async Task<ClsRoleDTO> ReadOneAsync(Guid roleUuid, Guid partnerUuid)
     {
         var role = await _AppDBContext.PartnerRoles
         .Where(partnerRole =>
-            partnerRole.Uuid == roleUUID &&
-            partnerRole.PartnerUuid == partnerUUID &&
+            partnerRole.Uuid == roleUuid &&
+            partnerRole.PartnerUuid == partnerUuid &&
             !partnerRole.IsDeleted
         )
         .Select(partnerRole => new ClsRoleDTO
         {
-            UUID = partnerRole.Uuid,
+            Uuid = partnerRole.Uuid,
             Name = partnerRole.Role.Name,
             Permissions = _AppDBContext.RolePermissions
             .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
             .Select(rolePermission => new ClsRoleDTO.ClsPermissionDTO
             {
-                UUID = rolePermission.PermissionUuid,
+                Uuid = rolePermission.PermissionUuid,
                 Name = rolePermission.Permission.Name
             })
             .ToArray(),
@@ -130,36 +131,35 @@ public class ClsRoleRepository
 
         return role;
     }
-    public async Task<ClsPaginatedDTO<ClsRoleDTO>> Read(ClsRoleFilterDTO filter, ClsPaginationFilterDTO pagination, Guid partnerUUID)
+    public async Task<ClsPaginatedDTO<ClsRoleDTO>> ReadManyAsync(ClsRoleFilterDTO filter, ClsPaginationFilterDTO pagination, Guid partnerUuid)
     {
         var roles = _AppDBContext.PartnerRoles
         .Where(partnerRole =>
-            partnerRole.PartnerUuid == partnerUUID &&
+            partnerRole.PartnerUuid == partnerUuid &&
             !partnerRole.IsDeleted
         )
         .Select(partnerRole => new ClsRoleDTO
         {
-            UUID = partnerRole.Uuid,
+            Uuid = partnerRole.Uuid,
             Name = partnerRole.Role.Name,
             Permissions = _AppDBContext.RolePermissions
             .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
             .Select(rolePermission => new ClsRoleDTO.ClsPermissionDTO
             {
-                UUID = rolePermission.PermissionUuid,
+                Uuid = rolePermission.PermissionUuid,
                 Name = rolePermission.Permission.Name
-            })
-            .ToArray(),
+            }).ToArray(),
             AssignedCount = partnerRole.AssignedCount,
             Status = (ClsRoleDTO.STATUS)partnerRole.Status,
             CreatedAt = partnerRole.CreatedAt,
             UpdatedAt = partnerRole.UpdatedAt,
         });
 
-        if (filter.Name != null) roles = roles.Where(partnerRole => partnerRole.Name.Contains(filter.Name));
+        if (filter.Name != null) roles = roles.Where(partnerRole => partnerRole.Name.ToLower().Contains(filter.Name.ToLower()));
         if (filter.Status != null) roles = roles.Where(partnerRole => partnerRole.Status == (ClsRoleDTO.STATUS)filter.Status);
 
         var mappedPermissions = filter.Permissions.Select(permission => PermissionsMap[permission]).ToArray();
-        if (mappedPermissions.Length > 0) roles = roles.Where(partnerRole => partnerRole.Permissions.Any(permission => mappedPermissions.Contains(permission.UUID)));
+        if (mappedPermissions.Length > 0) roles = roles.Where(partnerRole => partnerRole.Permissions.Any(permission => mappedPermissions.Contains(permission.Uuid)));
 
         var count = await roles.CountAsync();
 
@@ -172,17 +172,19 @@ public class ClsRoleRepository
             new ClsPaginatedDTO<ClsRoleDTO>.ClsPaginationDTO(pagination.Page, pagination.PageSize, count)
         );
     }
-    public async Task Delete(Guid roleUUID, Guid partnerUUID, Guid memberUUID)
+    public async Task DeleteOneAsync(Guid roleUuid, Guid partnerUuid, Guid memberUuid)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
             var role = await _AppDBContext.PartnerRoles
-            .SingleAsync(partnerRole =>
-                partnerRole.Uuid == roleUUID &&
-                partnerRole.PartnerUuid == partnerUUID &&
+            .Where(partnerRole =>
+                partnerRole.Uuid == roleUuid &&
+                partnerRole.PartnerUuid == partnerUuid &&
                 !partnerRole.IsDeleted
-            );
+            )
+            .SingleAsync();
+            role.UpdatedAt = DateTime.UtcNow;
             role.IsDeleted = true;
             role.DeletedAt = DateTime.UtcNow;
 
@@ -191,14 +193,14 @@ public class ClsRoleRepository
                 Uuid = Guid.NewGuid(),
                 Action = ClsHistoryEntity.ACTION.DELETE,
                 Entity = ClsHistoryEntity.ENTITY.PARTNER_ROLES,
-                EntityUuid = roleUUID,
+                EntityUuid = roleUuid,
 
             };
             var memberHistory = new ClsMemberHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
                 HistoryUuid = history.Uuid,
-                MemberUuid = memberUUID,
+                MemberUuid = memberUuid,
                 CreatedAt = DateTime.UtcNow,
             };
 

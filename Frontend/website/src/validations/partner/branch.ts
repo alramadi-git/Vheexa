@@ -21,7 +21,7 @@ type tBranchCreate = z.infer<typeof zBranchCreate>;
 
 const zBranchFilter = z
   .object({
-    search: z.optional(z.string().nonempty("branch name cannot be empty.")),
+    search: z.optional(z.string().nonempty("search cannot be empty.")),
     status: z.optional(z.enum(eBranchStatusModel, "invalid status.")),
   })
   .strict();
