@@ -1,17 +1,17 @@
 namespace Database.Entities;
 
-public class BranchEntity
+public class ClsBranchEntity
 {
     public enum STATUS
     {
         ACTIVE,
         INACTIVE
     }
-    public Guid UUID { get; set; }
-    public Guid PartnerUUID { get; set; }
-    public PartnerEntity Partner { get; set; }
-    public Guid LocationUUID { get; set; }
-    public LocationEntity Location { get; set; }
+    public Guid Uuid { get; set; }
+    public Guid PartnerUuid { get; set; }
+    public ClsPartnerEntity Partner { get; set; }
+    public Guid LocationUuid { get; set; }
+    public ClsLocationEntity Location { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }

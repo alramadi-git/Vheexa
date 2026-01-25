@@ -22,21 +22,21 @@ public class VehicleRepository
     public async Task<ClsSuccessDTO<ClsVehicleModelDTO>> GetOneAsync(Guid vehicleUUID)
     {
         var vehicleQuery = _AppDBContext.VehicleModels.AsQueryable();
-        vehicleQuery = vehicleQuery.Where(vehicle => vehicle.UUID == vehicleUUID);
+        vehicleQuery = vehicleQuery.Where(vehicle => vehicle.Uuid == vehicleUUID);
 
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Logo);
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Partner).ThenInclude(partner => partner.Banner);
         vehicleQuery = vehicleQuery.Where(vehicle => vehicle.Partner.IsDeleted == false);
 
         vehicleQuery = vehicleQuery.Include(vehicle => vehicle.Thumbnail);
-        vehicleQuery = vehicleQuery.Where(vehicle => vehicle.Status == VehicleModelEntity.STATUS.ACTIVE && vehicle.IsDeleted == false);
+        vehicleQuery = vehicleQuery.Where(vehicle => vehicle.Status == ClsVehicleModelEntity.STATUS.ACTIVE && vehicle.IsDeleted == false);
 
         var vehicle = await vehicleQuery.AsNoTracking().FirstOrDefaultAsync()
         ?? throw new ClsExceptionDTO(HTTP_STATUS_CODE.NOT_FOUND, "No such vehicle.");
 
         var vehicleImagesQuery = _AppDBContext.VehicleModelGallery.AsQueryable();
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Url);
-        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleModelUUID == vehicleUUID);
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.VehicleModelUuid == vehicleUUID);
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
         vehicleImagesQuery = vehicleImagesQuery.OrderBy(vehicleImage => vehicleImage.Index);
 
@@ -68,7 +68,7 @@ public class VehicleRepository
 
         vehiclesQuery = vehiclesQuery.Include(vehicle => vehicle.Thumbnail);
 
-        vehiclesQuery = vehiclesQuery.Where(vehicle => vehicle.Status == VehicleModelEntity.STATUS.ACTIVE && vehicle.IsDeleted == false);
+        vehiclesQuery = vehiclesQuery.Where(vehicle => vehicle.Status == ClsVehicleModelEntity.STATUS.ACTIVE && vehicle.IsDeleted == false);
         vehiclesQuery = filters.Apply(vehiclesQuery);
 
         vehiclesQuery = vehiclesQuery.OrderBy(vehicle => vehicle.CreatedAt);
@@ -80,11 +80,11 @@ public class VehicleRepository
 
         var vehicles = await vehiclesQuery.AsNoTracking().ToArrayAsync();
         var vehicleUUIDs =
-        new HashSet<Guid>(vehicles.Select(vehicle => vehicle.UUID));
+        new HashSet<Guid>(vehicles.Select(vehicle => vehicle.Uuid));
 
         var vehicleImagesQuery = _AppDBContext.VehicleModelGallery.AsQueryable();
         vehicleImagesQuery = vehicleImagesQuery.Include(vehicleImage => vehicleImage.Url);
-        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleModelUUID));
+        vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleUUIDs.Contains(vehicleImage.VehicleModelUuid));
         vehicleImagesQuery = vehicleImagesQuery.Where(vehicleImage => vehicleImage.IsDeleted == false);
         vehicleImagesQuery = vehicleImagesQuery.OrderBy(vehicleImage => vehicleImage.Index);
 
@@ -96,14 +96,14 @@ public class VehicleRepository
         var vehicleColorsTask = vehicleColorsQuery.AsNoTracking().ToArrayAsync();
         await Task.WhenAll([vehicleImagesTask, vehicleColorsTask]);
 
-        var vehicleImages = vehicleImagesTask.Result.GroupBy(vehicleImage => vehicleImage.VehicleModelUUID).ToDictionary(g => g.Key, g => g.ToArray());
+        var vehicleImages = vehicleImagesTask.Result.GroupBy(vehicleImage => vehicleImage.VehicleModelUuid).ToDictionary(g => g.Key, g => g.ToArray());
         var vehicleColors = vehicleColorsTask.Result.GroupBy(vehicleColor => vehicleColor.VehicleModelUUID).ToDictionary(g => g.Key, g => g.ToArray());
 
 
         var vehiclesDTO = vehicles.Select(vehicle =>
         {
-            vehicleImages.TryGetValue(vehicle.UUID, out var images);
-            vehicleColors.TryGetValue(vehicle.UUID, out var colors);
+            vehicleImages.TryGetValue(vehicle.Uuid, out var images);
+            vehicleColors.TryGetValue(vehicle.Uuid, out var colors);
 
             return new ClsVehicleModelDTO(vehicle, images ?? [], colors ?? []);
         }).ToArray();

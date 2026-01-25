@@ -1,15 +1,15 @@
 namespace Database.Entities;
 
-public class VehicleModelEntity
+public class ClsVehicleModelEntity
 {
    public enum STATUS
     {
         ACTIVE,
         INACTIVE
     }
-    public Guid UUID { get; set; }
-    public Guid PartnerUUID { get; set; }
-    public PartnerEntity Partner { get; set; }
+    public Guid Uuid { get; set; }
+    public Guid PartnerUuid { get; set; }
+    public ClsPartnerEntity Partner { get; set; }
     public string? Thumbnail { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }

@@ -2,9 +2,9 @@ using Database.Entities;
 
 namespace Database.Parameters.User;
 
-public class SearchFilterDTO : AbstractFilterParameter<string, VehicleModelEntity>
+public class SearchFilterDTO : AbstractFilterParameter<string, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == "") return entities;
 
@@ -17,18 +17,18 @@ public class SearchFilterDTO : AbstractFilterParameter<string, VehicleModelEntit
     }
 }
 
-public class TransmissionFilterDTO : AbstractFilterParameter<string, VehicleModelEntity>
+public class TransmissionFilterDTO : AbstractFilterParameter<string, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == "") return entities;
 
         return entities.Where(ent => ent.Transmission.ToLower().Contains(Value.ToLower()));
     }
 }
-public class FuelFilterDTO : AbstractFilterParameter<string, VehicleModelEntity>
+public class FuelFilterDTO : AbstractFilterParameter<string, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == "") return entities;
 
@@ -36,18 +36,18 @@ public class FuelFilterDTO : AbstractFilterParameter<string, VehicleModelEntity>
     }
 }
 
-public class MinCapacityFilterDTO : AbstractFilterParameter<int, VehicleModelEntity>
+public class MinCapacityFilterDTO : AbstractFilterParameter<int, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == 0) return entities;
 
         return entities.Where(ent => ent.Capacity >= Value);
     }
 }
-public class MaxCapacityFilterDTO : AbstractFilterParameter<int, VehicleModelEntity>
+public class MaxCapacityFilterDTO : AbstractFilterParameter<int, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == 0) return entities;
 
@@ -56,18 +56,18 @@ public class MaxCapacityFilterDTO : AbstractFilterParameter<int, VehicleModelEnt
 }
 
 
-public class MinPriceFilterDTO : AbstractFilterParameter<double, VehicleModelEntity>
+public class MinPriceFilterDTO : AbstractFilterParameter<double, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == 0) return entities;
 
         return entities.Where(ent => ent.Price >= Value);
     }
 }
-public class MaxPriceFilterDTO : AbstractFilterParameter<double, VehicleModelEntity>
+public class MaxPriceFilterDTO : AbstractFilterParameter<double, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == 0) return entities;
 
@@ -75,9 +75,9 @@ public class MaxPriceFilterDTO : AbstractFilterParameter<double, VehicleModelEnt
     }
 }
 
-public class HasDiscountFilterDTO : AbstractFilterParameter<bool, VehicleModelEntity>
+public class HasDiscountFilterDTO : AbstractFilterParameter<bool, ClsVehicleModelEntity>
 {
-    public override IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public override IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         if (Value == false) return entities;
 
@@ -100,7 +100,7 @@ public class VehicleFiltersParameter
 
     public HasDiscountFilterDTO HasDiscount { get; set; } = new HasDiscountFilterDTO { Value = false, };
 
-    public IQueryable<VehicleModelEntity> Apply(IQueryable<VehicleModelEntity> entities)
+    public IQueryable<ClsVehicleModelEntity> Apply(IQueryable<ClsVehicleModelEntity> entities)
     {
         var filters = entities;
         filters = Search.Apply(filters);

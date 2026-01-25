@@ -9,7 +9,7 @@ public class ClsUserDTO : AbstractClsHumanDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public ClsUserDTO(UserEntity user) : base(user.Human)
+    public ClsUserDTO(ClsUserEntity user) : base(user.Human)
     {
         UUID = user.Human.UUID;
         UpdatedAt = user.UpdatedAt;

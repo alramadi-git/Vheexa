@@ -1,11 +1,11 @@
 namespace Database.Entities;
 
-public class UserEntity
+public class ClsUserEntity
 {
-    public Guid UUID { get; set; }
+    public Guid Uuid { get; set; }
     public string? Avatar { get; set; }
-    public Guid LocationUUID { get; set; }
-    public LocationEntity Location { get; set; }
+    public Guid LocationUuid { get; set; }
+    public ClsLocationEntity Location { get; set; }
     public string Username { get; set; }
     public DateOnly Birthday { get; set; }
     public string PhoneNumber { get; set; }

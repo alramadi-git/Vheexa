@@ -1,17 +1,17 @@
 namespace Database.Entities;
 
-public class PartnerRoleEntity
+public class ClsPartnerRoleEntity
 {
     public enum STATUS
     {
         ACTIVE,
         INACTIVE
     }
-    public Guid UUID { get; set; }
-    public Guid PartnerUUID { get; set; }
-    public PartnerEntity Partner { get; set; }
-    public Guid RoleUUID { get; set; }
-    public RoleEntity Role { get; set; }
+    public Guid Uuid { get; set; }
+    public Guid PartnerUuid { get; set; }
+    public ClsPartnerEntity Partner { get; set; }
+    public Guid RoleUuid { get; set; }
+    public ClsRoleEntity Role { get; set; }
     public int AssignedCount { get; set; }
     public STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }

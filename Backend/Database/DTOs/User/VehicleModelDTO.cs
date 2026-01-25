@@ -14,19 +14,19 @@ public class ClsVehicleModelDTO
     public string Description { get; set; }
     public string Manufacturer { get; set; }
     public DateOnly ModelYear { get; set; }
-    public VehicleModelEntity.TRANSMISSION_MODEL Transmission { get; set; }
+    public ClsVehicleModelEntity.TRANSMISSION_MODEL Transmission { get; set; }
     public short Capacity { get; set; }
-    public VehicleModelEntity.FUEL_MODEL Fuel { get; set; }
+    public ClsVehicleModelEntity.FUEL_MODEL Fuel { get; set; }
     public double Price { get; set; }
     public float Discount { get; set; }
     public string[] Tags { get; set; }
-    public VehicleModelEntity.STATUS Status { get; set; }
+    public ClsVehicleModelEntity.STATUS Status { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public ClsVehicleModelDTO(VehicleModelEntity vehicleModel, VehicleModelGalleryEntity[] images, VehicleModelColorEntity[] colors)
+    public ClsVehicleModelDTO(ClsVehicleModelEntity vehicleModel, ClsVehicleModelGalleryEntity[] images, VehicleModelColorEntity[] colors)
     {
-        UUID = vehicleModel.UUID;
+        UUID = vehicleModel.Uuid;
         Partner = new ClsPartnerDTO(vehicleModel.Partner);
         Thumbnail = vehicleModel.Thumbnail == null
         ? null

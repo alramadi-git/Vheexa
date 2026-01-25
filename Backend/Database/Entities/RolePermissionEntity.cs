@@ -1,11 +1,11 @@
 namespace Database.Entities;
 
-public class RolePermissionEntity
+public class ClsRolePermissionEntity
 {
-    public Guid UUID { get; set; }
-    public Guid RoleUUID { get; set; }
-    public RoleEntity Role { get; set; }
-    public Guid PermissionUUID { get; set; }
-    public PermissionEntity Permission { get; set; }
+    public Guid Uuid { get; set; }
+    public Guid RoleUuid { get; set; }
+    public ClsRoleEntity Role { get; set; }
+    public Guid PermissionUuid { get; set; }
+    public ClsPermissionEntity Permission { get; set; }
 }
 

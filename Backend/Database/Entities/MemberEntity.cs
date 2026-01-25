@@ -1,19 +1,19 @@
 namespace Database.Entities;
 
-public class MemberEntity
+public class ClsMemberEntity
 {
     public enum STATUS
     {
         ACTIVE,
         INACTIVE
     }
-    public Guid UUID { get; set; }
-    public Guid PartnerUUID { get; set; }
-    public PartnerEntity Partner { get; set; }
-    public Guid RoleUUID { get; set; }
-    public PartnerRoleEntity Role { get; set; }
-    public Guid BranchUUID { get; set; }
-    public BranchEntity Branch { get; set; }
+    public Guid Uuid { get; set; }
+    public Guid PartnerUuid { get; set; }
+    public ClsPartnerEntity Partner { get; set; }
+    public Guid RoleUuid { get; set; }
+    public ClsPartnerRoleEntity Role { get; set; }
+    public Guid BranchUuid { get; set; }
+    public ClsBranchEntity Branch { get; set; }
     public string? Avatar { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }

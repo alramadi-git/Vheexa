@@ -1,11 +1,11 @@
 namespace Database.Entities;
 
-public class MemberHistoryEntity
+public class ClsMemberHistoryEntity
 {
-    public Guid UUID { get; set; }
-    public Guid MemberUUID { get; set; }
-    public MemberEntity Member { get; set; }
-    public Guid HistoryUUID { get; set; }
-    public HistoryEntity History { get; set; }
+    public Guid Uuid { get; set; }
+    public Guid MemberUuid { get; set; }
+    public ClsMemberEntity Member { get; set; }
+    public Guid HistoryUuid { get; set; }
+    public ClsHistoryEntity History { get; set; }
     public DateTime CreatedAt { get; set; }
 }

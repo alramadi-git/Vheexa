@@ -1,8 +1,8 @@
 namespace Database.Entities;
 
-public class PartnerEntity
+public class ClsPartnerEntity
 {
-    public Guid UUID { get; set; }
+    public Guid Uuid { get; set; }
     public string? Logo { get; set; }
     public string? Banner { get; set; }
     public string Handle { get; set; }

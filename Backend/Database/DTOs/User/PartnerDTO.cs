@@ -15,9 +15,9 @@ public class ClsPartnerDTO
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public ClsPartnerDTO(PartnerEntity partner)
+    public ClsPartnerDTO(ClsPartnerEntity partner)
     {
-        UUID = partner.UUID;
+        UUID = partner.Uuid;
         Logo = partner.Logo == null
         ? null
         : new ClsImageDTO(partner.Logo);

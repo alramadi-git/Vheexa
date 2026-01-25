@@ -1,6 +1,5 @@
 namespace Database.DTOs;
 
-
 public class ClsExceptionDTO : Exception
 {
     public enum STATUS_CODE

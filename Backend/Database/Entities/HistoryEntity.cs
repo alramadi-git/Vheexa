@@ -1,6 +1,6 @@
 namespace Database.Entities;
 
-public class HistoryEntity
+public class ClsHistoryEntity
 {
     public enum ACTION
     {
@@ -16,8 +16,8 @@ public class HistoryEntity
         MEMBERS,
         VEHICLE_MODELS,
     }
-    public Guid UUID { get; set; }
+    public Guid Uuid { get; set; }
     public ACTION Action { get; set; }
     public ENTITY Entity { get; set; }
-    public Guid EntityUUID { get; set; }
+    public Guid EntityUuid { get; set; }
 }

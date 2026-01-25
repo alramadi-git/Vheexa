@@ -1,5 +1,11 @@
 namespace Database.DTOs;
 
+public class ClsPaginationFilterDTO
+{
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+}
+
 public class ClsPaginatedDTO<TData>
 {
     public class ClsPaginationDTO
