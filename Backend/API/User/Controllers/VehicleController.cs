@@ -4,11 +4,11 @@ using FluentValidation;
 
 using API.Models;
 using Business.User.Services;
-using Database.DTOs;
+using Database.Dtos;
 using Database.Parameters;
 using Database.Parameters.User;
-using Database.DTOs.Partner;
-using Database.DTOs.User;
+using Database.Dtos.Partner;
+using Database.Dtos.User;
 
 namespace API.User.Controllers;
 
@@ -24,7 +24,7 @@ public class VehicleController : Controller
     }
 
     [HttpGet("{uuid:guid}")]
-    public async Task<ActionResult<ClsSuccessDTO<Database.DTOs.User.ClsVehicleModelDTO>>> GetOneAsync([FromRoute] Guid uuid)
+    public async Task<ActionResult<ClsSuccessDTO<Database.Dtos.User.ClsVehicleModelDTO>>> GetOneAsync([FromRoute] Guid uuid)
     {
         try
         {
@@ -53,7 +53,7 @@ public class VehicleController : Controller
 
 
     [HttpGet]
-    public async Task<ActionResult<ClsPaginationSuccessDTO<Database.DTOs.User.ClsVehicleModelDTO>>> GetManyAsync(
+    public async Task<ActionResult<ClsPaginationSuccessDTO<Database.Dtos.User.ClsVehicleModelDTO>>> GetManyAsync(
         [FromQuery] VehicleFiltersParameter filters,
         [FromQuery] PaginationParameter pagination
     )

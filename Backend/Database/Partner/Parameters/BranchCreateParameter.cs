@@ -1,8 +1,8 @@
-namespace Database.Partner.DTOs;
+namespace Database.Partner.Parameters;
 
-public class ClsBranchCreateDTO
+public class ClsBranchCreateParameter
 {
-    public class ClsLocationCreateDTO
+    public class ClsLocationCreateParameter
     {
         public string Country { get; set; }
         public string City { get; set; }
@@ -15,7 +15,7 @@ public class ClsBranchCreateDTO
         ACTIVE,
         INACTIVE
     }
-    public ClsLocationCreateDTO Location { get; set; }
+    public ClsLocationCreateParameter Location { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }

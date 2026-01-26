@@ -1,8 +1,6 @@
-using Database.Partner.Enums;
+namespace Database.Partner.Parameters;
 
-namespace Database.Partner.DTOs;
-
-public class ClsBranchFilterDTO
+public class ClsBranchFilterParameter
 {
     public enum STATUS
     {

@@ -1,4 +1,4 @@
-namespace Database.Partner.DTOs;
+namespace Database.Partner.Dtos;
 
 public class ClsBranchDTO
 {

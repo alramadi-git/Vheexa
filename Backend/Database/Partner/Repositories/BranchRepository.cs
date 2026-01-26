@@ -2,8 +2,10 @@ using Microsoft.EntityFrameworkCore;
 
 using Database.Entities;
 
-using Database.DTOs;
-using Database.Partner.DTOs;
+using Database.Dtos;
+using Database.Partner.Dtos;
+using Database.Parameters;
+using Database.Partner.Parameters;
 
 namespace Database.Partner.Repositories;
 
@@ -16,7 +18,7 @@ public class ClsBranchRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsBranchCreateDTO branchCreateDTO, Guid partnerUuid, Guid memberUuid)
+    public async Task CreateOneAsync(ClsBranchCreateParameter branchCreateDTO, Guid partnerUuid, Guid memberUuid)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -109,7 +111,7 @@ public class ClsBranchRepository
 
         return branch;
     }
-    public async Task<ClsPaginatedDTO<ClsBranchDTO>> ReadManyAsync(ClsBranchFilterDTO filter, ClsPaginationFilterDTO pagination, Guid partnerUuid)
+    public async Task<ClsPaginatedDto<ClsBranchDTO>> ReadManyAsync(ClsBranchFilterParameter filter, ClsPaginationFilterParameter pagination, Guid partnerUuid)
     {
         var branches = _AppDBContext.Branches
         .Where(partnerBranch =>
@@ -156,9 +158,9 @@ public class ClsBranchRepository
         .Skip((pagination.Page - 1) * pagination.PageSize)
         .Take(pagination.PageSize);
 
-        return new ClsPaginatedDTO<ClsBranchDTO>(
+        return new ClsPaginatedDto<ClsBranchDTO>(
             await branches.ToArrayAsync(),
-            new ClsPaginatedDTO<ClsBranchDTO>.ClsPaginationDTO(pagination.Page, pagination.PageSize, count)
+            new ClsPaginatedDto<ClsBranchDTO>.ClsPaginationDto(pagination.Page, pagination.PageSize, count)
         );
     }
     public async Task DeleteOneAsync(Guid branchUuid, Guid partnerUuid, Guid memberUuid)

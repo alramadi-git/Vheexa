@@ -1,4 +1,6 @@
 import { tNullable } from "@/types/nullish";
+import { ePermission } from "@/validations/partner/role";
+
 
 type tAccountModel = {
   uuid: string;
@@ -14,7 +16,7 @@ type tAccountModel = {
   avatar: tNullable<string>;
   role: {
     name: string;
-    permissions: string[];
+    permissions: ePermission[];
   };
   branch: {
     location: {

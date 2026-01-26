@@ -5,12 +5,12 @@ using System.Security.Claims;
 
 using FluentValidation;
 using API.Models;
-using Database.DTOs;
+using Database.Dtos;
 using Database.Parameters;
 using Business.User.Services;
 using API.Configurations;
-using Database.DTOs.User;
-using Database.DTOs.Abstracts;
+using Database.Dtos.User;
+using Database.Dtos.Abstracts;
 
 
 namespace API.User.Controllers;

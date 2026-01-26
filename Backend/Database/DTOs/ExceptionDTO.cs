@@ -1,6 +1,6 @@
-namespace Database.DTOs;
+namespace Database.Dtos;
 
-public class ClsExceptionDTO : Exception
+public class ClsExceptionDto : Exception
 {
     public enum STATUS_CODE
     {
@@ -13,7 +13,7 @@ public class ClsExceptionDTO : Exception
     }
     public STATUS_CODE StatusCode { get; set; }
 
-    public ClsExceptionDTO(STATUS_CODE statusCode, string message)
+    public ClsExceptionDto(STATUS_CODE statusCode, string message)
     : base(message)
     {
         StatusCode = statusCode;

@@ -1,19 +1,13 @@
-namespace Database.DTOs;
+namespace Database.Dtos;
 
-public class ClsPaginationFilterDTO
+public class ClsPaginatedDto<TData>
 {
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-}
-
-public class ClsPaginatedDTO<TData>
-{
-    public class ClsPaginationDTO
+    public class ClsPaginationDto
     {
         public int Page { get; init; }
         public int PageSize { get; init; }
         public int TotalItems { get; init; }
-        public ClsPaginationDTO(int page, int pageSize, int totalItems)
+        public ClsPaginationDto(int page, int pageSize, int totalItems)
         {
             Page = page;
             PageSize = pageSize;
@@ -21,8 +15,8 @@ public class ClsPaginatedDTO<TData>
         }
     }
     public TData[] Data { get; set; }
-    public ClsPaginationDTO Pagination { get; set; }
-    public ClsPaginatedDTO(TData[] data, ClsPaginationDTO pagination)
+    public ClsPaginationDto Pagination { get; set; }
+    public ClsPaginatedDto(TData[] data, ClsPaginationDto pagination)
     {
         Data = data;
         Pagination = pagination;

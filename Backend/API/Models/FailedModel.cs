@@ -1,5 +1,5 @@
-using Database.DTOs;
-using Database.DTOs.Response;
+using Database.Dtos;
+using Database.Dtos.Response;
 
 namespace API.Models;
 

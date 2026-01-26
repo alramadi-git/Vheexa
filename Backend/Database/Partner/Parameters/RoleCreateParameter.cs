@@ -1,8 +1,8 @@
 using Database.Partner.Enums;
 
-namespace Database.Partner.DTOs;
+namespace Database.Partner.Parameters;
 
-public class ClsRoleCreateDTO
+public class ClsRoleCreateParameter
 {
     public enum STATUS
     {
