@@ -1,8 +1,8 @@
 namespace Database.Partner.Dtos;
 
-public class ClsBranchDTO
+public class ClsBranchDto
 {
-    public class ClsLocationDTO
+    public class ClsLocationDto
     {
         public string Country { get; set; }
         public string City { get; set; }
@@ -16,7 +16,7 @@ public class ClsBranchDTO
         INACTIVE
     }
     public Guid Uuid { get; set; }
-    public ClsLocationDTO Location { get; set; }
+    public ClsLocationDto Location { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }

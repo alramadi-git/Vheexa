@@ -6,10 +6,7 @@ enum eRoleStatusModel {
 type tRoleModel = {
   uuid: string;
   name: string;
-  permissions: {
-    uuid: string;
-    name: string;
-  }[];
+  permissions: string[];
   assignedCount: number;
   status: eRoleStatusModel;
   createdAt: string;

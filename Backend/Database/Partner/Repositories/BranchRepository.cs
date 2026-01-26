@@ -4,8 +4,11 @@ using Database.Entities;
 
 using Database.Dtos;
 using Database.Partner.Dtos;
+
 using Database.Parameters;
 using Database.Partner.Parameters;
+
+using Database.Partner.Contexts;
 
 namespace Database.Partner.Repositories;
 
@@ -18,12 +21,12 @@ public class ClsBranchRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsBranchCreateParameter branchCreateDTO, Guid partnerUuid, Guid memberUuid)
+    public async Task CreateOneAsync(ClsBranchCreateParameter branchCreateDTO, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
-            var location = new ClsLocationEntity
+            var newLocation = new ClsLocationEntity
             {
                 Uuid = Guid.NewGuid(),
                 Country = branchCreateDTO.Location.Country,
@@ -33,11 +36,11 @@ public class ClsBranchRepository
                 Longitude = branchCreateDTO.Location.Longitude,
             };
 
-            var branch = new ClsBranchEntity
+            var newBranch = new ClsBranchEntity
             {
                 Uuid = Guid.NewGuid(),
-                PartnerUuid = partnerUuid,
-                LocationUuid = location.Uuid,
+                PartnerUuid = memberContext.PartnerUuid,
+                LocationUuid = newLocation.Uuid,
                 Name = branchCreateDTO.Name,
                 PhoneNumber = branchCreateDTO.PhoneNumber,
                 Email = branchCreateDTO.Email,
@@ -50,26 +53,26 @@ public class ClsBranchRepository
             };
 
 
-            var history = new ClsHistoryEntity
+            var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
                 Action = ClsHistoryEntity.ACTION.CREATE,
                 Entity = ClsHistoryEntity.ENTITY.BRANCHES,
-                EntityUuid = branch.Uuid,
+                EntityUuid = newBranch.Uuid,
             };
-            var memberHistory = new ClsMemberHistoryEntity
+            var newMemberHistory = new ClsMemberHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                HistoryUuid = history.Uuid,
-                MemberUuid = memberUuid,
+                HistoryUuid = newHistory.Uuid,
+                MemberUuid = memberContext.Uuid,
                 CreatedAt = DateTime.UtcNow,
             };
 
-            _AppDBContext.Locations.Add(location);
-            _AppDBContext.Branches.Add(branch);
+            _AppDBContext.Locations.Add(newLocation);
+            _AppDBContext.Branches.Add(newBranch);
 
-            _AppDBContext.Histories.Add(history);
-            _AppDBContext.MemberHistories.Add(memberHistory);
+            _AppDBContext.Histories.Add(newHistory);
+            _AppDBContext.MemberHistories.Add(newMemberHistory);
 
             await _AppDBContext.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -80,18 +83,18 @@ public class ClsBranchRepository
             throw;
         }
     }
-    public async Task<ClsBranchDTO> ReadOneAsync(Guid branchUuid, Guid partnerUuid)
+    public async Task<ClsBranchDto> ReadOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {
         var branch = await _AppDBContext.Branches
         .Where(branch =>
             branch.Uuid == branchUuid &&
-            branch.PartnerUuid == partnerUuid &&
+            branch.PartnerUuid == memberContext.PartnerUuid &&
             !branch.IsDeleted
         )
-        .Select(branch => new ClsBranchDTO
+        .Select(branch => new ClsBranchDto
         {
             Uuid = branch.Uuid,
-            Location = new ClsBranchDTO.ClsLocationDTO
+            Location = new ClsBranchDto.ClsLocationDto
             {
                 Country = branch.Location.Country,
                 City = branch.Location.City,
@@ -103,7 +106,7 @@ public class ClsBranchRepository
             PhoneNumber = branch.PhoneNumber,
             Email = branch.Email,
             MemberCount = branch.MemberCount,
-            Status = (ClsBranchDTO.STATUS)branch.Status,
+            Status = (ClsBranchDto.STATUS)branch.Status,
             CreatedAt = branch.CreatedAt,
             UpdatedAt = branch.UpdatedAt,
         })
@@ -111,32 +114,13 @@ public class ClsBranchRepository
 
         return branch;
     }
-    public async Task<ClsPaginatedDto<ClsBranchDTO>> ReadManyAsync(ClsBranchFilterParameter filter, ClsPaginationFilterParameter pagination, Guid partnerUuid)
+    public async Task<ClsPaginatedDto<ClsBranchDto>> ReadManyAsync(ClsBranchFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
     {
         var branches = _AppDBContext.Branches
         .Where(partnerBranch =>
-            partnerBranch.PartnerUuid == partnerUuid &&
+            partnerBranch.PartnerUuid == memberContext.PartnerUuid &&
             !partnerBranch.IsDeleted
-        )
-        .Select(branch => new ClsBranchDTO
-        {
-            Uuid = branch.Uuid,
-            Location = new ClsBranchDTO.ClsLocationDTO
-            {
-                Country = branch.Location.Country,
-                City = branch.Location.City,
-                Street = branch.Location.Street,
-                Latitude = branch.Location.Latitude,
-                Longitude = branch.Location.Longitude
-            },
-            Name = branch.Name,
-            PhoneNumber = branch.PhoneNumber,
-            Email = branch.Email,
-            MemberCount = branch.MemberCount,
-            Status = (ClsBranchDTO.STATUS)branch.Status,
-            CreatedAt = branch.CreatedAt,
-            UpdatedAt = branch.UpdatedAt,
-        });
+        );
 
         if (filter.Search != null)
         {
@@ -150,7 +134,7 @@ public class ClsBranchRepository
                 branch.Location.Street.ToLower().Contains(search)
             );
         }
-        if (filter.Status != null) branches = branches.Where(branch => branch.Status == (ClsBranchDTO.STATUS)filter.Status);
+        if (filter.Status != null) branches = branches.Where(branch => branch.Status == (ClsBranchEntity.STATUS)filter.Status);
 
         var count = await branches.CountAsync();
 
@@ -158,12 +142,32 @@ public class ClsBranchRepository
         .Skip((pagination.Page - 1) * pagination.PageSize)
         .Take(pagination.PageSize);
 
-        return new ClsPaginatedDto<ClsBranchDTO>(
-            await branches.ToArrayAsync(),
-            new ClsPaginatedDto<ClsBranchDTO>.ClsPaginationDto(pagination.Page, pagination.PageSize, count)
+        var branchDtos = branches.Select(branch => new ClsBranchDto
+        {
+            Uuid = branch.Uuid,
+            Location = new ClsBranchDto.ClsLocationDto
+            {
+                Country = branch.Location.Country,
+                City = branch.Location.City,
+                Street = branch.Location.Street,
+                Latitude = branch.Location.Latitude,
+                Longitude = branch.Location.Longitude
+            },
+            Name = branch.Name,
+            PhoneNumber = branch.PhoneNumber,
+            Email = branch.Email,
+            MemberCount = branch.MemberCount,
+            Status = (ClsBranchDto.STATUS)branch.Status,
+            CreatedAt = branch.CreatedAt,
+            UpdatedAt = branch.UpdatedAt,
+        });
+
+        return new ClsPaginatedDto<ClsBranchDto>(
+            await branchDtos.ToArrayAsync(),
+            new ClsPaginatedDto<ClsBranchDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, count)
         );
     }
-    public async Task DeleteOneAsync(Guid branchUuid, Guid partnerUuid, Guid memberUuid)
+    public async Task DeleteOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -171,7 +175,7 @@ public class ClsBranchRepository
             var branch = await _AppDBContext.Branches
             .Where(partnerBranch =>
                 partnerBranch.Uuid == branchUuid &&
-                partnerBranch.PartnerUuid == partnerUuid &&
+                partnerBranch.PartnerUuid == memberContext.PartnerUuid &&
                 !partnerBranch.IsDeleted
             )
             .SingleAsync();
@@ -179,7 +183,7 @@ public class ClsBranchRepository
             branch.IsDeleted = true;
             branch.DeletedAt = DateTime.UtcNow;
 
-            var history = new ClsHistoryEntity
+            var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
                 Action = ClsHistoryEntity.ACTION.DELETE,
@@ -187,16 +191,16 @@ public class ClsBranchRepository
                 EntityUuid = branchUuid,
 
             };
-            var memberHistory = new ClsMemberHistoryEntity
+            var newMemberHistory = new ClsMemberHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                HistoryUuid = history.Uuid,
-                MemberUuid = memberUuid,
+                HistoryUuid = newHistory.Uuid,
+                MemberUuid = memberContext.Uuid,
                 CreatedAt = DateTime.UtcNow,
             };
 
-            _AppDBContext.Histories.Add(history);
-            _AppDBContext.MemberHistories.Add(memberHistory);
+            _AppDBContext.Histories.Add(newHistory);
+            _AppDBContext.MemberHistories.Add(newMemberHistory);
 
             await _AppDBContext.SaveChangesAsync();
             await transaction.CommitAsync();

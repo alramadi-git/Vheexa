@@ -246,10 +246,10 @@ function Permissions({ permissions }: tPermissionProps) {
   return (
     <ul className="flex flex-wrap items-center gap-1">
       {visiblePermissions.map((permission) => (
-        <li key={permission.uuid}>
+        <li key={permission}>
           <Badge variant="muted" className="flex items-center gap-1">
-            <LuCheck size={16} />
-            {permission.name}
+            <LuCheck className="size-4" />
+            {permission}
           </Badge>
         </li>
       ))}
