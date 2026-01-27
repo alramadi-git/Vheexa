@@ -57,7 +57,7 @@ type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;
 
 const zVehicleModelFilter = z
   .object({
-    search: z.optional(z.string().nonempty("search can't be empty string.")),
+    search: z.optional(z.string().nonempty("search can't be empty.")),
     categories: z.array(
       z.enum(eVehicleModelCategoryModel, "invalid category."),
     ),

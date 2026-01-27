@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
+using Database.Enums;
+
 using Database.Entities;
 
 using Database.Partner.Enums;
@@ -69,7 +71,7 @@ public class ClsRoleRepository
                 PartnerUuid = memberContext.PartnerUuid,
                 RoleUuid = newRole.Uuid,
                 AssignedCount = 0,
-                Status = (ClsPartnerRoleEntity.STATUS)role.Status,
+                Status = role.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
@@ -79,8 +81,8 @@ public class ClsRoleRepository
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                Action = ClsHistoryEntity.ACTION.CREATE,
-                Entity = ClsHistoryEntity.ENTITY.PARTNER_ROLES,
+                Action = HISTORY_ACTION.CREATE,
+                Entity = HISTORY_ENTITY.PARTNER_ROLES,
                 EntityUuid = newPartnerRole.Uuid,
             };
             var newMemberHistory = new ClsMemberHistoryEntity
@@ -128,7 +130,7 @@ public class ClsRoleRepository
             })
             .ToArray(),
             AssignedCount = partnerRole.AssignedCount,
-            Status = (ClsRoleDto.STATUS)partnerRole.Status,
+            Status = partnerRole.Status,
             CreatedAt = partnerRole.CreatedAt,
             UpdatedAt = partnerRole.UpdatedAt,
         })
@@ -145,7 +147,7 @@ public class ClsRoleRepository
         );
 
         if (filter.Name != null) roles = roles.Where(partnerRole => partnerRole.Role.Name.ToLower().Contains(filter.Name.ToLower()));
-        if (filter.Status != null) roles = roles.Where(partnerRole => partnerRole.Status == (ClsPartnerRoleEntity.STATUS)filter.Status);
+        if (filter.Status != null) roles = roles.Where(partnerRole => partnerRole.Status == filter.Status);
 
         var mappedPermissions = filter.Permissions.Select(permission => PermissionsMap[permission]).ToArray();
         if (mappedPermissions.Length > 0) roles = roles.Where(partnerRole => _AppDBContext.RolePermissions.Any(rolePermission =>
@@ -171,7 +173,7 @@ public class ClsRoleRepository
                 Name = rolePermission.Permission.Name
             }).ToArray(),
             AssignedCount = partnerRole.AssignedCount,
-            Status = (ClsRoleDto.STATUS)partnerRole.Status,
+            Status = partnerRole.Status,
             CreatedAt = partnerRole.CreatedAt,
             UpdatedAt = partnerRole.UpdatedAt,
         });
@@ -200,8 +202,8 @@ public class ClsRoleRepository
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                Action = ClsHistoryEntity.ACTION.DELETE,
-                Entity = ClsHistoryEntity.ENTITY.PARTNER_ROLES,
+                Action = HISTORY_ACTION.DELETE,
+                Entity = HISTORY_ENTITY.PARTNER_ROLES,
                 EntityUuid = roleUuid,
 
             };

@@ -1,3 +1,5 @@
+using Database.Enums;
+
 namespace Database.Partner.Parameters;
 
 public class ClsBranchCreateParameter
@@ -9,11 +11,6 @@ public class ClsBranchCreateParameter
         public string Street { get; set; }
         public float Latitude { get; set; }
         public float Longitude { get; set; }
-    }
-    public enum STATUS
-    {
-        ACTIVE,
-        INACTIVE
     }
     public ClsLocationCreateParameter Location { get; set; }
     public string Name { get; set; }

@@ -1,3 +1,5 @@
+using Database.Enums;
+
 namespace Database.Partner.Dtos;
 
 public class ClsMemberDto
@@ -21,11 +23,6 @@ public class ClsMemberDto
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-    }
-    public enum STATUS
-    {
-        ACTIVE,
-        INACTIVE
     }
     public Guid Uuid { get; set; }
     public string? Avatar { get; set; }

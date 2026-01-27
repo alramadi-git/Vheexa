@@ -1,12 +1,9 @@
+using Database.Enums;
+
 namespace Database.Entities;
 
 public class ClsMemberEntity
 {
-    public enum STATUS
-    {
-        ACTIVE,
-        INACTIVE
-    }
     public Guid Uuid { get; set; }
     public Guid PartnerUuid { get; set; }
     public ClsPartnerEntity Partner { get; set; }

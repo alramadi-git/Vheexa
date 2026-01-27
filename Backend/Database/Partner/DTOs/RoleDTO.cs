@@ -1,3 +1,5 @@
+using Database.Enums;
+
 namespace Database.Partner.Dtos;
 
 public class ClsRoleDto
@@ -6,11 +8,6 @@ public class ClsRoleDto
     {
         public Guid Uuid { get; set; }
         public string Name { get; set; }
-    }
-    public enum STATUS
-    {
-        ACTIVE,
-        INACTIVE
     }
     public Guid Uuid { get; set; }
     public string Name { get; set; }

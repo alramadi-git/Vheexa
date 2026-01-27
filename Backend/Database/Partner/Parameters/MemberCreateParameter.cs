@@ -1,12 +1,9 @@
+using Database.Enums;
+
 namespace Database.Partner.Parameters;
 
 public class ClsMemberCreateParameter
 {
-    public enum STATUS
-    {
-        ACTIVE,
-        INACTIVE
-    }
     public string Avatar { get; set; }
     public Guid RoleUuid { get; set; }
     public Guid BranchUuid { get; set; }

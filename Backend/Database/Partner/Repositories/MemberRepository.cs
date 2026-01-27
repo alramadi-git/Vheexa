@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
+using Database.Enums;
+
 using Database.Entities;
 
 using Database.Dtos;
@@ -53,7 +55,7 @@ public class ClsMemberRepository
                 Username = member.Username,
                 Email = member.Email,
                 Password = member.Password,
-                Status = (ClsMemberEntity.STATUS)member.Status,
+                Status = member.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
@@ -63,8 +65,8 @@ public class ClsMemberRepository
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                Action = ClsHistoryEntity.ACTION.CREATE,
-                Entity = ClsHistoryEntity.ENTITY.MEMBERS,
+                Action = HISTORY_ACTION.CREATE,
+                Entity = HISTORY_ENTITY.MEMBERS,
                 EntityUuid = newMember.Uuid,
             };
             var newMemberHistory = new ClsMemberHistoryEntity
@@ -125,7 +127,7 @@ public class ClsMemberRepository
             },
             Username = member.Username,
             Email = member.Email,
-            Status = (ClsMemberDto.STATUS)member.Status,
+            Status = member.Status,
             CreatedAt = member.CreatedAt,
             UpdatedAt = member.UpdatedAt,
         })
@@ -149,7 +151,7 @@ public class ClsMemberRepository
         if (filter.Roles.Length > 0) members = members.Where(member => filter.Roles.Contains(member.RoleUuid));
         if (filter.Branches.Length > 0) members = members.Where(member => filter.Branches.Contains(member.BranchUuid));
 
-        if (filter.Status != null) members = members.Where(partnerMember => partnerMember.Status == (ClsMemberEntity.STATUS)filter.Status);
+        if (filter.Status != null) members = members.Where(partnerMember => partnerMember.Status == filter.Status);
 
         var count = await members.CountAsync();
 
@@ -186,7 +188,7 @@ public class ClsMemberRepository
             },
             Username = member.Username,
             Email = member.Email,
-            Status = (ClsMemberDto.STATUS)member.Status,
+            Status = member.Status,
             CreatedAt = member.CreatedAt,
             UpdatedAt = member.UpdatedAt,
         });
@@ -215,8 +217,8 @@ public class ClsMemberRepository
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                Action = ClsHistoryEntity.ACTION.DELETE,
-                Entity = ClsHistoryEntity.ENTITY.MEMBERS,
+                Action = HISTORY_ACTION.DELETE,
+                Entity = HISTORY_ENTITY.MEMBERS,
                 EntityUuid = memberUuid,
 
             };

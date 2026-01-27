@@ -1,3 +1,5 @@
+using Database.Enums;
+
 namespace Database.Partner.Dtos;
 
 public class ClsBranchDto
@@ -9,11 +11,6 @@ public class ClsBranchDto
         public string Street { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-    }
-    public enum STATUS
-    {
-        ACTIVE,
-        INACTIVE
     }
     public Guid Uuid { get; set; }
     public ClsLocationDto Location { get; set; }

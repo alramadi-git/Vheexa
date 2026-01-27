@@ -1,14 +1,13 @@
 using Database.Enums;
 using Database.Partner.Enums;
 
-namespace Database.Entities;
+namespace Database.Partner.Parameters;
 
-public class ClsVehicleModelEntity
+public class ClsVehicleModelCreateParameter
 {
-    public Guid Uuid { get; set; }
-    public Guid PartnerUuid { get; set; }
-    public ClsPartnerEntity Partner { get; set; }
-    public string? Thumbnail { get; set; }
+ 
+    public string Thumbnail { get; set; }
+    public string[] Gallery { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public VehicleModelCATEGORY Category { get; set; }
@@ -19,10 +18,6 @@ public class ClsVehicleModelEntity
     public string Fuel { get; set; }
     public decimal Price { get; set; }
     public decimal Discount { get; set; }
-    public string Tags { get; set; }
+    public string[] Tags { get; set; }
     public STATUS Status { get; set; }
-    public DateTime UpdatedAt { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public bool IsDeleted { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }

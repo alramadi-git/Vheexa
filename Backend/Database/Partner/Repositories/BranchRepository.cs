@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
+using Database.Enums;
+
 using Database.Entities;
 
 using Database.Dtos;
@@ -45,7 +47,7 @@ public class ClsBranchRepository
                 PhoneNumber = branchCreateDTO.PhoneNumber,
                 Email = branchCreateDTO.Email,
                 MemberCount = 0,
-                Status = (ClsBranchEntity.STATUS)branchCreateDTO.Status,
+                Status = branchCreateDTO.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
@@ -56,8 +58,8 @@ public class ClsBranchRepository
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                Action = ClsHistoryEntity.ACTION.CREATE,
-                Entity = ClsHistoryEntity.ENTITY.BRANCHES,
+                Action = HISTORY_ACTION.CREATE,
+                Entity = HISTORY_ENTITY.BRANCHES,
                 EntityUuid = newBranch.Uuid,
             };
             var newMemberHistory = new ClsMemberHistoryEntity
@@ -106,7 +108,7 @@ public class ClsBranchRepository
             PhoneNumber = branch.PhoneNumber,
             Email = branch.Email,
             MemberCount = branch.MemberCount,
-            Status = (ClsBranchDto.STATUS)branch.Status,
+            Status = branch.Status,
             CreatedAt = branch.CreatedAt,
             UpdatedAt = branch.UpdatedAt,
         })
@@ -134,7 +136,7 @@ public class ClsBranchRepository
                 branch.Location.Street.ToLower().Contains(search)
             );
         }
-        if (filter.Status != null) branches = branches.Where(branch => branch.Status == (ClsBranchEntity.STATUS)filter.Status);
+        if (filter.Status != null) branches = branches.Where(branch => branch.Status ==filter.Status);
 
         var count = await branches.CountAsync();
 
@@ -157,7 +159,7 @@ public class ClsBranchRepository
             PhoneNumber = branch.PhoneNumber,
             Email = branch.Email,
             MemberCount = branch.MemberCount,
-            Status = (ClsBranchDto.STATUS)branch.Status,
+            Status = branch.Status,
             CreatedAt = branch.CreatedAt,
             UpdatedAt = branch.UpdatedAt,
         });
@@ -186,8 +188,8 @@ public class ClsBranchRepository
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
-                Action = ClsHistoryEntity.ACTION.DELETE,
-                Entity = ClsHistoryEntity.ENTITY.BRANCHES,
+                Action = HISTORY_ACTION.DELETE,
+                Entity = HISTORY_ENTITY.BRANCHES,
                 EntityUuid = branchUuid,
 
             };
