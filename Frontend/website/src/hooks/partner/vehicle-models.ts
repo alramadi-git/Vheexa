@@ -114,7 +114,7 @@ export default function useVehicleModels() {
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => vehicleModelService.readMany(filter, pagination),
+    queryFn: () => vehicleModelService.search(filter, pagination),
   });
 
   return {

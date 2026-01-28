@@ -20,7 +20,7 @@ export default function useOverview() {
         return {
           isSuccess: true,
           data: {
-            businesses: {
+            entitiesOverview: {
               roles: {
                 active: 8,
                 inactive: 2,
@@ -42,30 +42,30 @@ export default function useOverview() {
                 total: 170,
               },
             },
-            breakdowns: {
+            groupedCounts: {
               permissionsByRole: [
-                { name: "Inventory Management", count: 45 },
-                { name: "Customer Management", count: 38 },
-                { name: "Sales Reporting", count: 32 },
-                { name: "Service Scheduling", count: 28 },
-                { name: "Financial Access", count: 15 },
-                { name: "Admin Controls", count: 8 },
+                { groupName: "Inventory Management", count: 45 },
+                { groupName: "Customer Management", count: 38 },
+                { groupName: "Sales Reporting", count: 32 },
+                { groupName: "Service Scheduling", count: 28 },
+                { groupName: "Financial Access", count: 15 },
+                { groupName: "Admin Controls", count: 8 },
               ],
               membersByRole: [
-                { name: "Sales Agent", count: 35 },
-                { name: "Mechanic", count: 22 },
-                { name: "Branch Manager", count: 12 },
-                { name: "Service Advisor", count: 8 },
-                { name: "Admin Staff", count: 5 },
-                { name: "Finance Officer", count: 3 },
+                { groupName: "Sales Agent", count: 35 },
+                { groupName: "Mechanic", count: 22 },
+                { groupName: "Branch Manager", count: 12 },
+                { groupName: "Service Advisor", count: 8 },
+                { groupName: "Admin Staff", count: 5 },
+                { groupName: "Finance Officer", count: 3 },
               ],
               membersByBranch: [
-                { name: "Downtown Center", count: 28 },
-                { name: "Northgate Branch", count: 22 },
-                { name: "Westside Hub", count: 18 },
-                { name: "Eastwood Office", count: 15 },
-                { name: "Central Plaza", count: 12 },
-                { name: "Other Branches", count: 5 },
+                { groupName: "Downtown Center", count: 28 },
+                { groupName: "Northgate Branch", count: 22 },
+                { groupName: "Westside Hub", count: 18 },
+                { groupName: "Eastwood Office", count: 15 },
+                { groupName: "Central Plaza", count: 12 },
+                { groupName: "Other Branches", count: 5 },
               ],
             },
             vehicleModelPriceDistribution: {
@@ -73,12 +73,12 @@ export default function useOverview() {
               max: 650,
               average: 129,
               ranges: [
-                { from: 0, to: 49, vehicleModelsCount: 4 },
-                { from: 50, to: 99, vehicleModelsCount: 6 },
-                { from: 100, to: 149, vehicleModelsCount: 5 },
-                { from: 150, to: 199, vehicleModelsCount: 2 },
-                { from: 200, to: 299, vehicleModelsCount: 2 },
-                { from: 300, to: null, vehicleModelsCount: 1 },
+                { from: 0, to: 49, count: 4 },
+                { from: 50, to: 99, count: 6 },
+                { from: 100, to: 149, count: 5 },
+                { from: 150, to: 199, count: 2 },
+                { from: 200, to: 299, count: 2 },
+                { from: 300, to: 467, count: 1 },
               ],
             },
           },

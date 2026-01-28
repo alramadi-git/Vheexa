@@ -44,7 +44,7 @@ export default function useBranches() {
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => branchService.readMany(filter, pagination),
+    queryFn: () => branchService.search(filter, pagination),
   });
 
   return {

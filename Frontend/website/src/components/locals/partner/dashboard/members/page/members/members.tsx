@@ -15,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
 import useMemberService from "@/services/partner/member";
-import useOptionsService from "@/services/partner/options";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -90,6 +89,7 @@ import { Button } from "@/components/shadcn/button";
 import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
+import { tOptionFilter, tOptionPagination } from "@/validations/partner/option";
 
 export default function Members() {
   const { isLoading, result } = useMembers();
@@ -170,7 +170,6 @@ function AddNew() {
   const statuses: tOption[] = tAddNew.raw("content.form.status.statuses");
 
   const memberService = useMemberService();
-  const optionsService = useOptionsService();
 
   function reset(): void {
     handleReset();
@@ -212,13 +211,13 @@ function AddNew() {
 
   async function fetch(
     type: "roles" | "branches",
-    search: string,
-    page: number,
+    filter: tOptionFilter,
+    pagination: tOptionPagination,
   ): Promise<tResponseManyService<tOption>> {
     const serviceResult: tResponseManyService<tOptionModel> = await (type ===
     "roles"
-      ? optionsService.readRoles(search, page)
-      : optionsService.readBranches(search, page));
+      ? memberService.searchRoles(filter, pagination)
+      : memberService.searchBranches(filter, pagination));
 
     const result: tResponseManyService<tOption> = !serviceResult.isSuccess
       ? serviceResult
@@ -352,7 +351,17 @@ function AddNew() {
                           "content.form.role.roles.placeholder",
                         )}
                         cacheKey="roles"
-                        fetch={(search, page) => fetch("roles", search, page)}
+                        fetch={(search, page) =>
+                          fetch(
+                            "roles",
+                            {
+                              search,
+                            },
+                            {
+                              page,
+                            },
+                          )
+                        }
                         optionRender={(option, isSelected) => (
                           <button
                             type="button"
@@ -442,7 +451,15 @@ function AddNew() {
                         )}
                         cacheKey="branches"
                         fetch={(search, page) =>
-                          fetch("branches", search, page)
+                          fetch(
+                            "branches",
+                            {
+                              search,
+                            },
+                            {
+                              page,
+                            },
+                          )
                         }
                         optionRender={(option, isSelected) => (
                           <button

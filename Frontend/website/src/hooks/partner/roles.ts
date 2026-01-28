@@ -48,7 +48,7 @@ export default function useRoles() {
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => roleService.readMany(filter, pagination),
+    queryFn: () => roleService.search(filter, pagination),
   });
 
   return {

@@ -55,10 +55,7 @@ export default function useBranchService() {
       };
     });
   }
-
-  async function readOne(
-    uuid: tUuid,
-  ): Promise<tResponseOneService<tBranchModel>> {
+  async function read(uuid: tUuid): Promise<tResponseOneService<tBranchModel>> {
     return await service.catch<tBranchModel>(async () => {
       zUuid.parse(uuid);
 
@@ -101,8 +98,33 @@ export default function useBranchService() {
       };
     });
   }
+  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+    return await service.catch<null>(async () => {
+      zUuid.parse(uuid);
 
-  async function readMany(
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const response = await service.fetch.delete(
+        `/partner/dashboard/branches/${uuid}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      return {
+        isSuccess: true,
+        data: null,
+      };
+    });
+  }
+  async function search(
     filter: tBranchFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tBranchModel>> {
@@ -256,7 +278,8 @@ export default function useBranchService() {
         throw new Error(await response.text());
       }
 
-      const result: tPaginationSuccessModel<tBranchModel> = await response.json();
+      const result: tPaginationSuccessModel<tBranchModel> =
+        await response.json();
       return {
         isSuccess: true,
         ...result,
@@ -264,37 +287,10 @@ export default function useBranchService() {
     });
   }
 
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
-    return await service.catch<null>(async () => {
-      zUuid.parse(uuid);
-
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: null,
-        };
-      }
-
-      const response = await service.fetch.delete(
-        `/partner/dashboard/branches/${uuid}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-
-      return {
-        isSuccess: true,
-        data: null,
-      };
-    });
-  }
-
   return {
     create,
-    readOne,
-    readMany,
+    read,
     delete: _delete,
+    search,
   };
 }

@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { tOptionModel } from "@/models/partner/option";
 import { tResponseManyService } from "@/services/service";
 
-import useOptionsService from "@/services/partner/options";
+import useMemberService from "@/services/partner/member";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -50,6 +50,7 @@ import {
 } from "@/components/locals/blocks/selects";
 
 import { Button } from "@/components/shadcn/button";
+import { tOptionFilter, tOptionPagination } from "@/validations/partner/option";
 
 export default function Filter() {
   const id = useId();
@@ -80,7 +81,7 @@ export default function Filter() {
 
   const statuses: tOption[] = tFilter.raw("status.statuses");
 
-  const optionsService = useOptionsService();
+  const memberService = useMemberService();
 
   useEffect(() => {
     const [searchQuery, rolesQuery, branchesQuery, statusQuery] = [
@@ -98,14 +99,12 @@ export default function Filter() {
     ];
 
     setValue("search", search);
-    
+
     setValue("roles", roles);
     setValue("branches", branches);
     Promise.all([
-      roles.length !== 0 ? optionsService.readRolesByUuid(roles) : undefined,
-      branches.length !== 0
-        ? optionsService.readBranchesByUuid(branches)
-        : undefined,
+      roles.length !== 0 ? memberService.readRoles(roles) : undefined,
+      branches.length !== 0 ? memberService.readBranches(branches) : undefined,
     ]).then(([rolesResult, branchesResult]) => {
       if (rolesResult !== undefined) {
         if (!rolesResult.isSuccess) {
@@ -177,13 +176,13 @@ export default function Filter() {
 
   async function fetch(
     type: "roles" | "branches",
-    search: string,
-    page: number,
+    filter: tOptionFilter,
+    pagination: tOptionPagination,
   ): Promise<tResponseManyService<tOption>> {
     const serviceResult: tResponseManyService<tOptionModel> = await (type ===
     "roles"
-      ? optionsService.readRoles(search, page)
-      : optionsService.readBranches(search, page));
+      ? memberService.searchRoles(filter, pagination)
+      : memberService.searchBranches(filter, pagination));
 
     const result: tResponseManyService<tOption> = !serviceResult.isSuccess
       ? serviceResult
@@ -268,7 +267,17 @@ export default function Filter() {
                       )}
                       searchPlaceholder={tFilter("roles.roles.placeholder")}
                       cacheKey="roles"
-                      fetch={(search, page) => fetch("roles", search, page)}
+                      fetch={(search, page) =>
+                        fetch(
+                          "roles",
+                          {
+                            search,
+                          },
+                          {
+                            page,
+                          },
+                        )
+                      }
                       optionRender={(option, isSelected) => (
                         <button
                           type="button"
@@ -351,7 +360,17 @@ export default function Filter() {
                         "branches.branches.placeholder",
                       )}
                       cacheKey="branches"
-                      fetch={(search, page) => fetch("branches", search, page)}
+                      fetch={(search, page) =>
+                        fetch(
+                          "branches",
+                          {
+                            search,
+                          },
+                          {
+                            page,
+                          },
+                        )
+                      }
                       optionRender={(option, isSelected) => (
                         <button
                           type="button"

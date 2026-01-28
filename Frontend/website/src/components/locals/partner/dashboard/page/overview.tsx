@@ -48,9 +48,9 @@ export default function Overview() {
         "failed..."
       ) : (
         <Fragment>
-          <Businesses businesses={result.data.businesses} />
+          <Businesses businesses={result.data.entitiesOverview} />
           <Separator />
-          <Breakdowns breakdowns={result.data.breakdowns} />
+          <Breakdowns breakdowns={result.data.groupedCounts} />
           <Separator />
           <VehicleModelPriceDistribution
             vehicleModelPriceDistribution={
@@ -64,7 +64,7 @@ export default function Overview() {
 }
 
 type tBusinessesProps = {
-  businesses: tOverviewModel["businesses"];
+  businesses: tOverviewModel["entitiesOverview"];
 };
 function Businesses({ businesses }: tBusinessesProps) {
   const tBusinesses = useTranslations(
@@ -218,7 +218,7 @@ function Businesses({ businesses }: tBusinessesProps) {
 }
 
 type tBreakdownsProps = {
-  breakdowns: tOverviewModel["breakdowns"];
+  breakdowns: tOverviewModel["groupedCounts"];
 };
 function Breakdowns({ breakdowns }: tBreakdownsProps) {
   const tBreakdowns = useTranslations(
@@ -241,12 +241,12 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
           <Separator className="my-3" />
           <ul className="space-y-1">
             {breakdowns.permissionsByRole.map((role) => (
-              <li key={role.name} className="flex items-center justify-between">
+              <li key={role.groupName} className="flex items-center justify-between">
                 <Badge
                   variant="muted"
                   className="w-full justify-between text-base"
                 >
-                  <p>{role.name}</p>
+                  <p>{role.groupName}</p>
                   <p>
                     {tBreakdowns("permissions-by-role.count", {
                       count: role.count,
@@ -272,12 +272,12 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
           <Separator className="my-3" />
           <ul className="space-y-1">
             {breakdowns.membersByRole.map((role) => (
-              <li key={role.name} className="flex items-center justify-between">
+              <li key={role.groupName} className="flex items-center justify-between">
                 <Badge
                   variant="muted"
                   className="w-full justify-between text-base"
                 >
-                  <p>{role.name}</p>
+                  <p>{role.groupName}</p>
                   <p>
                     {tBreakdowns("members-by-role.count", {
                       count: role.count,
@@ -304,14 +304,14 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
           <ul className="space-y-1">
             {breakdowns.membersByBranch.map((branch) => (
               <li
-                key={branch.name}
+                key={branch.groupName}
                 className="flex items-center justify-between"
               >
                 <Badge
                   variant="muted"
                   className="w-full justify-between text-base"
                 >
-                  <p>{branch.name}</p>
+                  <p>{branch.groupName}</p>
                   <p>
                     {tBreakdowns("members-by-branch.count", {
                       count: branch.count,
@@ -341,7 +341,7 @@ function VehicleModelPriceDistribution({
   const clsMonyFormatter = new ClsMonyFormatter(locale, eCurrency[locale]);
 
   const totalVehicleModelsCount = vehicleModelPriceDistribution.ranges.reduce(
-    (total, { vehicleModelsCount }) => total + vehicleModelsCount,
+    (total, { count: vehicleModelsCount }) => total + vehicleModelsCount,
     0,
   );
 
@@ -392,9 +392,9 @@ function VehicleModelPriceDistribution({
         <Separator className="my-3" />
         <ul className="space-y-3">
           {vehicleModelPriceDistribution.ranges.map((range) => (
-            <li key={`${range.from}-${range.to}-${range.vehicleModelsCount}`}>
+            <li key={`${range.from}-${range.to}-${range.count}`}>
               <Progress
-                value={range.vehicleModelsCount}
+                value={range.count}
                 max={totalVehicleModelsCount}
                 className="w-full rounded-full"
               >

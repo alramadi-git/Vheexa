@@ -1,27 +1,25 @@
-import { tNullable } from "@/types/nullish";
-
-type tTotal = {
+type tEntityOverviewModel = {
   active: number;
   inactive: number;
   total: number;
 };
 
-type tCountByEntity = {
-  name: string;
+type tEntityCountModel = {
+  groupName: string;
   count: number;
 };
 
 type tOverviewModel = {
-  businesses: {
-    roles: tTotal;
-    branches: tTotal;
-    members: tTotal;
-    vehicleModels: tTotal;
+  entitiesOverview: {
+    roles: tEntityOverviewModel;
+    branches: tEntityOverviewModel;
+    members: tEntityOverviewModel;
+    vehicleModels: tEntityOverviewModel;
   };
-  breakdowns: {
-    permissionsByRole: tCountByEntity[];
-    membersByRole: tCountByEntity[];
-    membersByBranch: tCountByEntity[];
+  groupedCounts: {
+    permissionsByRole: tEntityCountModel[];
+    membersByRole: tEntityCountModel[];
+    membersByBranch: tEntityCountModel[];
   };
   vehicleModelPriceDistribution: {
     min: number;
@@ -29,8 +27,8 @@ type tOverviewModel = {
     average: number;
     ranges: {
       from: number;
-      to: tNullable<number>;
-      vehicleModelsCount: number;
+      to: number;
+      count: number;
     }[];
   };
 };

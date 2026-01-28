@@ -31,7 +31,6 @@ export default function useVehicleModelService() {
   const { token } = useToken();
   const service = useService();
 
-
   async function create(
     vehicleModel: tVehicleModelCreate,
   ): Promise<tResponseOneService<null>> {
@@ -90,8 +89,7 @@ export default function useVehicleModelService() {
       };
     });
   }
-
-  async function readOne(
+  async function read(
     uuid: tUuid,
   ): Promise<tResponseOneService<tVehicleModelModel>> {
     return await service.catch<tVehicleModelModel>(async () => {
@@ -133,8 +131,7 @@ export default function useVehicleModelService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessModel<tVehicleModelModel> =
-        await response.json();
+      const result: tSuccessModel<tVehicleModelModel> = await response.json();
 
       return {
         isSuccess: true,
@@ -142,8 +139,33 @@ export default function useVehicleModelService() {
       };
     });
   }
+  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+    return await service.catch<null>(async () => {
+      zUuid.parse(uuid);
 
-  async function readMany(
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const response = await service.fetch.delete(
+        `/partner/dashboard/vehicle-models/${uuid}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      return {
+        isSuccess: true,
+        data: null,
+      };
+    });
+  }
+  async function search(
     filter: tVehicleModelFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tVehicleModelModel>> {
@@ -415,37 +437,10 @@ export default function useVehicleModelService() {
     });
   }
 
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
-    return await service.catch<null>(async () => {
-      zUuid.parse(uuid);
-
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: null,
-        };
-      }
-
-      const response = await service.fetch.delete(
-        `/partner/dashboard/vehicle-models/${uuid}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-
-      return {
-        isSuccess: true,
-        data: null,
-      };
-    });
-  }
-
   return {
     create,
-    readOne,
-    readMany,
+    read,
     delete: _delete,
+    search,
   };
 }

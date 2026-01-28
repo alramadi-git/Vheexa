@@ -21,6 +21,13 @@ import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
 
 import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
 import { tResponseOneService, tResponseManyService } from "@/services/service";
+import { tOptionModel } from "@/models/partner/option";
+import {
+  tOptionFilter,
+  tOptionPagination,
+  zOptionFilter,
+  zOptionPagination,
+} from "@/validations/partner/option";
 
 export default function useMemberService() {
   const { token } = useToken();
@@ -68,10 +75,7 @@ export default function useMemberService() {
       };
     });
   }
-
-  async function readOne(
-    uuid: tUuid,
-  ): Promise<tResponseOneService<tMemberModel>> {
+  async function read(uuid: tUuid): Promise<tResponseOneService<tMemberModel>> {
     return await service.catch<tMemberModel>(async () => {
       zUuid.parse(uuid);
 
@@ -125,8 +129,137 @@ export default function useMemberService() {
       };
     });
   }
+  async function readRoles(
+    uuids: tUuid[],
+  ): Promise<tResponseOneService<tOptionModel[]>> {
+    return await service.catch<tOptionModel[]>(async () => {
+      zUuid.array().parse(uuids);
 
-  async function readMany(
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: [
+            {
+              uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+              name: "Owner",
+            },
+            {
+              uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              name: "Manager",
+            },
+          ].filter((role) => uuids.some((uuid) => uuid === role.uuid)),
+        };
+      }
+
+      const clsQuery = new ClsQuery();
+
+      clsQuery.set("filter.uuids", uuids);
+
+      const response = await service.fetch.get(
+        `/partner/dashboard/members/options/roles/uuids${clsQuery.toString()}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const data: tSuccessModel<tOptionModel[]> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
+  }
+  async function readBranches(
+    uuids: tUuid[],
+  ): Promise<tResponseOneService<tOptionModel[]>> {
+    return await service.catch<tOptionModel[]>(async () => {
+      zUuid.array().parse(uuids);
+
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: [
+            {
+              uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+              name: "New York Headquarters",
+            },
+            {
+              uuid: "550e8400-e29b-41d4-a716-446655440000",
+              name: "Austin Downtown Branch",
+            },
+            {
+              uuid: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+              name: "Los Angeles West Branch",
+            },
+            {
+              uuid: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
+              name: "Chicago Lakeside Hub",
+            },
+            {
+              uuid: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+              name: "Miami Beach Office",
+            },
+            {
+              uuid: "123e4567-e89b-12d3-a456-426614174000",
+              name: "Seattle Downtown Center",
+            },
+            {
+              uuid: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+              name: "Denver Mountain Hub",
+            },
+          ].filter((role) => uuids.some((uuid) => uuid === role.uuid)),
+        };
+      }
+
+      const clsQuery = new ClsQuery();
+
+      clsQuery.set("filter.uuids", uuids);
+
+      const response = await service.fetch.get(
+        `/partner/dashboard/members/options/branches/uuids${clsQuery.toString()}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const data: tSuccessModel<tOptionModel[]> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+      };
+    });
+  }
+  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+    return await service.catch<null>(async () => {
+      zUuid.parse(uuid);
+
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: null,
+        };
+      }
+
+      const response = await service.fetch.delete(
+        `/partner/dashboard/members/${uuid}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      return {
+        isSuccess: true,
+        data: null,
+      };
+    });
+  }
+  async function search(
     filter: tMemberFilter,
     pagination: tPagination,
   ): Promise<tResponseManyService<tMemberModel>> {
@@ -427,27 +560,46 @@ export default function useMemberService() {
         throw new Error(await response.text());
       }
 
-      const result: tPaginationSuccessModel<tMemberModel> = await response.json();
+      const result: tPaginationSuccessModel<tMemberModel> =
+        await response.json();
       return {
         isSuccess: true,
         ...result,
       };
     });
   }
-
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
-    return await service.catch<null>(async () => {
-      zUuid.parse(uuid);
+  async function searchRoles(
+    filter: tOptionFilter,
+    pagination: tOptionPagination,
+  ): Promise<tResponseManyService<tOptionModel>> {
+    return await service.catch<tOptionModel>(async () => {
+      zOptionFilter.parse(filter);
+      zOptionPagination.parse(pagination);
 
       if (process.env.NODE_ENV === eEnvironment.development) {
         return {
           isSuccess: true,
-          data: null,
+          data: [
+            {
+              uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+              name: "Owner",
+            },
+            {
+              uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              name: "Manager",
+            },
+          ],
+          pagination: { page: 1, pageSize: 10, totalItems: 2 },
         };
       }
 
-      const response = await service.fetch.delete(
-        `/partner/dashboard/members/${uuid}`,
+      const clsQuery = new ClsQuery();
+
+      clsQuery.set("Filter.Search", filter.search);
+      clsQuery.set("Pagination.Page", pagination.page?.toString());
+
+      const response = await service.fetch.get(
+        `/partner/dashboard/members/options/roles${clsQuery.toString()}`,
         token,
       );
 
@@ -455,17 +607,90 @@ export default function useMemberService() {
         throw new Error(await response.text());
       }
 
+      const data: tPaginationSuccessModel<tOptionModel> = await response.json();
       return {
         isSuccess: true,
-        data: null,
+        data: data.data,
+        pagination: data.pagination,
+      };
+    });
+  }
+  async function searchBranches(
+    filter: tOptionFilter,
+    pagination: tOptionPagination,
+  ): Promise<tResponseManyService<tOptionModel>> {
+    return await service.catch<tOptionModel>(async () => {
+      zOptionFilter.parse(filter);
+      zOptionPagination.parse(pagination);
+
+      if (process.env.NODE_ENV === eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: [
+            {
+              uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+              name: "New York Headquarters",
+            },
+            {
+              uuid: "550e8400-e29b-41d4-a716-446655440000",
+              name: "Austin Downtown Branch",
+            },
+            {
+              uuid: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+              name: "Los Angeles West Branch",
+            },
+            {
+              uuid: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
+              name: "Chicago Lakeside Hub",
+            },
+            {
+              uuid: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+              name: "Miami Beach Office",
+            },
+            {
+              uuid: "123e4567-e89b-12d3-a456-426614174000",
+              name: "Seattle Downtown Center",
+            },
+            {
+              uuid: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+              name: "Denver Mountain Hub",
+            },
+          ],
+          pagination: { page: 1, pageSize: 10, totalItems: 2 },
+        };
+      }
+
+      const clsQuery = new ClsQuery();
+
+      clsQuery.set("Filter.Search", filter.search);
+      clsQuery.set("Pagination.Page", pagination.page?.toString());
+
+      const response = await service.fetch.get(
+        `/partner/dashboard/members/options/branches${clsQuery.toString()}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const data: tPaginationSuccessModel<tOptionModel> = await response.json();
+      return {
+        isSuccess: true,
+        data: data.data,
+        pagination: data.pagination,
       };
     });
   }
 
   return {
     create,
-    readOne,
-    readMany,
+    read,
+    readRoles,
+    readBranches,
     delete: _delete,
+    search,
+    searchRoles,
+    searchBranches,
   };
 }

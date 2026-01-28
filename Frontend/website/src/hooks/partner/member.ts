@@ -59,7 +59,7 @@ export default function useMembers() {
       pagination.page,
       pagination.pageSize,
     ],
-    queryFn: () => memberService.readMany(filter, pagination),
+    queryFn: () => memberService.search(filter, pagination),
   });
 
   return {
