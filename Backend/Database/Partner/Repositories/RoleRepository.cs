@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using FuzzySharp;
 
 using Database.Enums;
 
@@ -138,51 +139,6 @@ public class ClsRoleRepository
 
         return role;
     }
-    public async Task<ClsPaginatedDto<ClsRoleDto>> ReadManyAsync(ClsRoleFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
-    {
-        var roles = _AppDBContext.PartnerRoles
-        .Where(partnerRole =>
-            partnerRole.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerRole.IsDeleted
-        );
-
-        if (filter.Name != null) roles = roles.Where(partnerRole => partnerRole.Role.Name.ToLower().Contains(filter.Name.ToLower()));
-        if (filter.Status != null) roles = roles.Where(partnerRole => partnerRole.Status == filter.Status);
-
-        var mappedPermissions = filter.Permissions.Select(permission => PermissionsMap[permission]).ToArray();
-        if (mappedPermissions.Length > 0) roles = roles.Where(partnerRole => _AppDBContext.RolePermissions.Any(rolePermission =>
-            rolePermission.RoleUuid == partnerRole.RoleUuid &&
-            mappedPermissions.Contains(rolePermission.PermissionUuid)
-        ));
-
-        var count = await roles.CountAsync();
-
-        roles = roles
-        .Skip((pagination.Page - 1) * pagination.PageSize)
-        .Take(pagination.PageSize);
-
-        var roleDtos = roles.Select(partnerRole => new ClsRoleDto
-        {
-            Uuid = partnerRole.Uuid,
-            Name = partnerRole.Role.Name,
-            Permissions = _AppDBContext.RolePermissions
-            .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
-            .Select(rolePermission => new ClsRoleDto.ClsPermissionDto
-            {
-                Uuid = rolePermission.PermissionUuid,
-                Name = rolePermission.Permission.Name
-            }).ToArray(),
-            AssignedCount = partnerRole.AssignedCount,
-            Status = partnerRole.Status,
-            CreatedAt = partnerRole.CreatedAt,
-            UpdatedAt = partnerRole.UpdatedAt,
-        });
-
-        return new ClsPaginatedDto<ClsRoleDto>(
-            await roleDtos.ToArrayAsync(),
-            new ClsPaginatedDto<ClsRoleDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, count)
-        );
-    }
     public async Task DeleteOneAsync(Guid roleUuid, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
@@ -226,5 +182,69 @@ public class ClsRoleRepository
             await transaction.RollbackAsync();
             throw;
         }
+    }
+    public async Task<ClsPaginatedDto<ClsRoleDto>> SearchAsync(ClsRoleFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
+    {
+        var roles = _AppDBContext.PartnerRoles
+        .Where(partnerRole =>
+            partnerRole.PartnerUuid == memberContext.PartnerUuid &&
+            !partnerRole.IsDeleted
+        );
+
+
+        var mappedPermissions = filter.Permissions.Select(permission => PermissionsMap[permission]).ToArray();
+        if (mappedPermissions.Length > 0) roles = roles.Where(partnerRole => _AppDBContext.RolePermissions.Any(rolePermission =>
+            rolePermission.RoleUuid == partnerRole.RoleUuid &&
+            mappedPermissions.Contains(rolePermission.PermissionUuid)
+        ));
+
+        if (filter.Status != null) roles = roles.Where(partnerRole => partnerRole.Status == filter.Status);
+
+        var roleDtos = await roles
+        .Select(partnerRole => new ClsRoleDto
+        {
+            Uuid = partnerRole.Uuid,
+            Name = partnerRole.Role.Name,
+            Permissions = _AppDBContext.RolePermissions
+            .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
+            .Select(rolePermission => new ClsRoleDto.ClsPermissionDto
+            {
+                Uuid = rolePermission.PermissionUuid,
+                Name = rolePermission.Permission.Name
+            })
+            .ToArray(),
+            AssignedCount = partnerRole.AssignedCount,
+            Status = partnerRole.Status,
+            CreatedAt = partnerRole.CreatedAt,
+            UpdatedAt = partnerRole.UpdatedAt,
+        })
+        .ToArrayAsync();
+
+        if (filter.Name != null)
+        {
+            roleDtos = roleDtos
+            .Select(roleDto => new
+            {
+                RoleDto = roleDto,
+                Score = Fuzz.Ratio(roleDto.Name, filter.Name)
+            })
+            .Where(fuzzyRoleDto => fuzzyRoleDto.Score > 80)
+            .OrderByDescending(fuzzyRoleDto => fuzzyRoleDto.Score)
+            .Select(fuzzyRoleDto => fuzzyRoleDto.RoleDto)
+            .ToArray();
+        }
+
+        var totalItems = roleDtos.Length;
+
+        roleDtos = roleDtos
+        .Skip((pagination.Page - 1) * pagination.PageSize)
+        .Take(pagination.PageSize)
+        .ToArray();
+
+
+        return new ClsPaginatedDto<ClsRoleDto>(
+            roleDtos,
+            new ClsPaginatedDto<ClsRoleDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, totalItems)
+        );
     }
 };

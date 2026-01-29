@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using FuzzySharp;
+
+using Database.Enums;
 
 using Database.Entities;
 
@@ -9,7 +12,6 @@ using Database.Parameters;
 using Database.Partner.Parameters;
 
 using Database.Partner.Contexts;
-using Database.Enums;
 
 namespace Database.Partner.Repositories;
 
@@ -27,19 +29,22 @@ public class ClsVehicleModelRepository
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
-            var newVehicleModelGallery = new ClsVehicleModelGalleryEntity
+            var vehicleModelUuid = Guid.NewGuid();
+            var newVehicleModelGallery = vehicleModel.Gallery.Select((image, index) => new ClsVehicleModelGalleryEntity
             {
+
                 Uuid = Guid.NewGuid(),
-                
+                VehicleModelUuid = vehicleModelUuid,
+                Index = index,
+                Url = image,
                 IsDeleted = false,
                 DeletedAt = null,
-            };
+            }).ToArray();
             var newVehicleModel = new ClsVehicleModelEntity
             {
-                Uuid = Guid.NewGuid(),
+                Uuid = vehicleModelUuid,
                 PartnerUuid = memberContext.PartnerUuid,
                 Thumbnail = vehicleModel.Thumbnail,
-                Gallery = vehicleModel.Gallery,
                 Name = vehicleModel.Name,
                 Description = vehicleModel.Description,
                 Category = vehicleModel.Category,
@@ -50,7 +55,7 @@ public class ClsVehicleModelRepository
                 Fuel = vehicleModel.Fuel,
                 Price = vehicleModel.Price,
                 Discount = vehicleModel.Discount,
-                Tags = vehicleModel.Tags,
+                Tags = string.Join(", ", vehicleModel.Tags),
                 Status = vehicleModel.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -74,6 +79,7 @@ public class ClsVehicleModelRepository
             };
 
             _AppDBContext.VehicleModels.Add(newVehicleModel);
+            _AppDBContext.VehicleModelGalleries.AddRange(newVehicleModelGallery);
 
             _AppDBContext.Histories.Add(newHistory);
             _AppDBContext.MemberHistories.Add(newMemberHistory);
@@ -99,8 +105,8 @@ public class ClsVehicleModelRepository
         {
             Uuid = vehicleModel.Uuid,
             Thumbnail = vehicleModel.Thumbnail,
-            Gallery = _AppDBContext.VehicleModelGallery
-            .Where(image => image.VehicleModelUuid == vehicleModelUuid)
+            Gallery = _AppDBContext.VehicleModelGalleries
+            .Where(image => image.VehicleModelUuid == vehicleModel.Uuid)
             .Select(image => new ClsVehicleModelDto.ClsGalleryDto
             {
                 Uuid = image.Uuid,
@@ -125,69 +131,6 @@ public class ClsVehicleModelRepository
         .SingleAsync();
 
         return vehicleModel;
-    }
-    public async Task<ClsPaginatedDto<ClsVehicleModelDto>> ReadManyAsync(ClsVehicleModelFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
-    {
-        var vehicleModels = _AppDBContext.VehicleModels
-        .Where(partnerVehicleModel =>
-            partnerVehicleModel.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerVehicleModel.IsDeleted
-        );
-
-        if (filter.Search != null) vehicleModels = vehicleModels.Where(partnerVehicleModel =>
-            partnerVehicleModel.Username.ToLower().Contains(filter.Search.ToLower()) ||
-            partnerVehicleModel.Email.ToLower().Contains(filter.Search.ToLower())
-        );
-
-        if (filter.Roles.Length > 0) vehicleModels = vehicleModels.Where(vehicleModel => filter.Roles.Contains(vehicleModel.RoleUuid));
-        if (filter.Branches.Length > 0) vehicleModels = vehicleModels.Where(vehicleModel => filter.Branches.Contains(vehicleModel.BranchUuid));
-
-        if (filter.Status != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Status == (ClsVehicleModelEntity.STATUS)filter.Status);
-
-        var count = await vehicleModels.CountAsync();
-
-        vehicleModels = vehicleModels
-        .Skip((pagination.Page - 1) * pagination.PageSize)
-        .Take(pagination.PageSize);
-
-        var vehicleModelDtos = vehicleModels
-        .Select(vehicleModel => new ClsVehicleModelDto
-        {
-            Uuid = vehicleModel.Uuid,
-            Avatar = vehicleModel.Avatar,
-            Role = new ClsVehicleModelDto.ClsRoleDto
-            {
-                Name = vehicleModel.Role.Role.Name,
-                Permissions = _AppDBContext.RolePermissions
-                .Where(rolePermission => rolePermission.RoleUuid == vehicleModel.RoleUuid)
-                .Select(rolePermission => rolePermission.Permission.Name)
-                .ToArray()
-            },
-            Branch = new ClsVehicleModelDto.ClsBranchDto
-            {
-                Location = new ClsVehicleModelDto.ClsBranchDto.ClsLocationDto
-                {
-                    Country = vehicleModel.Branch.Location.Country,
-                    City = vehicleModel.Branch.Location.City,
-                    Street = vehicleModel.Branch.Location.Street,
-                    Latitude = vehicleModel.Branch.Location.Latitude,
-                    Longitude = vehicleModel.Branch.Location.Longitude
-                },
-                Name = vehicleModel.Branch.Name,
-                PhoneNumber = vehicleModel.Branch.PhoneNumber,
-                Email = vehicleModel.Branch.Email,
-            },
-            Username = vehicleModel.Username,
-            Email = vehicleModel.Email,
-            Status = (ClsVehicleModelDto.STATUS)vehicleModel.Status,
-            CreatedAt = vehicleModel.CreatedAt,
-            UpdatedAt = vehicleModel.UpdatedAt,
-        });
-
-        return new ClsPaginatedDto<ClsVehicleModelDto>(
-            await vehicleModelDtos.ToArrayAsync(),
-            new ClsPaginatedDto<ClsVehicleModelDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, count)
-        );
     }
     public async Task DeleteOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
     {
@@ -231,5 +174,90 @@ public class ClsVehicleModelRepository
             await transaction.RollbackAsync();
             throw;
         }
+    }
+    public async Task<ClsPaginatedDto<ClsVehicleModelDto>> SearchAsync(ClsVehicleModelFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
+    {
+        var vehicleModels = _AppDBContext.VehicleModels
+        .Where(partnerVehicleModel =>
+            partnerVehicleModel.PartnerUuid == memberContext.PartnerUuid &&
+            !partnerVehicleModel.IsDeleted
+        );
+
+        if (filter.Categories.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Categories.Contains(partnerVehicleModel.Category));
+
+        if (filter.Manufacturers.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Manufacturers.Contains(partnerVehicleModel.Manufacturer));
+
+        if (filter.Capacity.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Capacity >= filter.Capacity.Min);
+        if (filter.Capacity.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Capacity <= filter.Capacity.Max);
+
+        if (filter.Transmissions.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Transmissions.Contains(partnerVehicleModel.Transmission));
+        if (filter.Fuels.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Fuels.Contains(partnerVehicleModel.Fuel));
+
+        if (filter.Price.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Price >= filter.Price.Min);
+        if (filter.Price.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Price <= filter.Price.Max);
+
+        if (filter.Discount.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Discount >= filter.Discount.Min);
+        if (filter.Discount.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Discount <= filter.Discount.Max);
+
+        if (filter.Status != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Status == filter.Status);
+
+        var vehicleModelDtos = await vehicleModels
+        .Select(vehicleModel => new ClsVehicleModelDto
+        {
+            Uuid = vehicleModel.Uuid,
+            Thumbnail = vehicleModel.Thumbnail,
+            Gallery = _AppDBContext.VehicleModelGalleries
+            .Where(image => image.VehicleModelUuid == vehicleModel.Uuid)
+            .Select(image => new ClsVehicleModelDto.ClsGalleryDto
+            {
+                Uuid = image.Uuid,
+                Url = image.Url
+            })
+            .ToArray(),
+            Name = vehicleModel.Name,
+            Description = vehicleModel.Description,
+            Category = vehicleModel.Category,
+            Manufacturer = vehicleModel.Manufacturer,
+            MarketLaunch = vehicleModel.MarketLaunch,
+            Capacity = vehicleModel.Capacity,
+            Transmission = vehicleModel.Transmission,
+            Fuel = vehicleModel.Fuel,
+            Price = vehicleModel.Price,
+            Discount = vehicleModel.Discount,
+            Tags = vehicleModel.Tags,
+            Status = vehicleModel.Status,
+            CreatedAt = vehicleModel.CreatedAt,
+            UpdatedAt = vehicleModel.UpdatedAt,
+        })
+        .ToArrayAsync();
+
+        if (filter.Search != null) vehicleModelDtos = vehicleModelDtos.
+        Select(vehicleModelDto => new
+        {
+            VehicleModelDto = vehicleModelDto,
+            Score = new int[]
+            {
+                Fuzz.Ratio(vehicleModelDto.Name, filter.Search),
+                Fuzz.Ratio(vehicleModelDto.Description, filter.Search),
+                Fuzz.Ratio(vehicleModelDto.Tags, filter.Search),
+            }
+            .Max()
+        })
+        .Where(fuzzyVehicleModelDto => fuzzyVehicleModelDto.Score > 80)
+        .OrderByDescending(fuzzyVehicleModelDto => fuzzyVehicleModelDto.Score)
+        .Select(fuzzyVehicleModelDto => fuzzyVehicleModelDto.VehicleModelDto)
+        .ToArray();
+
+        var totalItems = vehicleModelDtos.Length;
+
+        vehicleModelDtos = vehicleModelDtos
+        .Skip((pagination.Page - 1) * pagination.PageSize)
+        .Take(pagination.PageSize)
+        .ToArray();
+
+        return new ClsPaginatedDto<ClsVehicleModelDto>(
+            vehicleModelDtos,
+            new ClsPaginatedDto<ClsVehicleModelDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, totalItems)
+        );
     }
 };

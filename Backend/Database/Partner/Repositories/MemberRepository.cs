@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using FuzzySharp;
 
 using Database.Enums;
 
@@ -11,6 +12,7 @@ using Database.Parameters;
 using Database.Partner.Parameters;
 
 using Database.Partner.Contexts;
+using Microsoft.AspNetCore.Identity;
 
 namespace Database.Partner.Repositories;
 
@@ -45,6 +47,7 @@ public class ClsMemberRepository
 
             if (!roleTask || !branchTask) throw new ArgumentException("Invalid (role or branch) uuid");
 
+            var hashedPassword = new PasswordHasher<object?>().HashPassword(null, member.Password);
             var newMember = new ClsMemberEntity
             {
                 Uuid = Guid.NewGuid(),
@@ -54,7 +57,7 @@ public class ClsMemberRepository
                 BranchUuid = member.BranchUuid,
                 Username = member.Username,
                 Email = member.Email,
-                Password = member.Password,
+                Password = hashedPassword,
                 Status = member.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -135,69 +138,6 @@ public class ClsMemberRepository
 
         return member;
     }
-    public async Task<ClsPaginatedDto<ClsMemberDto>> ReadManyAsync(ClsMemberFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
-    {
-        var members = _AppDBContext.Members
-        .Where(partnerMember =>
-            partnerMember.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerMember.IsDeleted
-        );
-
-        if (filter.Search != null) members = members.Where(partnerMember =>
-            partnerMember.Username.ToLower().Contains(filter.Search.ToLower()) ||
-            partnerMember.Email.ToLower().Contains(filter.Search.ToLower())
-        );
-
-        if (filter.Roles.Length > 0) members = members.Where(member => filter.Roles.Contains(member.RoleUuid));
-        if (filter.Branches.Length > 0) members = members.Where(member => filter.Branches.Contains(member.BranchUuid));
-
-        if (filter.Status != null) members = members.Where(partnerMember => partnerMember.Status == filter.Status);
-
-        var count = await members.CountAsync();
-
-        members = members
-        .Skip((pagination.Page - 1) * pagination.PageSize)
-        .Take(pagination.PageSize);
-
-        var memberDtos = members
-        .Select(member => new ClsMemberDto
-        {
-            Uuid = member.Uuid,
-            Avatar = member.Avatar,
-            Role = new ClsMemberDto.ClsRoleDto
-            {
-                Name = member.Role.Role.Name,
-                Permissions = _AppDBContext.RolePermissions
-                .Where(rolePermission => rolePermission.RoleUuid == member.RoleUuid)
-                .Select(rolePermission => rolePermission.Permission.Name)
-                .ToArray()
-            },
-            Branch = new ClsMemberDto.ClsBranchDto
-            {
-                Location = new ClsMemberDto.ClsBranchDto.ClsLocationDto
-                {
-                    Country = member.Branch.Location.Country,
-                    City = member.Branch.Location.City,
-                    Street = member.Branch.Location.Street,
-                    Latitude = member.Branch.Location.Latitude,
-                    Longitude = member.Branch.Location.Longitude
-                },
-                Name = member.Branch.Name,
-                PhoneNumber = member.Branch.PhoneNumber,
-                Email = member.Branch.Email,
-            },
-            Username = member.Username,
-            Email = member.Email,
-            Status = member.Status,
-            CreatedAt = member.CreatedAt,
-            UpdatedAt = member.UpdatedAt,
-        });
-
-        return new ClsPaginatedDto<ClsMemberDto>(
-            await memberDtos.ToArrayAsync(),
-            new ClsPaginatedDto<ClsMemberDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, count)
-        );
-    }
     public async Task DeleteOneAsync(Guid memberUuid, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
@@ -241,5 +181,189 @@ public class ClsMemberRepository
             await transaction.RollbackAsync();
             throw;
         }
+    }
+    public async Task<ClsOptionDto[]> ReadRolesAsync(Guid[] uuids, ClsMemberContext memberContext)
+    {
+        return await _AppDBContext.PartnerRoles
+        .Where(partnerRole =>
+            uuids.Contains(partnerRole.Uuid) &&
+            partnerRole.PartnerUuid == memberContext.PartnerUuid &&
+            !partnerRole.IsDeleted
+        )
+        .Select(partnerRole => new ClsOptionDto
+        {
+            Uuid = partnerRole.Uuid,
+            Name = partnerRole.Role.Name
+        })
+        .ToArrayAsync();
+    }
+    public async Task<ClsOptionDto[]> ReadBranchesAsync(Guid[] uuids, ClsMemberContext memberContext)
+    {
+        return await _AppDBContext.Branches
+        .Where(branch =>
+            uuids.Contains(branch.Uuid) &&
+            branch.PartnerUuid == memberContext.PartnerUuid &&
+            !branch.IsDeleted
+        )
+        .Select(branch => new ClsOptionDto
+        {
+            Uuid = branch.Uuid,
+            Name = branch.Name
+        })
+        .ToArrayAsync();
+    }
+    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchRolesAsync(ClsOptionFilterParameter filter, ClsOptionPaginationParameter pagination, ClsMemberContext memberContext)
+    {
+        var roleOptionDtos = await _AppDBContext.PartnerRoles
+        .Where(partnerRole =>
+            partnerRole.PartnerUuid == memberContext.PartnerUuid &&
+            !partnerRole.IsDeleted
+        )
+        .Select(role => new ClsOptionDto
+        {
+            Uuid = role.Uuid,
+            Name = role.Role.Name
+        })
+        .ToArrayAsync();
+
+        if (filter.Search != null) roleOptionDtos = roleOptionDtos
+        .Select(roleOptionDto => new
+        {
+            RoleOptionDto = roleOptionDto,
+            Score = Fuzz.Ratio(roleOptionDto.Name, filter.Search)
+        })
+        .Where(fuzzyRoleOptionDto => fuzzyRoleOptionDto.Score > 80)
+        .OrderByDescending(fuzzyRoleOptionDto => fuzzyRoleOptionDto.Score)
+        .Select(fuzzyRoleOptionDto => fuzzyRoleOptionDto.RoleOptionDto)
+        .ToArray();
+
+        var totalItems = roleOptionDtos.Length;
+
+        roleOptionDtos = roleOptionDtos
+        .Skip((pagination.Page - 1) * 5)
+        .Take(5)
+        .ToArray();
+
+
+        return new ClsPaginatedDto<ClsOptionDto>
+        (
+            roleOptionDtos,
+            new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto(pagination.Page, 5, totalItems)
+        );
+    }
+    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchBranchesAsync(ClsOptionFilterParameter filter, ClsOptionPaginationParameter pagination, ClsMemberContext memberContext)
+    {
+        var branchOptionDtos = await _AppDBContext.Branches
+        .Where(branch =>
+            branch.PartnerUuid == memberContext.PartnerUuid &&
+            !branch.IsDeleted
+        )
+        .Select(branch => new ClsOptionDto
+        {
+            Uuid = branch.Uuid,
+            Name = branch.Name
+        })
+        .ToArrayAsync();
+
+        if (filter.Search != null) branchOptionDtos = branchOptionDtos
+        .Select(branchOptionDto => new
+        {
+            BranchOptionDto = branchOptionDto,
+            Score = Fuzz.Ratio(branchOptionDto.Name, filter.Search)
+        })
+        .Where(fuzzyBranchOptionDto => fuzzyBranchOptionDto.Score > 80)
+        .OrderByDescending(fuzzyBranchOptionDto => fuzzyBranchOptionDto.Score)
+        .Select(fuzzyBranchOptionDto => fuzzyBranchOptionDto.BranchOptionDto)
+        .ToArray();
+
+        var totalItems = branchOptionDtos.Length;
+
+        branchOptionDtos = branchOptionDtos
+        .Skip((pagination.Page - 1) * 5)
+        .Take(5)
+        .ToArray();
+
+
+        return new ClsPaginatedDto<ClsOptionDto>
+        (
+            branchOptionDtos,
+            new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto(pagination.Page, 5, totalItems)
+        );
+    }
+    public async Task<ClsPaginatedDto<ClsMemberDto>> SearchAsync(ClsMemberFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
+    {
+        var members = _AppDBContext.Members
+        .Where(partnerMember =>
+            partnerMember.PartnerUuid == memberContext.PartnerUuid &&
+            !partnerMember.IsDeleted
+        );
+
+        if (filter.Roles.Length > 0) members = members.Where(member => filter.Roles.Contains(member.RoleUuid));
+        if (filter.Branches.Length > 0) members = members.Where(member => filter.Branches.Contains(member.BranchUuid));
+
+        if (filter.Status != null) members = members.Where(member => member.Status == filter.Status);
+
+        var memberDtos = await members
+        .Select(member => new ClsMemberDto
+        {
+            Uuid = member.Uuid,
+            Avatar = member.Avatar,
+            Role = new ClsMemberDto.ClsRoleDto
+            {
+                Name = member.Role.Role.Name,
+                Permissions = _AppDBContext.RolePermissions
+                .Where(rolePermission => rolePermission.RoleUuid == member.RoleUuid)
+                .Select(rolePermission => rolePermission.Permission.Name)
+                .ToArray()
+            },
+            Branch = new ClsMemberDto.ClsBranchDto
+            {
+                Location = new ClsMemberDto.ClsBranchDto.ClsLocationDto
+                {
+                    Country = member.Branch.Location.Country,
+                    City = member.Branch.Location.City,
+                    Street = member.Branch.Location.Street,
+                    Latitude = member.Branch.Location.Latitude,
+                    Longitude = member.Branch.Location.Longitude
+                },
+                Name = member.Branch.Name,
+                PhoneNumber = member.Branch.PhoneNumber,
+                Email = member.Branch.Email,
+            },
+            Username = member.Username,
+            Email = member.Email,
+            Status = member.Status,
+            CreatedAt = member.CreatedAt,
+            UpdatedAt = member.UpdatedAt,
+        })
+        .ToArrayAsync();
+
+        if (filter.Search != null) memberDtos = memberDtos
+        .Select(memberDto => new
+        {
+            MemberDto = memberDto,
+            Score = new int[]
+            {
+                Fuzz.Ratio(memberDto.Username, filter.Search),
+                Fuzz.Ratio(memberDto.Email, filter.Search),
+            }.Max()
+        })
+        .Where(fuzzyMemberDto => fuzzyMemberDto.Score > 80)
+        .OrderByDescending(fuzzyMemberDto => fuzzyMemberDto.Score)
+        .Select(fuzzyMemberDto => fuzzyMemberDto.MemberDto)
+        .ToArray();
+
+        var totalItems = memberDtos.Length;
+
+        memberDtos = memberDtos
+        .Skip((pagination.Page - 1) * pagination.PageSize)
+        .Take(pagination.PageSize)
+        .ToArray();
+
+        return new ClsPaginatedDto<ClsMemberDto>
+        (
+            memberDtos,
+            new ClsPaginatedDto<ClsMemberDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, totalItems)
+        );
     }
 };

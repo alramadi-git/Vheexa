@@ -17,10 +17,11 @@ public class ClsVehicleModelFilterParameter
     }
     public string? Search { get; set; }
     public VehicleModelCATEGORY[] Categories { get; set; }
-    public ClsMinMax? Capacity { get; set; }
+    public string[] Manufacturers { get; set; }
+    public ClsMinMax Capacity { get; set; }
     public string[] Transmissions { get; set; }
     public string[] Fuels { get; set; }
-    public ClsMinMaxMoney? Price { get; set; }
-    public ClsMinMaxMoney? Discount { get; set; }
+    public ClsMinMaxMoney Price { get; set; }
+    public ClsMinMaxMoney Discount { get; set; }
     public STATUS? Status { get; set; }
 }

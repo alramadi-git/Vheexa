@@ -18,7 +18,7 @@ public class AppDBContext : DbContext
     public DbSet<ClsMemberEntity> Members { get; set; }
     public DbSet<ClsMemberHistoryEntity> MemberHistories { get; set; }
     public DbSet<ClsVehicleModelEntity> VehicleModels { get; set; }
-    public DbSet<ClsVehicleModelGalleryEntity> VehicleModelGallery { get; set; }
+    public DbSet<ClsVehicleModelGalleryEntity> VehicleModelGalleries { get; set; }
 
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 
