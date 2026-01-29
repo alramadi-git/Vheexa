@@ -1,5 +1,7 @@
 "use client";
 
+import { ePermission } from "@/validations/partner/role";
+
 import useService from "../hook";
 
 import {
@@ -17,7 +19,6 @@ import { tAccountModel } from "@/models/partner/account";
 
 import { tSuccessModel } from "@/models/success";
 import { tResponseOneService } from "@/services/service";
-import { ePermission } from "@/validations/partner/role";
 
 export default function useAuthenticationService() {
   const service = useService();
@@ -153,7 +154,6 @@ export default function useAuthenticationService() {
       };
     });
   }
-
   async function login(
     credentials: tLoginCredentials,
   ): Promise<tResponseOneService<tBaseAccountModel<tAccountModel>>> {
@@ -239,7 +239,6 @@ export default function useAuthenticationService() {
       };
     });
   }
-
   async function logout(): Promise<tResponseOneService<null>> {
     return service.catch<null>(async () => {
       if (process.env.NODE_ENV === "development") {

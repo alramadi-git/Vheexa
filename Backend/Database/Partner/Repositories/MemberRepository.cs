@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 using FuzzySharp;
 
+using Database.Partner.Contexts;
 using Database.Enums;
 
 using Database.Entities;
@@ -10,9 +13,6 @@ using Database.Partner.Dtos;
 
 using Database.Parameters;
 using Database.Partner.Parameters;
-
-using Database.Partner.Contexts;
-using Microsoft.AspNetCore.Identity;
 
 namespace Database.Partner.Repositories;
 
@@ -30,14 +30,14 @@ public class ClsMemberRepository
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
-            var roleTask = await _AppDBContext.PartnerRoles
+            var isRoleExist = await _AppDBContext.PartnerRoles
             .AnyAsync(partnerRole =>
                 partnerRole.Uuid == member.RoleUuid &&
                 partnerRole.PartnerUuid == memberContext.PartnerUuid &&
                 !partnerRole.IsDeleted
 
             );
-            var branchTask = await _AppDBContext.Branches
+            var isBranchExist = await _AppDBContext.Branches
             .AnyAsync(branch =>
                 branch.Uuid == member.BranchUuid &&
                 branch.PartnerUuid == memberContext.PartnerUuid &&
@@ -45,7 +45,7 @@ public class ClsMemberRepository
 
             );
 
-            if (!roleTask || !branchTask) throw new ArgumentException("Invalid (role or branch) uuid");
+            if (!isRoleExist || !isBranchExist) throw new ArgumentException("Invalid (role or branch) uuid");
 
             var hashedPassword = new PasswordHasher<object?>().HashPassword(null, member.Password);
             var newMember = new ClsMemberEntity
@@ -96,7 +96,7 @@ public class ClsMemberRepository
     }
     public async Task<ClsMemberDto> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
     {
-        var member = await _AppDBContext.Members
+        var memberDto = await _AppDBContext.Members
         .Where(partnerMember =>
             partnerMember.Uuid == memberUuid &&
             partnerMember.PartnerUuid == memberContext.PartnerUuid &&
@@ -136,7 +136,7 @@ public class ClsMemberRepository
         })
         .SingleAsync();
 
-        return member;
+        return memberDto;
     }
     public async Task DeleteOneAsync(Guid memberUuid, ClsMemberContext memberContext)
     {
@@ -184,7 +184,7 @@ public class ClsMemberRepository
     }
     public async Task<ClsOptionDto[]> ReadRolesAsync(Guid[] uuids, ClsMemberContext memberContext)
     {
-        return await _AppDBContext.PartnerRoles
+        var roleOptionDtos = await _AppDBContext.PartnerRoles
         .Where(partnerRole =>
             uuids.Contains(partnerRole.Uuid) &&
             partnerRole.PartnerUuid == memberContext.PartnerUuid &&
@@ -196,10 +196,12 @@ public class ClsMemberRepository
             Name = partnerRole.Role.Name
         })
         .ToArrayAsync();
+
+        return roleOptionDtos;
     }
     public async Task<ClsOptionDto[]> ReadBranchesAsync(Guid[] uuids, ClsMemberContext memberContext)
     {
-        return await _AppDBContext.Branches
+        var branchOptionDto = await _AppDBContext.Branches
         .Where(branch =>
             uuids.Contains(branch.Uuid) &&
             branch.PartnerUuid == memberContext.PartnerUuid &&
@@ -211,6 +213,8 @@ public class ClsMemberRepository
             Name = branch.Name
         })
         .ToArrayAsync();
+
+        return branchOptionDto;
     }
     public async Task<ClsPaginatedDto<ClsOptionDto>> SearchRolesAsync(ClsOptionFilterParameter filter, ClsOptionPaginationParameter pagination, ClsMemberContext memberContext)
     {
@@ -244,12 +248,16 @@ public class ClsMemberRepository
         .Take(5)
         .ToArray();
 
-
         return new ClsPaginatedDto<ClsOptionDto>
-        (
-            roleOptionDtos,
-            new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto(pagination.Page, 5, totalItems)
-        );
+        {
+            Data =roleOptionDtos,
+            Pagination = new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto
+            {
+                Page = pagination.Page,
+                PageSize = 5,
+                TotalItems = totalItems
+            }
+        };
     }
     public async Task<ClsPaginatedDto<ClsOptionDto>> SearchBranchesAsync(ClsOptionFilterParameter filter, ClsOptionPaginationParameter pagination, ClsMemberContext memberContext)
     {
@@ -283,27 +291,31 @@ public class ClsMemberRepository
         .Take(5)
         .ToArray();
 
-
         return new ClsPaginatedDto<ClsOptionDto>
-        (
-            branchOptionDtos,
-            new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto(pagination.Page, 5, totalItems)
-        );
+        {
+            Data = branchOptionDtos,
+            Pagination = new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto
+            {
+                Page = pagination.Page,
+                PageSize = 5,
+                TotalItems = totalItems
+            }
+        };
     }
     public async Task<ClsPaginatedDto<ClsMemberDto>> SearchAsync(ClsMemberFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
     {
-        var members = _AppDBContext.Members
+        var membersQuery = _AppDBContext.Members
         .Where(partnerMember =>
             partnerMember.PartnerUuid == memberContext.PartnerUuid &&
             !partnerMember.IsDeleted
         );
 
-        if (filter.Roles.Length > 0) members = members.Where(member => filter.Roles.Contains(member.RoleUuid));
-        if (filter.Branches.Length > 0) members = members.Where(member => filter.Branches.Contains(member.BranchUuid));
+        if (filter.Roles.Length > 0) membersQuery = membersQuery.Where(member => filter.Roles.Contains(member.RoleUuid));
+        if (filter.Branches.Length > 0) membersQuery = membersQuery.Where(member => filter.Branches.Contains(member.BranchUuid));
 
-        if (filter.Status != null) members = members.Where(member => member.Status == filter.Status);
+        if (filter.Status != null) membersQuery = membersQuery.Where(member => member.Status == filter.Status);
 
-        var memberDtos = await members
+        var memberDtos = await membersQuery
         .Select(member => new ClsMemberDto
         {
             Uuid = member.Uuid,
@@ -361,9 +373,14 @@ public class ClsMemberRepository
         .ToArray();
 
         return new ClsPaginatedDto<ClsMemberDto>
-        (
-            memberDtos,
-            new ClsPaginatedDto<ClsMemberDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, totalItems)
-        );
+        {
+            Data = memberDtos,
+            Pagination = new ClsPaginatedDto<ClsMemberDto>.ClsPaginationDto
+            {
+                Page = pagination.Page,
+                PageSize = pagination.PageSize,
+                TotalItems = totalItems
+            }
+        };
     }
 };

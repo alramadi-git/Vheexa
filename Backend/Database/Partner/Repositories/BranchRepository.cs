@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+
 using FuzzySharp;
 
+using Database.Partner.Contexts;
 using Database.Enums;
 
 using Database.Entities;
@@ -10,8 +12,6 @@ using Database.Partner.Dtos;
 
 using Database.Parameters;
 using Database.Partner.Parameters;
-
-using Database.Partner.Contexts;
 
 namespace Database.Partner.Repositories;
 
@@ -88,7 +88,7 @@ public class ClsBranchRepository
     }
     public async Task<ClsBranchDto> ReadOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {
-        var branch = await _AppDBContext.Branches
+        var branchDto = await _AppDBContext.Branches
         .Where(branch =>
             branch.Uuid == branchUuid &&
             branch.PartnerUuid == memberContext.PartnerUuid &&
@@ -115,7 +115,7 @@ public class ClsBranchRepository
         })
         .SingleAsync();
 
-        return branch;
+        return branchDto;
     }
     public async Task DeleteOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {
@@ -163,15 +163,15 @@ public class ClsBranchRepository
     }
     public async Task<ClsPaginatedDto<ClsBranchDto>> SearchAsync(ClsBranchFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
     {
-        var branches = _AppDBContext.Branches
+        var branchesQuery = _AppDBContext.Branches
         .Where(partnerBranch =>
             partnerBranch.PartnerUuid == memberContext.PartnerUuid &&
             !partnerBranch.IsDeleted
         );
 
-        if (filter.Status != null) branches = branches.Where(branch => branch.Status == filter.Status);
+        if (filter.Status != null) branchesQuery = branchesQuery.Where(branch => branch.Status == filter.Status);
 
-        var branchDtos = await branches
+        var branchDtos = await branchesQuery
         .Select(branch => new ClsBranchDto
         {
             Uuid = branch.Uuid,
@@ -222,9 +222,15 @@ public class ClsBranchRepository
         .Take(pagination.PageSize)
         .ToArray();
 
-        return new ClsPaginatedDto<ClsBranchDto>(
-            branchDtos,
-            new ClsPaginatedDto<ClsBranchDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, totalItems)
-        );
+        return new ClsPaginatedDto<ClsBranchDto>
+        {
+            Data = branchDtos,
+            Pagination = new ClsPaginatedDto<ClsBranchDto>.ClsPaginationDto
+            {
+                Page = pagination.Page,
+                PageSize = pagination.PageSize,
+                TotalItems = totalItems
+            }
+        };
     }
 };

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+
 using FuzzySharp;
 
+using Database.Partner.Contexts;
 using Database.Enums;
 
 using Database.Entities;
@@ -10,8 +12,6 @@ using Database.Partner.Dtos;
 
 using Database.Parameters;
 using Database.Partner.Parameters;
-
-using Database.Partner.Contexts;
 
 namespace Database.Partner.Repositories;
 
@@ -255,9 +255,15 @@ public class ClsVehicleModelRepository
         .Take(pagination.PageSize)
         .ToArray();
 
-        return new ClsPaginatedDto<ClsVehicleModelDto>(
-            vehicleModelDtos,
-            new ClsPaginatedDto<ClsVehicleModelDto>.ClsPaginationDto(pagination.Page, pagination.PageSize, totalItems)
-        );
+        return new ClsPaginatedDto<ClsVehicleModelDto>
+        {
+            Data = vehicleModelDtos,
+            Pagination = new ClsPaginatedDto<ClsVehicleModelDto>.ClsPaginationDto
+            {
+                Page = pagination.Page,
+                PageSize = pagination.PageSize,
+                TotalItems = totalItems
+            }
+        };
     }
 };

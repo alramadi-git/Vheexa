@@ -7,19 +7,8 @@ public class ClsPaginatedDto<TData>
         public int Page { get; init; }
         public int PageSize { get; init; }
         public int TotalItems { get; init; }
-        public ClsPaginationDto(int page, int pageSize, int totalItems)
-        {
-            Page = page;
-            PageSize = pageSize;
-            TotalItems = totalItems;
-        }
     }
     public TData[] Data { get; set; }
     public ClsPaginationDto Pagination { get; set; }
-    public ClsPaginatedDto(TData[] data, ClsPaginationDto pagination)
-    {
-        Data = data;
-        Pagination = pagination;
-    }
 }
 

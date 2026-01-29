@@ -1,9 +1,9 @@
-using System.Collections.Immutable;
-using Database.Enums;
+using Microsoft.EntityFrameworkCore;
+
 using Database.Partner.Contexts;
+using Database.Enums;
 
 using Database.Partner.Dtos;
-using Microsoft.EntityFrameworkCore;
 
 namespace Database.Partner.Repositories;
 
@@ -18,125 +18,93 @@ public class ClsOverviewRepository
 
     public async Task<ClsOverviewDto> ReadOneAsync(ClsMemberContext memberContext)
     {
-        var roles = _AppDBContext.PartnerRoles
+        var rolesQuery = _AppDBContext.PartnerRoles
         .Where(
             partnerRole => partnerRole.PartnerUuid == memberContext.PartnerUuid &&
             !partnerRole.IsDeleted
         );
-        var branches = _AppDBContext.Branches
+        var branchesQuery = _AppDBContext.Branches
         .Where(
             branch => branch.PartnerUuid == memberContext.PartnerUuid &&
             !branch.IsDeleted
         );
-        var members = _AppDBContext.Members
+        var membersQuery = _AppDBContext.Members
         .Where(
             member => member.PartnerUuid == memberContext.PartnerUuid &&
             !member.IsDeleted
         );
-        var vehicleModels = _AppDBContext.VehicleModels
+        var vehicleModelsQuery = _AppDBContext.VehicleModels
         .Where(
             vehicleModel => vehicleModel.PartnerUuid == memberContext.PartnerUuid &&
             !vehicleModel.IsDeleted
         );
 
-        var activeRolesCount = await roles
-        .Where(partnerRole => partnerRole.Status == STATUS.ACTIVE)
-        .CountAsync();
-        var inactiveRolesCount = await roles
-        .Where(partnerRole => partnerRole.Status == STATUS.ACTIVE)
-        .CountAsync();
+        var rolesStatus = await rolesQuery.Select(role => role.Status).ToArrayAsync();
+        var activeRolesCount = rolesStatus.Count(roleStatus => roleStatus == STATUS.ACTIVE);
+        var inactiveRolesCount = rolesStatus.Count(roleStatus => roleStatus == STATUS.INACTIVE);
 
-        var activeBranchesCount = await branches
-       .Where(branch => branch.Status == STATUS.ACTIVE)
-       .CountAsync();
-        var inactiveBranchesCount = await branches
-        .Where(branch => branch.Status == STATUS.ACTIVE)
-        .CountAsync();
+        var branchesStatus = await branchesQuery.Select(branch => branch.Status).ToArrayAsync();
+        var activeBranchesCount = branchesStatus.Count(branchStatus => branchStatus == STATUS.ACTIVE);
+        var inactiveBranchesCount = branchesStatus.Count(branchStatus => branchStatus == STATUS.INACTIVE);
 
-        var activeMembersCount = await members
-       .Where(member => member.Status == STATUS.ACTIVE)
-       .CountAsync();
-        var inactiveMembersCount = await members
-        .Where(member => member.Status == STATUS.ACTIVE)
-        .CountAsync();
 
-        var activeVehicleModelsCount = await vehicleModels
-       .Where(vehicleModel => vehicleModel.Status == STATUS.ACTIVE)
-       .CountAsync();
-        var inactiveVehicleModelsCount = await vehicleModels
-        .Where(vehicleModel => vehicleModel.Status == STATUS.ACTIVE)
-        .CountAsync();
+        var membersStatus = await membersQuery.Select(member => member.Status).ToArrayAsync();
+        var activeMembersCount = membersStatus.Count(memberStatus => memberStatus == STATUS.ACTIVE);
+        var inactiveMembersCount = membersStatus.Count(memberStatus => memberStatus == STATUS.INACTIVE);
 
-        var permissionsByRole = await _AppDBContext.PartnerRoles
-        .Where(
-            partnerRole => partnerRole.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerRole.IsDeleted
-        )
-        .Select(partnerRole => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+        var vehicleModelsStatus = await vehicleModelsQuery.Select(vehicleModel => vehicleModel.Status).ToArrayAsync();
+        var activeVehicleModelsCount = vehicleModelsStatus.Count(vehicleModelStatus => vehicleModelStatus == STATUS.ACTIVE);
+        var inactiveVehicleModelsCount = vehicleModelsStatus.Count(vehicleModelStatus => vehicleModelStatus == STATUS.INACTIVE);
+
+        var permissionsByRole = await rolesQuery
+        .Select(role => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
         {
-            GroupName = partnerRole.Role.Name,
+            GroupName = role.Role.Name,
             Count = _AppDBContext.RolePermissions
-            .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
+            .Where(rolePermission => rolePermission.RoleUuid == role.RoleUuid)
             .Count()
         })
         .ToArrayAsync();
 
-        var membersByRole = await _AppDBContext.PartnerRoles
-        .Where(
-            partnerRole => partnerRole.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerRole.IsDeleted
-        )
-        .Select(partnerRole => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+        var membersByRole = await rolesQuery
+        .Select(role => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
         {
-            GroupName = partnerRole.Role.Name,
-            Count = _AppDBContext.Members
-            .Where(member => member.RoleUuid == partnerRole.RoleUuid)
+            GroupName = role.Role.Name,
+            Count = membersQuery
+            .Where(member => member.RoleUuid == role.RoleUuid)
             .Count()
         })
         .ToArrayAsync();
 
-        var membersByBranch = await _AppDBContext.Branches
-       .Where(
-           branch => branch.PartnerUuid == memberContext.PartnerUuid &&
-           !branch.IsDeleted
-       )
+        var membersByBranch = await branchesQuery
        .Select(branch => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
        {
            GroupName = branch.Name,
-           Count = _AppDBContext.Members
+           Count = membersQuery
            .Where(member => member.BranchUuid == branch.Uuid)
            .Count()
        })
        .ToArrayAsync();
 
 
-        var vehicleModelPrices = await _AppDBContext.VehicleModels
-        .Where(
-            vehicleModel => vehicleModel.PartnerUuid == memberContext.PartnerUuid &&
-            !vehicleModel.IsDeleted
-        )
+        var vehicleModelPrices = await vehicleModelsQuery
         .Select(vehicleModel => vehicleModel.Price)
         .Order()
         .ToArrayAsync();
 
-        var vehicleModelMinPrice = vehicleModelPrices.DefaultIfEmpty(0).Min();
-        var vehicleModelMaxPrice = vehicleModelPrices.DefaultIfEmpty(0).Max();
+        var vehicleModelMinPrice = vehicleModelPrices.Length > 0 ? vehicleModelPrices[0] : 0;
+        var vehicleModelMaxPrice = vehicleModelPrices.Length > 0 ? vehicleModelPrices[^1] : 0;
         var vehicleModelAveragePrice = vehicleModelPrices.DefaultIfEmpty(0).Average();
 
-        var uniqueVehicleModelPrices = vehicleModelPrices.ToHashSet().Order().ToArray();
+        var uniqueVehicleModelPrices = vehicleModelPrices.Distinct().Order().ToArray();
         var chunks = (int)Math.Ceiling(uniqueVehicleModelPrices.Length / 3F);
 
         var ranges = new List<ClsOverviewDto.ClsPriceDistributionDto.ClsRangeDto>(chunks);
-        var visitedChunks = 0;
-        while (visitedChunks < chunks)
+        for (var i = 0; i < chunks; i++)
         {
-            decimal from = 0, to = 0;
-            for (int i = visitedChunks * 3, iter = 1; i < chunks || iter <= 3; i++, iter++)
-            {
-                var price = uniqueVehicleModelPrices[i];
-                from = from < price ? from : price;
-                to = to > price ? to : price;
-            }
+            decimal
+            from = uniqueVehicleModelPrices[i * 3],
+            to = uniqueVehicleModelPrices[Math.Min(i * 3 + 2, uniqueVehicleModelPrices.Length - 1)];
 
             ranges.Add(new ClsOverviewDto.ClsPriceDistributionDto.ClsRangeDto
             {
@@ -144,11 +112,17 @@ public class ClsOverviewRepository
                 To = to,
                 Count = 0
             });
-
-            visitedChunks++;
         }
 
-        //TODO: do the count logic to the ranges[i].count
+        foreach (var range in ranges)
+        {
+            range.Count = vehicleModelPrices
+            .Count(
+                vehicleModelPrice =>
+                vehicleModelPrice >= range.From &&
+                vehicleModelPrice <= range.To
+            );
+        }
 
         return new ClsOverviewDto
         {
