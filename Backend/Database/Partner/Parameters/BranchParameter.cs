@@ -18,3 +18,9 @@ public class ClsBranchCreateParameter
     public string Email { get; set; }
     public STATUS Status { get; set; }
 }
+
+public class ClsBranchFilterParameter
+{
+    public string? Search { get; set; }
+    public STATUS? Status { get; set; }
+}

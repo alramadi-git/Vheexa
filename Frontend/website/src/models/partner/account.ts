@@ -4,21 +4,19 @@ import { ePermission } from "@/validations/partner/role";
 
 
 type tAccountModel = {
-  uuid: string;
   partner: {
-    uuid: string;
     logo: tNullable<string>;
     banner: tNullable<string>;
     handle: string;
-    name: string;
+    organizationName: string;
     phoneNumber: string;
     email: string;
   };
-  avatar: tNullable<string>;
   role: {
     name: string;
     permissions: ePermission[];
   };
+  avatar: tNullable<string>;
   branch: {
     location: {
       country: string;

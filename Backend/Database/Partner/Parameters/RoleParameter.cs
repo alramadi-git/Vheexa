@@ -9,3 +9,10 @@ public class ClsRoleCreateParameter
     public PERMISSION[] Permissions { get; set; }
     public STATUS Status { get; set; }
 }
+
+public class ClsRoleFilterParameter
+{
+    public string? Name { get; set; }
+    public PERMISSION[] Permissions { get; set; }
+    public STATUS? Status { get; set; }
+}

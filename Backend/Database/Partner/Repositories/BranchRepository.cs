@@ -2,16 +2,18 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
+using Database.Parameters;
+using Database.Partner.Parameters;
+
 using Database.Partner.Contexts;
-using Database.Enums;
 
 using Database.Entities;
+
+using Database.Enums;
 
 using Database.Dtos;
 using Database.Partner.Dtos;
 
-using Database.Parameters;
-using Database.Partner.Parameters;
 
 namespace Database.Partner.Repositories;
 
@@ -89,6 +91,7 @@ public class ClsBranchRepository
     public async Task<ClsBranchDto> ReadOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {
         var branchDto = await _AppDBContext.Branches
+        .AsNoTracking()
         .Where(branch =>
             branch.Uuid == branchUuid &&
             branch.PartnerUuid == memberContext.PartnerUuid &&
@@ -113,7 +116,7 @@ public class ClsBranchRepository
             CreatedAt = branch.CreatedAt,
             UpdatedAt = branch.UpdatedAt,
         })
-        .SingleAsync();
+        .FirstAsync();
 
         return branchDto;
     }
@@ -123,12 +126,15 @@ public class ClsBranchRepository
         try
         {
             var branch = await _AppDBContext.Branches
-            .Where(partnerBranch =>
+                .Where(partnerBranch =>
                 partnerBranch.Uuid == branchUuid &&
                 partnerBranch.PartnerUuid == memberContext.PartnerUuid &&
                 !partnerBranch.IsDeleted
             )
-            .SingleAsync();
+            .FirstAsync();
+
+            if (branch.MemberCount > 0) throw new ArgumentException("Cannot delete branch with assigned members");
+
             branch.UpdatedAt = DateTime.UtcNow;
             branch.IsDeleted = true;
             branch.DeletedAt = DateTime.UtcNow;
@@ -164,6 +170,7 @@ public class ClsBranchRepository
     public async Task<ClsPaginatedDto<ClsBranchDto>> SearchAsync(ClsBranchFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
     {
         var branchesQuery = _AppDBContext.Branches
+        .AsNoTracking()
         .Where(partnerBranch =>
             partnerBranch.PartnerUuid == memberContext.PartnerUuid &&
             !partnerBranch.IsDeleted

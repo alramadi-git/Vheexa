@@ -7,33 +7,28 @@ import { zEmail, zPassword } from "../credentials";
 
 const zRegisterCredentials = z
   .object({
-    partner: z
-      .object({
-        logo: z.optional(
-          z.file().refine((value) => value.type.startsWith("image/"), {
-            error: "logo can only be an image(e.g, png, jpg, etc...).",
-          }),
-        ),
-        banner: z.optional(
-          z.file().refine((value) => value.type.startsWith("image/"), {
-            error: "banner can only be an image(e.g, png, jpg, etc...).",
-          }),
-        ),
-        handle: z
-          .string("handle is required.")
-          .nonempty("handle cannot be empty.")
-          .regex(
-            /^[a-z0-9-_]+$/,
-            "handle can only contain lowercase letters, numbers, hyphens and underscores.",
-          ),
-        name: z
-          .string("partner name is required.")
-          .nonempty("partner name cannot be empty."),
-        phoneNumber: zPhoneNumber,
-        email: zEmail,
-        password: zPassword,
-      })
-      .strict(),
+    logo: z.optional(
+      z.file().refine((value) => value.type.startsWith("image/"), {
+        error: "logo can only be an image(e.g, png, jpg, etc...).",
+      }),
+    ),
+    banner: z.optional(
+      z.file().refine((value) => value.type.startsWith("image/"), {
+        error: "banner can only be an image(e.g, png, jpg, etc...).",
+      }),
+    ),
+    handle: z
+      .string("handle is required.")
+      .nonempty("handle cannot be empty.")
+      .regex(
+        /^[a-z0-9-_]+$/,
+        "handle can only contain lowercase letters, numbers, hyphens and underscores.",
+      ),
+    organizationName: z
+      .string("partner name is required.")
+      .nonempty("partner name cannot be empty."),
+    phoneNumber: zPhoneNumber,
+    email: zEmail,
     branch: z
       .object({
         location: zLocationCreate,

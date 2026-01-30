@@ -73,7 +73,7 @@ export default function useOverview() {
               max: 650,
               average: 129,
               ranges: [
-                { from: 0, to: 49, count: 4 },
+                { from: 34, to: 49, count: 4 },
                 { from: 50, to: 99, count: 6 },
                 { from: 100, to: 149, count: 5 },
                 { from: 150, to: 199, count: 2 },

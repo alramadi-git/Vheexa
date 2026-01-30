@@ -2,16 +2,17 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
+using Database.Parameters;
+using Database.Partner.Parameters;
+
 using Database.Partner.Contexts;
-using Database.Enums;
 
 using Database.Entities;
 
+using Database.Enums;
+
 using Database.Dtos;
 using Database.Partner.Dtos;
-
-using Database.Parameters;
-using Database.Partner.Parameters;
 
 namespace Database.Partner.Repositories;
 
@@ -128,7 +129,7 @@ public class ClsVehicleModelRepository
             CreatedAt = vehicleModel.CreatedAt,
             UpdatedAt = vehicleModel.UpdatedAt,
         })
-        .SingleAsync();
+        .FirstAsync();
 
         return vehicleModel;
     }
@@ -143,7 +144,7 @@ public class ClsVehicleModelRepository
                 partnerVehicleModel.PartnerUuid == memberContext.PartnerUuid &&
                 !partnerVehicleModel.IsDeleted
             )
-            .SingleAsync();
+            .FirstAsync();
             vehicleModel.UpdatedAt = DateTime.UtcNow;
             vehicleModel.IsDeleted = true;
             vehicleModel.DeletedAt = DateTime.UtcNow;

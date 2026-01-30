@@ -34,14 +34,12 @@ export default function useAuthenticationService() {
           isSuccess: true,
           data: {
             account: {
-              uuid: "d3b07384-d9a5-4e3a-9f94-71f0aefc8b4f",
               avatar: null,
               partner: {
-                uuid: "6f1e8e41-5cac-4c06-9c78-2b1bb9a5f8ae",
                 logo: null,
                 banner: null,
                 handle: "vheexa",
-                name: "Vheexa",
+                organizationName: "Vheexa",
                 phoneNumber: "+12125550123",
                 email: "team@vheexa.com",
               },
@@ -91,19 +89,18 @@ export default function useAuthenticationService() {
       }
 
       const formData = new FormData();
-      if (credentials.partner.logo) {
-        formData.append("partner.logo", credentials.partner.logo);
+      if (credentials.logo) {
+        formData.append("logo", credentials.logo);
       }
 
-      if (credentials.partner.banner) {
-        formData.append("partner.banner", credentials.partner.banner);
+      if (credentials.banner) {
+        formData.append("banner", credentials.banner);
       }
 
-      formData.append("partner.handle", credentials.partner.handle);
-      formData.append("partner.name", credentials.partner.name);
-      formData.append("partner.phoneNumber", credentials.partner.phoneNumber);
-      formData.append("partner.email", credentials.partner.email);
-      formData.append("partner.password", credentials.partner.password);
+      formData.append("handle", credentials.handle);
+      formData.append("name", credentials.organizationName);
+      formData.append("phoneNumber", credentials.phoneNumber);
+      formData.append("email", credentials.email);
 
       formData.append(
         "branch.location.country",
@@ -165,14 +162,12 @@ export default function useAuthenticationService() {
           isSuccess: true,
           data: {
             account: {
-              uuid: "d3b07384-d9a5-4e3a-9f94-71f0aefc8b4f",
               avatar: null,
               partner: {
-                uuid: "6f1e8e41-5cac-4c06-9c78-2b1bb9a5f8ae",
                 logo: null,
                 banner: null,
                 handle: "vheexa",
-                name: "Vheexa",
+                organizationName: "Vheexa",
                 phoneNumber: "+12125550123",
                 email: "team@vheexa.com",
               },

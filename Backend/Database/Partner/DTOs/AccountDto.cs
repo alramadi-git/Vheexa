@@ -1,10 +1,18 @@
-using Database.Enums;
 using Database.Partner.Enums;
 
 namespace Database.Partner.Dtos;
 
-public class ClsMemberDto
+public class ClsAccountDto
 {
+    public class ClsPartnerDto
+    {
+        public string? Logo { get; set; }
+        public string? Banner { get; set; }
+        public string Handle { get; set; }
+        public string OrganizationName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+    }
     public class ClsRoleDto
     {
         public string Name { get; set; }
@@ -25,13 +33,10 @@ public class ClsMemberDto
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
     }
-    public Guid Uuid { get; set; }
-    public string? Avatar { get; set; }
+    public ClsPartnerDto Partner { get; set; }
     public ClsRoleDto Role { get; set; }
+    public string? Avatar { get; set; }
     public ClsBranchDto Branch { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
-    public STATUS Status { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
 }

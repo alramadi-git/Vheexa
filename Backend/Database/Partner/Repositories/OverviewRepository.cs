@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Database.Partner.Contexts;
+
 using Database.Enums;
 
 using Database.Partner.Dtos;
@@ -18,30 +19,34 @@ public class ClsOverviewRepository
 
     public async Task<ClsOverviewDto> ReadOneAsync(ClsMemberContext memberContext)
     {
-        var rolesQuery = _AppDBContext.PartnerRoles
+        var partnerRolesQuery = _AppDBContext.PartnerRoles
+        .AsNoTracking()
         .Where(
             partnerRole => partnerRole.PartnerUuid == memberContext.PartnerUuid &&
             !partnerRole.IsDeleted
         );
         var branchesQuery = _AppDBContext.Branches
+        .AsNoTracking()
         .Where(
             branch => branch.PartnerUuid == memberContext.PartnerUuid &&
             !branch.IsDeleted
         );
         var membersQuery = _AppDBContext.Members
+        .AsNoTracking()
         .Where(
             member => member.PartnerUuid == memberContext.PartnerUuid &&
             !member.IsDeleted
         );
         var vehicleModelsQuery = _AppDBContext.VehicleModels
+        .AsNoTracking()
         .Where(
             vehicleModel => vehicleModel.PartnerUuid == memberContext.PartnerUuid &&
             !vehicleModel.IsDeleted
         );
 
-        var rolesStatus = await rolesQuery.Select(role => role.Status).ToArrayAsync();
-        var activeRolesCount = rolesStatus.Count(roleStatus => roleStatus == STATUS.ACTIVE);
-        var inactiveRolesCount = rolesStatus.Count(roleStatus => roleStatus == STATUS.INACTIVE);
+        var partnerRolesStatus = await partnerRolesQuery.Select(partnerRole => partnerRole.Status).ToArrayAsync();
+        var activeRolesCount = partnerRolesStatus.Count(partnerRoleStatus => partnerRoleStatus == STATUS.ACTIVE);
+        var inactiveRolesCount = partnerRolesStatus.Count(partnerRoleStatus => partnerRoleStatus == STATUS.INACTIVE);
 
         var branchesStatus = await branchesQuery.Select(branch => branch.Status).ToArrayAsync();
         var activeBranchesCount = branchesStatus.Count(branchStatus => branchStatus == STATUS.ACTIVE);
@@ -56,22 +61,22 @@ public class ClsOverviewRepository
         var activeVehicleModelsCount = vehicleModelsStatus.Count(vehicleModelStatus => vehicleModelStatus == STATUS.ACTIVE);
         var inactiveVehicleModelsCount = vehicleModelsStatus.Count(vehicleModelStatus => vehicleModelStatus == STATUS.INACTIVE);
 
-        var permissionsByRole = await rolesQuery
-        .Select(role => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+        var permissionsByRole = await partnerRolesQuery
+        .Select(partnerRole => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
         {
-            GroupName = role.Role.Name,
+            GroupName = partnerRole.Role.Name,
             Count = _AppDBContext.RolePermissions
-            .Where(rolePermission => rolePermission.RoleUuid == role.RoleUuid)
+            .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
             .Count()
         })
         .ToArrayAsync();
 
-        var membersByRole = await rolesQuery
-        .Select(role => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+        var membersByRole = await partnerRolesQuery
+        .Select(partnerRole => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
         {
-            GroupName = role.Role.Name,
+            GroupName = partnerRole.Role.Name,
             Count = membersQuery
-            .Where(member => member.RoleUuid == role.RoleUuid)
+            .Where(member => member.RoleUuid == partnerRole.RoleUuid)
             .Count()
         })
         .ToArrayAsync();

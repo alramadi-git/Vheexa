@@ -87,13 +87,10 @@ export default function Form() {
   const { formState, control, trigger, handleSubmit } =
     useForm<tRegisterCredentials>({
       defaultValues: {
-        partner: {
-          handle: "",
-          name: "",
-          phoneNumber: "",
-          email: "",
-          password: "",
-        },
+        handle: "",
+        organizationName: "",
+        phoneNumber: "",
+        email: "",
         branch: {
           location: {
             country: "",
@@ -225,7 +222,7 @@ function PartnerStep({ control }: tStepProps) {
     <StepperContent value="partner" className="space-y-3">
       <Controller
         control={control}
-        name="partner.banner"
+        name="banner"
         render={({
           field: { value, onChange: setValue },
           fieldState: { invalid, error },
@@ -249,7 +246,7 @@ function PartnerStep({ control }: tStepProps) {
       <FieldGroup className="grid-cols-2 gap-3">
         <Controller
           control={control}
-          name="partner.logo"
+          name="logo"
           render={({
             field: { value, onChange: setValue },
             fieldState: { invalid, error },
@@ -273,7 +270,7 @@ function PartnerStep({ control }: tStepProps) {
         <FieldGroup className="flex justify-between gap-3">
           <Controller
             control={control}
-            name="partner.handle"
+            name="handle"
             render={({
               field: { value, onChange: setValue },
               fieldState: { invalid, error },
@@ -300,7 +297,7 @@ function PartnerStep({ control }: tStepProps) {
           />
           <Controller
             control={control}
-            name="partner.name"
+            name="organizationName"
             render={({
               field: { value, onChange: setValue },
               fieldState: { invalid, error },
@@ -328,7 +325,7 @@ function PartnerStep({ control }: tStepProps) {
           />
           <Controller
             control={control}
-            name="partner.phoneNumber"
+            name="phoneNumber"
             render={({
               field: { value, onChange: setValue },
               fieldState: { invalid, error },
@@ -355,61 +352,31 @@ function PartnerStep({ control }: tStepProps) {
           />
         </FieldGroup>
       </FieldGroup>
-      <FieldGroup className="flex justify-between gap-3">
-        <Controller
-          control={control}
-          name="partner.email"
-          render={({
-            field: { value, onChange: setValue },
-            fieldState: { invalid, error },
-          }) => (
-            <Field data-invalid={invalid}>
-              <FieldLabel htmlFor={`${id}-partner-email`} className="max-w-fit">
-                {tPartnerStep("email.label")}
-              </FieldLabel>
-              <FieldContent>
-                <FieldEmail
-                  id={`${id}-partner-email`}
-                  isRequired
-                  isInvalid={invalid}
-                  placeholder={tPartnerStep("email.placeholder")}
-                  defaultValue={value}
-                  onValueChange={setValue}
-                />
-              </FieldContent>
-              <FieldError errors={error} />
-            </Field>
-          )}
-        />
-        <Controller
-          control={control}
-          name="partner.password"
-          render={({
-            field: { value, onChange: setValue },
-            fieldState: { invalid, error },
-          }) => (
-            <Field data-invalid={invalid}>
-              <FieldLabel
-                htmlFor={`${id}-partner-password`}
-                className="max-w-fit"
-              >
-                {tPartnerStep("password.label")}
-              </FieldLabel>
-              <FieldContent>
-                <FieldPassword
-                  id={`${id}-partner-password`}
-                  isRequired
-                  isInvalid={invalid}
-                  placeholder={tPartnerStep("password.placeholder")}
-                  defaultValue={value}
-                  onValueChange={setValue}
-                />
-              </FieldContent>
-              <FieldError errors={error} />
-            </Field>
-          )}
-        />
-      </FieldGroup>
+      <Controller
+        control={control}
+        name="email"
+        render={({
+          field: { value, onChange: setValue },
+          fieldState: { invalid, error },
+        }) => (
+          <Field data-invalid={invalid}>
+            <FieldLabel htmlFor={`${id}-partner-email`} className="max-w-fit">
+              {tPartnerStep("email.label")}
+            </FieldLabel>
+            <FieldContent>
+              <FieldEmail
+                id={`${id}-partner-email`}
+                isRequired
+                isInvalid={invalid}
+                placeholder={tPartnerStep("email.placeholder")}
+                defaultValue={value}
+                onValueChange={setValue}
+              />
+            </FieldContent>
+            <FieldError errors={error} />
+          </Field>
+        )}
+      />
       <StepperNext asChild>
         <Button className="w-full">
           {tPartnerStep("next")}

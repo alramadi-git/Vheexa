@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+
 using Database.Entities;
 
 namespace Database;
 
 public class AppDBContext : DbContext
 {
-
     public DbSet<ClsHistoryEntity> Histories { get; set; }
     public DbSet<ClsRoleEntity> Roles { get; set; }
     public DbSet<ClsPermissionEntity> Permissions { get; set; }
@@ -24,11 +24,9 @@ public class AppDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            var uuidProperty = entityType.FindProperty("Uuid");
-            if (uuidProperty != null) modelBuilder.Entity(entityType.ClrType).HasKey("Uuid");
-        }
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes()) 
+            if (entityType.FindProperty("Uuid") != null) 
+                modelBuilder.Entity(entityType.ClrType).HasKey("Uuid");
 
         base.OnModelCreating(modelBuilder);
     }

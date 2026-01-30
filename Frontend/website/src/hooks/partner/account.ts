@@ -10,9 +10,7 @@ import {
   useDeleteCookie,
 } from "cookies-next/client";
 
-import { zAccount } from "@/validations/partner/account";
-
-import { tAccountModel } from "@/models/partner/account";
+import { tAccount, zAccount } from "@/validations/partner/account";
 
 import { tRegisterCredentials } from "@/validations/partner/authentication-credentials";
 import { tLoginCredentials } from "@/validations/credentials";
@@ -29,7 +27,7 @@ export default function useAccount() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const account: tNullable<tAccountModel> = useMemo(() => {
+  const account: tNullable<tAccount> = useMemo(() => {
     try {
       return zAccount.parse(JSON.parse(getCookie("member-account") ?? "null"));
     } catch {
@@ -38,7 +36,7 @@ export default function useAccount() {
   }, [getCookie]);
 
   function setAccount(
-    account: tAccountModel,
+    account: tAccount,
     token: string,
     rememberMe: boolean,
   ): boolean {
