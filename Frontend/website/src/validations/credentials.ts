@@ -14,7 +14,7 @@ const zPassword = z
     message: "Password must contain at least one uppercase letter.",
   })
   .regex(/[0-9]/, { message: "Password must contain at least one number." })
-  .regex(/[^A-Za-z0-9]/, {
+  .regex(/[^a-zA-Z0-9]/, {
     message: "Password must contain at least one special character.",
   })
   .regex(/^\S+$/, {

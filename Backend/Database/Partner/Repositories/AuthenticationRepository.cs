@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Database.Enums;
 using Database.Partner.Enums;
 
-using Database.Parameters;
-using Database.Partner.Parameters;
+using Database.Inputs;
+using Database.Partner.Inputs;
 
 using Database.Entities;
 
@@ -44,7 +44,7 @@ public class ClsAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<ClsAccountDto> RegisterAsync(ClsRegisterCredentialsParameter credentials)
+    public async Task<ClsAccountDto> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -196,7 +196,7 @@ public class ClsAuthenticationRepository
             throw;
         }
     }
-    public async Task<ClsAccountDto> LoginAsync(ClsLoginCredentialsParameter credentials)
+    public async Task<ClsAccountDto> LoginAsync(ClsLoginCredentialsInput credentials)
     {
         var member = await _AppDBContext.Members
         .AsNoTracking()

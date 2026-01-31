@@ -79,8 +79,6 @@ export default function useVehicleModels() {
       min: minCapacity,
       max: maxCapacity,
     },
-    transmissions,
-    fuels,
     price: {
       min: minPrice,
       max: maxPrice,
@@ -104,8 +102,6 @@ export default function useVehicleModels() {
       filter.categories.join(", "),
       filter.capacity.min,
       filter.capacity.max,
-      filter.transmissions.join(", "),
-      filter.fuels.join(", "),
       filter.price.min,
       filter.price.max,
       filter.discount.min,

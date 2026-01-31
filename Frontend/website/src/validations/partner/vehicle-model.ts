@@ -9,22 +9,31 @@ const zVehicleModelCreate = z
   .object({
     thumbnail: z
       .file("thumbnail is required.")
-      .refine((value) => value.type.startsWith("image/"), {
-        error: "thumbnail can only be an image(e.g, png, jpg, etc...).",
-      }),
+      .max(10 * 1024 * 1024, "avatar must be at most 10MB.")
+      .mime("image/"),
     gallery: z
       .array(
-        z.file().refine((value) => value.type.startsWith("image/"), {
-          error: "gallery image can only be an image(e.g, png, jpg, etc...).",
-        }),
+        z
+          .file()
+          .max(10 * 1024 * 1024, "avatar must be at most 10MB.")
+          .mime("image/"),
       )
       .max(25, "you can upload a maximum of 25 images."),
-    name: z.string("name is required.").nonempty("name cannot be empty."),
+    name: z
+      .string("name is required.")
+      .trim()
+      .min(2, "vehicle name must be at least 2 characters.")
+      .max(80, "vehicle name must be at most 80 characters."),
     description: z
       .string()
+      .trim()
       .max(750, "description cannot be longer than 750 characters."),
     category: z.enum(eVehicleModelCategoryModel, "invalid category."),
-    manufacturer: z.string().nonempty("manufacturer cannot be empty."),
+    manufacturer: z
+      .string()
+      .trim()
+      .min(2, "manufacturer must be at least 2 characters.")
+      .max(60, "manufacturer must be at most 60 characters."),
     marketLaunch: z
       .date("market launch is required.")
       .min(new Date(1980, 0, 1), "model year cannot be older than 1980.")
@@ -37,18 +46,32 @@ const zVehicleModelCreate = z
       .min(1, "capacity cannot be less than 1."),
     transmission: z
       .string("transmission is required.")
-      .nonempty("transmission cannot be empty."),
-    fuel: z.string("fuel is required.").nonempty("fuel cannot be empty."),
+      .trim()
+      .min(3, "transmission must be at least 3 characters.")
+      .max(30, "transmission must be at most 30 characters."),
+    fuel: z
+      .string("fuel is required.")
+      .trim()
+      .min(3, "fuel must be at least 3 characters.")
+      .max(30, "fuel must be at most 30 characters."),
     price: z
       .number("price is required.")
       .min(1, "price cannot be less than 1."),
     discount: z
       .number("discount is required.")
       .nonnegative("discount cannot be negative."),
-    tags: z.array(z.string().nonempty("tag cannot be empty.")),
+    tags: z
+      .array(
+        z
+          .string()
+          .trim()
+          .min(3, "tag must be at least 3 characters.")
+          .max(15, "tag must be at most 15 characters."),
+      )
+      .max(15, "you can add a maximum of 15 tags."),
     status: z.enum(eVehicleModelStatusModel, "status is required."),
   })
-  .refine((value) => value?.price - 0.99 > value?.discount, {
+  .refine((value) => value?.discount + 1 >= value?.price, {
     path: ["discount"],
     error: "discount should be less than the price at least 1 dollar.",
   })
@@ -57,10 +80,16 @@ type tVehicleModelCreate = z.infer<typeof zVehicleModelCreate>;
 
 const zVehicleModelFilter = z
   .object({
-    search: z.optional(z.string().nonempty("search can't be empty.")),
-    categories: z.array(
-      z.enum(eVehicleModelCategoryModel, "invalid category."),
+    search: z.optional(
+      z
+        .string()
+        .trim()
+        .nonempty("search must not be empty.")
+        .max(256, "search must be at most 256 characters."),
     ),
+    categories: z
+      .array(z.enum(eVehicleModelCategoryModel, "invalid category."))
+      .max(8, "you can filter a maximum of 8 categories."),
     capacity: z
       .object({
         min: z.optional(
@@ -72,20 +101,15 @@ const zVehicleModelFilter = z
       })
       .refine(
         (value) => {
-          if (value.min !== undefined && value.max !== undefined)
-            return value.min <= value.max;
-          return true;
+          if (value.min === undefined || value.max === undefined) return true;
+          return value.min <= value.max;
         },
         {
           path: ["capacity"],
           error:
-            "min capacity should be less than, equal to max capacity or leave it blank.",
+            "the minimum capacity must be less than or equal to the maximum capacity.",
         },
       ),
-    transmissions: z.array(
-      z.string().nonempty("transmission cannot be empty."),
-    ),
-    fuels: z.array(z.string().nonempty("fuel cannot be empty.")),
     price: z
       .object({
         min: z.optional(
@@ -97,14 +121,13 @@ const zVehicleModelFilter = z
       })
       .refine(
         (value) => {
-          if (value.min !== undefined && value.max !== undefined)
-            return value.min <= value.max;
-          return true;
+          if (value.min === undefined || value.max === undefined) return true;
+          return value.min <= value.max;
         },
         {
           path: ["price"],
           error:
-            "min price should be less than, equal to max price or leave it blank.",
+            "the minimum price must be less than or equal to the maximum price.",
         },
       ),
     discount: z
@@ -118,14 +141,13 @@ const zVehicleModelFilter = z
       })
       .refine(
         (value) => {
-          if (value.min !== undefined && value.max !== undefined)
-            return value.min <= value.max;
-          return true;
+          if (value.min === undefined || value.max === undefined) return true;
+          return value.min <= value.max;
         },
         {
           path: ["discount"],
           error:
-            "min discount should be less than, equal to max discount or leave it blank.",
+            "the minimum discount must be less than or equal to the maximum discount.",
         },
       ),
     status: z.optional(z.enum(eVehicleModelStatusModel, "invalid status.")),

@@ -1,6 +1,6 @@
 namespace Database.Partner.Enums;
 
-public enum VehicleModelCATEGORY
+public enum CATEGORY
 {
     CAR,
     VAN,

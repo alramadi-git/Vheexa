@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
-using Database.Parameters;
-using Database.Partner.Parameters;
+using Database.Inputs;
+using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
@@ -25,7 +25,7 @@ public class ClsVehicleModelRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsVehicleModelCreateParameter vehicleModel, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsVehicleModelCreateInput vehicleModel, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -176,7 +176,7 @@ public class ClsVehicleModelRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsVehicleModelDto>> SearchAsync(ClsVehicleModelFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedDto<ClsVehicleModelDto>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var vehicleModels = _AppDBContext.VehicleModels
         .Where(partnerVehicleModel =>
@@ -186,13 +186,8 @@ public class ClsVehicleModelRepository
 
         if (filter.Categories.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Categories.Contains(partnerVehicleModel.Category));
 
-        if (filter.Manufacturers.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Manufacturers.Contains(partnerVehicleModel.Manufacturer));
-
         if (filter.Capacity.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Capacity >= filter.Capacity.Min);
         if (filter.Capacity.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Capacity <= filter.Capacity.Max);
-
-        if (filter.Transmissions.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Transmissions.Contains(partnerVehicleModel.Transmission));
-        if (filter.Fuels.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Fuels.Contains(partnerVehicleModel.Fuel));
 
         if (filter.Price.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Price >= filter.Price.Min);
         if (filter.Price.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Price <= filter.Price.Max);
@@ -240,6 +235,9 @@ public class ClsVehicleModelRepository
             {
                 Fuzz.Ratio(vehicleModelDto.Name, filter.Search),
                 Fuzz.Ratio(vehicleModelDto.Description, filter.Search),
+                Fuzz.Ratio(vehicleModelDto.Manufacturer, filter.Search),
+                Fuzz.Ratio(vehicleModelDto.Transmission, filter.Search),
+                Fuzz.Ratio(vehicleModelDto.Fuel, filter.Search),
                 Fuzz.Ratio(vehicleModelDto.Tags, filter.Search),
             }
             .Max()

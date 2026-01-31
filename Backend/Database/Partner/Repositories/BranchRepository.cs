@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
-using Database.Parameters;
-using Database.Partner.Parameters;
+using Database.Inputs;
+using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
@@ -26,7 +26,7 @@ public class ClsBranchRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsBranchCreateParameter branchCreateDTO, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsBranchCreateInput branchCreateDTO, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -167,7 +167,7 @@ public class ClsBranchRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsBranchDto>> SearchAsync(ClsBranchFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedDto<ClsBranchDto>> SearchAsync(ClsBranchFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var branchesQuery = _AppDBContext.Branches
         .AsNoTracking()

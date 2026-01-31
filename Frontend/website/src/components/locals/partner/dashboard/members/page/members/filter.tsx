@@ -68,8 +68,8 @@ export default function Filter() {
   } = useForm<tMemberFilter>({
     defaultValues: {
       search: undefined,
-      roles: [],
-      branches: [],
+      roleUuids: [],
+      branchUuids: [],
       status: undefined,
     },
     resolver: zodResolver(zMemberFilter),
@@ -167,8 +167,8 @@ export default function Filter() {
     query.remove("pagination.page");
 
     query.set("filter.search", data.search);
-    query.set("filter.roles", data.roles);
-    query.set("filter.branches", data.branches);
+    query.set("filter.roles", data.roleUuids);
+    query.set("filter.branches", data.branchUuids);
     query.set("filter.status", data.status?.toString());
 
     query.apply();

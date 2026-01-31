@@ -6,18 +6,18 @@ import { zEmail, zPassword } from "../credentials";
 const zMemberCreate = z
   .object({
     avatar: z.nullable(
-      z.file().refine((value) => value.type.startsWith("image/"), {
-        error: "avatar can only be an image(e.g, png, jpg, etc...).",
-      }),
+      z
+        .file()
+        .max(5 * 1024 * 1024, "avatar must be at most 5MB.")
+        .mime("image/"),
     ),
-    role: z.uuid("role is required."),
-    branch: z.uuid("branch is required."),
+    roleUuid: z.uuid("role is required."),
+    branchUuid: z.uuid("branch is required."),
     username: z
       .string("username is required.")
-      .nonempty("username cannot be empty.")
-      .min(2, "username cannot be less than 2 characters.")
-      .max(20, "username cannot be more than 20 characters.")
-      .regex(/^[a-zA-Z\s]+$/, "username can only contain letters and spaces."),
+      .trim()
+      .min(3, "username must be at least 3 characters.")
+      .max(20, "username must be at most 20 characters."),
     email: zEmail,
     password: zPassword,
     status: z.enum(eMemberStatusModel, "status is required."),
@@ -27,9 +27,15 @@ type tMemberCreate = z.infer<typeof zMemberCreate>;
 
 const zMemberFilter = z
   .object({
-    search: z.optional(z.string().nonempty("username cannot be empty.")),
-    roles: z.array(z.uuid()),
-    branches: z.array(z.uuid()),
+    search: z.optional(
+      z
+        .string()
+        .trim()
+        .nonempty("search must not be empty.")
+        .max(256, "search must be at most 256 characters."),
+    ),
+    roleUuids: z.array(z.uuid()),
+    branchUuids: z.array(z.uuid()),
     status: z.optional(z.enum(eMemberStatusModel, "invalid status.")),
   })
   .strict();

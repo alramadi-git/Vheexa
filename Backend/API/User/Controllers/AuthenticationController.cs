@@ -6,7 +6,7 @@ using System.Security.Claims;
 using FluentValidation;
 using API.Models;
 using Database.Dtos;
-using Database.Parameters;
+using Database.Inputs;
 using Business.User.Services;
 using API.Configurations;
 using Database.Dtos.User;

@@ -5,8 +5,8 @@ using FluentValidation;
 using API.Models;
 using Business.User.Services;
 using Database.Dtos;
-using Database.Parameters;
-using Database.Parameters.User;
+using Database.Inputs;
+using Database.Inputs.User;
 using Database.Dtos.Partner;
 using Database.Dtos.User;
 

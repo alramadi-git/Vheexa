@@ -1,7 +1,7 @@
 import {
   tVehicleFilter,
   zVehicleFilter,
-} from "@/validations/user/vehicles/vehicle-filter";
+} from "@/validations/user/vehicle-filter";
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { tVehicleModelModel } from "@/models/user/vehicle-model";

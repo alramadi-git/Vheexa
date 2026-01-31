@@ -39,8 +39,8 @@ export default function useMembers() {
 
   const filter: tMemberFilter = {
     search,
-    roles,
-    branches,
+    roleUuids: roles,
+    branchUuids: branches,
     status,
   };
 
@@ -53,8 +53,8 @@ export default function useMembers() {
     queryKey: [
       "members",
       filter.search,
-      filter.roles.join(", "),
-      filter.branches.join(", "),
+      filter.roleUuids.join(", "),
+      filter.branchUuids.join(", "),
       filter.status,
       pagination.page,
       pagination.pageSize,

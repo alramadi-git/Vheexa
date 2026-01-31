@@ -6,8 +6,8 @@ using FuzzySharp;
 using Database.Enums;
 using Database.Partner.Enums;
 
-using Database.Parameters;
-using Database.Partner.Parameters;
+using Database.Inputs;
+using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
@@ -49,7 +49,7 @@ public class ClsMemberRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsMemberCreateParameter member, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsMemberCreateInput member, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -277,7 +277,7 @@ public class ClsMemberRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchRolesAsync(ClsOptionFilterParameter filter, ClsOptionPaginationParameter pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchRolesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
     {
         var roleOptionDtos = await _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -321,7 +321,7 @@ public class ClsMemberRepository
             }
         };
     }
-    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchBranchesAsync(ClsOptionFilterParameter filter, ClsOptionPaginationParameter pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchBranchesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
     {
         var branchOptionDtos = await _AppDBContext.Branches
         .AsNoTracking()
@@ -365,7 +365,7 @@ public class ClsMemberRepository
             }
         };
     }
-    public async Task<ClsPaginatedDto<ClsMemberDto>> SearchAsync(ClsMemberFilterParameter filter, ClsPaginationFilterParameter pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedDto<ClsMemberDto>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var membersQuery = _AppDBContext.Members
         .AsNoTracking()
@@ -374,8 +374,8 @@ public class ClsMemberRepository
             !partnerMember.IsDeleted
         );
 
-        if (filter.Roles.Length > 0) membersQuery = membersQuery.Where(member => filter.Roles.Contains(member.RoleUuid));
-        if (filter.Branches.Length > 0) membersQuery = membersQuery.Where(member => filter.Branches.Contains(member.BranchUuid));
+        if (filter.RoleUuids.Length > 0) membersQuery = membersQuery.Where(member => filter.RoleUuids.Contains(member.RoleUuid));
+        if (filter.BranchUuids.Length > 0) membersQuery = membersQuery.Where(member => filter.BranchUuids.Contains(member.BranchUuid));
 
         if (filter.Status != null) membersQuery = membersQuery.Where(member => member.Status == filter.Status);
 

@@ -2113,7 +2113,7 @@
                   "filter": {
                     "search": {
                       "label": "Search",
-                      "placeholder": "Search by Vehicle Model (e.g., Name, Description, Tags, etc...)"
+                      "placeholder": "Search by Vehicle Model (e.g., Name, Description, Transmission, Fuel, Tags, etc...)"
                     },
                     "categories": {
                       "label": "Categories",
@@ -2162,14 +2162,6 @@
                       "max": {
                         "placeholder": "Enter max capacity"
                       }
-                    },
-                    "transmissions": {
-                      "label": "Transmissions",
-                      "placeholder": "Enter transmissions (e.g., Manual, Automatic, CVT, etc...)"
-                    },
-                    "fuels": {
-                      "label": "Fuels",
-                      "placeholder": "Enter fuels (e.g., Petrol 95, Diesel, etc...)"
                     },
                     "price": {
                       "label": "Price (Min/Max)",

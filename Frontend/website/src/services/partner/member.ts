@@ -52,8 +52,8 @@ export default function useMemberService() {
         formData.append("avatar", member.avatar);
       }
 
-      formData.append("role", member.role);
-      formData.append("branch", member.branch);
+      formData.append("role", member.roleUuid);
+      formData.append("branch", member.branchUuid);
       formData.append("username", member.username);
       formData.append("email", member.email);
       formData.append("password", member.password);
@@ -542,9 +542,9 @@ export default function useMemberService() {
 
       clsQuery.set("Filter.Search", filter.search);
 
-      clsQuery.set("Filter.Roles", filter.roles);
+      clsQuery.set("Filter.Roles", filter.roleUuids);
 
-      clsQuery.set("Filter.Branches", filter.branches);
+      clsQuery.set("Filter.Branches", filter.branchUuids);
 
       clsQuery.set("Filter.Status", filter.status?.toString());
 

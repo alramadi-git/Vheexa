@@ -73,8 +73,6 @@ export default function Filter() {
         min: undefined,
         max: undefined,
       },
-      transmissions: [],
-      fuels: [],
       price: {
         min: undefined,
         max: undefined,
@@ -93,7 +91,7 @@ export default function Filter() {
   const capacityRef = useRef<tFieldNumberMinMaxRef>(null);
 
   const transmissionsRef = useRef<tFieldTagsRef>(null);
-  
+
   const fuelsRef = useRef<tFieldTagsRef>(null);
 
   const priceRef = useRef<tFieldNumberMinMaxRef>(null);
@@ -122,18 +120,18 @@ export default function Filter() {
       discountMaxQuery,
       statusQuery,
     ] = [
-        query.get("filter.search"),
-        query.getAll("filter.categories"),
-        query.get("filter.capacity.min"),
-        query.get("filter.capacity.max"),
-        query.getAll("filter.transmissions"),
-        query.getAll("filter.fuels"),
-        query.get("filter.price.min"),
-        query.get("filter.price.max"),
-        query.get("filter.discount.min"),
-        query.get("filter.discount.max"),
-        query.get("filter.status"),
-      ];
+      query.get("filter.search"),
+      query.getAll("filter.categories"),
+      query.get("filter.capacity.min"),
+      query.get("filter.capacity.max"),
+      query.getAll("filter.transmissions"),
+      query.getAll("filter.fuels"),
+      query.get("filter.price.min"),
+      query.get("filter.price.max"),
+      query.get("filter.discount.min"),
+      query.get("filter.discount.max"),
+      query.get("filter.status"),
+    ];
 
     const [
       search,
@@ -148,20 +146,20 @@ export default function Filter() {
       discountMax,
       status,
     ] = [
-        searchQuery !== null ? searchQuery : undefined,
-        categoriesQuery !== null
-          ? categoriesQuery.map((category) => Number(category))
-          : [],
-        capacityMinQuery !== null ? Number(capacityMinQuery) : undefined,
-        capacityMaxQuery !== null ? Number(capacityMaxQuery) : undefined,
-        transmissionsQuery,
-        fuelsQuery,
-        priceMinQuery !== null ? Number(priceMinQuery) : undefined,
-        priceMaxQuery !== null ? Number(priceMaxQuery) : undefined,
-        discountMinQuery !== null ? Number(discountMinQuery) : undefined,
-        discountMaxQuery !== null ? Number(discountMaxQuery) : undefined,
-        statusQuery !== null ? Number(discountMaxQuery) : undefined,
-      ];
+      searchQuery !== null ? searchQuery : undefined,
+      categoriesQuery !== null
+        ? categoriesQuery.map((category) => Number(category))
+        : [],
+      capacityMinQuery !== null ? Number(capacityMinQuery) : undefined,
+      capacityMaxQuery !== null ? Number(capacityMaxQuery) : undefined,
+      transmissionsQuery,
+      fuelsQuery,
+      priceMinQuery !== null ? Number(priceMinQuery) : undefined,
+      priceMaxQuery !== null ? Number(priceMaxQuery) : undefined,
+      discountMinQuery !== null ? Number(discountMinQuery) : undefined,
+      discountMaxQuery !== null ? Number(discountMaxQuery) : undefined,
+      statusQuery !== null ? Number(discountMaxQuery) : undefined,
+    ];
 
     setValue("search", search);
 
@@ -175,12 +173,6 @@ export default function Filter() {
     setValue("capacity.min", capacityMin);
     setValue("capacity.max", capacityMax);
     capacityRef.current?.setValue({ min: capacityMin, max: capacityMax });
-
-    setValue("transmissions", transmissions);
-    transmissionsRef.current?.setValues(transmissions);
-
-    setValue("fuels", fuels);
-    fuelsRef.current?.setValues(fuels);
 
     setValue("price.min", priceMin);
     setValue("price.max", priceMax);
@@ -216,8 +208,6 @@ export default function Filter() {
     query.remove("filter.categories");
     query.remove("filter.capacity.min");
     query.remove("filter.capacity.max");
-    query.remove("filter.transmissions");
-    query.remove("filter.fuels");
     query.remove("filter.price.min");
     query.remove("filter.price.max");
     query.remove("filter.discount.min");
@@ -232,14 +222,6 @@ export default function Filter() {
     );
     query.set("filter.capacity.min", data.capacity.min?.toString());
     query.set("filter.capacity.max", data.capacity.min?.toString());
-    query.set(
-      "filter.transmissions",
-      data.transmissions.map((transmission) => transmission.toString()),
-    );
-    query.set(
-      "filter.fuels",
-      data.fuels.map((fuel) => fuel.toString()),
-    );
     query.set("filter.price.min", data.price.min?.toString());
     query.set("filter.price.max", data.price.max?.toString());
     query.set("filter.discount.min", data.discount.min?.toString());
@@ -374,65 +356,6 @@ export default function Filter() {
             />
             <Controller
               control={control}
-              name="transmissions"
-              render={({
-                field: { value, onChange: setValue },
-                fieldState: { invalid, error },
-              }) => (
-                <Field>
-                  <FieldLabel
-                    aria-invalid={invalid}
-                    htmlFor={`${id}-transmission`}
-                    className="max-w-fit"
-                  >
-                    {tFilter("transmissions.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <FieldTags
-                      ref={transmissionsRef}
-                      id={`${id}-transmission`}
-                      placeholder={tFilter("transmissions.placeholder")}
-                      defaultValues={value}
-                      onValuesChange={(value) => setValue(value)}
-                    />
-                  </FieldContent>
-                  <FieldError errors={error} />
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="fuels"
-              render={({
-                field: { value, onChange: setValue },
-                fieldState: { invalid, error },
-              }) => (
-                <Field>
-                  <FieldLabel
-                    aria-invalid={invalid}
-                    htmlFor={`${id}-fuels`}
-                    className="max-w-fit"
-                  >
-                    {tFilter("fuels.label")}
-                  </FieldLabel>
-                  <FieldContent>
-                    <FieldTags
-                      ref={fuelsRef}
-                      id={`${id}-fuels`}
-                      placeholder={tFilter("fuels.placeholder")}
-                      defaultValues={value}
-                      onValuesChange={(value) => setValue(value)}
-                    />
-                  </FieldContent>
-                  <FieldError errors={error} />
-                </Field>
-              )}
-            />
-          </FieldGroup>
-
-          <FieldGroup className="grid-cols-2">
-            <Controller
-              control={control}
               name="price"
               render={({
                 field: { value: price, onChange: setValue },
@@ -517,7 +440,6 @@ export default function Filter() {
               )}
             />
           </FieldGroup>
-
           <Controller
             control={control}
             name="status"

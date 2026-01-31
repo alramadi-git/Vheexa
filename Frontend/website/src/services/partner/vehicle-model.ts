@@ -403,10 +403,6 @@ export default function useVehicleModelService() {
       clsQuery.set("Filter.Capacity.Min", filter.capacity.min?.toString());
       clsQuery.set("Filter.Capacity.Max", filter.capacity.max?.toString());
 
-      clsQuery.set("Filter.Transmissions", filter.transmissions);
-
-      clsQuery.set("Filter.Fuels", filter.fuels);
-
       clsQuery.set("Filter.Price.Min", filter.price.min?.toString());
       clsQuery.set("Filter.Price.Max", filter.price.max?.toString());
 

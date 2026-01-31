@@ -7,7 +7,7 @@ import useService from "../hook";
 import {
   tRegisterCredentials,
   zRegisterCredentials,
-} from "@/validations/partner/authentication-credentials";
+} from "@/validations/partner/authentication";
 
 import {
   tLoginCredentials,

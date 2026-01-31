@@ -12,7 +12,7 @@ import {
 
 import { tAccount, zAccount } from "@/validations/partner/account";
 
-import { tRegisterCredentials } from "@/validations/partner/authentication-credentials";
+import { tRegisterCredentials } from "@/validations/partner/authentication";
 import { tLoginCredentials } from "@/validations/credentials";
 
 import { tResponseOneService } from "@/services/service";
