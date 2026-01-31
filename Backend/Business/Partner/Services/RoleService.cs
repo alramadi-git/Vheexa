@@ -1,4 +1,3 @@
-
 using Database.Partner.Repositories;
 
 using Business.Partner.Validations.Guards;
