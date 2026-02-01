@@ -1,16 +1,9 @@
-
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using Business.Validations;
-using Business.User.Services;
-using Business.User.Validations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 using Database;
-using API.Configurations;
-using API.Middlewares;
-using Database.Repositories.User;
 
 namespace API;
 
@@ -20,52 +13,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Register configuration objects
-        var APIKey = builder.Configuration.GetSection("ApiKeys").Get<ApiKeys>()!;
-        builder.Services.AddSingleton<ApiKeys>(APIKey);
-
-        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
-        builder.Services.AddSingleton<JwtSettings>(jwtSettings);
-
-        // Register middlewares
-        builder.Services.AddScoped<FrontendAPIKeyMiddleware>();
-
-        // Add Authentication (JWT)
-        builder.Services.AddAuthentication()
-        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateLifetime = true,
-
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtSettings.Issuer,
-
-                    ValidateAudience = true,
-                    ValidAudience = jwtSettings.Audience,
-
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = jwtSettings.SymmetricSecurityKey()
-                };
-            });
-
-
-        // Register validations
-        builder.Services.AddScoped<LoginCredentialsValidation>();
-
-        builder.Services.AddScoped<VehicleFiltersValidation>();
-        builder.Services.AddScoped<PaginationValidation>();
-
-
         // Register database
         builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
 
-        // Register business & data layer services
-        builder.Services.AddScoped<AuthenticationService>();
-        builder.Services.AddScoped<AuthenticationRepository>();
+        // Register business layer
+        builder.Services.AddScoped<ClsRepository>();
 
-        builder.Services.AddScoped<VehicleService>();
-        builder.Services.AddScoped<VehicleRepository>();
+        // Register database layer 
+        builder.Services.AddScoped<ClsRepository>();
 
         builder.Services.AddControllers();
 
@@ -84,7 +39,6 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseMiddleware<FrontendAPIKeyMiddleware>();
         app.UseAuthorization();
 
         app.MapControllers();

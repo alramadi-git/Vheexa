@@ -16,26 +16,11 @@ class ClsFetch {
   }
   public async post(
     path: string,
-    data: BodyInit,
+    data?: BodyInit,
     token?: string,
   ): Promise<Response> {
     return await fetch(`${this._domain}${path}`, {
       method: "POST",
-      headers: token
-        ? {
-            Authorization: `Bearer ${token}`,
-          }
-        : undefined,
-      body: data,
-    });
-  }
-  public async patch(
-    path: string,
-    data: BodyInit,
-    token?: string,
-  ): Promise<Response> {
-    return await fetch(`${this._domain}${path}`, {
-      method: "PATCH",
       headers: token
         ? {
             Authorization: `Bearer ${token}`,

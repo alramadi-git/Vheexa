@@ -6,7 +6,7 @@ using Business.Partner.Validations.Guards;
 using Business.Inputs;
 using Business.Partner.Inputs;
 
-using Database.Partner.Dtos;
+using Database.Partner.Models;
 
 namespace Business.Partner.Services;
 
@@ -22,14 +22,19 @@ public class ClsAuthenticationService
         _Guard = guard;
     }
 
-    public async Task<ClsAccountDto> RegisterAsync(ClsRegisterCredentialsInput credentials)
+    public async Task<ClsMemberAccountModel> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
-        // TODO: make the ImageKit integration and replace the "url" with a real one 
         await _Guard.RegisterAsync(credentials);
+
+        // TODO: make the ImageKit integration and replace the "url" with a real one
+
+        var path = "/partners/{uuid}";
+        if (credentials.Logo != null) { }
+        if (credentials.Banner != null) { }
+        if (credentials.Member.Avatar != null) { }
+
         return await _Repository.RegisterAsync(new Database.Partner.Inputs.ClsRegisterCredentialsInput
         {
-            Logo = "url",
-            Banner = "url",
             Handle = credentials.Handle,
             OrganizationName = credentials.OrganizationName,
             PhoneNumber = credentials.PhoneNumber,
@@ -50,14 +55,13 @@ public class ClsAuthenticationService
             },
             Member = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsMemberCreateInput
             {
-                Avatar = "url",
                 Username = credentials.Member.Username,
                 Email = credentials.Member.Email,
                 Password = credentials.Member.Password,
             }
         });
     }
-    public async Task<ClsAccountDto> LoginAsync(ClsLoginCredentialsInput credentials)
+    public async Task<ClsMemberAccountModel> LoginAsync(ClsLoginCredentialsInput credentials)
     {
         await _Guard.LoginAsync(credentials);
         return await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput

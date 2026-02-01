@@ -7,8 +7,8 @@ using Database.Partner.Contexts;
 using Business.Inputs;
 using Business.Partner.Inputs;
 
-using Database.Dtos;
-using Database.Partner.Dtos;
+using Database.Partner.Models;
+using Database.Models;
 
 namespace Business.Partner.Services;
 
@@ -16,7 +16,6 @@ public class ClsVehicleModelService
 {
     private readonly ClsVehicleModelRepository _Repository;
     private readonly ClsVehicleModelGuard _Guard;
-
 
     public ClsVehicleModelService(ClsVehicleModelRepository repository, ClsVehicleModelGuard guard)
     {
@@ -49,7 +48,7 @@ public class ClsVehicleModelService
             memberContext
         );
     }
-    public async Task<ClsVehicleModelDto> ReadOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
+    public async Task<ClsVehicleModelModel> ReadOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
     {
         return await _Repository.ReadOneAsync(vehicleModelUuid, memberContext);
     }
@@ -57,7 +56,7 @@ public class ClsVehicleModelService
     {
         await _Repository.DeleteOneAsync(vehicleModelUuid, memberContext);
     }
-    public async Task<ClsPaginatedDto<ClsVehicleModelDto>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
         return await _Repository.SearchAsync(

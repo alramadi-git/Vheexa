@@ -4,7 +4,7 @@ using Database.Partner.Contexts;
 
 using Database.Enums;
 
-using Database.Partner.Dtos;
+using Database.Partner.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -17,7 +17,7 @@ public class ClsOverviewRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<ClsOverviewDto> ReadOneAsync(ClsMemberContext memberContext)
+    public async Task<ClsOverviewModel> ReadOneAsync(ClsMemberContext memberContext)
     {
         var partnerRolesQuery = _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -62,7 +62,7 @@ public class ClsOverviewRepository
         var inactiveVehicleModelsCount = vehicleModelsStatus.Count(vehicleModelStatus => vehicleModelStatus == STATUS.INACTIVE);
 
         var permissionsByRole = await partnerRolesQuery
-        .Select(partnerRole => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+        .Select(partnerRole => new ClsOverviewModel.ClsEntitiesCountModel.ClsEntityCountModel
         {
             GroupName = partnerRole.Role.Name,
             Count = _AppDBContext.RolePermissions
@@ -72,7 +72,7 @@ public class ClsOverviewRepository
         .ToArrayAsync();
 
         var membersByRole = await partnerRolesQuery
-        .Select(partnerRole => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+        .Select(partnerRole => new ClsOverviewModel.ClsEntitiesCountModel.ClsEntityCountModel
         {
             GroupName = partnerRole.Role.Name,
             Count = membersQuery
@@ -82,7 +82,7 @@ public class ClsOverviewRepository
         .ToArrayAsync();
 
         var membersByBranch = await branchesQuery
-       .Select(branch => new ClsOverviewDto.ClsEntitiesCountDto.ClsEntityCountDto
+       .Select(branch => new ClsOverviewModel.ClsEntitiesCountModel.ClsEntityCountModel
        {
            GroupName = branch.Name,
            Count = membersQuery
@@ -104,14 +104,14 @@ public class ClsOverviewRepository
         var uniqueVehicleModelPrices = vehicleModelPrices.Distinct().Order().ToArray();
         var chunks = (int)Math.Ceiling(uniqueVehicleModelPrices.Length / 3F);
 
-        var ranges = new List<ClsOverviewDto.ClsPriceDistributionDto.ClsRangeDto>(chunks);
+        var ranges = new List<ClsOverviewModel.ClsPriceDistributionModel.ClsRangeModel>(chunks);
         for (var i = 0; i < chunks; i++)
         {
             decimal
             from = uniqueVehicleModelPrices[i * 3],
             to = uniqueVehicleModelPrices[Math.Min(i * 3 + 2, uniqueVehicleModelPrices.Length - 1)];
 
-            ranges.Add(new ClsOverviewDto.ClsPriceDistributionDto.ClsRangeDto
+            ranges.Add(new ClsOverviewModel.ClsPriceDistributionModel.ClsRangeModel
             {
                 From = from,
                 To = to,
@@ -129,42 +129,42 @@ public class ClsOverviewRepository
             );
         }
 
-        return new ClsOverviewDto
+        return new ClsOverviewModel
         {
-            EntityOverviews = new ClsOverviewDto.ClsEntityOverviewsDto
+            EntityOverviews = new ClsOverviewModel.ClsEntityOverviewsModel
             {
-                Roles = new ClsOverviewDto.ClsEntityOverviewsDto.ClsEntityOverviewDto
+                Roles = new ClsOverviewModel.ClsEntityOverviewsModel.ClsEntityOverviewModel
                 {
                     Active = activeRolesCount,
                     Inactive = inactiveRolesCount,
                     Total = activeRolesCount + inactiveRolesCount
                 },
-                Branches = new ClsOverviewDto.ClsEntityOverviewsDto.ClsEntityOverviewDto
+                Branches = new ClsOverviewModel.ClsEntityOverviewsModel.ClsEntityOverviewModel
                 {
                     Active = activeBranchesCount,
                     Inactive = inactiveBranchesCount,
                     Total = activeBranchesCount + inactiveBranchesCount
                 },
-                Members = new ClsOverviewDto.ClsEntityOverviewsDto.ClsEntityOverviewDto
+                Members = new ClsOverviewModel.ClsEntityOverviewsModel.ClsEntityOverviewModel
                 {
                     Active = activeMembersCount,
                     Inactive = inactiveMembersCount,
                     Total = activeMembersCount + inactiveMembersCount
                 },
-                VehicleModels = new ClsOverviewDto.ClsEntityOverviewsDto.ClsEntityOverviewDto
+                VehicleModels = new ClsOverviewModel.ClsEntityOverviewsModel.ClsEntityOverviewModel
                 {
                     Active = activeVehicleModelsCount,
                     Inactive = inactiveVehicleModelsCount,
                     Total = activeVehicleModelsCount + inactiveVehicleModelsCount
                 }
             },
-            GroupedCounts = new ClsOverviewDto.ClsEntitiesCountDto
+            GroupedCounts = new ClsOverviewModel.ClsEntitiesCountModel
             {
                 PermissionsByRole = permissionsByRole,
                 MembersByBranch = membersByBranch,
                 MembersByRole = membersByRole
             },
-            VehicleModelPriceDistribution = new ClsOverviewDto.ClsPriceDistributionDto
+            VehicleModelPriceDistribution = new ClsOverviewModel.ClsPriceDistributionModel
             {
                 Min = vehicleModelMinPrice,
                 Max = vehicleModelMaxPrice,

@@ -1,18 +1,18 @@
 using Database.Enums;
 using Database.Partner.Enums;
 
-namespace Database.Partner.Dtos;
+namespace Database.Partner.Models;
 
-public class ClsVehicleModelDto
+public class ClsVehicleModelModel
 {
-    public class ClsGalleryDto
+    public class ClsGalleryModel
     {
         public Guid Uuid { get; set; }
         public string Url { get; set; }
     }
     public Guid Uuid { get; set; }
     public string? Thumbnail { get; set; }
-    public ClsGalleryDto[] Gallery { get; set; }
+    public ClsGalleryModel[] Gallery { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public CATEGORY Category{ get; set; }

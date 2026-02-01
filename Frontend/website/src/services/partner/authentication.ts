@@ -14,19 +14,21 @@ import {
   zLoginCredentials,
 } from "@/validations/credentials";
 
-import { tBaseAccountModel } from "@/models/base-account";
-import { tAccountModel } from "@/models/partner/account";
+import { tAccountModel } from "@/models/account";
+import { tMemberAccountModel } from "@/models/partner/member-account";
 
 import { tSuccessModel } from "@/models/success";
 import { tResponseOneService } from "@/services/service";
+import useToken from "@/hooks/partner/token";
 
 export default function useAuthenticationService() {
+  const { token } = useToken();
   const service = useService();
 
   async function register(
     credentials: tRegisterCredentials,
-  ): Promise<tResponseOneService<tBaseAccountModel<tAccountModel>>> {
-    return service.catch<tBaseAccountModel<tAccountModel>>(async () => {
+  ): Promise<tResponseOneService<tAccountModel<tMemberAccountModel>>> {
+    return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
 
       if (process.env.NODE_ENV === "development") {
@@ -142,7 +144,7 @@ export default function useAuthenticationService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessModel<tBaseAccountModel<tAccountModel>> =
+      const result: tSuccessModel<tAccountModel<tMemberAccountModel>> =
         await response.json();
 
       return {
@@ -153,8 +155,8 @@ export default function useAuthenticationService() {
   }
   async function login(
     credentials: tLoginCredentials,
-  ): Promise<tResponseOneService<tBaseAccountModel<tAccountModel>>> {
-    return service.catch<tBaseAccountModel<tAccountModel>>(async () => {
+  ): Promise<tResponseOneService<tAccountModel<tMemberAccountModel>>> {
+    return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
 
       if (process.env.NODE_ENV === "development") {
@@ -225,7 +227,7 @@ export default function useAuthenticationService() {
         throw new Error(await response.text());
       }
 
-      const result: tSuccessModel<tBaseAccountModel<tAccountModel>> =
+      const result: tSuccessModel<tAccountModel<tMemberAccountModel>> =
         await response.json();
 
       return {
@@ -243,8 +245,10 @@ export default function useAuthenticationService() {
         };
       }
 
-      const response = await service.fetch.get(
+      const response = await service.fetch.post(
         "/partner/authentication/logout",
+        undefined,
+        token ?? undefined,
       );
 
       if (!response.ok) {

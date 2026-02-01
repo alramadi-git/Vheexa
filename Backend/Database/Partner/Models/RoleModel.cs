@@ -1,9 +1,9 @@
 using Database.Enums;
 using Database.Partner.Enums;
 
-namespace Database.Partner.Dtos;
+namespace Database.Partner.Models;
 
-public class ClsRoleDto
+public class ClsRoleModel
 {
     public Guid Uuid { get; set; }
     public string Name { get; set; }

@@ -1,20 +1,23 @@
 "use client";
 
+import { tNullable } from "@/types/nullish";
+
 import {
   useSetCookie,
   useGetCookie,
-  useDeleteCookie
+  useDeleteCookie,
 } from "cookies-next/client";
 
-import { zJwt } from "@/validations/jwt";
 import { eDuration } from "@/enums/duration";
+
+import { zJwt } from "@/validations/jwt";
 
 export default function useToken() {
   const setCookie = useSetCookie();
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const token = getCookie("member-access-token");
+  const token: tNullable<string> = getCookie("member-access-token") ?? null;
 
   function setToken(token: string, rememberMe: boolean): boolean {
     removeToken();
@@ -28,7 +31,7 @@ export default function useToken() {
       secure: true,
       priority: "high",
       sameSite: "strict",
-      maxAge: rememberMe ? eDuration.month : eDuration.day
+      maxAge: rememberMe ? eDuration.month : eDuration.day,
     });
 
     return true;

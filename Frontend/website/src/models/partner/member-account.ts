@@ -2,8 +2,7 @@ import { tNullable } from "@/types/nullish";
 
 import { ePermission } from "@/validations/partner/role";
 
-
-type tAccountModel = {
+type tMemberAccountModel = {
   partner: {
     logo: tNullable<string>;
     banner: tNullable<string>;
@@ -33,4 +32,4 @@ type tAccountModel = {
   email: string;
 };
 
-export type { tAccountModel };
+export type { tMemberAccountModel };

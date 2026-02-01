@@ -1,10 +1,10 @@
 using Database.Enums;
 
-namespace Database.Partner.Dtos;
+namespace Database.Partner.Models;
 
-public class ClsBranchDto
+public class ClsBranchModel
 {
-    public class ClsLocationDto
+    public class ClsLocationModel
     {
         public string Country { get; set; }
         public string City { get; set; }
@@ -13,7 +13,7 @@ public class ClsBranchDto
         public double Longitude { get; set; }
     }
     public Guid Uuid { get; set; }
-    public ClsLocationDto Location { get; set; }
+    public ClsLocationModel Location { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }

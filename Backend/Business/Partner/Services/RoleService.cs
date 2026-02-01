@@ -6,9 +6,8 @@ using Database.Partner.Contexts;
 
 using Business.Inputs;
 using Business.Partner.Inputs;
-
-using Database.Dtos;
-using Database.Partner.Dtos;
+using Database.Partner.Models;
+using Database.Models;
 
 namespace Business.Partner.Services;
 
@@ -36,7 +35,7 @@ public class ClsRoleService
             memberContext
         );
     }
-    public async Task<ClsRoleDto> ReadOneAsync(Guid roleUuid, ClsMemberContext memberContext)
+    public async Task<ClsRoleModel> ReadOneAsync(Guid roleUuid, ClsMemberContext memberContext)
     {
         return await _Repository.ReadOneAsync(roleUuid, memberContext);
     }
@@ -44,7 +43,7 @@ public class ClsRoleService
     {
         await _Repository.DeleteOneAsync(roleUuid, memberContext);
     }
-    public async Task<ClsPaginatedDto<ClsRoleDto>> SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsRoleModel>> SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
         return await _Repository.SearchAsync(

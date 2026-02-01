@@ -1,6 +1,6 @@
-namespace Database.Partner.Dtos;
+namespace Database.Partner.Models;
 
-public class ClsOptionDto
+public class ClsOptionModel
 {
     public Guid Uuid { get; set; }
     public string Name { get; set; }

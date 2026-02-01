@@ -12,9 +12,8 @@ using Database.Partner.Inputs;
 using Database.Partner.Contexts;
 
 using Database.Entities;
-
-using Database.Dtos;
-using Database.Partner.Dtos;
+using Database.Partner.Models;
+using Database.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -78,7 +77,6 @@ public class ClsMemberRepository
             {
                 Uuid = Guid.NewGuid(),
                 PartnerUuid = memberContext.PartnerUuid,
-                Avatar = member.Avatar,
                 RoleUuid = member.RoleUuid,
                 BranchUuid = member.BranchUuid,
                 Username = member.Username,
@@ -120,7 +118,7 @@ public class ClsMemberRepository
             throw;
         }
     }
-    public async Task<ClsOptionDto[]> ReadRolesAsync(Guid[] uuids, ClsMemberContext memberContext)
+    public async Task<ClsOptionModel[]> ReadRolesAsync(Guid[] uuids, ClsMemberContext memberContext)
     {
         var roleOptionDtos = await _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -129,7 +127,7 @@ public class ClsMemberRepository
             partnerRole.PartnerUuid == memberContext.PartnerUuid &&
             !partnerRole.IsDeleted
         )
-        .Select(partnerRole => new ClsOptionDto
+        .Select(partnerRole => new ClsOptionModel
         {
             Uuid = partnerRole.Uuid,
             Name = partnerRole.Role.Name
@@ -138,7 +136,7 @@ public class ClsMemberRepository
 
         return roleOptionDtos;
     }
-    public async Task<ClsOptionDto[]> ReadBranchesAsync(Guid[] uuids, ClsMemberContext memberContext)
+    public async Task<ClsOptionModel[]> ReadBranchesAsync(Guid[] uuids, ClsMemberContext memberContext)
     {
         var branchOptionDto = await _AppDBContext.Branches
         .AsNoTracking()
@@ -147,7 +145,7 @@ public class ClsMemberRepository
             branch.PartnerUuid == memberContext.PartnerUuid &&
             !branch.IsDeleted
         )
-        .Select(branch => new ClsOptionDto
+        .Select(branch => new ClsOptionModel
         {
             Uuid = branch.Uuid,
             Name = branch.Name
@@ -157,7 +155,7 @@ public class ClsMemberRepository
         return branchOptionDto;
     }
 
-    public async Task<ClsMemberDto> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
+    public async Task<ClsMemberModel> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
     {
         var member = await _AppDBContext.Members
         .AsNoTracking()
@@ -200,20 +198,20 @@ public class ClsMemberRepository
         })
         .FirstAsync();
 
-        var memberDto = new ClsMemberDto
+        var memberDto = new ClsMemberModel
         {
             Uuid = member.Uuid,
             Avatar = member.Avatar,
-            Role = new ClsMemberDto.ClsRoleDto
+            Role = new ClsMemberModel.ClsRoleModel
             {
                 Name = member.Role.Name,
                 Permissions = member.Role.PermissionUuids
                 .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
                 .ToArray(),
             },
-            Branch = new ClsMemberDto.ClsBranchDto
+            Branch = new ClsMemberModel.ClsBranchModel
             {
-                Location = new ClsMemberDto.ClsBranchDto.ClsLocationDto
+                Location = new ClsMemberModel.ClsBranchModel.ClsLocationModel
                 {
                     Country = member.Branch.Location.Country,
                     City = member.Branch.Location.City,
@@ -277,7 +275,7 @@ public class ClsMemberRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchRolesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsOptionModel>> SearchRolesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
     {
         var roleOptionDtos = await _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -285,7 +283,7 @@ public class ClsMemberRepository
             partnerRole.PartnerUuid == memberContext.PartnerUuid &&
             !partnerRole.IsDeleted
         )
-        .Select(role => new ClsOptionDto
+        .Select(role => new ClsOptionModel
         {
             Uuid = role.Uuid,
             Name = role.Role.Name
@@ -310,10 +308,10 @@ public class ClsMemberRepository
         .Take(5)
         .ToArray();
 
-        return new ClsPaginatedDto<ClsOptionDto>
+        return new ClsPaginatedModel<ClsOptionModel>
         {
             Data = roleOptionDtos,
-            Pagination = new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto
+            Pagination = new ClsPaginatedModel<ClsOptionModel>.ClsPaginationModel
             {
                 Page = pagination.Page,
                 PageSize = 5,
@@ -321,7 +319,7 @@ public class ClsMemberRepository
             }
         };
     }
-    public async Task<ClsPaginatedDto<ClsOptionDto>> SearchBranchesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsOptionModel>> SearchBranchesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
     {
         var branchOptionDtos = await _AppDBContext.Branches
         .AsNoTracking()
@@ -329,7 +327,7 @@ public class ClsMemberRepository
             branch.PartnerUuid == memberContext.PartnerUuid &&
             !branch.IsDeleted
         )
-        .Select(branch => new ClsOptionDto
+        .Select(branch => new ClsOptionModel
         {
             Uuid = branch.Uuid,
             Name = branch.Name
@@ -354,10 +352,10 @@ public class ClsMemberRepository
         .Take(5)
         .ToArray();
 
-        return new ClsPaginatedDto<ClsOptionDto>
+        return new ClsPaginatedModel<ClsOptionModel>
         {
             Data = branchOptionDtos,
-            Pagination = new ClsPaginatedDto<ClsOptionDto>.ClsPaginationDto
+            Pagination = new ClsPaginatedModel<ClsOptionModel>.ClsPaginationModel
             {
                 Page = pagination.Page,
                 PageSize = 5,
@@ -365,7 +363,7 @@ public class ClsMemberRepository
             }
         };
     }
-    public async Task<ClsPaginatedDto<ClsMemberDto>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsMemberModel>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var membersQuery = _AppDBContext.Members
         .AsNoTracking()
@@ -437,20 +435,20 @@ public class ClsMemberRepository
         .ToArray();
 
         var memberDtos = members
-        .Select(member => new ClsMemberDto
+        .Select(member => new ClsMemberModel
         {
             Uuid = member.Uuid,
             Avatar = member.Avatar,
-            Role = new ClsMemberDto.ClsRoleDto
+            Role = new ClsMemberModel.ClsRoleModel
             {
                 Name = member.Role.Name,
                 Permissions = member.Role.PermissionUuids
                 .Select(permission => PermissionUuidsMap[permission])
                 .ToArray(),
             },
-            Branch = new ClsMemberDto.ClsBranchDto
+            Branch = new ClsMemberModel.ClsBranchModel
             {
-                Location = new ClsMemberDto.ClsBranchDto.ClsLocationDto
+                Location = new ClsMemberModel.ClsBranchModel.ClsLocationModel
                 {
                     Country = member.Branch.Location.Country,
                     City = member.Branch.Location.City,
@@ -469,10 +467,10 @@ public class ClsMemberRepository
             UpdatedAt = member.UpdatedAt,
         }).ToArray();
 
-        return new ClsPaginatedDto<ClsMemberDto>
+        return new ClsPaginatedModel<ClsMemberModel>
         {
             Data = memberDtos,
-            Pagination = new ClsPaginatedDto<ClsMemberDto>.ClsPaginationDto
+            Pagination = new ClsPaginatedModel<ClsMemberModel>.ClsPaginationModel
             {
                 Page = pagination.Page,
                 PageSize = pagination.PageSize,

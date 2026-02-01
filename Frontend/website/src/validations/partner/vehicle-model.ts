@@ -7,10 +7,12 @@ import {
 
 const zVehicleModelCreate = z
   .object({
-    thumbnail: z
-      .file("thumbnail is required.")
-      .max(10 * 1024 * 1024, "avatar must be at most 10MB.")
-      .mime("image/"),
+    thumbnail: z.optional(
+      z
+        .file("thumbnail is required.")
+        .max(10 * 1024 * 1024, "avatar must be at most 10MB.")
+        .mime("image/"),
+    ),
     gallery: z
       .array(
         z

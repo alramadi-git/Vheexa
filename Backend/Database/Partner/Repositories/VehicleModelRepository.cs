@@ -11,8 +11,8 @@ using Database.Entities;
 
 using Database.Enums;
 
-using Database.Dtos;
-using Database.Partner.Dtos;
+using Database.Models;
+using Database.Partner.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -31,21 +31,10 @@ public class ClsVehicleModelRepository
         try
         {
             var vehicleModelUuid = Guid.NewGuid();
-            var newVehicleModelGallery = vehicleModel.Gallery.Select((image, index) => new ClsVehicleModelGalleryEntity
-            {
-
-                Uuid = Guid.NewGuid(),
-                VehicleModelUuid = vehicleModelUuid,
-                Index = index,
-                Url = image,
-                IsDeleted = false,
-                DeletedAt = null,
-            }).ToArray();
             var newVehicleModel = new ClsVehicleModelEntity
             {
                 Uuid = vehicleModelUuid,
                 PartnerUuid = memberContext.PartnerUuid,
-                Thumbnail = vehicleModel.Thumbnail,
                 Name = vehicleModel.Name,
                 Description = vehicleModel.Description,
                 Category = vehicleModel.Category,
@@ -80,7 +69,6 @@ public class ClsVehicleModelRepository
             };
 
             _AppDBContext.VehicleModels.Add(newVehicleModel);
-            _AppDBContext.VehicleModelGalleries.AddRange(newVehicleModelGallery);
 
             _AppDBContext.Histories.Add(newHistory);
             _AppDBContext.MemberHistories.Add(newMemberHistory);
@@ -94,7 +82,7 @@ public class ClsVehicleModelRepository
             throw;
         }
     }
-    public async Task<ClsVehicleModelDto> ReadOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
+    public async Task<ClsVehicleModelModel> ReadOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
     {
         var vehicleModel = await _AppDBContext.VehicleModels
         .Where(partnerVehicleModel =>
@@ -102,13 +90,13 @@ public class ClsVehicleModelRepository
             partnerVehicleModel.PartnerUuid == memberContext.PartnerUuid &&
             !partnerVehicleModel.IsDeleted
         )
-        .Select(vehicleModel => new ClsVehicleModelDto
+        .Select(vehicleModel => new ClsVehicleModelModel
         {
             Uuid = vehicleModel.Uuid,
             Thumbnail = vehicleModel.Thumbnail,
             Gallery = _AppDBContext.VehicleModelGalleries
             .Where(image => image.VehicleModelUuid == vehicleModel.Uuid)
-            .Select(image => new ClsVehicleModelDto.ClsGalleryDto
+            .Select(image => new ClsVehicleModelModel.ClsGalleryModel
             {
                 Uuid = image.Uuid,
                 Url = image.Url
@@ -176,7 +164,7 @@ public class ClsVehicleModelRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsVehicleModelDto>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var vehicleModels = _AppDBContext.VehicleModels
         .Where(partnerVehicleModel =>
@@ -198,13 +186,13 @@ public class ClsVehicleModelRepository
         if (filter.Status != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Status == filter.Status);
 
         var vehicleModelDtos = await vehicleModels
-        .Select(vehicleModel => new ClsVehicleModelDto
+        .Select(vehicleModel => new ClsVehicleModelModel
         {
             Uuid = vehicleModel.Uuid,
             Thumbnail = vehicleModel.Thumbnail,
             Gallery = _AppDBContext.VehicleModelGalleries
             .Where(image => image.VehicleModelUuid == vehicleModel.Uuid)
-            .Select(image => new ClsVehicleModelDto.ClsGalleryDto
+            .Select(image => new ClsVehicleModelModel.ClsGalleryModel
             {
                 Uuid = image.Uuid,
                 Url = image.Url
@@ -254,10 +242,10 @@ public class ClsVehicleModelRepository
         .Take(pagination.PageSize)
         .ToArray();
 
-        return new ClsPaginatedDto<ClsVehicleModelDto>
+        return new ClsPaginatedModel<ClsVehicleModelModel>
         {
             Data = vehicleModelDtos,
-            Pagination = new ClsPaginatedDto<ClsVehicleModelDto>.ClsPaginationDto
+            Pagination = new ClsPaginatedModel<ClsVehicleModelModel>.ClsPaginationModel
             {
                 Page = pagination.Page,
                 PageSize = pagination.PageSize,

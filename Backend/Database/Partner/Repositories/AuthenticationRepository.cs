@@ -9,7 +9,7 @@ using Database.Partner.Inputs;
 
 using Database.Entities;
 
-using Database.Partner.Dtos;
+using Database.Partner.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -44,7 +44,7 @@ public class ClsAuthenticationRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<ClsAccountDto> RegisterAsync(ClsRegisterCredentialsInput credentials)
+    public async Task<ClsMemberAccountModel> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -52,8 +52,8 @@ public class ClsAuthenticationRepository
             var newPartner = new ClsPartnerEntity
             {
                 Uuid = Guid.NewGuid(),
-                Banner = credentials.Banner,
                 Logo = credentials.Logo,
+                Banner = credentials.Banner,
                 Handle = credentials.Handle,
                 OrganizationName = credentials.OrganizationName,
                 PhoneNumber = credentials.PhoneNumber,
@@ -150,10 +150,12 @@ public class ClsAuthenticationRepository
             .Select(rolePermission => rolePermission.PermissionUuid)
             .ToArrayAsync();
 
-            var accountDto = new ClsAccountDto
+            var accountDto = new ClsMemberAccountModel
             {
-                Partner = new ClsAccountDto.ClsPartnerDto
+                Uuid = newMember.Uuid,
+                Partner = new ClsMemberAccountModel.ClsPartnerModel
                 {
+                    Uuid = newPartner.Uuid,
                     Banner = newPartner.Banner,
                     Logo = newPartner.Logo,
                     Handle = newPartner.Handle,
@@ -169,9 +171,9 @@ public class ClsAuthenticationRepository
                     .ToArray(),
                 },
                 Avatar = newMember.Avatar,
-                Branch = new ClsAccountDto.ClsBranchDto
+                Branch = new ClsMemberAccountModel.ClsBranchModel
                 {
-                    Location = new ClsAccountDto.ClsBranchDto.ClsLocationDto
+                    Location = new ClsMemberAccountModel.ClsBranchModel.ClsLocationModel
                     {
                         Country = newLocation.Country,
                         City = newLocation.City,
@@ -196,7 +198,7 @@ public class ClsAuthenticationRepository
             throw;
         }
     }
-    public async Task<ClsAccountDto> LoginAsync(ClsLoginCredentialsInput credentials)
+    public async Task<ClsMemberAccountModel> LoginAsync(ClsLoginCredentialsInput credentials)
     {
         var member = await _AppDBContext.Members
         .AsNoTracking()
@@ -226,9 +228,9 @@ public class ClsAuthenticationRepository
         .Select(rolePermission => rolePermission.PermissionUuid)
         .ToArrayAsync();
 
-        var accountDto = new ClsAccountDto
+        var accountDto = new ClsMemberAccountModel
         {
-            Partner = new ClsAccountDto.ClsPartnerDto
+            Partner = new ClsMemberAccountModel.ClsPartnerModel
             {
                 Banner = member.Partner.Banner,
                 Logo = member.Partner.Logo,
@@ -237,7 +239,7 @@ public class ClsAuthenticationRepository
                 PhoneNumber = member.Partner.PhoneNumber,
                 Email = member.Partner.Email,
             },
-            Role = new ClsAccountDto.ClsRoleDto
+            Role = new ClsMemberAccountModel.ClsRoleModel
             {
                 Name = member.Role.Role.Name,
                 Permissions = permissionUuids
@@ -245,9 +247,9 @@ public class ClsAuthenticationRepository
                 .ToArray(),
             },
             Avatar = member.Avatar,
-            Branch = new ClsAccountDto.ClsBranchDto
+            Branch = new ClsMemberAccountModel.ClsBranchModel
             {
-                Location = new ClsAccountDto.ClsBranchDto.ClsLocationDto
+                Location = new ClsMemberAccountModel.ClsBranchModel.ClsLocationModel
                 {
                     Country = member.Branch.Location.Country,
                     City = member.Branch.Location.City,

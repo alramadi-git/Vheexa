@@ -10,10 +10,9 @@ using Database.Partner.Contexts;
 using Database.Entities;
 
 using Database.Enums;
-
-using Database.Dtos;
-using Database.Partner.Dtos;
-
+ 
+using Database.Models;
+using Database.Partner.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -88,7 +87,7 @@ public class ClsBranchRepository
             throw;
         }
     }
-    public async Task<ClsBranchDto> ReadOneAsync(Guid branchUuid, ClsMemberContext memberContext)
+    public async Task<ClsBranchModel> ReadOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {
         var branchDto = await _AppDBContext.Branches
         .AsNoTracking()
@@ -97,10 +96,10 @@ public class ClsBranchRepository
             branch.PartnerUuid == memberContext.PartnerUuid &&
             !branch.IsDeleted
         )
-        .Select(branch => new ClsBranchDto
+        .Select(branch => new ClsBranchModel
         {
             Uuid = branch.Uuid,
-            Location = new ClsBranchDto.ClsLocationDto
+            Location = new ClsBranchModel.ClsLocationModel
             {
                 Country = branch.Location.Country,
                 City = branch.Location.City,
@@ -167,7 +166,7 @@ public class ClsBranchRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsBranchDto>> SearchAsync(ClsBranchFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsBranchModel>> SearchAsync(ClsBranchFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var branchesQuery = _AppDBContext.Branches
         .AsNoTracking()
@@ -179,10 +178,10 @@ public class ClsBranchRepository
         if (filter.Status != null) branchesQuery = branchesQuery.Where(branch => branch.Status == filter.Status);
 
         var branchDtos = await branchesQuery
-        .Select(branch => new ClsBranchDto
+        .Select(branch => new ClsBranchModel
         {
             Uuid = branch.Uuid,
-            Location = new ClsBranchDto.ClsLocationDto
+            Location = new ClsBranchModel.ClsLocationModel
             {
                 Country = branch.Location.Country,
                 City = branch.Location.City,
@@ -229,10 +228,10 @@ public class ClsBranchRepository
         .Take(pagination.PageSize)
         .ToArray();
 
-        return new ClsPaginatedDto<ClsBranchDto>
+        return new ClsPaginatedModel<ClsBranchModel>
         {
             Data = branchDtos,
-            Pagination = new ClsPaginatedDto<ClsBranchDto>.ClsPaginationDto
+            Pagination = new ClsPaginatedModel<ClsBranchModel>.ClsPaginationModel
             {
                 Page = pagination.Page,
                 PageSize = pagination.PageSize,

@@ -12,9 +12,8 @@ using Database.Partner.Contexts;
 
 using Database.Entities;
 
-using Database.Dtos;
-using Database.Partner.Dtos;
-
+using Database.Models;
+using Database.Partner.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -135,7 +134,7 @@ public class ClsRoleRepository
             throw;
         }
     }
-    public async Task<ClsRoleDto> ReadOneAsync(Guid roleUuid, ClsMemberContext memberContext)
+    public async Task<ClsRoleModel> ReadOneAsync(Guid roleUuid, ClsMemberContext memberContext)
     {
         var role = await _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -159,7 +158,7 @@ public class ClsRoleRepository
         })
         .FirstAsync();
 
-        var roleDto = new ClsRoleDto
+        var roleDto = new ClsRoleModel
         {
             Uuid = role.Uuid,
             Name = role.Name,
@@ -221,7 +220,7 @@ public class ClsRoleRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedDto<ClsRoleDto>> SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsRoleModel>> SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
     {
         var rolesQuery = _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -282,7 +281,7 @@ public class ClsRoleRepository
         .ToArray();
 
         var roleDtos = roles
-        .Select(role => new ClsRoleDto
+        .Select(role => new ClsRoleModel
         {
             Uuid = role.Uuid,
             Name = role.Name,
@@ -296,10 +295,10 @@ public class ClsRoleRepository
         })
         .ToArray();
 
-        return new ClsPaginatedDto<ClsRoleDto>
+        return new ClsPaginatedModel<ClsRoleModel>
         {
             Data = roleDtos,
-            Pagination = new ClsPaginatedDto<ClsRoleDto>.ClsPaginationDto
+            Pagination = new ClsPaginatedModel<ClsRoleModel>.ClsPaginationModel
             {
                 Page = pagination.Page,
                 PageSize = pagination.PageSize,
