@@ -1,24 +1,11 @@
-enum eVehicleModelCategoryModel {
-  car,
-  van,
-  truck,
-  motorcycle,
-  boat,
-  yacht,
-  jetSki,
-  helicopter,
-}
-
-enum eVehicleModelStatusModel {
-  active,
-  inactive,
-}
+import { eVehicleModelCategoryModel } from "./enums/vehicle-model";
+import { eStatusModel } from "./enums/status";
 
 type tVehicleModelModel = {
   uuid: string;
   thumbnail: string;
   gallery: {
-    uuid: string;
+    id: string;
     url: string;
   }[];
   name: string;
@@ -32,10 +19,9 @@ type tVehicleModelModel = {
   price: number;
   discount: number;
   tags: string;
-  status: eVehicleModelStatusModel;
+  status: eStatusModel;
   updatedAt: string;
   createdAt: string;
 };
 
-export { eVehicleModelCategoryModel, eVehicleModelStatusModel };
 export type { tVehicleModelModel };

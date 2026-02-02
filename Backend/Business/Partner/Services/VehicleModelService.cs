@@ -25,17 +25,22 @@ public class ClsVehicleModelService
     public async Task CreateOneAsync(ClsVehicleModelCreateInput vehicleModel, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         var VehicleModelUuid = Guid.NewGuid();
+
+        string? uploadedThumbnailId = null;
+
         try
         {
             await _Guard.CreateOneAsync(vehicleModel);
 
             var thumbnailTask = vehicleModel.Thumbnail == null ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null) : _ImagekitIntegration.UploadOneAsyncSafe(vehicleModel.Thumbnail, $"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}");
             var galleryTask = _ImagekitIntegration.UploadManyAsyncSafe(vehicleModel.Gallery, $"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery");
-          
+
             await Task.WhenAll(thumbnailTask, galleryTask);
 
             var thumbnail = thumbnailTask.Result;
             var gallery = galleryTask.Result;
+
+            uploadedThumbnailId = thumbnail?.Id;
 
             await _Repository.CreateOneAsync(
                 new Database.Partner.Inputs.ClsVehicleModelCreateInput
@@ -69,18 +74,24 @@ public class ClsVehicleModelService
         }
         catch
         {
-            await _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery");
+            await Task.WhenAll([
+                uploadedThumbnailId == null ? Task.CompletedTask :_ImagekitIntegration.DeleteImageAsync(uploadedThumbnailId),
+                _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery"),
+            ]);
+
             throw;
         }
     }
     public async Task DeleteOneAsync(Guid vehicleModelUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(vehicleModelUuid, memberContext);
+        await _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/vehicle-models/{vehicleModelUuid}");
+
     }
     public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
-        return await _Repository.SearchAsync(
+        var vehicleModels = await _Repository.SearchAsync(
             new Database.Partner.Inputs.ClsVehicleModelFilterInput
             {
                 Search = filter.Search,
@@ -109,5 +120,7 @@ public class ClsVehicleModelService
             },
             memberContext
         );
+
+        return vehicleModels;
     }
 }

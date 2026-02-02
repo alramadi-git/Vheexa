@@ -1,7 +1,7 @@
 "use client";
 
 import useToken from "@/hooks/partner/token";
-import useService from "../hook";
+import useService from "../../services/use-service";
 
 import { ClsQuery } from "@/libraries/query";
 
@@ -17,16 +17,19 @@ import {
 import { tPagination, zPagination } from "@/validations/pagination";
 
 import { eEnvironment } from "@/enums/environment";
-import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
 
-import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
-import { tResponseOneService, tResponseManyService } from "@/services/service";
+import { tRoleModel } from "@/partner/models/role";
+
+import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
+import { ClsErrorService } from "@/services/error";
+import { eStatusModel } from "../models/enums/status";
 
 export default function useRoleService() {
   const { token } = useToken();
   const service = useService();
 
-  async function create(role: tRoleCreate): Promise<tResponseOneService<null>> {
+  async function create(role: tRoleCreate): Promise<tSuccessService<null>> {
     return await service.catch<null>(async () => {
       zRoleCreate.parse(role);
 
@@ -44,7 +47,7 @@ export default function useRoleService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -53,7 +56,7 @@ export default function useRoleService() {
       };
     });
   }
-  async function read(uuid: tUuid): Promise<tResponseOneService<tRoleModel>> {
+  async function read(uuid: tUuid): Promise<tSuccessService<tRoleModel>> {
     return await service.catch<tRoleModel>(async () => {
       zUuid.parse(uuid);
 
@@ -142,7 +145,7 @@ export default function useRoleService() {
               },
             ],
             assignedCount: 1,
-            status: eRoleStatusModel.active,
+            status: eStatusModel.active,
             createdAt: "2024-02-10T09:15:00Z",
             updatedAt: "2024-10-05T11:40:22Z",
           },
@@ -155,7 +158,7 @@ export default function useRoleService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const result: tSuccessModel<tRoleModel> = await response.json();
@@ -165,7 +168,7 @@ export default function useRoleService() {
       };
     });
   }
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+  async function _delete(uuid: tUuid): Promise<tSuccessService<null>> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
@@ -182,7 +185,7 @@ export default function useRoleService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -194,7 +197,7 @@ export default function useRoleService() {
   async function search(
     filter: tRoleFilter,
     pagination: tPagination,
-  ): Promise<tResponseManyService<tRoleModel>> {
+  ): Promise<tPaginatedSuccessService<tRoleModel>> {
     return await service.catch<tRoleModel>(async () => {
       zRoleFilter.parse(filter);
       zPagination.parse(pagination);
@@ -285,7 +288,7 @@ export default function useRoleService() {
                 },
               ],
               assignedCount: 1,
-              status: eRoleStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-02-10T09:15:00Z",
               updatedAt: "2024-10-05T11:40:22Z",
             },
@@ -311,7 +314,7 @@ export default function useRoleService() {
                 },
               ],
               assignedCount: 3,
-              status: eRoleStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-03-15T10:20:00Z",
               updatedAt: "2024-11-28T14:35:10Z",
             },
@@ -340,10 +343,10 @@ export default function useRoleService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginationSuccessModel<tRoleModel> = await response.json();
+      const result: tPaginatedSuccessModel<tRoleModel> = await response.json();
       return {
         isSuccess: true,
         ...result,

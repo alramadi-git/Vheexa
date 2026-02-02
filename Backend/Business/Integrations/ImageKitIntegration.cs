@@ -1,8 +1,7 @@
 using Imagekit.Sdk;
 
-using Microsoft.AspNetCore.Http;
-
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Integrations;
 
@@ -55,21 +54,24 @@ public class ClsImagekitIntegration
     {
         var newImages = await Task.WhenAll(images.Select(image => UploadOneAsyncSafe(image, path)));
 
-        var filteredImages = newImages.Where(image => image != null).Select(image => image!).ToArray();
-
-        return filteredImages;
+        var succeededImages = newImages.Where(image => image != null).Select(image => image!).ToArray();
+        return succeededImages;
     }
 
-    public async Task DeleteImageAsync(string imageId)
+    public async Task<bool> DeleteImageAsync(string imageId)
     {
-        _ImagekitClient.DeleteFile(imageId);
+        var result = await _ImagekitClient.DeleteFileAsync(imageId);
+
+        return result.HttpStatusCode == (int)HttpStatusCode.NoContent;
     }
 
     public async Task<bool> DeleteFolderAsync(string folderPath)
     {
-        return (await _ImagekitClient.DeleteFolderAsync(new Imagekit.Models.DeleteFolderRequest
+        var result = await _ImagekitClient.DeleteFolderAsync(new Imagekit.Models.DeleteFolderRequest
         {
             folderPath = folderPath
-        })).HttpStatusCode == (int)HttpStatusCode.NoContent;
+        });
+
+        return result.HttpStatusCode == (int)HttpStatusCode.NoContent;
     }
 }

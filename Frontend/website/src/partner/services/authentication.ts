@@ -1,8 +1,7 @@
 "use client";
 
-import { ePermission } from "@/validations/partner/role";
-
-import useService from "../hook";
+import useToken from "@/hooks/partner/token";
+import useService from "../../services/use-service";
 
 import {
   tRegisterCredentials,
@@ -14,12 +13,15 @@ import {
   zLoginCredentials,
 } from "@/validations/credentials";
 
+import { ePermissionModel } from "@/partner/models/enums/permission";
+
 import { tAccountModel } from "@/models/account";
-import { tMemberAccountModel } from "@/models/partner/member-account";
+import { tMemberAccountModel } from "@/partner/models/member-account";
+
+import { ClsErrorService, tErrorService } from "@/services/error";
 
 import { tSuccessModel } from "@/models/success";
-import { tResponseOneService } from "@/services/service";
-import useToken from "@/hooks/partner/token";
+import { tSuccessService } from "@/services/success";
 
 export default function useAuthenticationService() {
   const { token } = useToken();
@@ -27,7 +29,9 @@ export default function useAuthenticationService() {
 
   async function register(
     credentials: tRegisterCredentials,
-  ): Promise<tResponseOneService<tAccountModel<tMemberAccountModel>>> {
+  ): Promise<
+    tSuccessService<tAccountModel<tMemberAccountModel>> | tErrorService
+  > {
     return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
 
@@ -48,25 +52,25 @@ export default function useAuthenticationService() {
               role: {
                 name: "Owner",
                 permissions: [
-                  ePermission.PartnerRead,
-                  ePermission.PartnerUpdate,
-                  ePermission.PartnerDelete,
-                  ePermission.RolesCreate,
-                  ePermission.RolesRead,
-                  ePermission.RolesUpdate,
-                  ePermission.RolesDelete,
-                  ePermission.BranchesCreate,
-                  ePermission.BranchesRead,
-                  ePermission.BranchesUpdate,
-                  ePermission.BranchesDelete,
-                  ePermission.MembersCreate,
-                  ePermission.MembersRead,
-                  ePermission.MembersUpdate,
-                  ePermission.MembersDelete,
-                  ePermission.VehicleModelsCreate,
-                  ePermission.VehicleModelsRead,
-                  ePermission.VehicleModelsUpdate,
-                  ePermission.VehicleModelsDelete,
+                  ePermissionModel.PartnerRead,
+                  ePermissionModel.PartnerUpdate,
+                  ePermissionModel.PartnerDelete,
+                  ePermissionModel.RolesCreate,
+                  ePermissionModel.RolesRead,
+                  ePermissionModel.RolesUpdate,
+                  ePermissionModel.RolesDelete,
+                  ePermissionModel.BranchesCreate,
+                  ePermissionModel.BranchesRead,
+                  ePermissionModel.BranchesUpdate,
+                  ePermissionModel.BranchesDelete,
+                  ePermissionModel.MembersCreate,
+                  ePermissionModel.MembersRead,
+                  ePermissionModel.MembersUpdate,
+                  ePermissionModel.MembersDelete,
+                  ePermissionModel.VehicleModelsCreate,
+                  ePermissionModel.VehicleModelsRead,
+                  ePermissionModel.VehicleModelsUpdate,
+                  ePermissionModel.VehicleModelsDelete,
                 ],
               },
               branch: {
@@ -141,7 +145,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const result: tSuccessModel<tAccountModel<tMemberAccountModel>> =
@@ -155,7 +159,7 @@ export default function useAuthenticationService() {
   }
   async function login(
     credentials: tLoginCredentials,
-  ): Promise<tResponseOneService<tAccountModel<tMemberAccountModel>>> {
+  ): Promise<tSuccessService<tAccountModel<tMemberAccountModel>>| tErrorService> {
     return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
 
@@ -176,25 +180,25 @@ export default function useAuthenticationService() {
               role: {
                 name: "Owner",
                 permissions: [
-                  ePermission.PartnerRead,
-                  ePermission.PartnerUpdate,
-                  ePermission.PartnerDelete,
-                  ePermission.RolesCreate,
-                  ePermission.RolesRead,
-                  ePermission.RolesUpdate,
-                  ePermission.RolesDelete,
-                  ePermission.BranchesCreate,
-                  ePermission.BranchesRead,
-                  ePermission.BranchesUpdate,
-                  ePermission.BranchesDelete,
-                  ePermission.MembersCreate,
-                  ePermission.MembersRead,
-                  ePermission.MembersUpdate,
-                  ePermission.MembersDelete,
-                  ePermission.VehicleModelsCreate,
-                  ePermission.VehicleModelsRead,
-                  ePermission.VehicleModelsUpdate,
-                  ePermission.VehicleModelsDelete,
+                  ePermissionModel.PartnerRead,
+                  ePermissionModel.PartnerUpdate,
+                  ePermissionModel.PartnerDelete,
+                  ePermissionModel.RolesCreate,
+                  ePermissionModel.RolesRead,
+                  ePermissionModel.RolesUpdate,
+                  ePermissionModel.RolesDelete,
+                  ePermissionModel.BranchesCreate,
+                  ePermissionModel.BranchesRead,
+                  ePermissionModel.BranchesUpdate,
+                  ePermissionModel.BranchesDelete,
+                  ePermissionModel.MembersCreate,
+                  ePermissionModel.MembersRead,
+                  ePermissionModel.MembersUpdate,
+                  ePermissionModel.MembersDelete,
+                  ePermissionModel.VehicleModelsCreate,
+                  ePermissionModel.VehicleModelsRead,
+                  ePermissionModel.VehicleModelsUpdate,
+                  ePermissionModel.VehicleModelsDelete,
                 ],
               },
               branch: {
@@ -224,7 +228,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const result: tSuccessModel<tAccountModel<tMemberAccountModel>> =
@@ -236,7 +240,7 @@ export default function useAuthenticationService() {
       };
     });
   }
-  async function logout(): Promise<tResponseOneService<null>> {
+  async function logout(): Promise<tSuccessService<null>| tErrorService> {
     return service.catch<null>(async () => {
       if (process.env.NODE_ENV === "development") {
         return {
@@ -252,7 +256,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {

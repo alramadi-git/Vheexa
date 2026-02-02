@@ -1,20 +1,22 @@
 "use client";
 
 import useToken from "@/hooks/partner/token";
-import useService from "../hook";
+import useService from "../../services/use-service";
 
 import { eEnvironment } from "@/enums/environment";
 
-import { tOverviewModel } from "@/models/partner/overview";
+import { tOverviewModel } from "@/partner/models/overview";
+
+import { ClsErrorService, tErrorService } from "@/services/error";
 
 import { tSuccessModel } from "@/models/success";
-import { tResponseOneService } from "@/services/service";
+import { tSuccessService } from "@/services/success";
 
 export default function useOverview() {
   const { token } = useToken();
   const service = useService();
 
-  async function read(): Promise<tResponseOneService<tOverviewModel>> {
+  async function read(): Promise<tSuccessService<tOverviewModel> | tErrorService> {
     return await service.catch<tOverviewModel>(async () => {
       if (process.env.NODE_ENV === eEnvironment.development) {
         return {
@@ -91,7 +93,7 @@ export default function useOverview() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const data: tSuccessModel<tOverviewModel> = await response.json();

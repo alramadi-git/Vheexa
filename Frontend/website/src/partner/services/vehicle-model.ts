@@ -1,7 +1,7 @@
 "use client";
 
 import useToken from "@/hooks/partner/token";
-import useService from "../hook";
+import useService from "../../services/use-service";
 
 import { ClsQuery } from "@/libraries/query";
 
@@ -22,10 +22,10 @@ import {
   eVehicleModelCategoryModel,
   eVehicleModelStatusModel,
   tVehicleModelModel,
-} from "@/models/partner/vehicle-model";
+} from "@/partner/models/vehicle-model";
 
-import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
-import { tResponseOneService, tResponseManyService } from "@/services/service";
+import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tResponseOneService, tResponseManyService } from "@/services/success";
 
 export default function useVehicleModelService() {
   const { token } = useToken();
@@ -80,7 +80,7 @@ export default function useVehicleModelService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -128,7 +128,7 @@ export default function useVehicleModelService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const result: tSuccessModel<tVehicleModelModel> = await response.json();
@@ -156,7 +156,7 @@ export default function useVehicleModelService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -420,10 +420,10 @@ export default function useVehicleModelService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginationSuccessModel<tVehicleModelModel> =
+      const result: tPaginatedSuccessModel<tVehicleModelModel> =
         await response.json();
 
       return {

@@ -1,13 +1,12 @@
 import { tNullable } from "@/types/nullish";
 
-enum eMemberStatusModel {
-  active,
-  inactive,
-}
+import { tImageModel } from "./image";
+
+import { eStatusModel } from "./enums/status";
 
 type tMemberModel = {
   uuid: string;
-  avatar: tNullable<string>;
+  avatar: tNullable<tImageModel>;
   role: {
     name: string;
     permissions: string[];
@@ -26,10 +25,9 @@ type tMemberModel = {
   };
   username: string;
   email: string;
-  status: eMemberStatusModel;
+  status: eStatusModel;
   updatedAt: string;
   createdAt: string;
 };
 
-export { eMemberStatusModel };
 export type { tMemberModel };

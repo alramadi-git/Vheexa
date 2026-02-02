@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import useRoleService from "@/services/partner/role";
+import useRoleService from "@/partner/services/role";
 
 import { useQuery } from "@tanstack/react-query";
 

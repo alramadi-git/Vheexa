@@ -10,7 +10,7 @@ import { tBranchCreate, zBranchCreate } from "@/validations/partner/branch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import useBranchService from "@/services/partner/branch";
+import useBranchService from "@/partner/services/branch";
 import useBranches from "@/hooks/partner/branches";
 
 import { LuPlus, LuCheck, LuLoader } from "react-icons/lu";

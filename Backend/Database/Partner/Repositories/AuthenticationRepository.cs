@@ -174,10 +174,8 @@ public class ClsAuthenticationRepository
 
             var accountDto = new ClsMemberAccountModel
             {
-                Uuid = newMember.Uuid,
                 Partner = new ClsMemberAccountModel.ClsPartnerModel
                 {
-                    Uuid = newPartner.Uuid,
                     Logo = newPartner.Logo == null ? null : new Database.Models.ClsImageModel
                     {
                         Id = newPartner.Logo.Id,

@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { eMemberStatusModel } from "@/models/partner/member";
+import { eMemberStatusModel } from "@/partner/models/member";
 import { zEmail, zPassword } from "../credentials";
 
 const zMemberCreate = z

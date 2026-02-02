@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
-import { eVehicleModelStatusModel } from "@/models/partner/vehicle-model";
+import { eVehicleModelStatusModel } from "@/partner/models/vehicle-model";
 
 import {
   tVehicleModelCreate,
@@ -17,7 +17,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import useVehicleModelService from "@/services/partner/vehicle-model";
+import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { LuCheck, LuPlus } from "react-icons/lu";
 

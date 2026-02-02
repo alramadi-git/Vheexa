@@ -8,14 +8,14 @@ import { ClsDateFormatter } from "@/libraries/date-formatter";
 import { useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
-import useVehicleModelService from "@/services/partner/vehicle-model";
+import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { cn } from "@/utilities/cn";
 
 import {
   eVehicleModelStatusModel,
   tVehicleModelModel,
-} from "@/models/partner/vehicle-model";
+} from "@/partner/models/vehicle-model";
 
 import {
   LuDot,

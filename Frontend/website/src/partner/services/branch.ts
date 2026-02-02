@@ -1,9 +1,7 @@
 "use client";
 
 import useToken from "@/hooks/partner/token";
-import useService from "../hook";
-
-import { ClsQuery } from "@/libraries/query";
+import useService from "../../services/use-service";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
@@ -16,11 +14,17 @@ import {
 
 import { tPagination, zPagination } from "@/validations/pagination";
 
-import { eEnvironment } from "@/enums/environment";
-import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
+import { ClsQuery } from "@/libraries/query";
 
-import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
-import { tResponseOneService, tResponseManyService } from "@/services/service";
+import { eEnvironment } from "@/enums/environment";
+import { eStatusModel } from "../models/enums/status";
+
+import { tBranchModel } from "@/partner/models/branch";
+
+import { ClsErrorService, tErrorService } from "@/services/error";
+
+import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
 
 export default function useBranchService() {
   const { token } = useToken();
@@ -28,7 +32,7 @@ export default function useBranchService() {
 
   async function create(
     branch: tBranchCreate,
-  ): Promise<tResponseOneService<null>> {
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zBranchCreate.parse(branch);
 
@@ -46,7 +50,7 @@ export default function useBranchService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -55,7 +59,9 @@ export default function useBranchService() {
       };
     });
   }
-  async function read(uuid: tUuid): Promise<tResponseOneService<tBranchModel>> {
+  async function read(
+    uuid: tUuid,
+  ): Promise<tSuccessService<tBranchModel> | tErrorService> {
     return await service.catch<tBranchModel>(async () => {
       zUuid.parse(uuid);
 
@@ -75,7 +81,7 @@ export default function useBranchService() {
             phoneNumber: "+12125550123",
             email: "ny.headquarters@vheexa.com",
             memberCount: 22,
-            status: eBranchStatusModel.active,
+            status: eStatusModel.active,
             createdAt: "2023-06-12T10:30:00Z",
             updatedAt: "2024-11-30T14:22:10Z",
           },
@@ -88,7 +94,7 @@ export default function useBranchService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const result: tSuccessModel<tBranchModel> = await response.json();
@@ -98,7 +104,9 @@ export default function useBranchService() {
       };
     });
   }
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+  async function _delete(
+    uuid: tUuid,
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
@@ -115,7 +123,7 @@ export default function useBranchService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -127,7 +135,7 @@ export default function useBranchService() {
   async function search(
     filter: tBranchFilter,
     pagination: tPagination,
-  ): Promise<tResponseManyService<tBranchModel>> {
+  ): Promise<tPaginatedSuccessService<tBranchModel>> {
     return await service.catch<tBranchModel>(async () => {
       zBranchFilter.parse(filter);
       zPagination.parse(pagination);
@@ -149,7 +157,7 @@ export default function useBranchService() {
               phoneNumber: "+12125550123",
               email: "ny.headquarters@vheexa.com",
               memberCount: 22,
-              status: eBranchStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-06-12T10:30:00Z",
               updatedAt: "2024-11-30T14:22:10Z",
             },
@@ -166,7 +174,7 @@ export default function useBranchService() {
               phoneNumber: "+15125550198",
               email: "austin.downtown@vheexa.com",
               memberCount: 15,
-              status: eBranchStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-08-05T09:15:00Z",
               updatedAt: "2024-10-18T11:40:22Z",
             },
@@ -183,7 +191,7 @@ export default function useBranchService() {
               phoneNumber: "+13105550167",
               email: "la.west@vheexa.com",
               memberCount: 18,
-              status: eBranchStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-09-22T14:20:00Z",
               updatedAt: "2024-11-25T09:45:30Z",
             },
@@ -200,7 +208,7 @@ export default function useBranchService() {
               phoneNumber: "+13125550145",
               email: "chicago.lakeside@vheexa.com",
               memberCount: 12,
-              status: eBranchStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-11-15T11:10:00Z",
               updatedAt: "2024-12-03T16:20:15Z",
             },
@@ -217,7 +225,7 @@ export default function useBranchService() {
               phoneNumber: "+13055550132",
               email: "miami.beach@vheexa.com",
               memberCount: 10,
-              status: eBranchStatusModel.inactive,
+              status: eStatusModel.inactive,
               createdAt: "2024-01-08T13:45:00Z",
               updatedAt: "2024-09-28T14:35:40Z",
             },
@@ -234,7 +242,7 @@ export default function useBranchService() {
               phoneNumber: "+12065550189",
               email: "seattle.downtown@vheexa.com",
               memberCount: 14,
-              status: eBranchStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-02-20T10:05:00Z",
               updatedAt: "2024-11-12T12:15:25Z",
             },
@@ -251,7 +259,7 @@ export default function useBranchService() {
               phoneNumber: "+13035550176",
               email: "denver.mountain@vheexa.com",
               memberCount: 11,
-              status: eBranchStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-03-10T08:30:00Z",
               updatedAt: "2024-10-22T15:10:50Z",
             },
@@ -275,10 +283,10 @@ export default function useBranchService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginationSuccessModel<tBranchModel> =
+      const result: tPaginatedSuccessModel<tBranchModel> =
         await response.json();
       return {
         isSuccess: true,

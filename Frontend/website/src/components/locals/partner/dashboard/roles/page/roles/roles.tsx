@@ -10,7 +10,7 @@ import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import useRoleService from "@/services/partner/role";
+import useRoleService from "@/partner/services/role";
 import useRoles from "@/hooks/partner/roles";
 
 import { toast } from "sonner";

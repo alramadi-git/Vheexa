@@ -1,31 +1,35 @@
 "use client";
 
-import {
-  tSuccessOneService,
-  tSuccessManyService,
-  tResponseOneService,
-  tResponseManyService,
-} from "./service";
-
 import { ZodError } from "zod";
+
 import { ClsFetch } from "@/libraries/fetch";
+
+import { tSuccessService, tPaginatedSuccessService } from "./success";
+import { tErrorService } from "./error";
 
 export default function useService() {
   const clsFetch = new ClsFetch(process.env.NEXT_PUBLIC_BACKEND_API!);
   async function _catch<tData>(
-    callback: () => Promise<tSuccessOneService<tData>>,
-  ): Promise<tResponseOneService<tData>>;
+    callback: () => Promise<tSuccessService<tData>>,
+  ): Promise<tSuccessService<tData>>;
   async function _catch<tData>(
-    callback: () => Promise<tSuccessManyService<tData>>,
-  ): Promise<tResponseManyService<tData>>;
+    callback: () => Promise<tPaginatedSuccessService<tData>>,
+  ): Promise<tPaginatedSuccessService<tData>>;
   async function _catch<tData>(
     callback: () => Promise<
-      tSuccessOneService<tData> | tSuccessManyService<tData>
+      tSuccessService<tData> | tPaginatedSuccessService<tData>
     >,
-  ): Promise<tResponseOneService<tData> | tResponseManyService<tData>> {
+  ): Promise<
+    tSuccessService<tData> | tPaginatedSuccessService<tData> | tErrorService
+  > {
     try {
       return await callback();
     } catch (error: unknown) {
+      // TODO: change the return to satisfy tErrorService instead of normal {
+      // isSuccess: boolean,
+      // message: string
+      // }
+      
       let message =
         error instanceof ZodError
           ? "Validation error."
@@ -33,7 +37,10 @@ export default function useService() {
             ? error.message
             : "Something went wrong.";
 
-      if (message === "Access token is expired." || message === "Access token is missing.") {
+      if (
+        message === "Access token is expired." ||
+        message === "Access token is missing."
+      ) {
         try {
           const response = await clsFetch.get(
             "/partner/authentication/refresh",
@@ -61,9 +68,8 @@ export default function useService() {
     }
   }
 
-
   return {
     fetch: clsFetch,
     catch: _catch,
-  }
+  };
 }
