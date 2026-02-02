@@ -2,13 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using API.Models;
 
-using Business.Inputs;
-using Business.Partner.Inputs;
-
-using Business.Partner.Services;
-
-using Database.Partner.Models;
-
 namespace API.Partner.Controllers;
 
 [ApiController]
@@ -36,5 +29,4 @@ public class ClsAuthenticationController : Controller
     public async Task<ActionResult> LoginAsync([FromBody] ClsLoginCredentialsInput credentials) { }
 
     [HttpDelete("[uuid]")]
-    [HttpGet("")]
 }

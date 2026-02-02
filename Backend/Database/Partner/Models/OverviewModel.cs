@@ -42,5 +42,4 @@ public class ClsOverviewModel
     public ClsEntityOverviewsModel EntityOverviews { get; set; }
     public ClsEntitiesCountModel GroupedCounts { get; set; }
     public ClsPriceDistributionModel VehicleModelPriceDistribution { get; set; }
-
 }

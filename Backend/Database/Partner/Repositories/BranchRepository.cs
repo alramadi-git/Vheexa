@@ -2,15 +2,15 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
+using Database.Entities;
+
 using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
-using Database.Entities;
-
 using Database.Enums;
- 
+
 using Database.Models;
 using Database.Partner.Models;
 
@@ -86,38 +86,6 @@ public class ClsBranchRepository
             await transaction.RollbackAsync();
             throw;
         }
-    }
-    public async Task<ClsBranchModel> ReadOneAsync(Guid branchUuid, ClsMemberContext memberContext)
-    {
-        var branchDto = await _AppDBContext.Branches
-        .AsNoTracking()
-        .Where(branch =>
-            branch.Uuid == branchUuid &&
-            branch.PartnerUuid == memberContext.PartnerUuid &&
-            !branch.IsDeleted
-        )
-        .Select(branch => new ClsBranchModel
-        {
-            Uuid = branch.Uuid,
-            Location = new ClsBranchModel.ClsLocationModel
-            {
-                Country = branch.Location.Country,
-                City = branch.Location.City,
-                Street = branch.Location.Street,
-                Latitude = branch.Location.Latitude,
-                Longitude = branch.Location.Longitude
-            },
-            Name = branch.Name,
-            PhoneNumber = branch.PhoneNumber,
-            Email = branch.Email,
-            MemberCount = branch.MemberCount,
-            Status = branch.Status,
-            CreatedAt = branch.CreatedAt,
-            UpdatedAt = branch.UpdatedAt,
-        })
-        .FirstAsync();
-
-        return branchDto;
     }
     public async Task DeleteOneAsync(Guid branchUuid, ClsMemberContext memberContext)
     {

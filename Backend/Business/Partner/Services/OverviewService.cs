@@ -1,22 +1,18 @@
-using Database.Partner.Repositories;
-
-using Database.Partner.Contexts;
-
-using Database.Partner.Models;
-
 namespace Business.Partner.Services;
 
 public class ClsOverviewService
 {
-    private readonly ClsOverviewRepository _Repository;
+    private readonly Database.Partner.Repositories.ClsOverviewRepository _Repository;
 
-    public ClsOverviewService(ClsOverviewRepository repository)
+    public ClsOverviewService(Database.Partner.Repositories.ClsOverviewRepository repository)
     {
         _Repository = repository;
     }
 
-    public async Task<ClsOverviewModel> ReadOneAsync(ClsMemberContext memberContext)
+    public async Task<Database.Partner.Models.ClsOverviewModel> ReadOneAsync(Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        return await _Repository.ReadOneAsync(memberContext);
+        var overview =  await _Repository.ReadOneAsync(memberContext);
+
+        return overview;
     }
 }

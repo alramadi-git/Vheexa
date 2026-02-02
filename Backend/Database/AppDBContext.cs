@@ -11,6 +11,7 @@ public class AppDBContext : DbContext
     public DbSet<ClsPermissionEntity> Permissions { get; set; }
     public DbSet<ClsRolePermissionEntity> RolePermissions { get; set; }
     public DbSet<ClsLocationEntity> Locations { get; set; }
+    public DbSet<ClsImageEntity> Images { get; set; }
     public DbSet<ClsUserEntity> Users { get; set; }
     public DbSet<ClsPartnerEntity> Partners { get; set; }
     public DbSet<ClsPartnerRoleEntity> PartnerRoles { get; set; }

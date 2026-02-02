@@ -8,7 +8,8 @@ public class ClsVehicleModelEntity
     public Guid Uuid { get; set; }
     public Guid PartnerUuid { get; set; }
     public ClsPartnerEntity Partner { get; set; }
-    public string? Thumbnail { get; set; }
+    public string? ThumbnailId { get; set; }
+    public ClsImageEntity? Thumbnail { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public CATEGORY Category { get; set; }

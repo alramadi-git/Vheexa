@@ -1,59 +1,75 @@
-using Database.Partner.Repositories;
-
 using Business.Partner.Validations.Guards;
 
-using Database.Partner.Contexts;
+using Business.Integrations;
 
 using Business.Inputs;
 using Business.Partner.Inputs;
-
-using Database.Partner.Models;
-using Database.Models;
 
 namespace Business.Partner.Services;
 
 public class ClsMemberService
 {
-    private readonly ClsMemberRepository _Repository;
+    private readonly Database.Partner.Repositories.ClsMemberRepository _Repository;
     private readonly ClsMemberGuard _Guard;
 
+    private readonly ClsImagekitIntegration _ImagekitIntegration;
 
-    public ClsMemberService(ClsMemberRepository repository, ClsMemberGuard guard)
+    public ClsMemberService(Database.Partner.Repositories.ClsMemberRepository repository, ClsMemberGuard guard, ClsImagekitIntegration imagekitIntegration)
     {
         _Repository = repository;
         _Guard = guard;
+
+        _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task CreateOneAsync(ClsMemberCreateInput member, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsMemberCreateInput member, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        // TODO: make the ImageKit integration and replace the "url" with a real one 
-        await _Guard.CreateOneAsync(member);
-        await _Repository.CreateOneAsync(
-            new Database.Partner.Inputs.ClsMemberCreateInput
-            {
-                Avatar = "url",
-                RoleUuid = member.RoleUuid,
-                BranchUuid = member.BranchUuid,
-                Username = member.Username,
-                Email = member.Email,
-                Password = member.Password,
-                Status = member.Status
-            },
-            memberContext
-        );
+        ClsImagekitIntegration.ClsImagekit? uploadedAvatar = null;
+        try
+        {
+            await _Guard.CreateOneAsync(member);
+
+            var memberUuid = Guid.NewGuid();
+
+            var avatar = member.Avatar == null ? null : await _ImagekitIntegration.UploadOneAsyncSafe(member.Avatar, $"/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
+
+            uploadedAvatar = avatar;
+
+            await _Repository.CreateOneAsync(
+                new Database.Partner.Inputs.ClsMemberCreateInput
+                {
+                    Uuid = memberUuid,
+                    Avatar = avatar == null ? null : new Database.Inputs.ClsImageInput
+                    {
+                        Id = avatar.Id,
+                        Url = avatar.Url
+                    },
+                    RoleUuid = member.RoleUuid,
+                    BranchUuid = member.BranchUuid,
+                    Username = member.Username,
+                    Email = member.Email,
+                    Password = member.Password,
+                    Status = member.Status
+                },
+                memberContext
+            );
+        }
+        catch
+        {
+            if (uploadedAvatar != null) await _ImagekitIntegration.DeleteImageAsync(uploadedAvatar.Id);
+            throw;
+        }
+
     }
-    public async Task<ClsMemberModel> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
-    {
-        return await _Repository.ReadOneAsync(memberUuid, memberContext);
-    }
-    public async Task DeleteOneAsync(Guid memberUuid, ClsMemberContext memberContext)
+    public async Task DeleteOneAsync(Guid memberUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(memberUuid, memberContext);
     }
-    public async Task<ClsPaginatedModel<ClsMemberModel>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
-        return await _Repository.SearchAsync(
+     
+        var members = await _Repository.SearchAsync(
             new Database.Partner.Inputs.ClsMemberFilterInput
             {
                 Search = filter.Search,
@@ -68,5 +84,7 @@ public class ClsMemberService
             },
             memberContext
         );
+
+        return members;
     }
 }

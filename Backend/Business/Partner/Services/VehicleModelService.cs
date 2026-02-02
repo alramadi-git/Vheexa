@@ -1,62 +1,83 @@
-using Database.Partner.Repositories;
+using Business.Integrations;
 
 using Business.Partner.Validations.Guards;
 
-using Database.Partner.Contexts;
-
 using Business.Inputs;
 using Business.Partner.Inputs;
-
-using Database.Partner.Models;
-using Database.Models;
 
 namespace Business.Partner.Services;
 
 public class ClsVehicleModelService
 {
-    private readonly ClsVehicleModelRepository _Repository;
+    private readonly Database.Partner.Repositories.ClsVehicleModelRepository _Repository;
     private readonly ClsVehicleModelGuard _Guard;
 
-    public ClsVehicleModelService(ClsVehicleModelRepository repository, ClsVehicleModelGuard guard)
+    private readonly ClsImagekitIntegration _ImagekitIntegration;
+
+    public ClsVehicleModelService(Database.Partner.Repositories.ClsVehicleModelRepository repository, ClsVehicleModelGuard guard, ClsImagekitIntegration imagekitIntegration)
     {
         _Repository = repository;
         _Guard = guard;
+
+        _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task CreateOneAsync(ClsVehicleModelCreateInput vehicleModel, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsVehicleModelCreateInput vehicleModel, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        // TODO: make the ImageKit integration and replace the "url" with a real one 
-        await _Guard.CreateOneAsync(vehicleModel);
-        await _Repository.CreateOneAsync(
-            new Database.Partner.Inputs.ClsVehicleModelCreateInput
-            {
-                Thumbnail = "url",
-                Gallery = [],
-                Name = vehicleModel.Name,
-                Description = vehicleModel.Description,
-                Category = vehicleModel.Category,
-                Manufacturer = vehicleModel.Manufacturer,
-                MarketLaunch = vehicleModel.MarketLaunch,
-                Capacity = vehicleModel.Capacity,
-                Transmission = vehicleModel.Transmission,
-                Fuel = vehicleModel.Fuel,
-                Price = vehicleModel.Price,
-                Discount = vehicleModel.Discount,
-                Tags = vehicleModel.Tags,
-                Status = vehicleModel.Status
-            },
-            memberContext
-        );
+        var VehicleModelUuid = Guid.NewGuid();
+        try
+        {
+            await _Guard.CreateOneAsync(vehicleModel);
+
+            var thumbnailTask = vehicleModel.Thumbnail == null ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null) : _ImagekitIntegration.UploadOneAsyncSafe(vehicleModel.Thumbnail, $"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}");
+            var galleryTask = _ImagekitIntegration.UploadManyAsyncSafe(vehicleModel.Gallery, $"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery");
+          
+            await Task.WhenAll(thumbnailTask, galleryTask);
+
+            var thumbnail = thumbnailTask.Result;
+            var gallery = galleryTask.Result;
+
+            await _Repository.CreateOneAsync(
+                new Database.Partner.Inputs.ClsVehicleModelCreateInput
+                {
+                    Uuid = VehicleModelUuid,
+                    Thumbnail = thumbnail == null ? null : new Database.Inputs.ClsImageInput
+                    {
+                        Id = thumbnail.Id,
+                        Url = thumbnail.Url
+                    },
+                    Gallery = gallery.Select(image => new Database.Inputs.ClsImageInput
+                    {
+                        Id = image.Id,
+                        Url = image.Url
+                    }).ToArray(),
+                    Name = vehicleModel.Name,
+                    Description = vehicleModel.Description,
+                    Category = vehicleModel.Category,
+                    Manufacturer = vehicleModel.Manufacturer,
+                    MarketLaunch = vehicleModel.MarketLaunch,
+                    Capacity = vehicleModel.Capacity,
+                    Transmission = vehicleModel.Transmission,
+                    Fuel = vehicleModel.Fuel,
+                    Price = vehicleModel.Price,
+                    Discount = vehicleModel.Discount,
+                    Tags = vehicleModel.Tags,
+                    Status = vehicleModel.Status
+                },
+                memberContext
+            );
+        }
+        catch
+        {
+            await _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery");
+            throw;
+        }
     }
-    public async Task<ClsVehicleModelModel> ReadOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
-    {
-        return await _Repository.ReadOneAsync(vehicleModelUuid, memberContext);
-    }
-    public async Task DeleteOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
+    public async Task DeleteOneAsync(Guid vehicleModelUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(vehicleModelUuid, memberContext);
     }
-    public async Task<ClsPaginatedModel<ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
         return await _Repository.SearchAsync(

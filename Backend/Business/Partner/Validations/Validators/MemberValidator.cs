@@ -10,7 +10,7 @@ public class ClsMemberCreateValidator : AbstractValidator<ClsMemberCreateInput>
 {
     public ClsMemberCreateValidator()
     {
-        RuleFor(memberCreate => memberCreate.Avatar)
+        RuleFor(memberCreate => memberCreate.Avatar!)
         .MaxSize(5)
         .Type("image/")
         .When(memberCreate => memberCreate.Avatar != null);

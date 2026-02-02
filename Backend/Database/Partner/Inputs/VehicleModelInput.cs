@@ -1,3 +1,5 @@
+using Database.Inputs;
+
 using Database.Enums;
 using Database.Partner.Enums;
 
@@ -5,9 +7,9 @@ namespace Database.Partner.Inputs;
 
 public class ClsVehicleModelCreateInput
 {
-
-    public required string Thumbnail { get; set; }
-    public required string[] Gallery { get; set; }
+    public Guid Uuid { get; set; }
+    public ClsImageInput? Thumbnail { get; set; }
+    public required ClsImageInput[] Gallery { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
     public CATEGORY Category { get; set; }

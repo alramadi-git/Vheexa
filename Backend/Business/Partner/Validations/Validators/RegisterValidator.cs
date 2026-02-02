@@ -10,12 +10,12 @@ public class ClsRegisterValidator : AbstractValidator<ClsRegisterCredentialsInpu
 {
     public ClsRegisterValidator()
     {
-        RuleFor(memberCreate => memberCreate.Logo)
+        RuleFor(memberCreate => memberCreate.Logo!)
         .MaxSize(5)
         .Type("image/")
         .When(memberCreate => memberCreate.Logo != null);
 
-        RuleFor(memberCreate => memberCreate.Banner)
+        RuleFor(memberCreate => memberCreate.Banner!)
         .MaxSize(10)
         .Type("image/")
         .When(memberCreate => memberCreate.Banner != null);

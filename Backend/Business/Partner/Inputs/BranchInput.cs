@@ -1,5 +1,3 @@
-using Database.Enums;
-
 namespace Business.Partner.Inputs;
 
 public class ClsBranchCreateInput
@@ -16,11 +14,11 @@ public class ClsBranchCreateInput
     public required string Name { get => field.Trim(); set; }
     public required string PhoneNumber { get; set; }
     public required string Email { get; set; }
-    public STATUS Status { get; set; }
+    public Database.Enums.STATUS Status { get; set; }
 }
 
 public class ClsBranchFilterInput
 {
     public string? Search { get => field?.Trim(); set; }
-    public STATUS? Status { get; set; }
+    public Database.Enums.STATUS? Status { get; set; }
 }

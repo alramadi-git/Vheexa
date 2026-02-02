@@ -1,5 +1,8 @@
 using Imagekit.Sdk;
+
 using Microsoft.AspNetCore.Http;
+
+using System.Net;
 
 namespace Business.Integrations;
 
@@ -12,6 +15,12 @@ public class ClsImagekitIntegration
         public string UrlEndPoint { get; set; }
     }
 
+    public class ClsImagekit
+    {
+        public string Id { get; set; }
+        public string Url { get; set; }
+    }
+
     private readonly ImagekitClient _ImagekitClient;
 
     public ClsImagekitIntegration(ClsImagekitOptions options)
@@ -19,15 +28,48 @@ public class ClsImagekitIntegration
         _ImagekitClient = new ImagekitClient(options.PublicKey, options.PrivateKey, options.UrlEndPoint);
     }
 
-    public async Task UploadOneAsync(IFormFile image, string path)
+    public async Task<ClsImagekit?> UploadOneAsyncSafe(IFormFile image, string path)
     {
-        await _ImagekitClient.UploadAsync(new FileCreateRequest
+        try
         {
-            folder = path,
-            file = image
-        });
-    }
-    // public async Task UploadManyAsync() {}
+            var newImage = await _ImagekitClient.UploadAsync(new FileCreateRequest
+            {
+                folder = path,
+                useUniqueFileName = true,
+                file = image
+            });
 
-    public async Task DeleteAsync() { }
+            return new ClsImagekit
+            {
+                Id = newImage.fileId,
+                Url = newImage.url,
+            };
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task<ClsImagekit[]> UploadManyAsyncSafe(IFormFile[] images, string path)
+    {
+        var newImages = await Task.WhenAll(images.Select(image => UploadOneAsyncSafe(image, path)));
+
+        var filteredImages = newImages.Where(image => image != null).Select(image => image!).ToArray();
+
+        return filteredImages;
+    }
+
+    public async Task DeleteImageAsync(string imageId)
+    {
+        _ImagekitClient.DeleteFile(imageId);
+    }
+
+    public async Task<bool> DeleteFolderAsync(string folderPath)
+    {
+        return (await _ImagekitClient.DeleteFolderAsync(new Imagekit.Models.DeleteFolderRequest
+        {
+            folderPath = folderPath
+        })).HttpStatusCode == (int)HttpStatusCode.NoContent;
+    }
 }

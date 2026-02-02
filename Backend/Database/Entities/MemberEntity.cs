@@ -11,7 +11,8 @@ public class ClsMemberEntity
     public ClsPartnerRoleEntity Role { get; set; }
     public Guid BranchUuid { get; set; }
     public ClsBranchEntity Branch { get; set; }
-    public string? Avatar { get; set; }
+    public string? AvatarId { get; set; }
+    public ClsImageEntity? Avatar { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }

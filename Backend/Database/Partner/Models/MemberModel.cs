@@ -1,3 +1,5 @@
+using Database.Models;
+
 using Database.Enums;
 using Database.Partner.Enums;
 
@@ -26,7 +28,7 @@ public class ClsMemberModel
         public string Email { get; set; }
     }
     public Guid Uuid { get; set; }
-    public string? Avatar { get; set; }
+    public ClsImageModel? Avatar { get; set; }
     public ClsRoleModel Role { get; set; }
     public ClsBranchModel Branch { get; set; }
     public string Username { get; set; }

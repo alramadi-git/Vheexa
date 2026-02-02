@@ -3,7 +3,8 @@ namespace Database.Entities;
 public class ClsUserEntity
 {
     public Guid Uuid { get; set; }
-    public string? Avatar { get; set; }
+    public string? AvatarId { get; set; }
+    public ClsImageEntity? Avatar { get; set; }
     public Guid LocationUuid { get; set; }
     public ClsLocationEntity Location { get; set; }
     public string Username { get; set; }

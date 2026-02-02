@@ -1,7 +1,5 @@
 using FluentValidation;
 
-using Microsoft.AspNetCore.Http;
-
 namespace Business.Validations.Extensions;
 
 public static class AuthenticationExtension

@@ -10,7 +10,7 @@ public class ClsVehicleModelCreateValidator : AbstractValidator<ClsVehicleModelC
 {
     public ClsVehicleModelCreateValidator()
     {
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Thumbnail)
+        RuleFor(vehicleModelCreate => vehicleModelCreate.Thumbnail!)
         .MaxSize(10)
         .Type("image/")
         .When(vehicleModelCreate => vehicleModelCreate.Thumbnail != null);

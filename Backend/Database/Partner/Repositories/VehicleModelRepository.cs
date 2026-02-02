@@ -2,14 +2,14 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
+using Database.Entities;
+
+using Database.Enums;
+
 using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
-
-using Database.Entities;
-
-using Database.Enums;
 
 using Database.Models;
 using Database.Partner.Models;
@@ -30,10 +30,16 @@ public class ClsVehicleModelRepository
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
-            var vehicleModelUuid = Guid.NewGuid();
+            var newThumbnail = vehicleModel.Thumbnail == null ? null : new ClsImageEntity
+            {
+                Id = vehicleModel.Thumbnail.Id,
+                Url = vehicleModel.Thumbnail.Url
+            };
+
             var newVehicleModel = new ClsVehicleModelEntity
             {
-                Uuid = vehicleModelUuid,
+                Uuid = vehicleModel.Uuid,
+                ThumbnailId = newThumbnail?.Id,
                 PartnerUuid = memberContext.PartnerUuid,
                 Name = vehicleModel.Name,
                 Description = vehicleModel.Description,
@@ -53,6 +59,32 @@ public class ClsVehicleModelRepository
                 DeletedAt = null,
             };
 
+            var images = new List<ClsImageEntity>(vehicleModel.Gallery.Length);
+            var newVehicleModelGallery = new List<ClsVehicleModelGalleryEntity>(vehicleModel.Gallery.Length);
+
+            for (var i = 0; i < vehicleModel.Gallery.Length; i++)
+            {
+                var image = vehicleModel.Gallery[i];
+                var newImage = new ClsImageEntity
+                {
+                    Id = image.Id,
+                    Url = image.Url,
+                };
+
+                var newVehicleModelGalleryImage = new ClsVehicleModelGalleryEntity
+                {
+                    Guid = Guid.NewGuid(),
+                    VehicleModelUuid = newVehicleModel.Uuid,
+                    ImageId = image.Id,
+                    Index = i,
+                    IsDeleted = false,
+                    DeletedAt = null,
+                };
+
+                images.Add(newImage);
+                newVehicleModelGallery.Add(newVehicleModelGalleryImage);
+            }
+
             var newHistory = new ClsHistoryEntity
             {
                 Uuid = Guid.NewGuid(),
@@ -68,7 +100,11 @@ public class ClsVehicleModelRepository
                 CreatedAt = DateTime.UtcNow,
             };
 
+            if (newThumbnail != null) _AppDBContext.Images.Add(newThumbnail);
             _AppDBContext.VehicleModels.Add(newVehicleModel);
+
+            _AppDBContext.Images.AddRange(images);
+            _AppDBContext.VehicleModelGalleries.AddRange(newVehicleModelGallery);
 
             _AppDBContext.Histories.Add(newHistory);
             _AppDBContext.MemberHistories.Add(newMemberHistory);
@@ -81,45 +117,6 @@ public class ClsVehicleModelRepository
             await transaction.RollbackAsync();
             throw;
         }
-    }
-    public async Task<ClsVehicleModelModel> ReadOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
-    {
-        var vehicleModel = await _AppDBContext.VehicleModels
-        .Where(partnerVehicleModel =>
-            partnerVehicleModel.Uuid == vehicleModelUuid &&
-            partnerVehicleModel.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerVehicleModel.IsDeleted
-        )
-        .Select(vehicleModel => new ClsVehicleModelModel
-        {
-            Uuid = vehicleModel.Uuid,
-            Thumbnail = vehicleModel.Thumbnail,
-            Gallery = _AppDBContext.VehicleModelGalleries
-            .Where(image => image.VehicleModelUuid == vehicleModel.Uuid)
-            .Select(image => new ClsVehicleModelModel.ClsGalleryModel
-            {
-                Uuid = image.Uuid,
-                Url = image.Url
-            })
-            .ToArray(),
-            Name = vehicleModel.Name,
-            Description = vehicleModel.Description,
-            Category = vehicleModel.Category,
-            Manufacturer = vehicleModel.Manufacturer,
-            MarketLaunch = vehicleModel.MarketLaunch,
-            Capacity = vehicleModel.Capacity,
-            Transmission = vehicleModel.Transmission,
-            Fuel = vehicleModel.Fuel,
-            Price = vehicleModel.Price,
-            Discount = vehicleModel.Discount,
-            Tags = vehicleModel.Tags,
-            Status = vehicleModel.Status,
-            CreatedAt = vehicleModel.CreatedAt,
-            UpdatedAt = vehicleModel.UpdatedAt,
-        })
-        .FirstAsync();
-
-        return vehicleModel;
     }
     public async Task DeleteOneAsync(Guid vehicleModelUuid, ClsMemberContext memberContext)
     {
@@ -189,13 +186,17 @@ public class ClsVehicleModelRepository
         .Select(vehicleModel => new ClsVehicleModelModel
         {
             Uuid = vehicleModel.Uuid,
-            Thumbnail = vehicleModel.Thumbnail,
+            Thumbnail = vehicleModel.Thumbnail == null ? null : new ClsImageModel
+            {
+                Id = vehicleModel.Thumbnail.Id,
+                Url = vehicleModel.Thumbnail.Url
+            },
             Gallery = _AppDBContext.VehicleModelGalleries
             .Where(image => image.VehicleModelUuid == vehicleModel.Uuid)
-            .Select(image => new ClsVehicleModelModel.ClsGalleryModel
+            .Select(galleryImage => new ClsImageModel
             {
-                Uuid = image.Uuid,
-                Url = image.Url
+                Id = galleryImage.Image.Id,
+                Url = galleryImage.Image.Url
             })
             .ToArray(),
             Name = vehicleModel.Name,

@@ -1,3 +1,5 @@
+using Database.Inputs;
+
 namespace Database.Partner.Inputs;
 
 public class ClsRegisterCredentialsInput
@@ -19,13 +21,15 @@ public class ClsRegisterCredentialsInput
     }
     public class ClsMemberCreateInput
     {
-        public string? Avatar { get; set; }
+        public Guid Uuid { get; set; }
+        public ClsImageInput? Avatar { get; set; }
         public required string Username { get; set; }
         public required string Email { get; set; }
         public required string Password { get; set; }
     }
-    public string? Logo { get; set; }
-    public string? Banner { get; set; }
+    public Guid Uuid { get; set; }
+    public ClsImageInput? Logo { get; set; }
+    public ClsImageInput? Banner { get; set; }
     public required string Handle { get; set; }
     public required string OrganizationName { get; set; }
     public required string PhoneNumber { get; set; }

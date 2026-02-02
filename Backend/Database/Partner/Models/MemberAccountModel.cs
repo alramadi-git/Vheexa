@@ -1,3 +1,5 @@
+using Database.Models;
+
 using Database.Partner.Enums;
 
 namespace Database.Partner.Models;
@@ -7,8 +9,8 @@ public class ClsMemberAccountModel
     public class ClsPartnerModel
     {
         public Guid Uuid { get; set; }
-        public string? Logo { get; set; }
-        public string? Banner { get; set; }
+        public ClsImageModel? Logo { get; set; }
+        public ClsImageModel? Banner { get; set; }
         public string Handle { get; set; }
         public string OrganizationName { get; set; }
         public string PhoneNumber { get; set; }
@@ -37,8 +39,8 @@ public class ClsMemberAccountModel
     public Guid Uuid { get; set; }
     public ClsPartnerModel Partner { get; set; }
     public ClsRoleModel Role { get; set; }
-    public string? Avatar { get; set; }
     public ClsBranchModel Branch { get; set; }
+    public ClsImageModel? Avatar { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
 }

@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using FuzzySharp;
 
+using Database.Entities;
+
 using Database.Enums;
 using Database.Partner.Enums;
 
@@ -9,8 +11,6 @@ using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
-
-using Database.Entities;
 
 using Database.Models;
 using Database.Partner.Models;
@@ -133,45 +133,6 @@ public class ClsRoleRepository
             await transaction.RollbackAsync();
             throw;
         }
-    }
-    public async Task<ClsRoleModel> ReadOneAsync(Guid roleUuid, ClsMemberContext memberContext)
-    {
-        var role = await _AppDBContext.PartnerRoles
-        .AsNoTracking()
-        .Where(partnerRole =>
-            partnerRole.Uuid == roleUuid &&
-            partnerRole.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerRole.IsDeleted
-        )
-        .Select(partnerRole => new
-        {
-            Uuid = partnerRole.Uuid,
-            Name = partnerRole.Role.Name,
-            PermissionUuids = _AppDBContext.RolePermissions
-            .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
-            .Select(rolePermission => rolePermission.PermissionUuid)
-            .ToArray(),
-            AssignedCount = partnerRole.AssignedCount,
-            Status = partnerRole.Status,
-            CreatedAt = partnerRole.CreatedAt,
-            UpdatedAt = partnerRole.UpdatedAt,
-        })
-        .FirstAsync();
-
-        var roleDto = new ClsRoleModel
-        {
-            Uuid = role.Uuid,
-            Name = role.Name,
-            PermissionUuids = role.PermissionUuids
-            .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
-            .ToArray(),
-            AssignedCount = role.AssignedCount,
-            Status = role.Status,
-            CreatedAt = role.CreatedAt,
-            UpdatedAt = role.UpdatedAt,
-        };
-
-        return roleDto;
     }
     public async Task DeleteOneAsync(Guid roleUuid, ClsMemberContext memberContext)
     {

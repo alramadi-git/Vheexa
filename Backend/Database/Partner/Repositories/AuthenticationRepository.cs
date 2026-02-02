@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Identity;
+
+using Database.Entities;
 
 using Database.Enums;
 using Database.Partner.Enums;
 
 using Database.Inputs;
 using Database.Partner.Inputs;
-
-using Database.Entities;
 
 using Database.Partner.Models;
 
@@ -49,11 +50,22 @@ public class ClsAuthenticationRepository
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
+            var newLogo = credentials.Logo == null ? null : new ClsImageEntity
+            {
+                Id = credentials.Logo.Id,
+                Url = credentials.Logo.Url,
+            };
+            var newBanner = credentials.Banner == null ? null : new ClsImageEntity
+            {
+                Id = credentials.Banner.Id,
+                Url = credentials.Banner.Url,
+            };
+
             var newPartner = new ClsPartnerEntity
             {
-                Uuid = Guid.NewGuid(),
-                Logo = credentials.Logo,
-                Banner = credentials.Banner,
+                Uuid = credentials.Uuid,
+                LogoId = newLogo?.Id,
+                BannerId = newBanner?.Id,
                 Handle = credentials.Handle,
                 OrganizationName = credentials.OrganizationName,
                 PhoneNumber = credentials.PhoneNumber,
@@ -97,6 +109,7 @@ public class ClsAuthenticationRepository
             )
             .ToArrayAsync();
 
+            var ownerRoleUuid = new Guid("e1d4a7a3-4b9f-4b4b-9c9c-4a9b4a9b4a9b");
             var newPartnerRoles = defaultRoles
             .Select(role => new ClsPartnerRoleEntity
             {
@@ -111,17 +124,23 @@ public class ClsAuthenticationRepository
                 DeletedAt = null,
             }).ToArray();
 
-            var partnerRole = newPartnerRoles.First(role => role.RoleUuid == new Guid("e1d4a7a3-4b9f-4b4b-9c9c-4a9b4a9b4a9b"));
+            var partnerRole = newPartnerRoles.First(role => role.RoleUuid == ownerRoleUuid);
             partnerRole.AssignedCount = 1;
+
+            var newAvatar = credentials.Member.Avatar == null ? null : new ClsImageEntity
+            {
+                Id = credentials.Member.Avatar.Id,
+                Url = credentials.Member.Avatar.Url,
+            };
 
             var hashPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Member.Password);
             var newMember = new ClsMemberEntity
             {
-                Uuid = Guid.NewGuid(),
+                Uuid = credentials.Member.Uuid,
                 PartnerUuid = newPartner.Uuid,
                 RoleUuid = partnerRole.Uuid,
                 BranchUuid = newBranch.Uuid,
-                Avatar = credentials.Member.Avatar,
+                AvatarId = newAvatar?.Id,
                 Username = credentials.Member.Username,
                 Email = credentials.Member.Email,
                 Password = hashPassword,
@@ -132,6 +151,8 @@ public class ClsAuthenticationRepository
                 DeletedAt = null,
             };
 
+            if (newLogo != null) _AppDBContext.Images.Add(newLogo);
+            if (newBanner != null) _AppDBContext.Images.Add(newBanner);
             _AppDBContext.Partners.Add(newPartner);
 
             _AppDBContext.Locations.Add(newLocation);
@@ -139,6 +160,7 @@ public class ClsAuthenticationRepository
 
             _AppDBContext.PartnerRoles.AddRange(newPartnerRoles);
 
+            if (newAvatar != null) _AppDBContext.Images.Add(newAvatar);
             _AppDBContext.Members.Add(newMember);
 
             await _AppDBContext.SaveChangesAsync();
@@ -156,8 +178,16 @@ public class ClsAuthenticationRepository
                 Partner = new ClsMemberAccountModel.ClsPartnerModel
                 {
                     Uuid = newPartner.Uuid,
-                    Banner = newPartner.Banner,
-                    Logo = newPartner.Logo,
+                    Logo = newPartner.Logo == null ? null : new Database.Models.ClsImageModel
+                    {
+                        Id = newPartner.Logo.Id,
+                        Url = newPartner.Logo.Url,
+                    },
+                    Banner = newPartner.Banner == null ? null : new Database.Models.ClsImageModel
+                    {
+                        Id = newPartner.Banner.Id,
+                        Url = newPartner.Banner.Url,
+                    },
                     Handle = newPartner.Handle,
                     OrganizationName = newPartner.OrganizationName,
                     PhoneNumber = newPartner.PhoneNumber,
@@ -170,7 +200,11 @@ public class ClsAuthenticationRepository
                     .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
                     .ToArray(),
                 },
-                Avatar = newMember.Avatar,
+                Avatar = newMember.Avatar == null ? null : new Database.Models.ClsImageModel
+                {
+                    Id = newMember.Avatar.Id,
+                    Url = newMember.Avatar.Url,
+                },
                 Branch = new ClsMemberAccountModel.ClsBranchModel
                 {
                     Location = new ClsMemberAccountModel.ClsBranchModel.ClsLocationModel
@@ -232,8 +266,16 @@ public class ClsAuthenticationRepository
         {
             Partner = new ClsMemberAccountModel.ClsPartnerModel
             {
-                Banner = member.Partner.Banner,
-                Logo = member.Partner.Logo,
+                Logo = member.Partner.Logo == null ? null : new Database.Models.ClsImageModel
+                {
+                    Id = member.Partner.Logo.Id,
+                    Url = member.Partner.Logo.Url,
+                },
+                Banner = member.Partner.Banner == null ? null : new Database.Models.ClsImageModel
+                {
+                    Id = member.Partner.Banner.Id,
+                    Url = member.Partner.Banner.Url,
+                },
                 Handle = member.Partner.Handle,
                 OrganizationName = member.Partner.OrganizationName,
                 PhoneNumber = member.Partner.PhoneNumber,
@@ -246,7 +288,11 @@ public class ClsAuthenticationRepository
                 .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
                 .ToArray(),
             },
-            Avatar = member.Avatar,
+            Avatar = member.Avatar == null ? null : new Database.Models.ClsImageModel
+            {
+                Id = member.Avatar.Id,
+                Url = member.Avatar.Url,
+            },
             Branch = new ClsMemberAccountModel.ClsBranchModel
             {
                 Location = new ClsMemberAccountModel.ClsBranchModel.ClsLocationModel

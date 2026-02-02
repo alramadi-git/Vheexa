@@ -1,3 +1,5 @@
+using Database.Models;
+
 using Database.Enums;
 using Database.Partner.Enums;
 
@@ -5,17 +7,12 @@ namespace Database.Partner.Models;
 
 public class ClsVehicleModelModel
 {
-    public class ClsGalleryModel
-    {
-        public Guid Uuid { get; set; }
-        public string Url { get; set; }
-    }
     public Guid Uuid { get; set; }
-    public string? Thumbnail { get; set; }
-    public ClsGalleryModel[] Gallery { get; set; }
+    public ClsImageModel? Thumbnail { get; set; }
+    public ClsImageModel[] Gallery { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public CATEGORY Category{ get; set; }
+    public CATEGORY Category { get; set; }
     public string Manufacturer { get; set; }
     public DateOnly MarketLaunch { get; set; }
     public int Capacity { get; set; }

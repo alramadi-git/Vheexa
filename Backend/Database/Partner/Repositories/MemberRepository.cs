@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Identity;
 
 using FuzzySharp;
+
+using Database.Entities;
 
 using Database.Enums;
 using Database.Partner.Enums;
@@ -11,9 +14,8 @@ using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
-using Database.Entities;
-using Database.Partner.Models;
 using Database.Models;
+using Database.Partner.Models;
 
 namespace Database.Partner.Repositories;
 
@@ -59,7 +61,6 @@ public class ClsMemberRepository
                 partnerRole.Uuid == member.RoleUuid &&
                 partnerRole.PartnerUuid == memberContext.PartnerUuid &&
                 !partnerRole.IsDeleted
-
             );
             var isBranchExist = await _AppDBContext.Branches
             .AsNoTracking()
@@ -67,15 +68,21 @@ public class ClsMemberRepository
                 branch.Uuid == member.BranchUuid &&
                 branch.PartnerUuid == memberContext.PartnerUuid &&
                 !branch.IsDeleted
-
             );
 
             if (!isRoleExist || !isBranchExist) throw new ArgumentException("Invalid (role or branch) uuid");
 
+            var newAvatar = member.Avatar == null ? null : new ClsImageEntity
+            {
+                Id = member.Avatar.Id,
+                Url = member.Avatar.Url,
+            };
+
             var hashedPassword = new PasswordHasher<object?>().HashPassword(null, member.Password);
             var newMember = new ClsMemberEntity
             {
-                Uuid = Guid.NewGuid(),
+                Uuid = member.Uuid,
+                AvatarId = newAvatar?.Id,
                 PartnerUuid = memberContext.PartnerUuid,
                 RoleUuid = member.RoleUuid,
                 BranchUuid = member.BranchUuid,
@@ -104,6 +111,7 @@ public class ClsMemberRepository
                 CreatedAt = DateTime.UtcNow,
             };
 
+            if (newAvatar != null) _AppDBContext.Images.Add(newAvatar);
             _AppDBContext.Members.Add(newMember);
 
             _AppDBContext.Histories.Add(newHistory);
@@ -155,83 +163,83 @@ public class ClsMemberRepository
         return branchOptionDto;
     }
 
-    public async Task<ClsMemberModel> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
-    {
-        var member = await _AppDBContext.Members
-        .AsNoTracking()
-        .Where(partnerMember =>
-            partnerMember.Uuid == memberUuid &&
-            partnerMember.PartnerUuid == memberContext.PartnerUuid &&
-            !partnerMember.IsDeleted
-        )
-        .Select(member => new
-        {
-            Uuid = member.Uuid,
-            Avatar = member.Avatar,
-            Role = new
-            {
-                Name = member.Role.Role.Name,
-                PermissionUuids = _AppDBContext.RolePermissions
-                .Where(rolePermission => rolePermission.RoleUuid == member.RoleUuid)
-                .Select(rolePermission => rolePermission.Permission.Uuid)
-                .ToArray()
-            },
-            Branch = new
-            {
-                Location = new
-                {
-                    Country = member.Branch.Location.Country,
-                    City = member.Branch.Location.City,
-                    Street = member.Branch.Location.Street,
-                    Latitude = member.Branch.Location.Latitude,
-                    Longitude = member.Branch.Location.Longitude
-                },
-                Name = member.Branch.Name,
-                PhoneNumber = member.Branch.PhoneNumber,
-                Email = member.Branch.Email,
-            },
-            Username = member.Username,
-            Email = member.Email,
-            Status = member.Status,
-            CreatedAt = member.CreatedAt,
-            UpdatedAt = member.UpdatedAt,
-        })
-        .FirstAsync();
+    // public async Task<ClsMemberModel> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
+    // {
+    //     var member = await _AppDBContext.Members
+    //     .AsNoTracking()
+    //     .Where(partnerMember =>
+    //         partnerMember.Uuid == memberUuid &&
+    //         partnerMember.PartnerUuid == memberContext.PartnerUuid &&
+    //         !partnerMember.IsDeleted
+    //     )
+    //     .Select(member => new
+    //     {
+    //         Uuid = member.Uuid,
+    //         Avatar = member.Avatar,
+    //         Role = new
+    //         {
+    //             Name = member.Role.Role.Name,
+    //             PermissionUuids = _AppDBContext.RolePermissions
+    //             .Where(rolePermission => rolePermission.RoleUuid == member.RoleUuid)
+    //             .Select(rolePermission => rolePermission.Permission.Uuid)
+    //             .ToArray()
+    //         },
+    //         Branch = new
+    //         {
+    //             Location = new
+    //             {
+    //                 Country = member.Branch.Location.Country,
+    //                 City = member.Branch.Location.City,
+    //                 Street = member.Branch.Location.Street,
+    //                 Latitude = member.Branch.Location.Latitude,
+    //                 Longitude = member.Branch.Location.Longitude
+    //             },
+    //             Name = member.Branch.Name,
+    //             PhoneNumber = member.Branch.PhoneNumber,
+    //             Email = member.Branch.Email,
+    //         },
+    //         Username = member.Username,
+    //         Email = member.Email,
+    //         Status = member.Status,
+    //         CreatedAt = member.CreatedAt,
+    //         UpdatedAt = member.UpdatedAt,
+    //     })
+    //     .FirstAsync();
 
-        var memberDto = new ClsMemberModel
-        {
-            Uuid = member.Uuid,
-            Avatar = member.Avatar,
-            Role = new ClsMemberModel.ClsRoleModel
-            {
-                Name = member.Role.Name,
-                Permissions = member.Role.PermissionUuids
-                .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
-                .ToArray(),
-            },
-            Branch = new ClsMemberModel.ClsBranchModel
-            {
-                Location = new ClsMemberModel.ClsBranchModel.ClsLocationModel
-                {
-                    Country = member.Branch.Location.Country,
-                    City = member.Branch.Location.City,
-                    Street = member.Branch.Location.Street,
-                    Latitude = member.Branch.Location.Latitude,
-                    Longitude = member.Branch.Location.Longitude
-                },
-                Name = member.Branch.Name,
-                PhoneNumber = member.Branch.PhoneNumber,
-                Email = member.Branch.Email,
-            },
-            Username = member.Username,
-            Email = member.Email,
-            Status = member.Status,
-            CreatedAt = member.CreatedAt,
-            UpdatedAt = member.UpdatedAt,
-        };
+    //     var memberDto = new ClsMemberModel
+    //     {
+    //         Uuid = member.Uuid,
+    //         Avatar = member.Avatar,
+    //         Role = new ClsMemberModel.ClsRoleModel
+    //         {
+    //             Name = member.Role.Name,
+    //             Permissions = member.Role.PermissionUuids
+    //             .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
+    //             .ToArray(),
+    //         },
+    //         Branch = new ClsMemberModel.ClsBranchModel
+    //         {
+    //             Location = new ClsMemberModel.ClsBranchModel.ClsLocationModel
+    //             {
+    //                 Country = member.Branch.Location.Country,
+    //                 City = member.Branch.Location.City,
+    //                 Street = member.Branch.Location.Street,
+    //                 Latitude = member.Branch.Location.Latitude,
+    //                 Longitude = member.Branch.Location.Longitude
+    //             },
+    //             Name = member.Branch.Name,
+    //             PhoneNumber = member.Branch.PhoneNumber,
+    //             Email = member.Branch.Email,
+    //         },
+    //         Username = member.Username,
+    //         Email = member.Email,
+    //         Status = member.Status,
+    //         CreatedAt = member.CreatedAt,
+    //         UpdatedAt = member.UpdatedAt,
+    //     };
 
-        return memberDto;
-    }
+    //     return memberDto;
+    // }
     public async Task DeleteOneAsync(Guid memberUuid, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
@@ -438,7 +446,11 @@ public class ClsMemberRepository
         .Select(member => new ClsMemberModel
         {
             Uuid = member.Uuid,
-            Avatar = member.Avatar,
+            Avatar = member.Avatar == null ? null : new ClsImageModel
+            {
+                Id = member.Avatar.Id,
+                Url = member.Avatar.Url
+            },
             Role = new ClsMemberModel.ClsRoleModel
             {
                 Name = member.Role.Name,
