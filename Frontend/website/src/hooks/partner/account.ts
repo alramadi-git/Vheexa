@@ -1,6 +1,6 @@
 "use client";
 
-import useAuthenticationService from "@/services/partner/authentication";
+import useAuthenticationService from "@/partner/services/authentication";
 
 import useToken from "./token";
 
@@ -15,7 +15,7 @@ import { tAccount, zAccount } from "@/validations/partner/account";
 import { tRegisterCredentials } from "@/validations/partner/authentication";
 import { tLoginCredentials } from "@/validations/credentials";
 
-import { tResponseOneService } from "@/services/service";
+import { tResponseOneService } from "@/services/success";
 import { eDuration } from "@/enums/duration";
 import { tNullable } from "@/types/nullish";
 import { useMemo } from "react";

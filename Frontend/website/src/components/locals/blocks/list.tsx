@@ -1,7 +1,6 @@
 "use client";
 
-import { tCallback } from "@/types/array";
-import { ComponentProps, JSX } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 import { useTranslations } from "next-intl";
 import { FullHDImage } from "./images";
@@ -24,9 +23,9 @@ function Empty() {
 
 type tListSuccessProps<tItem> = Omit<ComponentProps<"div">, "children"> & {
   items: Array<tItem>;
-  render: tCallback<tItem, JSX.Element>;
+  render: (value: tItem, index: number, array: Array<tItem>) => ReactNode;
 
-  whenEmpty?: JSX.Element;
+  whenEmpty?: ReactNode;
 };
 function ListSuccess<tItem>({
   items,
@@ -40,7 +39,7 @@ function ListSuccess<tItem>({
 
 type tListLoadingProps = Omit<ComponentProps<"div">, "children"> & {
   itemsLength: number;
-  render: tCallback<null, JSX.Element>;
+  render: (value: null, index: number, array: Array<null>) => ReactNode;
 };
 function ListLoading({ itemsLength, render, ...props }: tListLoadingProps) {
   const arr = new Array(itemsLength).fill(null);
@@ -72,7 +71,7 @@ type tList<tItem> = {
   status: eListStatus;
   whenLoading: tListLoadingProps;
   whenSuccess: tListSuccessProps<tItem>;
-  whenFailed?: JSX.Element;
+  whenFailed?: ReactNode;
 };
 
 function List<tItem>({

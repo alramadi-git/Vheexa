@@ -31,7 +31,9 @@ public class ClsMemberService
 
             var memberUuid = Guid.NewGuid();
 
-            var avatar = member.Avatar == null ? null : await _ImagekitIntegration.UploadOneAsyncSafe(member.Avatar, $"/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
+            var avatar = member.Avatar == null
+            ? null
+            : await _ImagekitIntegration.UploadOneAsyncSafe(member.Avatar, $"/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
 
             uploadedAvatar = avatar;
 
@@ -57,6 +59,7 @@ public class ClsMemberService
         catch
         {
             if (uploadedAvatar != null) await _ImagekitIntegration.DeleteImageAsync(uploadedAvatar.Id);
+            
             throw;
         }
 
@@ -64,11 +67,12 @@ public class ClsMemberService
     public async Task DeleteOneAsync(Guid memberUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(memberUuid, memberContext);
+        await _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
     }
     public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
-     
+
         var members = await _Repository.SearchAsync(
             new Database.Partner.Inputs.ClsMemberFilterInput
             {

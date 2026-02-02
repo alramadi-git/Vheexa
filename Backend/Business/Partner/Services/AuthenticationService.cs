@@ -25,7 +25,12 @@ public class ClsAuthenticationService
 
     public async Task<Database.Partner.Models.ClsMemberAccountModel> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
-        var uploadedImageIds = new List<string>();
+        var uploadedImageIds = new List<string>(
+            (credentials.Logo == null ? 0 : 1) +
+            (credentials.Banner == null ? 0 : 1) +
+            (credentials.Member.Avatar == null ? 0 : 1)
+        );
+
         try
         {
             await _Guard.RegisterAsync(credentials);
@@ -102,13 +107,15 @@ public class ClsAuthenticationService
         }
         catch
         {
-            await Task.WhenAll(uploadedImageIds.Select(_ImagekitIntegration.DeleteImageAsync));
+            if (uploadedImageIds.Count > 0) await Task.WhenAll(uploadedImageIds.Select(_ImagekitIntegration.DeleteImageAsync));
+
             throw;
         }
     }
     public async Task<Database.Partner.Models.ClsMemberAccountModel> LoginAsync(ClsLoginCredentialsInput credentials)
     {
         await _Guard.LoginAsync(credentials);
+
         var account = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
         {
             Email = credentials.Email,

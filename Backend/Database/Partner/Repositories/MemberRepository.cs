@@ -162,84 +162,6 @@ public class ClsMemberRepository
 
         return branchOptionDto;
     }
-
-    // public async Task<ClsMemberModel> ReadOneAsync(Guid memberUuid, ClsMemberContext memberContext)
-    // {
-    //     var member = await _AppDBContext.Members
-    //     .AsNoTracking()
-    //     .Where(partnerMember =>
-    //         partnerMember.Uuid == memberUuid &&
-    //         partnerMember.PartnerUuid == memberContext.PartnerUuid &&
-    //         !partnerMember.IsDeleted
-    //     )
-    //     .Select(member => new
-    //     {
-    //         Uuid = member.Uuid,
-    //         Avatar = member.Avatar,
-    //         Role = new
-    //         {
-    //             Name = member.Role.Role.Name,
-    //             PermissionUuids = _AppDBContext.RolePermissions
-    //             .Where(rolePermission => rolePermission.RoleUuid == member.RoleUuid)
-    //             .Select(rolePermission => rolePermission.Permission.Uuid)
-    //             .ToArray()
-    //         },
-    //         Branch = new
-    //         {
-    //             Location = new
-    //             {
-    //                 Country = member.Branch.Location.Country,
-    //                 City = member.Branch.Location.City,
-    //                 Street = member.Branch.Location.Street,
-    //                 Latitude = member.Branch.Location.Latitude,
-    //                 Longitude = member.Branch.Location.Longitude
-    //             },
-    //             Name = member.Branch.Name,
-    //             PhoneNumber = member.Branch.PhoneNumber,
-    //             Email = member.Branch.Email,
-    //         },
-    //         Username = member.Username,
-    //         Email = member.Email,
-    //         Status = member.Status,
-    //         CreatedAt = member.CreatedAt,
-    //         UpdatedAt = member.UpdatedAt,
-    //     })
-    //     .FirstAsync();
-
-    //     var memberDto = new ClsMemberModel
-    //     {
-    //         Uuid = member.Uuid,
-    //         Avatar = member.Avatar,
-    //         Role = new ClsMemberModel.ClsRoleModel
-    //         {
-    //             Name = member.Role.Name,
-    //             Permissions = member.Role.PermissionUuids
-    //             .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
-    //             .ToArray(),
-    //         },
-    //         Branch = new ClsMemberModel.ClsBranchModel
-    //         {
-    //             Location = new ClsMemberModel.ClsBranchModel.ClsLocationModel
-    //             {
-    //                 Country = member.Branch.Location.Country,
-    //                 City = member.Branch.Location.City,
-    //                 Street = member.Branch.Location.Street,
-    //                 Latitude = member.Branch.Location.Latitude,
-    //                 Longitude = member.Branch.Location.Longitude
-    //             },
-    //             Name = member.Branch.Name,
-    //             PhoneNumber = member.Branch.PhoneNumber,
-    //             Email = member.Branch.Email,
-    //         },
-    //         Username = member.Username,
-    //         Email = member.Email,
-    //         Status = member.Status,
-    //         CreatedAt = member.CreatedAt,
-    //         UpdatedAt = member.UpdatedAt,
-    //     };
-
-    //     return memberDto;
-    // }
     public async Task DeleteOneAsync(Guid memberUuid, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
@@ -421,18 +343,18 @@ public class ClsMemberRepository
         .ToArrayAsync();
 
         if (filter.Search != null) members = members
-        .Select(memberDto => new
+        .Select(member => new
         {
-            MemberDto = memberDto,
+            Member = member,
             Score = new int[]
             {
-                Fuzz.Ratio(memberDto.Username, filter.Search),
-                Fuzz.Ratio(memberDto.Email, filter.Search),
+                Fuzz.Ratio(member.Username, filter.Search),
+                Fuzz.Ratio(member.Email, filter.Search),
             }.Max()
         })
-        .Where(fuzzyMemberDto => fuzzyMemberDto.Score > 80)
-        .OrderByDescending(fuzzyMemberDto => fuzzyMemberDto.Score)
-        .Select(fuzzyMemberDto => fuzzyMemberDto.MemberDto)
+        .Where(fuzzyMember => fuzzyMember.Score > 80)
+        .OrderByDescending(fuzzyMember => fuzzyMember.Score)
+        .Select(fuzzyMember => fuzzyMember.Member)
         .ToArray();
 
         var totalItems = members.Length;

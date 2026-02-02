@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import useMemberService from "@/services/partner/member";
+import useMemberService from "@/partner/services/member";
 
 import { useQuery } from "@tanstack/react-query";
 

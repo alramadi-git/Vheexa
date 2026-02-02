@@ -1,7 +1,4 @@
-enum eRoleStatusModel {
-  active,
-  inactive,
-}
+import { eStatusModel } from "./enums/status";
 
 type tRoleModel = {
   uuid: string;
@@ -11,10 +8,9 @@ type tRoleModel = {
     name: string;
   }[];
   assignedCount: number;
-  status: eRoleStatusModel;
+  status: eStatusModel;
   createdAt: string;
   updatedAt: string;
 };
 
-export { eRoleStatusModel };
 export type { tRoleModel };

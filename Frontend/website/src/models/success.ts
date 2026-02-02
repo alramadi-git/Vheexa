@@ -2,14 +2,13 @@ type tSuccessModel<tData> = {
   data: tData;
 };
 
-type tPaginationModel = {
-  page: number;
-  pageSize: number;
-  totalItems: number;
-};
-type tPaginationSuccessModel<tData> = {
+type tPaginatedSuccessModel<tData> = {
   data: tData[];
-  pagination: tPaginationModel;
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalItems: number;
+  };
 };
 
-export type { tSuccessModel, tPaginationModel, tPaginationSuccessModel };
+export type { tSuccessModel, tPaginatedSuccessModel };

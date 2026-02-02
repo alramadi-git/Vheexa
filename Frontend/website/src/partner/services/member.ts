@@ -1,9 +1,7 @@
 "use client";
 
 import useToken from "@/hooks/partner/token";
-import useService from "../hook";
-
-import { ClsQuery } from "@/libraries/query";
+import useService from "../../services/use-service";
 
 import { tUuid, zUuid } from "@/validations/uuid";
 
@@ -14,14 +12,6 @@ import {
   zMemberFilter,
 } from "@/validations/partner/member";
 
-import { tPagination, zPagination } from "@/validations/pagination";
-
-import { eEnvironment } from "@/enums/environment";
-import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
-
-import { tSuccessModel, tPaginationSuccessModel } from "@/models/success";
-import { tResponseOneService, tResponseManyService } from "@/services/service";
-import { tOptionModel } from "@/models/partner/option";
 import {
   tOptionFilter,
   tOptionPagination,
@@ -29,13 +19,28 @@ import {
   zOptionPagination,
 } from "@/validations/partner/option";
 
+import { tPagination, zPagination } from "@/validations/pagination";
+
+import { ClsQuery } from "@/libraries/query";
+
+import { eEnvironment } from "@/enums/environment";
+import { eStatusModel } from "../models/enums/status";
+
+import { tMemberModel } from "@/partner/models/member";
+import { tOptionModel } from "@/partner/models/option";
+
+import { ClsErrorService, tErrorService } from "@/services/error";
+
+import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
+
 export default function useMemberService() {
   const { token } = useToken();
   const service = useService();
 
   async function create(
     member: tMemberCreate,
-  ): Promise<tResponseOneService<null>> {
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zMemberCreate.parse(member);
 
@@ -66,7 +71,7 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -75,7 +80,9 @@ export default function useMemberService() {
       };
     });
   }
-  async function read(uuid: tUuid): Promise<tResponseOneService<tMemberModel>> {
+  async function read(
+    uuid: tUuid,
+  ): Promise<tSuccessService<tMemberModel> | tErrorService> {
     return await service.catch<tMemberModel>(async () => {
       zUuid.parse(uuid);
 
@@ -106,7 +113,7 @@ export default function useMemberService() {
               phoneNumber: "+14155552671",
               email: "austin.downtown@partnerfleet.com",
             },
-            status: eMemberStatusModel.active,
+            status: eStatusModel.active,
             createdAt: "2024-01-10T08:30:00Z",
             updatedAt: "2024-12-01T09:15:22Z",
           },
@@ -119,7 +126,7 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const result: tSuccessModel<tMemberModel> = await response.json();
@@ -131,7 +138,7 @@ export default function useMemberService() {
   }
   async function readRoles(
     uuids: tUuid[],
-  ): Promise<tResponseOneService<tOptionModel[]>> {
+  ): Promise<tSuccessService<tOptionModel[]> | tErrorService> {
     return await service.catch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
@@ -161,7 +168,7 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const data: tSuccessModel<tOptionModel[]> = await response.json();
@@ -173,7 +180,7 @@ export default function useMemberService() {
   }
   async function readBranches(
     uuids: tUuid[],
-  ): Promise<tResponseOneService<tOptionModel[]>> {
+  ): Promise<tSuccessService<tOptionModel[]> | tErrorService> {
     return await service.catch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
@@ -223,7 +230,7 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       const data: tSuccessModel<tOptionModel[]> = await response.json();
@@ -233,7 +240,9 @@ export default function useMemberService() {
       };
     });
   }
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+  async function _delete(
+    uuid: tUuid,
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
@@ -250,7 +259,7 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
       return {
@@ -262,7 +271,7 @@ export default function useMemberService() {
   async function search(
     filter: tMemberFilter,
     pagination: tPagination,
-  ): Promise<tResponseManyService<tMemberModel>> {
+  ): Promise<tPaginatedSuccessService<tMemberModel> | tErrorService> {
     return await service.catch<tMemberModel>(async () => {
       zMemberFilter.parse(filter);
       zPagination.parse(pagination);
@@ -295,7 +304,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "austin.downtown@partnerfleet.com",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-01-10T08:30:00Z",
               updatedAt: "2024-12-01T09:15:22Z",
             },
@@ -320,7 +329,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "berlin.mitte@partnerfleet.eu",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-09-18T11:20:00Z",
               updatedAt: "2024-11-02T13:10:45Z",
             },
@@ -345,7 +354,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "toronto.fd@partnerfleet.ca",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-11-25T10:00:00Z",
               updatedAt: "2024-10-14T16:22:30Z",
             },
@@ -373,7 +382,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "sydney.central@partnerfleet.com.au",
               },
-              status: eMemberStatusModel.inactive,
+              status: eStatusModel.inactive,
               createdAt: "2023-05-20T09:10:00Z",
               updatedAt: "2024-09-12T11:30:00Z",
             },
@@ -398,7 +407,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "dubai.bb@partnerfleet.ae",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-01-12T10:30:00Z",
               updatedAt: "2024-12-06T08:45:10Z",
             },
@@ -423,7 +432,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "saopaulo.paulista@partnerfleet.br",
               },
-              status: eMemberStatusModel.inactive,
+              status: eStatusModel.inactive,
               createdAt: "2023-07-25T14:20:00Z",
               updatedAt: "2024-08-15T09:10:00Z",
             },
@@ -451,7 +460,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "vancouver.dt@partnerfleet.ca",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-10-10T11:15:00Z",
               updatedAt: "2024-11-22T10:30:00Z",
             },
@@ -476,7 +485,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "munich.cc@partnerfleet.eu",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2024-02-20T09:45:00Z",
               updatedAt: "2024-11-29T11:15:30Z",
             },
@@ -504,7 +513,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "nyc.midtown@partnerfleet.com",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-09-05T10:00:00Z",
               updatedAt: "2024-12-04T09:25:15Z",
             },
@@ -529,7 +538,7 @@ export default function useMemberService() {
                 phoneNumber: "+14155552671",
                 email: "melbourne.cbd@partnerfleet.com.au",
               },
-              status: eMemberStatusModel.active,
+              status: eStatusModel.active,
               createdAt: "2023-11-15T10:30:00Z",
               updatedAt: "2024-11-26T14:20:00Z",
             },
@@ -557,10 +566,10 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginationSuccessModel<tMemberModel> =
+      const result: tPaginatedSuccessModel<tMemberModel> =
         await response.json();
       return {
         isSuccess: true,
@@ -571,7 +580,7 @@ export default function useMemberService() {
   async function searchRoles(
     filter: tOptionFilter,
     pagination: tOptionPagination,
-  ): Promise<tResponseManyService<tOptionModel>> {
+  ): Promise<tPaginatedSuccessService<tOptionModel> | tErrorService> {
     return await service.catch<tOptionModel>(async () => {
       zOptionFilter.parse(filter);
       zOptionPagination.parse(pagination);
@@ -604,10 +613,10 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const data: tPaginationSuccessModel<tOptionModel> = await response.json();
+      const data: tPaginatedSuccessModel<tOptionModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,
@@ -618,7 +627,7 @@ export default function useMemberService() {
   async function searchBranches(
     filter: tOptionFilter,
     pagination: tOptionPagination,
-  ): Promise<tResponseManyService<tOptionModel>> {
+  ): Promise<tPaginatedSuccessService<tOptionModel> | tErrorService> {
     return await service.catch<tOptionModel>(async () => {
       zOptionFilter.parse(filter);
       zOptionPagination.parse(pagination);
@@ -671,10 +680,10 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const data: tPaginationSuccessModel<tOptionModel> = await response.json();
+      const data: tPaginatedSuccessModel<tOptionModel> = await response.json();
       return {
         isSuccess: true,
         data: data.data,

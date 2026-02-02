@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import useBranchService from "@/services/partner/branch";
+import useBranchService from "@/partner/services/branch";
 
 import { useQuery } from "@tanstack/react-query";
 

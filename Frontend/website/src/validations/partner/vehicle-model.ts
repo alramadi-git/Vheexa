@@ -3,7 +3,7 @@ import z from "zod";
 import {
   eVehicleModelCategoryModel,
   eVehicleModelStatusModel,
-} from "@/models/partner/vehicle-model";
+} from "@/partner/models/vehicle-model";
 
 const zVehicleModelCreate = z
   .object({

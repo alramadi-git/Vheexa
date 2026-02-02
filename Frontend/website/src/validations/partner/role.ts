@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { eRoleStatusModel } from "@/models/partner/role";
+import { eRoleStatusModel } from "@/partner/models/role";
 
 enum ePermission {
   PartnerRead,

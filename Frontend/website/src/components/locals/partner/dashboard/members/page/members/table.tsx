@@ -7,9 +7,9 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import { eMemberStatusModel, tMemberModel } from "@/models/partner/member";
+import { eMemberStatusModel, tMemberModel } from "@/partner/models/member";
 
-import useMemberService from "@/services/partner/member";
+import useMemberService from "@/partner/services/member";
 
 import { Toast } from "@/components/locals/blocks/toasts";
 import { toast } from "sonner";

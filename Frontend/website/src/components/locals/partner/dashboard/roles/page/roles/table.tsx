@@ -6,9 +6,9 @@ import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import useRoleService from "@/services/partner/role";
+import useRoleService from "@/partner/services/role";
 
-import { eRoleStatusModel, tRoleModel } from "@/models/partner/role";
+import { eRoleStatusModel, tRoleModel } from "@/partner/models/role";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";

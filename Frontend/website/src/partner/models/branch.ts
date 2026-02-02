@@ -1,8 +1,7 @@
-import { tNullable } from "@/types/nullish";
+import { eStatusModel } from "./enums/status";
 
-type tUserModel = {
+type tBranchModel = {
   uuid: string;
-  avatar: tNullable<string>;
   location: {
     country: string;
     city: string;
@@ -10,12 +9,13 @@ type tUserModel = {
     latitude: number;
     longitude: number;
   };
-  username: string;
-  birthday: string;
+  name: string;
   phoneNumber: string;
   email: string;
+  memberCount: number;
+  status: eStatusModel;
   updatedAt: string;
   createdAt: string;
 };
 
-export type { tUserModel };
+export type { tBranchModel };

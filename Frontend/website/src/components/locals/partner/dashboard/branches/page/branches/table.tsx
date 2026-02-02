@@ -8,9 +8,9 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import useBranchService from "@/services/partner/branch";
+import useBranchService from "@/partner/services/branch";
 
-import { eBranchStatusModel, tBranchModel } from "@/models/partner/branch";
+import { eBranchStatusModel, tBranchModel } from "@/partner/models/branch";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";

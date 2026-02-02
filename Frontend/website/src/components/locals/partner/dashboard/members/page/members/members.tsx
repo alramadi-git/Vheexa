@@ -6,15 +6,15 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
-import { tOptionModel } from "@/models/partner/option";
-import { tResponseManyService } from "@/services/service";
+import { tOptionModel } from "@/partner/models/option";
+import { tResponseManyService } from "@/services/success";
 
 import { tMemberCreate, zMemberCreate } from "@/validations/partner/member";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import useMemberService from "@/services/partner/member";
+import useMemberService from "@/partner/services/member";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";

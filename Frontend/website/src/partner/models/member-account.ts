@@ -1,11 +1,13 @@
 import { tNullable } from "@/types/nullish";
 
-import { ePermission } from "@/validations/partner/role";
+import { tImageModel } from "./image";
+
+import { ePermissionModel } from "./enums/permission";
 
 type tMemberAccountModel = {
   partner: {
-    logo: tNullable<string>;
-    banner: tNullable<string>;
+    logo: tNullable<tImageModel>;
+    banner: tNullable<tImageModel>;
     handle: string;
     organizationName: string;
     phoneNumber: string;
@@ -13,9 +15,9 @@ type tMemberAccountModel = {
   };
   role: {
     name: string;
-    permissions: ePermission[];
+    permissions: ePermissionModel[];
   };
-  avatar: tNullable<string>;
+  avatar: tNullable<tImageModel>;
   branch: {
     location: {
       country: string;

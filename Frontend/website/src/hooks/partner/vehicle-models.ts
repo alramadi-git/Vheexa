@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import useVehicleModelService from "@/services/partner/vehicle-model";
+import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { useQuery } from "@tanstack/react-query";
 

@@ -43,7 +43,7 @@ import {
   CommandItem,
 } from "@/components/shadcn/command";
 
-import { tResponseManyService } from "@/services/service";
+import { tResponseManyService } from "@/services/success";
 
 import { tPaginationModel } from "@/models/pagination";
 

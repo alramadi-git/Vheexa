@@ -8,7 +8,6 @@ public class ClsMemberAccountModel
 {
     public class ClsPartnerModel
     {
-        public Guid Uuid { get; set; }
         public ClsImageModel? Logo { get; set; }
         public ClsImageModel? Banner { get; set; }
         public string Handle { get; set; }
@@ -36,7 +35,6 @@ public class ClsMemberAccountModel
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
     }
-    public Guid Uuid { get; set; }
     public ClsPartnerModel Partner { get; set; }
     public ClsRoleModel Role { get; set; }
     public ClsBranchModel Branch { get; set; }

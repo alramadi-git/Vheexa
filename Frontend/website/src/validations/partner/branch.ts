@@ -3,7 +3,7 @@ import z from "zod";
 import { zPhoneNumber } from "../phone-number";
 import { zEmail } from "../credentials";
 
-import { eBranchStatusModel } from "@/models/partner/branch";
+import { eBranchStatusModel } from "@/partner/models/branch";
 
 const zBranchCreate = z.object({
   location: z
