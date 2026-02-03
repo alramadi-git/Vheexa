@@ -45,7 +45,7 @@ public class ClsMemberService
 
             var avatar = member.Avatar == null
             ? null
-            : await _ImagekitIntegration.UploadOneAsyncSafe(member.Avatar, $"/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
+            : await _ImagekitIntegration.UploadOneAsyncSafe(member.Avatar, $"/vheexa/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
 
             uploadedAvatar = avatar;
 
@@ -79,7 +79,7 @@ public class ClsMemberService
     public async Task DeleteOneAsync(Guid memberUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(memberUuid, memberContext);
-        await _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
+        await _ImagekitIntegration.DeleteFolderAsync($"/vheexa/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
     }
     public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>> SearchRolesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {

@@ -41,13 +41,13 @@ public class ClsAuthenticationService
             var uploadedImages = await Task.WhenAll([
                 credentials.Logo == null
                 ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null)
-                : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Logo, $"/partners/{partnerUuid}"),
+                : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Logo, $"/vheexa/partners/{partnerUuid}"),
                 credentials.Banner == null
                 ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null)
-                : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Banner, $"/partners/{partnerUuid}"),
+                : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Banner, $"/vheexa/partners/{partnerUuid}"),
                 credentials.Member.Avatar == null
                 ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null)
-                : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Member.Avatar, $"/partners/{partnerUuid}/members/{memberUuid}"),
+                : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Member.Avatar, $"/vheexa/partners/{partnerUuid}/members/{memberUuid}"),
             ]);
 
             var Logo = uploadedImages[0];

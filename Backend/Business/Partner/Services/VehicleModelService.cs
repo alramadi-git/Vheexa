@@ -32,8 +32,8 @@ public class ClsVehicleModelService
         {
             await _Guard.CreateOneAsync(vehicleModel);
 
-            var thumbnailTask = vehicleModel.Thumbnail == null ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null) : _ImagekitIntegration.UploadOneAsyncSafe(vehicleModel.Thumbnail, $"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}");
-            var galleryTask = _ImagekitIntegration.UploadManyAsyncSafe(vehicleModel.Gallery, $"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery");
+            var thumbnailTask = vehicleModel.Thumbnail == null ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null) : _ImagekitIntegration.UploadOneAsyncSafe(vehicleModel.Thumbnail, $"/vheexa/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}");
+            var galleryTask = _ImagekitIntegration.UploadManyAsyncSafe(vehicleModel.Gallery, $"/vheexa/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery");
 
             await Task.WhenAll(thumbnailTask, galleryTask);
 
@@ -76,7 +76,7 @@ public class ClsVehicleModelService
         {
             await Task.WhenAll([
                 uploadedThumbnailId == null ? Task.CompletedTask :_ImagekitIntegration.DeleteImageAsync(uploadedThumbnailId),
-                _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery"),
+                _ImagekitIntegration.DeleteFolderAsync($"/vheexa/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery"),
             ]);
 
             throw;
@@ -85,7 +85,7 @@ public class ClsVehicleModelService
     public async Task DeleteOneAsync(Guid vehicleModelUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(vehicleModelUuid, memberContext);
-        await _ImagekitIntegration.DeleteFolderAsync($"/partners/{memberContext.PartnerUuid}/vehicle-models/{vehicleModelUuid}");
+        await _ImagekitIntegration.DeleteFolderAsync($"/vheexa/partners/{memberContext.PartnerUuid}/vehicle-models/{vehicleModelUuid}");
 
     }
     public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)

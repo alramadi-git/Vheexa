@@ -9,27 +9,56 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Register options
-        var Options = builder.Configuration.GetSection("Options").Get<ClsOption>();
+        builder.Services.Configure<Business.Integrations.ClsImagekitIntegration.ClsImagekitOptions>(
+            builder.Configuration.GetSection("ImagekitOptions")
+        );
 
         // Register database
-        builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
+        builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSql")));
 
         // Register business layer
         // Validators
-        builder.Services.AddScoped<ClsValidator>();
+        builder.Services.AddScoped<Business.Validations.Validators.ClsLoginValidator>();
+        builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationValidator>();
+
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionPaginationValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRegisterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelFilterValidator>();
 
         // Guards
-        builder.Services.AddScoped<ClsGuard>();
+        builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsAuthenticationGuard>();
+        builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsRoleGuard>();
+        builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsBranchGuard>();
+        builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsMemberGuard>();
+        builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsVehicleModelGuard>();
 
         // Integrations
-        builder.Services.AddScoped<ClsIntegration>();
+        builder.Services.AddScoped<Business.Integrations.ClsImagekitIntegration>();
 
         // Services
-        builder.Services.AddScoped<ClsService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsAuthenticationService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsOverviewService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsRoleService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsBranchService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsMemberService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsVehicleModelService>();
 
         // Register database layer 
         // Repositories 
-        builder.Services.AddScoped<ClsRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsAuthenticationRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsOverviewRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsRoleRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsBranchRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsMemberRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsVehicleModelRepository>();
 
         builder.Services.AddControllers();
 

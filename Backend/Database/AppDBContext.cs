@@ -6,12 +6,12 @@ namespace Database;
 
 public class AppDBContext : DbContext
 {
-    public DbSet<ClsHistoryEntity> Histories { get; set; }
+    public DbSet<ClsImageEntity> Images { get; set; }
+    public DbSet<ClsLocationEntity> Locations { get; set; }
     public DbSet<ClsRoleEntity> Roles { get; set; }
     public DbSet<ClsPermissionEntity> Permissions { get; set; }
     public DbSet<ClsRolePermissionEntity> RolePermissions { get; set; }
-    public DbSet<ClsLocationEntity> Locations { get; set; }
-    public DbSet<ClsImageEntity> Images { get; set; }
+    public DbSet<ClsHistoryEntity> Histories { get; set; }
     public DbSet<ClsUserEntity> Users { get; set; }
     public DbSet<ClsPartnerEntity> Partners { get; set; }
     public DbSet<ClsPartnerRoleEntity> PartnerRoles { get; set; }
@@ -25,8 +25,8 @@ public class AppDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes()) 
-            if (entityType.FindProperty("Uuid") != null) 
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            if (entityType.FindProperty("Uuid") != null)
                 modelBuilder.Entity(entityType.ClrType).HasKey("Uuid");
 
         base.OnModelCreating(modelBuilder);

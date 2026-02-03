@@ -2,6 +2,7 @@ using Imagekit.Sdk;
 
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Business.Integrations;
 
@@ -22,9 +23,9 @@ public class ClsImagekitIntegration
 
     private readonly ImagekitClient _ImagekitClient;
 
-    public ClsImagekitIntegration(ClsImagekitOptions options)
+    public ClsImagekitIntegration(IOptions<ClsImagekitOptions> options)
     {
-        _ImagekitClient = new ImagekitClient(options.PublicKey, options.PrivateKey, options.UrlEndPoint);
+        _ImagekitClient = new ImagekitClient(options.Value.PublicKey, options.Value.PrivateKey, options.Value.UrlEndPoint);
     }
 
     public async Task<ClsImagekit?> UploadOneAsyncSafe(IFormFile image, string path)
