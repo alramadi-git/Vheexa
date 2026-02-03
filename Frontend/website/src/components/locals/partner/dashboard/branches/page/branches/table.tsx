@@ -10,7 +10,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import useBranchService from "@/partner/services/branch";
 
-import { eBranchStatusModel, tBranchModel } from "@/partner/models/branch";
+import { tBranchModel } from "@/partner/models/branch";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -20,7 +20,6 @@ import {
   LuHash,
   LuBuilding2,
   LuUsers,
-  LuCar,
   LuCalendar,
   LuCircleCheck,
   LuCircleX,
@@ -54,6 +53,7 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { eStatusModel } from "@/partner/models/enums/status";
 
 type tTableProps = {
   isLoading: boolean;
@@ -150,13 +150,11 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <Badge
               variant={
-                branch.status === eBranchStatusModel.active
-                  ? "success"
-                  : "muted"
+                branch.status === eStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {branch.status === eBranchStatusModel.active ? (
+              {branch.status === eStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />

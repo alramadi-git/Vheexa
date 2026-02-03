@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useId, useRef, useEffect } from "react";
 import { useQuery } from "@/hooks/query";
 
-import { tBranchFilter, zBranchFilter } from "@/validations/partner/branch";
+import { tBranchFilter, zBranchFilter } from "@/partner/validators/branch";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

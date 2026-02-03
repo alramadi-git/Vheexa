@@ -7,9 +7,8 @@ import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
 import { tOptionModel } from "@/partner/models/option";
-import { tResponseManyService } from "@/services/success";
 
-import { tMemberCreate, zMemberCreate } from "@/validations/partner/member";
+import { tMemberCreate, zMemberCreate } from "@/partner/validators/member";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
@@ -89,7 +88,9 @@ import { Button } from "@/components/shadcn/button";
 import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
-import { tOptionFilter, tOptionPagination } from "@/validations/partner/option";
+import { tOptionFilter, tOptionPagination } from "@/partner/validators/option";
+import { tPaginatedSuccessService } from "@/services/success";
+import { tErrorService } from "@/services/error";
 
 export default function Members() {
   const { isLoading, result } = useMembers();
@@ -213,21 +214,23 @@ function AddNew() {
     type: "roles" | "branches",
     filter: tOptionFilter,
     pagination: tOptionPagination,
-  ): Promise<tResponseManyService<tOption>> {
-    const serviceResult: tResponseManyService<tOptionModel> = await (type ===
-    "roles"
+  ): Promise<tPaginatedSuccessService<tOption> | tErrorService> {
+    const serviceResult:
+      | tPaginatedSuccessService<tOptionModel>
+      | tErrorService = await (type === "roles"
       ? memberService.searchRoles(filter, pagination)
       : memberService.searchBranches(filter, pagination));
 
-    const result: tResponseManyService<tOption> = !serviceResult.isSuccess
-      ? serviceResult
-      : {
-          ...serviceResult,
-          data: serviceResult.data.map((option) => ({
-            value: option.uuid,
-            label: option.name,
-          })),
-        };
+    const result: tPaginatedSuccessService<tOption> | tErrorService =
+      !serviceResult.isSuccess
+        ? serviceResult
+        : {
+            ...serviceResult,
+            data: serviceResult.data.map((option) => ({
+              value: option.uuid,
+              label: option.name,
+            })),
+          };
 
     return result;
   }
@@ -320,7 +323,7 @@ function AddNew() {
               />
               <Controller
                 control={control}
-                name="role"
+                name="roleUuid"
                 render={({
                   field: { onChange: setValue },
                   fieldState: { invalid, error },
@@ -328,7 +331,7 @@ function AddNew() {
                   <Field>
                     <FieldLabel
                       aria-invalid={invalid}
-                      htmlFor={`${id}-role`}
+                      htmlFor={`${id}-role-uuid`}
                       className="max-w-fit"
                     >
                       {tAddNew("content.form.role.label")}
@@ -336,7 +339,7 @@ function AddNew() {
                     <FieldContent>
                       <FieldAsyncSelect<tOption>
                         ref={roleRef}
-                        id={`${id}-role`}
+                        id={`${id}-role-uuid`}
                         isInvalid={invalid}
                         placeholder={tAddNew("content.form.role.placeholder")}
                         valueRender={(option) => (
@@ -355,7 +358,7 @@ function AddNew() {
                           fetch(
                             "roles",
                             {
-                              search,
+                              search: search.trim() === "" ? undefined : search,
                             },
                             {
                               page,
@@ -419,7 +422,7 @@ function AddNew() {
               />
               <Controller
                 control={control}
-                name="branch"
+                name="branchUuid"
                 render={({
                   field: { onChange: setValue },
                   fieldState: { invalid, error },
@@ -427,7 +430,7 @@ function AddNew() {
                   <Field className="col-span-2 mt-auto">
                     <FieldLabel
                       aria-invalid={invalid}
-                      htmlFor={`${id}-branch`}
+                      htmlFor={`${id}-branch-uuid`}
                       className="max-w-fit"
                     >
                       {tAddNew("content.form.branch.label")}
@@ -435,7 +438,7 @@ function AddNew() {
                     <FieldContent>
                       <FieldAsyncSelect<tOption>
                         ref={branchRef}
-                        id={`${id}-branch`}
+                        id={`${id}-branch-uuid`}
                         isInvalid={invalid}
                         placeholder={tAddNew("content.form.branch.placeholder")}
                         valueRender={(option) => (
@@ -454,7 +457,7 @@ function AddNew() {
                           fetch(
                             "branches",
                             {
-                              search,
+                              search: search.trim() === "" ? undefined : search,
                             },
                             {
                               page,

@@ -6,13 +6,12 @@ import { useQuery } from "@/hooks/query";
 
 import { useId, useRef, useEffect } from "react";
 
-import { tMemberFilter, zMemberFilter } from "@/validations/partner/member";
+import { tMemberFilter, zMemberFilter } from "@/partner/validators/member";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { tOptionModel } from "@/partner/models/option";
-import { tResponseManyService } from "@/services/success";
 
 import useMemberService from "@/partner/services/member";
 
@@ -50,7 +49,9 @@ import {
 } from "@/components/locals/blocks/selects";
 
 import { Button } from "@/components/shadcn/button";
-import { tOptionFilter, tOptionPagination } from "@/validations/partner/option";
+import { tOptionFilter, tOptionPagination } from "@/partner/validators/option";
+import { tPaginatedSuccessService } from "@/services/success";
+import { tErrorService } from "@/services/error";
 
 export default function Filter() {
   const id = useId();
@@ -84,27 +85,29 @@ export default function Filter() {
   const memberService = useMemberService();
 
   useEffect(() => {
-    const [searchQuery, rolesQuery, branchesQuery, statusQuery] = [
+    const [searchQuery, roleUuidsQuery, branchUuidsQuery, statusQuery] = [
       query.get("filter.search"),
-      query.getAll("filter.roles"),
-      query.getAll("filter.branches"),
+      query.getAll("filter.roleUuids"),
+      query.getAll("filter.branchUuids"),
       query.get("filter.status"),
     ];
 
-    const [search, roles, branches, status] = [
+    const [search, roleUuids, branchUuids, status] = [
       searchQuery !== null ? searchQuery : undefined,
-      rolesQuery,
-      branchesQuery,
+      roleUuidsQuery,
+      branchUuidsQuery,
       statusQuery !== null ? Number(statusQuery) : undefined,
     ];
 
     setValue("search", search);
 
-    setValue("roles", roles);
-    setValue("branches", branches);
+    setValue("roleUuids", roleUuids);
+    setValue("branchUuids", branchUuids);
     Promise.all([
-      roles.length !== 0 ? memberService.readRoles(roles) : undefined,
-      branches.length !== 0 ? memberService.readBranches(branches) : undefined,
+      roleUuids.length !== 0 ? memberService.readRoles(roleUuids) : undefined,
+      branchUuids.length !== 0
+        ? memberService.readBranches(branchUuids)
+        : undefined,
     ]).then(([rolesResult, branchesResult]) => {
       if (rolesResult !== undefined) {
         if (!rolesResult.isSuccess) {
@@ -115,7 +118,7 @@ export default function Filter() {
             />
           ));
 
-          setValue("roles", []);
+          setValue("roleUuids", []);
         } else
           rolesRef.current?.change(
             rolesResult.data.map((option) => ({
@@ -134,7 +137,7 @@ export default function Filter() {
             />
           ));
 
-          setValue("branches", []);
+          setValue("branchUuids", []);
         } else
           branchesRef.current?.change(
             branchesResult.data.map((option) => ({
@@ -161,14 +164,14 @@ export default function Filter() {
 
   function submit(data: tMemberFilter) {
     query.remove("filter.search");
-    query.remove("filter.roles");
-    query.remove("filter.branches");
+    query.remove("filter.roleUuids");
+    query.remove("filter.branchUuids");
     query.remove("filter.status");
     query.remove("pagination.page");
 
     query.set("filter.search", data.search);
-    query.set("filter.roles", data.roleUuids);
-    query.set("filter.branches", data.branchUuids);
+    query.set("filter.roleUuids", data.roleUuids);
+    query.set("filter.branchUuids", data.branchUuids);
     query.set("filter.status", data.status?.toString());
 
     query.apply();
@@ -178,21 +181,23 @@ export default function Filter() {
     type: "roles" | "branches",
     filter: tOptionFilter,
     pagination: tOptionPagination,
-  ): Promise<tResponseManyService<tOption>> {
-    const serviceResult: tResponseManyService<tOptionModel> = await (type ===
-    "roles"
+  ): Promise<tPaginatedSuccessService<tOption> | tErrorService> {
+    const serviceResult:
+      | tPaginatedSuccessService<tOptionModel>
+      | tErrorService = await (type === "roles"
       ? memberService.searchRoles(filter, pagination)
       : memberService.searchBranches(filter, pagination));
 
-    const result: tResponseManyService<tOption> = !serviceResult.isSuccess
-      ? serviceResult
-      : {
-          ...serviceResult,
-          data: serviceResult.data.map((option) => ({
-            value: option.uuid,
-            label: option.name,
-          })),
-        };
+    const result: tPaginatedSuccessService<tOption> | tErrorService =
+      !serviceResult.isSuccess
+        ? serviceResult
+        : {
+            ...serviceResult,
+            data: serviceResult.data.map((option) => ({
+              value: option.uuid,
+              label: option.name,
+            })),
+          };
 
     return result;
   }
@@ -238,7 +243,7 @@ export default function Filter() {
           <FieldGroup className="grid-cols-2">
             <Controller
               control={control}
-              name="roles"
+              name="roleUuids"
               render={({
                 field: { onChange: setValues },
                 fieldState: { invalid, error },
@@ -246,7 +251,7 @@ export default function Filter() {
                 <Field>
                   <FieldLabel
                     aria-invalid={invalid}
-                    htmlFor={`${id}-roles`}
+                    htmlFor={`${id}-role-uuids`}
                     className="max-w-fit"
                   >
                     {tFilter("roles.label")}
@@ -254,7 +259,7 @@ export default function Filter() {
                   <FieldContent>
                     <FieldMultiAsyncSelect<tOption>
                       ref={rolesRef}
-                      id={`${id}-roles`}
+                      id={`${id}-role-uuids`}
                       isInvalid={invalid}
                       placeholder={tFilter("roles.placeholder")}
                       valueRender={(value) => (
@@ -271,7 +276,7 @@ export default function Filter() {
                         fetch(
                           "roles",
                           {
-                            search,
+                            search: search.trim() === "" ? undefined : search,
                           },
                           {
                             page,
@@ -329,7 +334,7 @@ export default function Filter() {
             />
             <Controller
               control={control}
-              name="branches"
+              name="branchUuids"
               render={({
                 field: { onChange: setValues },
                 fieldState: { invalid, error },
@@ -337,7 +342,7 @@ export default function Filter() {
                 <Field>
                   <FieldLabel
                     aria-invalid={invalid}
-                    htmlFor={`${id}-branches`}
+                    htmlFor={`${id}-branch-uuids`}
                     className="max-w-fit"
                   >
                     {tFilter("branches.label")}
@@ -345,7 +350,7 @@ export default function Filter() {
                   <FieldContent>
                     <FieldMultiAsyncSelect<tOption>
                       ref={branchesRef}
-                      id={`${id}-branches`}
+                      id={`${id}-branch-uuids`}
                       isInvalid={invalid}
                       placeholder={tFilter("branches.placeholder")}
                       valueRender={(value) => (
@@ -364,7 +369,7 @@ export default function Filter() {
                         fetch(
                           "branches",
                           {
-                            search,
+                            search: search.trim() === "" ? undefined : search,
                           },
                           {
                             page,

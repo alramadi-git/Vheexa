@@ -1226,7 +1226,10 @@
                 },
                 "permissions": {
                   "header": "Permissions",
-                  "cell": "+{count} More"
+                  "cell": {
+                    "permission": "{permission, select, 0 {Partner Read} 1 {Partner Update} 2 {Partner Delete} 3 {Roles Create} 4 {Roles Read} 5 {Roles Update} 6 {Roles Delete} 7 {Branches Create} 8 {Branches Read} 9 {Branches Update} 10 {Branches Delete} 11 {Members Create} 12 {Members Read} 13 {Members Update} 14 {Members Delete} 15 {Vehicle Models Create} 16 {Vehicle Models Read} 17 {Vehicle Models Update} 18 {Vehicle Models Delete} other {Unknown}}",
+                    "more": "+{count} More"
+                  }
                 },
                 "members": {
                   "header": "Members",

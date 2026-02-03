@@ -1,9 +1,9 @@
 import z from "zod";
 
-import { zPhoneNumber } from "../phone-number";
-import { zEmail } from "../credentials";
+import { zPhoneNumber } from "../../validators/phone-number";
+import { zEmail } from "../../validators/authentication";
 
-import { eBranchStatusModel } from "@/partner/models/branch";
+import { eStatusService } from "./enums/status";
 
 const zBranchCreate = z.object({
   location: z
@@ -40,7 +40,7 @@ const zBranchCreate = z.object({
     .max(80, "branch name must be at most 25 characters."),
   phoneNumber: zPhoneNumber,
   email: zEmail,
-  status: z.enum(eBranchStatusModel, "invalid status."),
+  status: z.enum(eStatusService, "invalid status."),
 });
 type tBranchCreate = z.infer<typeof zBranchCreate>;
 
@@ -53,7 +53,7 @@ const zBranchFilter = z
         .nonempty("search must not be empty.")
         .max(256, "search must be at most 256 characters."),
     ),
-    status: z.optional(z.enum(eBranchStatusModel, "invalid status.")),
+    status: z.optional(z.enum(eStatusService, "invalid status.")),
   })
   .strict();
 type tBranchFilter = z.infer<typeof zBranchFilter>;

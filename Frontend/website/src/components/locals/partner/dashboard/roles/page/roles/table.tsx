@@ -8,7 +8,7 @@ import { ClsDateFormatter } from "@/libraries/date-formatter";
 
 import useRoleService from "@/partner/services/role";
 
-import { eRoleStatusModel, tRoleModel } from "@/partner/models/role";
+import { tRoleModel } from "@/partner/models/role";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";
@@ -50,6 +50,7 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 
 import { Button } from "@/components/shadcn/button";
 import { Badge } from "@/components/locals/blocks/typography";
+import { eStatusModel } from "@/partner/models/enums/status";
 
 type tTableProps = {
   isLoading: boolean;
@@ -132,11 +133,11 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <Badge
               variant={
-                role.status === eRoleStatusModel.active ? "success" : "muted"
+                role.status === eStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {role.status === eRoleStatusModel.active ? (
+              {role.status === eStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />
@@ -249,14 +250,16 @@ function Permissions({ permissions }: tPermissionProps) {
         <li key={permission}>
           <Badge variant="muted" className="flex items-center gap-1">
             <LuCheck className="size-4" />
-            {permission}
+            {tPermissions("cell.permission", {
+              permission: permission,
+            })}
           </Badge>
         </li>
       ))}
       {remainingPermissions > 0 && (
         <li>
           <Badge variant="muted" className="flex items-center gap-1">
-            {tPermissions("cell", {
+            {tPermissions("cell.more", {
               count: remainingPermissions,
             })}
           </Badge>

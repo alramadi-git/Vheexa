@@ -1,8 +1,8 @@
-import z from "zod/v4";
+import z from "zod";
 
 const zOptionFilter = z
   .object({
-    search: z.optional(z.string().nonempty("search cannot be empty.")),
+    search: z.optional(z.string().trim().nonempty("search cannot be empty.")),
   })
   .strict();
 type tOptionFilter = z.infer<typeof zOptionFilter>;

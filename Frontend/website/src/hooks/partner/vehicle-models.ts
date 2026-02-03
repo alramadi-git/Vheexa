@@ -5,8 +5,8 @@ import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { tVehicleModelFilter } from "@/validations/partner/vehicle-model";
-import { tPagination } from "@/validations/pagination";
+import { tVehicleModelFilter } from "@/partner/validators/vehicle-model";
+import { tPagination } from "@/validators/pagination";
 
 export default function useVehicleModels() {
   const searchParams = useSearchParams();
@@ -17,8 +17,6 @@ export default function useVehicleModels() {
     categoriesQuery,
     minCapacityQuery,
     maxCapacityQuery,
-    transmissionsQuery,
-    fuelsQuery,
     minPriceQuery,
     maxPriceQuery,
     minDiscountQuery,
@@ -31,8 +29,6 @@ export default function useVehicleModels() {
       searchParams.getAll("filter.categories"),
       searchParams.get("filter.capacity.min"),
       searchParams.get("filter.capacity.max"),
-      searchParams.getAll("filter.transmissions"),
-      searchParams.getAll("filter.fuels"),
       searchParams.get("filter.price.min"),
       searchParams.get("filter.price.max"),
       searchParams.get("filter.discount.min"),
@@ -47,8 +43,6 @@ export default function useVehicleModels() {
     categories,
     minCapacity,
     maxCapacity,
-    transmissions,
-    fuels,
     minPrice,
     maxPrice,
     minDiscount,
@@ -61,8 +55,6 @@ export default function useVehicleModels() {
       categoriesQuery.map((category) => Number(category)),
       minCapacityQuery !== null ? Number(minCapacityQuery) : undefined,
       maxCapacityQuery !== null ? Number(maxCapacityQuery) : undefined,
-      transmissionsQuery,
-      fuelsQuery,
       minPriceQuery !== null ? Number(minPriceQuery) : undefined,
       maxPriceQuery !== null ? Number(maxPriceQuery) : undefined,
       minDiscountQuery !== null ? Number(minDiscountQuery) : undefined,

@@ -8,7 +8,7 @@ import { useRouter } from "@/i18n/navigation";
 import {
   tRegisterCredentials,
   zRegisterCredentials,
-} from "@/validations/partner/authentication";
+} from "@/partner/validators/authentication";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller, Control, FormState } from "react-hook-form";

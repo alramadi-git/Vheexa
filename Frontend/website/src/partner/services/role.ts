@@ -3,33 +3,38 @@
 import useToken from "@/hooks/partner/token";
 import useService from "../../services/use-service";
 
-import { ClsQuery } from "@/libraries/query";
-
-import { tUuid, zUuid } from "@/validations/uuid";
+import { tUuid, zUuid } from "@/validators/uuid";
 
 import {
   tRoleCreate,
   tRoleFilter,
   zRoleCreate,
   zRoleFilter,
-} from "@/validations/partner/role";
+} from "@/partner/validators/role";
 
-import { tPagination, zPagination } from "@/validations/pagination";
+import { tPagination, zPagination } from "@/validators/pagination";
+
+import { ClsQuery } from "@/libraries/query";
 
 import { eEnvironment } from "@/enums/environment";
 
+import { ePermissionModel } from "../models/enums/permission";
+import { eStatusModel } from "../models/enums/status";
+
 import { tRoleModel } from "@/partner/models/role";
+
+import { ClsErrorService, tErrorService } from "@/services/error";
 
 import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
 import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
-import { ClsErrorService } from "@/services/error";
-import { eStatusModel } from "../models/enums/status";
 
 export default function useRoleService() {
   const { token } = useToken();
   const service = useService();
 
-  async function create(role: tRoleCreate): Promise<tSuccessService<null>> {
+  async function create(
+    role: tRoleCreate,
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zRoleCreate.parse(role);
 
@@ -56,7 +61,9 @@ export default function useRoleService() {
       };
     });
   }
-  async function read(uuid: tUuid): Promise<tSuccessService<tRoleModel>> {
+  async function read(
+    uuid: tUuid,
+  ): Promise<tSuccessService<tRoleModel> | tErrorService> {
     return await service.catch<tRoleModel>(async () => {
       zUuid.parse(uuid);
 
@@ -67,82 +74,25 @@ export default function useRoleService() {
             uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
             name: "Owner",
             permissions: [
-              {
-                uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-                name: "Partner Read",
-              },
-              {
-                uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
-                name: "Partner Update",
-              },
-              {
-                uuid: "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
-                name: "Partner Delete",
-              },
-              {
-                uuid: "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8g",
-                name: "Roles Create",
-              },
-              {
-                uuid: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8g9h",
-                name: "Roles Read",
-              },
-              {
-                uuid: "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8g9h0i",
-                name: "Roles Update",
-              },
-              {
-                uuid: "g7b8c9d0-e1f2-4a3b-4c5d-6e7f8g9h0i1j",
-                name: "Roles Delete",
-              },
-              {
-                uuid: "h8c9d0e1-f2a3-4b4c-5d6e-7f8g9h0i1j2k",
-                name: "Branches Create",
-              },
-              {
-                uuid: "i9d0e1f2-a3b4-4c5d-6e7f-8g9h0i1j2k3l",
-                name: "Branches Read",
-              },
-              {
-                uuid: "j0e1f2a3-b4c5-4d6e-7f8g-9h0i1j2k3l4m",
-                name: "Branches Update",
-              },
-              {
-                uuid: "k1f2a3b4-c5d6-4e7f-8g9h-0i1j2k3l4m5n",
-                name: "Branches Delete",
-              },
-              {
-                uuid: "l2a3b4c5-d6e7-4f8g-9h0i-1j2k3l4m5n6o",
-                name: "Members Create",
-              },
-              {
-                uuid: "m3b4c5d6-e7f8-4g9h-0i1j-2k3l4m5n6o7p",
-                name: "Members Read",
-              },
-              {
-                uuid: "n4c5d6e7-f8g9-4h0i-1j2k-3l4m5n6o7p8q",
-                name: "Members Update",
-              },
-              {
-                uuid: "o5d6e7f8-g9h0-4i1j-2k3l-4m5n6o7p8q9r",
-                name: "Members Delete",
-              },
-              {
-                uuid: "p6e7f8g9-h0i1-4j2k-3l4m-5n6o7p8q9r0s",
-                name: "Vehicle Models Create",
-              },
-              {
-                uuid: "q7f8g9h0-i1j2-4k3l-4m5n-6o7p8q9r0s1t",
-                name: "Vehicle Models Read",
-              },
-              {
-                uuid: "r8g9h0i1-j2k3-4l4m-5n6o-7p8q9r0s1t2u",
-                name: "Vehicle Models Update",
-              },
-              {
-                uuid: "s9h0i1j2-k3l4-4m5n-6o7p-8q9r0s1t2u3v",
-                name: "Vehicle Models Delete",
-              },
+              ePermissionModel.PartnerRead,
+              ePermissionModel.PartnerUpdate,
+              ePermissionModel.PartnerDelete,
+              ePermissionModel.RolesCreate,
+              ePermissionModel.RolesRead,
+              ePermissionModel.RolesUpdate,
+              ePermissionModel.RolesDelete,
+              ePermissionModel.BranchesCreate,
+              ePermissionModel.BranchesRead,
+              ePermissionModel.BranchesUpdate,
+              ePermissionModel.BranchesDelete,
+              ePermissionModel.MembersCreate,
+              ePermissionModel.MembersRead,
+              ePermissionModel.MembersUpdate,
+              ePermissionModel.MembersDelete,
+              ePermissionModel.VehicleModelsCreate,
+              ePermissionModel.VehicleModelsRead,
+              ePermissionModel.VehicleModelsUpdate,
+              ePermissionModel.VehicleModelsDelete,
             ],
             assignedCount: 1,
             status: eStatusModel.active,
@@ -168,7 +118,9 @@ export default function useRoleService() {
       };
     });
   }
-  async function _delete(uuid: tUuid): Promise<tSuccessService<null>> {
+  async function _delete(
+    uuid: tUuid,
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
@@ -197,7 +149,7 @@ export default function useRoleService() {
   async function search(
     filter: tRoleFilter,
     pagination: tPagination,
-  ): Promise<tPaginatedSuccessService<tRoleModel>> {
+  ): Promise<tPaginatedSuccessService<tRoleModel> | tErrorService> {
     return await service.catch<tRoleModel>(async () => {
       zRoleFilter.parse(filter);
       zPagination.parse(pagination);
@@ -210,82 +162,25 @@ export default function useRoleService() {
               uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
               name: "Owner",
               permissions: [
-                {
-                  uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-                  name: "Partner Read",
-                },
-                {
-                  uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
-                  name: "Partner Update",
-                },
-                {
-                  uuid: "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
-                  name: "Partner Delete",
-                },
-                {
-                  uuid: "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8g",
-                  name: "Roles Create",
-                },
-                {
-                  uuid: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8g9h",
-                  name: "Roles Read",
-                },
-                {
-                  uuid: "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8g9h0i",
-                  name: "Roles Update",
-                },
-                {
-                  uuid: "g7b8c9d0-e1f2-4a3b-4c5d-6e7f8g9h0i1j",
-                  name: "Roles Delete",
-                },
-                {
-                  uuid: "h8c9d0e1-f2a3-4b4c-5d6e-7f8g9h0i1j2k",
-                  name: "Branches Create",
-                },
-                {
-                  uuid: "i9d0e1f2-a3b4-4c5d-6e7f-8g9h0i1j2k3l",
-                  name: "Branches Read",
-                },
-                {
-                  uuid: "j0e1f2a3-b4c5-4d6e-7f8g-9h0i1j2k3l4m",
-                  name: "Branches Update",
-                },
-                {
-                  uuid: "k1f2a3b4-c5d6-4e7f-8g9h-0i1j2k3l4m5n",
-                  name: "Branches Delete",
-                },
-                {
-                  uuid: "l2a3b4c5-d6e7-4f8g-9h0i-1j2k3l4m5n6o",
-                  name: "Members Create",
-                },
-                {
-                  uuid: "m3b4c5d6-e7f8-4g9h-0i1j-2k3l4m5n6o7p",
-                  name: "Members Read",
-                },
-                {
-                  uuid: "n4c5d6e7-f8g9-4h0i-1j2k-3l4m5n6o7p8q",
-                  name: "Members Update",
-                },
-                {
-                  uuid: "o5d6e7f8-g9h0-4i1j-2k3l-4m5n6o7p8q9r",
-                  name: "Members Delete",
-                },
-                {
-                  uuid: "p6e7f8g9-h0i1-4j2k-3l4m-5n6o7p8q9r0s",
-                  name: "Vehicle Models Create",
-                },
-                {
-                  uuid: "q7f8g9h0-i1j2-4k3l-4m5n-6o7p8q9r0s1t",
-                  name: "Vehicle Models Read",
-                },
-                {
-                  uuid: "r8g9h0i1-j2k3-4l4m-5n6o-7p8q9r0s1t2u",
-                  name: "Vehicle Models Update",
-                },
-                {
-                  uuid: "s9h0i1j2-k3l4-4m5n-6o7p-8q9r0s1t2u3v",
-                  name: "Vehicle Models Delete",
-                },
+                ePermissionModel.PartnerRead,
+                ePermissionModel.PartnerUpdate,
+                ePermissionModel.PartnerDelete,
+                ePermissionModel.RolesCreate,
+                ePermissionModel.RolesRead,
+                ePermissionModel.RolesUpdate,
+                ePermissionModel.RolesDelete,
+                ePermissionModel.BranchesCreate,
+                ePermissionModel.BranchesRead,
+                ePermissionModel.BranchesUpdate,
+                ePermissionModel.BranchesDelete,
+                ePermissionModel.MembersCreate,
+                ePermissionModel.MembersRead,
+                ePermissionModel.MembersUpdate,
+                ePermissionModel.MembersDelete,
+                ePermissionModel.VehicleModelsCreate,
+                ePermissionModel.VehicleModelsRead,
+                ePermissionModel.VehicleModelsUpdate,
+                ePermissionModel.VehicleModelsDelete,
               ],
               assignedCount: 1,
               status: eStatusModel.active,
@@ -296,22 +191,10 @@ export default function useRoleService() {
               uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
               name: "Manager",
               permissions: [
-                {
-                  uuid: "i9d0e1f2-a3b4-4c5d-6e7f-8g9h0i1j2k3l",
-                  name: "Branches Read",
-                },
-                {
-                  uuid: "m3b4c5d6-e7f8-4g9h-0i1j-2k3l4m5n6o7p",
-                  name: "Members Read",
-                },
-                {
-                  uuid: "n4c5d6e7-f8g9-4h0i-1j2k-3l4m5n6o7p8q",
-                  name: "Members Update",
-                },
-                {
-                  uuid: "q7f8g9h0-i1j2-4k3l-4m5n-6o7p8q9r0s1t",
-                  name: "Vehicle Models Read",
-                },
+                ePermissionModel.BranchesRead,
+                ePermissionModel.MembersRead,
+                ePermissionModel.MembersUpdate,
+                ePermissionModel.VehicleModelsRead,
               ],
               assignedCount: 3,
               status: eStatusModel.active,

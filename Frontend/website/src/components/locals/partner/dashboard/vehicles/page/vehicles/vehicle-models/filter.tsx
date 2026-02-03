@@ -7,7 +7,7 @@ import { useQuery } from "@/hooks/query";
 import {
   tVehicleModelFilter,
   zVehicleModelFilter,
-} from "@/validations/partner/vehicle-model";
+} from "@/partner/validators/vehicle-model";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +33,6 @@ import {
   tFieldTagsRef,
   tFieldNumberMinMaxRef,
   FieldSearch,
-  FieldTags,
   FieldNumberMinMax,
 } from "@/components/locals/blocks/fields";
 
@@ -112,8 +111,6 @@ export default function Filter() {
       categoriesQuery,
       capacityMinQuery,
       capacityMaxQuery,
-      transmissionsQuery,
-      fuelsQuery,
       priceMinQuery,
       priceMaxQuery,
       discountMinQuery,
@@ -124,8 +121,6 @@ export default function Filter() {
       query.getAll("filter.categories"),
       query.get("filter.capacity.min"),
       query.get("filter.capacity.max"),
-      query.getAll("filter.transmissions"),
-      query.getAll("filter.fuels"),
       query.get("filter.price.min"),
       query.get("filter.price.max"),
       query.get("filter.discount.min"),
@@ -138,8 +133,6 @@ export default function Filter() {
       categories,
       capacityMin,
       capacityMax,
-      transmissions,
-      fuels,
       priceMin,
       priceMax,
       discountMin,
@@ -152,8 +145,6 @@ export default function Filter() {
         : [],
       capacityMinQuery !== null ? Number(capacityMinQuery) : undefined,
       capacityMaxQuery !== null ? Number(capacityMaxQuery) : undefined,
-      transmissionsQuery,
-      fuelsQuery,
       priceMinQuery !== null ? Number(priceMinQuery) : undefined,
       priceMaxQuery !== null ? Number(priceMaxQuery) : undefined,
       discountMinQuery !== null ? Number(discountMinQuery) : undefined,

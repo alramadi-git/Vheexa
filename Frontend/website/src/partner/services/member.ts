@@ -3,27 +3,28 @@
 import useToken from "@/hooks/partner/token";
 import useService from "../../services/use-service";
 
-import { tUuid, zUuid } from "@/validations/uuid";
+import { tUuid, zUuid } from "@/validators/uuid";
 
 import {
   tMemberCreate,
   tMemberFilter,
   zMemberCreate,
   zMemberFilter,
-} from "@/validations/partner/member";
+} from "@/partner/validators/member";
 
 import {
   tOptionFilter,
   tOptionPagination,
   zOptionFilter,
   zOptionPagination,
-} from "@/validations/partner/option";
+} from "@/partner/validators/option";
 
-import { tPagination, zPagination } from "@/validations/pagination";
+import { tPagination, zPagination } from "@/validators/pagination";
 
 import { ClsQuery } from "@/libraries/query";
 
 import { eEnvironment } from "@/enums/environment";
+
 import { eStatusModel } from "../models/enums/status";
 
 import { tMemberModel } from "@/partner/models/member";
@@ -631,6 +632,7 @@ export default function useMemberService() {
     return await service.catch<tOptionModel>(async () => {
       zOptionFilter.parse(filter);
       zOptionPagination.parse(pagination);
+
 
       if (process.env.NODE_ENV === eEnvironment.development) {
         return {

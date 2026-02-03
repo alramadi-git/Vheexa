@@ -13,10 +13,16 @@ public static class FileExtension
         .WithMessage($"File type must be of {type}.");
     }
 
-    public static IRuleBuilderOptions<T, IFormFile> MaxSize<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, int size)
+    public static IRuleBuilderOptions<T, IFormFile> MaxKBSize<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, int size)
+    {
+        return ruleBuilder
+        .Must(file => file.Length <= size * 1024 )
+        .WithMessage($"File size must be of less than {size} KB.");
+    }
+    public static IRuleBuilderOptions<T, IFormFile> MaxMBSize<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, int size)
     {
         return ruleBuilder
         .Must(file => file.Length <= size * 1024 * 1024)
-        .WithMessage($"File size must be of less than {size}MB.");
+        .WithMessage($"File size must be of less than {size} MB.");
     }
 }

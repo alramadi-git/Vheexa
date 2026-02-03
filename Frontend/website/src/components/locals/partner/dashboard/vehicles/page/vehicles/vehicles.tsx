@@ -7,12 +7,10 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
-import { eVehicleModelStatusModel } from "@/partner/models/vehicle-model";
-
 import {
   tVehicleModelCreate,
   zVehicleModelCreate,
-} from "@/validations/partner/vehicle-model";
+} from "@/partner/validators/vehicle-model";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -92,6 +90,7 @@ import {
   FieldColorPickers,
   tFieldColorPickersRef,
 } from "@/components/locals/blocks/color-pickers";
+import { eStatusService } from "@/partner/validators/enums/status";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(
@@ -177,7 +176,7 @@ function AddNewVehicleModel() {
       price: 1,
       discount: 0,
       tags: [],
-      status: eVehicleModelStatusModel.active,
+      status: eStatusService.active,
     },
     resolver: zodResolver(zVehicleModelCreate),
   });

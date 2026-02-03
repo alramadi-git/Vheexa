@@ -1,22 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import nextIntlMiddleware from "@/middlewares/next-intl";
+import nextIntlProxy from "@/proxies/next-intl";
 
-import partnerMiddleware from "./middlewares/partner/partner";
-import userMiddleware from "./middlewares/user/user";
+import partnerProxy from "./partner/proxies/partner";
 
 export default function middleware(request: NextRequest): NextResponse {
   let middlewares = NextResponse.next();
   if (!request.nextUrl.pathname.startsWith("/api", 6)) {
-    middlewares = nextIntlMiddleware(request);
+    middlewares = nextIntlProxy(request);
     if (!middlewares?.ok) return middlewares;
   }
 
-  middlewares = partnerMiddleware(request);
+  middlewares = partnerProxy(request);
   if (!middlewares?.ok) return middlewares;
-
-  // middlewares = userMiddleware(request);
-  // if (!middlewares?.ok) return middlewares;
 
   return middlewares;
 }

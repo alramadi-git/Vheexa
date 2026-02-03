@@ -1,14 +1,15 @@
 import z from "zod";
 
-import { eMemberStatusModel } from "@/partner/models/member";
-import { zEmail, zPassword } from "../credentials";
+import { zEmail, zPassword } from "../../validators/authentication";
+
+import { eStatusService } from "./enums/status";
 
 const zMemberCreate = z
   .object({
     avatar: z.nullable(
       z
         .file()
-        .max(5 * 1024 * 1024, "avatar must be at most 5MB.")
+        .max(300 * 1024 , "avatar must be at most 300 KB.")
         .mime("image/"),
     ),
     roleUuid: z.uuid("role is required."),
@@ -20,7 +21,7 @@ const zMemberCreate = z
       .max(20, "username must be at most 20 characters."),
     email: zEmail,
     password: zPassword,
-    status: z.enum(eMemberStatusModel, "status is required."),
+    status: z.enum(eStatusService, "status is required."),
   })
   .strict();
 type tMemberCreate = z.infer<typeof zMemberCreate>;
@@ -36,7 +37,7 @@ const zMemberFilter = z
     ),
     roleUuids: z.array(z.uuid()),
     branchUuids: z.array(z.uuid()),
-    status: z.optional(z.enum(eMemberStatusModel, "invalid status.")),
+    status: z.optional(z.enum(eStatusService, "invalid status.")),
   })
   .strict();
 type tMemberFilter = z.infer<typeof zMemberFilter>;

@@ -43,10 +43,6 @@ import {
   CommandItem,
 } from "@/components/shadcn/command";
 
-import { tResponseManyService } from "@/services/success";
-
-import { tPaginationModel } from "@/models/pagination";
-
 import { ClsPagination } from "./pagination";
 
 import {
@@ -60,6 +56,9 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 
 import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
+import { tPaginatedSuccessService } from "@/services/success";
+import { tErrorService } from "@/services/error";
+import { tPaginatedSuccessModel } from "@/models/success";
 
 type tGroup<gtOption extends tOption> = {
   value: string;
@@ -308,7 +307,8 @@ const FieldMultiSelect = forwardRef(
                       </span>
                     </Badge>
                   ))}
-                  {hiddenCount > 0 && (
+                  {(visibleValues.length > maxShownOptions ||
+                    hiddenCount > 0) && (
                     <Badge
                       variant="outline"
                       onClick={(event) => {
@@ -544,7 +544,7 @@ type tFieldAsyncSelectProps<gtOption extends tOption> = {
   fetch: (
     search: string,
     page: number,
-  ) => Promise<tResponseManyService<gtOption>>;
+  ) => Promise<tPaginatedSuccessService<gtOption> | tErrorService>;
   optionRender: (
     option: gtOption,
     isSelected: boolean,
@@ -725,7 +725,7 @@ type tFieldMultiAsyncSelectProps<gtOption extends tOption> = {
   fetch: (
     search: string,
     page: number,
-  ) => Promise<tResponseManyService<gtOption>>;
+  ) => Promise<tPaginatedSuccessService<gtOption> | tErrorService>;
   optionRender: (
     option: gtOption,
     isSelected: boolean,
@@ -841,7 +841,8 @@ const FieldMultiAsyncSelect = forwardRef(
                         </span>
                       </Badge>
                     ))}
-                    {hiddenCount > 0 && (
+                    {(visibleValues.length > maxShownOptions ||
+                      hiddenCount > 0) && (
                       <Badge
                         variant="outline"
                         onClick={(event) => {
@@ -953,7 +954,7 @@ function FieldAsyncSelectLoading() {
 }
 
 type tPagination = {
-  pagination: tPaginationModel;
+  pagination: tPaginatedSuccessModel<unknown>["pagination"];
   onPageChange?: (page: number) => void;
 };
 function Pagination({ pagination, onPageChange }: tPagination) {

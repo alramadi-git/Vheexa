@@ -11,12 +11,12 @@ public class ClsRegisterValidator : AbstractValidator<ClsRegisterCredentialsInpu
     public ClsRegisterValidator()
     {
         RuleFor(memberCreate => memberCreate.Logo!)
-        .MaxSize(5)
+        .MaxKBSize(300)
         .Type("image/")
         .When(memberCreate => memberCreate.Logo != null);
 
         RuleFor(memberCreate => memberCreate.Banner!)
-        .MaxSize(10)
+        .MaxMBSize(1)
         .Type("image/")
         .When(memberCreate => memberCreate.Banner != null);
 
@@ -63,7 +63,7 @@ public class ClsRegisterValidator : AbstractValidator<ClsRegisterCredentialsInpu
         .EmailAddress();
 
         RuleFor(registerCredentials => registerCredentials.Member.Avatar)
-        .MaxSize(5)
+        .MaxKBSize(300)
         .Type("image/")
         .When(registerCredentials => registerCredentials.Member.Avatar != null);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ePageSize } from "@/validations/pagination";
+import { ePageSize } from "@/validators/pagination";
 import { tPaginationModel } from "@/models/pagination";
 
 import { useTranslations } from "next-intl";

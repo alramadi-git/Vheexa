@@ -11,14 +11,14 @@ public class ClsVehicleModelCreateValidator : AbstractValidator<ClsVehicleModelC
     public ClsVehicleModelCreateValidator()
     {
         RuleFor(vehicleModelCreate => vehicleModelCreate.Thumbnail!)
-        .MaxSize(10)
+        .MaxMBSize(2)
         .Type("image/")
         .When(vehicleModelCreate => vehicleModelCreate.Thumbnail != null);
 
         RuleFor(vehicleModelCreate => vehicleModelCreate.Gallery)
         .Must(gallery => gallery.Length <= 25).WithMessage("You can assign a maximum of 25 files.");
         RuleForEach(vehicleModelCreate => vehicleModelCreate.Gallery)
-        .MaxSize(10)
+        .MaxMBSize(2)
         .Type("image/");
 
         RuleFor(vehicleModelCreate => vehicleModelCreate.Name)

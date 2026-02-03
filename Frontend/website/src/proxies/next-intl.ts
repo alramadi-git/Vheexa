@@ -1,6 +1,6 @@
 import { routing } from "@/i18n/routing";
 import createMiddleware from "next-intl/middleware";
 
-const nextIntlMiddleware = createMiddleware(routing);
+const nextIntlProxy = createMiddleware(routing);
 
-export default nextIntlMiddleware;
+export default nextIntlProxy;

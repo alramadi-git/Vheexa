@@ -3,29 +3,30 @@
 import useToken from "@/hooks/partner/token";
 import useService from "../../services/use-service";
 
-import { ClsQuery } from "@/libraries/query";
-
-import { tUuid, zUuid } from "@/validations/uuid";
+import { tUuid, zUuid } from "@/validators/uuid";
 
 import {
   tVehicleModelCreate,
   tVehicleModelFilter,
   zVehicleModelCreate,
   zVehicleModelFilter,
-} from "@/validations/partner/vehicle-model";
+} from "@/partner/validators/vehicle-model";
 
-import { tPagination, zPagination } from "@/validations/pagination";
+import { tPagination, zPagination } from "@/validators/pagination";
+
+import { ClsQuery } from "@/libraries/query";
 
 import { eEnvironment } from "@/enums/environment";
 
-import {
-  eVehicleModelCategoryModel,
-  eVehicleModelStatusModel,
-  tVehicleModelModel,
-} from "@/partner/models/vehicle-model";
+import { eVehicleModelCategoryModel } from "../models/enums/vehicle-model";
+import { eStatusModel } from "../models/enums/status";
+
+import { tVehicleModelModel } from "@/partner/models/vehicle-model";
+
+import { ClsErrorService, tErrorService } from "@/services/error";
 
 import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
-import { tResponseOneService, tResponseManyService } from "@/services/success";
+import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
 
 export default function useVehicleModelService() {
   const { token } = useToken();
@@ -33,7 +34,7 @@ export default function useVehicleModelService() {
 
   async function create(
     vehicleModel: tVehicleModelCreate,
-  ): Promise<tResponseOneService<null>> {
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zVehicleModelCreate.parse(vehicleModel);
 
@@ -46,7 +47,9 @@ export default function useVehicleModelService() {
 
       const formData = new FormData();
 
-      formData.append("thumbnail", vehicleModel.thumbnail);
+      if (vehicleModel.thumbnail) {
+        formData.append("thumbnail", vehicleModel.thumbnail);
+      }
 
       vehicleModel.gallery.forEach((image, index) =>
         formData.append(`gallery[${index}]`, image),
@@ -91,7 +94,7 @@ export default function useVehicleModelService() {
   }
   async function read(
     uuid: tUuid,
-  ): Promise<tResponseOneService<tVehicleModelModel>> {
+  ): Promise<tSuccessService<tVehicleModelModel> | tErrorService> {
     return await service.catch<tVehicleModelModel>(async () => {
       zUuid.parse(uuid);
 
@@ -115,7 +118,7 @@ export default function useVehicleModelService() {
             price: 180,
             discount: 30,
             tags: "electric, luxury, sedan, high-performance",
-            status: eVehicleModelStatusModel.active,
+            status: eStatusModel.active,
             updatedAt: "2025-03-10T08:45:00Z",
             createdAt: "2025-01-15T12:00:00Z",
           },
@@ -139,7 +142,9 @@ export default function useVehicleModelService() {
       };
     });
   }
-  async function _delete(uuid: tUuid): Promise<tResponseOneService<null>> {
+  async function _delete(
+    uuid: tUuid,
+  ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
@@ -168,7 +173,7 @@ export default function useVehicleModelService() {
   async function search(
     filter: tVehicleModelFilter,
     pagination: tPagination,
-  ): Promise<tResponseManyService<tVehicleModelModel>> {
+  ): Promise<tPaginatedSuccessService<tVehicleModelModel> | tErrorService> {
     return await service.catch<tVehicleModelModel>(async () => {
       zVehicleModelFilter.parse(filter);
       zPagination.parse(pagination);
@@ -194,7 +199,7 @@ export default function useVehicleModelService() {
               price: 180,
               discount: 30,
               tags: "electric, luxury, sedan, high-performance",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-10T08:45:00Z",
               createdAt: "2025-01-15T12:00:00Z",
             },
@@ -215,7 +220,7 @@ export default function useVehicleModelService() {
               price: 65,
               discount: 0,
               tags: "sedan, compact, fuel-efficient, reliable",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-08T14:22:00Z",
               createdAt: "2025-01-10T09:15:00Z",
             },
@@ -236,7 +241,7 @@ export default function useVehicleModelService() {
               price: 220,
               discount: 0,
               tags: "performance, luxury, sports, coupe",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-07T11:30:00Z",
               createdAt: "2025-01-05T16:45:00Z",
             },
@@ -257,7 +262,7 @@ export default function useVehicleModelService() {
               price: 95,
               discount: 15,
               tags: "hot hatch, sport, compact, fun-to-drive",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-06T10:10:00Z",
               createdAt: "2025-01-04T14:30:00Z",
             },
@@ -278,7 +283,7 @@ export default function useVehicleModelService() {
               price: 75,
               discount: 10,
               tags: "sedan, hybrid, reliable, family",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-05T09:20:00Z",
               createdAt: "2025-01-03T11:00:00Z",
             },
@@ -299,7 +304,7 @@ export default function useVehicleModelService() {
               price: 88,
               discount: 12,
               tags: "SUV, AWD, compact, outdoors",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-04T13:15:00Z",
               createdAt: "2025-01-02T10:20:00Z",
             },
@@ -320,7 +325,7 @@ export default function useVehicleModelService() {
               price: 130,
               discount: 0,
               tags: "truck, diesel, towing, full-size",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-03T16:40:00Z",
               createdAt: "2025-01-01T08:30:00Z",
             },
@@ -341,7 +346,7 @@ export default function useVehicleModelService() {
               price: 290,
               discount: 30,
               tags: "sports car, performance, American, coupe",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-02T12:05:00Z",
               createdAt: "2024-12-31T14:10:00Z",
             },
@@ -362,7 +367,7 @@ export default function useVehicleModelService() {
               price: 210,
               discount: 0,
               tags: "luxury, SUV, hybrid, family, safe",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-03-01T10:50:00Z",
               createdAt: "2024-12-30T09:00:00Z",
             },
@@ -383,7 +388,7 @@ export default function useVehicleModelService() {
               price: 145,
               discount: 15,
               tags: "muscle car, V8, American, sedan",
-              status: eVehicleModelStatusModel.active,
+              status: eStatusModel.active,
               updatedAt: "2025-02-28T14:30:00Z",
               createdAt: "2024-12-29T13:20:00Z",
             },

@@ -3,20 +3,21 @@
 import useToken from "@/hooks/partner/token";
 import useService from "../../services/use-service";
 
-import { tUuid, zUuid } from "@/validations/uuid";
+import { tUuid, zUuid } from "@/validators/uuid";
 
 import {
   tBranchCreate,
   tBranchFilter,
   zBranchCreate,
   zBranchFilter,
-} from "@/validations/partner/branch";
+} from "@/partner/validators/branch";
 
-import { tPagination, zPagination } from "@/validations/pagination";
+import { tPagination, zPagination } from "@/validators/pagination";
 
 import { ClsQuery } from "@/libraries/query";
 
 import { eEnvironment } from "@/enums/environment";
+
 import { eStatusModel } from "../models/enums/status";
 
 import { tBranchModel } from "@/partner/models/branch";

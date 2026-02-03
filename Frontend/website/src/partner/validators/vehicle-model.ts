@@ -1,23 +1,21 @@
 import z from "zod";
 
-import {
-  eVehicleModelCategoryModel,
-  eVehicleModelStatusModel,
-} from "@/partner/models/vehicle-model";
+import { eVehicleModelCategoryService } from "./enums/vehicle-model";
+import { eStatusService } from "./enums/status";
 
 const zVehicleModelCreate = z
   .object({
     thumbnail: z.optional(
       z
-        .file("thumbnail is required.")
-        .max(10 * 1024 * 1024, "avatar must be at most 10MB.")
+        .file()
+        .max(2 * 1024 * 1024, "avatar must be at most 2 MB.")
         .mime("image/"),
     ),
     gallery: z
       .array(
         z
           .file()
-          .max(10 * 1024 * 1024, "avatar must be at most 10MB.")
+          .max(2 * 1024 * 1024, "avatar must be at most 2 MB.")
           .mime("image/"),
       )
       .max(25, "you can upload a maximum of 25 images."),
@@ -30,7 +28,7 @@ const zVehicleModelCreate = z
       .string()
       .trim()
       .max(750, "description cannot be longer than 750 characters."),
-    category: z.enum(eVehicleModelCategoryModel, "invalid category."),
+    category: z.enum(eVehicleModelCategoryService, "invalid category."),
     manufacturer: z
       .string()
       .trim()
@@ -71,7 +69,7 @@ const zVehicleModelCreate = z
           .max(15, "tag must be at most 15 characters."),
       )
       .max(15, "you can add a maximum of 15 tags."),
-    status: z.enum(eVehicleModelStatusModel, "status is required."),
+    status: z.enum(eStatusService, "status is required."),
   })
   .refine((value) => value?.discount + 1 >= value?.price, {
     path: ["discount"],
@@ -90,7 +88,7 @@ const zVehicleModelFilter = z
         .max(256, "search must be at most 256 characters."),
     ),
     categories: z
-      .array(z.enum(eVehicleModelCategoryModel, "invalid category."))
+      .array(z.enum(eVehicleModelCategoryService, "invalid category."))
       .max(8, "you can filter a maximum of 8 categories."),
     capacity: z
       .object({
@@ -152,7 +150,7 @@ const zVehicleModelFilter = z
             "the minimum discount must be less than or equal to the maximum discount.",
         },
       ),
-    status: z.optional(z.enum(eVehicleModelStatusModel, "invalid status.")),
+    status: z.optional(z.enum(eStatusService, "invalid status.")),
   })
   .refine(
     (value) => {

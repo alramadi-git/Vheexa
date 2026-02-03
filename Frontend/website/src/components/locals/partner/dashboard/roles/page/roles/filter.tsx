@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useId, useRef, useEffect } from "react";
 import { useQuery } from "@/hooks/query";
 
-import { tRoleFilter, zRoleFilter } from "@/validations/partner/role";
+import { tRoleFilter, zRoleFilter } from "@/partner/validators/role";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -152,8 +152,12 @@ export default function Filter() {
                       aria-invalid={invalid}
                       id={`${id}-name`}
                       placeholder={tFilter("name.placeholder")}
-                      value={value}
-                      onChange={setValue}
+                      value={value ?? ""}
+                      onChange={(value) =>
+                        value.trim() === ""
+                          ? setValue(undefined)
+                          : setValue(value)
+                      }
                     />
                   </FieldContent>
                   <FieldError errors={error} />

@@ -5,8 +5,8 @@ import useBranchService from "@/partner/services/branch";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { tBranchFilter } from "@/validations/partner/branch";
-import { tPagination } from "@/validations/pagination";
+import { tBranchFilter } from "@/partner/validators/branch";
+import { tPagination } from "@/validators/pagination";
 
 export default function useBranches() {
   const searchParams = useSearchParams();

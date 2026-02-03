@@ -12,10 +12,7 @@ import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { cn } from "@/utilities/cn";
 
-import {
-  eVehicleModelStatusModel,
-  tVehicleModelModel,
-} from "@/partner/models/vehicle-model";
+import { tVehicleModelModel } from "@/partner/models/vehicle-model";
 
 import {
   LuDot,
@@ -36,7 +33,6 @@ import {
   LuTags,
 } from "react-icons/lu";
 import { FaCarTunnel, FaCarBurst } from "react-icons/fa6";
-import { IoColorPaletteOutline } from "react-icons/io5";
 
 import BlockTable from "@/components/locals/partner/dashboard/blocks/table";
 
@@ -70,6 +66,7 @@ import { Badge } from "@/components/locals/blocks/typography";
 
 import { Button } from "@/components/shadcn/button";
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { eStatusModel } from "@/partner/models/enums/status";
 
 type tVehicleModelsProps = {
   isLoading: boolean;
@@ -243,13 +240,13 @@ export default function Table({
           <TableCell>
             <Badge
               variant={
-                vehicleModel.status === eVehicleModelStatusModel.active
+                vehicleModel.status === eStatusModel.active
                   ? "success"
                   : "muted"
               }
               className="flex items-center gap-1"
             >
-              {vehicleModel.status === eVehicleModelStatusModel.active ? (
+              {vehicleModel.status === eStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />
@@ -368,9 +365,7 @@ function Actions({ vehicleModel }: tActionsProps) {
   }
 
   async function remove() {
-    const result = await vehicleModelService.delete(
-      vehicleModel.uuid,
-    );
+    const result = await vehicleModelService.delete(vehicleModel.uuid);
 
     if (!result.isSuccess) {
       toast.custom(() => (

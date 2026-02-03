@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export default function unauthenticatedMiddleware(
+export default function unauthenticatedProxy(
   request: NextRequest,
 ): NextResponse {
   if (!request.nextUrl.pathname.startsWith("/partner/authentication", 6)) {

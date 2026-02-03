@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import { eMemberStatusModel, tMemberModel } from "@/partner/models/member";
+import { tMemberModel } from "@/partner/models/member";
 
 import useMemberService from "@/partner/services/member";
 
@@ -56,6 +56,7 @@ import { Badge } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { eStatusModel } from "@/partner/models/enums/status";
 
 type tTableProps = {
   isLoading: boolean;
@@ -138,10 +139,7 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
                     .map((n) => n[0].toUpperCase())
                     .join("")}
                 </AvatarFallback>
-                <AvatarImage
-                  src={member.avatar ?? undefined}
-                  alt={member.username}
-                />
+                <AvatarImage src={member.avatar?.url} alt={member.username} />
               </Avatar>
               <div>
                 <p>{member.username}</p>
@@ -168,13 +166,11 @@ export default function Table({ isLoading, isSuccess, data }: tTableProps) {
           <TableCell>
             <Badge
               variant={
-                member.status === eMemberStatusModel.active
-                  ? "success"
-                  : "muted"
+                member.status === eStatusModel.active ? "success" : "muted"
               }
               className="flex items-center gap-1"
             >
-              {member.status === eMemberStatusModel.active ? (
+              {member.status === eStatusModel.active ? (
                 <LuCircleCheck />
               ) : (
                 <LuCircleX />

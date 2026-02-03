@@ -1,6 +1,6 @@
 "use client";
 
-import { ePageSize } from "@/validations/pagination";
+import { ePageSize } from "@/validators/pagination";
 
 import { ReactElement, Fragment } from "react";
 

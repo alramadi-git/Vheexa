@@ -5,8 +5,8 @@ import useRoleService from "@/partner/services/role";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { tRoleFilter } from "@/validations/partner/role";
-import { tPagination } from "@/validations/pagination";
+import { tRoleFilter } from "@/partner/validators/role";
+import { tPagination } from "@/validators/pagination";
 
 export default function useRoles() {
   const searchParams = useSearchParams();

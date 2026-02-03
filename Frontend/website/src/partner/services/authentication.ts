@@ -6,12 +6,12 @@ import useService from "../../services/use-service";
 import {
   tRegisterCredentials,
   zRegisterCredentials,
-} from "@/validations/partner/authentication";
+} from "@/partner/validators/authentication";
 
 import {
   tLoginCredentials,
   zLoginCredentials,
-} from "@/validations/credentials";
+} from "@/validators/authentication";
 
 import { ePermissionModel } from "@/partner/models/enums/permission";
 

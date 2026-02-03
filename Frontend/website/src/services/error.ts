@@ -1,4 +1,4 @@
-import { eHttpStatusCode } from "@/enums/http-status-code";
+import { eHttpStatusCode } from "@/services/enums/http-status-code";
 
 type tErrorService = {
   isSuccess: false;

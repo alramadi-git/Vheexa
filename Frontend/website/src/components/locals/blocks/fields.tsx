@@ -108,7 +108,7 @@ function FieldIconInput({
 
 type tFieldSearchProps = Omit<
   ComponentProps<typeof Input>,
-  "type" | "className"
+  "type" | "className" | "onChange"
 > & {
   onChange?: (value: string) => void;
 };

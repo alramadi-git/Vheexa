@@ -22,4 +22,4 @@ class ClsQuery extends URLSearchParams {
   }
 }
 
-export { ClsQuery as ClsQuery };
+export { ClsQuery };

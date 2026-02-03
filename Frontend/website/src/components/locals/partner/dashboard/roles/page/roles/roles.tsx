@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useId, useRef, useState } from "react";
 
-import { tRoleCreate, zRoleCreate } from "@/validations/partner/role";
+import { tRoleCreate, zRoleCreate } from "@/partner/validators/role";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";

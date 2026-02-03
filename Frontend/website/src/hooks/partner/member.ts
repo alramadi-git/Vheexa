@@ -5,8 +5,8 @@ import useMemberService from "@/partner/services/member";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { tMemberFilter } from "@/validations/partner/member";
-import { tPagination } from "@/validations/pagination";
+import { tMemberFilter } from "@/partner/validators/member";
+import { tPagination } from "@/validators/pagination";
 
 export default function useMembers() {
   const searchParams = useSearchParams();

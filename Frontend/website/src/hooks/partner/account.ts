@@ -1,6 +1,6 @@
 "use client";
 
-import useAuthenticationService from "@/partner/services/authentication";
+import { useMemo } from "react";
 
 import useToken from "./token";
 
@@ -10,15 +10,18 @@ import {
   useDeleteCookie,
 } from "cookies-next/client";
 
-import { tAccount, zAccount } from "@/validations/partner/account";
+import useAuthenticationService from "@/partner/services/authentication";
 
-import { tRegisterCredentials } from "@/validations/partner/authentication";
-import { tLoginCredentials } from "@/validations/credentials";
+import { tAccount, zAccount } from "@/partner/validators/account";
 
-import { tResponseOneService } from "@/services/success";
-import { eDuration } from "@/enums/duration";
+import { tRegisterCredentials } from "@/partner/validators/authentication";
+import { tLoginCredentials } from "@/validators/authentication";
+
 import { tNullable } from "@/types/nullish";
-import { useMemo } from "react";
+
+import { eDuration } from "@/enums/duration";
+import { tSuccessService } from "@/services/success";
+import { tErrorService } from "@/services/error";
 
 export default function useAccount() {
   const { setToken, removeToken } = useToken();
@@ -71,7 +74,7 @@ export default function useAccount() {
 
   async function register(
     credentials: tRegisterCredentials,
-  ): Promise<tResponseOneService<null>> {
+  ): Promise<tSuccessService<null> | tErrorService> {
     const response = await authenticationService.register(credentials);
     if (!response.isSuccess) {
       return response;
@@ -94,7 +97,7 @@ export default function useAccount() {
 
   async function login(
     credentials: tLoginCredentials,
-  ): Promise<tResponseOneService<null>> {
+  ): Promise<tSuccessService<null> | tErrorService> {
     const response = await authenticationService.login(credentials);
     if (!response.isSuccess) {
       return response;
@@ -115,7 +118,7 @@ export default function useAccount() {
     };
   }
 
-  async function logout(): Promise<tResponseOneService<null>> {
+  async function logout(): Promise<tSuccessService<null> | tErrorService> {
     const response = await authenticationService.logout();
     if (!response.isSuccess) {
       return response;

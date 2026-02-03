@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useId, useState, useRef } from "react";
 
-import { tBranchCreate, zBranchCreate } from "@/validations/partner/branch";
+import { tBranchCreate, zBranchCreate } from "@/partner/validators/branch";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";

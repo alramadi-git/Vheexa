@@ -1,20 +1,20 @@
 import z from "zod";
 
-import { zPhoneNumber } from "../phone-number";
-import { zEmail, zPassword } from "../credentials";
+import { zPhoneNumber } from "../../validators/phone-number";
+import { zEmail, zPassword } from "../../validators/authentication";
 
 const zRegisterCredentials = z
   .object({
     logo: z.optional(
       z
         .file()
-        .max(5 * 1024 * 1024, "logo must be at most 5MB.")
+        .max(300 * 1024, "logo must be at most 300 KB.")
         .mime("image/"),
     ),
     banner: z.optional(
       z
         .file()
-        .max(10 * 1024 * 1024, "banner must be at most 10MB.")
+        .max(1 * 1024 * 1024, "banner must be at most 1 MB.")
         .mime("image/"),
     ),
     handle: z
@@ -76,7 +76,7 @@ const zRegisterCredentials = z
         avatar: z.optional(
           z
             .file()
-            .max(5 * 1024 * 1024, "avatar must be at most 5MB.")
+            .max(300 * 1024, "avatar must be at most 300 KB.")
             .mime("image/"),
         ),
         username: z

@@ -1,23 +1,16 @@
-import z from "zod/v4";
+import z from "zod";
 
-enum ePageSize {
-  five = 5,
-  ten = 10,
-  twentyFive = 25,
-  fifty = 50,
-  seventyFive = 75,
-  hundred = 100,
-}
+import { ePageSizeService } from "./enums/pagination";
 
 const zPagination = z
   .object({
     page: z.optional(z.number().min(1, "page must be at least 1.")),
-    pageSize: z.optional(z.enum(ePageSize, "invalid page size.")),
+    pageSize: z.optional(z.enum(ePageSizeService, "invalid page size.")),
   })
   .strict();
 type tPagination = z.infer<typeof zPagination>;
 
-export { ePageSize };
+export { ePageSizeService as ePageSize };
 
 export type { tPagination };
 export { zPagination };

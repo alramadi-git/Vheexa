@@ -2,7 +2,7 @@
 
 import { ClsAuthenticationService } from "@/services/user/authentication";
 
-import z from "zod/v4";
+import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   tLoginCredentials,

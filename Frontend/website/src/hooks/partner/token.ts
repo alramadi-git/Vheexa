@@ -6,7 +6,7 @@ import {
   useDeleteCookie,
 } from "cookies-next/client";
 
-import { zJwt } from "@/validations/jwt";
+import { zJwt } from "@/validators/jwt";
 
 import { tNullable } from "@/types/nullish";
 
