@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { zJwt } from "@/validators/jwt";
 import { zAccount } from "@/partner/validators/account";
 
-export default function authenticatedProxy(
+export default function authenticatedMiddleware(
   request: NextRequest,
 ): NextResponse {
   if (!request.nextUrl.pathname.includes("/partner/dashboard")) {

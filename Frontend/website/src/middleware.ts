@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import nextIntlProxy from "@/proxies/next-intl";
+import nextIntlMiddleware from "@/middlewares/next-intl";
 
-import partnerProxy from "./partner/proxies/partner";
+import partnerMiddleware from "./partner/middlewares/partner";
 
 export default function middleware(request: NextRequest): NextResponse {
   let middlewares = NextResponse.next();
   if (!request.nextUrl.pathname.startsWith("/api", 6)) {
-    middlewares = nextIntlProxy(request);
+    middlewares = nextIntlMiddleware(request);
     if (!middlewares?.ok) return middlewares;
   }
 
-  middlewares = partnerProxy(request);
+  middlewares = partnerMiddleware(request);
   if (!middlewares?.ok) return middlewares;
 
   return middlewares;

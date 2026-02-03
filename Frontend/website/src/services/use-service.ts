@@ -4,8 +4,13 @@ import { ZodError } from "zod";
 
 import { ClsFetch } from "@/libraries/fetch";
 
+import { tUndefinable } from "@/types/nullish";
+
+import { eHttpStatusCode } from "./enums/http-status-code";
+
+import { ClsErrorService, tErrorService } from "./error";
+
 import { tSuccessService, tPaginatedSuccessService } from "./success";
-import { tErrorService } from "./error";
 
 export default function useService() {
   const clsFetch = new ClsFetch(process.env.NEXT_PUBLIC_BACKEND_API!);
@@ -25,17 +30,19 @@ export default function useService() {
     try {
       return await callback();
     } catch (error: unknown) {
-      // TODO: change the return to satisfy tErrorService instead of normal {
-      // isSuccess: boolean,
-      // message: string
-      // }
-      
-      let message =
+      let message: string =
         error instanceof ZodError
           ? "Validation error."
           : error instanceof Error
             ? error.message
             : "Something went wrong.";
+
+      let httpStatusCode: tUndefinable<eHttpStatusCode> =
+        error instanceof ZodError
+          ? eHttpStatusCode.BAD_REQUEST
+          : error instanceof ClsErrorService
+            ? error.httpStatusCode
+            : undefined;
 
       if (
         message === "Access token is expired." ||
@@ -50,6 +57,7 @@ export default function useService() {
             return {
               isSuccess: false,
               message: await response.text(),
+              httpStatusCode: response.status,
             };
           }
 
@@ -61,10 +69,21 @@ export default function useService() {
               : error instanceof Error
                 ? error.message
                 : "Something went wrong.";
+
+          httpStatusCode =
+            error instanceof ZodError
+              ? eHttpStatusCode.BAD_REQUEST
+              : error instanceof ClsErrorService
+                ? error.httpStatusCode
+                : undefined;
         }
       }
 
-      return { isSuccess: false, message: message };
+      return {
+        isSuccess: false,
+        message: message,
+        httpStatusCode: httpStatusCode,
+      };
     }
   }
 

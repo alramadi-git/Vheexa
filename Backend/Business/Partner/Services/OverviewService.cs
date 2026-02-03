@@ -9,9 +9,9 @@ public class ClsOverviewService
         _Repository = repository;
     }
 
-    public async Task<Database.Partner.Models.ClsOverviewModel> ReadOneAsync(Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Partner.Models.ClsOverviewModel> ReadAsync(Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        var overview =  await _Repository.ReadOneAsync(memberContext);
+        var overview =  await _Repository.ReadAsync(memberContext);
 
         return overview;
     }

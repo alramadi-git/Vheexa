@@ -1,10 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-
-using Database;
-
 namespace API;
 
 public class Program
@@ -13,13 +8,27 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Register options
+        var Options = builder.Configuration.GetSection("Options").Get<ClsOption>();
+
         // Register database
-        builder.Services.AddDbContext<AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
+        builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL")));
 
         // Register business layer
-        builder.Services.AddScoped<ClsRepository>();
+        // Validators
+        builder.Services.AddScoped<ClsValidator>();
+
+        // Guards
+        builder.Services.AddScoped<ClsGuard>();
+
+        // Integrations
+        builder.Services.AddScoped<ClsIntegration>();
+
+        // Services
+        builder.Services.AddScoped<ClsService>();
 
         // Register database layer 
+        // Repositories 
         builder.Services.AddScoped<ClsRepository>();
 
         builder.Services.AddControllers();

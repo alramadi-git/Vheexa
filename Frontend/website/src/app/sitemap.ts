@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 
 const locales = routing.locales;
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL!;
+const baseURL = process.env.NEXT_PUBLIC_DOMAINBASE_URL!;
 
 const userPaths = ["/", "/vehicles", "/authentication/login"];
 // const partnerPaths = []; // coming soon...

@@ -17,7 +17,7 @@ public class ClsOverviewRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task<ClsOverviewModel> ReadOneAsync(ClsMemberContext memberContext)
+    public async Task<ClsOverviewModel> ReadAsync(ClsMemberContext memberContext)
     {
         var partnerRolesQuery = _AppDBContext.PartnerRoles
         .AsNoTracking()
