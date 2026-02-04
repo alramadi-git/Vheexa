@@ -1,13 +1,12 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 import { routing } from "@/i18n/routing";
 
 const locales = routing.locales;
-const baseURL = process.env.NEXT_PUBLIC_DOMAIN!;
+const domain = process.env.NEXT_PUBLIC_DOMAIN!;
 
 const userPaths = ["/", "/vehicles", "/authentication/login"];
 // const partnerPaths = []; // coming soon...
-// const adminPaths = []; // coming soon...
 
 const lastModified = new Date();
 
@@ -15,10 +14,10 @@ function generator(paths: string[]): MetadataRoute.Sitemap {
   return paths.flatMap<MetadataRoute.Sitemap[number]>((path) =>
     locales.map<MetadataRoute.Sitemap[number]>((locale) => {
       return {
-        url: `${baseURL}/${locale}${path}`,
+        url: `${domain}/${locale}${path}`,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((locale) => [locale, `${baseURL}/${locale}${path}`]),
+            locales.map((locale) => [locale, `${domain}/${locale}${path}`]),
           ),
         },
         lastModified: lastModified,
