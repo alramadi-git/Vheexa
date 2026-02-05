@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { zJwt } from "@/validators/jwt";
-import { zAccount } from "@/partner/validators/account";
+import { zMemberAccount } from "@/partner/validators/member-account";
 
 export default function authenticatedMiddleware(
   request: NextRequest,
@@ -22,7 +22,7 @@ export default function authenticatedMiddleware(
 
   const account = request.cookies.get("member-account")?.value ?? "null";
   try {
-    zAccount.parse(JSON.parse(account));
+    zMemberAccount.parse(JSON.parse(account));
   } catch {
     request.cookies.delete("member-access-token");
     request.cookies.delete("member-account");

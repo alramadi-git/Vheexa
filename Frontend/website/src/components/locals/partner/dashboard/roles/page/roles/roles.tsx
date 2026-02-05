@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
 import useRoleService from "@/partner/services/role";
-import useRoles from "@/hooks/partner/roles";
+import useRoles from "@/partner/hooks/roles";
 
 import { toast } from "sonner";
 import { Toast } from "@/components/locals/blocks/toasts";

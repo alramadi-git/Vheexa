@@ -1,6 +1,6 @@
 import { tNullable } from "@/types/nullish";
 
-import { tImageModel } from "./image";
+import { tImageModel } from "../../models/image";
 
 import { ePermissionModel } from "./enums/permission";
 

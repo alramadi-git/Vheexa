@@ -10,11 +10,11 @@ import {
   useDeleteCookie,
 } from "cookies-next/client";
 
-import useAuthenticationService from "@/partner/services/authentication";
+import useAuthenticationService from "@/user/services/authentication";
 
-import { tAccount, zAccount } from "@/partner/validators/account";
+import { tUserAccount, zUserAccount } from "@/user/validators/user-account";
 
-import { tRegisterCredentials } from "@/partner/validators/authentication";
+import { tRegisterCredentials } from "@/user/validators/authentication";
 import { tLoginCredentials } from "@/validators/authentication";
 
 import { tNullable } from "@/types/nullish";
@@ -30,16 +30,18 @@ export default function useAccount() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const account: tNullable<tAccount> = useMemo(() => {
+  const account: tNullable<tUserAccount> = useMemo(() => {
     try {
-      return zAccount.parse(JSON.parse(getCookie("member-account") ?? "null"));
+      return zUserAccount.parse(
+        JSON.parse(getCookie("user-account") ?? "null"),
+      );
     } catch {
       return null;
     }
   }, [getCookie]);
 
   function setAccount(
-    account: tAccount,
+    account: tUserAccount,
     token: string,
     rememberMe: boolean,
   ): boolean {
@@ -49,13 +51,13 @@ export default function useAccount() {
       return false;
     }
 
-    const parsedAccount = zAccount.safeParse(account);
+    const parsedAccount = zUserAccount.safeParse(account);
     if (!parsedAccount.success) {
       removeToken();
       return false;
     }
 
-    setCookie("member-account", JSON.stringify(account), {
+    setCookie("user-account", JSON.stringify(account), {
       secure: true,
       priority: "high",
       sameSite: "strict",
@@ -67,7 +69,7 @@ export default function useAccount() {
 
   function removeAccount() {
     removeToken();
-    deleteCookie("member-account");
+    deleteCookie("user-account");
   }
 
   const authenticationService = useAuthenticationService();

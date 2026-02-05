@@ -1,6 +1,6 @@
 "use client";
 
-import useMembers from "@/hooks/partner/member";
+import useMembers from "@/partner/hooks/member";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";

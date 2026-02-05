@@ -1,11 +1,12 @@
 "use client";
 
+import { ComponentProps, Fragment } from "react";
+import { useLocale, useTranslations } from "next-intl";
+
 import { cn } from "@/utilities/cn";
 
-import { useLocale, useTranslations } from "next-intl";
-import { type ComponentProps, Fragment } from "react";
-
 import { LuCheck, LuChevronDown } from "react-icons/lu";
+
 import {
   Popover,
   PopoverContent,
@@ -19,6 +20,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/shadcn/command";
+
 import { Button } from "@/components/shadcn/button";
 import { LinkLocale } from "@/components/locals/blocks/links";
 
@@ -27,9 +29,9 @@ type tContinent = {
   countries: tCountry[];
 };
 type tCountry = {
-  dir: string;
+  direction: string;
   locale: string;
-  flag: string;
+  "country-code": string;
   label: string;
 };
 
@@ -43,10 +45,11 @@ export default function Languages({
   ...props
 }: tLanguagesProps) {
   const locale = useLocale();
-  const tLanguages = useTranslations("app.user.layout.header.languages");
+  const tLanguages = useTranslations("components.languages");
 
   const continents: tContinent[] = tLanguages.raw("continents");
-  const selectedLanguage = continents
+
+  const language = continents
     .find(
       (continent) =>
         continent.countries.find((country) => country.locale === locale) !==
@@ -64,9 +67,9 @@ export default function Languages({
             className="bg-background hover:bg-background border-input w-full justify-start rounded px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
           >
             <span className="text-lg leading-none">
-              {selectedLanguage?.flag}
+              {language?.["country-code"]}
             </span>
-            <p>{selectedLanguage?.label}</p>
+            <p>{language?.label}</p>
 
             <LuChevronDown
               size={16}
@@ -76,7 +79,7 @@ export default function Languages({
         </PopoverTrigger>
         <PopoverContent
           align={align}
-          className="border-input w-full min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+          className="border-input w-full min-w-(--radix-popper-anchor-width) rounded p-0"
         >
           <Command className="rounded">
             <CommandInput placeholder={tLanguages("placeholder")} />
@@ -86,7 +89,7 @@ export default function Languages({
                 <CommandGroup key={continent.label} heading={continent.label}>
                   {continent.countries.map((country) => (
                     <Fragment key={country.label}>
-                      {country.locale !== selectedLanguage?.locale && (
+                      {country.locale !== language?.locale && (
                         <CommandItem
                           asChild
                           value={country.label}
@@ -94,13 +97,16 @@ export default function Languages({
                         >
                           <LinkLocale locale={country.locale}>
                             <span className="text-lg leading-none">
-                              {country.flag}
+                              {country["country-code"]}
                             </span>
 
-                            <span dir={country.dir} className="line-clamp-1">
+                            <span
+                              dir={country.direction}
+                              className="line-clamp-1"
+                            >
                               {country.label}
                             </span>
-                            {selectedLanguage?.locale === country.locale && (
+                            {language?.locale === country.locale && (
                               <LuCheck size={16} className="ml-auto" />
                             )}
                           </LinkLocale>

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import useVehicleModels from "@/hooks/partner/vehicle-models";
+import useVehicleModels from "@/partner/hooks/vehicle-models";
 
 import { TabsContent } from "@/components/shadcn/tabs";
 

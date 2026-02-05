@@ -13,7 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import useAccount from "@/hooks/partner/account";
+import useAccount from "@/partner/hooks/account";
 
 import { LuLoader } from "react-icons/lu";
 

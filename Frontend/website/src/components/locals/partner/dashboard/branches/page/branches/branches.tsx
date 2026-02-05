@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
 import useBranchService from "@/partner/services/branch";
-import useBranches from "@/hooks/partner/branches";
+import useBranches from "@/partner/hooks/branches";
 
 import { LuPlus, LuCheck, LuLoader } from "react-icons/lu";
 

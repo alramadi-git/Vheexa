@@ -1,18 +1,13 @@
 "use client";
 
-import { type ComponentProps } from "react";
+import { ComponentProps } from "react";
 
 import { useTranslations } from "next-intl";
-import useAccount from "@/hooks/user/account";
+import useAccount from "@/user/hooks/account";
 
 import { LuUserRound } from "react-icons/lu";
 
-import {
-
-  DropdownMenuContent,
- 
-} from "@/components/shadcn/dropdown-menu";
-
+import { DropdownMenuContent } from "@/components/shadcn/dropdown-menu";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";

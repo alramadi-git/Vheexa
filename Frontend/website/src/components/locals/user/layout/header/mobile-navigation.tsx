@@ -22,7 +22,7 @@ import { Container } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
-import Languages from "./languages";
+import Languages from "../../../blocks/languages";
 import Account from "./account";
 
 type tSubNavigationMenuItem = {
@@ -37,34 +37,6 @@ type tSubNavigationMenu = {
   submenu: tSubNavigationMenuItem[];
 };
 
-type tSubNavigationMenuProps = {
-  subNavigationMenu: tSubNavigationMenu;
-};
-function SubNavigationMenu({ subNavigationMenu }: tSubNavigationMenuProps) {
-  return (
-    <AccordionItem value={subNavigationMenu.id.toString()} className="py-2">
-      <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
-        {subNavigationMenu.label}
-      </AccordionTrigger>
-      <AccordionContent className="text-muted-foreground pb-2">
-        <ul className="flex flex-col gap-2">
-          {subNavigationMenu.submenu.map((submenu) => (
-            <li key={submenu.id}>
-              <SheetClose asChild>
-                <Link
-                  href={submenu.href}
-                  className="inline-block duration-150 hover:indent-1 hover:underline"
-                >
-                  {submenu.label}
-                </Link>
-              </SheetClose>
-            </li>
-          ))}
-        </ul>
-      </AccordionContent>
-    </AccordionItem>
-  );
-}
 
 export default async function MobileNavigation() {
   const tSettings = await getTranslations("settings");
@@ -100,7 +72,7 @@ export default async function MobileNavigation() {
             </SheetClose>
 
             <Languages align="end" className="grow" />
-            <Account align="end" />
+            {/* <Account align="end" /> */}
           </SheetHeader>
 
           <Accordion
@@ -116,5 +88,34 @@ export default async function MobileNavigation() {
         </Container>
       </SheetContent>
     </Sheet>
+  );
+}
+
+type tSubNavigationMenuProps = {
+  subNavigationMenu: tSubNavigationMenu;
+};
+function SubNavigationMenu({ subNavigationMenu }: tSubNavigationMenuProps) {
+  return (
+    <AccordionItem value={subNavigationMenu.id.toString()} className="py-2">
+      <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
+        {subNavigationMenu.label}
+      </AccordionTrigger>
+      <AccordionContent className="text-muted-foreground pb-2">
+        <ul className="flex flex-col gap-2">
+          {subNavigationMenu.submenu.map((submenu) => (
+            <li key={submenu.id}>
+              <SheetClose asChild>
+                <Link
+                  href={submenu.href}
+                  className="inline-block duration-150 hover:indent-1 hover:underline"
+                >
+                  {submenu.label}
+                </Link>
+              </SheetClose>
+            </li>
+          ))}
+        </ul>
+      </AccordionContent>
+    </AccordionItem>
   );
 }

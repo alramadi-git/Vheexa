@@ -6,13 +6,17 @@ import { ClsFetch } from "@/libraries/fetch";
 
 import { tUndefinable } from "@/types/nullish";
 
-import { eHttpStatusCode } from "./enums/http-status-code";
+import { eServiceRole } from "@/services/enums/service-role";
+import { eHttpStatusCode } from "@/services/enums/http-status-code";
 
-import { ClsErrorService, tErrorService } from "./error";
+import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessService, tPaginatedSuccessService } from "./success";
+import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
 
-export default function useService() {
+type tUseServiceProps = {
+  serviceRole: eServiceRole;
+};
+export default function useService({ serviceRole }: tUseServiceProps) {
   const clsFetch = new ClsFetch(process.env.NEXT_PUBLIC_BACKEND_API!);
   async function _catch<tData>(
     callback: () => Promise<tSuccessService<tData>>,
@@ -48,9 +52,21 @@ export default function useService() {
         message === "Access token is expired." ||
         message === "Access token is missing."
       ) {
+        let base: string;
+        switch (serviceRole) {
+          case eServiceRole.Partner: {
+            base = "partner";
+            break;
+          }
+          case eServiceRole.User: {
+            base = "user";
+            break;
+          }
+        }
+
         try {
           const response = await clsFetch.get(
-            "/partner/authentication/refresh",
+            `/${base}/authentication/refresh`,
           );
 
           if (!response.ok) {

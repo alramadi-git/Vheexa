@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import useAccount from "@/hooks/partner/account";
+import useAccount from "@/partner/hooks/account";
 
 import { LuChevronsUpDown, LuUser, LuLogOut } from "react-icons/lu";
 

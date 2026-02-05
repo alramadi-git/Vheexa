@@ -1,7 +1,7 @@
 "use client";
 
-import useToken from "@/hooks/partner/token";
-import useService from "../../services/use-service";
+import useToken from "@/partner/hooks/token";
+import usePartnerService from "./use-partner-service";
 
 import {
   tRegisterCredentials,
@@ -25,7 +25,7 @@ import { tSuccessService } from "@/services/success";
 
 export default function useAuthenticationService() {
   const { token } = useToken();
-  const service = useService();
+  const service = usePartnerService();
 
   async function register(
     credentials: tRegisterCredentials,
