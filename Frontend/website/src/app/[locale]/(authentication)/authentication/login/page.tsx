@@ -4,18 +4,18 @@ import { getTranslations } from "next-intl/server";
 
 import { Fragment } from "react";
 
-import Form from "@/components/locals/partner/authentication/login/page/form";
+import Form from "@/components/locals/user/authentication/login/page/form";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {
-  return (await getTranslations("app.partner.authentication.login.page")).raw(
+  return (await getTranslations("app.user.authentication.login.page")).raw(
     "metadata",
   );
 }
 
 export default async function Page() {
   const tLogin = await getTranslations(
-    "app.partner.authentication.login.page",
+    "app.user.authentication.login.page",
   );
 
   return (

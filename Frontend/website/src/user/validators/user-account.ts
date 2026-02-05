@@ -18,7 +18,10 @@ const zUserAccount = z
       })
       .strict(),
     username: z.string(),
-    birthday: z.date(),
+    birthday: z.preprocess(
+      (value) => (typeof value === "string" ? new Date(value) : value),
+      z.date(),
+    ),
     phoneNumber: z.string(),
     email: z.string(),
   })

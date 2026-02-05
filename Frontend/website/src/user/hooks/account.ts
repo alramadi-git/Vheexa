@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import useToken from "./token";
 
@@ -30,14 +30,17 @@ export default function useAccount() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const account: tNullable<tUserAccount> = useMemo(() => {
+  const [account, setA] = useState<tNullable<tUserAccount>>(null);
+
+  useEffect(() => {
     try {
-      return zUserAccount.parse(
-        JSON.parse(getCookie("user-account") ?? "null"),
+      const user: tNullable<unknown> = JSON.parse(
+        getCookie("user-account") ?? "null",
       );
-    } catch {
-      return null;
-    }
+      console.log(getCookie("user-account"))
+
+      setA(zUserAccount.parse(user));
+    } catch {}
   }, [getCookie]);
 
   function setAccount(
@@ -64,12 +67,16 @@ export default function useAccount() {
       maxAge: rememberMe ? eDuration.month : eDuration.day,
     });
 
+    setA(account);
+
     return true;
   }
 
   function removeAccount() {
     removeToken();
     deleteCookie("user-account");
+
+    setA(null);
   }
 
   const authenticationService = useAuthenticationService();
@@ -134,7 +141,7 @@ export default function useAccount() {
   }
 
   return {
-    account: account ?? null,
+    account,
     register,
     login,
     logout,

@@ -24,16 +24,16 @@ export default function NotFound() {
         </p>
 
         <Button asChild size="lg" className="rounded-lg text-base">
-          <Link href="/user">{tNotFound("go-back-to-home")}</Link>
+          <Link href="/">{tNotFound("go-back-to-home")}</Link>
         </Button>
       </div>
 
       <div className="relative size-full max-lg:hidden">
-        <div className="bg-primary size-full rounded-2xl"></div>
+        <div className="bg-primary dark:brightness-[0.2] dark:grayscale size-full rounded-2xl"></div>
         <FullHDImage
           src={tNotFound("illustration.url")}
           alt={tNotFound("illustration.alternate")}
-          className="absolute top-1/2 left-1/2 h-64 -translate-x-1/2 -translate-y-1/2 object-contain"
+          className="absolute top-1/2 dark:brightness-90  left-1/2 h-64 -translate-x-1/2 -translate-y-1/2 object-contain"
         />
       </div>
     </Section>

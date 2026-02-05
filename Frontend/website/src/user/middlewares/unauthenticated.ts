@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export default function unauthenticatedMiddleware(
   request: NextRequest,
 ): NextResponse {
-  if (!request.nextUrl.pathname.startsWith("/user/authentication", 6)) {
+  if (!request.nextUrl.pathname.startsWith("/authentication", 6)) {
     return NextResponse.next();
   }
 
@@ -12,7 +12,7 @@ export default function unauthenticatedMiddleware(
 
   if (accessToken && account) {
     return NextResponse.redirect(
-      new URL("/user", request.nextUrl.origin),
+      new URL("/", request.nextUrl.origin),
     );
   }
 

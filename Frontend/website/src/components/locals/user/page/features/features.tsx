@@ -1,71 +1,16 @@
 import { getTranslations } from "next-intl/server";
 
-import type { IconType } from "react-icons/lib";
 import { LuZap, LuDollarSign, LuFingerprint, LuEarth } from "react-icons/lu";
 
 import {
-  Container,
-  Description,
-  Intro,
   Section,
+  Container,
+  Intro,
   Title,
+  Description,
 } from "@/components/locals/blocks/typography";
-import { FullHDImage } from "@/components/locals/blocks/images";
 
-async function Illustration() {
-  const t = await getTranslations("app.user.page.features.illustration");
-
-  return (
-    <div className="-mx-4 hidden mask-b-from-75% mask-b-to-95% mask-l-from-75% mask-l-to-95% pt-3 pr-3 md:-mx-12 md:block">
-      <div className="perspective-midrange">
-        <div className="rotate-x-6 -skew-2">
-          <div className="aspect-88/36">
-            <FullHDImage
-              src={t("src")}
-              alt={t("alt")}
-              className="h-[550px] rounded lg:h-[650px]"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type tHighlight = {
-  icon: IconType;
-  label: string;
-  description: string;
-};
-
-const hightLightIcons = [LuZap, LuDollarSign, LuFingerprint, LuEarth];
-async function Highlights() {
-  const t = await getTranslations("app.user.page.features");
-
-  const highlights: Array<tHighlight> = t
-    .raw("highlights")
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    .map((highlight, index) => ({
-      icon: hightLightIcons[index],
-      label: highlight.label,
-      description: highlight.description,
-    }));
-
-  return (
-    <div className="grid gap-6 divide-gray-300 max-md:divide-y md:grid-cols-2 md:divide-x xl:grid-cols-4">
-      {highlights.map((highlight, index) => (
-        <div key={index} className="space-y-2 p-2">
-          <div className="flex items-center gap-3">
-            <highlight.icon className="size-6" />
-            <h3 className="text-2xl font-medium">{highlight.label}</h3>
-          </div>
-          <p className="text-muted-foreground">{highlight.description}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
+import { Placeholder as PlaceholderBlock } from "@/components/locals/blocks/images";
 
 export default async function Features() {
   const tFeatures = await getTranslations("app.user.page.features");
@@ -77,9 +22,78 @@ export default async function Features() {
           <Title>{tFeatures("title")}</Title>
           <Description>{tFeatures("description")}</Description>
         </Intro>
-        <Illustration />
+        <Placeholder />
         <Highlights />
       </Container>
     </Section>
+  );
+}
+
+async function Placeholder() {
+  return (
+    <div className="-mx-4 hidden mask-b-from-75% mask-b-to-95% mask-l-from-75% mask-l-to-95% pt-3 pr-3 md:-mx-12 md:block">
+      <div className="perspective-midrange">
+        <div className="rotate-x-6 -skew-2">
+          <div className="aspect-88/36">
+            <PlaceholderBlock className="h-137.5 rounded lg:h-162.5" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+async function Highlights() {
+  const tHighlights = await getTranslations(
+    "app.user.page.features.highlights",
+  );
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="space-y-2 p-2">
+        <div className="flex items-center gap-3">
+          <LuZap className="size-6" />
+          <h3 className="text-2xl font-medium">
+            {tHighlights("ease-of-use.label")}
+          </h3>
+        </div>
+        <p className="text-muted-foreground">
+          {tHighlights("ease-of-use.description")}
+        </p>
+      </div>
+      <div className="space-y-2 p-2">
+        <div className="flex items-center gap-3">
+          <LuDollarSign className="size-6" />
+          <h3 className="text-2xl font-medium">
+            {tHighlights("competitive-prices.label")}
+          </h3>
+        </div>
+        <p className="text-muted-foreground">
+          {tHighlights("competitive-prices.description")}
+        </p>
+      </div>
+      <div className="space-y-2 p-2">
+        <div className="flex items-center gap-3">
+          <LuFingerprint className="size-6" />
+          <h3 className="text-2xl font-medium">
+            {tHighlights("trust-and-Security.label")}
+          </h3>
+        </div>
+        <p className="text-muted-foreground">
+          {tHighlights("trust-and-Security.description")}
+        </p>
+      </div>
+      <div className="space-y-2 p-2">
+        <div className="flex items-center gap-3">
+          <LuEarth className="size-6" />
+          <h3 className="text-2xl font-medium">
+            {tHighlights("variety-and-coverage.label")}
+          </h3>
+        </div>
+        <p className="text-muted-foreground">
+          {tHighlights("variety-and-coverage.description")}
+        </p>
+      </div>
+    </div>
   );
 }

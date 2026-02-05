@@ -1,13 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/shadcn/card";
-import {
   Section,
   Container,
   Intro,
@@ -15,44 +8,15 @@ import {
   Description,
 } from "@/components/locals/blocks/typography";
 
-import { FullHDImage } from "@/components/locals/blocks/images";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/shadcn/card";
 
-type tStep = {
-  label: string;
-  description: string;
-  illustration: {
-    src: string;
-    alt: string;
-  };
-};
-async function Steps() {
-  const tHowItWorks = await getTranslations("app.user.page.how-it-works");
-  const steps: Array<tStep> = tHowItWorks.raw("steps");
-
-  return (
-    <ol className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {steps.map((step, index) => (
-        <li key={index} >
-          <Card className="h-full">
-            <CardContent>
-              <FullHDImage
-                src={step.illustration.src}
-                alt={step.illustration.alt}
-                className="h-64 w-full rounded"
-              />
-            </CardContent>
-            <CardHeader className="block space-y-2">
-              <CardTitle className="text-xl font-medium">
-                {step.label}
-              </CardTitle>
-              <CardDescription>{step.description} </CardDescription>
-            </CardHeader>
-          </Card>
-        </li>
-      ))}
-    </ol>
-  );
-}
+import { Placeholder } from "@/components/locals/blocks/images";
 
 export default async function HowItWorks() {
   const tHowItWorks = await getTranslations("app.user.page.how-it-works");
@@ -64,9 +28,62 @@ export default async function HowItWorks() {
           <Title>{tHowItWorks("title")}</Title>
           <Description>{tHowItWorks("description")}</Description>
         </Intro>
-
         <Steps />
       </Container>
     </Section>
+  );
+}
+
+async function Steps() {
+  const tHowItWorks = await getTranslations("app.user.page.how-it-works");
+
+  return (
+    <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <li>
+        <Card className="h-full">
+          <CardContent>
+            <Placeholder className="h-64 w-full rounded" />
+          </CardContent>
+          <CardHeader className="block space-y-2">
+            <CardTitle className="text-xl font-medium">
+              {tHowItWorks("steps.book.label")}
+            </CardTitle>
+            <CardDescription>
+              {tHowItWorks("steps.book.description")}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </li>
+      <li>
+        <Card className="h-full">
+          <CardContent>
+            <Placeholder className="h-64 w-full rounded" />
+          </CardContent>
+          <CardHeader className="block space-y-2">
+            <CardTitle className="text-xl font-medium">
+              {tHowItWorks("steps.pick-up.label")}
+            </CardTitle>
+            <CardDescription>
+              {tHowItWorks("steps.pick-up.description")}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </li>
+      <li>
+        <Card className="h-full">
+          <CardContent>
+            <Placeholder className="h-64 w-full rounded" />
+          </CardContent>
+          <CardHeader className="block space-y-2">
+            <CardTitle className="text-xl font-medium">
+              {tHowItWorks("steps.return.label")}
+            </CardTitle>
+            <CardDescription>
+              {tHowItWorks("steps.return.description")}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </li>
+    </ol>
   );
 }

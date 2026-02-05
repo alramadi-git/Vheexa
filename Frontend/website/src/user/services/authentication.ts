@@ -89,7 +89,7 @@ export default function useAuthenticationService() {
       );
 
       const response = await service.fetch.post(
-        "/user/authentication/register",
+        "/authentication/register",
         formData,
       );
 
@@ -139,7 +139,7 @@ export default function useAuthenticationService() {
       }
 
       const response = await service.fetch.post(
-        "/user/authentication/login",
+        "/authentication/login",
         JSON.stringify(credentials),
       );
 
@@ -166,7 +166,7 @@ export default function useAuthenticationService() {
       }
 
       const response = await service.fetch.post(
-        "/user/authentication/logout",
+        "/authentication/logout",
         undefined,
         token ?? undefined,
       );

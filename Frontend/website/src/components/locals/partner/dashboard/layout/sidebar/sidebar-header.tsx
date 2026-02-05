@@ -40,8 +40,8 @@ export default function SidebarHeader() {
 function SidebarAccount() {
   const router = useRouter();
 
-  const { account, logout } = useAccount();
-  const tAccount = useTranslations("components.account");
+  const { account, logout: accountLogout } = useAccount();
+  const tAccount = useTranslations("app.partner.dashboard.layout.sidebar.header.account");
 
   if (account === null) {
     return (
@@ -55,6 +55,11 @@ function SidebarAccount() {
     );
   }
 
+  function logout() {
+    accountLogout();
+    router.push("/partner/authentication/login");
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -63,10 +68,7 @@ function SidebarAccount() {
           className="data-[state=open]:bg-sidebar-accent items-center"
         >
           <Avatar className="size-8 bg-transparent">
-            <AvatarImage
-              src={account.avatar ?? undefined}
-              alt={account.username}
-            />
+            <AvatarImage src={account.avatar?.url} alt={account.username} />
             <AvatarFallback>
               <LuUser size={20} />
             </AvatarFallback>
@@ -92,15 +94,9 @@ function SidebarAccount() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild variant="destructive">
-          <button
-            className="w-full"
-            onClick={() => {
-              logout();
-              router.push("/partner/authentication/login");
-            }}
-          >
+          <button className="w-full" onClick={logout}>
             <LuLogOut />
-            {tAccount("logout")}
+            {tAccount("when-authenticated.logout")}
           </button>
         </DropdownMenuItem>
       </DropdownMenuContent>

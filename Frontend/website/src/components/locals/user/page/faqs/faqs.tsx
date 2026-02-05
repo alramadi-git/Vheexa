@@ -1,30 +1,60 @@
 import { getTranslations } from "next-intl/server";
 
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/shadcn/accordion";
-import {
   Section,
   Container,
   Intro,
   Title,
   Description,
 } from "@/components/locals/blocks/typography";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/shadcn/accordion";
+
 import { Link } from "@/components/locals/blocks/links";
 
 type tQuestion = {
-  id: string;
   question: string;
   answer: string;
 };
 
-async function Questions() {
-  const tFaqs = await getTranslations("app.user.page.faqs");
-  const questions: Array<tQuestion> = tFaqs.raw("questions");
+export default async function FAQs() {
+  const tFAQs = await getTranslations("app.user.page.faqs");
+  const questions: tQuestion[] = tFAQs.raw("questions");
 
+  return (
+    <Section>
+      <Container className="space-y-16">
+        <Intro>
+          <Title>{tFAQs("title")}</Title>
+          <Description>{tFAQs("description")}</Description>
+        </Intro>
+        <Questions questions={questions} />
+        <p className="text-muted-foreground font-medium">
+          {tFAQs.rich("help", {
+            link: (chunk) => (
+              <Link
+                href="/faqs"
+                className="px-2 text-blue-400 hover:underline"
+              >
+                {chunk}
+              </Link>
+            ),
+          })}
+        </p>
+      </Container>
+    </Section>
+  );
+}
+
+type tQuestionsProps = {
+  questions: tQuestion[];
+};
+async function Questions({ questions }: tQuestionsProps) {
   return (
     <Accordion
       collapsible
@@ -33,8 +63,8 @@ async function Questions() {
     >
       {questions.map((question) => (
         <AccordionItem
-          key={question.id}
-          value={question.id}
+          key={question.question}
+          value={question.question}
           className="border-dashed"
         >
           <AccordionTrigger className="cursor-pointer text-lg hover:no-underline">
@@ -46,35 +76,5 @@ async function Questions() {
         </AccordionItem>
       ))}
     </Accordion>
-  );
-}
-
-export default async function FAQs() {
-  const t = await getTranslations("app.user.page.faqs");
-
-  return (
-    <Section>
-      <Container className="space-y-16">
-        <Intro>
-          <Title>{t("title")}</Title>
-          <Description>{t("description")}</Description>
-        </Intro>
-
-        <Questions />
-
-        <p className="text-muted-foreground font-medium">
-          {t.rich("help", {
-            link: (chunk) => (
-              <Link
-                href="/user/faqs"
-                className="px-2 text-blue-400 hover:underline"
-              >
-                {chunk}
-              </Link>
-            ),
-          })}
-        </p>
-      </Container>
-    </Section>
   );
 }

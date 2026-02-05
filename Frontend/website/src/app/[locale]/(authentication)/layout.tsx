@@ -5,8 +5,8 @@ import { getTranslations } from "next-intl/server";
 
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 
-import { Placeholder, Logo } from "@/components/locals/blocks/images";
 import { Container } from "@/components/locals/blocks/typography";
+import { Placeholder, Logo } from "@/components/locals/blocks/images";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,20 +27,20 @@ export default async function Layout({
             repeatDelay={1}
             maxOpacity={0.1}
             numSquares={64}
-            className="skew-y-12 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
+            className="skew-y-12 mask-[radial-gradient(450px_circle_at_center,white,transparent)]"
           />
         </div>
         <Container className="flex h-full flex-col gap-6 p-12">
           <div className="flex items-end gap-3">
             <Logo priority className="size-12" />
-            <h2 className="text-4xl font-bold">{tLayout("logo.label")}</h2>
+            <h2 className="text-4xl font-bold">{tLayout("company-name")}</h2>
           </div>
-          <div className="mt-auto">{children}</div>
+          <div className="my-auto">{children}</div>
         </Container>
       </div>
       <Placeholder
         priority
-        className="hidden size-full rounded-e-sm object-cover xl:block dark:brightness-[0.2] dark:grayscale"
+        className="hidden size-full rounded-e-sm object-cover xl:block"
       />
     </main>
   );

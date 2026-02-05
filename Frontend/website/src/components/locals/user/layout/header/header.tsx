@@ -1,8 +1,8 @@
 import Account from "./account";
 import Languages from "@/components/locals/blocks/languages";
 
-import DesktopNavigation from "@/components/locals/user/layout/header/desktop-navigation";
-import MobileNavigation from "@/components/locals/user/layout/header/mobile-navigation";
+import NavigationMenu from "@/components/locals/user/layout/header/navigation-menu";
+import MobileNavigationMenu from "@/components/locals/user/layout/header/mobile-navigation-menu";
 
 import { Container } from "@/components/locals/blocks/typography";
 import { Link } from "@/components/locals/blocks/links";
@@ -18,13 +18,13 @@ export default async function Header() {
             <Languages />
             <Account />
           </div>
-          <MobileNavigation />
-          <Link href="/user" className="border-s ps-3">
+          <MobileNavigationMenu />
+          <Link href="/" className="border-s ps-3">
             <Logo className="size-8" />
           </Link>
         </div>
         <div className="hidden border-t py-2 md:block">
-          <DesktopNavigation />
+          <NavigationMenu />
         </div>
       </Container>
     </header>

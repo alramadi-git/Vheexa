@@ -10,7 +10,7 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 export default function NotFound() {
-  const tNotFound = useTranslations("app.partner.dashboard.not-found");
+  const tNotFound = useTranslations("app.partner.not-found");
 
   return (
     <Section className="h-fullscreen grid grid-cols-1 items-center lg:grid-cols-2">
@@ -24,16 +24,16 @@ export default function NotFound() {
         </p>
 
         <Button asChild size="lg" className="rounded-lg text-base">
-          <Link href="/partner/dashboard">{tNotFound("go-back-to-dashboard")}</Link>
+         <Link href="/partner/dashboard">{tNotFound("go-back-to-dashboard")}</Link>
         </Button>
       </div>
 
       <div className="relative size-full max-lg:hidden">
-        <div className="bg-primary size-full rounded-2xl"></div>
+        <div className="bg-primary dark:brightness-[0.2] dark:grayscale size-full rounded-2xl"></div>
         <FullHDImage
           src={tNotFound("illustration.url")}
           alt={tNotFound("illustration.alternate")}
-          className="absolute top-1/2 left-1/2 h-64 -translate-x-1/2 -translate-y-1/2 object-contain"
+          className="absolute top-1/2 dark:brightness-90  left-1/2 h-64 -translate-x-1/2 -translate-y-1/2 object-contain"
         />
       </div>
     </Section>

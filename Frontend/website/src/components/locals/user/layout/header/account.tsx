@@ -1,73 +1,76 @@
 "use client";
 
-import { ComponentProps } from "react";
-
 import { useTranslations } from "next-intl";
+
 import useAccount from "@/user/hooks/account";
 
-import { LuUserRound } from "react-icons/lu";
+import { LuLogOut, LuUserRound } from "react-icons/lu";
 
-import { DropdownMenuContent } from "@/components/shadcn/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/shadcn/dropdown-menu";
+
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/shadcn/avatar";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
-import BlockAccount from "../../../blocks/account";
-
-type tAccountProps = ComponentProps<typeof DropdownMenuContent>;
-
-type tNavigationMenuItem = {
-  url: string;
-  label: string;
-};
-
-const icons = [
-  [
-    LuUserRound({
-      "aria-hidden": "true",
-      size: 16,
-      className: "opacity-60",
-    }),
-  ],
-];
-
-export default function Account(props: tAccountProps) {
+export default function Account() {
   const { account, logout } = useAccount();
+
   const tAccount = useTranslations("app.user.layout.header.account");
 
   if (account === null) {
     return (
-      <BlockAccount
-        isAuthenticated={false}
-        unauthenticatedReactNode={
-          <Button asChild className="max-md:grow">
-            <Link href="/user/authentication/login">
-              {tAccount("unauthenticated.login-now")}
-            </Link>
-          </Button>
-        }
-      />
+      <Button asChild className="max-md:grow">
+        <Link href="/authentication/login">
+          {tAccount("when-unauthenticated.login")}
+        </Link>
+      </Button>
     );
   }
 
-  const navigationMenu: tNavigationMenuItem[][] = (
-    tAccount.raw("authenticated.navigation-menu") as tNavigationMenuItem[][]
-  ).map((group, groupIndex) =>
-    group.map((item, index) => ({
-      icon: icons[groupIndex][index],
-      ...item,
-    })),
-  );
-
   return (
-    <BlockAccount
-      isAuthenticated={true}
-      authenticated={{
-        account,
-        logout,
-        navigationMenu,
-        props,
-      }}
-    />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="border p-2.5 hover:bg-transparent">
+          <Avatar className="size-6 items-center justify-center rounded">
+            <AvatarImage
+              src={account.avatar?.url}
+              alt={account.username}
+              className="rounded bg-transparent"
+            />
+            <AvatarFallback className="rounded bg-transparent">
+              <LuUserRound className="opacity-60" aria-hidden="true" />
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="max-w-64">
+        <div>
+          <p className="text-foreground text-sm font-medium">
+            {account.username}
+          </p>
+          <p className="text-muted-foreground truncate text-xs font-normal">
+            {account.email}
+          </p>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild variant="destructive" onClick={logout}>
+          <button className="w-full">
+            <LuLogOut className="size-4" />
+            {tAccount("when-authenticated.logout")}
+          </button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

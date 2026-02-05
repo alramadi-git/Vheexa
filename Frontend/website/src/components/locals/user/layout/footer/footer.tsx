@@ -1,4 +1,7 @@
 import { getTranslations } from "next-intl/server";
+
+import { cn } from "@/utilities/cn";
+
 import {
   FaRegCopyright,
   FaLinkedinIn,
@@ -8,53 +11,47 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
-import { Link } from "@/components/locals/blocks/links";
-import { FullHDImage } from "@/components/locals/blocks/images";
+
 import {
   sectionClassName,
   Container,
 } from "@/components/locals/blocks/typography";
-import { cn } from "@/utilities/cn";
 
-type tRoute = {
+import { Link } from "@/components/locals/blocks/links";
+import { Logo } from "@/components/locals/blocks/images";
+
+type tLink = {
   label: string;
   href: string;
 };
-type tLinkGroup = {
+type tNavigationMenu = {
   label: string;
-  links: Array<tRoute>;
+  links: tLink[];
 };
 
 const date = new Date();
 export default async function Footer() {
+  const tFooter = await getTranslations("app.user.layout.footer");
+  const quickLinks: tNavigationMenu[] = tFooter.raw("quick-links");
+
   const year = date.getFullYear();
 
-  const tFooter = await getTranslations("app.user.layout.footer");
-  const quickLinks: Array<tLinkGroup> = tFooter.raw("quick-links");
-
   return (
-    <footer className={cn(sectionClassName, "border-t !pb-0")}>
+    <footer className={cn(sectionClassName, "border-t pb-0!")}>
       <Container>
-        <div className="grid sm:grid-cols-3 gap-6 lg:grid-cols-6">
+        <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-6">
           <div className="space-y-3 lg:col-span-2">
             <div className="flex items-center gap-2">
-              <Link href="/user" className="block size-fit">
-                <FullHDImage
-                  src={tFooter("logo.src")}
-                  alt={tFooter("logo.alt")}
-                  className="size-10"
-                />
+              <Link href="/" className="block size-fit">
+                <Logo className="size-10" />
               </Link>
-
               <h3 className="text-2xl font-bold">{tFooter("title")}</h3>
             </div>
-
             <p className="text-muted-foreground text-pretty">
               {tFooter("description")}
             </p>
           </div>
-
-          <div className="sm:col-span-2 grid xs:grid-cols-2 gap-6 lg:col-span-4 lg:grid-cols-4">
+          <div className="xs:grid-cols-2 grid gap-6 sm:col-span-2 lg:col-span-4 lg:grid-cols-4">
             {quickLinks.map((linkGroup, index) => (
               <div key={index} className="space-y-3">
                 <h4 className="block text-lg font-medium">{linkGroup.label}</h4>
@@ -74,7 +71,6 @@ export default async function Footer() {
             ))}
           </div>
         </div>
-
         <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6 text-sm">
           <p className="text-muted-foreground flex items-center gap-1.5">
             {tFooter.rich("outro", {

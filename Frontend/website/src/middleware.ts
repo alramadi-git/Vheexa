@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nextIntlMiddleware from "@/middlewares/next-intl";
 
 import partnerMiddleware from "./partner/middlewares/partner";
-import userMiddleware from "./partner/middlewares/partner";
+import userMiddleware from "./user/middlewares/user";
 
 export default function middleware(request: NextRequest): NextResponse {
   let middlewares = NextResponse.next();
