@@ -417,7 +417,7 @@
                   "label": "Contact Us"
                 },
                 {
-                  "url": "/faqs",
+                  "url": "#",
                   "label": "FAQs"
                 },
                 {
@@ -579,6 +579,18 @@
           "metadata": {
             "title": "Contact Us",
             "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
+          },
+          "contact": {
+            "title": "Our Location",
+            "subtitle": "Come See Us",
+            "description": "Visit us to see our office and meet our team.",
+            "map": {
+              "label": "Main Office",
+              "description": "Visit our office and meet our team.",
+              "phoneNumber": "+12125550123",
+              "email": "main.office@vheexa.com"
+            },
+            "location": "180 Maiden Lane, Suite 902, New York, NY 10038, United States"
           }
         }
       },
