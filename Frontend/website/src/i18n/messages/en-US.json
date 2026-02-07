@@ -302,8 +302,8 @@
       "layout": {
         "metadata": {
           "title": {
-            "default": "User",
-            "template": "%s | Vheexa User"
+            "default": "Vheexa",
+            "template": "%s | Vheexa"
           },
           "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
         },
@@ -356,10 +356,6 @@
           }
         },
         "footer": {
-          "logo": {
-            "src": "https://ik.imagekit.io/alramadi/vheexa/website/brand/logo.png",
-            "alt": "Vheexa Company Logo"
-          },
           "title": "Vheexa",
           "description": "A platform for renting all types of vehicles easily and quickly, offering you diverse options at competitive prices, with a safe and comfortable booking experience.",
           "quick-links": [
@@ -367,24 +363,24 @@
               "label": "Our Services",
               "links": [
                 {
-                  "label": "Platform Features",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Platform Features"
                 },
                 {
-                  "label": "Available Solutions",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Available Solutions"
                 },
                 {
-                  "label": "Our Clients",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Our Clients"
                 },
                 {
-                  "label": "Pricing Plans",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Pricing Plans"
                 },
                 {
-                  "label": "Support",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Support"
                 }
               ]
             },
@@ -392,20 +388,20 @@
               "label": "Our Options",
               "links": [
                 {
-                  "label": "For companies and individuals",
-                  "href": "/partner/authentication/login"
+                  "url": "/partner/authentication/login",
+                  "label": "For companies and individuals"
                 },
                 {
-                  "label": "Collaboration & Teamwork",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Collaboration & Teamwork"
                 },
                 {
-                  "label": "Design & Creativity",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Design & Creativity"
                 },
                 {
-                  "label": "Resource Management",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Resource Management"
                 }
               ]
             },
@@ -413,24 +409,24 @@
               "label": "About the Company",
               "links": [
                 {
-                  "label": "About Us",
-                  "href": "/about"
+                  "url": "/about",
+                  "label": "About Us"
                 },
                 {
-                  "label": "Contact Us",
-                  "href": "/contact"
+                  "url": "/contact",
+                  "label": "Contact Us"
                 },
                 {
-                  "label": "FAQs",
-                  "href": "/faqs"
+                  "url": "/faqs",
+                  "label": "FAQs"
                 },
                 {
-                  "label": "Blog",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Blog"
                 },
                 {
-                  "label": "Technical Support",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Technical Support"
                 }
               ]
             },
@@ -438,20 +434,20 @@
               "label": "Policies & Terms",
               "links": [
                 {
-                  "label": "Terms of Use",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Terms of Use"
                 },
                 {
-                  "label": "Privacy Policy",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Privacy Policy"
                 },
                 {
-                  "label": "Cookie Policy",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Cookie Policy"
                 },
                 {
-                  "label": "Security & Privacy",
-                  "href": "#"
+                  "url": "#",
+                  "label": "Security & Privacy"
                 }
               ]
             }
@@ -577,6 +573,15 @@
           "help": "Didn't find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we'll be happy to assist you."
         }
       },
+      "about": {},
+      "contact": {
+        "page": {
+          "metadata": {
+            "title": "Contact Us",
+            "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
+          }
+        }
+      },
       "authentication": {
         "layout": {
           "metadata": {
@@ -684,6 +689,12 @@
               "login": "Already have an account? <link>Login</link>"
             }
           }
+        },
+        "not-found": {
+          "title": "Whoops!",
+          "subtitle": "Something went wrong",
+          "description": " The page you're looking for isn't found, we suggest you back to home.",
+          "go-back-to-login": "Go Back to Login"
         }
       }
     },
@@ -2158,6 +2169,16 @@
               }
             }
           }
+        },
+        "not-found": {
+          "title": "Whoops!",
+          "subtitle": "Something went wrong",
+          "description": " The page you're looking for isn't found, we suggest you back to home.",
+          "go-back-to-dashboard": "Go Back to Dashboard",
+          "illustration": {
+            "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
+            "alternate": "404 Not Found Illustration"
+          }
         }
       },
       "authentication": {
@@ -2352,17 +2373,7 @@
           "title": "Whoops!",
           "subtitle": "Something went wrong",
           "description": " The page you're looking for isn't found, we suggest you back to home.",
-          "go-back-to-dashboard": "Go Back to Dashboard"
-        }
-      },
-      "not-found": {
-        "title": "Whoops!",
-        "subtitle": "Something went wrong",
-        "description": " The page you're looking for isn't found, we suggest you back to home.",
-        "go-back-to-dashboard": "Go Back to Dashboard",
-        "illustration": {
-          "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/Illustrations/not-found-page.jpg?updatedAt=1765701737548",
-          "alternate": "404 Not Found Illustration"
+          "go-back-to-login": "Go Back to Login"
         }
       }
     },

@@ -138,7 +138,7 @@
     @apply cursor-pointer;
   }
   .h-fullscreen {
-    @apply min-h-dvh;
+    @apply min-h-[calc(100dvh-64px)];
   }
   .authentication .h-fullscreen {
     @apply min-h-dvh max-h-dvh;

@@ -17,9 +17,8 @@ export default function NotFound() {
       <p className="text-muted-foreground max-w-sm">
         {tNotFound("description")}
       </p>
-
       <Button asChild size="lg" className="rounded-lg text-base">
-        <Link href="/partner/dashboard">{tNotFound("go-back-to-dashboard")}</Link>
+        <Link href="/partner/authentication/login">{tNotFound("go-back-to-login")}</Link>
       </Button>
     </Section>
   );

@@ -10,7 +10,7 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 export default function NotFound() {
-  const tNotFound = useTranslations("app.partner.not-found");
+  const tNotFound = useTranslations("app.partner.dashboard.not-found");
 
   return (
     <Section className="h-fullscreen grid grid-cols-1 items-center lg:grid-cols-2">

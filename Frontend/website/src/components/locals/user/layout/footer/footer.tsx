@@ -21,8 +21,8 @@ import { Link } from "@/components/locals/blocks/links";
 import { Logo } from "@/components/locals/blocks/images";
 
 type tLink = {
+  url: string;
   label: string;
-  href: string;
 };
 type tNavigationMenu = {
   label: string;
@@ -59,7 +59,7 @@ export default async function Footer() {
                   {linkGroup.links.map((item, index) => (
                     <li key={index}>
                       <Link
-                        href={item.href}
+                        href={item.url}
                         className="text-muted-foreground hover:text-primary block duration-150"
                       >
                         {item.label}

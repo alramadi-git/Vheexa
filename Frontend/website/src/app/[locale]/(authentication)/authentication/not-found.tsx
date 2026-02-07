@@ -8,7 +8,7 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 export default function NotFound() {
-  const tNotFound = useTranslations("app.not-found");
+  const tNotFound = useTranslations("app.user.authentication.not-found");
 
   return (
     <Section className="h-full space-y-6">
@@ -17,9 +17,8 @@ export default function NotFound() {
       <p className="text-muted-foreground max-w-sm">
         {tNotFound("description")}
       </p>
-
       <Button asChild size="lg" className="rounded-lg text-base">
-        <Link href="/">{tNotFound("go-back-to-home")}</Link>
+        <Link href="/authentication/login">{tNotFound("go-back-to-login")}</Link>
       </Button>
     </Section>
   );

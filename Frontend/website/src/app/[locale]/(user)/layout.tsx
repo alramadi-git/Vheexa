@@ -1,7 +1,9 @@
 import { Metadata } from "next";
+
 import { getTranslations } from "next-intl/server";
 
 import { Fragment } from "react";
+
 import Header from "@/components/locals/user/layout/header/header";
 import Footer from "@/components/locals/user/layout/footer/footer";
 
@@ -12,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Layout({
   children,
-}: LayoutProps<"/[locale]/user">) {
+}: LayoutProps<"/[locale]">) {
   return (
     <Fragment>
       <Header />
