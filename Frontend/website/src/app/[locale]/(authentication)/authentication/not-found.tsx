@@ -12,8 +12,8 @@ export default function NotFound() {
 
   return (
     <Section className="h-full space-y-6">
-      <h2 className="text-5xl font-semibold">{tNotFound("title")}</h2>
-      <h3 className="mb-1.5 text-3xl font-semibold">{tNotFound("subtitle")}</h3>
+      <h2 className="text-5xl font-semibold">{tNotFound("subtitle")}</h2>
+      <h3 className="mb-1.5 text-3xl font-semibold">{tNotFound("title")}</h3>
       <p className="text-muted-foreground max-w-sm">
         {tNotFound("description")}
       </p>

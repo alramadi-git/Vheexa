@@ -15,9 +15,9 @@ export default function NotFound() {
   return (
     <Section className="h-fullscreen grid grid-cols-1 items-center lg:grid-cols-2">
       <div className="space-y-6 px-4 py-8 text-center">
-        <h2 className="text-5xl font-semibold">{tNotFound("title")}</h2>
+        <h2 className="text-5xl font-semibold">{tNotFound("subtitle")}</h2>
         <h3 className="mb-1.5 text-3xl font-semibold">
-          {tNotFound("subtitle")}
+          {tNotFound("title")}
         </h3>
         <p className="text-muted-foreground mx-auto max-w-sm">
           {tNotFound("description")}

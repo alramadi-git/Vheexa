@@ -288,8 +288,7 @@
           "apple": "https://ik.imagekit.io/alramadi/vheexa/website/brand/apple-touch-icon.png",
           "shortcut": "https://ik.imagekit.io/alramadi/vheexa/website/brand/favicon.ico"
         },
-        "openGraph": {},
-        "creator": "vheexa",
+        "creator": "nawaf alramadi",
         "authors": [
           {
             "name": "nawaf alramadi",
@@ -300,13 +299,6 @@
     },
     "user": {
       "layout": {
-        "metadata": {
-          "title": {
-            "default": "Vheexa",
-            "template": "%s | Vheexa"
-          },
-          "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
-        },
         "header": {
           "navigation-menu": {
             "label": "Quick Links",
@@ -315,11 +307,6 @@
                 "url": "/",
                 "label": "Home",
                 "description": "The main page featuring the latest news and highlights."
-              },
-              {
-                "url": "/about",
-                "label": "About Us",
-                "description": "Learn about our vision, mission, and the team behind Vheexa."
               },
               {
                 "url": "/contact",
@@ -335,10 +322,6 @@
               {
                 "url": "/",
                 "label": "Home"
-              },
-              {
-                "url": "/about",
-                "label": "About Us"
               },
               {
                 "url": "/contact",
@@ -409,7 +392,7 @@
               "label": "About the Company",
               "links": [
                 {
-                  "url": "/about",
+                  "url": "#",
                   "label": "About Us"
                 },
                 {
@@ -418,11 +401,11 @@
                 },
                 {
                   "url": "#",
-                  "label": "FAQs"
+                  "label": "Blog"
                 },
                 {
                   "url": "#",
-                  "label": "Blog"
+                  "label": "FAQs"
                 },
                 {
                   "url": "#",
@@ -573,24 +556,44 @@
           "help": "Didn't find your answer here? <link>Go to the Frequent Asked Questions page</link>. If you still need help, contact our support team via the Contact Us page and we'll be happy to assist you."
         }
       },
-      "about": {},
       "contact": {
         "page": {
           "metadata": {
             "title": "Contact Us",
-            "description": "Vheexa is an innovative platform for renting all types of vehicles, from cars to bikes and trucks, at competitive prices with a simple and fast booking experience tailored to your needs."
+            "description": "Reach out to our team quickly via chat, call, or email — we,re here to help."
           },
           "contact": {
             "title": "Our Location",
             "subtitle": "Come See Us",
             "description": "Visit us to see our office and meet our team.",
-            "map": {
-              "label": "Main Office",
-              "description": "Visit our office and meet our team.",
-              "phoneNumber": "+12125550123",
-              "email": "main.office@vheexa.com"
+            "chat-with-us": {
+              "title": "Chat with us",
+              "description": "Speak with our team via chat fast",
+              "whatsapp": {
+                "url": "https://wa.me/+12125550123",
+                "label": "WhatsApp"
+              },
+              "email": {
+                "url": "mailto:main.office@vheexa.com",
+                "label": "Email"
+              }
             },
-            "location": "180 Maiden Lane, Suite 902, New York, NY 10038, United States"
+            "call-us": {
+              "title": "Call us",
+              "description": "Call our team Mon - Fri | 8:00 AM to 10:00 PM ",
+              "phone-number": {
+                "url": "tel:+12125550123",
+                "label": "+12125550123"
+              }
+            },
+            "visit-us": {
+              "title": "Visit us",
+              "description": "Or come and meet us in person - Fri | 8:00 AM to 10:00 PM ",
+              "location": {
+                "url": "https://share.google/1RNgx1i3QRCBJ9yg4",
+                "label": "180 Maiden Lane, Suite 902, New York, NY 10038, United States"
+              }
+            }
           }
         }
       },
@@ -598,10 +601,8 @@
         "layout": {
           "metadata": {
             "title": {
-              "absolute": "Auth | Vheexa",
-              "template": "%s | Vheexa User Auth"
-            },
-            "description": "Access your Vheexa account to manage bookings and rents easily and securely."
+              "template": "%s | Vheexa Auth"
+            }
           },
           "illustration": {
             "url": "https://ik.imagekit.io/alramadi/vheexa/website/assets/placeholder.png",
@@ -703,8 +704,8 @@
           }
         },
         "not-found": {
-          "title": "Whoops!",
-          "subtitle": "Something went wrong",
+          "subtitle": "Whoops!",
+          "title": "Something went wrong",
           "description": " The page you're looking for isn't found, we suggest you back to home.",
           "go-back-to-login": "Go Back to Login"
         }
@@ -2183,8 +2184,8 @@
           }
         },
         "not-found": {
-          "title": "Whoops!",
-          "subtitle": "Something went wrong",
+          "subtitle": "Whoops!",
+          "title": "Something went wrong",
           "description": " The page you're looking for isn't found, we suggest you back to home.",
           "go-back-to-dashboard": "Go Back to Dashboard",
           "illustration": {
@@ -2382,8 +2383,8 @@
           }
         },
         "not-found": {
-          "title": "Whoops!",
-          "subtitle": "Something went wrong",
+          "subtitle": "Whoops!",
+          "title": "Something went wrong",
           "description": " The page you're looking for isn't found, we suggest you back to home.",
           "go-back-to-login": "Go Back to Login"
         }
@@ -2393,15 +2394,16 @@
       "layout": {
         "metadata": {
           "title": {
-            "template": "%s | Vheexa Auth"
-          }
+            "default": "Auth"
+          },
+          "description": "Access your Vheexa account to manage bookings and rents easily and securely."
         },
         "company-name": "Vheexa"
       }
     },
     "not-found": {
-      "title": "Whoops!",
-      "subtitle": "Something went wrong",
+      "subtitle": "Whoops!",
+      "title": "Something went wrong",
       "description": " The page you're looking for isn't found, we suggest you back to home.",
       "go-back-to-home": "Go Back to Home",
       "illustration": {
