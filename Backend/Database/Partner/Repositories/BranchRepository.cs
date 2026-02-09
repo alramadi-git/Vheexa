@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using FuzzySharp;
 
 using Database.Entities;
-
-using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
@@ -13,6 +11,8 @@ using Database.Enums;
 
 using Database.Models;
 using Database.Partner.Models;
+using Database.Filters;
+using Database.Partner.Filters;
 
 namespace Database.Partner.Repositories;
 
@@ -25,7 +25,7 @@ public class ClsBranchRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsBranchCreateInput branchCreateDTO, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsBranchInput branchCreateDTO, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -134,7 +134,7 @@ public class ClsBranchRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedModel<ClsBranchModel>> SearchAsync(ClsBranchFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsBranchModel>> SearchAsync(ClsBranchFilter filter, ClsPaginationFilter pagination, ClsMemberContext memberContext)
     {
         var branchesQuery = _AppDBContext.Branches
         .AsNoTracking()

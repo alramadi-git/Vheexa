@@ -8,10 +8,10 @@ namespace Business.Partner.Validations.Guards;
 
 public class ClsAuthenticationGuard
 {
-    private readonly ClsRegisterValidator _RegisterValidator;
+    private readonly ClsRegisterCredentialsValidator _RegisterValidator;
     private readonly ClsLoginValidator _LoginValidator;
 
-    public ClsAuthenticationGuard(ClsRegisterValidator _RegisterValidator, ClsLoginValidator _LoginValidator)
+    public ClsAuthenticationGuard(ClsRegisterCredentialsValidator _RegisterValidator, ClsLoginValidator _LoginValidator)
     {
         this._RegisterValidator = _RegisterValidator;
         this._LoginValidator = _LoginValidator;

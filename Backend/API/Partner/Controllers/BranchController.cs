@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
+using Business.Filters;
+using Business.Partner.Filters;
+
 namespace API.Partner.Controllers;
 
 [ApiController]
@@ -14,7 +17,7 @@ public class ClsBranchController : Controller
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsBranchCreateInput branch)
+    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsBranchInput branch)
     {
         await _BranchService.CreateOneAsync(branch, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -38,7 +41,7 @@ public class ClsBranchController : Controller
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsBranchModel>>> SearchAsync([FromQuery] Business.Partner.Inputs.ClsBranchFilterInput filter, [FromQuery] Business.Inputs.ClsPaginationInput pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsBranchModel>>> SearchAsync([FromQuery] ClsBranchFilter filter, [FromQuery] ClsPaginationFilter pagination)
     {
         var branches = await _BranchService.SearchAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {

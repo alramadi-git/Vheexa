@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
+using Business.Filters;
+using Business.Partner.Filters;
+
 namespace API.Partner.Controllers;
 
 [ApiController]
@@ -14,7 +17,7 @@ public class ClsRoleController : Controller
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsRoleCreateInput role)
+    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsRoleInput role)
     {
         await _RoleService.CreateOneAsync(role, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -38,7 +41,7 @@ public class ClsRoleController : Controller
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsRoleModel>>> SearchAsync([FromQuery] Business.Partner.Inputs.ClsRoleFilterInput filter, [FromQuery] Business.Inputs.ClsPaginationInput pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsRoleModel>>> SearchAsync([FromQuery] ClsRoleFilter filter, [FromQuery] ClsPaginationFilter pagination)
     {
         var roles = await _RoleService.SearchAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {

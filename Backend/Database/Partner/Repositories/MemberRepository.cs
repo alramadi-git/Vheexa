@@ -8,14 +8,14 @@ using Database.Entities;
 
 using Database.Enums;
 using Database.Partner.Enums;
-
-using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
 using Database.Models;
 using Database.Partner.Models;
+using Database.Filters;
+using Database.Partner.Filters;
 
 namespace Database.Partner.Repositories;
 
@@ -50,7 +50,7 @@ public class ClsMemberRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsMemberCreateInput member, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsMemberInput member, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -205,7 +205,7 @@ public class ClsMemberRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedModel<ClsOptionModel>> SearchRolesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsOptionModel>> SearchRolesAsync(ClsOptionFilter filter, ClsOptionPaginationFilter pagination, ClsMemberContext memberContext)
     {
         var roleOptionDtos = await _AppDBContext.PartnerRoles
         .AsNoTracking()
@@ -249,7 +249,7 @@ public class ClsMemberRepository
             }
         };
     }
-    public async Task<ClsPaginatedModel<ClsOptionModel>> SearchBranchesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsOptionModel>> SearchBranchesAsync(ClsOptionFilter filter, ClsOptionPaginationFilter pagination, ClsMemberContext memberContext)
     {
         var branchOptionDtos = await _AppDBContext.Branches
         .AsNoTracking()
@@ -293,7 +293,7 @@ public class ClsMemberRepository
             }
         };
     }
-    public async Task<ClsPaginatedModel<ClsMemberModel>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsMemberModel>> SearchAsync(ClsMemberFilter filter, ClsPaginationFilter pagination, ClsMemberContext memberContext)
     {
         var membersQuery = _AppDBContext.Members
         .AsNoTracking()

@@ -25,7 +25,7 @@ public class ClsAuthenticationService
 
     public async Task<Database.Partner.Models.ClsMemberAccountModel> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
-        var uploadedImageIds = new List<string>(
+        var imageIds = new List<string>(
             (credentials.Logo == null ? 0 : 1) +
             (credentials.Banner == null ? 0 : 1) +
             (credentials.Member.Avatar == null ? 0 : 1)
@@ -54,9 +54,9 @@ public class ClsAuthenticationService
             var Banner = uploadedImages[1];
             var Avatar = uploadedImages[2];
 
-            if (Logo != null) uploadedImageIds.Add(Logo.Id);
-            if (Banner != null) uploadedImageIds.Add(Banner.Id);
-            if (Avatar != null) uploadedImageIds.Add(Avatar.Id);
+            if (Logo != null) imageIds.Add(Logo.Id);
+            if (Banner != null) imageIds.Add(Banner.Id);
+            if (Avatar != null) imageIds.Add(Avatar.Id);
 
             var account = await _Repository.RegisterAsync(new Database.Partner.Inputs.ClsRegisterCredentialsInput
             {
@@ -75,9 +75,9 @@ public class ClsAuthenticationService
                 OrganizationName = credentials.OrganizationName,
                 PhoneNumber = credentials.PhoneNumber,
                 Email = credentials.Email,
-                Branch = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsBranchCreateInput
+                Branch = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsBranchInput
                 {
-                    Location = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsBranchCreateInput.ClsLocationCreateInput
+                    Location = new Database.Inputs.ClsLocationInput
                     {
                         Country = credentials.Branch.Location.Country,
                         City = credentials.Branch.Location.City,
@@ -89,7 +89,7 @@ public class ClsAuthenticationService
                     PhoneNumber = credentials.Branch.PhoneNumber,
                     Email = credentials.Branch.Email
                 },
-                Member = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsMemberCreateInput
+                Member = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsMemberInput
                 {
                     Avatar = Avatar == null ? null : new Database.Inputs.ClsImageInput
                     {
@@ -107,7 +107,7 @@ public class ClsAuthenticationService
         }
         catch
         {
-            if (uploadedImageIds.Count > 0) await Task.WhenAll(uploadedImageIds.Select(_ImagekitIntegration.DeleteImageAsync));
+            if (imageIds.Count > 0) await Task.WhenAll(imageIds.Select(_ImagekitIntegration.DeleteImageAsync));
 
             throw;
         }

@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
+using Business.Filters;
+using Business.Partner.Filters;
+
 namespace API.Partner.Controllers;
 
 [ApiController]
@@ -37,7 +40,7 @@ public class ClsMemberController : Controller
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsMemberCreateInput member)
+    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsMemberInput member)
     {
         await _MemberService.CreateOneAsync(member, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -61,7 +64,7 @@ public class ClsMemberController : Controller
     }
 
     [HttpGet("options/roles/search")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchRolesAsync([FromQuery] Business.Partner.Inputs.ClsOptionFilterInput filter, [FromQuery] Business.Partner.Inputs.ClsOptionPaginationInput pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchRolesAsync([FromQuery] ClsOptionFilterFilter filter, [FromQuery] ClsOptionPaginationFilter pagination)
     {
         var roleOptions = await _MemberService.SearchRolesAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -72,7 +75,7 @@ public class ClsMemberController : Controller
         return Ok(roleOptions);
     }
     [HttpGet("options/branches/search")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchBranchesAsync([FromQuery] Business.Partner.Inputs.ClsOptionFilterInput filter, [FromQuery] Business.Partner.Inputs.ClsOptionPaginationInput pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchBranchesAsync([FromQuery] ClsOptionFilterFilter filter, [FromQuery] ClsOptionPaginationFilter pagination)
     {
         var branchOptions = await _MemberService.SearchBranchesAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -84,7 +87,7 @@ public class ClsMemberController : Controller
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>>> SearchAsync([FromQuery] Business.Partner.Inputs.ClsMemberFilterInput filter, [FromQuery] Business.Inputs.ClsPaginationInput pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>>> SearchAsync([FromQuery] ClsMemberFilter filter, [FromQuery] ClsPaginationFilter pagination)
     {
         var members = await _MemberService.SearchAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {

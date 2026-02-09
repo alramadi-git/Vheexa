@@ -1,10 +1,10 @@
 using FluentValidation;
 
-using Business.Partner.Inputs;
+using Business.Partner.Filters;
 
 namespace Business.Partner.Validations.Validators;
 
-public class ClsOptionFilterValidator : AbstractValidator<ClsOptionFilterInput>
+public class ClsOptionFilterValidator : AbstractValidator<ClsOptionFilterFilter>
 {
     public ClsOptionFilterValidator()
     {
@@ -15,9 +15,9 @@ public class ClsOptionFilterValidator : AbstractValidator<ClsOptionFilterInput>
     }
 }
 
-public class ClsOptionPaginationValidator : AbstractValidator<ClsOptionPaginationInput>
+public class ClsOptionPaginationFilterValidator : AbstractValidator<ClsOptionPaginationFilter>
 {
-    public ClsOptionPaginationValidator()
+    public ClsOptionPaginationFilterValidator()
     {
         RuleFor(memberFilter => memberFilter.Page)
         .GreaterThanOrEqualTo(1);

@@ -1,6 +1,6 @@
-namespace Database.Inputs;
+namespace Database.Filters;
 
-public class ClsPaginationInput
+public class ClsPaginationFilter
 {
     public int Page { get; set; }
     public int PageSize { get; set; }

@@ -5,7 +5,7 @@ using Database.Partner.Enums;
 
 namespace Database.Partner.Inputs;
 
-public class ClsVehicleModelCreateInput
+public class ClsVehicleModelInput
 {
     public Guid Uuid { get; set; }
     public ClsImageInput? Thumbnail { get; set; }
@@ -22,24 +22,4 @@ public class ClsVehicleModelCreateInput
     public decimal Discount { get; set; }
     public required string[] Tags { get; set; }
     public STATUS Status { get; set; }
-}
-
-public class ClsVehicleModelFilterInput
-{
-    public class ClsMinMaxInput
-    {
-        public int? Min { get; set; }
-        public int? Max { get; set; }
-    }
-    public class ClsMinMaxMoneyInput
-    {
-        public decimal? Min { get; set; }
-        public decimal? Max { get; set; }
-    }
-    public string? Search { get; set; }
-    public required CATEGORY[] Categories { get; set; }
-    public required ClsMinMaxInput Capacity { get; set; }
-    public required ClsMinMaxMoneyInput Price { get; set; }
-    public required ClsMinMaxMoneyInput Discount { get; set; }
-    public STATUS? Status { get; set; }
 }

@@ -1,7 +1,9 @@
 using Business.Partner.Validations.Guards;
 
-using Business.Inputs;
 using Business.Partner.Inputs;
+
+using Business.Filters;
+using Business.Partner.Filters;
 
 namespace Business.Partner.Services;
 
@@ -16,11 +18,11 @@ public class ClsRoleService
         _Guard = guard;
     }
 
-    public async Task CreateOneAsync(ClsRoleCreateInput role, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsRoleInput role, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.CreateOneAsync(role);
         await _Repository.CreateOneAsync(
-            new Database.Partner.Inputs.ClsRoleCreateInput
+            new Database.Partner.Inputs.ClsRoleInput
             {
                 Name = role.Name,
                 Permissions = role.Permissions,
@@ -33,17 +35,17 @@ public class ClsRoleService
     {
         await _Repository.DeleteOneAsync(roleUuid, memberContext);
     }
-    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsRoleModel>> SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsRoleModel>> SearchAsync(ClsRoleFilter filter, ClsPaginationFilter pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
         return await _Repository.SearchAsync(
-            new Database.Partner.Inputs.ClsRoleFilterInput
+            new Database.Partner.Filters.ClsRoleFilter
             {
                 Name = filter.Name,
                 Permissions = filter.Permissions,
                 Status = filter.Status
             },
-            new Database.Inputs.ClsPaginationInput
+            new Database.Filters.ClsPaginationFilter
             {
                 Page = pagination.Page,
                 PageSize = (int)pagination.PageSize

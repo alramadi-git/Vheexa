@@ -1,6 +1,6 @@
-namespace Business.Inputs;
+namespace Business.Filters;
 
-public class ClsPaginationInput
+public class ClsPaginationFilter
 {
     public enum PAGE_SIZE
     {
@@ -11,6 +11,6 @@ public class ClsPaginationInput
         SEVENTY_FIVE = 75,
         HUNDRED = 100
     }
-    public int Page { get; set; } = 1;
-    public PAGE_SIZE PageSize { get; set; } = PAGE_SIZE.TEN;
+    public int Page { get; set; }
+    public PAGE_SIZE PageSize { get; set; }
 }

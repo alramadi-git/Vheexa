@@ -1,7 +1,9 @@
 using Business.Partner.Validations.Guards;
 
-using Business.Inputs;
 using Business.Partner.Inputs;
+
+using Business.Filters;
+using Business.Partner.Filters;
 
 namespace Business.Partner.Services;
 
@@ -17,14 +19,14 @@ public class ClsBranchService
         _Guard = guard;
     }
 
-    public async Task CreateOneAsync(ClsBranchCreateInput branch, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsBranchInput branch, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.CreateOneAsync(branch);
 
         await _Repository.CreateOneAsync(
-            new Database.Partner.Inputs.ClsBranchCreateInput
+            new Database.Partner.Inputs.ClsBranchInput
             {
-                Location = new Database.Partner.Inputs.ClsBranchCreateInput.ClsLocationCreateInput
+                Location = new Database.Inputs.ClsLocationInput
                 {
                     Country = branch.Location.Country,
                     City = branch.Location.City,
@@ -44,17 +46,17 @@ public class ClsBranchService
     {
         await _Repository.DeleteOneAsync(branchUuid, memberContext);
     }
-    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsBranchModel>> SearchAsync(ClsBranchFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsBranchModel>> SearchAsync(ClsBranchFilter filter, ClsPaginationFilter pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
 
         var branches = await _Repository.SearchAsync(
-            new Database.Partner.Inputs.ClsBranchFilterInput
+            new Database.Partner.Filters.ClsBranchFilter
             {
                 Search = filter.Search,
                 Status = filter.Status
             },
-            new Database.Inputs.ClsPaginationInput
+            new Database.Filters.ClsPaginationFilter
             {
                 Page = pagination.Page,
                 PageSize = (int)pagination.PageSize

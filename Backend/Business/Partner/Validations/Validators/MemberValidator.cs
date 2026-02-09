@@ -4,33 +4,35 @@ using Business.Validations.Extensions;
 
 using Business.Partner.Inputs;
 
+using Business.Partner.Filters;
+
 namespace Business.Partner.Validations.Validators;
 
-public class ClsMemberCreateValidator : AbstractValidator<ClsMemberCreateInput>
+public class ClsMemberInputValidator : AbstractValidator<ClsMemberInput>
 {
-    public ClsMemberCreateValidator()
+    public ClsMemberInputValidator()
     {
-        RuleFor(memberCreate => memberCreate.Avatar!)
+        RuleFor(memberInput => memberInput.Avatar!)
         .Type("image/")
         .MaxKBSize(300)
-        .When(memberCreate => memberCreate.Avatar != null);
+        .When(memberInput => memberInput.Avatar != null);
 
-        RuleFor(memberCreate => memberCreate.Username)
+        RuleFor(memberInput => memberInput.Username)
         .MinimumLength(3)
         .MaximumLength(20);
 
-        RuleFor(memberCreate => memberCreate.Email)
+        RuleFor(memberInput => memberInput.Email)
         .EmailAddress();
 
-        RuleFor(memberCreate => memberCreate.Password)
+        RuleFor(memberInput => memberInput.Password)
         .Password();
 
-        RuleFor(memberCreate => memberCreate.Status)
+        RuleFor(memberInput => memberInput.Status)
         .IsInEnum();
     }
 }
 
-public class ClsMemberFilterValidator : AbstractValidator<ClsMemberFilterInput>
+public class ClsMemberFilterValidator : AbstractValidator<ClsMemberFilter>
 {
     public ClsMemberFilterValidator()
     {

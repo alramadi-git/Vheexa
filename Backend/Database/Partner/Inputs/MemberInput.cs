@@ -4,7 +4,7 @@ using Database.Enums;
 
 namespace Database.Partner.Inputs;
 
-public class ClsMemberCreateInput
+public class ClsMemberInput
 {
     public Guid Uuid { get; set; }
     public ClsImageInput? Avatar { get; set; }
@@ -14,12 +14,4 @@ public class ClsMemberCreateInput
     public required string Email { get; set; }
     public required string Password { get; set; }
     public STATUS Status { get; set; }
-}
-
-public class ClsMemberFilterInput
-{
-    public string? Search { get; set; }
-    public required Guid[] RoleUuids { get; set; }
-    public required Guid[] BranchUuids { get; set; }
-    public STATUS? Status { get; set; }
 }

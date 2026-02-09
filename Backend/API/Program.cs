@@ -19,18 +19,18 @@ public class Program
         // Register business layer
         // Validators
         builder.Services.AddScoped<Business.Validations.Validators.ClsLoginValidator>();
-        builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationValidator>();
+        builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationFilterValidator>();
 
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchFilterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberFilterValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionFilterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionPaginationValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRegisterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionPaginationFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRegisterCredentialsValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleFilterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelCreateValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelFilterValidator>();
 
         // Guards

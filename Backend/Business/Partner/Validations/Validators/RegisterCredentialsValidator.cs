@@ -4,21 +4,23 @@ using Business.Validations.Extensions;
 
 using Business.Partner.Inputs;
 
+using Business.Validations.Validators;
+
 namespace Business.Partner.Validations.Validators;
 
-public class ClsRegisterValidator : AbstractValidator<ClsRegisterCredentialsInput>
+public class ClsRegisterCredentialsValidator : AbstractValidator<ClsRegisterCredentialsInput>
 {
-    public ClsRegisterValidator()
+    public ClsRegisterCredentialsValidator(ClsLocationValidator locationValidator)
     {
-        RuleFor(memberCreate => memberCreate.Logo!)
+        RuleFor(registerCredentials => registerCredentials.Logo!)
         .MaxKBSize(300)
         .Type("image/")
-        .When(memberCreate => memberCreate.Logo != null);
+        .When(registerCredentials => registerCredentials.Logo != null);
 
-        RuleFor(memberCreate => memberCreate.Banner!)
+        RuleFor(registerCredentials => registerCredentials.Banner!)
         .MaxMBSize(1)
         .Type("image/")
-        .When(memberCreate => memberCreate.Banner != null);
+        .When(registerCredentials => registerCredentials.Banner != null);
 
         RuleFor(registerCredentials => registerCredentials.Handle)
         .MinimumLength(3)
@@ -32,25 +34,7 @@ public class ClsRegisterValidator : AbstractValidator<ClsRegisterCredentialsInpu
 
         RuleFor(registerCredentials => registerCredentials.Email).EmailAddress();
 
-        RuleFor(registerCredentials => registerCredentials.Branch.Location.Country)
-        .MinimumLength(2)
-        .MaximumLength(56);
-
-        RuleFor(registerCredentials => registerCredentials.Branch.Location.City)
-        .MinimumLength(2)
-        .MaximumLength(85);
-
-        RuleFor(registerCredentials => registerCredentials.Branch.Location.Street)
-        .MinimumLength(3)
-        .MaximumLength(150);
-
-        RuleFor(registerCredentials => registerCredentials.Branch.Location.Latitude)
-        .GreaterThanOrEqualTo(-90)
-        .LessThanOrEqualTo(90);
-
-        RuleFor(registerCredentials => registerCredentials.Branch.Location.Longitude)
-        .GreaterThanOrEqualTo(-180)
-        .LessThanOrEqualTo(180);
+        RuleFor(registerCredentials => registerCredentials.Branch.Location).SetValidator(locationValidator);
 
         RuleFor(registerCredentials => registerCredentials.Branch.Name)
         .MinimumLength(2)

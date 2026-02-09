@@ -5,14 +5,14 @@ using FuzzySharp;
 using Database.Entities;
 
 using Database.Enums;
-
-using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
 using Database.Models;
 using Database.Partner.Models;
+using Database.Filters;
+using Database.Partner.Filters;
 
 namespace Database.Partner.Repositories;
 
@@ -25,7 +25,7 @@ public class ClsVehicleModelRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsVehicleModelCreateInput vehicleModel, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsVehicleModelInput vehicleModel, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -161,7 +161,7 @@ public class ClsVehicleModelRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedModel<ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilter filter, ClsPaginationFilter pagination, ClsMemberContext memberContext)
     {
         var vehicleModels = _AppDBContext.VehicleModels
         .Where(partnerVehicleModel =>

@@ -6,14 +6,14 @@ using Database.Entities;
 
 using Database.Enums;
 using Database.Partner.Enums;
-
-using Database.Inputs;
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
 using Database.Models;
 using Database.Partner.Models;
+using Database.Filters;
+using Database.Partner.Filters;
 
 namespace Database.Partner.Repositories;
 
@@ -72,7 +72,7 @@ public class ClsRoleRepository
         _AppDBContext = appDBContext;
     }
 
-    public async Task CreateOneAsync(ClsRoleCreateInput role, ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsRoleInput role, ClsMemberContext memberContext)
     {
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
@@ -181,7 +181,7 @@ public class ClsRoleRepository
             throw;
         }
     }
-    public async Task<ClsPaginatedModel<ClsRoleModel>> SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination, ClsMemberContext memberContext)
+    public async Task<ClsPaginatedModel<ClsRoleModel>> SearchAsync(ClsRoleFilter filter, ClsPaginationFilter pagination, ClsMemberContext memberContext)
     {
         var rolesQuery = _AppDBContext.PartnerRoles
         .AsNoTracking()

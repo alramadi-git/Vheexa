@@ -1,50 +1,37 @@
 using FluentValidation;
+
+using Business.Validations.Validators;
+
 using Business.Validations.Extensions;
 
 using Business.Partner.Inputs;
 
+using Business.Partner.Filters;
+
 namespace Business.Partner.Validations.Validators;
 
-public class ClsBranchCreateValidator : AbstractValidator<ClsBranchCreateInput>
+public class ClsBranchInputValidator : AbstractValidator<ClsBranchInput>
 {
-    public ClsBranchCreateValidator()
+    public ClsBranchInputValidator(ClsLocationValidator locationValidator)
     {
-        RuleFor(branchCreate => branchCreate.Location.Country)
-        .MinimumLength(2)
-        .MaximumLength(56);
+        RuleFor(branchInput => branchInput.Location).SetValidator(locationValidator);
 
-        RuleFor(branchCreate => branchCreate.Location.City)
-        .MinimumLength(2)
-        .MaximumLength(85);
-
-        RuleFor(branchCreate => branchCreate.Location.Street)
-        .MinimumLength(3)
-        .MaximumLength(150);
-
-        RuleFor(branchCreate => branchCreate.Location.Latitude)
-        .GreaterThanOrEqualTo(-90)
-        .LessThanOrEqualTo(90);
-
-        RuleFor(branchCreate => branchCreate.Location.Longitude)
-        .GreaterThanOrEqualTo(-180)
-        .LessThanOrEqualTo(180);
-
-        RuleFor(branchCreate => branchCreate.Name)
+        RuleFor(branchInput => branchInput.Name)
         .MinimumLength(2)
         .MaximumLength(80);
 
-        RuleFor(branchCreate => branchCreate.PhoneNumber)
+        RuleFor(branchInput => branchInput.PhoneNumber)
         .PhoneNumber();
 
-        RuleFor(branchCreate => branchCreate.Email)
+        RuleFor(branchInput => branchInput.Email)
         .EmailAddress();
 
-        RuleFor(branchCreate => branchCreate.Status)
+        RuleFor(branchInput => branchInput.Status)
         .IsInEnum();
     }
 }
 
-public class ClsBranchFilterValidator : AbstractValidator<ClsBranchFilterInput>
+public class ClsBranchFilterValidator : AbstractValidator<ClsBranchFilter>
 {
     public ClsBranchFilterValidator()
     {

@@ -2,28 +2,30 @@ using FluentValidation;
 
 using Business.Partner.Inputs;
 
+using Business.Partner.Filters;
+
 namespace Business.Partner.Validations.Validators;
 
-public class ClsRoleCreateValidator : AbstractValidator<ClsRoleCreateInput>
+public class ClsRoleInputValidator : AbstractValidator<ClsRoleInput>
 {
-    public ClsRoleCreateValidator()
+    public ClsRoleInputValidator()
     {
-        RuleFor(roleCreate => roleCreate.Name)
+        RuleFor(roleInput => roleInput.Name)
         .MinimumLength(3)
         .MaximumLength(25);
 
-        RuleFor(roleCreate => roleCreate.Permissions)
+        RuleFor(roleInput => roleInput.Permissions)
         .Must(permissions => permissions.Length > 0).WithMessage("You must assign at least 1 permission.")
         .Must(permissions => permissions.Length <= 19).WithMessage("You can assign a maximum of 19 permissions.");
-        RuleForEach(roleCreate => roleCreate.Permissions)
+        RuleForEach(roleInput => roleInput.Permissions)
         .IsInEnum();
 
-        RuleFor(roleCreate => roleCreate.Status)
+        RuleFor(roleInput => roleInput.Status)
         .IsInEnum();
     }
 }
 
-public class ClsRoleFilterValidator : AbstractValidator<ClsRoleFilterInput>
+public class ClsRoleFilterValidator : AbstractValidator<ClsRoleFilter>
 {
     public ClsRoleFilterValidator()
     {

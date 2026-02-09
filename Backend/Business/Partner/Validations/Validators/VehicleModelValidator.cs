@@ -4,72 +4,74 @@ using Business.Validations.Extensions;
 
 using Business.Partner.Inputs;
 
+using Business.Partner.Filters;
+
 namespace Business.Partner.Validations.Validators;
 
-public class ClsVehicleModelCreateValidator : AbstractValidator<ClsVehicleModelCreateInput>
+public class ClsVehicleModelInputValidator : AbstractValidator<ClsVehicleModelInput>
 {
-    public ClsVehicleModelCreateValidator()
+    public ClsVehicleModelInputValidator()
     {
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Thumbnail!)
+        RuleFor(vehicleModelInput => vehicleModelInput.Thumbnail!)
         .MaxMBSize(2)
         .Type("image/")
-        .When(vehicleModelCreate => vehicleModelCreate.Thumbnail != null);
+        .When(vehicleModelInput => vehicleModelInput.Thumbnail != null);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Gallery)
+        RuleFor(vehicleModelInput => vehicleModelInput.Gallery)
         .Must(gallery => gallery.Length <= 25).WithMessage("You can assign a maximum of 25 files.");
-        RuleForEach(vehicleModelCreate => vehicleModelCreate.Gallery)
+        RuleForEach(vehicleModelInput => vehicleModelInput.Gallery)
         .MaxMBSize(2)
         .Type("image/");
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Name)
+        RuleFor(vehicleModelInput => vehicleModelInput.Name)
         .MinimumLength(2)
         .MaximumLength(80);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Description)
+        RuleFor(vehicleModelInput => vehicleModelInput.Description)
         .MaximumLength(750);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Category)
+        RuleFor(vehicleModelInput => vehicleModelInput.Category)
         .IsInEnum();
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Manufacturer)
+        RuleFor(vehicleModelInput => vehicleModelInput.Manufacturer)
         .MinimumLength(2)
         .MaximumLength(60);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.MarketLaunch)
+        RuleFor(vehicleModelInput => vehicleModelInput.MarketLaunch)
         .GreaterThanOrEqualTo(new DateOnly(1980, 1, 1))
         .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Capacity)
+        RuleFor(vehicleModelInput => vehicleModelInput.Capacity)
         .GreaterThanOrEqualTo(1);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Transmission)
+        RuleFor(vehicleModelInput => vehicleModelInput.Transmission)
         .MinimumLength(3)
         .MaximumLength(30);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Fuel)
+        RuleFor(vehicleModelInput => vehicleModelInput.Fuel)
         .MinimumLength(3)
         .MaximumLength(30);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Price)
+        RuleFor(vehicleModelInput => vehicleModelInput.Price)
         .GreaterThanOrEqualTo(1);
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Discount)
+        RuleFor(vehicleModelInput => vehicleModelInput.Discount)
         .GreaterThanOrEqualTo(0);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate)
-        .Must(vehicleModelCreate => vehicleModelCreate.Discount + 1 <= vehicleModelCreate.Price).WithMessage("Discount must be less than the price at least 1 dollar.");
+        RuleFor(vehicleModelInput => vehicleModelInput)
+        .Must(vehicleModelInput => vehicleModelInput.Discount + 1 <= vehicleModelInput.Price).WithMessage("Discount must be less than the price at least 1 dollar.");
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Tags)
+        RuleFor(vehicleModelInput => vehicleModelInput.Tags)
         .Must(tags => tags.Length <= 15).WithMessage("You can add a maximum of 15 tags.");
-        RuleForEach(vehicleModelCreate => vehicleModelCreate.Tags)
+        RuleForEach(vehicleModelInput => vehicleModelInput.Tags)
         .MinimumLength(3)
         .MaximumLength(15);
 
-        RuleFor(vehicleModelCreate => vehicleModelCreate.Status)
+        RuleFor(vehicleModelInput => vehicleModelInput.Status)
         .IsInEnum();
     }
 }
 
-public class ClsVehicleModelFilterValidator : AbstractValidator<ClsVehicleModelFilterInput>
+public class ClsVehicleModelFilterValidator : AbstractValidator<ClsVehicleModelFilter>
 {
     public ClsVehicleModelFilterValidator()
     {

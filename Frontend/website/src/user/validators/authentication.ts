@@ -45,11 +45,18 @@ const zRegisterCredentials = z
       .max(20, "username must be at most 20 characters."),
     birthday: z
       .date()
-      .max(new Date(), "birthday must not be in the future.")
       .refine((date) => {
         const today = new Date();
         const minDate = new Date();
-        
+
+        minDate.setFullYear(today.getFullYear() - 100);
+
+        return date >= minDate;
+      }, "birthday must be less than 100 years or older.")
+      .refine((date) => {
+        const today = new Date();
+        const minDate = new Date();
+
         minDate.setFullYear(today.getFullYear() - 18);
 
         return date <= minDate;

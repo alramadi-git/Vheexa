@@ -1,12 +1,12 @@
 using FluentValidation;
 
-using Business.Inputs;
+using Business.Filters;
 
 namespace Business.Validations.Validators;
 
-public class ClsPaginationValidator : AbstractValidator<ClsPaginationInput>
+public class ClsPaginationFilterValidator : AbstractValidator<ClsPaginationFilter>
 {
-    public ClsPaginationValidator()
+    public ClsPaginationFilterValidator()
     {
         RuleFor(pagination => pagination.Page)
         .GreaterThanOrEqualTo(1);

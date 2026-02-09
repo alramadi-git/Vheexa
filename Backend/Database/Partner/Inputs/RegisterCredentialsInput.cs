@@ -4,22 +4,14 @@ namespace Database.Partner.Inputs;
 
 public class ClsRegisterCredentialsInput
 {
-    public class ClsBranchCreateInput
+    public class ClsBranchInput
     {
-        public class ClsLocationCreateInput
-        {
-            public required string Country { get; set; }
-            public required string City { get; set; }
-            public required string Street { get; set; }
-            public double Latitude { get; set; }
-            public double Longitude { get; set; }
-        }
-        public required ClsLocationCreateInput Location { get; set; }
+        public required ClsLocationInput Location { get; set; }
         public required string Name { get; set; }
         public required string PhoneNumber { get; set; }
         public required string Email { get; set; }
     }
-    public class ClsMemberCreateInput
+    public class ClsMemberInput
     {
         public Guid Uuid { get; set; }
         public ClsImageInput? Avatar { get; set; }
@@ -34,6 +26,6 @@ public class ClsRegisterCredentialsInput
     public required string OrganizationName { get; set; }
     public required string PhoneNumber { get; set; }
     public required string Email { get; set; }
-    public required ClsBranchCreateInput Branch { get; set; }
-    public required ClsMemberCreateInput Member { get; set; }
+    public required ClsBranchInput Branch { get; set; }
+    public required ClsMemberInput Member { get; set; }
 }

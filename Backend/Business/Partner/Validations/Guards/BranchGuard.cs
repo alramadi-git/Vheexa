@@ -1,22 +1,22 @@
 using Business.Validations.Validators;
 using Business.Partner.Validations.Validators;
-
-using Business.Inputs;
 using Business.Partner.Inputs;
+using Business.Filters;
+using Business.Partner.Filters;
 
 namespace Business.Partner.Validations.Guards;
 
 public class ClsBranchGuard
 {
-    private readonly ClsBranchCreateValidator _BranchCreateValidator;
+    private readonly ClsBranchInputValidator _BranchCreateValidator;
     private readonly ClsBranchFilterValidator _BranchFilterValidator;
 
-    private readonly ClsPaginationValidator _PaginationValidator;
+    private readonly ClsPaginationFilterValidator _PaginationValidator;
 
     public ClsBranchGuard(
-        ClsBranchCreateValidator branchCreateValidator,
+        ClsBranchInputValidator branchCreateValidator,
         ClsBranchFilterValidator branchFilterValidator,
-        ClsPaginationValidator paginationValidator
+        ClsPaginationFilterValidator paginationValidator
     )
     {
         _BranchCreateValidator = branchCreateValidator;
@@ -25,11 +25,11 @@ public class ClsBranchGuard
         _PaginationValidator = paginationValidator;
     }
 
-    public async Task CreateOneAsync(ClsBranchCreateInput branch)
+    public async Task CreateOneAsync(ClsBranchInput branch)
     {
         await _BranchCreateValidator.ValidateAsync(branch);
     }
-    public async Task SearchAsync(ClsBranchFilterInput filter, ClsPaginationInput pagination)
+    public async Task SearchAsync(ClsBranchFilter filter, ClsPaginationFilter pagination)
     {
         await _BranchFilterValidator.ValidateAsync(filter);
         await _PaginationValidator.ValidateAsync(pagination);

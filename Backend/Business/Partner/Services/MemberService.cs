@@ -2,8 +2,10 @@ using Business.Partner.Validations.Guards;
 
 using Business.Integrations;
 
-using Business.Inputs;
 using Business.Partner.Inputs;
+
+using Business.Filters;
+using Business.Partner.Filters;
 
 namespace Business.Partner.Services;
 
@@ -22,21 +24,10 @@ public class ClsMemberService
         _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task<Database.Partner.Models.ClsOptionModel[]> ReadRolesAsync(Guid[] uuids, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsMemberInput member, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        var roleOptions = await _Repository.ReadRolesAsync(uuids, memberContext);
+        string? avatarId = null;
 
-        return roleOptions;
-    }
-    public async Task<Database.Partner.Models.ClsOptionModel[]> ReadBranchesAsync(Guid[] uuids, Database.Partner.Contexts.ClsMemberContext memberContext)
-    {
-        var branchOptions = await _Repository.ReadBranchesAsync(uuids, memberContext);
-
-        return branchOptions;
-    }
-    public async Task CreateOneAsync(ClsMemberCreateInput member, Database.Partner.Contexts.ClsMemberContext memberContext)
-    {
-        ClsImagekitIntegration.ClsImagekit? uploadedAvatar = null;
         try
         {
             await _Guard.CreateOneAsync(member);
@@ -47,10 +38,10 @@ public class ClsMemberService
             ? null
             : await _ImagekitIntegration.UploadOneAsyncSafe(member.Avatar, $"/vheexa/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
 
-            uploadedAvatar = avatar;
+            avatarId = avatar?.Id;
 
             await _Repository.CreateOneAsync(
-                new Database.Partner.Inputs.ClsMemberCreateInput
+                new Database.Partner.Inputs.ClsMemberInput
                 {
                     Uuid = memberUuid,
                     Avatar = avatar == null ? null : new Database.Inputs.ClsImageInput
@@ -70,27 +61,38 @@ public class ClsMemberService
         }
         catch
         {
-            if (uploadedAvatar != null) await _ImagekitIntegration.DeleteImageAsync(uploadedAvatar.Id);
-
+            if (avatarId != null) await _ImagekitIntegration.DeleteImageAsync(avatarId);
             throw;
         }
 
+    }
+    public async Task<Database.Partner.Models.ClsOptionModel[]> ReadRolesAsync(Guid[] uuids, Database.Partner.Contexts.ClsMemberContext memberContext)
+    {
+        var roleOptions = await _Repository.ReadRolesAsync(uuids, memberContext);
+
+        return roleOptions;
+    }
+    public async Task<Database.Partner.Models.ClsOptionModel[]> ReadBranchesAsync(Guid[] uuids, Database.Partner.Contexts.ClsMemberContext memberContext)
+    {
+        var branchOptions = await _Repository.ReadBranchesAsync(uuids, memberContext);
+
+        return branchOptions;
     }
     public async Task DeleteOneAsync(Guid memberUuid, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Repository.DeleteOneAsync(memberUuid, memberContext);
         await _ImagekitIntegration.DeleteFolderAsync($"/vheexa/partners/{memberContext.PartnerUuid}/members/{memberUuid}");
     }
-    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>> SearchRolesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>> SearchRolesAsync(ClsOptionFilterFilter filter, ClsOptionPaginationFilter pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchRolesAsync(filter, pagination);
 
         var roleOptions = await _Repository.SearchRolesAsync(
-            new Database.Partner.Inputs.ClsOptionFilterInput
+            new Database.Partner.Filters.ClsOptionFilter
             {
                 Search = filter.Search,
             },
-            new Database.Partner.Inputs.ClsOptionPaginationInput
+            new Database.Partner.Filters.ClsOptionPaginationFilter
             {
                 Page = pagination.Page,
             },
@@ -99,16 +101,16 @@ public class ClsMemberService
 
         return roleOptions;
     }
-    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>> SearchBranchesAsync(ClsOptionFilterInput filter, ClsOptionPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>> SearchBranchesAsync(ClsOptionFilterFilter filter, ClsOptionPaginationFilter pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchBranchesAsync(filter, pagination);
 
         var branchOptions = await _Repository.SearchBranchesAsync(
-            new Database.Partner.Inputs.ClsOptionFilterInput
+            new Database.Partner.Filters.ClsOptionFilter
             {
                 Search = filter.Search,
             },
-            new Database.Partner.Inputs.ClsOptionPaginationInput
+            new Database.Partner.Filters.ClsOptionPaginationFilter
             {
                 Page = pagination.Page,
             },
@@ -117,19 +119,19 @@ public class ClsMemberService
 
         return branchOptions;
     }
-    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>> SearchAsync(ClsMemberFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>> SearchAsync(ClsMemberFilter filter, ClsPaginationFilter pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
 
         var members = await _Repository.SearchAsync(
-            new Database.Partner.Inputs.ClsMemberFilterInput
+            new Database.Partner.Filters.ClsMemberFilter
             {
                 Search = filter.Search,
                 RoleUuids = filter.RoleUuids,
                 BranchUuids = filter.BranchUuids,
                 Status = filter.Status
             },
-            new Database.Inputs.ClsPaginationInput
+            new Database.Filters.ClsPaginationFilter
             {
                 Page = pagination.Page,
                 PageSize = (int)pagination.PageSize

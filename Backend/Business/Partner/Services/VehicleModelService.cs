@@ -2,8 +2,9 @@ using Business.Integrations;
 
 using Business.Partner.Validations.Guards;
 
-using Business.Inputs;
 using Business.Partner.Inputs;
+
+using Business.Filters;
 
 namespace Business.Partner.Services;
 
@@ -22,11 +23,11 @@ public class ClsVehicleModelService
         _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task CreateOneAsync(ClsVehicleModelCreateInput vehicleModel, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task CreateOneAsync(ClsVehicleModelInput vehicleModel, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        var VehicleModelUuid = Guid.NewGuid();
-
         string? uploadedThumbnailId = null;
+
+        var VehicleModelUuid = Guid.NewGuid();
 
         try
         {
@@ -43,7 +44,7 @@ public class ClsVehicleModelService
             uploadedThumbnailId = thumbnail?.Id;
 
             await _Repository.CreateOneAsync(
-                new Database.Partner.Inputs.ClsVehicleModelCreateInput
+                new Database.Partner.Inputs.ClsVehicleModelInput
                 {
                     Uuid = VehicleModelUuid,
                     Thumbnail = thumbnail == null ? null : new Database.Inputs.ClsImageInput
@@ -88,32 +89,32 @@ public class ClsVehicleModelService
         await _ImagekitIntegration.DeleteFolderAsync($"/vheexa/partners/{memberContext.PartnerUuid}/vehicle-models/{vehicleModelUuid}");
 
     }
-    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilterInput filter, ClsPaginationInput pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
+    public async Task<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsVehicleModelModel>> SearchAsync(Filters.ClsVehicleModelFilter filter, ClsPaginationFilter pagination, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
         await _Guard.SearchAsync(filter, pagination);
         var vehicleModels = await _Repository.SearchAsync(
-            new Database.Partner.Inputs.ClsVehicleModelFilterInput
+            new Database.Partner.Filters.ClsVehicleModelFilter
             {
                 Search = filter.Search,
                 Categories = filter.Categories,
-                Capacity = new Database.Partner.Inputs.ClsVehicleModelFilterInput.ClsMinMaxInput
+                Capacity = new Database.Partner.Filters.ClsVehicleModelFilter.ClsMinMaxInput
                 {
                     Min = filter.Capacity.Min,
                     Max = filter.Capacity.Max
                 },
-                Price = new Database.Partner.Inputs.ClsVehicleModelFilterInput.ClsMinMaxMoneyInput
+                Price = new Database.Partner.Filters.ClsVehicleModelFilter.ClsMinMaxMoneyInput
                 {
                     Min = filter.Price.Min,
                     Max = filter.Price.Max
                 },
-                Discount = new Database.Partner.Inputs.ClsVehicleModelFilterInput.ClsMinMaxMoneyInput
+                Discount = new Database.Partner.Filters.ClsVehicleModelFilter.ClsMinMaxMoneyInput
                 {
                     Min = filter.Discount.Min,
                     Max = filter.Discount.Max
                 },
                 Status = filter.Status
             },
-            new Database.Inputs.ClsPaginationInput
+            new Database.Filters.ClsPaginationFilter
             {
                 Page = pagination.Page,
                 PageSize = (int)pagination.PageSize

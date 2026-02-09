@@ -1,22 +1,22 @@
 using Business.Validations.Validators;
 using Business.Partner.Validations.Validators;
-
-using Business.Inputs;
 using Business.Partner.Inputs;
+using Business.Filters;
+using Business.Partner.Filters;
 
 namespace Business.Partner.Validations.Guards;
 
 public class ClsRoleGuard
 {
-    private readonly ClsRoleCreateValidator _RoleCreateValidator;
+    private readonly ClsRoleInputValidator _RoleCreateValidator;
     private readonly ClsRoleFilterValidator _RoleFilterValidator;
 
-    private readonly ClsPaginationValidator _PaginationValidator;
+    private readonly ClsPaginationFilterValidator _PaginationValidator;
 
     public ClsRoleGuard(
-        ClsRoleCreateValidator roleCreateValidator,
+        ClsRoleInputValidator roleCreateValidator,
         ClsRoleFilterValidator roleFilterValidator,
-        ClsPaginationValidator paginationValidator
+        ClsPaginationFilterValidator paginationValidator
     )
     {
         _RoleCreateValidator = roleCreateValidator;
@@ -25,11 +25,11 @@ public class ClsRoleGuard
         _PaginationValidator = paginationValidator;
     }
 
-    public async Task CreateOneAsync(ClsRoleCreateInput role)
+    public async Task CreateOneAsync(ClsRoleInput role)
     {
         await _RoleCreateValidator.ValidateAsync(role);
     }
-    public async Task SearchAsync(ClsRoleFilterInput filter, ClsPaginationInput pagination)
+    public async Task SearchAsync(ClsRoleFilter filter, ClsPaginationFilter pagination)
     {
         await _RoleFilterValidator.ValidateAsync(filter);
         await _PaginationValidator.ValidateAsync(pagination);
