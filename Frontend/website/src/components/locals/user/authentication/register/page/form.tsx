@@ -129,7 +129,7 @@ export default function Form() {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -155,7 +155,7 @@ export default function Form() {
                     onChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -179,7 +179,7 @@ export default function Form() {
                     setValue={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -206,7 +206,7 @@ export default function Form() {
                     onValueChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -238,7 +238,7 @@ export default function Form() {
                   onChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -264,7 +264,7 @@ export default function Form() {
                   onChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -293,7 +293,7 @@ export default function Form() {
                   onChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -320,7 +320,7 @@ export default function Form() {
                   onValueChange={(number) => setValue(number ?? 0)}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -347,7 +347,7 @@ export default function Form() {
                   onValueChange={(number) => setValue(number ?? 0)}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -375,7 +375,7 @@ export default function Form() {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -401,7 +401,7 @@ export default function Form() {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -432,7 +432,7 @@ export default function Form() {
                 </div>
               </FieldLabel>
             </FieldContent>
-            <FieldError errors={error} />
+            <FieldError errorsProp={error} />
           </Field>
         )}
       />

@@ -234,7 +234,7 @@ function AddNew() {
                       placeholder={tAddNew("content.form.name.placeholder")}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -260,7 +260,7 @@ function AddNew() {
                       onValueChange={field.onChange}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -289,7 +289,7 @@ function AddNew() {
                       onValueChange={setValue}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -316,7 +316,7 @@ function AddNew() {
                       placeholder={tAddNew("content.form.country.placeholder")}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -341,7 +341,7 @@ function AddNew() {
                       placeholder={tAddNew("content.form.city.placeholder")}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -366,7 +366,7 @@ function AddNew() {
                       placeholder={tAddNew("content.form.street.placeholder")}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -393,7 +393,7 @@ function AddNew() {
                       onValueChange={(number) => setValue(number ?? 0)}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -420,7 +420,7 @@ function AddNew() {
                       onValueChange={(number) => setValue(number ?? 0)}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -461,7 +461,7 @@ function AddNew() {
                     )}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />

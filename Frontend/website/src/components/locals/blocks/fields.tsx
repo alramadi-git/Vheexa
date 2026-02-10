@@ -473,6 +473,8 @@ const FieldPhoneNumber = forwardRef<
       "country-calling-code": parsedPhoneNumber.countryCallingCode,
     });
     setPhoneNumber(parsedPhoneNumber.nationalNumber);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function imperativeReset(defaultValue: string = ""): void {

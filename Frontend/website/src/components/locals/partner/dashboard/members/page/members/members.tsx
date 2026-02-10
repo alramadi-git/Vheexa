@@ -285,7 +285,7 @@ function AddNew() {
                       onValueChange={setValue}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -317,7 +317,7 @@ function AddNew() {
                         onChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -416,7 +416,7 @@ function AddNew() {
                         onSelect={(option) => setValue(option?.value)}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -515,7 +515,7 @@ function AddNew() {
                         onSelect={(option) => setValue(option?.value)}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -546,7 +546,7 @@ function AddNew() {
                         onValueChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -577,7 +577,7 @@ function AddNew() {
                         onValueChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -619,7 +619,7 @@ function AddNew() {
                     )}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />

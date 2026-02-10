@@ -235,7 +235,7 @@ function AddNew() {
                       onChange={setValue}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -293,7 +293,7 @@ function AddNew() {
                       }}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -333,7 +333,7 @@ function AddNew() {
                       )}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />

@@ -15,6 +15,8 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { eStatusService } from "@/partner/validators/enums/status";
+
 import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { LuCheck, LuPlus } from "react-icons/lu";
@@ -51,9 +53,6 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/dialog";
 
-import { Button } from "@/components/shadcn/button";
-import { Separator } from "@/components/shadcn/separator";
-
 import {
   FieldGroup,
   Field,
@@ -86,11 +85,10 @@ import {
 
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
-import {
-  FieldColorPickers,
-  tFieldColorPickersRef,
-} from "@/components/locals/blocks/color-pickers";
-import { eStatusService } from "@/partner/validators/enums/status";
+
+import { Separator } from "@/components/shadcn/separator";
+
+import { Button } from "@/components/shadcn/button";
 
 export default function Vehicles() {
   const tVehicles = useTranslations(
@@ -158,7 +156,6 @@ function AddNewVehicleModel() {
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.add-new",
   );
 
-
   const {
     formState,
     control,
@@ -191,8 +188,6 @@ function AddNewVehicleModel() {
 
   const transmissionRef = useRef<tFieldSelectRef<tOption>>(null);
   const fuelRef = useRef<tFieldSelectRef<tOption>>(null);
-
-  const colorsRef = useRef<tFieldColorPickersRef>(null);
 
   const statusRef = useRef<tFieldSelectRef<tOption>>(null);
 
@@ -227,8 +222,6 @@ function AddNewVehicleModel() {
     transmissionRef.current?.reset();
     fuelRef.current?.reset();
 
-    colorsRef.current?.reset();
-
     statusRef.current?.reset(
       statuses.find(
         (status) =>
@@ -236,7 +229,6 @@ function AddNewVehicleModel() {
       ),
     );
   }
-
 
   async function submit(data: tVehicleModelCreate): Promise<void> {
     const result = await vehicleModelService.create(data);
@@ -311,7 +303,7 @@ function AddNewVehicleModel() {
                         placeholder={tAddNew("content.form.name.placeholder")}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -343,7 +335,7 @@ function AddNewVehicleModel() {
                         setValue={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -382,7 +374,7 @@ function AddNewVehicleModel() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -427,7 +419,7 @@ function AddNewVehicleModel() {
                         )}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -458,7 +450,7 @@ function AddNewVehicleModel() {
                         className="h-full resize-none"
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -485,7 +477,7 @@ function AddNewVehicleModel() {
                         onValuesChange={setValue}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 )}
               />
@@ -517,7 +509,7 @@ function AddNewVehicleModel() {
                         onValueChange={(number) => setValue(number ?? 0)}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 </Field>
               )}
@@ -561,7 +553,7 @@ function AddNewVehicleModel() {
                       )}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -604,7 +596,7 @@ function AddNewVehicleModel() {
                       )}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -634,7 +626,7 @@ function AddNewVehicleModel() {
                       onValueChange={setValue}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -662,11 +654,10 @@ function AddNewVehicleModel() {
                       onValuesChange={setValues}
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
-
           </FieldGroup>
           <FieldGroup className="grid-cols-2">
             <Controller
@@ -696,7 +687,7 @@ function AddNewVehicleModel() {
                         }}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 </Field>
               )}
@@ -725,7 +716,7 @@ function AddNewVehicleModel() {
                         onValueChange={(number) => setValue(number ?? 0)}
                       />
                     </FieldContent>
-                    <FieldError errors={error} />
+                    <FieldError errorsProp={error} />
                   </Field>
                 </Field>
               )}
@@ -767,7 +758,7 @@ function AddNewVehicleModel() {
                     )}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />

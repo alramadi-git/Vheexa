@@ -10,7 +10,7 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 export default function NotFound() {
-  const tNotFound = useTranslations("app.not-found");
+  const tNotFound = useTranslations("app.partner.not-found");
 
   return (
     <Section className="grid h-screen grid-cols-1 items-center lg:grid-cols-2">
@@ -22,7 +22,9 @@ export default function NotFound() {
         </p>
 
         <Button asChild size="lg" className="rounded-lg text-base">
-          <Link href="/">{tNotFound("go-back-to-home")}</Link>
+          <Link href="/partner/dashboard">
+            {tNotFound("go-back-to-dashboard")}
+          </Link>
         </Button>
       </div>
 

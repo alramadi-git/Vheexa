@@ -114,7 +114,7 @@ export default function Form() {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -139,7 +139,7 @@ export default function Form() {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -170,7 +170,7 @@ export default function Form() {
                 </div>
               </FieldLabel>
             </FieldContent>
-            <FieldError errors={error} />
+            <FieldError errorsProp={error} />
           </Field>
         )}
       />

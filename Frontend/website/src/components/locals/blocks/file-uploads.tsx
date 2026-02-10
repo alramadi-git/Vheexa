@@ -10,11 +10,11 @@ import { Toast } from "./toasts";
 
 import { LuGripVertical, LuTrash, LuUpload } from "react-icons/lu";
 
-import {
-  FileUpload,
-  FileUploadDropzone,
-  FileUploadTrigger,
-} from "@/components/shadcn/file-upload";
+// import {
+//   FileUpload,
+//   FileUploadDropzone,
+//   FileUploadTrigger,
+// } from "@/components/shadcn/file-upload";
 
 import {
   Sortable,
@@ -39,6 +39,7 @@ import { Button } from "@/components/shadcn/button";
 import { tNullish, tUndefinable } from "@/types/nullish";
 
 import { ClsDateFormatter } from "@/libraries/date-formatter";
+import { Dropzone } from "@/components/kibo-ui/dropzone";
 
 type tFieldFileUploadRef = {
   setValue: (value: tUndefinable<File>) => void;
@@ -90,47 +91,55 @@ const FieldFileUpload = forwardRef<tFieldFileUploadRef, tFieldFileUploadProps>(
     }, []);
 
     return (
-      <FileUpload
-        accept="image/*"
-        value={value}
-        onValueChange={onValueChange}
-        onFileReject={onFileReject}
-      >
-        <FileUploadDropzone
-          aria-invalid={isInvalid}
-          className="aria-invalid:border-destructive aria-invalid:ring-destructive/20 size-full space-y-1 text-center"
-        >
-          <LuUpload
-            aria-invalid={isInvalid}
-            size={46}
-            className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
-          />
-          <p
-            aria-invalid={isInvalid}
-            className="aria-invalid:text-destructive max-w-fll line-clamp-1 text-sm font-medium"
-          >
-            {tFileUpload("title")}
-          </p>
-          <p
-            aria-invalid={isInvalid}
-            className="aria-invalid:text-destructive/80 text-muted-foreground line-clamp-1 text-xs"
-          >
-            {value.length !== 0 ? value[0].name : tFileUpload("subtitle")}
-          </p>
-          <FileUploadTrigger asChild>
-            <Button
-              id={id}
-              aria-invalid={isInvalid}
-              variant="outline"
-              size="sm"
-              className="mt-2 line-clamp-1 max-w-full text-wrap"
-            >
-              {tFileUpload("trigger")}
-            </Button>
-          </FileUploadTrigger>
-        </FileUploadDropzone>
-      </FileUpload>
+      <Dropzone
+        accept={{ "images/*": [] }}
+        maxFiles={1}
+      
+        // value={value}
+        // onValueChange={onValueChange}
+        // onFileReject={onFileReject}
+      ></Dropzone>
     );
+
+    // return (
+    //   <FileUpload
+    //
+    //   >
+    //     <FileUploadDropzone
+    //       aria-invalid={isInvalid}
+    //       className="aria-invalid:border-destructive aria-invalid:ring-destructive/20 size-full space-y-1 text-center"
+    //     >
+    //       <LuUpload
+    //         aria-invalid={isInvalid}
+    //         size={46}
+    //         className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
+    //       />
+    //       <p
+    //         aria-invalid={isInvalid}
+    //         className="aria-invalid:text-destructive max-w-fll line-clamp-1 text-sm font-medium"
+    //       >
+    //         {tFileUpload("title")}
+    //       </p>
+    //       <p
+    //         aria-invalid={isInvalid}
+    //         className="aria-invalid:text-destructive/80 text-muted-foreground line-clamp-1 text-xs"
+    //       >
+    //         {value.length !== 0 ? value[0].name : tFileUpload("subtitle")}
+    //       </p>
+    //       <FileUploadTrigger asChild>
+    //         <Button
+    //           id={id}
+    //           aria-invalid={isInvalid}
+    //           variant="outline"
+    //           size="sm"
+    //           className="mt-2 line-clamp-1 max-w-full text-wrap"
+    //         >
+    //           {tFileUpload("trigger")}
+    //         </Button>
+    //       </FileUploadTrigger>
+    //     </FileUploadDropzone>
+    //   </FileUpload>
+    // );
   },
 );
 
@@ -219,7 +228,7 @@ const FieldFileUploads = forwardRef<
               {values.map((value) => (
                 <SortableItem asChild key={value.name} value={value.name}>
                   <TableRow>
-                    <TableCell className="w-[50px]">
+                    <TableCell className="w-12.5">
                       <SortableItemHandle asChild>
                         <Button variant="ghost" size="icon" className="size-8">
                           <LuGripVertical className="h-4 w-4" />

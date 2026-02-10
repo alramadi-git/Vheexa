@@ -177,6 +177,8 @@ export default function Filter() {
     statusRef.current?.setValue(
       statuses.find((_status) => _status.value === status?.toString()),
     );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function reset() {
@@ -258,7 +260,7 @@ export default function Filter() {
                       }
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -302,7 +304,7 @@ export default function Filter() {
                       }
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -341,7 +343,7 @@ export default function Filter() {
                       }
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -385,7 +387,7 @@ export default function Filter() {
                       }
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -426,7 +428,7 @@ export default function Filter() {
                       }
                     />
                   </FieldContent>
-                  <FieldError errors={error} />
+                  <FieldError errorsProp={error} />
                 </Field>
               )}
             />
@@ -464,7 +466,7 @@ export default function Filter() {
                     )}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />

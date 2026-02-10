@@ -187,12 +187,12 @@ function FieldSeparator({
 function FieldError({
   className,
   children,
-  errors,
+  errorsProp,
   ...props
 }: React.ComponentProps<"div"> & {
-  errors?:
+  errorsProp?:
     | { message?: string }
-    | Array<{ message?: string } | undefined>
+    | Array<{ message?: string }>
     | Record<string, { message?: string }>;
 }) {
   const content = useMemo(() => {
@@ -200,36 +200,36 @@ function FieldError({
       return children;
     }
 
-    if (errors === undefined) {
+    if (errorsProp === undefined) {
       return null;
     }
 
-    let _errors = errors;
-    if (!Array.isArray(_errors)) {
-      if ("message" in _errors) {
-        return _errors.message;
+    let errors = errorsProp;
+    if (!Array.isArray(errors)) {
+      if ("message" in errors) {
+        return errors.message?.toString();
       }
 
-      _errors = Object.values(_errors);
+      errors = Object.values(errors);
     }
 
-    if (!_errors.length) {
+    if (!errors.length) {
       return null;
     }
 
-    if (_errors.length == 1) {
-      return _errors[0]?.message;
+    if (errors.length == 1) {
+      return errors[0]?.message;
     }
 
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
-        {_errors.map(
+        {errors.map(
           (error, index) =>
             error?.message && <li key={index}>{error.message}</li>,
         )}
       </ul>
     );
-  }, [children, errors]);
+  }, [children, errorsProp]);
 
   if (!content) {
     return null;

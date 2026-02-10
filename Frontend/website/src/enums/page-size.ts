@@ -1,4 +1,4 @@
-enum ePageSizeService {
+enum ePageSize {
   five = 5,
   ten = 10,
   twentyFive = 25,
@@ -7,4 +7,4 @@ enum ePageSizeService {
   hundred = 100,
 }
 
-export { ePageSizeService };
+export { ePageSize };

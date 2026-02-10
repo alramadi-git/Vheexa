@@ -54,17 +54,14 @@ export default async function MobileNavigationMenu() {
                 {tMobileNavigationMenu("description")}
               </SheetDescription>
             </VisuallyHidden>
-
             <SheetClose asChild>
               <Button variant="outline" className="w-fit">
                 <LuX />
               </Button>
             </SheetClose>
-
             <Languages align="end" className="grow" />
             <Account />
           </SheetHeader>
-
           <ul className="space-y-2">
             {links.map((link) => (
               <li key={link.url}>

@@ -12,24 +12,28 @@ export default function authenticatedMiddleware(
 
   const accessToken = request.cookies.get("member-access-token")?.value;
   if (!zJwt.safeParse(accessToken).success) {
-    request.cookies.delete("member-access-token");
-    request.cookies.delete("member-account");
-
-    return NextResponse.redirect(
+    const response = NextResponse.redirect(
       new URL("/partner/authentication/login", request.nextUrl.origin),
     );
+
+    response.cookies.delete("member-access-token");
+    response.cookies.delete("member-account");
+
+    return response;
   }
 
   const account = request.cookies.get("member-account")?.value ?? "null";
   try {
     zMemberAccount.parse(JSON.parse(account));
   } catch {
-    request.cookies.delete("member-access-token");
-    request.cookies.delete("member-account");
-
-    return NextResponse.redirect(
+    const response = NextResponse.redirect(
       new URL("/partner/authentication/login", request.nextUrl.origin),
     );
+
+    response.cookies.delete("member-access-token");
+    response.cookies.delete("member-account");
+
+    return response;
   }
 
   return NextResponse.next();

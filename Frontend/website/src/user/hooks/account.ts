@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import useToken from "./token";
 
@@ -37,7 +37,7 @@ export default function useAccount() {
       const user: tNullable<unknown> = JSON.parse(
         getCookie("user-account") ?? "null",
       );
-      console.log(getCookie("user-account"))
+      console.log(getCookie("user-account"));
 
       setA(zUserAccount.parse(user));
     } catch {}

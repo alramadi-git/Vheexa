@@ -239,7 +239,7 @@ function PartnerStep({ control }: tStepProps) {
                 onValueChange={setValue}
               />
             </FieldContent>
-            <FieldError errors={error} />
+            <FieldError errorsProp={error} />
           </Field>
         )}
       />
@@ -263,7 +263,7 @@ function PartnerStep({ control }: tStepProps) {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -291,7 +291,7 @@ function PartnerStep({ control }: tStepProps) {
                     onChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -319,7 +319,7 @@ function PartnerStep({ control }: tStepProps) {
                     onChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -346,7 +346,7 @@ function PartnerStep({ control }: tStepProps) {
                     onValueChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -373,7 +373,7 @@ function PartnerStep({ control }: tStepProps) {
                 onValueChange={setValue}
               />
             </FieldContent>
-            <FieldError errors={error} />
+            <FieldError errorsProp={error} />
           </Field>
         )}
       />
@@ -416,7 +416,7 @@ function BranchStep({ control }: tStepProps) {
                 onChange={setValue}
               />
             </FieldContent>
-            <FieldError errors={error} />
+            <FieldError errorsProp={error} />
           </Field>
         )}
       />
@@ -445,7 +445,7 @@ function BranchStep({ control }: tStepProps) {
                   onChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -473,7 +473,7 @@ function BranchStep({ control }: tStepProps) {
                   onChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -501,7 +501,7 @@ function BranchStep({ control }: tStepProps) {
                   onChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -527,7 +527,7 @@ function BranchStep({ control }: tStepProps) {
                   onValueChange={(number) => setValue(number ?? 0)}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -553,7 +553,7 @@ function BranchStep({ control }: tStepProps) {
                   onValueChange={(number) => setValue(number ?? 0)}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -582,7 +582,7 @@ function BranchStep({ control }: tStepProps) {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -607,7 +607,7 @@ function BranchStep({ control }: tStepProps) {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -662,7 +662,7 @@ function MemberStep({ formState, control }: tLastStepProps) {
                   onValueChange={setValue}
                 />
               </FieldContent>
-              <FieldError errors={error} />
+              <FieldError errorsProp={error} />
             </Field>
           )}
         />
@@ -690,7 +690,7 @@ function MemberStep({ formState, control }: tLastStepProps) {
                     onChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -718,7 +718,7 @@ function MemberStep({ formState, control }: tLastStepProps) {
                     onValueChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -746,7 +746,7 @@ function MemberStep({ formState, control }: tLastStepProps) {
                     onValueChange={setValue}
                   />
                 </FieldContent>
-                <FieldError errors={error} />
+                <FieldError errorsProp={error} />
               </Field>
             )}
           />
@@ -780,7 +780,7 @@ function MemberStep({ formState, control }: tLastStepProps) {
                 </div>
               </FieldLabel>
             </FieldContent>
-            <FieldError errors={error} />
+            <FieldError errorsProp={error} />
           </Field>
         )}
       />
