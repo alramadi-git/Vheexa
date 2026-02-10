@@ -1,20 +1,26 @@
 "use client";
 
-import { forwardRef, useState, useImperativeHandle, useCallback } from "react";
+import {
+  useId,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  Fragment,
+} from "react";
 
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
+
+import { useDropzone, FileRejection } from "react-dropzone";
+
+import { tUndefinable, tNullable } from "@/types/nullish";
+
+import { cn } from "@/utilities/cn";
 
 import { toast } from "sonner";
 import { Toast } from "./toasts";
 
 import { LuGripVertical, LuTrash, LuUpload } from "react-icons/lu";
-
-// import {
-//   FileUpload,
-//   FileUploadDropzone,
-//   FileUploadTrigger,
-// } from "@/components/shadcn/file-upload";
 
 import {
   Sortable,
@@ -36,10 +42,7 @@ import {
 
 import { Button } from "@/components/shadcn/button";
 
-import { tNullish, tUndefinable } from "@/types/nullish";
-
 import { ClsDateFormatter } from "@/libraries/date-formatter";
-import { Dropzone } from "@/components/kibo-ui/dropzone";
 
 type tFieldFileUploadRef = {
   setValue: (value: tUndefinable<File>) => void;
@@ -53,19 +56,29 @@ type tFieldFileUploadProps = {
 };
 
 const FieldFileUpload = forwardRef<tFieldFileUploadRef, tFieldFileUploadProps>(
-  ({ id, isInvalid, defaultValue, onValueChange: onValueChangeProp }, ref) => {
+  (
+    { id: idProp, isInvalid, defaultValue, onValueChange: onValueChangeProp },
+    ref,
+  ) => {
     const tFileUpload = useTranslations("components.fields.file-upload");
 
-    const [value, setValue] = useState<[] | [File]>(
-      defaultValue ? [defaultValue] : [],
-    );
+    const id = useId();
+    const { isDragActive, getRootProps, getInputProps } = useDropzone({
+      noClick: true,
+      multiple: false,
+      maxFiles: 1,
+      accept: { "images/*": [".png", ".jpg", ".jpeg"] },
+      onDrop: onValueChange,
+    });
+
+    const [value, setValue] = useState<tNullable<File>>(defaultValue ?? null);
 
     function imperativeSetValue(value: tUndefinable<File>) {
-      setValue(value ? [value] : []);
+      setValue(value ?? null);
     }
 
     function imperativeReset(defaultValue?: File) {
-      setValue(defaultValue ? [defaultValue] : []);
+      setValue(defaultValue ?? null);
     }
 
     useImperativeHandle(ref, () => ({
@@ -73,73 +86,122 @@ const FieldFileUpload = forwardRef<tFieldFileUploadRef, tFieldFileUploadProps>(
       reset: imperativeReset,
     }));
 
-    const changeValue = useCallback(
-      (file: File) => {
-        setValue([file]);
-        onValueChangeProp?.(file);
-      },
-      [setValue, onValueChangeProp],
-    );
+    function onError(fileRejections: FileRejection[]) {
+      fileRejections.forEach(({ file, errors }) => {
+        toast.custom(() => (
+          <Toast variant="destructive" label={file.name}>
+            {errors.length <= 1 ? (
+              errors[0].message
+            ) : (
+              <ul className="list-inside list-disc ps-1">
+                {errors.map((error) => (
+                  <li key={error.code}>{error.message}</li>
+                ))}
+                {errors.map((error) => (
+                  <li key={error.code}>{error.message}</li>
+                ))}
+                {errors.map((error) => (
+                  <li key={error.code}>{error.message}</li>
+                ))}
+              </ul>
+            )}
+          </Toast>
+        ));
+      });
+    }
 
-    const onValueChange = useCallback(
-      (files: File[]): void => changeValue(files.at(-1)!),
-      [changeValue],
-    );
+    function onValueChange(
+      acceptedFiles: File[],
+      fileRejections: FileRejection[],
+    ) {
+      onError(fileRejections);
 
-    const onFileReject = useCallback((file: File, message: string) => {
-      toast.custom(() => <Toast variant="destructive" label={message} />);
-    }, []);
+      const file = acceptedFiles[0] ?? value;
+
+      setValue(file);
+      onValueChangeProp?.(file);
+    }
 
     return (
-      <Dropzone
-        accept={{ "images/*": [] }}
-        maxFiles={1}
-      
-        // value={value}
-        // onValueChange={onValueChange}
-        // onFileReject={onFileReject}
-      ></Dropzone>
+      <div
+        aria-invalid={isInvalid}
+        className={cn(
+          "aria-invalid:border-destructive border-border flex size-full flex-col items-center justify-center gap-3 rounded border-2 border-dashed p-8 duration-200",
+          {
+            "aria-invalid:bg-destructive/10 bg-border/60": isDragActive,
+            "bg-border/60": isDragActive,
+          },
+        )}
+        {...getRootProps()}
+      >
+        <div
+          aria-invalid={isInvalid}
+          className="aria-invalid:border-destructive/20 border-muted rounded-full border-2 p-3"
+        >
+          <LuUpload
+            aria-invalid={isInvalid}
+            className="aria-invalid:text-destructive/80 text-muted-foreground size-5"
+          />
+        </div>
+        <div className="space-y-1 text-center">
+          {value ? (
+            <Fragment>
+              <p
+                aria-invalid={isInvalid}
+                className="aria-invalid:text-destructive text-primary font-medium"
+              >
+                {value.name}
+              </p>
+              <p
+                aria-invalid={isInvalid}
+                className="aria-invalid:text-destructive/80 text-muted-foreground text-sm font-medium"
+              >
+                {tFileUpload("title")}{" "}
+                {tFileUpload.rich("help", {
+                  trigger: (chunk) => (
+                    <label
+                      aria-invalid={isInvalid}
+                      htmlFor={idProp ?? id}
+                      className="aria-invalid:text-destructive text-primary cursor-pointer hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {chunk}
+                    </label>
+                  ),
+                })}
+              </p>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <p
+                aria-invalid={isInvalid}
+                className="aria-invalid:text-destructive text-primary font-medium"
+              >
+                {tFileUpload("title")}
+              </p>
+              <p
+                aria-invalid={isInvalid}
+                className="aria-invalid:text-destructive/80 text-muted-foreground text-sm font-medium"
+              >
+                {tFileUpload.rich("help", {
+                  trigger: (chunk) => (
+                    <label
+                      aria-invalid={isInvalid}
+                      htmlFor={idProp ?? id}
+                      className="aria-invalid:text-destructive text-primary cursor-pointer hover:underline"
+                      onClick={(e) => e.stopPropagation()} // Prevent triggering handleBoxClick
+                    >
+                      {chunk}
+                    </label>
+                  ),
+                })}
+              </p>
+            </Fragment>
+          )}
+        </div>
+        <input id={idProp ?? id} className="hidden" {...getInputProps()} />
+      </div>
     );
-
-    // return (
-    //   <FileUpload
-    //
-    //   >
-    //     <FileUploadDropzone
-    //       aria-invalid={isInvalid}
-    //       className="aria-invalid:border-destructive aria-invalid:ring-destructive/20 size-full space-y-1 text-center"
-    //     >
-    //       <LuUpload
-    //         aria-invalid={isInvalid}
-    //         size={46}
-    //         className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
-    //       />
-    //       <p
-    //         aria-invalid={isInvalid}
-    //         className="aria-invalid:text-destructive max-w-fll line-clamp-1 text-sm font-medium"
-    //       >
-    //         {tFileUpload("title")}
-    //       </p>
-    //       <p
-    //         aria-invalid={isInvalid}
-    //         className="aria-invalid:text-destructive/80 text-muted-foreground line-clamp-1 text-xs"
-    //       >
-    //         {value.length !== 0 ? value[0].name : tFileUpload("subtitle")}
-    //       </p>
-    //       <FileUploadTrigger asChild>
-    //         <Button
-    //           id={id}
-    //           aria-invalid={isInvalid}
-    //           variant="outline"
-    //           size="sm"
-    //           className="mt-2 line-clamp-1 max-w-full text-wrap"
-    //         >
-    //           {tFileUpload("trigger")}
-    //         </Button>
-    //       </FileUploadTrigger>
-    //     </FileUploadDropzone>
-    //   </FileUpload>
-    // );
   },
 );
 
@@ -161,16 +223,29 @@ const FieldFileUploads = forwardRef<
   tFieldFileUploadsProps
 >(
   (
-    { id, isInvalid, defaultValues = [], onValuesChange: onValuesChangeProp },
+    {
+      id: idProp,
+      isInvalid,
+      defaultValues = [],
+      onValuesChange: onValuesChangeProp,
+    },
     ref,
   ) => {
+    const id = useId();
+    const { isDragActive, getRootProps, getInputProps } = useDropzone({
+      noClick: true,
+
+      accept: { "images/*": [".png", ".jpg", ".jpeg"] },
+      onDrop: onValueChange,
+    });
+
+    const [values, setValues] = useState<File[]>(defaultValues);
+
     const locale = useLocale() as eLocale;
     const clsDateFormatter = new ClsDateFormatter(locale);
 
     const tFileUploads = useTranslations("components.fields.file-uploads");
     const headers: string[] = tFileUploads.raw("table.headers");
-
-    const [values, setValues] = useState<File[]>(defaultValues);
 
     function imperativeSetValues(values: File[]) {
       setValues(values);
@@ -185,34 +260,77 @@ const FieldFileUploads = forwardRef<
       reset: imperativeReset,
     }));
 
-    const changeValues = useCallback(
-      (files: File[]): void => {
-        setValues(files);
-        onValuesChangeProp?.(files);
-      },
-      [setValues, onValuesChangeProp],
-    );
+    function onError(fileRejections: FileRejection[]) {
+      fileRejections.forEach(({ file, errors }) => {
+        toast.custom(() => (
+          <Toast variant="destructive" label={file.name}>
+            {errors.length <= 1 ? (
+              errors[0].message
+            ) : (
+              <ul className="list-inside list-disc ps-1">
+                {errors.map((error) => (
+                  <li key={error.code}>{error.message}</li>
+                ))}
+                {errors.map((error) => (
+                  <li key={error.code}>{error.message}</li>
+                ))}
+                {errors.map((error) => (
+                  <li key={error.code}>{error.message}</li>
+                ))}
+              </ul>
+            )}
+          </Toast>
+        ));
+      });
+    }
 
-    const onFileReject = useCallback((file: File, message: string): void => {
-      toast.custom(() => <Toast variant="destructive" label={message} />);
-    }, []);
+    function onValueChange(
+      acceptedFiles: File[],
+      fileRejections: FileRejection[],
+    ) {
+      const valuesName = new Set(values.map((value) => value.name));
 
-    const onFileValidate = useCallback(
-      (file: File): tNullish<string> => {
-        if (values.find((value) => value.name === file.name))
-          return tFileUploads("when-duplicates");
+      const uniqueFiles = acceptedFiles.filter(
+        (file) => !valuesName.has(file.name),
+      );
+      const repeatedFiles: FileRejection[] = acceptedFiles
+        .filter((file) => valuesName.has(file.name))
+        .map((file) => ({
+          errors: [
+            {
+              code: tFileUploads("when-duplicates.code"),
+              message: tFileUploads("when-duplicates.message"),
+            },
+          ],
+          file,
+        }));
 
-        return null;
-      },
-      [values, tFileUploads],
-    );
+      onError([...fileRejections, ...repeatedFiles]);
+
+      const newValues = [...values, ...uniqueFiles];
+
+      setValues(newValues);
+      onValuesChangeProp?.(newValues);
+    }
+
+    function reorderValues(values: File[]) {
+      setValues(values);
+      onValuesChangeProp?.(values);
+    }
+
+    function removeValue(name: string) {
+      const filteredValues = values.filter((value) => value.name !== name);
+
+      setValues(filteredValues);
+      onValuesChangeProp?.(filteredValues);
+    }
 
     return (
       <Sortable
         orientation="mixed"
         value={values}
         getItemValue={(value) => value.name}
-        onValueChange={(values) => changeValues([...values])}
+        onValueChange={reorderValues}
       >
         <Table className="rounded-none border">
           <TableHeader>
@@ -251,11 +369,7 @@ const FieldFileUploads = forwardRef<
                         aria-invalid
                         variant="ghost"
                         size="icon"
-                        onClick={() =>
-                          changeValues(
-                            values.filter(({ name }) => name !== value.name),
-                          )
-                        }
+                        onClick={() => removeValue(value.name)}
                       >
                         <LuTrash />
                       </Button>
@@ -268,51 +382,58 @@ const FieldFileUploads = forwardRef<
           <TableFooter>
             <TableRow>
               <TableCell colSpan={5}>
-                <FileUpload
-                  id={id}
-                  disabled={values.length === 25}
-                  multiple
-                  maxFiles={25}
-                  accept="image/*"
-                  value={values}
-                  onFileValidate={onFileValidate}
-                  onFileReject={onFileReject}
-                  onValueChange={changeValues}
+                <div
+                  aria-invalid={isInvalid}
+                  className={cn(
+                    "aria-invalid:border-destructive border-border flex size-full flex-col items-center justify-center gap-3 rounded border-2 border-dashed p-8 duration-200",
+                    {
+                      "aria-invalid:bg-destructive/10 bg-border/60":
+                        isDragActive,
+                      "bg-border/60": isDragActive,
+                    },
+                  )}
+                  {...getRootProps()}
                 >
-                  <FileUploadDropzone
+                  <div
                     aria-invalid={isInvalid}
-                    className="aria-invalid:border-destructive aria-invalid:ring-destructive/20 size-full space-y-1 text-center"
+                    className="aria-invalid:border-destructive/20 border-muted rounded-full border-2 p-3"
                   >
                     <LuUpload
                       aria-invalid={isInvalid}
-                      size={46}
-                      className="aria-invalid:border-destructive text-muted-foreground aria-invalid:text-destructive/80 rounded-full border p-2.5"
+                      className="aria-invalid:text-destructive/80 text-muted-foreground size-5"
                     />
+                  </div>
+                  <div className="space-y-1 text-center">
                     <p
                       aria-invalid={isInvalid}
-                      className="aria-invalid:text-destructive max-w-fll line-clamp-1 text-sm font-medium"
+                      className="aria-invalid:text-destructive text-primary font-medium"
                     >
                       {tFileUploads("title")}
                     </p>
                     <p
                       aria-invalid={isInvalid}
-                      className="aria-invalid:text-destructive/80 text-muted-foreground line-clamp-1 text-xs"
+                      className="aria-invalid:text-destructive/80 text-muted-foreground text-sm font-medium"
                     >
-                      {tFileUploads("subtitle")}
+                      {tFileUploads.rich("help", {
+                        trigger: (chunk) => (
+                          <label
+                            aria-invalid={isInvalid}
+                            htmlFor={idProp ?? id}
+                            className="aria-invalid:text-destructive text-primary cursor-pointer hover:underline"
+                            onClick={(e) => e.stopPropagation()} // Prevent triggering handleBoxClick
+                          >
+                            {chunk}
+                          </label>
+                        ),
+                      })}
                     </p>
-                    <FileUploadTrigger asChild>
-                      <Button
-                        id={id}
-                        aria-invalid={isInvalid}
-                        variant="outline"
-                        size="sm"
-                        className="mt-2 line-clamp-1 max-w-full text-wrap"
-                      >
-                        {tFileUploads("trigger")}
-                      </Button>
-                    </FileUploadTrigger>
-                  </FileUploadDropzone>
-                </FileUpload>
+                  </div>
+                  <input
+                    id={idProp ?? id}
+                    className="hidden"
+                    {...getInputProps()}
+                  />
+                </div>
               </TableCell>
             </TableRow>
           </TableFooter>

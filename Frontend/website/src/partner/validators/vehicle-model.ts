@@ -9,14 +9,14 @@ const zVehicleModelCreate = z
       z
         .file()
         .max(2 * 1024 * 1024, "avatar must be at most 2 MB.")
-        .mime("image/"),
+        .mime(["image/jpeg", "image/png"]),
     ),
     gallery: z
       .array(
         z
           .file()
           .max(2 * 1024 * 1024, "avatar must be at most 2 MB.")
-          .mime("image/"),
+          .mime(["image/jpeg", "image/png"]),
       )
       .max(25, "you can upload a maximum of 25 images."),
     name: z

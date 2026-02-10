@@ -9,13 +9,13 @@ const zRegisterCredentials = z
       z
         .file()
         .max(300 * 1024, "logo must be at most 300 KB.")
-        .mime("image/"),
+        .mime(["image/jpeg", "image/png"]),
     ),
     banner: z.optional(
       z
         .file()
         .max(1 * 1024 * 1024, "banner must be at most 1 MB.")
-        .mime("image/"),
+        .mime(["image/jpeg", "image/png"]),
     ),
     handle: z
       .string("handle is required.")
@@ -77,7 +77,7 @@ const zRegisterCredentials = z
           z
             .file()
             .max(300 * 1024, "avatar must be at most 300 KB.")
-            .mime("image/"),
+            .mime(["image/jpeg", "image/png"]),
         ),
         username: z
           .string("username is required.")

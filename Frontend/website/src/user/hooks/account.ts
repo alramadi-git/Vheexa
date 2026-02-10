@@ -37,7 +37,6 @@ export default function useAccount() {
       const user: tNullable<unknown> = JSON.parse(
         getCookie("user-account") ?? "null",
       );
-      console.log(getCookie("user-account"));
 
       setA(zUserAccount.parse(user));
     } catch {}

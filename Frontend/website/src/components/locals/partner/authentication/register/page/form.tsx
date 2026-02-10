@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { useId, useCallback } from "react";
+import { useId, useCallback, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
 
 import {
@@ -48,7 +48,10 @@ import {
   FieldError,
 } from "@/components/shadcn/field";
 
-import { FieldFileUpload } from "@/components/locals/blocks/file-uploads";
+import {
+  FieldFileUpload,
+  tFieldFileUploadRef,
+} from "@/components/locals/blocks/file-uploads";
 import {
   FieldIconInput,
   FieldHandle,
@@ -147,7 +150,7 @@ export default function Form() {
   );
 
   async function submit(credentials: tRegisterCredentials) {
-    const isSuccess = await register(credentials);
+    const { isSuccess } = await register(credentials);
 
     if (!isSuccess) {
       toast.custom(() => (
@@ -214,9 +217,13 @@ type tStepProps = {
 
 function PartnerStep({ control }: tStepProps) {
   const id = useId();
+
   const tPartnerStep = useTranslations(
     "app.partner.authentication.register.page.form.partner",
   );
+
+  const bannerRef = useRef<tFieldFileUploadRef>(null);
+  const logoRef = useRef<tFieldFileUploadRef>(null);
 
   return (
     <StepperContent value="partner" className="space-y-3">
@@ -228,12 +235,13 @@ function PartnerStep({ control }: tStepProps) {
           fieldState: { invalid, error },
         }) => (
           <Field data-invalid={invalid}>
-            <FieldLabel htmlFor={`${id}-partner-banner`} className="max-w-fit">
+            <FieldLabel htmlFor={`${id}-banner`} className="max-w-fit">
               {tPartnerStep("banner.label")}
             </FieldLabel>
-            <FieldContent>
+            <FieldContent className="size-full">
               <FieldFileUpload
-                id={`${id}-partner-banner`}
+                ref={bannerRef}
+                id={`${id}-banner`}
                 isInvalid={invalid}
                 defaultValue={value}
                 onValueChange={setValue}
@@ -252,12 +260,13 @@ function PartnerStep({ control }: tStepProps) {
             fieldState: { invalid, error },
           }) => (
             <Field data-invalid={invalid}>
-              <FieldLabel htmlFor={`${id}-partner-logo`} className="max-w-fit">
+              <FieldLabel htmlFor={`${id}-logo`} className="max-w-fit">
                 {tPartnerStep("logo.label")}
               </FieldLabel>
-              <FieldContent>
+              <FieldContent className="size-full">
                 <FieldFileUpload
-                  id={`${id}-partner-logo`}
+                  ref={logoRef}
+                  id={`${id}-logo`}
                   isInvalid={invalid}
                   defaultValue={value}
                   onValueChange={setValue}
@@ -276,15 +285,12 @@ function PartnerStep({ control }: tStepProps) {
               fieldState: { invalid, error },
             }) => (
               <Field data-invalid={invalid}>
-                <FieldLabel
-                  htmlFor={`${id}-partner-handle`}
-                  className="max-w-fit"
-                >
+                <FieldLabel htmlFor={`${id}-handle`} className="max-w-fit">
                   {tPartnerStep("handle.label")}
                 </FieldLabel>
                 <FieldContent>
                   <FieldHandle
-                    id={`${id}-partner-handle`}
+                    id={`${id}-handle`}
                     aria-invalid={invalid}
                     placeholder={tPartnerStep("handle.placeholder")}
                     defaultValue={value}
@@ -304,14 +310,14 @@ function PartnerStep({ control }: tStepProps) {
             }) => (
               <Field data-invalid={invalid}>
                 <FieldLabel
-                  htmlFor={`${id}-partner-organization-name`}
+                  htmlFor={`${id}-organization-name`}
                   className="max-w-fit"
                 >
                   {tPartnerStep("organization-name.label")}
                 </FieldLabel>
                 <FieldContent>
                   <FieldIconInput
-                    id={`${id}-partner-organization-name`}
+                    id={`${id}-organization-name`}
                     aria-invalid={invalid}
                     placeholder={tPartnerStep("organization-name.placeholder")}
                     icon={<LuBuilding2 className="size-4" />}
@@ -332,14 +338,14 @@ function PartnerStep({ control }: tStepProps) {
             }) => (
               <Field data-invalid={invalid}>
                 <FieldLabel
-                  htmlFor={`${id}-partner-phone-number`}
+                  htmlFor={`${id}-phone-number`}
                   className="max-w-fit"
                 >
                   {tPartnerStep("phone-number.label")}
                 </FieldLabel>
                 <FieldContent>
                   <FieldPhoneNumber
-                    id={`${id}-partner-phone-number`}
+                    id={`${id}-phone-number`}
                     isRequired
                     isInvalid={invalid}
                     defaultValue={value}
@@ -360,12 +366,12 @@ function PartnerStep({ control }: tStepProps) {
           fieldState: { invalid, error },
         }) => (
           <Field data-invalid={invalid}>
-            <FieldLabel htmlFor={`${id}-partner-email`} className="max-w-fit">
+            <FieldLabel htmlFor={`${id}-email`} className="max-w-fit">
               {tPartnerStep("email.label")}
             </FieldLabel>
             <FieldContent>
               <FieldEmail
-                id={`${id}-partner-email`}
+                id={`${id}-email`}
                 isRequired
                 isInvalid={invalid}
                 placeholder={tPartnerStep("email.placeholder")}
@@ -640,6 +646,8 @@ function MemberStep({ formState, control }: tLastStepProps) {
     "app.partner.authentication.register.page.form.member",
   );
 
+  const avatarRef = useRef<tFieldFileUploadRef>(null);
+
   return (
     <StepperContent value="member" className="space-y-3">
       <FieldGroup className="grid-cols-2 gap-3">
@@ -654,8 +662,9 @@ function MemberStep({ formState, control }: tLastStepProps) {
               <FieldLabel htmlFor={`${id}-member-avatar`} className="max-w-fit">
                 {tMemberStep("avatar.label")}
               </FieldLabel>
-              <FieldContent>
+              <FieldContent className="size-full">
                 <FieldFileUpload
+                  ref={avatarRef}
                   id={`${id}-member-avatar`}
                   isInvalid={invalid}
                   defaultValue={value}

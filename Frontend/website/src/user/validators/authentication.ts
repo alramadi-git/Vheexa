@@ -9,7 +9,7 @@ const zRegisterCredentials = z
       z
         .file()
         .max(300 * 1024, "avatar must be at most 300 KB.")
-        .mime("image/"),
+        .mime(["image/jpeg", "image/png"]),
     ),
     location: z
       .object({

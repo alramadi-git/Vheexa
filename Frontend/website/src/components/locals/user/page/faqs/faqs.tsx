@@ -38,7 +38,7 @@ export default async function FAQs() {
           {tFAQs.rich("help", {
             link: (chunk) => (
               <Link
-                href="/faqs"
+                href="#"
                 className="px-2 text-blue-400 hover:underline"
               >
                 {chunk}

@@ -44,7 +44,10 @@ import { Toast } from "@/components/locals/blocks/toasts";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
-import { FieldFileUpload } from "@/components/locals/blocks/file-uploads";
+import {
+  FieldFileUpload,
+  tFieldFileUploadRef,
+} from "@/components/locals/blocks/file-uploads";
 import { GiMountainRoad } from "react-icons/gi";
 import { FaMountainCity } from "react-icons/fa6";
 
@@ -52,6 +55,8 @@ export default function Form() {
   const id = useId();
 
   const tForm = useTranslations("app.user.authentication.register.page.form");
+
+  const avatarRef = useRef<tFieldFileUploadRef>(null);
 
   const emailRef = useRef<tFieldEmailRef>(null);
   const passwordRef = useRef<tFieldPasswordRef>(null);
@@ -85,12 +90,14 @@ export default function Form() {
   function reset() {
     handleReset();
 
+    avatarRef.current?.reset();
+
     emailRef.current?.reset();
     passwordRef.current?.reset();
   }
 
   async function submit(credentials: tRegisterCredentials) {
-    const isSuccess = await register(credentials);
+    const { isSuccess } = await register(credentials);
 
     if (!isSuccess) {
       toast.custom(() => (
@@ -121,8 +128,9 @@ export default function Form() {
               <FieldLabel htmlFor={`${id}-avatar`} className="max-w-fit">
                 {tForm("avatar.label")}
               </FieldLabel>
-              <FieldContent>
+              <FieldContent className="size-full">
                 <FieldFileUpload
+                  ref={avatarRef}
                   id={`${id}-avatar`}
                   isInvalid={invalid}
                   defaultValue={value}

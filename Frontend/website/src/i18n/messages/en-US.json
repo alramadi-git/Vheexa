@@ -169,13 +169,11 @@
       },
       "file-upload": {
         "title": "Drag & drop file here",
-        "subtitle": "Or click to browse",
-        "trigger": "Browse files"
+        "help": "Or, <trigger>chose file</trigger> to upload"
       },
       "file-uploads": {
         "title": "Drag & drop files here",
-        "subtitle": "Or click to browse",
-        "trigger": "Browse files",
+        "help": "Or, <trigger>chose files</trigger> to upload",
         "table": {
           "headers": [
             "File Name",
@@ -187,19 +185,9 @@
             "file-size": "{size} KB"
           }
         },
-        "when-duplicates": "No duplicates allowed"
-      },
-      "color-picker": {
-        "placeholder": "Enter color (e.g., Black, White, etc...)",
-        "content": {
-          "name": {
-            "placeholder": "Enter color name: e.g., Black, White, Red, etc..."
-          },
-          "tags": {
-            "placeholder": "Enter tags for better search: (e.g., Black, Dark, Night, etc..."
-          },
-          "save": "Save",
-          "reset": "Reset"
+        "when-duplicates": {
+          "code": "duplicates",
+          "message": "No duplicates allowed"
         }
       }
     },

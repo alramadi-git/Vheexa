@@ -259,20 +259,33 @@ function Stepper(props: StepperProps) {
     onValidate,
   });
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const store = React.useMemo<Store>(() => {
     return {
       subscribe: (cb) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         listenersRef.current.add(cb);
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         return () => listenersRef.current.delete(cb);
       },
       getState: () => stateRef.current,
       setState: (key, value) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         if (Object.is(stateRef.current[key], value)) return;
 
         if (key === "value" && typeof value === "string") {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           stateRef.current.value = value;
           propsRef.current.onValueChange?.(value);
         } else {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           stateRef.current[key] = value;
         }
 
@@ -296,20 +309,27 @@ function Stepper(props: StepperProps) {
       },
       hasValidation: () => !!propsRef.current.onValidate,
       addStep: (value, completed, disabled) => {
-        const newStep: StepState = { value, completed, disabled };
+        const newStep: StepState = { value, completed, disabled }; // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         stateRef.current.steps.set(value, newStep);
         propsRef.current.onValueAdd?.(value);
         store.notify();
       },
       removeStep: (value) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         stateRef.current.steps.delete(value);
         propsRef.current.onValueRemove?.(value);
         store.notify();
       },
       setStep: (value, completed, disabled) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const step = stateRef.current.steps.get(value);
         if (step) {
           const updatedStep: StepState = { ...step, completed, disabled };
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           stateRef.current.steps.set(value, updatedStep);
 
           if (completed !== step.completed) {
@@ -320,6 +340,8 @@ function Stepper(props: StepperProps) {
         }
       },
       notify: () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         for (const cb of listenersRef.current) {
           cb();
         }
@@ -425,6 +447,9 @@ function StepperList(props: DivProps) {
   const isClickFocusRef = React.useRef(false);
   const itemsRef = React.useRef<Map<string, ItemData>>(new Map());
   const listRef = React.useRef<ListElement>(null);
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const composedRef = useComposedRefs(ref, listRef);
 
   const onItemFocus = React.useCallback((tabStopId: string) => {
@@ -659,7 +684,7 @@ function StepperItem(props: StepperItemProps) {
         {...itemProps}
         ref={ref}
         className={cn(
-          "relative flex not-last:flex-1 items-center",
+          "relative flex items-center not-last:flex-1",
           orientation === "horizontal" ? "flex-row" : "flex-col",
           className,
         )}
@@ -720,6 +745,9 @@ function StepperTrigger(props: ButtonProps) {
   const dataState = getDataState(value, itemValue, stepState, steps);
 
   const triggerRef = React.useRef<TriggerElement>(null);
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const composedRef = useComposedRefs(ref, triggerRef);
   const isArrowKeyPressedRef = React.useRef(false);
   const isMouseClickRef = React.useRef(false);
@@ -965,7 +993,7 @@ function StepperTrigger(props: ButtonProps) {
       {...triggerProps}
       ref={composedRef}
       className={cn(
-        "inline-flex items-center justify-center gap-3 rounded-md text-left outline-none transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 inline-flex items-center justify-center gap-3 rounded-md text-left transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         "not-has-data-[slot=description]:rounded-full not-has-data-[slot=title]:rounded-full",
         className,
       )}
@@ -1006,7 +1034,7 @@ function StepperIndicator(props: StepperIndicatorProps) {
       {...indicatorProps}
       ref={ref}
       className={cn(
-        "flex size-7 shrink-0 items-center justify-center rounded-full border-2 border-muted bg-background font-medium text-muted-foreground text-sm transition-colors data-[state=active]:border-primary data-[state=completed]:border-primary data-[state=active]:bg-primary data-[state=completed]:bg-primary data-[state=active]:text-primary-foreground data-[state=completed]:text-primary-foreground",
+        "border-muted bg-background text-muted-foreground data-[state=active]:border-primary data-[state=completed]:border-primary data-[state=active]:bg-primary data-[state=completed]:bg-primary data-[state=active]:text-primary-foreground data-[state=completed]:text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors",
         className,
       )}
     >
@@ -1071,7 +1099,7 @@ function StepperSeparator(props: StepperSeparatorProps) {
       {...separatorProps}
       ref={ref}
       className={cn(
-        "bg-border transition-colors data-[state=active]:bg-primary data-[state=completed]:bg-primary",
+        "bg-border data-[state=active]:bg-primary data-[state=completed]:bg-primary transition-colors",
         orientation === "horizontal" ? "h-px flex-1" : "h-10 w-px",
         className,
       )}
@@ -1100,7 +1128,7 @@ function StepperTitle(props: StepperTitleProps) {
       dir={context.dir}
       {...titleProps}
       ref={ref}
-      className={cn("font-medium text-sm", className)}
+      className={cn("text-sm font-medium", className)}
     />
   );
 }

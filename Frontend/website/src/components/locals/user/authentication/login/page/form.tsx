@@ -73,7 +73,7 @@ export default function Form() {
   }
 
   async function submit(credentials: tLoginCredentials) {
-    const isSuccess = await login(credentials);
+    const { isSuccess } = await login(credentials);
 
     if (!isSuccess) {
       toast.custom(() => (
