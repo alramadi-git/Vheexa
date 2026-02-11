@@ -145,7 +145,7 @@ public class ClsBranchRepository
 
         if (filter.Status != null) branchesQuery = branchesQuery.Where(branch => branch.Status == filter.Status);
 
-        var branchDtos = await branchesQuery
+        var branches = await branchesQuery
         .Select(branch => new ClsBranchModel
         {
             Uuid = branch.Uuid,
@@ -169,36 +169,36 @@ public class ClsBranchRepository
 
         if (filter.Search != null)
         {
-            branchDtos = branchDtos
-            .Select(branchDto => new
+            branches = branches
+            .Select(branch => new
             {
-                BranchDto = branchDto,
+                Branch = branch,
                 Score = new int[]
                 {
-                    Fuzz.Ratio(branchDto.Name, filter.Search),
-                    Fuzz.Ratio(branchDto.Email, filter.Search),
-                    Fuzz.Ratio(branchDto.Location.Country, filter.Search),
-                    Fuzz.Ratio(branchDto.Location.City, filter.Search),
-                    Fuzz.Ratio(branchDto.Location.Street, filter.Search),
+                    Fuzz.Ratio(branch.Name, filter.Search),
+                    Fuzz.Ratio(branch.Email, filter.Search),
+                    Fuzz.Ratio(branch.Location.Country, filter.Search),
+                    Fuzz.Ratio(branch.Location.City, filter.Search),
+                    Fuzz.Ratio(branch.Location.Street, filter.Search),
                 }
                 .Max()
             })
-            .Where(fuzzyBranchDto => fuzzyBranchDto.Score > 80)
-            .OrderByDescending(fuzzyBranchDto => fuzzyBranchDto.Score)
-            .Select(fuzzyBranchDto => fuzzyBranchDto.BranchDto)
+            .Where(fuzzyBranch => fuzzyBranch.Score > 80)
+            .OrderByDescending(fuzzyBranch => fuzzyBranch.Score)
+            .Select(fuzzyBranch => fuzzyBranch.Branch)
             .ToArray();
         }
 
-        var totalItems = branchDtos.Length;
+        var totalItems = branches.Length;
 
-        branchDtos = branchDtos
+        branches = branches
         .Skip((pagination.Page - 1) * pagination.PageSize)
         .Take(pagination.PageSize)
         .ToArray();
 
         return new ClsPaginatedModel<ClsBranchModel>
         {
-            Data = branchDtos,
+            Data = branches,
             Pagination = new ClsPaginatedModel<ClsBranchModel>.ClsPaginationModel
             {
                 Page = pagination.Page,

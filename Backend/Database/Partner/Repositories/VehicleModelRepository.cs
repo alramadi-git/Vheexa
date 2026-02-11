@@ -163,26 +163,26 @@ public class ClsVehicleModelRepository
     }
     public async Task<ClsPaginatedModel<ClsVehicleModelModel>> SearchAsync(ClsVehicleModelFilter filter, ClsPaginationFilter pagination, ClsMemberContext memberContext)
     {
-        var vehicleModels = _AppDBContext.VehicleModels
+        var vehicleModelsQuery = _AppDBContext.VehicleModels
         .Where(partnerVehicleModel =>
             partnerVehicleModel.PartnerUuid == memberContext.PartnerUuid &&
             !partnerVehicleModel.IsDeleted
         );
 
-        if (filter.Categories.Length > 0) vehicleModels = vehicleModels.Where(partnerVehicleModel => filter.Categories.Contains(partnerVehicleModel.Category));
+        if (filter.Categories.Length > 0) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => filter.Categories.Contains(partnerVehicleModel.Category));
 
-        if (filter.Capacity.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Capacity >= filter.Capacity.Min);
-        if (filter.Capacity.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Capacity <= filter.Capacity.Max);
+        if (filter.Capacity.Min != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Capacity >= filter.Capacity.Min);
+        if (filter.Capacity.Max != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Capacity <= filter.Capacity.Max);
 
-        if (filter.Price.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Price >= filter.Price.Min);
-        if (filter.Price.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Price <= filter.Price.Max);
+        if (filter.Price.Min != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Price >= filter.Price.Min);
+        if (filter.Price.Max != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Price <= filter.Price.Max);
 
-        if (filter.Discount.Min != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Discount >= filter.Discount.Min);
-        if (filter.Discount.Max != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Discount <= filter.Discount.Max);
+        if (filter.Discount.Min != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Discount >= filter.Discount.Min);
+        if (filter.Discount.Max != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Discount <= filter.Discount.Max);
 
-        if (filter.Status != null) vehicleModels = vehicleModels.Where(partnerVehicleModel => partnerVehicleModel.Status == filter.Status);
+        if (filter.Status != null) vehicleModelsQuery = vehicleModelsQuery.Where(partnerVehicleModel => partnerVehicleModel.Status == filter.Status);
 
-        var vehicleModelDtos = await vehicleModels
+        var vehicleModels = await vehicleModelsQuery
         .Select(vehicleModel => new ClsVehicleModelModel
         {
             Uuid = vehicleModel.Uuid,
@@ -216,36 +216,36 @@ public class ClsVehicleModelRepository
         })
         .ToArrayAsync();
 
-        if (filter.Search != null) vehicleModelDtos = vehicleModelDtos.
-        Select(vehicleModelDto => new
+        if (filter.Search != null) vehicleModels = vehicleModels.
+        Select(vehicleModel => new
         {
-            VehicleModelDto = vehicleModelDto,
+            VehicleModel = vehicleModel,
             Score = new int[]
             {
-                Fuzz.Ratio(vehicleModelDto.Name, filter.Search),
-                Fuzz.Ratio(vehicleModelDto.Description, filter.Search),
-                Fuzz.Ratio(vehicleModelDto.Manufacturer, filter.Search),
-                Fuzz.Ratio(vehicleModelDto.Transmission, filter.Search),
-                Fuzz.Ratio(vehicleModelDto.Fuel, filter.Search),
-                Fuzz.Ratio(vehicleModelDto.Tags, filter.Search),
+                Fuzz.Ratio(vehicleModel.Name, filter.Search),
+                Fuzz.Ratio(vehicleModel.Description, filter.Search),
+                Fuzz.Ratio(vehicleModel.Manufacturer, filter.Search),
+                Fuzz.Ratio(vehicleModel.Transmission, filter.Search),
+                Fuzz.Ratio(vehicleModel.Fuel, filter.Search),
+                Fuzz.Ratio(vehicleModel.Tags, filter.Search),
             }
             .Max()
         })
-        .Where(fuzzyVehicleModelDto => fuzzyVehicleModelDto.Score > 80)
-        .OrderByDescending(fuzzyVehicleModelDto => fuzzyVehicleModelDto.Score)
-        .Select(fuzzyVehicleModelDto => fuzzyVehicleModelDto.VehicleModelDto)
+        .Where(fuzzyVehicleModel => fuzzyVehicleModel.Score > 80)
+        .OrderByDescending(fuzzyVehicleModel => fuzzyVehicleModel.Score)
+        .Select(fuzzyVehicleModel => fuzzyVehicleModel.VehicleModel)
         .ToArray();
 
-        var totalItems = vehicleModelDtos.Length;
+        var totalItems = vehicleModels.Length;
 
-        vehicleModelDtos = vehicleModelDtos
+        vehicleModels = vehicleModels
         .Skip((pagination.Page - 1) * pagination.PageSize)
         .Take(pagination.PageSize)
         .ToArray();
 
         return new ClsPaginatedModel<ClsVehicleModelModel>
         {
-            Data = vehicleModelDtos,
+            Data = vehicleModels,
             Pagination = new ClsPaginatedModel<ClsVehicleModelModel>.ClsPaginationModel
             {
                 Page = pagination.Page,

@@ -22,7 +22,7 @@ public class ClsMemberController : Controller
         var roleOptions = await _MemberService.ReadRolesAsync(uuids, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Ok(roleOptions);
@@ -33,7 +33,7 @@ public class ClsMemberController : Controller
         var branchOptions = await _MemberService.ReadBranchesAsync(uuids, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Ok(branchOptions);
@@ -45,7 +45,7 @@ public class ClsMemberController : Controller
         await _MemberService.CreateOneAsync(member, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Created();
@@ -57,7 +57,7 @@ public class ClsMemberController : Controller
         await _MemberService.DeleteOneAsync(uuid, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return NoContent();
@@ -69,7 +69,7 @@ public class ClsMemberController : Controller
         var roleOptions = await _MemberService.SearchRolesAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Ok(roleOptions);
@@ -80,7 +80,7 @@ public class ClsMemberController : Controller
         var branchOptions = await _MemberService.SearchBranchesAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Ok(branchOptions);
@@ -92,7 +92,7 @@ public class ClsMemberController : Controller
         var members = await _MemberService.SearchAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Ok(members);

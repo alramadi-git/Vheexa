@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Database.Entities;
 
 using Database.Enums;
-using Database.Partner.Enums;
 
 using Database.Inputs;
 using Database.Partner.Inputs;
@@ -16,28 +15,6 @@ namespace Database.Partner.Repositories;
 
 public class ClsAuthenticationRepository
 {
-    private static readonly Dictionary<Guid, PERMISSION> PermissionUuidsMap = new()
-    {
-        { new Guid("d3b2f1a4-7c6e-4a8d-b5c9-123456789abc"), PERMISSION.PARTNER_READ},
-        { new Guid("e4c3g2b5-8d7f-5b9e-c6da-23456789abcd"), PERMISSION.PARTNER_UPDATE},
-        { new Guid("f5d4h3c6-9e8g-6c0f-d7eb-3456789abcde"), PERMISSION.PARTNER_DELETE},
-        { new Guid("a6e5i4d7-0f9h-7d1g-e8fc-456789abcdef"), PERMISSION.ROLES_CREATE},
-        { new Guid("b7f6j5e8-1g0i-8e2h-f9gd-56789abcdef0"), PERMISSION.ROLES_READ},
-        { new Guid("c8g7k6f9-2h1j-9f3i-g0he-6789abcdef01"), PERMISSION.ROLES_UPDATE},
-        { new Guid("d9h8l7g0-3i2k-0g4j-h1if-789abcdef012"), PERMISSION.ROLES_DELETE},
-        { new Guid("e0i9m8h1-4j3l-1h5k-i2jg-89abcdef0123"), PERMISSION.BRANCHES_CREATE},
-        { new Guid("f1j0n9i2-5k4m-2i6l-j3kh-9abcdef01234"), PERMISSION.BRANCHES_READ},
-        { new Guid("g2k1o0j3-6l5n-3j7m-k4li-abcdef012345"), PERMISSION.BRANCHES_UPDATE},
-        { new Guid("h3l2p1k4-7m6o-4k8n-l5mj-bcdef0123456"), PERMISSION.BRANCHES_DELETE},
-        { new Guid("i4m3q2l5-8n7p-5l9o-m6nk-cdef01234567"), PERMISSION.MEMBERS_CREATE},
-        { new Guid("j5n4r3m6-9o8q-6m0p-n7ol-def012345678"), PERMISSION.MEMBERS_READ},
-        { new Guid("k6o5s4n7-0p9r-7n1q-o8pm-ef0123456789"), PERMISSION.MEMBERS_UPDATE},
-        { new Guid("l7p6t5o8-1q0s-8o2r-p9qn-f0123456789a"), PERMISSION.MEMBERS_DELETE},
-        { new Guid("m8q7u6p9-2r1t-9p3s-q0ro-0123456789ab"), PERMISSION.VEHICLE_MODELS_CREATE},
-        { new Guid("n9r8v7q0-3s2u-0q4t-r1sp-123456789abc"), PERMISSION.VEHICLE_MODELS_READ},
-        { new Guid("o0s9w8r1-4t3v-1r5u-s2tq-23456789abcd"), PERMISSION.VEHICLE_MODELS_UPDATE},
-        { new Guid("p1t0x9s2-5u4w-2s6v-t3ur-3456789abcde"), PERMISSION.VEHICLE_MODELS_DELETE}
-    };
     private readonly AppDBContext _AppDBContext;
 
     public ClsAuthenticationRepository(AppDBContext appDBContext)
@@ -109,7 +86,7 @@ public class ClsAuthenticationRepository
             )
             .ToArrayAsync();
 
-            var ownerRoleUuid = new Guid("e1d4a7a3-4b9f-4b4b-9c9c-4a9b4a9b4a9b");
+            var ownerRoleUuid = new Guid("8d5df272-e00a-4fc4-89a5-f0b6028bb7c0");
             var newPartnerRoles = defaultRoles
             .Select(role => new ClsPartnerRoleEntity
             {
@@ -133,7 +110,7 @@ public class ClsAuthenticationRepository
                 Url = credentials.Member.Avatar.Url,
             };
 
-            var hashPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Member.Password);
+            var hashedPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Member.Password);
             var newMember = new ClsMemberEntity
             {
                 Uuid = credentials.Member.Uuid,
@@ -143,7 +120,7 @@ public class ClsAuthenticationRepository
                 AvatarId = newAvatar?.Id,
                 Username = credentials.Member.Username,
                 Email = credentials.Member.Email,
-                Password = hashPassword,
+                Password = hashedPassword,
                 Status = STATUS.ACTIVE,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -166,10 +143,10 @@ public class ClsAuthenticationRepository
             await _AppDBContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            var permissionUuids = await _AppDBContext.RolePermissions
+            var permissions = await _AppDBContext.RolePermissions
             .AsNoTracking()
             .Where(rolePermission => rolePermission.RoleUuid == newMember.Role.RoleUuid)
-            .Select(rolePermission => rolePermission.PermissionUuid)
+            .Select(rolePermission => rolePermission.Permission.Type)
             .ToArrayAsync();
 
             var accountDto = new ClsMemberAccountModel
@@ -194,9 +171,7 @@ public class ClsAuthenticationRepository
                 Role =
                 {
                     Name = newMember.Role.Role.Name,
-                    Permissions = permissionUuids
-                    .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
-                    .ToArray(),
+                    Permissions = permissions
                 },
                 Avatar = newMember.Avatar == null ? null : new Database.Models.ClsImageModel
                 {
@@ -254,10 +229,10 @@ public class ClsAuthenticationRepository
             await _AppDBContext.SaveChangesAsync();
         }
 
-        var permissionUuids = await _AppDBContext.RolePermissions
+        var permissions = await _AppDBContext.RolePermissions
         .AsNoTracking()
         .Where(rolePermission => rolePermission.RoleUuid == member.Role.RoleUuid)
-        .Select(rolePermission => rolePermission.PermissionUuid)
+        .Select(rolePermission => rolePermission.Permission.Type)
         .ToArrayAsync();
 
         var accountDto = new ClsMemberAccountModel
@@ -282,9 +257,7 @@ public class ClsAuthenticationRepository
             Role = new ClsMemberAccountModel.ClsRoleModel
             {
                 Name = member.Role.Role.Name,
-                Permissions = permissionUuids
-                .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
-                .ToArray(),
+                Permissions = permissions
             },
             Avatar = member.Avatar == null ? null : new Database.Models.ClsImageModel
             {

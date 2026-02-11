@@ -21,7 +21,7 @@ public class ClsVehicleModelController : Controller
         await _VehicleModelService.CreateOneAsync(vehicleModel, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Created();
@@ -33,7 +33,7 @@ public class ClsVehicleModelController : Controller
         await _VehicleModelService.DeleteOneAsync(uuid, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return NoContent();
@@ -45,7 +45,7 @@ public class ClsVehicleModelController : Controller
         var vehicleModels = await _VehicleModelService.SearchAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
             Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("c79cf3f7-d4d5-464e-a283-58c67b6be878"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
         });
 
         return Ok(vehicleModels);

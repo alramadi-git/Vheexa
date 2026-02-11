@@ -6,14 +6,16 @@ using Database.Entities;
 
 using Database.Enums;
 using Database.Partner.Enums;
+
+using Database.Filters;
+using Database.Partner.Filters;
+
 using Database.Partner.Inputs;
 
 using Database.Partner.Contexts;
 
 using Database.Models;
 using Database.Partner.Models;
-using Database.Filters;
-using Database.Partner.Filters;
 
 namespace Database.Partner.Repositories;
 
@@ -21,48 +23,25 @@ public class ClsRoleRepository
 {
     private static readonly Dictionary<PERMISSION, Guid> PermissionsMap = new()
     {
-        { PERMISSION.PARTNER_READ, new Guid("d3b2f1a4-7c6e-4a8d-b5c9-123456789abc") },
-        { PERMISSION.PARTNER_UPDATE, new Guid("e4c3g2b5-8d7f-5b9e-c6da-23456789abcd") },
-        { PERMISSION.PARTNER_DELETE, new Guid("f5d4h3c6-9e8g-6c0f-d7eb-3456789abcde") },
-        { PERMISSION.ROLES_CREATE, new Guid("a6e5i4d7-0f9h-7d1g-e8fc-456789abcdef") },
-        { PERMISSION.ROLES_READ, new Guid("b7f6j5e8-1g0i-8e2h-f9gd-56789abcdef0") },
-        { PERMISSION.ROLES_UPDATE, new Guid("c8g7k6f9-2h1j-9f3i-g0he-6789abcdef01") },
-        { PERMISSION.ROLES_DELETE, new Guid("d9h8l7g0-3i2k-0g4j-h1if-789abcdef012") },
-        { PERMISSION.BRANCHES_CREATE, new Guid("e0i9m8h1-4j3l-1h5k-i2jg-89abcdef0123") },
-        { PERMISSION.BRANCHES_READ, new Guid("f1j0n9i2-5k4m-2i6l-j3kh-9abcdef01234") },
-        { PERMISSION.BRANCHES_UPDATE, new Guid("g2k1o0j3-6l5n-3j7m-k4li-abcdef012345") },
-        { PERMISSION.BRANCHES_DELETE, new Guid("h3l2p1k4-7m6o-4k8n-l5mj-bcdef0123456") },
-        { PERMISSION.MEMBERS_CREATE, new Guid("i4m3q2l5-8n7p-5l9o-m6nk-cdef01234567") },
-        { PERMISSION.MEMBERS_READ, new Guid("j5n4r3m6-9o8q-6m0p-n7ol-def012345678") },
-        { PERMISSION.MEMBERS_UPDATE, new Guid("k6o5s4n7-0p9r-7n1q-o8pm-ef0123456789") },
-        { PERMISSION.MEMBERS_DELETE, new Guid("l7p6t5o8-1q0s-8o2r-p9qn-f0123456789a") },
-        { PERMISSION.VEHICLE_MODELS_CREATE, new Guid("m8q7u6p9-2r1t-9p3s-q0ro-0123456789ab") },
-        { PERMISSION.VEHICLE_MODELS_READ, new Guid("n9r8v7q0-3s2u-0q4t-r1sp-123456789abc") },
-        { PERMISSION.VEHICLE_MODELS_UPDATE, new Guid("o0s9w8r1-4t3v-1r5u-s2tq-23456789abcd") },
-        { PERMISSION.VEHICLE_MODELS_DELETE, new Guid("p1t0x9s2-5u4w-2s6v-t3ur-3456789abcde") }
-    };
-
-    private static readonly Dictionary<Guid, PERMISSION> PermissionUuidsMap = new()
-    {
-        { new Guid("d3b2f1a4-7c6e-4a8d-b5c9-123456789abc"), PERMISSION.PARTNER_READ},
-        { new Guid("e4c3g2b5-8d7f-5b9e-c6da-23456789abcd"), PERMISSION.PARTNER_UPDATE},
-        { new Guid("f5d4h3c6-9e8g-6c0f-d7eb-3456789abcde"), PERMISSION.PARTNER_DELETE},
-        { new Guid("a6e5i4d7-0f9h-7d1g-e8fc-456789abcdef"), PERMISSION.ROLES_CREATE},
-        { new Guid("b7f6j5e8-1g0i-8e2h-f9gd-56789abcdef0"), PERMISSION.ROLES_READ},
-        { new Guid("c8g7k6f9-2h1j-9f3i-g0he-6789abcdef01"), PERMISSION.ROLES_UPDATE},
-        { new Guid("d9h8l7g0-3i2k-0g4j-h1if-789abcdef012"), PERMISSION.ROLES_DELETE},
-        { new Guid("e0i9m8h1-4j3l-1h5k-i2jg-89abcdef0123"), PERMISSION.BRANCHES_CREATE},
-        { new Guid("f1j0n9i2-5k4m-2i6l-j3kh-9abcdef01234"), PERMISSION.BRANCHES_READ},
-        { new Guid("g2k1o0j3-6l5n-3j7m-k4li-abcdef012345"), PERMISSION.BRANCHES_UPDATE},
-        { new Guid("h3l2p1k4-7m6o-4k8n-l5mj-bcdef0123456"), PERMISSION.BRANCHES_DELETE},
-        { new Guid("i4m3q2l5-8n7p-5l9o-m6nk-cdef01234567"), PERMISSION.MEMBERS_CREATE},
-        { new Guid("j5n4r3m6-9o8q-6m0p-n7ol-def012345678"), PERMISSION.MEMBERS_READ},
-        { new Guid("k6o5s4n7-0p9r-7n1q-o8pm-ef0123456789"), PERMISSION.MEMBERS_UPDATE},
-        { new Guid("l7p6t5o8-1q0s-8o2r-p9qn-f0123456789a"), PERMISSION.MEMBERS_DELETE},
-        { new Guid("m8q7u6p9-2r1t-9p3s-q0ro-0123456789ab"), PERMISSION.VEHICLE_MODELS_CREATE},
-        { new Guid("n9r8v7q0-3s2u-0q4t-r1sp-123456789abc"), PERMISSION.VEHICLE_MODELS_READ},
-        { new Guid("o0s9w8r1-4t3v-1r5u-s2tq-23456789abcd"), PERMISSION.VEHICLE_MODELS_UPDATE},
-        { new Guid("p1t0x9s2-5u4w-2s6v-t3ur-3456789abcde"), PERMISSION.VEHICLE_MODELS_DELETE}
+        { PERMISSION.PARTNER_READ, new Guid("dfdbf9b2-b7c7-43bc-8911-0ac1f3ab340b") },
+        { PERMISSION.PARTNER_UPDATE, new Guid("55662026-8286-4566-8c95-30de9f9cb13e") },
+        { PERMISSION.PARTNER_DELETE, new Guid("d9404cc5-4a67-4433-aec1-57a7dbd0eb48") },
+        { PERMISSION.ROLES_CREATE, new Guid("57c81c15-4092-49f3-9c14-a65b1b558ff6") },
+        { PERMISSION.ROLES_READ, new Guid("0cdb4614-ada9-40a3-bbe6-39608af357b7") },
+        { PERMISSION.ROLES_UPDATE, new Guid("b42a9e6c-e66a-48b3-9de8-9bdc43a1f6a8") },
+        { PERMISSION.ROLES_DELETE, new Guid("3918479a-a73d-4a9a-bdfa-76a3bcdd9b07") },
+        { PERMISSION.BRANCHES_CREATE, new Guid("9f524606-f2fb-4d9f-b121-df52cff42fb9") },
+        { PERMISSION.BRANCHES_READ, new Guid("9ceeb1d8-3348-41e6-a4a0-c5a50efe4f0a") },
+        { PERMISSION.BRANCHES_UPDATE, new Guid("86c89f2b-18ca-47c9-8f07-c5c34d6a1682") },
+        { PERMISSION.BRANCHES_DELETE, new Guid("8a9e7122-6cdf-4652-a4ef-5ad88248d61f") },
+        { PERMISSION.MEMBERS_CREATE, new Guid("1fca3d0f-bd4f-4f95-8a4a-52142e1887ab") },
+        { PERMISSION.MEMBERS_READ, new Guid("4ebbf4c4-89c1-4c0a-a45c-193a0ef5d3ae") },
+        { PERMISSION.MEMBERS_UPDATE, new Guid("4d2da27f-6e60-4794-ac8d-ace63987c44f") },
+        { PERMISSION.MEMBERS_DELETE, new Guid("684a4492-3216-4298-b98b-83359f0f0280") },
+        { PERMISSION.VEHICLE_MODELS_CREATE, new Guid("cfff27e5-0e9f-492e-b0c2-14009781e589") },
+        { PERMISSION.VEHICLE_MODELS_READ, new Guid("987dd5dd-1a1b-4d4f-8392-859f9a9e6656") },
+        { PERMISSION.VEHICLE_MODELS_UPDATE, new Guid("d8b092d3-8cb2-418d-8b00-30c23735b708") },
+        { PERMISSION.VEHICLE_MODELS_DELETE, new Guid("121bb695-28ed-426f-abcf-eabc44ee3447") }
     };
 
     private readonly AppDBContext _AppDBContext;
@@ -190,14 +169,13 @@ public class ClsRoleRepository
             !partnerRole.IsDeleted
         );
 
-        var mappedPermissions = filter.Permissions.Select(permission => PermissionsMap[permission]).ToArray();
-        if (mappedPermissions.Length > 0)
+        if (filter.Permissions.Length > 0)
         {
             rolesQuery = rolesQuery
             .Where(partnerRole => _AppDBContext.RolePermissions
                 .Any(rolePermission =>
                     rolePermission.RoleUuid == partnerRole.RoleUuid &&
-                    mappedPermissions.Contains(rolePermission.PermissionUuid)
+                    filter.Permissions.Contains(rolePermission.Permission.Type)
                 )
             );
         }
@@ -205,13 +183,13 @@ public class ClsRoleRepository
         if (filter.Status != null) rolesQuery = rolesQuery.Where(partnerRole => partnerRole.Status == filter.Status);
 
         var roles = await rolesQuery
-        .Select(partnerRole => new
+        .Select(partnerRole => new ClsRoleModel
         {
             Uuid = partnerRole.Uuid,
             Name = partnerRole.Role.Name,
-            PermissionUuids = _AppDBContext.RolePermissions
+            Permissions = _AppDBContext.RolePermissions
             .Where(rolePermission => rolePermission.RoleUuid == partnerRole.RoleUuid)
-            .Select(rolePermission => rolePermission.PermissionUuid)
+            .Select(rolePermission => rolePermission.Permission.Type)
             .ToArray(),
             AssignedCount = partnerRole.AssignedCount,
             Status = partnerRole.Status,
@@ -241,24 +219,9 @@ public class ClsRoleRepository
         .Take(pagination.PageSize)
         .ToArray();
 
-        var roleDtos = roles
-        .Select(role => new ClsRoleModel
-        {
-            Uuid = role.Uuid,
-            Name = role.Name,
-            PermissionUuids = role.PermissionUuids
-            .Select(permissionUuid => PermissionUuidsMap[permissionUuid])
-            .ToArray(),
-            AssignedCount = role.AssignedCount,
-            Status = role.Status,
-            CreatedAt = role.CreatedAt,
-            UpdatedAt = role.UpdatedAt,
-        })
-        .ToArray();
-
         return new ClsPaginatedModel<ClsRoleModel>
         {
-            Data = roleDtos,
+            Data = roles,
             Pagination = new ClsPaginatedModel<ClsRoleModel>.ClsPaginationModel
             {
                 Page = pagination.Page,

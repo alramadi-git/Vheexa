@@ -2,6 +2,7 @@ import { tNullable } from "@/types/nullish";
 
 import { tImageModel } from "../../models/image";
 
+import { ePermissionModel } from "./enums/permission";
 import { eStatusModel } from "./enums/status";
 
 type tMemberModel = {
@@ -9,7 +10,7 @@ type tMemberModel = {
   avatar: tNullable<tImageModel>;
   role: {
     name: string;
-    permissions: string[];
+    permissions: ePermissionModel[];
   };
   branch: {
     location: {

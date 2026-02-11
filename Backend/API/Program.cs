@@ -20,6 +20,7 @@ public class Program
         // Validators
         builder.Services.AddScoped<Business.Validations.Validators.ClsLoginValidator>();
         builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationFilterValidator>();
+        builder.Services.AddScoped<Business.Validations.Validators.ClsLocationValidator>();
 
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchFilterValidator>();
