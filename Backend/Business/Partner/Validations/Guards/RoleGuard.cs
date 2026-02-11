@@ -1,8 +1,13 @@
+using FluentValidation;
+
 using Business.Validations.Validators;
 using Business.Partner.Validations.Validators;
+
 using Business.Partner.Inputs;
+
 using Business.Filters;
 using Business.Partner.Filters;
+
 
 namespace Business.Partner.Validations.Guards;
 
@@ -27,11 +32,11 @@ public class ClsRoleGuard
 
     public async Task CreateOneAsync(ClsRoleInput role)
     {
-        await _RoleCreateValidator.ValidateAsync(role);
+        await _RoleCreateValidator.ValidateAndThrowAsync(role);
     }
     public async Task SearchAsync(ClsRoleFilter filter, ClsPaginationFilter pagination)
     {
-        await _RoleFilterValidator.ValidateAsync(filter);
-        await _PaginationValidator.ValidateAsync(pagination);
+        await _RoleFilterValidator.ValidateAndThrowAsync(filter);
+        await _PaginationValidator.ValidateAndThrowAsync(pagination);
     }
 }

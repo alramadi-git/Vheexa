@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Business.Validations.Validators;
 using Business.User.Validations.Validators;
 
@@ -19,10 +21,10 @@ public class ClsAuthenticationGuard
 
     public async Task RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
-        await _RegisterValidator.ValidateAsync(credentials);
+        await _RegisterValidator.ValidateAndThrowAsync(credentials);
     }
     public async Task LoginAsync(ClsLoginCredentialsInput credentials)
     {
-        await _LoginValidator.ValidateAsync(credentials);
+        await _LoginValidator.ValidateAndThrowAsync(credentials);
     }
 }

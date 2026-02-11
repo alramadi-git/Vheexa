@@ -35,9 +35,10 @@ public class ClsImagekitIntegration
         {
             var newImage = await _ImagekitClient.UploadAsync(new FileCreateRequest
             {
-                folder = path,
                 useUniqueFileName = true,
-                file = image
+                file = image,
+                folder = path,
+                fileName = image.FileName,
             });
 
             return new ClsImagekit

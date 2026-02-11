@@ -1,6 +1,10 @@
+using FluentValidation;
+
 using Business.Validations.Validators;
 using Business.Partner.Validations.Validators;
+
 using Business.Partner.Inputs;
+
 using Business.Filters;
 using Business.Partner.Filters;
 
@@ -27,11 +31,11 @@ public class ClsBranchGuard
 
     public async Task CreateOneAsync(ClsBranchInput branch)
     {
-        await _BranchCreateValidator.ValidateAsync(branch);
+        await _BranchCreateValidator.ValidateAndThrowAsync(branch);
     }
     public async Task SearchAsync(ClsBranchFilter filter, ClsPaginationFilter pagination)
     {
-        await _BranchFilterValidator.ValidateAsync(filter);
-        await _PaginationValidator.ValidateAsync(pagination);
+        await _BranchFilterValidator.ValidateAndThrowAsync(filter);
+        await _PaginationValidator.ValidateAndThrowAsync(pagination);
     }
 }

@@ -12,7 +12,7 @@ public class ClsVehicleModelEntity
     public ClsImageEntity? Thumbnail { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public CATEGORY Category { get; set; }
+    public VEHICLE_MODEL_CATEGORY Category { get; set; }
     public string Manufacturer { get; set; }
     public DateOnly MarketLaunch { get; set; }
     public int Capacity { get; set; }

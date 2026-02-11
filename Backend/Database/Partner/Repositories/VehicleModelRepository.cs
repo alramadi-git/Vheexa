@@ -73,7 +73,7 @@ public class ClsVehicleModelRepository
 
                 var newVehicleModelGalleryImage = new ClsVehicleModelGalleryEntity
                 {
-                    Guid = Guid.NewGuid(),
+                    Uuid = Guid.NewGuid(),
                     VehicleModelUuid = newVehicleModel.Uuid,
                     ImageId = image.Id,
                     Index = i,

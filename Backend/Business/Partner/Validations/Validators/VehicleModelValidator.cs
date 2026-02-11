@@ -61,10 +61,8 @@ public class ClsVehicleModelInputValidator : AbstractValidator<ClsVehicleModelIn
         .Must(vehicleModelInput => vehicleModelInput.Discount + 1 <= vehicleModelInput.Price).WithMessage("Discount must be less than the price at least 1 dollar.");
 
         RuleFor(vehicleModelInput => vehicleModelInput.Tags)
-        .Must(tags => tags.Length <= 15).WithMessage("You can add a maximum of 15 tags.");
-        RuleForEach(vehicleModelInput => vehicleModelInput.Tags)
         .MinimumLength(3)
-        .MaximumLength(15);
+        .MaximumLength(256);
 
         RuleFor(vehicleModelInput => vehicleModelInput.Status)
         .IsInEnum();

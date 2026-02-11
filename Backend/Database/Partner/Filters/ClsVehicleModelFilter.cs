@@ -16,9 +16,21 @@ public class ClsVehicleModelFilter
         public decimal? Max { get; set; }
     }
     public string? Search { get; set; }
-    public required CATEGORY[] Categories { get; set; }
-    public required ClsMinMaxInput Capacity { get; set; }
-    public required ClsMinMaxMoneyInput Price { get; set; }
-    public required ClsMinMaxMoneyInput Discount { get; set; }
+    public VEHICLE_MODEL_CATEGORY[] Categories { get; set; } = [];
+    public ClsMinMaxInput Capacity { get; set; } = new ClsMinMaxInput
+    {
+        Min = null,
+        Max = null
+    };
+    public ClsMinMaxMoneyInput Price { get; set; } = new ClsMinMaxMoneyInput
+    {
+        Min = null,
+        Max = null
+    };
+    public ClsMinMaxMoneyInput Discount { get; set; } = new ClsMinMaxMoneyInput
+    {
+        Min = null,
+        Max = null
+    };
     public STATUS? Status { get; set; }
 }

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using Database.Entities;
+using Database.Enums;
+using Database.Partner.Enums;
 
 namespace Database;
 

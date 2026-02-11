@@ -2,7 +2,7 @@ namespace Database.Entities;
 
 public class ClsVehicleModelGalleryEntity
 {
-    public Guid Guid { get; set; }
+    public Guid Uuid { get; set; }
     public Guid VehicleModelUuid { get; set; }
     public ClsVehicleModelEntity VehicleModel { get; set; }
     public string ImageId { get; set; }

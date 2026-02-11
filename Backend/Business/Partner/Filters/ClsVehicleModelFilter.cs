@@ -7,15 +7,27 @@ public class ClsVehicleModelFilter
         public int? Min { get; set; }
         public int? Max { get; set; }
     }
-    public class ClsMinMaxMonyInput
+    public class ClsMinMaxMoneyInput
     {
         public decimal? Min { get; set; }
         public decimal? Max { get; set; }
     }
     public string? Search { get => field?.Trim(); set; }
-    public required Database.Partner.Enums.CATEGORY[] Categories { get; set; }
-    public required ClsMinMaxInput Capacity { get; set; }
-    public required ClsMinMaxMonyInput Price { get; set; }
-    public required ClsMinMaxMonyInput Discount { get; set; }
+    public Database.Partner.Enums.VEHICLE_MODEL_CATEGORY[] Categories { get; set; } = [];
+    public ClsMinMaxInput Capacity { get; set; } = new ClsMinMaxInput
+    {
+        Min = null,
+        Max = null
+    };
+    public ClsMinMaxMoneyInput Price { get; set; } = new ClsMinMaxMoneyInput
+    {
+        Min = null,
+        Max = null
+    };
+    public ClsMinMaxMoneyInput Discount { get; set; } = new ClsMinMaxMoneyInput
+    {
+        Min = null,
+        Max = null
+    };
     public Database.Enums.STATUS? Status { get; set; }
 }

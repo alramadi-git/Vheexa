@@ -61,14 +61,10 @@ const zVehicleModelCreate = z
       .number("discount is required.")
       .nonnegative("discount cannot be negative."),
     tags: z
-      .array(
-        z
-          .string()
-          .trim()
-          .min(3, "tag must be at least 3 characters.")
-          .max(15, "tag must be at most 15 characters."),
-      )
-      .max(15, "you can add a maximum of 15 tags."),
+      .string()
+      .trim()
+      .min(3, "tags must be at least 3 characters.")
+      .max(256, "tags must be at most 256 characters."),
     status: z.enum(eStatusService, "status is required."),
   })
   .refine((value) => value?.discount + 1 >= value?.price, {

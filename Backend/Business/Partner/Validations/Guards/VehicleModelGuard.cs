@@ -1,6 +1,10 @@
+using FluentValidation;
+
 using Business.Validations.Validators;
 using Business.Partner.Validations.Validators;
+
 using Business.Partner.Inputs;
+
 using Business.Filters;
 using Business.Partner.Filters;
 
@@ -27,11 +31,11 @@ public class ClsVehicleModelGuard
 
     public async Task CreateOneAsync(ClsVehicleModelInput vehicleModel)
     {
-        await _VehicleModelCreateValidator.ValidateAsync(vehicleModel);
+        await _VehicleModelCreateValidator.ValidateAndThrowAsync(vehicleModel);
     }
     public async Task SearchAsync(ClsVehicleModelFilter filter, ClsPaginationFilter pagination)
     {
-        await _VehicleModelFilterValidator.ValidateAsync(filter);
-        await _PaginationValidator.ValidateAsync(pagination);
+        await _VehicleModelFilterValidator.ValidateAndThrowAsync(filter);
+        await _PaginationValidator.ValidateAndThrowAsync(pagination);
     }
 }

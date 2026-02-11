@@ -25,7 +25,7 @@ public class ClsVehicleModelService
 
     public async Task CreateOneAsync(ClsVehicleModelInput vehicleModel, Database.Partner.Contexts.ClsMemberContext memberContext)
     {
-        string? uploadedThumbnailId = null;
+        string? thumbnailId = null;
 
         var VehicleModelUuid = Guid.NewGuid();
 
@@ -41,7 +41,7 @@ public class ClsVehicleModelService
             var thumbnail = thumbnailTask.Result;
             var gallery = galleryTask.Result;
 
-            uploadedThumbnailId = thumbnail?.Id;
+            thumbnailId = thumbnail?.Id;
 
             await _Repository.CreateOneAsync(
                 new Database.Partner.Inputs.ClsVehicleModelInput
@@ -76,7 +76,7 @@ public class ClsVehicleModelService
         catch
         {
             await Task.WhenAll([
-                uploadedThumbnailId == null ? Task.CompletedTask :_ImagekitIntegration.DeleteImageAsync(uploadedThumbnailId),
+                thumbnailId == null ? Task.CompletedTask :_ImagekitIntegration.DeleteImageAsync(thumbnailId),
                 _ImagekitIntegration.DeleteFolderAsync($"/vheexa/partners/{memberContext.PartnerUuid}/vehicle-models/{VehicleModelUuid}/gallery"),
             ]);
 

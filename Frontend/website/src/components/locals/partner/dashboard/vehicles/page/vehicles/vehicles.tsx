@@ -172,7 +172,7 @@ function AddNewVehicleModel() {
       capacity: 1,
       price: 1,
       discount: 0,
-      tags: [],
+      tags: "",
       status: eStatusService.active,
     },
     resolver: zodResolver(zVehicleModelCreate),
@@ -442,8 +442,8 @@ function AddNewVehicleModel() {
                       <Textarea
                         {...field}
                         id={`${id}-description`}
-                        aria-invalid={invalid}
                         required
+                        aria-invalid={invalid}
                         placeholder={tAddNew(
                           "content.form.description.placeholder",
                         )}
@@ -473,8 +473,8 @@ function AddNewVehicleModel() {
                       <FieldTags
                         id={`${id}-tags`}
                         placeholder={tAddNew("content.form.tags.placeholder")}
-                        defaultValues={value}
-                        onValuesChange={setValue}
+                        defaultValues={value.split(", ")}
+                        onValuesChange={(values) => setValue(values.join(", "))}
                       />
                     </FieldContent>
                     <FieldError errorsProp={error} />

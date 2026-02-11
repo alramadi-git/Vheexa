@@ -16,7 +16,7 @@ public class Program
         // Register database
         builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSql")));
 
-        // Register business layer
+        // Register business layer 
         // Validators
         builder.Services.AddScoped<Business.Validations.Validators.ClsLoginValidator>();
         builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationFilterValidator>();
@@ -65,7 +65,10 @@ public class Program
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.
+        AddSwaggerGen(options => options
+            .CustomSchemaIds(type => type.FullName?.Replace("+", "_"))
+        );
 
         var app = builder.Build();
 

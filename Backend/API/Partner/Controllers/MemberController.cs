@@ -40,7 +40,7 @@ public class ClsMemberController : Controller
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsMemberInput member)
+    public async Task<ActionResult> CreateOneAsync([FromForm] Business.Partner.Inputs.ClsMemberInput member)
     {
         await _MemberService.CreateOneAsync(member, new Database.Partner.Contexts.ClsMemberContext
         {

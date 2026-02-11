@@ -13,57 +13,6 @@ DROP TABLE IF EXISTS "Images",
 "VehicleModels",
 "VehicleModelGalleries";
 
-DROP TYPE IF EXISTS "STATUS" CASCADE;
-DROP TYPE IF EXISTS "HISTORY_ACTION" CASCADE;
-DROP TYPE IF EXISTS "HISTORY_ENTITY" CASCADE;
-DROP TYPE IF EXISTS "PERMISSION" CASCADE;
-DROP TYPE IF EXISTS "VEHICLE_MODEL_CATEGORY" CASCADE;
-
-CREATE TYPE "STATUS" AS ENUM ('ACTIVE', 'INACTIVE');
-
-CREATE TYPE "HISTORY_ACTION" AS ENUM ('CREATE', 'UPDATE', 'DELETE');
-
-CREATE TYPE "HISTORY_ENTITY" AS ENUM (
-    'PARTNERS',
-    'PARTNER_ROLES',
-    'BRANCHES',
-    'MEMBERS',
-    'VEHICLE_MODELS'
-);
-
-CREATE TYPE "PERMISSION" AS ENUM (
-    'PARTNER_READ',
-    'PARTNER_UPDATE',
-    'PARTNER_DELETE',
-    'ROLES_CREATE',
-    'ROLES_READ',
-    'ROLES_UPDATE',
-    'ROLES_DELETE',
-    'BRANCHES_CREATE',
-    'BRANCHES_READ',
-    'BRANCHES_UPDATE',
-    'BRANCHES_DELETE',
-    'MEMBERS_CREATE',
-    'MEMBERS_READ',
-    'MEMBERS_UPDATE',
-    'MEMBERS_DELETE',
-    'VEHICLE_MODELS_CREATE',
-    'VEHICLE_MODELS_READ',
-    'VEHICLE_MODELS_UPDATE',
-    'VEHICLE_MODELS_DELETE'
-);
-
-CREATE TYPE "VEHICLE_MODEL_CATEGORY" AS ENUM (
-    'CAR',
-    'VAN',
-    'TRUCK',
-    'MOTORCYCLE',
-    'BOAT',
-    'YACHT',
-    'JET_SKI',
-    'HELICOPTER'
-);
-
 CREATE TABLE
     "Images" ("Id" TEXT PRIMARY KEY, "Url" TEXT NOT NULL);
 
@@ -88,7 +37,7 @@ CREATE TABLE
 CREATE TABLE
     "Permissions" (
         "Uuid" UUID PRIMARY KEY,
-        "Type" "PERMISSION" NOT NULL,
+        "Type" INT NOT NULL,
         "IsAdmin" BOOLEAN NOT NULL,
         UNIQUE ("Type", "IsAdmin")
     );
@@ -104,8 +53,8 @@ CREATE TABLE
 CREATE TABLE
     "Histories" (
         "Uuid" UUID PRIMARY KEY,
-        "Action" "HISTORY_ACTION" NOT NULL,
-        "Entity" "HISTORY_ENTITY" NOT NULL,
+        "Action" INT NOT NULL,
+        "Entity" INT NOT NULL,
         "EntityUuid" UUID NOT NULL
     );
 
@@ -158,7 +107,7 @@ CREATE TABLE
         "PartnerUuid" UUID NOT NULL REFERENCES "Partners" ("Uuid"),
         "RoleUuid" UUID NOT NULL REFERENCES "Roles" ("Uuid"),
         "AssignedCount" INTEGER NOT NULL,
-        "Status" "STATUS" NOT NULL,
+        "Status" INT NOT NULL,
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
@@ -175,7 +124,7 @@ CREATE TABLE
         "PhoneNumber" TEXT NOT NULL,
         "Email" TEXT NOT NULL,
         "MemberCount" INTEGER NOT NULL,
-        "Status" "STATUS" NOT NULL,
+        "Status" INT NOT NULL,
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
@@ -187,13 +136,13 @@ CREATE TABLE
     "Members" (
         "Uuid" UUID PRIMARY KEY,
         "PartnerUuid" UUID NOT NULL REFERENCES "Partners" ("Uuid"),
-        "RoleUuid" UUID NOT NULL REFERENCES "Roles" ("Uuid"),
+        "RoleUuid" UUID NOT NULL REFERENCES "PartnerRoles" ("Uuid"),
         "BranchUuid" UUID NOT NULL REFERENCES "Branches" ("Uuid"),
         "AvatarId" TEXT REFERENCES "Images" ("Id"),
         "Username" TEXT NOT NULL,
         "Email" TEXT NOT NULL UNIQUE,
         "Password" TEXT NOT NULL,
-        "Status" "STATUS" NOT NULL,
+        "Status" INT NOT NULL,
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
@@ -219,7 +168,7 @@ CREATE TABLE
         "ThumbnailId" TEXT REFERENCES "Images" ("Id"),
         "Name" TEXT NOT NULL,
         "Description" TEXT NOT NULL,
-        "Category" "VEHICLE_MODEL_CATEGORY" NOT NULL,
+        "Category" INT NOT NULL,
         "Manufacturer" TEXT NOT NULL,
         "MarketLaunch" DATE NOT NULL,
         "Capacity" INTEGER NOT NULL,
@@ -228,7 +177,7 @@ CREATE TABLE
         "Price" DECIMAL(10, 2) NOT NULL,
         "Discount" DECIMAL(5, 2) NOT NULL,
         "Tags" TEXT NOT NULL,
-        "Status" "STATUS" NOT NULL,
+        "Status" INT NOT NULL,
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,

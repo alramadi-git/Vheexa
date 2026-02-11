@@ -286,6 +286,7 @@ public class ClsMemberRepository
             !partnerMember.IsDeleted
         );
 
+
         if (filter.RoleUuids.Length > 0) membersQuery = membersQuery.Where(member => filter.RoleUuids.Contains(member.RoleUuid));
         if (filter.BranchUuids.Length > 0) membersQuery = membersQuery.Where(member => filter.BranchUuids.Contains(member.BranchUuid));
 

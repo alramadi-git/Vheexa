@@ -16,7 +16,7 @@ public class ClsVehicleModelController : Controller
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> CreateOneAsync([FromBody] Business.Partner.Inputs.ClsVehicleModelInput vehicleModel)
+    public async Task<ActionResult> CreateOneAsync([FromForm] Business.Partner.Inputs.ClsVehicleModelInput vehicleModel)
     {
         await _VehicleModelService.CreateOneAsync(vehicleModel, new Database.Partner.Contexts.ClsMemberContext
         {
