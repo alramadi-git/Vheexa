@@ -6,7 +6,7 @@ import { eStatusService } from "./enums/status";
 
 const zMemberCreate = z
   .object({
-    avatar: z.nullable(
+    avatar: z.optional(
       z
         .file()
         .max(300 * 1024 , "avatar must be at most 300 KB.")

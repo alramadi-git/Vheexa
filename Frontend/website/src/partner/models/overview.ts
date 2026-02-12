@@ -16,7 +16,7 @@ type tOverviewModel = {
     members: tEntityOverviewModel;
     vehicleModels: tEntityOverviewModel;
   };
-  groupedCounts: {
+  groupCounts: {
     permissionsByRole: tEntityCountModel[];
     membersByRole: tEntityCountModel[];
     membersByBranch: tEntityCountModel[];

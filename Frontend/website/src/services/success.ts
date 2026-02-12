@@ -1,9 +1,9 @@
-import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tSuccessModel, tPaginatedModel } from "@/models/success";
 
 type tSuccessService<tData> = tSuccessModel<tData> & {
   isSuccess: true;
 };
-type tPaginatedSuccessService<tData> = tPaginatedSuccessModel<tData> & {
+type tPaginatedSuccessService<tData> = tPaginatedModel<tData> & {
   isSuccess: true;
 };
 

@@ -103,13 +103,16 @@ export default function Filter() {
 
     setValue("roleUuids", roleUuids);
     setValue("branchUuids", branchUuids);
+
     Promise.all([
-      roleUuids.length !== 0 ? memberService.readRoles(roleUuids) : undefined,
-      branchUuids.length !== 0
+      roleUuids.length > 0
+        ? memberService.readRoles(roleUuids)
+        : new Promise((resolve) => resolve(null)),
+      branchUuids.length > 0
         ? memberService.readBranches(branchUuids)
-        : undefined,
+        : new Promise((resolve) => resolve(null)),
     ]).then(([rolesResult, branchesResult]) => {
-      if (rolesResult !== undefined) {
+      if (rolesResult !== null) {
         if (!rolesResult.isSuccess) {
           toast.custom(() => (
             <Toast
@@ -120,15 +123,18 @@ export default function Filter() {
 
           setValue("roleUuids", []);
         } else
+          setValue("roleUuids", [
+            rolesResult.data.map((role: tOptionModel) => role.uuid),
+          ]);
           rolesRef.current?.change(
-            rolesResult.data.map((option) => ({
+            rolesResult.data.map((option: tOptionModel) => ({
               value: option.uuid,
               label: option.name,
             })),
           );
       }
 
-      if (branchesResult !== undefined) {
+      if (branchesResult !== null) {
         if (!branchesResult.isSuccess) {
           toast.custom(() => (
             <Toast
@@ -139,12 +145,15 @@ export default function Filter() {
 
           setValue("branchUuids", []);
         } else
-          branchesRef.current?.change(
-            branchesResult.data.map((option) => ({
-              value: option.uuid,
-              label: option.name,
-            })),
-          );
+          setValue("branchUuids", [
+            branchesResult.data.map((branch: tOptionModel) => branch.uuid),
+          ]);
+        branchesRef.current?.change(
+          branchesResult.data.map((option: tOptionModel) => ({
+            value: option.uuid,
+            label: option.name,
+          })),
+        );
       }
     });
 

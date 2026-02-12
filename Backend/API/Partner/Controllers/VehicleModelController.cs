@@ -5,7 +5,7 @@ using Business.Partner.Filters;
 namespace API.Partner.Controllers;
 
 [ApiController]
-[Route("api/partner/vehicle-models")]
+[Route("api/partner/dashboard/vehicle-models")]
 public class ClsVehicleModelController : Controller
 {
     private readonly Business.Partner.Services.ClsVehicleModelService _VehicleModelService;

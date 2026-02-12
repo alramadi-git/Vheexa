@@ -34,6 +34,8 @@ export default function useService({ serviceRole }: tUseServiceProps) {
     try {
       return await callback();
     } catch (error: unknown) {
+      console.error(error);
+
       let message: string =
         error instanceof ZodError
           ? "Validation error."

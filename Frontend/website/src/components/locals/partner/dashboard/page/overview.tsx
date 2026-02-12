@@ -50,7 +50,7 @@ export default function Overview() {
         <Fragment>
           <Businesses businesses={result.data.entitiesOverview} />
           <Separator />
-          <Breakdowns breakdowns={result.data.groupedCounts} />
+          <Breakdowns breakdowns={result.data.groupCounts} />
           <Separator />
           <VehicleModelPriceDistribution
             vehicleModelPriceDistribution={
@@ -218,7 +218,7 @@ function Businesses({ businesses }: tBusinessesProps) {
 }
 
 type tBreakdownsProps = {
-  breakdowns: tOverviewModel["groupedCounts"];
+  breakdowns: tOverviewModel["groupCounts"];
 };
 function Breakdowns({ breakdowns }: tBreakdownsProps) {
   const tBreakdowns = useTranslations(

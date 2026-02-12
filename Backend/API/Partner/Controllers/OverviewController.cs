@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Partner.Controllers;
 
 [ApiController]
-[Route("api/partner/overview")]
+[Route("api/partner/dashboard/overview")]
 public class ClsOverviewController : Controller
 {
     private readonly Business.Partner.Services.ClsOverviewService _OverviewService;

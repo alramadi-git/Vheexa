@@ -4,7 +4,7 @@ import useMembers from "@/partner/hooks/member";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { tOptionModel } from "@/partner/models/option";
 
@@ -266,7 +266,7 @@ function AddNew() {
               control={control}
               name="avatar"
               render={({
-                field: { onChange: setValue },
+                field: {  onChange: setValue },
                 fieldState: { invalid, error },
               }) => (
                 <Field>
@@ -294,7 +294,7 @@ function AddNew() {
                 control={control}
                 name="username"
                 render={({
-                  field: { value, onChange: setValue },
+                  field: {  onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
                   <Field>
@@ -310,7 +310,6 @@ function AddNew() {
                         id={`${id}-username`}
                         aria-invalid={invalid}
                         required
-                        value={value}
                         placeholder={tAddNew(
                           "content.form.username.placeholder",
                         )}
@@ -587,7 +586,7 @@ function AddNew() {
             control={control}
             name="status"
             render={({
-              field: { value, onChange: setValue },
+              field: {  onChange: setValue },
               fieldState: { invalid, error },
             }) => (
               <Field>
@@ -604,9 +603,6 @@ function AddNew() {
                     id={`${id}-status`}
                     isInvalid={invalid}
                     placeholder={tAddNew("content.form.status.placeholder")}
-                    defaultValue={statuses.find(
-                      (status) => status.value === value.toString(),
-                    )}
                     onSelect={(option) =>
                       setValue(option && Number(option.value))
                     }

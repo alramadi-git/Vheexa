@@ -70,6 +70,23 @@ public class Program
             .CustomSchemaIds(type => type.FullName?.Replace("+", "_"))
         );
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("FrontendPolicy", policy =>
+            {
+                if (builder.Environment.IsDevelopment())
+                    policy
+                    .WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                if (builder.Environment.IsProduction())
+                    policy
+                    .WithOrigins("https://www.vheexa.vercel.app")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -80,6 +97,8 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+
+        app.UseCors("FrontendPolicy");
 
         app.UseAuthorization();
 

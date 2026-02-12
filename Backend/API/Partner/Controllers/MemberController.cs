@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-using Business.Filters;
-using Business.Partner.Filters;
-
 namespace API.Partner.Controllers;
 
 [ApiController]
-[Route("api/partner/members")]
+[Route("api/partner/dashboard/members")]
 public class ClsMemberController : Controller
 {
     private readonly Business.Partner.Services.ClsMemberService _MemberService;
@@ -14,6 +11,18 @@ public class ClsMemberController : Controller
     public ClsMemberController(Business.Partner.Services.ClsMemberService memberService)
     {
         _MemberService = memberService;
+    }
+
+    [HttpPost("")]
+    public async Task<ActionResult> CreateOneAsync([FromForm] Business.Partner.Inputs.ClsMemberInput member)
+    {
+        await _MemberService.CreateOneAsync(member, new Database.Partner.Contexts.ClsMemberContext
+        {
+            Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
+            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
+        });
+
+        return Created();
     }
 
     [HttpGet("options/roles")]
@@ -39,18 +48,6 @@ public class ClsMemberController : Controller
         return Ok(branchOptions);
     }
 
-    [HttpPost("")]
-    public async Task<ActionResult> CreateOneAsync([FromForm] Business.Partner.Inputs.ClsMemberInput member)
-    {
-        await _MemberService.CreateOneAsync(member, new Database.Partner.Contexts.ClsMemberContext
-        {
-            Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
-        });
-
-        return Created();
-    }
-
     [HttpDelete("{uuid}")]
     public async Task<ActionResult> DeleteOneAsync([FromRoute] Guid uuid)
     {
@@ -64,7 +61,7 @@ public class ClsMemberController : Controller
     }
 
     [HttpGet("options/roles/search")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchRolesAsync([FromQuery] ClsOptionFilterFilter filter, [FromQuery] ClsOptionPaginationFilter pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchRolesAsync([FromQuery] Business.Partner.Filters.ClsOptionFilterFilter filter, [FromQuery] Business.Partner.Filters.ClsOptionPaginationFilter pagination)
     {
         var roleOptions = await _MemberService.SearchRolesAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -75,7 +72,7 @@ public class ClsMemberController : Controller
         return Ok(roleOptions);
     }
     [HttpGet("options/branches/search")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchBranchesAsync([FromQuery] ClsOptionFilterFilter filter, [FromQuery] ClsOptionPaginationFilter pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsOptionModel>>> SearchBranchesAsync([FromQuery] Business.Partner.Filters.ClsOptionFilterFilter filter, [FromQuery] Business.Partner.Filters.ClsOptionPaginationFilter pagination)
     {
         var branchOptions = await _MemberService.SearchBranchesAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {
@@ -87,7 +84,7 @@ public class ClsMemberController : Controller
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>>> SearchAsync([FromQuery] ClsMemberFilter filter, [FromQuery] ClsPaginationFilter pagination)
+    public async Task<ActionResult<Database.Models.ClsPaginatedModel<Database.Partner.Models.ClsMemberModel>>> SearchAsync([FromQuery] Business.Partner.Filters.ClsMemberFilter filter, [FromQuery] Business.Filters.ClsPaginationFilter pagination)
     {
         var members = await _MemberService.SearchAsync(filter, pagination, new Database.Partner.Contexts.ClsMemberContext
         {

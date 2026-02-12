@@ -6,7 +6,7 @@ using Business.Partner.Filters;
 namespace API.Partner.Controllers;
 
 [ApiController]
-[Route("api/partner/branches")]
+[Route("api/partner/dashboard/branches")]
 public class ClsBranchController : Controller
 {
     private readonly Business.Partner.Services.ClsBranchService _BranchService;

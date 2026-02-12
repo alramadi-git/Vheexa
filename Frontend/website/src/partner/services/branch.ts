@@ -24,7 +24,7 @@ import { tBranchModel } from "@/partner/models/branch";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
 
 export default function useBranchService() {
@@ -37,7 +37,7 @@ export default function useBranchService() {
     return await service.catch<null>(async () => {
       zBranchCreate.parse(branch);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: null,
@@ -45,7 +45,7 @@ export default function useBranchService() {
       }
 
       const response = await service.fetch.post(
-        "/partner/dashboard/branches",
+        "/api/partner/dashboard/branches",
         JSON.stringify(branch),
         token,
       );
@@ -60,58 +60,13 @@ export default function useBranchService() {
       };
     });
   }
-  async function read(
-    uuid: tUuid,
-  ): Promise<tSuccessService<tBranchModel> | tErrorService> {
-    return await service.catch<tBranchModel>(async () => {
-      zUuid.parse(uuid);
-
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: {
-            uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-            location: {
-              country: "United States",
-              city: "New York",
-              street: "123 Main Street",
-              latitude: 40.7128,
-              longitude: -74.006,
-            },
-            name: "New York Headquarters",
-            phoneNumber: "+12125550123",
-            email: "ny.headquarters@vheexa.com",
-            memberCount: 22,
-            status: eStatusModel.active,
-            createdAt: "2023-06-12T10:30:00Z",
-            updatedAt: "2024-11-30T14:22:10Z",
-          },
-        };
-      }
-
-      const response = await service.fetch.get(
-        `/partner/dashboard/branches/${uuid}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
-      }
-
-      const result: tSuccessModel<tBranchModel> = await response.json();
-      return {
-        isSuccess: true,
-        ...result,
-      };
-    });
-  }
   async function _delete(
     uuid: tUuid,
   ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: null,
@@ -119,7 +74,7 @@ export default function useBranchService() {
       }
 
       const response = await service.fetch.delete(
-        `/partner/dashboard/branches/${uuid}`,
+        `/api/partner/dashboard/branches/${uuid}`,
         token,
       );
 
@@ -141,7 +96,7 @@ export default function useBranchService() {
       zBranchFilter.parse(filter);
       zPagination.parse(pagination);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: [
@@ -271,15 +226,15 @@ export default function useBranchService() {
 
       const clsQuery: ClsQuery = new ClsQuery();
 
-      clsQuery.set("Filter.Search", filter.search);
+      clsQuery.set("Search", filter.search);
 
-      clsQuery.set("Filter.Status", filter.status?.toString());
+      clsQuery.set("Status", filter.status?.toString());
 
-      clsQuery.set("Pagination.Page", pagination.page?.toString());
-      clsQuery.set("Pagination.PageSize", pagination.pageSize?.toString());
+      clsQuery.set("Page", pagination.page?.toString());
+      clsQuery.set("PageSize", pagination.pageSize?.toString());
 
       const response = await service.fetch.get(
-        `/partner/dashboard/branches${clsQuery.toString()}`,
+        `/api/partner/dashboard/branches${clsQuery.toString()}`,
         token,
       );
 
@@ -287,8 +242,7 @@ export default function useBranchService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginatedSuccessModel<tBranchModel> =
-        await response.json();
+      const result: tPaginatedModel<tBranchModel> = await response.json();
       return {
         isSuccess: true,
         ...result,
@@ -298,7 +252,6 @@ export default function useBranchService() {
 
   return {
     create,
-    read,
     delete: _delete,
     search,
   };

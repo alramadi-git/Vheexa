@@ -131,7 +131,7 @@ public class ClsOverviewRepository
 
         return new ClsOverviewModel
         {
-            EntityOverviews = new ClsOverviewModel.ClsEntityOverviewsModel
+            EntitiesOverview = new ClsOverviewModel.ClsEntityOverviewsModel
             {
                 Roles = new ClsOverviewModel.ClsEntityOverviewsModel.ClsEntityOverviewModel
                 {
@@ -158,7 +158,7 @@ public class ClsOverviewRepository
                     Total = activeVehicleModelsCount + inactiveVehicleModelsCount
                 }
             },
-            GroupedCounts = new ClsOverviewModel.ClsEntitiesCountModel
+            GroupCounts = new ClsOverviewModel.ClsEntitiesCountModel
             {
                 PermissionsByRole = permissionsByRole,
                 MembersByBranch = membersByBranch,

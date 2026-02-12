@@ -6,7 +6,7 @@ using Business.Partner.Filters;
 namespace API.Partner.Controllers;
 
 [ApiController]
-[Route("api/partner/roles")]
+[Route("api/partner/dashboard/roles")]
 public class ClsRoleController : Controller
 {
     private readonly Business.Partner.Services.ClsRoleService _RoleService;

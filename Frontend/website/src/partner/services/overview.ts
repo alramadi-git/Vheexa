@@ -9,16 +9,17 @@ import { tOverviewModel } from "@/partner/models/overview";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessModel } from "@/models/success";
 import { tSuccessService } from "@/services/success";
 
 export default function useOverview() {
   const { token } = useToken();
   const service = usePartnerService();
 
-  async function read(): Promise<tSuccessService<tOverviewModel> | tErrorService> {
+  async function read(): Promise<
+    tSuccessService<tOverviewModel> | tErrorService
+  > {
     return await service.catch<tOverviewModel>(async () => {
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: {
@@ -44,7 +45,7 @@ export default function useOverview() {
                 total: 170,
               },
             },
-            groupedCounts: {
+            groupCounts: {
               permissionsByRole: [
                 { groupName: "Inventory Management", count: 45 },
                 { groupName: "Customer Management", count: 38 },
@@ -88,7 +89,7 @@ export default function useOverview() {
       }
 
       const response = await service.fetch.get(
-        "/partner/dashboard/overview",
+        "/api/partner/dashboard/overview",
         token,
       );
 
@@ -96,10 +97,10 @@ export default function useOverview() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const data: tSuccessModel<tOverviewModel> = await response.json();
+      const data: tOverviewModel = await response.json();
       return {
         isSuccess: true,
-        data: data.data,
+        data,
       };
     });
   }

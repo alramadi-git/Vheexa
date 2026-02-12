@@ -26,13 +26,14 @@ import { ClsQuery } from "@/libraries/query";
 import { eEnvironment } from "@/enums/environment";
 
 import { eStatusModel } from "../models/enums/status";
+import { ePermissionModel } from "../models/enums/permission";
 
 import { tMemberModel } from "@/partner/models/member";
 import { tOptionModel } from "@/partner/models/option";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
 
 export default function useMemberService() {
@@ -45,7 +46,7 @@ export default function useMemberService() {
     return await service.catch<null>(async () => {
       zMemberCreate.parse(member);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: null,
@@ -58,15 +59,15 @@ export default function useMemberService() {
         formData.append("avatar", member.avatar);
       }
 
-      formData.append("role", member.roleUuid);
-      formData.append("branch", member.branchUuid);
+      formData.append("roleUuid", member.roleUuid);
+      formData.append("branchUuid", member.branchUuid);
       formData.append("username", member.username);
       formData.append("email", member.email);
       formData.append("password", member.password);
       formData.append("status", member.status.toString());
 
       const response = await service.fetch.post(
-        "/partner/dashboard/members",
+        "/api/partner/dashboard/members",
         formData,
         token,
       );
@@ -81,69 +82,14 @@ export default function useMemberService() {
       };
     });
   }
-  async function read(
-    uuid: tUuid,
-  ): Promise<tSuccessService<tMemberModel> | tErrorService> {
-    return await service.catch<tMemberModel>(async () => {
-      zUuid.parse(uuid);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: {
-            uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-            avatar: null,
-            username: "james wilson",
-            email: "james.wilson@partnerfleet.com",
-            role: {
-              name: "Vehicle Operator",
-              permissions: [
-                "Vehicle Instances Create",
-                "Vehicle Instances Update",
-              ],
-            },
-            branch: {
-              location: {
-                country: "United States",
-                city: "Austin",
-                street: "201 E 6th St",
-                latitude: 30.267153,
-                longitude: -97.743094,
-              },
-              name: "Austin Downtown Branch",
-              phoneNumber: "+14155552671",
-              email: "austin.downtown@partnerfleet.com",
-            },
-            status: eStatusModel.active,
-            createdAt: "2024-01-10T08:30:00Z",
-            updatedAt: "2024-12-01T09:15:22Z",
-          },
-        };
-      }
-
-      const response = await service.fetch.get(
-        `/partner/dashboard/members/${uuid}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
-      }
-
-      const result: tSuccessModel<tMemberModel> = await response.json();
-      return {
-        isSuccess: true,
-        ...result,
-      };
-    });
-  }
   async function readRoles(
     uuids: tUuid[],
   ): Promise<tSuccessService<tOptionModel[]> | tErrorService> {
     return await service.catch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: [
@@ -161,10 +107,10 @@ export default function useMemberService() {
 
       const clsQuery = new ClsQuery();
 
-      clsQuery.set("filter.uuids", uuids);
+      clsQuery.set("Uuids", uuids);
 
       const response = await service.fetch.get(
-        `/partner/dashboard/members/options/roles/uuids${clsQuery.toString()}`,
+        `/api/partner/dashboard/members/options/roles${clsQuery.toString()}`,
         token,
       );
 
@@ -172,10 +118,10 @@ export default function useMemberService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const data: tSuccessModel<tOptionModel[]> = await response.json();
+      const result: tOptionModel[] = await response.json();
       return {
         isSuccess: true,
-        data: data.data,
+        data: result,
       };
     });
   }
@@ -185,7 +131,7 @@ export default function useMemberService() {
     return await service.catch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: [
@@ -223,10 +169,10 @@ export default function useMemberService() {
 
       const clsQuery = new ClsQuery();
 
-      clsQuery.set("filter.uuids", uuids);
+      clsQuery.set("Uuids", uuids);
 
       const response = await service.fetch.get(
-        `/partner/dashboard/members/options/branches/uuids${clsQuery.toString()}`,
+        `/api/partner/dashboard/members/options/branches${clsQuery.toString()}`,
         token,
       );
 
@@ -234,10 +180,10 @@ export default function useMemberService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const data: tSuccessModel<tOptionModel[]> = await response.json();
+      const result: tOptionModel[] = await response.json();
       return {
         isSuccess: true,
-        data: data.data,
+        data: result,
       };
     });
   }
@@ -247,7 +193,7 @@ export default function useMemberService() {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: null,
@@ -255,7 +201,7 @@ export default function useMemberService() {
       }
 
       const response = await service.fetch.delete(
-        `/partner/dashboard/members/${uuid}`,
+        `/api/partner/dashboard/members/${uuid}`,
         token,
       );
 
@@ -269,6 +215,119 @@ export default function useMemberService() {
       };
     });
   }
+
+  async function searchRoles(
+    filter: tOptionFilter,
+    pagination: tOptionPagination,
+  ): Promise<tPaginatedSuccessService<tOptionModel> | tErrorService> {
+    return await service.catch<tOptionModel>(async () => {
+      zOptionFilter.parse(filter);
+      zOptionPagination.parse(pagination);
+
+      if (process.env.NODE_ENV !== eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: [
+            {
+              uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+              name: "Owner",
+            },
+            {
+              uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              name: "Manager",
+            },
+          ],
+          pagination: { page: 1, pageSize: 10, totalItems: 2 },
+        };
+      }
+
+      const clsQuery = new ClsQuery();
+
+      clsQuery.set("Search", filter.search);
+      clsQuery.set("Page", pagination.page?.toString());
+
+      const response = await service.fetch.get(
+        `/api/partner/dashboard/members/options/roles/search${clsQuery.toString()}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new ClsErrorService(await response.text(), response.status);
+      }
+
+      const result: tPaginatedModel<tOptionModel> = await response.json();
+      return {
+        isSuccess: true,
+        ...result,
+      };
+    });
+  }
+  async function searchBranches(
+    filter: tOptionFilter,
+    pagination: tOptionPagination,
+  ): Promise<tPaginatedSuccessService<tOptionModel> | tErrorService> {
+    return await service.catch<tOptionModel>(async () => {
+      zOptionFilter.parse(filter);
+      zOptionPagination.parse(pagination);
+
+      if (process.env.NODE_ENV !== eEnvironment.development) {
+        return {
+          isSuccess: true,
+          data: [
+            {
+              uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+              name: "New York Headquarters",
+            },
+            {
+              uuid: "550e8400-e29b-41d4-a716-446655440000",
+              name: "Austin Downtown Branch",
+            },
+            {
+              uuid: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+              name: "Los Angeles West Branch",
+            },
+            {
+              uuid: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
+              name: "Chicago Lakeside Hub",
+            },
+            {
+              uuid: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+              name: "Miami Beach Office",
+            },
+            {
+              uuid: "123e4567-e89b-12d3-a456-426614174000",
+              name: "Seattle Downtown Center",
+            },
+            {
+              uuid: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+              name: "Denver Mountain Hub",
+            },
+          ],
+          pagination: { page: 1, pageSize: 10, totalItems: 2 },
+        };
+      }
+
+      const clsQuery = new ClsQuery();
+
+      clsQuery.set("Search", filter.search);
+      clsQuery.set("Page", pagination.page?.toString());
+
+      const response = await service.fetch.get(
+        `/api/partner/dashboard/members/options/branches/search${clsQuery.toString()}`,
+        token,
+      );
+
+      if (!response.ok) {
+        throw new ClsErrorService(await response.text(), response.status);
+      }
+
+      const result: tPaginatedModel<tOptionModel> = await response.json();
+      return {
+        isSuccess: true,
+        ...result,
+      };
+    });
+  }
   async function search(
     filter: tMemberFilter,
     pagination: tPagination,
@@ -277,7 +336,7 @@ export default function useMemberService() {
       zMemberFilter.parse(filter);
       zPagination.parse(pagination);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: [
@@ -289,8 +348,8 @@ export default function useMemberService() {
               role: {
                 name: "Vehicle Operator",
                 permissions: [
-                  "Vehicle Instances Create",
-                  "Vehicle Instances Update",
+                  ePermissionModel.VehicleModelsCreate,
+                  ePermissionModel.VehicleModelsUpdate,
                 ],
               },
               branch: {
@@ -316,7 +375,10 @@ export default function useMemberService() {
               email: "lena.schmidt@partnerfleet.eu",
               role: {
                 name: "HR Specialist",
-                permissions: ["Members Create", "Members Update"],
+                permissions: [
+                  ePermissionModel.MembersCreate,
+                  ePermissionModel.MembersUpdate,
+                ],
               },
               branch: {
                 location: {
@@ -341,7 +403,10 @@ export default function useMemberService() {
               email: "michael.toronto@partnerfleet.ca",
               role: {
                 name: "Branch Coordinator",
-                permissions: ["Branches Read", "Branches Update"],
+                permissions: [
+                  ePermissionModel.BranchesCreate,
+                  ePermissionModel.BranchesUpdate,
+                ],
               },
               branch: {
                 location: {
@@ -367,8 +432,8 @@ export default function useMemberService() {
               role: {
                 name: "Fleet Supervisor",
                 permissions: [
-                  "Vehicle Instances Read",
-                  "Vehicle Models Update",
+                  ePermissionModel.VehicleModelsCreate,
+                  ePermissionModel.VehicleModelsUpdate,
                 ],
               },
               branch: {
@@ -394,7 +459,10 @@ export default function useMemberService() {
               email: "ahmed.dubai@partnerfleet.ae",
               role: {
                 name: "Partner Administrator",
-                permissions: ["Partner Update", "Roles Create"],
+                permissions: [
+                  ePermissionModel.PartnerUpdate,
+                  ePermissionModel.RolesCreate,
+                ],
               },
               branch: {
                 location: {
@@ -419,7 +487,10 @@ export default function useMemberService() {
               email: "carlos.sp@partnerfleet.br",
               role: {
                 name: "HR Specialist",
-                permissions: ["Members Delete", "Members Read"],
+                permissions: [
+                  ePermissionModel.MembersUpdate,
+                  ePermissionModel.MembersDelete,
+                ],
               },
               branch: {
                 location: {
@@ -445,8 +516,8 @@ export default function useMemberService() {
               role: {
                 name: "Vehicle Operator",
                 permissions: [
-                  "Vehicle Models Create",
-                  "Vehicle Instances Create",
+                  ePermissionModel.VehicleModelsCreate,
+                  ePermissionModel.VehicleModelsUpdate,
                 ],
               },
               branch: {
@@ -472,7 +543,10 @@ export default function useMemberService() {
               email: "thomas.munich@partnerfleet.eu",
               role: {
                 name: "Branch Coordinator",
-                permissions: ["Branches Create", "Branches Delete"],
+                permissions: [
+                  ePermissionModel.BranchesCreate,
+                  ePermissionModel.BranchesDelete,
+                ],
               },
               branch: {
                 location: {
@@ -498,8 +572,8 @@ export default function useMemberService() {
               role: {
                 name: "Fleet Supervisor",
                 permissions: [
-                  "Vehicle Instances Update",
-                  "Vehicle Models Read",
+                  ePermissionModel.VehicleModelsRead,
+                  ePermissionModel.VehicleModelsUpdate,
                 ],
               },
               branch: {
@@ -525,7 +599,10 @@ export default function useMemberService() {
               email: "anna.melbourne@partnerfleet.com.au",
               role: {
                 name: "HR Specialist",
-                permissions: ["Members Create", "Members Update"],
+                permissions: [
+                  ePermissionModel.MembersCreate,
+                  ePermissionModel.MembersUpdate,
+                ],
               },
               branch: {
                 location: {
@@ -550,19 +627,20 @@ export default function useMemberService() {
 
       const clsQuery = new ClsQuery();
 
-      clsQuery.set("Filter.Search", filter.search);
+      clsQuery.set("Search", filter.search);
 
-      clsQuery.set("Filter.Roles", filter.roleUuids);
+      console.log(filter.roleUuids)
+      clsQuery.set("RoleUuids", filter.roleUuids);
 
-      clsQuery.set("Filter.Branches", filter.branchUuids);
+      clsQuery.set("BranchUuids", filter.branchUuids);
 
-      clsQuery.set("Filter.Status", filter.status?.toString());
+      clsQuery.set("Status", filter.status?.toString());
 
-      clsQuery.set("Pagination.Page", pagination.page?.toString());
-      clsQuery.set("Pagination.PageSize", pagination.pageSize?.toString());
+      clsQuery.set("Page", pagination.page?.toString());
+      clsQuery.set("PageSize", pagination.pageSize?.toString());
 
       const response = await service.fetch.get(
-        `/partner/dashboard/members${clsQuery.toString()}`,
+        `/api/partner/dashboard/members${clsQuery.toString()}`,
         token,
       );
 
@@ -570,133 +648,16 @@ export default function useMemberService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginatedSuccessModel<tMemberModel> =
-        await response.json();
+      const result: tPaginatedModel<tMemberModel> = await response.json();
       return {
         isSuccess: true,
         ...result,
       };
     });
   }
-  async function searchRoles(
-    filter: tOptionFilter,
-    pagination: tOptionPagination,
-  ): Promise<tPaginatedSuccessService<tOptionModel> | tErrorService> {
-    return await service.catch<tOptionModel>(async () => {
-      zOptionFilter.parse(filter);
-      zOptionPagination.parse(pagination);
-
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: [
-            {
-              uuid: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
-              name: "Owner",
-            },
-            {
-              uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-              name: "Manager",
-            },
-          ],
-          pagination: { page: 1, pageSize: 10, totalItems: 2 },
-        };
-      }
-
-      const clsQuery = new ClsQuery();
-
-      clsQuery.set("Filter.Search", filter.search);
-      clsQuery.set("Pagination.Page", pagination.page?.toString());
-
-      const response = await service.fetch.get(
-        `/partner/dashboard/members/options/roles${clsQuery.toString()}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
-      }
-
-      const data: tPaginatedSuccessModel<tOptionModel> = await response.json();
-      return {
-        isSuccess: true,
-        data: data.data,
-        pagination: data.pagination,
-      };
-    });
-  }
-  async function searchBranches(
-    filter: tOptionFilter,
-    pagination: tOptionPagination,
-  ): Promise<tPaginatedSuccessService<tOptionModel> | tErrorService> {
-    return await service.catch<tOptionModel>(async () => {
-      zOptionFilter.parse(filter);
-      zOptionPagination.parse(pagination);
-
-
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: [
-            {
-              uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-              name: "New York Headquarters",
-            },
-            {
-              uuid: "550e8400-e29b-41d4-a716-446655440000",
-              name: "Austin Downtown Branch",
-            },
-            {
-              uuid: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
-              name: "Los Angeles West Branch",
-            },
-            {
-              uuid: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
-              name: "Chicago Lakeside Hub",
-            },
-            {
-              uuid: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-              name: "Miami Beach Office",
-            },
-            {
-              uuid: "123e4567-e89b-12d3-a456-426614174000",
-              name: "Seattle Downtown Center",
-            },
-            {
-              uuid: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-              name: "Denver Mountain Hub",
-            },
-          ],
-          pagination: { page: 1, pageSize: 10, totalItems: 2 },
-        };
-      }
-
-      const clsQuery = new ClsQuery();
-
-      clsQuery.set("Filter.Search", filter.search);
-      clsQuery.set("Pagination.Page", pagination.page?.toString());
-
-      const response = await service.fetch.get(
-        `/partner/dashboard/members/options/branches${clsQuery.toString()}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
-      }
-
-      const data: tPaginatedSuccessModel<tOptionModel> = await response.json();
-      return {
-        isSuccess: true,
-        data: data.data,
-        pagination: data.pagination,
-      };
-    });
-  }
 
   return {
     create,
-    read,
     readRoles,
     readBranches,
     delete: _delete,

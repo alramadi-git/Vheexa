@@ -39,7 +39,7 @@ public class ClsOverviewModel
         public decimal Average { get; set; }
         public ClsRangeModel[] Ranges { get; set; }
     }
-    public ClsEntityOverviewsModel EntityOverviews { get; set; }
-    public ClsEntitiesCountModel GroupedCounts { get; set; }
+    public ClsEntityOverviewsModel EntitiesOverview { get; set; }
+    public ClsEntitiesCountModel GroupCounts { get; set; }
     public ClsPriceDistributionModel VehicleModelPriceDistribution { get; set; }
 }

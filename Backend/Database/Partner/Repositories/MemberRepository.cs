@@ -210,7 +210,7 @@ public class ClsMemberRepository
             RoleOptionDto = roleOption,
             Score = Fuzz.Ratio(roleOption.Name, filter.Search)
         })
-        .Where(fuzzyRoleOption => fuzzyRoleOption.Score > 80)
+        .Where(fuzzyRoleOption => fuzzyRoleOption.Score > 20)
         .OrderByDescending(fuzzyRoleOption => fuzzyRoleOption.Score)
         .Select(fuzzyRoleOption => fuzzyRoleOption.RoleOptionDto)
         .ToArray();
@@ -254,7 +254,7 @@ public class ClsMemberRepository
             BranchOption = branchOption,
             Score = Fuzz.Ratio(branchOption.Name, filter.Search)
         })
-        .Where(fuzzyBranchOption => fuzzyBranchOption.Score > 80)
+        .Where(fuzzyBranchOption => fuzzyBranchOption.Score > 20)
         .OrderByDescending(fuzzyBranchOption => fuzzyBranchOption.Score)
         .Select(fuzzyBranchOption => fuzzyBranchOption.BranchOption)
         .ToArray();
@@ -341,7 +341,7 @@ public class ClsMemberRepository
                 Fuzz.Ratio(member.Email, filter.Search),
             }.Max()
         })
-        .Where(fuzzyMember => fuzzyMember.Score > 80)
+        .Where(fuzzyMember => fuzzyMember.Score > 20)
         .OrderByDescending(fuzzyMember => fuzzyMember.Score)
         .Select(fuzzyMember => fuzzyMember.Member)
         .ToArray();

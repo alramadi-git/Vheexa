@@ -25,7 +25,7 @@ import { tVehicleModelModel } from "@/partner/models/vehicle-model";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessModel, tPaginatedSuccessModel } from "@/models/success";
+import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
 
 export default function useVehicleModelService() {
@@ -38,7 +38,7 @@ export default function useVehicleModelService() {
     return await service.catch<null>(async () => {
       zVehicleModelCreate.parse(vehicleModel);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: null,
@@ -70,14 +70,12 @@ export default function useVehicleModelService() {
       formData.append("price", vehicleModel.price.toString());
       formData.append("discount", vehicleModel.discount.toString());
 
-      vehicleModel.tags.forEach((tag, index) =>
-        formData.append(`tags[${index}]`, tag),
-      );
+      formData.append("tags", vehicleModel.tags);
 
       formData.append("status", vehicleModel.status.toString());
 
       const response = await service.fetch.post(
-        "/partner/dashboard/vehicle-models",
+        "/api/partner/dashboard/vehicle-models",
         formData,
         token,
       );
@@ -92,63 +90,13 @@ export default function useVehicleModelService() {
       };
     });
   }
-  async function read(
-    uuid: tUuid,
-  ): Promise<tSuccessService<tVehicleModelModel> | tErrorService> {
-    return await service.catch<tVehicleModelModel>(async () => {
-      zUuid.parse(uuid);
-
-      if (process.env.NODE_ENV === eEnvironment.development) {
-        return {
-          isSuccess: true,
-          data: {
-            uuid: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-            thumbnail:
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/2022_Tesla_Model_S_%28Facelift%29_Plaid.png/1200px-2022_Tesla_Model_S_%28Facelift%29_Plaid.png",
-            gallery: [],
-            name: "Model S",
-            description:
-              "Luxury electric sedan with long-range battery and autopilot.",
-            category: eVehicleModelCategoryModel.car,
-            manufacturer: "Tesla",
-            marketLaunch: "2022-01-01T00:00:00.000Z",
-            capacity: 5,
-            transmission: "Automatic",
-            fuel: "Electric",
-            price: 180,
-            discount: 30,
-            tags: "electric, luxury, sedan, high-performance",
-            status: eStatusModel.active,
-            updatedAt: "2025-03-10T08:45:00Z",
-            createdAt: "2025-01-15T12:00:00Z",
-          },
-        };
-      }
-
-      const response = await service.fetch.get(
-        `/partner/dashboard/vehicle-models/${uuid}`,
-        token,
-      );
-
-      if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
-      }
-
-      const result: tSuccessModel<tVehicleModelModel> = await response.json();
-
-      return {
-        isSuccess: true,
-        ...result,
-      };
-    });
-  }
   async function _delete(
     uuid: tUuid,
   ): Promise<tSuccessService<null> | tErrorService> {
     return await service.catch<null>(async () => {
       zUuid.parse(uuid);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: null,
@@ -156,7 +104,7 @@ export default function useVehicleModelService() {
       }
 
       const response = await service.fetch.delete(
-        `/partner/dashboard/vehicle-models/${uuid}`,
+        `/api/partner/dashboard/vehicle-models/${uuid}`,
         token,
       );
 
@@ -178,7 +126,7 @@ export default function useVehicleModelService() {
       zVehicleModelFilter.parse(filter);
       zPagination.parse(pagination);
 
-      if (process.env.NODE_ENV === eEnvironment.development) {
+      if (process.env.NODE_ENV !== eEnvironment.development) {
         return {
           isSuccess: true,
           data: [
@@ -398,29 +346,29 @@ export default function useVehicleModelService() {
       }
 
       const clsQuery: ClsQuery = new ClsQuery();
-      clsQuery.set("Filter.Search", filter.search);
+      clsQuery.set("Search", filter.search);
 
       clsQuery.set(
-        "Filter.Categories",
+        "Categories",
         filter.categories.map((category) => category.toString()),
       );
 
-      clsQuery.set("Filter.Capacity.Min", filter.capacity.min?.toString());
-      clsQuery.set("Filter.Capacity.Max", filter.capacity.max?.toString());
+      clsQuery.set("Capacity.Min", filter.capacity.min?.toString());
+      clsQuery.set("Capacity.Max", filter.capacity.max?.toString());
 
-      clsQuery.set("Filter.Price.Min", filter.price.min?.toString());
-      clsQuery.set("Filter.Price.Max", filter.price.max?.toString());
+      clsQuery.set("Price.Min", filter.price.min?.toString());
+      clsQuery.set("Price.Max", filter.price.max?.toString());
 
-      clsQuery.set("Filter.Discount.Min", filter.discount.min?.toString());
-      clsQuery.set("Filter.Discount.Max", filter.discount.max?.toString());
+      clsQuery.set("Discount.Min", filter.discount.min?.toString());
+      clsQuery.set("Discount.Max", filter.discount.max?.toString());
 
-      clsQuery.set("Filter.Status", filter.status?.toString());
+      clsQuery.set("Status", filter.status?.toString());
 
-      clsQuery.set("Pagination.Page", pagination.page?.toString());
-      clsQuery.set("Pagination.PageSize", pagination.pageSize?.toString());
+      clsQuery.set("Page", pagination.page?.toString());
+      clsQuery.set("PageSize", pagination.pageSize?.toString());
 
       const response = await service.fetch.get(
-        `/partner/dashboard/vehicle-models${clsQuery.toString()}`,
+        `/api/partner/dashboard/vehicle-models${clsQuery.toString()}`,
         token,
       );
 
@@ -428,8 +376,7 @@ export default function useVehicleModelService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tPaginatedSuccessModel<tVehicleModelModel> =
-        await response.json();
+      const result: tPaginatedModel<tVehicleModelModel> = await response.json();
 
       return {
         isSuccess: true,
@@ -440,7 +387,6 @@ export default function useVehicleModelService() {
 
   return {
     create,
-    read,
     delete: _delete,
     search,
   };

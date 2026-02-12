@@ -58,7 +58,7 @@ import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
 import { tPaginatedSuccessService } from "@/services/success";
 import { tErrorService } from "@/services/error";
-import { tPaginatedSuccessModel } from "@/models/success";
+import { tPaginatedModel } from "@/models/success";
 
 type tGroup<gtOption extends tOption> = {
   value: string;
@@ -954,7 +954,7 @@ function FieldAsyncSelectLoading() {
 }
 
 type tPagination = {
-  pagination: tPaginatedSuccessModel<unknown>["pagination"];
+  pagination: tPaginatedModel<unknown>["pagination"];
   onPageChange?: (page: number) => void;
 };
 function Pagination({ pagination, onPageChange }: tPagination) {

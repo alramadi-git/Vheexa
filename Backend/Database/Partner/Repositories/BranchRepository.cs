@@ -183,7 +183,7 @@ public class ClsBranchRepository
                 }
                 .Max()
             })
-            .Where(fuzzyBranch => fuzzyBranch.Score > 80)
+            .Where(fuzzyBranch => fuzzyBranch.Score > 20)
             .OrderByDescending(fuzzyBranch => fuzzyBranch.Score)
             .Select(fuzzyBranch => fuzzyBranch.Branch)
             .ToArray();

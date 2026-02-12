@@ -231,7 +231,7 @@ public class ClsVehicleModelRepository
             }
             .Max()
         })
-        .Where(fuzzyVehicleModel => fuzzyVehicleModel.Score > 80)
+        .Where(fuzzyVehicleModel => fuzzyVehicleModel.Score > 20)
         .OrderByDescending(fuzzyVehicleModel => fuzzyVehicleModel.Score)
         .Select(fuzzyVehicleModel => fuzzyVehicleModel.VehicleModel)
         .ToArray();

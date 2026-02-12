@@ -20,7 +20,6 @@ import { tMemberAccountModel } from "@/partner/models/member-account";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessModel } from "@/models/success";
 import { tSuccessService } from "@/services/success";
 
 export default function useAuthenticationService() {
@@ -104,8 +103,11 @@ export default function useAuthenticationService() {
       }
 
       formData.append("handle", credentials.handle);
+      
       formData.append("name", credentials.organizationName);
+
       formData.append("phoneNumber", credentials.phoneNumber);
+
       formData.append("email", credentials.email);
 
       formData.append(
@@ -140,7 +142,7 @@ export default function useAuthenticationService() {
       formData.append("rememberMe", credentials.rememberMe.toString());
 
       const response = await service.fetch.post(
-        "/partner/authentication/register",
+        "/api/partner/authentication/register",
         formData,
       );
 
@@ -148,12 +150,12 @@ export default function useAuthenticationService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tSuccessModel<tAccountModel<tMemberAccountModel>> =
+      const result: tAccountModel<tMemberAccountModel> =
         await response.json();
 
       return {
         isSuccess: true,
-        ...result,
+        data: result,
       };
     });
   }
@@ -223,7 +225,7 @@ export default function useAuthenticationService() {
       }
 
       const response = await service.fetch.post(
-        "/partner/authentication/login",
+        "/api/partner/authentication/login",
         JSON.stringify(credentials),
       );
 
@@ -231,12 +233,12 @@ export default function useAuthenticationService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tSuccessModel<tAccountModel<tMemberAccountModel>> =
+      const result: tAccountModel<tMemberAccountModel> =
         await response.json();
 
       return {
         isSuccess: true,
-        ...result,
+        data: result,
       };
     });
   }
@@ -250,7 +252,7 @@ export default function useAuthenticationService() {
       }
 
       const response = await service.fetch.post(
-        "/partner/authentication/logout",
+        "/api/partner/authentication/logout",
         undefined,
         token ?? undefined,
       );

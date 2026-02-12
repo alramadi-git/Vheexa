@@ -206,7 +206,7 @@ public class ClsRoleRepository
                 RoleDto = roleDto,
                 Score = Fuzz.Ratio(roleDto.Name, filter.Name)
             })
-            .Where(fuzzyRoleDto => fuzzyRoleDto.Score > 80)
+            .Where(fuzzyRoleDto => fuzzyRoleDto.Score > 20)
             .OrderByDescending(fuzzyRoleDto => fuzzyRoleDto.Score)
             .Select(fuzzyRoleDto => fuzzyRoleDto.RoleDto)
             .ToArray();
