@@ -200,13 +200,15 @@ public class ClsRoleRepository
 
         if (filter.Name != null)
         {
+            var name = filter.Name.ToLower();
+
             roles = roles
             .Select(roleDto => new
             {
                 RoleDto = roleDto,
-                Score = Fuzz.Ratio(roleDto.Name, filter.Name)
+                Score = Fuzz.Ratio(roleDto.Name.ToLower(), name)
             })
-            .Where(fuzzyRoleDto => fuzzyRoleDto.Score > 20)
+            .Where(fuzzyRoleDto => fuzzyRoleDto.Score > 40)
             .OrderByDescending(fuzzyRoleDto => fuzzyRoleDto.Score)
             .Select(fuzzyRoleDto => fuzzyRoleDto.RoleDto)
             .ToArray();

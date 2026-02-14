@@ -169,21 +169,23 @@ public class ClsBranchRepository
 
         if (filter.Search != null)
         {
+            var search = filter.Search.ToLower();
+
             branches = branches
             .Select(branch => new
             {
                 Branch = branch,
                 Score = new int[]
                 {
-                    Fuzz.Ratio(branch.Name, filter.Search),
-                    Fuzz.Ratio(branch.Email, filter.Search),
-                    Fuzz.Ratio(branch.Location.Country, filter.Search),
-                    Fuzz.Ratio(branch.Location.City, filter.Search),
-                    Fuzz.Ratio(branch.Location.Street, filter.Search),
+                    Fuzz.Ratio(branch.Name.ToLower(), search),
+                    Fuzz.Ratio(branch.Email.ToLower(), search),
+                    Fuzz.Ratio(branch.Location.Country.ToLower(), search),
+                    Fuzz.Ratio(branch.Location.City.ToLower(), search),
+                    Fuzz.Ratio(branch.Location.Street.ToLower(), search),
                 }
                 .Max()
             })
-            .Where(fuzzyBranch => fuzzyBranch.Score > 20)
+            .Where(fuzzyBranch => fuzzyBranch.Score > 40)
             .OrderByDescending(fuzzyBranch => fuzzyBranch.Score)
             .Select(fuzzyBranch => fuzzyBranch.Branch)
             .ToArray();

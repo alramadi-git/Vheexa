@@ -76,7 +76,7 @@ public class ClsOverviewRepository
         {
             GroupName = partnerRole.Role.Name,
             Count = membersQuery
-            .Where(member => member.RoleUuid == partnerRole.RoleUuid)
+            .Where(member => member.Role.RoleUuid == partnerRole.RoleUuid)
             .Count()
         })
         .ToArrayAsync();

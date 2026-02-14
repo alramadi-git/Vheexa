@@ -214,7 +214,7 @@ export default function Filter() {
       data.categories.map((category) => category.toString()),
     );
     query.set("filter.capacity.min", data.capacity.min?.toString());
-    query.set("filter.capacity.max", data.capacity.min?.toString());
+    query.set("filter.capacity.max", data.capacity.max?.toString());
     query.set("filter.price.min", data.price.min?.toString());
     query.set("filter.price.max", data.price.max?.toString());
     query.set("filter.discount.min", data.discount.min?.toString());

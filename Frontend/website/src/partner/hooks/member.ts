@@ -21,8 +21,8 @@ export default function useMembers() {
     pageSizeQuery,
   ] = [
     searchParams.get("filter.search"),
-    searchParams.getAll("filter.roles"),
-    searchParams.getAll("filter.branches"),
+    searchParams.getAll("filter.role-uuids"),
+    searchParams.getAll("filter.branch-uuids"),
     searchParams.get("filter.status"),
     searchParams.get("pagination.page"),
     searchParams.get("pagination.page-size"),

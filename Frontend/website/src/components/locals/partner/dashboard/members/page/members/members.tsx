@@ -4,7 +4,7 @@ import useMembers from "@/partner/hooks/member";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { tOptionModel } from "@/partner/models/option";
 
@@ -89,7 +89,7 @@ import Filter from "./filter";
 import Table from "./table";
 import { Pagination } from "@/components/locals/blocks/pagination";
 import { tOptionFilter, tOptionPagination } from "@/partner/validators/option";
-import { tPaginatedSuccessService } from "@/services/success";
+import { tPaginatedService } from "@/services/success";
 import { tErrorService } from "@/services/error";
 
 export default function Members() {
@@ -214,14 +214,14 @@ function AddNew() {
     type: "roles" | "branches",
     filter: tOptionFilter,
     pagination: tOptionPagination,
-  ): Promise<tPaginatedSuccessService<tOption> | tErrorService> {
+  ): Promise<tPaginatedService<tOption> | tErrorService> {
     const serviceResult:
-      | tPaginatedSuccessService<tOptionModel>
+      | tPaginatedService<tOptionModel>
       | tErrorService = await (type === "roles"
       ? memberService.searchRoles(filter, pagination)
       : memberService.searchBranches(filter, pagination));
 
-    const result: tPaginatedSuccessService<tOption> | tErrorService =
+    const result: tPaginatedService<tOption> | tErrorService =
       !serviceResult.isSuccess
         ? serviceResult
         : {
@@ -266,7 +266,7 @@ function AddNew() {
               control={control}
               name="avatar"
               render={({
-                field: {  onChange: setValue },
+                field: { onChange: setValue },
                 fieldState: { invalid, error },
               }) => (
                 <Field>
@@ -294,7 +294,7 @@ function AddNew() {
                 control={control}
                 name="username"
                 render={({
-                  field: {  onChange: setValue },
+                  field: { onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
                   <Field>
@@ -586,7 +586,7 @@ function AddNew() {
             control={control}
             name="status"
             render={({
-              field: {  onChange: setValue },
+              field: { onChange: setValue },
               fieldState: { invalid, error },
             }) => (
               <Field>

@@ -3,6 +3,7 @@
 import { ePageSize } from "@/validators/pagination";
 
 import { useTranslations } from "next-intl";
+
 import { useQuery } from "@/hooks/query";
 
 import {
@@ -27,10 +28,10 @@ import {
   SelectValue,
 } from "@/components/shadcn/select";
 
+import { ClsPagination } from "@/classes/pagination";
+
 import { tOption } from "./selects";
 import { tPaginationModel } from "@/models/pagination";
-
-import { ClsPagination } from "@/classes/pagination";
 
 type tPaginationProps = {
   pagination: tPaginationModel;
@@ -43,14 +44,14 @@ export function Pagination(props: tPaginationProps) {
   const options: tOption[] = tPagination.raw("page-size.options");
   const pagination = new ClsPagination(props.pagination);
 
-  function setPagination(pagination: ClsPagination) {
-    if (pagination.isFirst()) searchParams.remove("pagination.page");
-    else searchParams.set("pagination.page", pagination.page.toString());
+  function setPage(page: number) {
+    searchParams.set("pagination.page", page.toString());
 
-    if (pagination.pageSize === ePageSize.ten)
-      searchParams.remove("pagination.page-size");
-    else
-      searchParams.set("pagination.page-size", pagination.pageSize.toString());
+    searchParams.apply();
+  }
+  function setPageSize(pageSize: ePageSize) {
+    searchParams.remove("pagination.page");
+    searchParams.set("pagination.page-size", pageSize.toString());
 
     searchParams.apply();
   }
@@ -60,10 +61,10 @@ export function Pagination(props: tPaginationProps) {
       <PaginationContent>
         <PaginationItem>
           <PaginationButton
-            variant="outline"
             aria-disabled={pagination.isFirst() ? true : undefined}
+            variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => setPagination(pagination.firstPage())}
+            onClick={() => setPage(pagination.firstPage())}
           >
             <LuChevronFirst />
           </PaginationButton>
@@ -73,7 +74,7 @@ export function Pagination(props: tPaginationProps) {
             aria-disabled={pagination.isFirst() ? true : undefined}
             variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => setPagination(pagination.previousPage())}
+            onClick={() => setPage(pagination.previousPage())}
           >
             <LuChevronLeft />
           </PaginationButton>
@@ -84,7 +85,7 @@ export function Pagination(props: tPaginationProps) {
             aria-disabled={pagination.isLast() ? true : undefined}
             variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => setPagination(pagination.nextPage())}
+            onClick={() => setPage(pagination.nextPage())}
           >
             <LuChevronRight />
           </PaginationButton>
@@ -94,7 +95,7 @@ export function Pagination(props: tPaginationProps) {
             aria-disabled={pagination.isLast() ? true : undefined}
             variant="outline"
             className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            onClick={() => setPagination(pagination.lastPage())}
+            onClick={() => setPage(pagination.lastPage())}
           >
             <LuChevronLast />
           </PaginationButton>
@@ -103,9 +104,7 @@ export function Pagination(props: tPaginationProps) {
 
       <Select
         value={pagination.pageSize.toString()}
-        onValueChange={(value) =>
-          setPagination(pagination.selectPageSize(Number(value)))
-        }
+        onValueChange={(value) => setPageSize(Number(value))}
       >
         <SelectTrigger>
           <SelectValue placeholder={tPagination("page-size.label")} />

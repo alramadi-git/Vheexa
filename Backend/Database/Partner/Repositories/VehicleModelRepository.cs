@@ -216,25 +216,30 @@ public class ClsVehicleModelRepository
         })
         .ToArrayAsync();
 
-        if (filter.Search != null) vehicleModels = vehicleModels.
-        Select(vehicleModel => new
+        if (filter.Search != null)
         {
-            VehicleModel = vehicleModel,
-            Score = new int[]
+            var search = filter.Search.ToLower();
+
+            vehicleModels = vehicleModels.
+            Select(vehicleModel => new
             {
-                Fuzz.Ratio(vehicleModel.Name, filter.Search),
-                Fuzz.Ratio(vehicleModel.Description, filter.Search),
-                Fuzz.Ratio(vehicleModel.Manufacturer, filter.Search),
-                Fuzz.Ratio(vehicleModel.Transmission, filter.Search),
-                Fuzz.Ratio(vehicleModel.Fuel, filter.Search),
-                Fuzz.Ratio(vehicleModel.Tags, filter.Search),
-            }
-            .Max()
-        })
-        .Where(fuzzyVehicleModel => fuzzyVehicleModel.Score > 20)
-        .OrderByDescending(fuzzyVehicleModel => fuzzyVehicleModel.Score)
-        .Select(fuzzyVehicleModel => fuzzyVehicleModel.VehicleModel)
-        .ToArray();
+                VehicleModel = vehicleModel,
+                Score = new int[]
+                {
+                    Fuzz.Ratio(vehicleModel.Name.ToLower(), search),
+                    Fuzz.Ratio(vehicleModel.Description.ToLower(), search),
+                    Fuzz.Ratio(vehicleModel.Manufacturer.ToLower(), search),
+                    Fuzz.Ratio(vehicleModel.Transmission.ToLower(), search),
+                    Fuzz.Ratio(vehicleModel.Fuel.ToLower(), search),
+                    Fuzz.Ratio(vehicleModel.Tags.ToLower(), search),
+                }
+                .Max()
+            })
+            .Where(fuzzyVehicleModel => fuzzyVehicleModel.Score > 40)
+            .OrderByDescending(fuzzyVehicleModel => fuzzyVehicleModel.Score)
+            .Select(fuzzyVehicleModel => fuzzyVehicleModel.VehicleModel)
+            .ToArray();
+        }
 
         var totalItems = vehicleModels.Length;
 

@@ -722,7 +722,7 @@
                 "links": [
                   {
                     "url": "/partner/dashboard",
-                    "label": "Dashboard"
+                    "label": "Overview"
                   }
                 ]
               },
@@ -1414,10 +1414,10 @@
                   "placeholder": "Search by member (e.g., username or email)"
                 },
                 "roles": {
-                  "label": "Role",
-                  "placeholder": "Select role (e.g., owner, manager, etc...)",
+                  "label": "Roles",
+                  "placeholder": "Select roles (e.g., owner, manager, etc...)",
                   "roles": {
-                    "placeholder": "Select role (e.g., owner, manager, etc...)",
+                    "placeholder": "Select roles (e.g., owner, manager, etc...)",
                     "when-loading": "Searching for roles...",
                     "when-empty": {
                       "label": "No roles were found",
@@ -1430,10 +1430,10 @@
                   }
                 },
                 "branches": {
-                  "label": "Branch",
-                  "placeholder": "Select branch (e.g., owner, manager, etc...)",
+                  "label": "Branches",
+                  "placeholder": "Select branches (e.g., owner, manager, etc...)",
                   "branches": {
-                    "placeholder": "Select branch (e.g., owner, manager, etc...)",
+                    "placeholder": "Select branches (e.g., owner, manager, etc...)",
                     "when-loading": "Searching for branches...",
                     "when-empty": {
                       "label": "No branches were found",

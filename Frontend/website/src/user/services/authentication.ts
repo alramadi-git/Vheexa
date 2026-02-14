@@ -18,7 +18,6 @@ import { tUserAccountModel } from "@/user/models/user-account";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessModel } from "@/models/success";
 import { tSuccessService } from "@/services/success";
 
 export default function useAuthenticationService() {
@@ -33,7 +32,7 @@ export default function useAuthenticationService() {
     return service.catch<tAccountModel<tUserAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
 
-      if (process.env.NODE_ENV === "development") {
+      if (true === true) {
         return {
           isSuccess: true,
           data: {
@@ -76,17 +75,17 @@ export default function useAuthenticationService() {
 
       formData.append("username", credentials.username);
 
-      formData.append("birthday", credentials.birthday.toISOString().split("T")[0]);
+      formData.append(
+        "birthday",
+        credentials.birthday.toISOString().split("T")[0],
+      );
 
       formData.append("phoneNumber", credentials.phoneNumber);
 
       formData.append("email", credentials.email);
       formData.append("password", credentials.password);
 
-      formData.append(
-        "rememberMe",
-        credentials.rememberMe.toString(),
-      );
+      formData.append("rememberMe", credentials.rememberMe.toString());
 
       const response = await service.fetch.post(
         "/authentication/register",
@@ -97,12 +96,11 @@ export default function useAuthenticationService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tSuccessModel<tAccountModel<tUserAccountModel>> =
-        await response.json();
+      const result: tAccountModel<tUserAccountModel> = await response.json();
 
       return {
         isSuccess: true,
-        ...result,
+        data: result,
       };
     });
   }
@@ -114,7 +112,7 @@ export default function useAuthenticationService() {
     return service.catch<tAccountModel<tUserAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
 
-      if (process.env.NODE_ENV === "development") {
+      if (true === true) {
         return {
           isSuccess: true,
           data: {
@@ -147,18 +145,17 @@ export default function useAuthenticationService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tSuccessModel<tAccountModel<tUserAccountModel>> =
-        await response.json();
+      const result: tAccountModel<tUserAccountModel> = await response.json();
 
       return {
         isSuccess: true,
-        ...result,
+        data: result,
       };
     });
   }
   async function logout(): Promise<tSuccessService<null> | tErrorService> {
     return service.catch<null>(async () => {
-      if (process.env.NODE_ENV === "development") {
+      if (true === true) {
         return {
           isSuccess: true,
           data: null,

@@ -34,7 +34,7 @@ export default function useAuthenticationService() {
     return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
 
-      if (process.env.NODE_ENV === "development") {
+      if (true === true) {
         return {
           isSuccess: true,
           data: {
@@ -103,7 +103,7 @@ export default function useAuthenticationService() {
       }
 
       formData.append("handle", credentials.handle);
-      
+
       formData.append("name", credentials.organizationName);
 
       formData.append("phoneNumber", credentials.phoneNumber);
@@ -150,8 +150,7 @@ export default function useAuthenticationService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tAccountModel<tMemberAccountModel> =
-        await response.json();
+      const result: tAccountModel<tMemberAccountModel> = await response.json();
 
       return {
         isSuccess: true,
@@ -161,11 +160,13 @@ export default function useAuthenticationService() {
   }
   async function login(
     credentials: tLoginCredentials,
-  ): Promise<tSuccessService<tAccountModel<tMemberAccountModel>>| tErrorService> {
+  ): Promise<
+    tSuccessService<tAccountModel<tMemberAccountModel>> | tErrorService
+  > {
     return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
 
-      if (process.env.NODE_ENV === "development") {
+      if (true === true) {
         return {
           isSuccess: true,
           data: {
@@ -233,8 +234,7 @@ export default function useAuthenticationService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const result: tAccountModel<tMemberAccountModel> =
-        await response.json();
+      const result: tAccountModel<tMemberAccountModel> = await response.json();
 
       return {
         isSuccess: true,
@@ -242,9 +242,9 @@ export default function useAuthenticationService() {
       };
     });
   }
-  async function logout(): Promise<tSuccessService<null>| tErrorService> {
+  async function logout(): Promise<tSuccessService<null> | tErrorService> {
     return service.catch<null>(async () => {
-      if (process.env.NODE_ENV === "development") {
+      if (true === true) {
         return {
           isSuccess: true,
           data: null,

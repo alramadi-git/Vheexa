@@ -15,8 +15,6 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { eStatusService } from "@/partner/validators/enums/status";
-
 import useVehicleModelService from "@/partner/services/vehicle-model";
 
 import { LuCheck, LuPlus } from "react-icons/lu";
@@ -168,12 +166,9 @@ function AddNewVehicleModel() {
       gallery: [],
       name: "",
       description: "",
-      marketLaunch: new Date(),
-      capacity: 1,
-      price: 1,
+      capacity: 0,
+      price: 0,
       discount: 0,
-      tags: "",
-      status: eStatusService.active,
     },
     resolver: zodResolver(zVehicleModelCreate),
   });
@@ -311,7 +306,7 @@ function AddNewVehicleModel() {
                 control={control}
                 name="marketLaunch"
                 render={({
-                  field: { value, onChange: setValue },
+                  field: { onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
                   <Field>
@@ -331,7 +326,6 @@ function AddNewVehicleModel() {
                         placeholder={tAddNew(
                           "content.form.market-launch.placeholder",
                         )}
-                        value={value}
                         setValue={setValue}
                       />
                     </FieldContent>
@@ -382,7 +376,7 @@ function AddNewVehicleModel() {
                 control={control}
                 name="manufacturer"
                 render={({
-                  field: { value, onChange: setValue },
+                  field: { onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
                   <Field>
@@ -408,7 +402,6 @@ function AddNewVehicleModel() {
                             "content.form.manufacturer.search-placeholder",
                           )
                         }
-                        defaultValue={value}
                         onSelect={setValue}
                         options={manufacturers?.options ?? []}
                         optionRender={(option, isSelected) => (
@@ -458,7 +451,7 @@ function AddNewVehicleModel() {
                 control={control}
                 name="tags"
                 render={({
-                  field: { value, onChange: setValue },
+                  field: { onChange: setValue },
                   fieldState: { invalid, error },
                 }) => (
                   <Field>
@@ -473,7 +466,6 @@ function AddNewVehicleModel() {
                       <FieldTags
                         id={`${id}-tags`}
                         placeholder={tAddNew("content.form.tags.placeholder")}
-                        defaultValues={value.split(", ")}
                         onValuesChange={(values) => setValue(values.join(", "))}
                       />
                     </FieldContent>
@@ -518,7 +510,7 @@ function AddNewVehicleModel() {
               control={control}
               name="transmission"
               render={({
-                field: { value, onChange: setValue },
+                field: {  onChange: setValue },
                 fieldState: { invalid, error },
               }) => (
                 <Field>
@@ -542,7 +534,6 @@ function AddNewVehicleModel() {
                         transmissions?.["search-placeholder"] ??
                         tAddNew("content.form.transmission.search-placeholder")
                       }
-                      defaultValue={value}
                       onSelect={setValue}
                       options={transmissions?.options ?? []}
                       optionRender={(option, isSelected) => (
@@ -561,7 +552,7 @@ function AddNewVehicleModel() {
               control={control}
               name="fuel"
               render={({
-                field: { value, onChange: setValue },
+                field: {  onChange: setValue },
                 fieldState: { invalid, error },
               }) => (
                 <Field>
@@ -585,7 +576,6 @@ function AddNewVehicleModel() {
                         fuels?.["search-placeholder"] ??
                         tAddNew("content.form.fuel.search-placeholder")
                       }
-                      defaultValue={value}
                       onSelect={setValue}
                       options={fuels?.options ?? []}
                       optionRender={(option, isSelected) => (
@@ -726,7 +716,7 @@ function AddNewVehicleModel() {
             control={control}
             name="status"
             render={({
-              field: { value, onChange: setValue },
+              field: { onChange: setValue },
               fieldState: { invalid, error },
             }) => (
               <Field>
@@ -743,9 +733,6 @@ function AddNewVehicleModel() {
                     id={`${id}-status`}
                     isInvalid={invalid}
                     placeholder={tAddNew("content.form.status.placeholder")}
-                    defaultValue={statuses.find(
-                      (status) => status.value === value.toString(),
-                    )}
                     onSelect={(option) =>
                       setValue(option && Number(option.value))
                     }

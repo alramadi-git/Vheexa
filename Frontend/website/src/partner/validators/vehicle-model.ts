@@ -67,7 +67,7 @@ const zVehicleModelCreate = z
       .max(256, "tags must be at most 256 characters."),
     status: z.enum(eStatusService, "status is required."),
   })
-  .refine((value) => value?.discount + 1 >= value?.price, {
+  .refine((value) => value.discount + 1 <= value.price, {
     path: ["discount"],
     error: "discount should be less than the price at least 1 dollar.",
   })

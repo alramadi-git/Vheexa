@@ -11,7 +11,7 @@ import { eHttpStatusCode } from "@/services/enums/http-status-code";
 
 import { ClsErrorService, tErrorService } from "@/services/error";
 
-import { tSuccessService, tPaginatedSuccessService } from "@/services/success";
+import { tSuccessService, tPaginatedService } from "@/services/success";
 
 type tUseServiceProps = {
   serviceRole: eServiceRole;
@@ -22,14 +22,14 @@ export default function useService({ serviceRole }: tUseServiceProps) {
     callback: () => Promise<tSuccessService<tData>>,
   ): Promise<tSuccessService<tData>>;
   async function _catch<tData>(
-    callback: () => Promise<tPaginatedSuccessService<tData>>,
-  ): Promise<tPaginatedSuccessService<tData>>;
+    callback: () => Promise<tPaginatedService<tData>>,
+  ): Promise<tPaginatedService<tData>>;
   async function _catch<tData>(
     callback: () => Promise<
-      tSuccessService<tData> | tPaginatedSuccessService<tData>
+      tSuccessService<tData> | tPaginatedService<tData>
     >,
   ): Promise<
-    tSuccessService<tData> | tPaginatedSuccessService<tData> | tErrorService
+    tSuccessService<tData> | tPaginatedService<tData> | tErrorService
   > {
     try {
       return await callback();

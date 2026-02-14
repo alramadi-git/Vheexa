@@ -50,7 +50,7 @@ import {
 
 import { Button } from "@/components/shadcn/button";
 import { tOptionFilter, tOptionPagination } from "@/partner/validators/option";
-import { tPaginatedSuccessService } from "@/services/success";
+import { tPaginatedService } from "@/services/success";
 import { tErrorService } from "@/services/error";
 
 export default function Filter() {
@@ -105,12 +105,8 @@ export default function Filter() {
     setValue("branchUuids", branchUuids);
 
     Promise.all([
-      roleUuids.length > 0
-        ? memberService.readRoles(roleUuids)
-        : new Promise((resolve) => resolve(null)),
-      branchUuids.length > 0
-        ? memberService.readBranches(branchUuids)
-        : new Promise((resolve) => resolve(null)),
+      roleUuids.length > 0 ? memberService.readRoles(roleUuids) : null,
+      branchUuids.length > 0 ? memberService.readBranches(branchUuids) : null,
     ]).then(([rolesResult, branchesResult]) => {
       if (rolesResult !== null) {
         if (!rolesResult.isSuccess) {
@@ -122,16 +118,18 @@ export default function Filter() {
           ));
 
           setValue("roleUuids", []);
-        } else
-          setValue("roleUuids", [
-            rolesResult.data.map((role: tOptionModel) => role.uuid),
-          ]);
+        } else {
+          setValue(
+            "roleUuids",
+            rolesResult.data.map((role) => role.uuid),
+          );
           rolesRef.current?.change(
             rolesResult.data.map((option: tOptionModel) => ({
               value: option.uuid,
               label: option.name,
             })),
           );
+        }
       }
 
       if (branchesResult !== null) {
@@ -144,16 +142,18 @@ export default function Filter() {
           ));
 
           setValue("branchUuids", []);
-        } else
-          setValue("branchUuids", [
+        } else {
+          setValue(
+            "branchUuids",
             branchesResult.data.map((branch: tOptionModel) => branch.uuid),
-          ]);
-        branchesRef.current?.change(
-          branchesResult.data.map((option: tOptionModel) => ({
-            value: option.uuid,
-            label: option.name,
-          })),
-        );
+          );
+          branchesRef.current?.change(
+            branchesResult.data.map((option: tOptionModel) => ({
+              value: option.uuid,
+              label: option.name,
+            })),
+          );
+        }
       }
     });
 
@@ -175,14 +175,14 @@ export default function Filter() {
 
   function submit(data: tMemberFilter) {
     query.remove("filter.search");
-    query.remove("filter.roleUuids");
-    query.remove("filter.branchUuids");
+    query.remove("filter.role-uuids");
+    query.remove("filter.branch-uuids");
     query.remove("filter.status");
     query.remove("pagination.page");
 
     query.set("filter.search", data.search);
-    query.set("filter.roleUuids", data.roleUuids);
-    query.set("filter.branchUuids", data.branchUuids);
+    query.set("filter.role-uuids", data.roleUuids);
+    query.set("filter.branch-uuids", data.branchUuids);
     query.set("filter.status", data.status?.toString());
 
     query.apply();
@@ -192,14 +192,13 @@ export default function Filter() {
     type: "roles" | "branches",
     filter: tOptionFilter,
     pagination: tOptionPagination,
-  ): Promise<tPaginatedSuccessService<tOption> | tErrorService> {
-    const serviceResult:
-      | tPaginatedSuccessService<tOptionModel>
-      | tErrorService = await (type === "roles"
-      ? memberService.searchRoles(filter, pagination)
-      : memberService.searchBranches(filter, pagination));
+  ): Promise<tPaginatedService<tOption> | tErrorService> {
+    const serviceResult: tPaginatedService<tOptionModel> | tErrorService =
+      await (type === "roles"
+        ? memberService.searchRoles(filter, pagination)
+        : memberService.searchBranches(filter, pagination));
 
-    const result: tPaginatedSuccessService<tOption> | tErrorService =
+    const result: tPaginatedService<tOption> | tErrorService =
       !serviceResult.isSuccess
         ? serviceResult
         : {

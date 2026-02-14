@@ -1,4 +1,3 @@
-import { ePageSize } from "@/enums/page-size";
 import { tPaginationModel } from "@/models/pagination";
 
 class ClsPagination {
@@ -22,46 +21,22 @@ class ClsPagination {
     return this.page >= this.totalPages;
   }
 
-  firstPage(): ClsPagination {
-    return new ClsPagination({
-      page: 1,
-      pageSize: this.pageSize,
-      totalItems: this.totalItems,
-    });
+  firstPage(): number {
+    return 1;
   }
-  lastPage(): ClsPagination {
-    return new ClsPagination({
-      page: this.totalPages,
-      pageSize: this.pageSize,
-      totalItems: this.totalItems,
-    });
+  lastPage(): number {
+    return this.totalPages;
   }
 
-  previousPage(): ClsPagination {
-    if (this.isFirst()) return this;
+  previousPage(): number {
+    if (this.isFirst()) return this.page;
 
-    return new ClsPagination({
-      page: this.page - 1,
-      pageSize: this.pageSize,
-      totalItems: this.totalItems,
-    });
+    return this.page - 1;
   }
-  nextPage(): ClsPagination {
-    if (this.isLast()) return this;
+  nextPage(): number {
+    if (this.isLast()) return this.page;
 
-    return new ClsPagination({
-      page: this.page + 1,
-      pageSize: this.pageSize,
-      totalItems: this.totalItems,
-    });
-  }
-
-  public selectPageSize(pageSize: ePageSize): ClsPagination {
-    return new ClsPagination({
-      page: this.page,
-      pageSize: pageSize,
-      totalItems: this.totalItems,
-    });
+    return this.page + 1;
   }
 }
 

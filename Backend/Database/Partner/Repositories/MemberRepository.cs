@@ -204,16 +204,21 @@ public class ClsMemberRepository
         })
         .ToArrayAsync();
 
-        if (filter.Search != null) roleOptions = roleOptions
-        .Select(roleOption => new
+        if (filter.Search != null)
         {
-            RoleOptionDto = roleOption,
-            Score = Fuzz.Ratio(roleOption.Name, filter.Search)
-        })
-        .Where(fuzzyRoleOption => fuzzyRoleOption.Score > 20)
-        .OrderByDescending(fuzzyRoleOption => fuzzyRoleOption.Score)
-        .Select(fuzzyRoleOption => fuzzyRoleOption.RoleOptionDto)
-        .ToArray();
+            var search = filter.Search.ToLower();
+
+            roleOptions = roleOptions
+            .Select(roleOption => new
+            {
+                RoleOptionDto = roleOption,
+                Score = Fuzz.Ratio(roleOption.Name.ToLower(), search)
+            })
+            .Where(fuzzyRoleOption => fuzzyRoleOption.Score > 40)
+            .OrderByDescending(fuzzyRoleOption => fuzzyRoleOption.Score)
+            .Select(fuzzyRoleOption => fuzzyRoleOption.RoleOptionDto)
+            .ToArray();
+        }
 
         var totalItems = roleOptions.Length;
 
@@ -248,16 +253,21 @@ public class ClsMemberRepository
         })
         .ToArrayAsync();
 
-        if (filter.Search != null) branchOptions = branchOptions
-        .Select(branchOption => new
+        if (filter.Search != null)
         {
-            BranchOption = branchOption,
-            Score = Fuzz.Ratio(branchOption.Name, filter.Search)
-        })
-        .Where(fuzzyBranchOption => fuzzyBranchOption.Score > 20)
-        .OrderByDescending(fuzzyBranchOption => fuzzyBranchOption.Score)
-        .Select(fuzzyBranchOption => fuzzyBranchOption.BranchOption)
-        .ToArray();
+            var search = filter.Search.ToLower();
+
+            branchOptions = branchOptions
+            .Select(branchOption => new
+            {
+                BranchOption = branchOption,
+                Score = Fuzz.Ratio(branchOption.Name.ToLower(), search)
+            })
+            .Where(fuzzyBranchOption => fuzzyBranchOption.Score > 40)
+            .OrderByDescending(fuzzyBranchOption => fuzzyBranchOption.Score)
+            .Select(fuzzyBranchOption => fuzzyBranchOption.BranchOption)
+            .ToArray();
+        }
 
         var totalItems = branchOptions.Length;
 
@@ -331,20 +341,25 @@ public class ClsMemberRepository
         })
         .ToArrayAsync();
 
-        if (filter.Search != null) members = members
-        .Select(member => new
+        if (filter.Search != null)
         {
-            Member = member,
-            Score = new int[]
+            var search = filter.Search.ToLower();
+
+            members = members
+            .Select(member => new
             {
-                Fuzz.Ratio(member.Username, filter.Search),
-                Fuzz.Ratio(member.Email, filter.Search),
-            }.Max()
-        })
-        .Where(fuzzyMember => fuzzyMember.Score > 20)
-        .OrderByDescending(fuzzyMember => fuzzyMember.Score)
-        .Select(fuzzyMember => fuzzyMember.Member)
-        .ToArray();
+                Member = member,
+                Score = new int[]
+                {
+                    Fuzz.Ratio(member.Username.ToLower(), search),
+                    Fuzz.Ratio(member.Email.ToLower(), search),
+                }.Max()
+            })
+            .Where(fuzzyMember => fuzzyMember.Score > 40)
+            .OrderByDescending(fuzzyMember => fuzzyMember.Score)
+            .Select(fuzzyMember => fuzzyMember.Member)
+            .ToArray();
+        }
 
         var totalItems = members.Length;
 

@@ -56,7 +56,7 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 
 import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
-import { tPaginatedSuccessService } from "@/services/success";
+import { tPaginatedService } from "@/services/success";
 import { tErrorService } from "@/services/error";
 import { tPaginatedModel } from "@/models/success";
 
@@ -167,7 +167,7 @@ const FieldSelect = forwardRef(
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+          className="border-input max-w-(--radix-popper-anchor-width) min-w-(--radix-popper-anchor-width) rounded p-0"
         >
           <Command className="rounded">
             <CommandList className="flex flex-col p-1">
@@ -477,7 +477,7 @@ const FieldFreeSelect = forwardRef<tFieldFreeSelectRef, tFieldFreeSelectProps>(
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+          className="border-input max-w-(--radix-popper-anchor-width) min-w-(--radix-popper-anchor-width) rounded p-0"
         >
           <Command className="rounded">
             <CommandInput
@@ -544,7 +544,7 @@ type tFieldAsyncSelectProps<gtOption extends tOption> = {
   fetch: (
     search: string,
     page: number,
-  ) => Promise<tPaginatedSuccessService<gtOption> | tErrorService>;
+  ) => Promise<tPaginatedService<gtOption> | tErrorService>;
   optionRender: (
     option: gtOption,
     isSelected: boolean,
@@ -654,7 +654,7 @@ const FieldAsyncSelect = forwardRef(
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+          className="border-input max-w-(--radix-popper-anchor-width) min-w-(--radix-popper-anchor-width) rounded p-0"
         >
           <Command shouldFilter={false} className="rounded">
             <CommandInput
@@ -725,7 +725,7 @@ type tFieldMultiAsyncSelectProps<gtOption extends tOption> = {
   fetch: (
     search: string,
     page: number,
-  ) => Promise<tPaginatedSuccessService<gtOption> | tErrorService>;
+  ) => Promise<tPaginatedService<gtOption> | tErrorService>;
   optionRender: (
     option: gtOption,
     isSelected: boolean,
@@ -880,7 +880,7 @@ const FieldMultiAsyncSelect = forwardRef(
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="border-input max-w-[var(--radix-popper-anchor-width)] min-w-[var(--radix-popper-anchor-width)] rounded p-0"
+          className="border-input max-w-(--radix-popper-anchor-width) min-w-(--radix-popper-anchor-width) rounded p-0"
         >
           <Command shouldFilter={false} className="rounded">
             <CommandInput
@@ -964,7 +964,7 @@ function Pagination({ pagination, onPageChange }: tPagination) {
 
   const clsPagination = new ClsPagination(pagination);
 
-  function changePage(page: number) {
+  function setPage(page: number) {
     onPageChange?.(page);
   }
 
@@ -976,7 +976,7 @@ function Pagination({ pagination, onPageChange }: tPagination) {
             size="icon"
             variant="outline"
             disabled={clsPagination.isFirst() ? true : undefined}
-            onClick={() => changePage(clsPagination.firstPage().page)}
+            onClick={() => setPage(clsPagination.firstPage())}
           >
             <LuChevronFirst />
           </PaginationButton>
@@ -986,7 +986,7 @@ function Pagination({ pagination, onPageChange }: tPagination) {
             size="icon"
             variant="outline"
             disabled={clsPagination.isFirst() ? true : undefined}
-            onClick={() => changePage(clsPagination.previousPage().page)}
+            onClick={() => setPage(clsPagination.previousPage())}
           >
             <LuChevronLeft />
           </PaginationButton>
@@ -997,7 +997,7 @@ function Pagination({ pagination, onPageChange }: tPagination) {
             size="icon"
             variant="outline"
             disabled={clsPagination.isLast() ? true : undefined}
-            onClick={() => changePage(clsPagination.nextPage().page)}
+            onClick={() => setPage(clsPagination.nextPage())}
           >
             <LuChevronRight />
           </PaginationButton>
@@ -1007,7 +1007,7 @@ function Pagination({ pagination, onPageChange }: tPagination) {
             size="icon"
             variant="outline"
             disabled={clsPagination.isLast() ? true : undefined}
-            onClick={() => changePage(clsPagination.lastPage().page)}
+            onClick={() => setPage(clsPagination.lastPage())}
           >
             <LuChevronLast />
           </PaginationButton>
