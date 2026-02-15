@@ -1,4 +1,13 @@
+using Microsoft.OpenApi;
+
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.EntityFrameworkCore;
+
+using API.Helpers;
+
+using System.Text;
 
 namespace API;
 
@@ -9,9 +18,22 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Register options
+        var usersJwtSection = builder.Configuration.GetSection("Options:JwtOptions:UsersJwtOptions");
+        var usersJwtOptions = usersJwtSection.Get<User.Options.ClsJwtOptions>()!;
+
+        builder.Services.Configure<User.Options.ClsJwtOptions>(usersJwtSection);
+
+        var partnersJwtSection = builder.Configuration.GetSection("Options:JwtOptions:PartnersJwtOptions");
+        var partnersJwtOptions = partnersJwtSection.Get<Partner.Options.ClsJwtOptions>()!;
+
+        builder.Services.Configure<Partner.Options.ClsJwtOptions>(partnersJwtSection);
+
         builder.Services.Configure<Business.Integrations.ClsImagekitIntegration.ClsImagekitOptions>(
-            builder.Configuration.GetSection("ImagekitOptions")
+          builder.Configuration.GetSection("Options:ImagekitOptions")
         );
+
+        // Helpers
+        builder.Services.AddScoped(typeof(ClsJwtHelper<>));
 
         // Register database
         builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSql")));
@@ -61,18 +83,52 @@ public class Program
         builder.Services.AddScoped<Database.Partner.Repositories.ClsMemberRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsVehicleModelRepository>();
 
+        // Register Authentication
+        // Register Authentication - ONE call with multiple schemes
+        // Register Authentication with multiple schemes
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer("Users", options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = usersJwtOptions.Issuer,
+                ValidAudience = usersJwtOptions.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(usersJwtOptions.SecretKey))
+            };
+        })
+        .AddJwtBearer("Partners", options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = partnersJwtOptions.Issuer,
+                ValidAudience = partnersJwtOptions.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(partnersJwtOptions.SecretKey))
+            };
+        });
         builder.Services.AddControllers();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.
-        AddSwaggerGen(options => options
-            .CustomSchemaIds(type => type.FullName?.Replace("+", "_"))
-        );
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.CustomSchemaIds(type => type.FullName?.Replace("+", "_"));
+        });
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("FrontendPolicy", policy =>
+            options.AddPolicy("VheexaPolicy", policy =>
             {
                 if (builder.Environment.IsDevelopment())
                     policy
@@ -98,7 +154,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseCors("FrontendPolicy");
+        app.UseCors("VheexaPolicy");
 
         app.UseAuthorization();
 

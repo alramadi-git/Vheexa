@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "ik.imagekit.io",
-        pathname: "/alramadi/vheexa/website/**",
+        pathname: "/alramadi/vheexa/**",
       },
     ],
   },

@@ -68,6 +68,7 @@ public class ClsAuthenticationRepository
 
             var userAccountDto = new ClsUserAccountModel
             {
+                Uuid = newUser.Uuid,
                 Avatar = newUser.Avatar == null ? null : new Database.Models.ClsImageModel
                 {
                     Id = newUser.Avatar.Id,
@@ -120,6 +121,7 @@ public class ClsAuthenticationRepository
 
         var userAccountDto = new ClsUserAccountModel
         {
+            Uuid = user.Uuid,
             Avatar = user.Avatar == null ? null : new Database.Models.ClsImageModel
             {
                 Id = user.Avatar.Id,

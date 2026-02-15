@@ -151,8 +151,10 @@ public class ClsAuthenticationRepository
 
             var accountDto = new ClsMemberAccountModel
             {
+                Uuid = newMember.Uuid,
                 Partner = new ClsMemberAccountModel.ClsPartnerModel
                 {
+                    Uuid = newMember.Partner.Uuid,
                     Logo = newPartner.Logo == null ? null : new Database.Models.ClsImageModel
                     {
                         Id = newPartner.Logo.Id,
@@ -237,8 +239,10 @@ public class ClsAuthenticationRepository
 
         var accountDto = new ClsMemberAccountModel
         {
+            Uuid = member.Uuid,
             Partner = new ClsMemberAccountModel.ClsPartnerModel
             {
+                Uuid = member.Partner.Uuid,
                 Logo = member.Partner.Logo == null ? null : new Database.Models.ClsImageModel
                 {
                     Id = member.Partner.Logo.Id,

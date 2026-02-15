@@ -32,30 +32,6 @@ export default function useAuthenticationService() {
     return service.catch<tAccountModel<tUserAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
 
-      if (true === true) {
-        return {
-          isSuccess: true,
-          data: {
-            account: {
-              avatar: null,
-              location: {
-                country: "United States",
-                city: "New York",
-                street: "Main Street",
-                latitude: 40.7128,
-                longitude: -74.006,
-              },
-              username: "Nawaf Alramadi",
-              birthday: new Date("9/9/20"),
-              phoneNumber: "+12125550123",
-              email: "user@vheexa.com",
-            },
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcwMDAwMDAwLCJleHAiOjE2NzAwMDM2MDB9.L2ZP6DgPgnU_u4aRMI0K9R0U4Y3D6zXWPR7KzfrQGbQ",
-          },
-        };
-      }
-
       const formData = new FormData();
       if (credentials.avatar) {
         formData.append("avatar", credentials.avatar);
@@ -111,30 +87,6 @@ export default function useAuthenticationService() {
   > {
     return service.catch<tAccountModel<tUserAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
-
-      if (true === true) {
-        return {
-          isSuccess: true,
-          data: {
-            account: {
-              avatar: null,
-              location: {
-                country: "United States",
-                city: "New York",
-                street: "Main Street",
-                latitude: 40.7128,
-                longitude: -74.006,
-              },
-              username: "Nawaf Alramadi",
-              birthday: new Date("9/9/202"),
-              phoneNumber: "+12125550123",
-              email: "user@vheexa.com",
-            },
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcwMDAwMDAwLCJleHAiOjE2NzAwMDM2MDB9.L2ZP6DgPgnU_u4aRMI0K9R0U4Y3D6zXWPR7KzfrQGbQ",
-          },
-        };
-      }
 
       const response = await service.fetch.post(
         "/authentication/login",

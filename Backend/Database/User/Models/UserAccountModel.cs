@@ -4,6 +4,7 @@ namespace Database.User.Models;
 
 public class ClsUserAccountModel
 {
+    public Guid Uuid { get; set; }
     public ClsImageModel? Avatar { get; set; }
     public ClsLocationModel Location { get; set; }
     public string Username { get; set; }

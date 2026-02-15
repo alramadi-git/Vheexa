@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Partner.Controllers;
 
 [ApiController]
 [Route("api/partner/dashboard/overview")]
+[Authorize(AuthenticationSchemes = "Partners")]
 public class ClsOverviewController : Controller
 {
     private readonly Business.Partner.Services.ClsOverviewService _OverviewService;

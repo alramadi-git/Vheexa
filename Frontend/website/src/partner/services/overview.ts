@@ -26,10 +26,10 @@ export default function useOverview() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
-      const data: tOverviewModel = await response.json();
+      const result: tOverviewModel = await response.json();
       return {
         isSuccess: true,
-        data,
+        data: result,
       };
     });
   }

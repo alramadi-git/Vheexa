@@ -2,6 +2,7 @@ import z from "zod";
 
 const zUserAccount = z
   .object({
+    uuid: z.string(),
     avatar: z.nullable(
       z.object({
         id: z.string(),

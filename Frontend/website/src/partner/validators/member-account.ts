@@ -4,8 +4,10 @@ import { ePermissionModel } from "../models/enums/permission";
 
 const zMemberAccount = z
   .object({
+    uuid: z.string(),
     partner: z
       .object({
+        uuid: z.string(),
         logo: z.nullable(
           z
             .object({

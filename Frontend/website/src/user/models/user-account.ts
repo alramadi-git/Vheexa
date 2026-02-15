@@ -3,6 +3,7 @@ import { tNullable } from "@/types/nullish";
 import { tImageModel } from "@/models/image";
 
 type tUserAccountModel = {
+  uuid: string;
   avatar: tNullable<tImageModel>;
   location: {
     country: string;

@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using Business.Filters;
 using Business.Partner.Filters;
+
 namespace API.Partner.Controllers;
 
 [ApiController]
 [Route("api/partner/dashboard/vehicle-models")]
+[Authorize(AuthenticationSchemes = "Partners")]
 public class ClsVehicleModelController : Controller
 {
     private readonly Business.Partner.Services.ClsVehicleModelService _VehicleModelService;

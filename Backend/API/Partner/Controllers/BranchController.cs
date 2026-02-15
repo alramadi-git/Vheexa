@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using Business.Filters;
 using Business.Partner.Filters;
@@ -7,6 +8,7 @@ namespace API.Partner.Controllers;
 
 [ApiController]
 [Route("api/partner/dashboard/branches")]
+[Authorize(AuthenticationSchemes = "Partners")]
 public class ClsBranchController : Controller
 {
     private readonly Business.Partner.Services.ClsBranchService _BranchService;

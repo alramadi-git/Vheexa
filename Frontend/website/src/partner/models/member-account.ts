@@ -5,7 +5,9 @@ import { tImageModel } from "../../models/image";
 import { ePermissionModel } from "./enums/permission";
 
 type tMemberAccountModel = {
+  uuid: string;
   partner: {
+    uuid: string;
     logo: tNullable<tImageModel>;
     banner: tNullable<tImageModel>;
     handle: string;

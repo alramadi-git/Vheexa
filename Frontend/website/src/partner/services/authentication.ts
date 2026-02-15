@@ -13,8 +13,6 @@ import {
   zLoginCredentials,
 } from "@/validators/authentication";
 
-import { ePermissionModel } from "@/partner/models/enums/permission";
-
 import { tAccountModel } from "@/models/account";
 import { tMemberAccountModel } from "@/partner/models/member-account";
 
@@ -33,65 +31,6 @@ export default function useAuthenticationService() {
   > {
     return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zRegisterCredentials.parse(credentials);
-
-      if (true === true) {
-        return {
-          isSuccess: true,
-          data: {
-            account: {
-              avatar: null,
-              partner: {
-                logo: null,
-                banner: null,
-                handle: "vheexa",
-                organizationName: "Vheexa",
-                phoneNumber: "+12125550123",
-                email: "team@vheexa.com",
-              },
-              role: {
-                name: "Owner",
-                permissions: [
-                  ePermissionModel.PartnerRead,
-                  ePermissionModel.PartnerUpdate,
-                  ePermissionModel.PartnerDelete,
-                  ePermissionModel.RolesCreate,
-                  ePermissionModel.RolesRead,
-                  ePermissionModel.RolesUpdate,
-                  ePermissionModel.RolesDelete,
-                  ePermissionModel.BranchesCreate,
-                  ePermissionModel.BranchesRead,
-                  ePermissionModel.BranchesUpdate,
-                  ePermissionModel.BranchesDelete,
-                  ePermissionModel.MembersCreate,
-                  ePermissionModel.MembersRead,
-                  ePermissionModel.MembersUpdate,
-                  ePermissionModel.MembersDelete,
-                  ePermissionModel.VehicleModelsCreate,
-                  ePermissionModel.VehicleModelsRead,
-                  ePermissionModel.VehicleModelsUpdate,
-                  ePermissionModel.VehicleModelsDelete,
-                ],
-              },
-              branch: {
-                location: {
-                  country: "United States",
-                  city: "New York",
-                  street: "Main Street",
-                  latitude: 40.7128,
-                  longitude: -74.006,
-                },
-                name: "Main Branch",
-                phoneNumber: "+12125550123",
-                email: "main.branch@vheexa.com",
-              },
-              username: "Nawaf Alramadi",
-              email: "member@vheexa.com",
-            },
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcwMDAwMDAwLCJleHAiOjE2NzAwMDM2MDB9.L2ZP6DgPgnU_u4aRMI0K9R0U4Y3D6zXWPR7KzfrQGbQ",
-          },
-        };
-      }
 
       const formData = new FormData();
       if (credentials.logo) {
@@ -165,65 +104,6 @@ export default function useAuthenticationService() {
   > {
     return service.catch<tAccountModel<tMemberAccountModel>>(async () => {
       zLoginCredentials.parse(credentials);
-
-      if (true === true) {
-        return {
-          isSuccess: true,
-          data: {
-            account: {
-              avatar: null,
-              partner: {
-                logo: null,
-                banner: null,
-                handle: "vheexa",
-                organizationName: "Vheexa",
-                phoneNumber: "+12125550123",
-                email: "team@vheexa.com",
-              },
-              role: {
-                name: "Owner",
-                permissions: [
-                  ePermissionModel.PartnerRead,
-                  ePermissionModel.PartnerUpdate,
-                  ePermissionModel.PartnerDelete,
-                  ePermissionModel.RolesCreate,
-                  ePermissionModel.RolesRead,
-                  ePermissionModel.RolesUpdate,
-                  ePermissionModel.RolesDelete,
-                  ePermissionModel.BranchesCreate,
-                  ePermissionModel.BranchesRead,
-                  ePermissionModel.BranchesUpdate,
-                  ePermissionModel.BranchesDelete,
-                  ePermissionModel.MembersCreate,
-                  ePermissionModel.MembersRead,
-                  ePermissionModel.MembersUpdate,
-                  ePermissionModel.MembersDelete,
-                  ePermissionModel.VehicleModelsCreate,
-                  ePermissionModel.VehicleModelsRead,
-                  ePermissionModel.VehicleModelsUpdate,
-                  ePermissionModel.VehicleModelsDelete,
-                ],
-              },
-              branch: {
-                location: {
-                  country: "United States",
-                  city: "New York",
-                  street: "Main Street",
-                  latitude: 40.7128,
-                  longitude: -74.006,
-                },
-                name: "Main Branch",
-                phoneNumber: "+12125550123",
-                email: "main.branch@vheexa.com",
-              },
-              username: "Nawaf Alramadi",
-              email: "member@vheexa.com",
-            },
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcwMDAwMDAwLCJleHAiOjE2NzAwMDM2MDB9.L2ZP6DgPgnU_u4aRMI0K9R0U4Y3D6zXWPR7KzfrQGbQ",
-          },
-        };
-      }
 
       const response = await service.fetch.post(
         "/api/partner/authentication/login",

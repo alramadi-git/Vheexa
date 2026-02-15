@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Partner.Controllers;
 
 [ApiController]
 [Route("api/partner/dashboard/members")]
+[Authorize(AuthenticationSchemes = "Partners")]
 public class ClsMemberController : Controller
 {
     private readonly Business.Partner.Services.ClsMemberService _MemberService;

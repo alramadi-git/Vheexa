@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using Business.Filters;
 using Business.Partner.Filters;
@@ -7,6 +8,7 @@ namespace API.Partner.Controllers;
 
 [ApiController]
 [Route("api/partner/dashboard/roles")]
+[Authorize(AuthenticationSchemes = "Partners")]
 public class ClsRoleController : Controller
 {
     private readonly Business.Partner.Services.ClsRoleService _RoleService;
