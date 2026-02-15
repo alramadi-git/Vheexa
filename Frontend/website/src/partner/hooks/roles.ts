@@ -7,8 +7,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { tRoleFilter } from "@/partner/validators/role";
 import { tPagination } from "@/validators/pagination";
+import { useEffect, useState } from "react";
 
 export default function useRoles() {
+  const [run, setRun] = useState(false);
+
   const searchParams = useSearchParams();
   const roleService = useRoleService();
 
@@ -39,7 +42,8 @@ export default function useRoles() {
     pageSize,
   };
 
-  const { isLoading, data: result } = useQuery({
+  const { isEnabled, isLoading, data: result } = useQuery({
+    enabled: run,
     queryKey: [
       "roles",
       filter.name,
@@ -51,8 +55,12 @@ export default function useRoles() {
     queryFn: () => roleService.search(filter, pagination),
   });
 
+  useEffect(() => {
+    setRun(true);
+  }, []);
+
   return {
-    isLoading,
+    isLoading: !isEnabled || isLoading ,
     result,
   };
 }

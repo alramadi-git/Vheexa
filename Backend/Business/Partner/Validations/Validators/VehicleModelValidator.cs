@@ -39,7 +39,7 @@ public class ClsVehicleModelInputValidator : AbstractValidator<ClsVehicleModelIn
 
         RuleFor(vehicleModelInput => vehicleModelInput.MarketLaunch)
         .GreaterThanOrEqualTo(new DateOnly(1980, 1, 1))
-        .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
+        .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow));
 
         RuleFor(vehicleModelInput => vehicleModelInput.Capacity)
         .GreaterThanOrEqualTo(1);

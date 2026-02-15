@@ -65,13 +65,14 @@ CREATE TABLE
         "LocationUuid" UUID NOT NULL REFERENCES "Locations" ("Uuid") UNIQUE,
         "Username" TEXT NOT NULL,
         "Birthday" DATE NOT NULL,
-        "PhoneNumber" TEXT NOT NULL UNIQUE,
-        "Email" TEXT NOT NULL UNIQUE,
+        "PhoneNumber" TEXT NOT NULL,
+        "Email" TEXT NOT NULL,
         "Password" TEXT NOT NULL,
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
-        "DeletedAt" TIMESTAMP
+        "DeletedAt" TIMESTAMP,
+        UNIQUE ("PhoneNumber", "Email", "IsDeleted", "DeletedAt")
     );
 
 CREATE UNIQUE INDEX "Users_AvatarId_unique_not_null" ON "Users" ("AvatarId")
@@ -83,14 +84,21 @@ CREATE TABLE
         "Uuid" UUID PRIMARY KEY,
         "LogoId" TEXT REFERENCES "Images" ("Id"),
         "BannerId" TEXT REFERENCES "Images" ("Id"),
-        "Handle" TEXT NOT NULL UNIQUE,
+        "Handle" TEXT NOT NULL,
         "OrganizationName" TEXT NOT NULL,
-        "PhoneNumber" TEXT NOT NULL UNIQUE,
-        "Email" TEXT NOT NULL UNIQUE,
+        "PhoneNumber" TEXT NOT NULL,
+        "Email" TEXT NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
         "DeletedAt" TIMESTAMP,
         "UpdatedAt" TIMESTAMP NOT NULL,
-        "CreatedAt" TIMESTAMP NOT NULL
+        "CreatedAt" TIMESTAMP NOT NULL,
+        UNIQUE (
+            "Handle",
+            "PhoneNumber",
+            "Email",
+            "IsDeleted",
+            "DeletedAt"
+        )
     );
 
 CREATE UNIQUE INDEX "Partners_LogoId_unique_not_null" ON "Partners" ("LogoId")
@@ -119,7 +127,7 @@ CREATE TABLE
     "Branches" (
         "Uuid" UUID PRIMARY KEY,
         "PartnerUuid" UUID NOT NULL REFERENCES "Partners" ("Uuid"),
-        "LocationUuid" UUID NOT NULL REFERENCES "Locations" ("Uuid"),
+        "LocationUuid" UUID NOT NULL REFERENCES "Locations" ("Uuid") UNIQUE,
         "Name" TEXT NOT NULL,
         "PhoneNumber" TEXT NOT NULL,
         "Email" TEXT NOT NULL,
@@ -128,8 +136,7 @@ CREATE TABLE
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
-        "DeletedAt" TIMESTAMP,
-        UNIQUE ("PartnerUuid", "LocationUuid")
+        "DeletedAt" TIMESTAMP
     );
 
 CREATE TABLE
@@ -140,13 +147,14 @@ CREATE TABLE
         "BranchUuid" UUID NOT NULL REFERENCES "Branches" ("Uuid"),
         "AvatarId" TEXT REFERENCES "Images" ("Id"),
         "Username" TEXT NOT NULL,
-        "Email" TEXT NOT NULL UNIQUE,
+        "Email" TEXT NOT NULL,
         "Password" TEXT NOT NULL,
         "Status" INT NOT NULL,
         "UpdatedAt" TIMESTAMP NOT NULL,
         "CreatedAt" TIMESTAMP NOT NULL,
         "IsDeleted" BOOLEAN NOT NULL,
-        "DeletedAt" TIMESTAMP
+        "DeletedAt" TIMESTAMP,
+        UNIQUE ("Email", "IsDeleted", "DeletedAt")
     );
 
 CREATE UNIQUE INDEX "Members_AvatarId_unique_not_null" ON "Members" ("AvatarId")
@@ -190,7 +198,9 @@ CREATE TABLE
             "MarketLaunch",
             "Capacity",
             "Transmission",
-            "Fuel"
+            "Fuel",
+            "IsDeleted",
+            "DeletedAt"
         )
     );
 

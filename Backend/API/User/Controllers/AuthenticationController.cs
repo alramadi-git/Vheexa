@@ -24,13 +24,12 @@ public class ClsAuthenticationController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<ClsAccountDto<Database.User.Models.ClsUserAccountModel>>> RegisterAsync([FromBody] Business.User.Inputs.ClsRegisterCredentialsInput registerCredentials)
+    public async Task<ActionResult<ClsAccountDto<Database.User.Models.ClsUserAccountModel>>> RegisterAsync([FromForm] Business.User.Inputs.ClsRegisterCredentialsInput registerCredentials)
     {
         var userAccount = await _AuthenticationService.RegisterAsync(registerCredentials);
         var claims = new List<Claim>
         {
             new Claim("Uuid", userAccount.Uuid.ToString()),
-
         };
 
         var account = new ClsAccountDto<Database.User.Models.ClsUserAccountModel>
@@ -43,9 +42,14 @@ public class ClsAuthenticationController : Controller
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<ClsAccountDto<Database.User.Models.ClsUserAccountModel>>> LoginAsync([FromBody] Business.Inputs.ClsLoginCredentialsInput loginCredentials)
+    public async Task<ActionResult<ClsAccountDto<Database.User.Models.ClsUserAccountModel>>> LoginAsync([FromBody] Inputs.ClsLoginCredentialsInput loginCredentials)
     {
-        var userAccount = await _AuthenticationService.LoginAsync(loginCredentials);
+        var userAccount = await _AuthenticationService.LoginAsync(new Business.Inputs.ClsLoginCredentialsInput
+        {
+            Email = loginCredentials.Email,
+            Password = loginCredentials.Password,
+        });
+        
         var claims = new List<Claim>
         {
             new Claim("Uuid", userAccount.Uuid.ToString()),

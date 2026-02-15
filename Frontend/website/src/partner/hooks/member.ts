@@ -7,8 +7,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { tMemberFilter } from "@/partner/validators/member";
 import { tPagination } from "@/validators/pagination";
+import { useEffect, useState } from "react";
 
 export default function useMembers() {
+  const [run, setRun] = useState(false);
+
   const searchParams = useSearchParams();
   const memberService = useMemberService();
 
@@ -49,7 +52,8 @@ export default function useMembers() {
     pageSize,
   };
 
-  const { isLoading, data: result } = useQuery({
+  const { isEnabled, isLoading, data: result } = useQuery({
+    enabled: run,
     queryKey: [
       "members",
       filter.search,
@@ -62,8 +66,12 @@ export default function useMembers() {
     queryFn: () => memberService.search(filter, pagination),
   });
 
+  useEffect(() => {
+    setRun(true);
+  }, []);
+
   return {
-    isLoading,
+    isLoading: !isEnabled || isLoading ,
     result,
   };
 }

@@ -3,7 +3,6 @@
 import { eLocale } from "@/i18n/routing";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import { useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -54,6 +53,7 @@ import { Link } from "@/components/locals/blocks/links";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { eStatusModel } from "@/partner/models/enums/status";
+import { useQueryClient } from "@tanstack/react-query";
 
 type tTableProps = {
   isLoading: boolean;
@@ -282,8 +282,7 @@ type tActionsProps = {
   branch: tBranchModel;
 };
 function Actions({ branch }: tActionsProps) {
-  const router = useRouter();
-
+  const queryClient = useQueryClient();
   const branchService = useBranchService();
 
   const tAction = useTranslations(
@@ -310,14 +309,19 @@ function Actions({ branch }: tActionsProps) {
       return;
     }
 
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["branches"] }),
+      queryClient.invalidateQueries({ queryKey: ["overview"] }),
+      queryClient.invalidateQueries({ queryKey: ["async-select", "branches"] }),
+      queryClient.invalidateQueries({ queryKey: ["async-multi-select", "branches"] }),
+    ]);
+
     toast.custom(() => (
       <Toast
         variant="success"
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
-
-    router.refresh();
   }
 
   return (

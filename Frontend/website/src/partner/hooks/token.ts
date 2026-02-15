@@ -1,16 +1,16 @@
 "use client";
 
+import { tNullable } from "@/types/nullish";
+
+import { eDuration } from "@/enums/duration";
+
+import { zJwt } from "@/validators/jwt";
+
 import {
   useSetCookie,
   useGetCookie,
   useDeleteCookie,
 } from "cookies-next/client";
-
-import { zJwt } from "@/validators/jwt";
-
-import { tNullable } from "@/types/nullish";
-
-import { eDuration } from "@/enums/duration";
 
 export default function useToken() {
   const setCookie = useSetCookie();

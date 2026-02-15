@@ -5,7 +5,6 @@ import { eLocale } from "@/i18n/routing";
 import { eCurrency, ClsMonyFormatter } from "@/libraries/mony-formatter";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
 
-import { useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 import useVehicleModelService from "@/partner/services/vehicle-model";
@@ -67,6 +66,7 @@ import { Badge } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { eStatusModel } from "@/partner/models/enums/status";
+import { useQueryClient } from "@tanstack/react-query";
 
 type tVehicleModelsProps = {
   isLoading: boolean;
@@ -350,12 +350,12 @@ type tActionsProps = {
   vehicleModel: tVehicleModelModel;
 };
 function Actions({ vehicleModel }: tActionsProps) {
+  const queryClient = useQueryClient();
+  const vehicleModelService = useVehicleModelService();
+
   const tAction = useTranslations(
     "app.partner.dashboard.vehicles.page.vehicles.vehicle-models.content.table.actions.cell",
   );
-
-  const router = useRouter();
-  const vehicleModelService = useVehicleModelService();
 
   function view() {
     toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
@@ -377,14 +377,17 @@ function Actions({ vehicleModel }: tActionsProps) {
       return;
     }
 
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["vehicle-models"] }),
+      queryClient.invalidateQueries({ queryKey: ["overview"] }),
+    ]);
+
     toast.custom(() => (
       <Toast
         variant="success"
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
-
-    router.refresh();
   }
 
   return (

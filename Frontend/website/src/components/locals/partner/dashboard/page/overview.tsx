@@ -18,7 +18,7 @@ import {
   LuUsers,
 } from "react-icons/lu";
 
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { Card, CardContent } from "@/components/shadcn/card";
 import { Separator } from "@/components/shadcn/separator";
@@ -33,16 +33,23 @@ import {
 } from "@/components/shadcn/progress";
 
 export default function Overview() {
-  const overview = useOverview();
+  const [run, setRun] = useState(false);
 
-  const { isLoading, data: result } = useQuery({
+  const overview = useOverview();
+  const { isEnabled,isLoading, data: result } = useQuery({
+    enabled: run,
     queryKey: ["overview"],
     queryFn: () => overview.read(),
   });
 
+  useEffect(() => {
+    setRun(true);
+  }, []);
+  
+
   return (
     <Section className="size-full space-y-6">
-      {isLoading ? (
+      {!isEnabled || isLoading ? (
         "loading..."
       ) : !result?.isSuccess ? (
         "failed..."
@@ -241,7 +248,10 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
           <Separator className="my-3" />
           <ul className="space-y-1">
             {breakdowns.permissionsByRole.map((role) => (
-              <li key={role.groupName} className="flex items-center justify-between">
+              <li
+                key={role.groupName}
+                className="flex items-center justify-between"
+              >
                 <Badge
                   variant="muted"
                   className="w-full justify-between text-base"
@@ -272,7 +282,10 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
           <Separator className="my-3" />
           <ul className="space-y-1">
             {breakdowns.membersByRole.map((role) => (
-              <li key={role.groupName} className="flex items-center justify-between">
+              <li
+                key={role.groupName}
+                className="flex items-center justify-between"
+              >
                 <Badge
                   variant="muted"
                   className="w-full justify-between text-base"

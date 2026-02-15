@@ -35,7 +35,7 @@ public class ClsAuthenticationService
 
             var avatar = registerCredentials.Avatar == null
             ? null
-            : await _ImagekitIntegration.UploadOneAsyncSafe(registerCredentials.Avatar, $"/users/{userUuid}");
+            : await _ImagekitIntegration.UploadOneAsyncSafe(registerCredentials.Avatar, $"/vheexa/users/{userUuid}");
 
             avatarId = avatar?.Id;
 

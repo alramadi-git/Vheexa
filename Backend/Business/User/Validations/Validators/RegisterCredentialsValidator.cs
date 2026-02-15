@@ -27,8 +27,8 @@ public class ClsRegisterCredentialsValidator : AbstractValidator<ClsRegisterCred
         .PhoneNumber();
 
         RuleFor(registerCredentials => registerCredentials.Birthday)
-        .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now).AddYears(-100))
-        .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now).AddYears(-18));
+        .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-100))
+        .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-18));
 
         RuleFor(registerCredentials => registerCredentials.Email)
         .EmailAddress();

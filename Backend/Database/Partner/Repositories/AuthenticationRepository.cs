@@ -214,7 +214,11 @@ public class ClsAuthenticationRepository
         .Include(member => member.Partner)
         .Include(member => member.Role).ThenInclude(partnerRole => partnerRole.Role)
         .Include(member => member.Branch).ThenInclude(branch => branch.Location)
-        .Where(member => member.Email == credentials.Email)
+        .Where(member =>
+            member.Email == credentials.Email &&
+            member.Status == STATUS.ACTIVE &&
+           !member.IsDeleted
+        )
         .FirstAsync();
 
         var hashPassword = new PasswordHasher<object?>().VerifyHashedPassword(null, member.Password, credentials.Password);

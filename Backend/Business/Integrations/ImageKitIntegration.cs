@@ -1,9 +1,11 @@
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
+
+using Microsoft.AspNetCore.Http;
+
 using Imagekit.Sdk;
 
 using System.Net;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 
 namespace Business.Integrations;
 
@@ -23,29 +25,37 @@ public class ClsImagekitIntegration
     }
 
     private readonly ImagekitClient _ImagekitClient;
+    private readonly ILogger<ClsImagekitIntegration> _Logger;
 
-    public ClsImagekitIntegration(IOptions<ClsImagekitOptions> options)
+    public ClsImagekitIntegration(IOptions<ClsImagekitOptions> options, ILogger<ClsImagekitIntegration> logger)
     {
         _ImagekitClient = new ImagekitClient(options.Value.PublicKey, options.Value.PrivateKey, options.Value.UrlEndPoint);
+        _Logger = logger;
     }
 
     public async Task<ClsImagekit?> UploadOneAsyncSafe(IFormFile image, string path)
     {
         try
         {
-            var newImage = await _ImagekitClient.UploadAsync(new FileCreateRequest
+            using (var memoryStream = new MemoryStream())
             {
-                useUniqueFileName = true,
-                file = image,
-                folder = path,
-                fileName = image.FileName,
-            });
+                await image.CopyToAsync(memoryStream);
+                var imageBytes = memoryStream.ToArray();
 
-            return new ClsImagekit
-            {
-                Id = newImage.fileId,
-                Url = newImage.url,
-            };
+                var newImage = await _ImagekitClient.UploadAsync(new FileCreateRequest
+                {
+                    useUniqueFileName = true,
+                    folder = path,
+                    fileName = image.FileName,
+                    file = imageBytes
+                });
+
+                return new ClsImagekit
+                {
+                    Id = newImage.fileId,
+                    Url = newImage.url
+                };
+            }
         }
         catch
         {

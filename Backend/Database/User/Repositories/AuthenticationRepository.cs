@@ -102,7 +102,10 @@ public class ClsAuthenticationRepository
         .AsNoTracking()
         .Include(user => user.Avatar)
         .Include(user => user.Location)
-        .Where(user => user.Email == credentials.Email)
+        .Where(user =>
+            user.Email == credentials.Email &&
+            !user.IsDeleted
+        )
         .FirstAsync();
 
         var hashPassword = new PasswordHasher<object?>().VerifyHashedPassword(null, user.Password, credentials.Password);

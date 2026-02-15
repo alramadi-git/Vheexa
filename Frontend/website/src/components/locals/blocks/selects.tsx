@@ -781,7 +781,7 @@ const FieldMultiAsyncSelect = forwardRef(
     } = useQuery({
       enabled: isOpen,
       placeholderData: (prev) => prev,
-      queryKey: ["async-select", cacheKey, debouncedSearch, page],
+      queryKey: ["async-multi-select", cacheKey, debouncedSearch, page],
       queryFn: async () => fetch(debouncedSearch, page),
     });
 

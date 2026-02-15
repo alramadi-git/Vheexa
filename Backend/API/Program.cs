@@ -44,17 +44,19 @@ public class Program
         builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationFilterValidator>();
         builder.Services.AddScoped<Business.Validations.Validators.ClsLocationValidator>();
 
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchInputValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchFilterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberInputValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberFilterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionFilterValidator>();
-        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionPaginationFilterValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRegisterCredentialsValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchInputValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsOptionPaginationFilterValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberInputValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsMemberFilterValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelFilterValidator>();
+
+        builder.Services.AddScoped<Business.User.Validations.Validators.ClsRegisterCredentialsValidator>();
 
         // Guards
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsAuthenticationGuard>();
@@ -62,6 +64,8 @@ public class Program
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsBranchGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsMemberGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsVehicleModelGuard>();
+
+        builder.Services.AddScoped<Business.User.Validations.Guards.ClsAuthenticationGuard>();
 
         // Integrations
         builder.Services.AddScoped<Business.Integrations.ClsImagekitIntegration>();
@@ -74,6 +78,8 @@ public class Program
         builder.Services.AddScoped<Business.Partner.Services.ClsMemberService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsVehicleModelService>();
 
+        builder.Services.AddScoped<Business.User.Services.ClsAuthenticationService>();
+
         // Register database layer 
         // Repositories 
         builder.Services.AddScoped<Database.Partner.Repositories.ClsAuthenticationRepository>();
@@ -82,6 +88,8 @@ public class Program
         builder.Services.AddScoped<Database.Partner.Repositories.ClsBranchRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsMemberRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsVehicleModelRepository>();
+
+        builder.Services.AddScoped<Database.User.Repositories.ClsAuthenticationRepository>();
 
         // Register Authentication
         // Register Authentication - ONE call with multiple schemes
@@ -124,6 +132,32 @@ public class Program
         builder.Services.AddSwaggerGen(options =>
         {
             options.CustomSchemaIds(type => type.FullName?.Replace("+", "_"));
+
+            options.AddSecurityDefinition("Users", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "Users JWT: Enter your user token"
+            });
+
+            options.AddSecurityDefinition("Partners", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "Partners JWT: Enter your partner token"
+            });
+
+            options.AddSecurityRequirement(document =>
+            {
+                var requirement = new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("Users", document)] = new List<string>(),
+                    [new OpenApiSecuritySchemeReference("Partners", document)] = new List<string>()
+                };
+                return requirement;
+            });
         });
 
         builder.Services.AddCors(options =>

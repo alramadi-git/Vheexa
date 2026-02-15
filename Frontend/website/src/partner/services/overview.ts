@@ -16,6 +16,7 @@ export default function useOverview() {
   async function read(): Promise<
     tSuccessService<tOverviewModel> | tErrorService
   > {
+    console.log("Reading overview data...");
     return await service.catch<tOverviewModel>(async () => {
       const response = await service.fetch.get(
         "/api/partner/dashboard/overview",

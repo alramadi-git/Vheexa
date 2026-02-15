@@ -7,8 +7,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { tBranchFilter } from "@/partner/validators/branch";
 import { tPagination } from "@/validators/pagination";
+import { useEffect, useState } from "react";
 
 export default function useBranches() {
+  const [run, setRun] = useState(false);
+
   const searchParams = useSearchParams();
   const branchService = useBranchService();
 
@@ -36,7 +39,8 @@ export default function useBranches() {
     pageSize,
   };
 
-  const { isLoading, data: result } = useQuery({
+  const { isEnabled, isLoading, data: result } = useQuery({
+    enabled: run,
     queryKey: [
       "branches",
       filter.search,
@@ -47,8 +51,12 @@ export default function useBranches() {
     queryFn: () => branchService.search(filter, pagination),
   });
 
+  useEffect(() => {
+    setRun(true);
+  }, []);
+
   return {
-    isLoading,
+    isLoading: !isEnabled || isLoading ,
     result,
   };
 }

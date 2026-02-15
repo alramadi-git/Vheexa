@@ -24,17 +24,15 @@ public class ClsAuthenticationController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>>> RegisterAsync([FromBody] Business.Partner.Inputs.ClsRegisterCredentialsInput registerCredentials)
+    public async Task<ActionResult<ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>>> RegisterAsync([FromForm] Business.Partner.Inputs.ClsRegisterCredentialsInput registerCredentials)
     {
         var memberAccount = await _AuthenticationService.RegisterAsync(registerCredentials);
         var claims = new List<Claim>
         {
             new Claim("Uuid", memberAccount.Uuid.ToString()),
             new Claim("PartnerUuid", memberAccount.Partner.Uuid.ToString()),
-
         };
-        claims.AddRange(memberAccount.Role.Permissions
-            .Select(permission => new Claim("Permissions", permission.ToString())));
+        claims.AddRange(memberAccount.Role.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
 
         var account = new ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>
         {
@@ -46,17 +44,20 @@ public class ClsAuthenticationController : Controller
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>>> LoginAsync([FromBody] Business.Inputs.ClsLoginCredentialsInput loginCredentials)
+    public async Task<ActionResult<ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>>> LoginAsync([FromBody] Inputs.ClsLoginCredentialsInput loginCredentials)
     {
-        var memberAccount = await _AuthenticationService.LoginAsync(loginCredentials);
+        var memberAccount = await _AuthenticationService.LoginAsync(new Business.Inputs.ClsLoginCredentialsInput
+        {
+            Email = loginCredentials.Email,
+            Password = loginCredentials.Password,
+        });
+        
         var claims = new List<Claim>
         {
             new Claim("Uuid", memberAccount.Uuid.ToString()),
             new Claim("PartnerUuid", memberAccount.Partner.Uuid.ToString()),
-
         };
-        claims.AddRange(memberAccount.Role.Permissions
-            .Select(permission => new Claim("Permissions", permission.ToString())));
+        claims.AddRange(memberAccount.Role.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
 
         var account = new ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>
         {

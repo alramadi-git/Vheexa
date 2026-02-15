@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
-
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -57,6 +55,7 @@ import { Button } from "@/components/shadcn/button";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { eStatusModel } from "@/partner/models/enums/status";
+import { useQueryClient } from "@tanstack/react-query";
 
 type tTableProps = {
   isLoading: boolean;
@@ -267,7 +266,7 @@ type tActionsProps = {
   member: tMemberModel;
 };
 function Actions({ member }: tActionsProps) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const memberService = useMemberService();
 
   const tAction = useTranslations(
@@ -293,13 +292,19 @@ function Actions({ member }: tActionsProps) {
       return;
     }
 
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["members"] }),
+      queryClient.invalidateQueries({ queryKey: ["overview"] }),
+      queryClient.invalidateQueries({ queryKey: ["roles"] }),
+      queryClient.invalidateQueries({ queryKey: ["branches"] }),
+    ]);
+
     toast.custom(() => (
       <Toast
         variant="success"
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
-    router.refresh();
   }
 
   return (

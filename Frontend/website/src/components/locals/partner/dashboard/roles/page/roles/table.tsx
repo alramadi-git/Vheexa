@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
-
 import { eLocale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { ClsDateFormatter } from "@/libraries/date-formatter";
@@ -51,6 +49,7 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 import { Button } from "@/components/shadcn/button";
 import { Badge } from "@/components/locals/blocks/typography";
 import { eStatusModel } from "@/partner/models/enums/status";
+import { useQueryClient } from "@tanstack/react-query";
 
 type tTableProps = {
   isLoading: boolean;
@@ -273,12 +272,12 @@ type tActionsProps = {
   role: tRoleModel;
 };
 function Actions({ role }: tActionsProps) {
+  const queryClient = useQueryClient();
+  const roleService = useRoleService();
+
   const tAction = useTranslations(
     "app.partner.dashboard.roles.page.roles.table.actions.cell",
   );
-
-  const router = useRouter();
-  const roleService = useRoleService();
 
   function view() {
     toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
@@ -300,14 +299,20 @@ function Actions({ role }: tActionsProps) {
       return;
     }
 
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["roles"] }),
+      queryClient.invalidateQueries({ queryKey: ["overview"] }),
+      queryClient.invalidateQueries({ queryKey: ["async-select", "roles"] }),
+      queryClient.invalidateQueries({ queryKey: ["async-multi-select", "roles"] }),
+      queryClient.invalidateQueries({ queryKey: ["members"] }),
+    ]);
+
     toast.custom(() => (
       <Toast
         variant="success"
         label={tAction("remove.toasts.when-success")}
       ></Toast>
     ));
-
-    router.refresh();
   }
 
   return (

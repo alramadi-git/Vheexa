@@ -26,7 +26,7 @@ public class ClsJwtHelper<TJwtOptions> where TJwtOptions : ClsAbstractJwtOptions
             _Options.Audience,
             claims,
             null,
-            DateTime.Now.AddMinutes(_Options.Expires),
+            DateTime.UtcNow.AddMinutes(_Options.Expires),
             signingCredentials
         );
 
