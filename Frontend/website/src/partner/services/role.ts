@@ -1,5 +1,7 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import useToken from "@/partner/hooks/token";
 import usePartnerService from "./use-partner-service";
 
@@ -24,6 +26,8 @@ import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedService } from "@/services/success";
 
 export default function useRoleService() {
+  const queryClient = useQueryClient();
+
   const { token } = useToken();
   const service = usePartnerService();
 
@@ -43,6 +47,16 @@ export default function useRoleService() {
         throw new ClsErrorService(await response.text(), response.status);
       }
 
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["roles"] }),
+        queryClient.invalidateQueries({ queryKey: ["overview"] }),
+        queryClient.invalidateQueries({ queryKey: ["async-select", "roles"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["async-multi-select", "roles"],
+        }),
+        queryClient.invalidateQueries({ queryKey: ["members"] }),
+      ]);
+      
       return {
         isSuccess: true,
         data: null,
@@ -63,6 +77,16 @@ export default function useRoleService() {
       if (!response.ok) {
         throw new ClsErrorService(await response.text(), response.status);
       }
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["roles"] }),
+        queryClient.invalidateQueries({ queryKey: ["overview"] }),
+        queryClient.invalidateQueries({ queryKey: ["async-select", "roles"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["async-multi-select", "roles"],
+        }),
+        queryClient.invalidateQueries({ queryKey: ["members"] }),
+      ]);
 
       return {
         isSuccess: true,

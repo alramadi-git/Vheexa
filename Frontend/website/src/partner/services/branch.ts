@@ -1,5 +1,7 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import useToken from "@/partner/hooks/token";
 import usePartnerService from "./use-partner-service";
 
@@ -24,6 +26,8 @@ import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedService } from "@/services/success";
 
 export default function useBranchService() {
+  const queryClient = useQueryClient();
+
   const { token } = useToken();
   const service = usePartnerService();
 
@@ -42,6 +46,17 @@ export default function useBranchService() {
       if (!response.ok) {
         throw new ClsErrorService(await response.text(), response.status);
       }
+      
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["branches"] }),
+        queryClient.invalidateQueries({ queryKey: ["overview"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["async-select", "branches"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["async-multi-select", "branches"],
+        }),
+      ]);
 
       return {
         isSuccess: true,
@@ -63,6 +78,17 @@ export default function useBranchService() {
       if (!response.ok) {
         throw new ClsErrorService(await response.text(), response.status);
       }
+      
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["branches"] }),
+        queryClient.invalidateQueries({ queryKey: ["overview"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["async-select", "branches"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["async-multi-select", "branches"],
+        }),
+      ]);
 
       return {
         isSuccess: true,

@@ -34,22 +34,22 @@ public class ClsMemberRepository
         using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
-            var isRoleExist = await _AppDBContext.PartnerRoles
-            .AsNoTracking()
-            .AnyAsync(partnerRole =>
+            var role = await _AppDBContext.PartnerRoles
+            .FirstOrDefaultAsync(partnerRole =>
                 partnerRole.Uuid == member.RoleUuid &&
                 partnerRole.PartnerUuid == memberContext.PartnerUuid &&
                 !partnerRole.IsDeleted
             );
-            var isBranchExist = await _AppDBContext.Branches
-            .AsNoTracking()
-            .AnyAsync(branch =>
+            var branch = await _AppDBContext.Branches
+            .FirstOrDefaultAsync(branch =>
                 branch.Uuid == member.BranchUuid &&
                 branch.PartnerUuid == memberContext.PartnerUuid &&
                 !branch.IsDeleted
             );
 
-            if (!isRoleExist || !isBranchExist) throw new ArgumentException("Invalid (role or branch) uuid");
+            if (role == null || branch == null) throw new ArgumentException("Invalid (role or branch) uuid");
+            role.AssignedCount += 1;
+            branch.MemberCount += 1;
 
             var newAvatar = member.Avatar == null ? null : new ClsImageEntity
             {

@@ -53,7 +53,6 @@ import { Link } from "@/components/locals/blocks/links";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { eStatusModel } from "@/partner/models/enums/status";
-import { useQueryClient } from "@tanstack/react-query";
 
 type tTableProps = {
   isLoading: boolean;
@@ -282,7 +281,6 @@ type tActionsProps = {
   branch: tBranchModel;
 };
 function Actions({ branch }: tActionsProps) {
-  const queryClient = useQueryClient();
   const branchService = useBranchService();
 
   const tAction = useTranslations(
@@ -308,13 +306,6 @@ function Actions({ branch }: tActionsProps) {
       ));
       return;
     }
-
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["branches"] }),
-      queryClient.invalidateQueries({ queryKey: ["overview"] }),
-      queryClient.invalidateQueries({ queryKey: ["async-select", "branches"] }),
-      queryClient.invalidateQueries({ queryKey: ["async-multi-select", "branches"] }),
-    ]);
 
     toast.custom(() => (
       <Toast

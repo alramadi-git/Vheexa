@@ -66,7 +66,6 @@ import { Badge } from "@/components/locals/blocks/typography";
 import { Button } from "@/components/shadcn/button";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { eStatusModel } from "@/partner/models/enums/status";
-import { useQueryClient } from "@tanstack/react-query";
 
 type tVehicleModelsProps = {
   isLoading: boolean;
@@ -350,7 +349,6 @@ type tActionsProps = {
   vehicleModel: tVehicleModelModel;
 };
 function Actions({ vehicleModel }: tActionsProps) {
-  const queryClient = useQueryClient();
   const vehicleModelService = useVehicleModelService();
 
   const tAction = useTranslations(
@@ -376,11 +374,6 @@ function Actions({ vehicleModel }: tActionsProps) {
       ));
       return;
     }
-
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["vehicle-models"] }),
-      queryClient.invalidateQueries({ queryKey: ["overview"] }),
-    ]);
 
     toast.custom(() => (
       <Toast

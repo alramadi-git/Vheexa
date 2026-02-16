@@ -116,7 +116,7 @@ export default function Form() {
 
   return (
     <form className="space-y-3" onReset={reset} onSubmit={handleSubmit(submit)}>
-      <FieldGroup className="grid-cols-2 gap-3">
+      <FieldGroup className="sm:grid-cols-2 gap-3">
         <Controller
           control={control}
           name="avatar"

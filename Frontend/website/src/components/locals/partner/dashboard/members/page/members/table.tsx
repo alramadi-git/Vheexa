@@ -55,7 +55,6 @@ import { Button } from "@/components/shadcn/button";
 
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { eStatusModel } from "@/partner/models/enums/status";
-import { useQueryClient } from "@tanstack/react-query";
 
 type tTableProps = {
   isLoading: boolean;
@@ -266,7 +265,6 @@ type tActionsProps = {
   member: tMemberModel;
 };
 function Actions({ member }: tActionsProps) {
-  const queryClient = useQueryClient();
   const memberService = useMemberService();
 
   const tAction = useTranslations(
@@ -291,13 +289,6 @@ function Actions({ member }: tActionsProps) {
       ));
       return;
     }
-
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["members"] }),
-      queryClient.invalidateQueries({ queryKey: ["overview"] }),
-      queryClient.invalidateQueries({ queryKey: ["roles"] }),
-      queryClient.invalidateQueries({ queryKey: ["branches"] }),
-    ]);
 
     toast.custom(() => (
       <Toast

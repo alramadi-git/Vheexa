@@ -12,7 +12,10 @@ import {
 
 import useAuthenticationService from "@/partner/services/authentication";
 
-import { tMemberAccount, zMemberAccount } from "@/partner/validators/member-account";
+import {
+  tMemberAccount,
+  zMemberAccount,
+} from "@/partner/validators/member-account";
 
 import { tRegisterCredentials } from "@/partner/validators/authentication";
 import { tLoginCredentials } from "@/validators/authentication";
@@ -30,9 +33,13 @@ export default function useAccount() {
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
+  const authenticationService = useAuthenticationService();
+
   const account: tNullable<tMemberAccount> = useMemo(() => {
     try {
-      return zMemberAccount.parse(JSON.parse(getCookie("member-account") ?? "null"));
+      return zMemberAccount.parse(
+        JSON.parse(getCookie("member-account") ?? "null"),
+      );
     } catch {
       return null;
     }
@@ -69,8 +76,6 @@ export default function useAccount() {
     removeToken();
     deleteCookie("member-account");
   }
-
-  const authenticationService = useAuthenticationService();
 
   async function register(
     credentials: tRegisterCredentials,

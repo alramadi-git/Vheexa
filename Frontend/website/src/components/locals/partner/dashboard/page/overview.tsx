@@ -31,12 +31,17 @@ import {
   ProgressTrack,
   ProgressValue,
 } from "@/components/shadcn/progress";
+import { Skeleton } from "@/components/shadcn/skeleton";
 
 export default function Overview() {
   const [run, setRun] = useState(false);
 
   const overview = useOverview();
-  const { isEnabled,isLoading, data: result } = useQuery({
+  const {
+    isEnabled,
+    isLoading,
+    data: result,
+  } = useQuery({
     enabled: run,
     queryKey: ["overview"],
     queryFn: () => overview.read(),
@@ -45,14 +50,13 @@ export default function Overview() {
   useEffect(() => {
     setRun(true);
   }, []);
-  
 
   return (
     <Section className="size-full space-y-6">
       {!isEnabled || isLoading ? (
-        "loading..."
+        <Loading />
       ) : !result?.isSuccess ? (
-        "failed..."
+        <Error />
       ) : (
         <Fragment>
           <Businesses businesses={result.data.entitiesOverview} />
@@ -89,7 +93,7 @@ function Businesses({ businesses }: tBusinessesProps) {
             </h3>
             <p className="text-4xl">{businesses.roles.total}</p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <div className="space-y-1">
             <Badge variant="success" className="w-full justify-start">
               <div className="relative size-2">
@@ -123,7 +127,7 @@ function Businesses({ businesses }: tBusinessesProps) {
             </h3>
             <p className="text-4xl">{businesses.branches.total}</p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <div className="space-y-1">
             <Badge variant="success" className="w-full justify-start">
               <div className="relative size-2">
@@ -157,7 +161,7 @@ function Businesses({ businesses }: tBusinessesProps) {
             </h3>
             <p className="text-4xl">{businesses.members.total}</p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <div className="space-y-1">
             <Badge variant="success" className="w-full justify-start">
               <div className="relative size-2">
@@ -191,7 +195,7 @@ function Businesses({ businesses }: tBusinessesProps) {
             </h3>
             <p className="text-4xl">{businesses.vehicleModels.total}</p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <div className="space-y-1">
             <Badge variant="success" className="w-full justify-start">
               <div className="relative size-2">
@@ -245,7 +249,7 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
               {tBreakdowns("permissions-by-role.description")}
             </p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <ul className="space-y-1">
             {breakdowns.permissionsByRole.map((role) => (
               <li
@@ -279,7 +283,7 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
               {tBreakdowns("members-by-role.description")}
             </p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <ul className="space-y-1">
             {breakdowns.membersByRole.map((role) => (
               <li
@@ -313,7 +317,7 @@ function Breakdowns({ breakdowns }: tBreakdownsProps) {
               {tBreakdowns("members-by-branch.description")}
             </p>
           </div>
-          <Separator className="my-3" />
+          <Separator />
           <ul className="space-y-1">
             {breakdowns.membersByBranch.map((branch) => (
               <li
@@ -360,7 +364,7 @@ function VehicleModelPriceDistribution({
 
   return (
     <Card>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-3">
         <div>
           <h3 className="inline-flex items-center gap-1 text-xl">
             <LuDollarSign className="text-emerald-500" />
@@ -402,7 +406,7 @@ function VehicleModelPriceDistribution({
             </CardContent>
           </Card>
         </div>
-        <Separator className="my-3" />
+        <Separator />
         <ul className="space-y-3">
           {vehicleModelPriceDistribution.ranges.map((range) => (
             <li key={`${range.from}-${range.to}-${range.count}`}>
@@ -437,4 +441,149 @@ function VehicleModelPriceDistribution({
       </CardContent>
     </Card>
   );
+}
+
+function Loading() {
+  return (
+    <>
+      <div className="grid gap-6 md:grid-cols-2 2xl:grid-cols-4">
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-10 w-1/2" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-10 w-1/2" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-10 w-1/2" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-10 w-1/2" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <Separator />
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-6 w-full" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-6 w-full" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-3">
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-12" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <Skeleton className="h-6 w-full" />
+            <Separator />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <Separator />
+      <Card>
+        <CardContent className="space-y-3">
+          <div className="flex gap-3">
+            <Skeleton className="h-8 w-12" />
+            <Skeleton className="h-8 w-full" />
+          </div>
+          <Skeleton className="h-6 w-full" />
+          <div className="my-6 grid grid-cols-3 gap-6">
+            <Skeleton className="h-32" />
+            <Skeleton className="h-32" />
+            <Skeleton className="h-32" />
+          </div>
+          <Separator />
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-full" />
+          </div>
+        </CardContent>
+      </Card>
+    </>
+  );
+}
+function Error() {
+  return "";
 }

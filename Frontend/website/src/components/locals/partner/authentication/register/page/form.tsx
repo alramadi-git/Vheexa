@@ -169,7 +169,7 @@ export default function Form() {
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submit)}>
-      <Stepper defaultValue="partner" onValidate={onValidate}>
+      <Stepper defaultValue="member" onValidate={onValidate}>
         <StepperList className="flex-wrap gap-3">
           {steps.map((step, index) => (
             <StepperItem
@@ -251,7 +251,7 @@ function PartnerStep({ control }: tStepProps) {
           </Field>
         )}
       />
-      <FieldGroup className="grid-cols-2 gap-3">
+      <FieldGroup className="sm:grid-cols-2 gap-3">
         <Controller
           control={control}
           name="logo"
@@ -650,7 +650,7 @@ function MemberStep({ formState, control }: tLastStepProps) {
 
   return (
     <StepperContent value="member" className="space-y-3">
-      <FieldGroup className="grid-cols-2 gap-3">
+      <FieldGroup className="sm:grid-cols-2 gap-3">
         <Controller
           control={control}
           name="member.avatar"
