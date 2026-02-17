@@ -30,8 +30,6 @@ public class ClsAuthenticationRepository
                 Id = credentials.Avatar.Id,
                 Url = credentials.Avatar.Url,
             };
-
-
             var newLocation = new ClsLocationEntity
             {
                 Uuid = Guid.NewGuid(),

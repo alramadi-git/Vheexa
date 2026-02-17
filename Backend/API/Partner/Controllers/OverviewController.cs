@@ -20,8 +20,8 @@ public class ClsOverviewController : Controller
     {
         var overview = await _OverviewService.ReadAsync(new Database.Partner.Contexts.ClsMemberContext
         {
-            Uuid = new Guid("bda46d8a-12ee-450e-972c-3969b36fd48e"),
-            PartnerUuid = new Guid("550c8d76-1cb0-4647-b66e-99ca0586f771"),
+            Uuid = new Guid(User.FindFirst("Uuid")!.Value),
+            PartnerUuid = new Guid(User.FindFirst("PartnerUuid")!.Value),
         });
 
         return Ok(overview);

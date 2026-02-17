@@ -101,15 +101,16 @@ public class ClsOverviewRepository
         var vehicleModelMaxPrice = vehicleModelPrices.Length > 0 ? vehicleModelPrices[^1] : 0;
         var vehicleModelAveragePrice = vehicleModelPrices.DefaultIfEmpty(0).Average();
 
-        var uniqueVehicleModelPrices = vehicleModelPrices.Distinct().Order().ToArray();
-        var chunks = (int)Math.Ceiling(uniqueVehicleModelPrices.Length / 3F);
+        var uniqueVehicleModelPrices = vehicleModelPrices.Distinct().Order().ToArray(); // [2,4,8,90]
+        var maxChunks = 5;
+
+        var chunks = (uniqueVehicleModelPrices.Length + maxChunks - 1) / maxChunks;
 
         var ranges = new List<ClsOverviewModel.ClsPriceDistributionModel.ClsRangeModel>(chunks);
         for (var i = 0; i < chunks; i++)
         {
-            decimal
-            from = uniqueVehicleModelPrices[i * 3],
-            to = uniqueVehicleModelPrices[Math.Min(i * 3 + 2, uniqueVehicleModelPrices.Length - 1)];
+            var from = uniqueVehicleModelPrices[i * maxChunks];
+            var to = uniqueVehicleModelPrices[Math.Min(i * maxChunks + maxChunks - 1, uniqueVehicleModelPrices.Length - 1)];
 
             ranges.Add(new ClsOverviewModel.ClsPriceDistributionModel.ClsRangeModel
             {

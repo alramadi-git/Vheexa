@@ -125,6 +125,15 @@ public class Program
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(partnersJwtOptions.SecretKey))
             };
         });
+
+        builder.Services.AddAuthorization(options =>
+        {
+            foreach (var permissionName in Enum.GetNames<Database.Partner.Enums.PERMISSION>())
+            {
+                options.AddPolicy(permissionName, policy => policy.RequireClaim("Permissions", permissionName));
+            }
+        });
+
         builder.Services.AddControllers();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
