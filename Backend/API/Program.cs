@@ -1,13 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
 using Microsoft.OpenApi;
 
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using Microsoft.EntityFrameworkCore;
-
-using API.Helpers;
-
 using System.Text;
+
+using API.Middlewares;
 
 namespace API;
 
@@ -19,21 +19,21 @@ public class Program
 
         // Register options
         var usersJwtSection = builder.Configuration.GetSection("Options:JwtOptions:UsersJwtOptions");
-        var usersJwtOptions = usersJwtSection.Get<User.Options.ClsJwtOptions>()!;
+        var usersJwtOptions = usersJwtSection.Get<Database.User.Options.ClsAccessTokenOptions>()!;
 
-        builder.Services.Configure<User.Options.ClsJwtOptions>(usersJwtSection);
+        builder.Services.Configure<Database.User.Options.ClsAccessTokenOptions>(usersJwtSection);
 
         var partnersJwtSection = builder.Configuration.GetSection("Options:JwtOptions:PartnersJwtOptions");
-        var partnersJwtOptions = partnersJwtSection.Get<Partner.Options.ClsJwtOptions>()!;
+        var partnersJwtOptions = partnersJwtSection.Get<Database.Partner.Options.ClsAccessTokenOptions>()!;
 
-        builder.Services.Configure<Partner.Options.ClsJwtOptions>(partnersJwtSection);
+        builder.Services.Configure<Database.Partner.Options.ClsAccessTokenOptions>(partnersJwtSection);
 
         builder.Services.Configure<Business.Integrations.ClsImagekitIntegration.ClsImagekitOptions>(
           builder.Configuration.GetSection("Options:ImagekitOptions")
         );
 
         // Helpers
-        builder.Services.AddScoped(typeof(ClsJwtHelper<>));
+        builder.Services.AddScoped(typeof(Database.Helpers.ClsAccessTokenHelper<>));
         builder.Services.AddScoped<Database.Helpers.ClsRefreshTokenHelper>();
 
         // Register database
@@ -96,9 +96,11 @@ public class Program
 
         builder.Services.AddScoped<Database.User.Repositories.ClsAuthenticationRepository>();
 
+        // Register Exception
+        builder.Services.AddProblemDetails();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
         // Register Authentication
-        // Register Authentication - ONE call with multiple schemes
-        // Register Authentication with multiple schemes
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -193,6 +195,8 @@ public class Program
         });
 
         var app = builder.Build();
+
+        app.UseExceptionHandler();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

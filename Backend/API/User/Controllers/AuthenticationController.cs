@@ -1,12 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-
-using System.Security.Claims;
-
-using API.User.Options;
-
-using API.Helpers;
-
-using API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.User.Controllers;
@@ -16,77 +8,35 @@ namespace API.User.Controllers;
 public class ClsAuthenticationController : Controller
 {
     private readonly Business.User.Services.ClsAuthenticationService _AuthenticationService;
-    private readonly ClsJwtHelper<ClsJwtOptions> _JwtHelper;
 
-
-    public ClsAuthenticationController(Business.User.Services.ClsAuthenticationService authenticationService, ClsJwtHelper<ClsJwtOptions> jwtHelper)
+    public ClsAuthenticationController(Business.User.Services.ClsAuthenticationService authenticationService)
     {
         _AuthenticationService = authenticationService;
-        _JwtHelper = jwtHelper;
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<ClsAccountDto<Database.User.Models.ClsUserAccountModel>>> RegisterAsync([FromForm] Business.User.Inputs.ClsRegisterCredentialsInput registerCredentials)
+    public async Task<ActionResult<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>>> RegisterAsync([FromForm] Business.User.Inputs.ClsRegisterCredentialsInput credentials)
     {
-        var userAccount = await _AuthenticationService.RegisterAsync(registerCredentials);
+        var userModel = await _AuthenticationService.RegisterAsync(credentials);
 
-        var claims = new Claim[]
-        {
-            new Claim("Uuid", userAccount.Account.Uuid.ToString()),
-        };
-
-        var accessToken = _JwtHelper.Generate(claims);
-        var account = new ClsAccountDto<Database.User.Models.ClsUserAccountModel>
-        {
-            Account = userAccount.Account,
-            AccessToken = accessToken,
-            RefreshToken = userAccount.RefreshToken
-        };
-
-        return Created(string.Empty, account);
+        return Created(string.Empty, userModel);
     }
-
     [HttpPost("login")]
-    public async Task<ActionResult<ClsAccountDto<Database.User.Models.ClsUserAccountModel>>> LoginAsync([FromBody] Business.Inputs.ClsLoginCredentialsInput credentials)
+    public async Task<ActionResult<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>>> LoginAsync([FromBody] Business.Inputs.ClsLoginCredentialsInput credentials)
     {
-        var userAccount = await _AuthenticationService.LoginAsync(credentials);
+        var userModel = await _AuthenticationService.LoginAsync(credentials);
 
-        var claims = new Claim[]
-        {
-            new Claim("Uuid", userAccount.Account.Uuid.ToString()),
-        };
-
-        var accessToken = _JwtHelper.Generate(claims);
-        var account = new ClsAccountDto<Database.User.Models.ClsUserAccountModel>
-        {
-            Account = userAccount.Account,
-            AccessToken = accessToken,
-            RefreshToken = userAccount.RefreshToken
-        };
-
-        return Ok(account);
+        return Ok(userModel);
     }
     [HttpPost("refresh-token")]
-
-    public async Task<ActionResult<ClsTokensDto>> RefreshTokenAsync([FromBody] Business.User.Inputs.ClsRefreshTokenCredentialsInput credentials)
+    public async Task<ActionResult<Database.Models.ClsTokensModel>> RefreshTokenAsync([FromBody] Business.User.Inputs.ClsRefreshTokenCredentialsInput credentials)
     {
-        var refreshToken = await _AuthenticationService.RefreshTokenAsync(credentials);
+        var tokensModel = await _AuthenticationService.RefreshTokenAsync(credentials);
 
-        var claims = new Claim[]
-        {
-            new Claim("Uuid", credentials.Uuid.ToString()),
-        };
-
-        var tokensDto = new ClsTokensDto
-        {
-            AccessToken = _JwtHelper.Generate(claims),
-            RefreshToken = refreshToken
-        };
-        return Ok(tokensDto);
+        return Ok(tokensModel);
     }
     [HttpPost("logout")]
     [Authorize(AuthenticationSchemes = "Users")]
-
     public async Task<ActionResult> LogoutAsync([FromBody] Business.User.Inputs.ClsLogoutCredentialsInput credentials)
     {
         await _AuthenticationService.LogoutAsync(credentials, new Database.User.Contexts.ClsUserContext
@@ -94,6 +44,6 @@ public class ClsAuthenticationController : Controller
             Uuid = new Guid(User.FindFirst("Uuid")!.Value),
         });
 
-        return Ok();
+        return NoContent();
     }
 }

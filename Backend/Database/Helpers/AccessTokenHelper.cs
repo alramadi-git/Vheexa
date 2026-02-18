@@ -1,18 +1,19 @@
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-
 using System.Text;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
-using API.Options;
 using Microsoft.Extensions.Options;
 
-namespace API.Helpers;
+using Microsoft.IdentityModel.Tokens;
 
-public class ClsJwtHelper<TJwtOptions> where TJwtOptions : ClsAbstractJwtOptions
+using Database.Options;
+
+namespace Database.Helpers;
+
+public class ClsAccessTokenHelper<TJwtOptions> where TJwtOptions : ClsAbstractAccessTokenOptions
 {
     private readonly TJwtOptions _Options;
-    public ClsJwtHelper(IOptions<TJwtOptions> options)
+    public ClsAccessTokenHelper(IOptions<TJwtOptions> options)
     {
         _Options = options.Value;
     }

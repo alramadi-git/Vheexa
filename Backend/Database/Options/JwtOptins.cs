@@ -1,6 +1,6 @@
-namespace API.Options;
+namespace Database.Options;
 
-public abstract class ClsAbstractJwtOptions
+public abstract class ClsAbstractAccessTokenOptions
 {
     public string Issuer { get; set; }
     public string Audience { get; set; }

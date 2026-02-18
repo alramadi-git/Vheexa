@@ -2,296 +2,265 @@ using Microsoft.EntityFrameworkCore;
 
 using Microsoft.AspNetCore.Identity;
 
+using System.Security.Claims;
+
+using Database.Partner.Options;
 using Database.Helpers;
 
 using Database.Entities;
 
-using Database.Partner.Contexts;
-
 using Database.Enums;
 
-using Database.Inputs;
+using Database.Partner.Contexts;
 
-using Database.Partner.Models;
+using Database.Inputs;
 using Database.Partner.Inputs;
+
 using Database.Models;
+using Database.Partner.Models;
+
 
 namespace Database.Partner.Repositories;
 
 public class ClsAuthenticationRepository
 {
     private readonly AppDBContext _AppDBContext;
+
+    private readonly ClsAccessTokenHelper<ClsAccessTokenOptions> _AccessTokenHelper;
     private readonly ClsRefreshTokenHelper _RefreshTokenHelper;
 
-    public ClsAuthenticationRepository(AppDBContext appDBContext, ClsRefreshTokenHelper refreshTokenHelper)
+    public ClsAuthenticationRepository(
+        AppDBContext appDBContext,
+        ClsAccessTokenHelper<ClsAccessTokenOptions> accessTokenHelper,
+        ClsRefreshTokenHelper refreshTokenHelper
+    )
     {
         _AppDBContext = appDBContext;
+
+        _AccessTokenHelper = accessTokenHelper;
         _RefreshTokenHelper = refreshTokenHelper;
     }
 
     public async Task<ClsAccountModel<ClsMemberAccountModel>> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
-        using var transaction = await _AppDBContext.Database.BeginTransactionAsync();
-        try
+        var newLogoEntity = credentials.Logo == null ? null : new ClsImageEntity
         {
-            var newLogo = credentials.Logo == null ? null : new ClsImageEntity
+            Id = credentials.Logo.Id,
+            Url = credentials.Logo.Url,
+        };
+        var newBannerEntity = credentials.Banner == null ? null : new ClsImageEntity
+        {
+            Id = credentials.Banner.Id,
+            Url = credentials.Banner.Url,
+        };
+
+        var newPartnerEntity = new ClsPartnerEntity
+        {
+            Uuid = credentials.Uuid,
+            LogoId = newLogoEntity?.Id,
+            BannerId = newBannerEntity?.Id,
+            Handle = credentials.Handle,
+            OrganizationName = credentials.OrganizationName,
+            PhoneNumber = credentials.PhoneNumber,
+            Email = credentials.Email,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            IsDeleted = false,
+            DeletedAt = null,
+        };
+
+        var newLocationEntity = new ClsLocationEntity
+        {
+            Uuid = Guid.NewGuid(),
+            Country = credentials.Branch.Location.Country,
+            City = credentials.Branch.Location.City,
+            Street = credentials.Branch.Location.Street,
+            Latitude = credentials.Branch.Location.Latitude,
+            Longitude = credentials.Branch.Location.Longitude,
+        };
+        var newBranchEntity = new ClsBranchEntity
+        {
+            Uuid = Guid.NewGuid(),
+            PartnerUuid = newPartnerEntity.Uuid,
+            LocationUuid = newLocationEntity.Uuid,
+            Name = credentials.Branch.Name,
+            PhoneNumber = credentials.Branch.PhoneNumber,
+            Email = credentials.Branch.Email,
+            MemberCount = 1,
+            Status = STATUS.ACTIVE,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            IsDeleted = false,
+            DeletedAt = null,
+        };
+
+        var defaultRoles = await _AppDBContext.Roles
+        .Where(role =>
+            role.IsDefault &&
+            !role.IsAdmin
+        )
+        .ToArrayAsync();
+
+        var newPartnerRoleEntities = defaultRoles
+        .Select(role => new ClsPartnerRoleEntity
+        {
+            Uuid = Guid.NewGuid(),
+            PartnerUuid = newPartnerEntity.Uuid,
+            RoleUuid = role.Uuid,
+            AssignedCount = 0,
+            Status = STATUS.ACTIVE,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            IsDeleted = false,
+            DeletedAt = null,
+        }).ToArray();
+
+        var ownerRoleUuid = new Guid("8d5df272-e00a-4fc4-89a5-f0b6028bb7c0");
+
+        var ownerPartnerRole = newPartnerRoleEntities.First(role => role.RoleUuid == ownerRoleUuid);
+        ownerPartnerRole.AssignedCount = 1;
+
+        var newAvatarEntity = credentials.Member.Avatar == null ? null : new ClsImageEntity
+        {
+            Id = credentials.Member.Avatar.Id,
+            Url = credentials.Member.Avatar.Url,
+        };
+
+        var hashedPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Member.Password);
+        var newMemberEntity = new ClsMemberEntity
+        {
+            Uuid = credentials.Member.Uuid,
+            PartnerUuid = newPartnerEntity.Uuid,
+            RoleUuid = ownerPartnerRole.Uuid,
+            BranchUuid = newBranchEntity.Uuid,
+            AvatarId = newAvatarEntity?.Id,
+            Username = credentials.Member.Username,
+            Email = credentials.Member.Email,
+            Password = hashedPassword,
+            Status = STATUS.ACTIVE,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            IsDeleted = false,
+            DeletedAt = null,
+        };
+
+        var refreshToken = _RefreshTokenHelper.Generate();
+        var hashedRefreshToken = _RefreshTokenHelper.Hash(refreshToken);
+
+        var newRefreshTokenEntity = new ClsRefreshTokenEntity
+        {
+            Uuid = Guid.NewGuid(),
+            RefreshToken = hashedRefreshToken,
+            IsRevoked = false,
+            ExpiresAt = credentials.RememberMe ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(1),
+            CreatedAt = DateTime.UtcNow,
+        };
+        var newMemberRefreshTokenEntity = new ClsMemberRefreshTokenEntity
+        {
+            Uuid = Guid.NewGuid(),
+            MemberUuid = credentials.Uuid,
+            RefreshTokenUuid = newRefreshTokenEntity.Uuid,
+        };
+
+        if (newLogoEntity != null) _AppDBContext.Images.Add(newLogoEntity);
+        if (newBannerEntity != null) _AppDBContext.Images.Add(newBannerEntity);
+        _AppDBContext.Partners.Add(newPartnerEntity);
+
+        _AppDBContext.Locations.Add(newLocationEntity);
+        _AppDBContext.Branches.Add(newBranchEntity);
+
+        _AppDBContext.PartnerRoles.AddRange(newPartnerRoleEntities);
+
+        if (newAvatarEntity != null) _AppDBContext.Images.Add(newAvatarEntity);
+        _AppDBContext.Members.Add(newMemberEntity);
+
+        _AppDBContext.RefreshTokens.Add(newRefreshTokenEntity);
+        _AppDBContext.MemberRefreshTokens.Add(newMemberRefreshTokenEntity);
+
+        await _AppDBContext.SaveChangesAsync();
+
+        var accountModel = new ClsMemberAccountModel
+        {
+            Uuid = newMemberEntity.Uuid,
+            Partner = new ClsMemberAccountModel.ClsPartnerModel
             {
-                Id = credentials.Logo.Id,
-                Url = credentials.Logo.Url,
-            };
-            var newBanner = credentials.Banner == null ? null : new ClsImageEntity
-            {
-                Id = credentials.Banner.Id,
-                Url = credentials.Banner.Url,
-            };
-
-            var newPartner = new ClsPartnerEntity
-            {
-                Uuid = credentials.Uuid,
-                LogoId = newLogo?.Id,
-                BannerId = newBanner?.Id,
-                Handle = credentials.Handle,
-                OrganizationName = credentials.OrganizationName,
-                PhoneNumber = credentials.PhoneNumber,
-                Email = credentials.Email,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                DeletedAt = null,
-            };
-
-            var newLocation = new ClsLocationEntity
-            {
-                Uuid = Guid.NewGuid(),
-                Country = credentials.Branch.Location.Country,
-                City = credentials.Branch.Location.City,
-                Street = credentials.Branch.Location.Street,
-                Latitude = credentials.Branch.Location.Latitude,
-                Longitude = credentials.Branch.Location.Longitude,
-            };
-            var newBranch = new ClsBranchEntity
-            {
-                Uuid = Guid.NewGuid(),
-                PartnerUuid = newPartner.Uuid,
-                LocationUuid = newLocation.Uuid,
-                Name = credentials.Branch.Name,
-                PhoneNumber = credentials.Branch.PhoneNumber,
-                Email = credentials.Branch.Email,
-                MemberCount = 1,
-                Status = STATUS.ACTIVE,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                DeletedAt = null,
-            };
-
-            var defaultRoles = await _AppDBContext.Roles
-            .AsNoTracking()
-            .Where(role =>
-                role.IsDefault &&
-                !role.IsAdmin
-            )
-            .ToArrayAsync();
-
-            var ownerRoleUuid = new Guid("8d5df272-e00a-4fc4-89a5-f0b6028bb7c0");
-            var newPartnerRoles = defaultRoles
-            .Select(role => new ClsPartnerRoleEntity
-            {
-                Uuid = Guid.NewGuid(),
-                PartnerUuid = newPartner.Uuid,
-                RoleUuid = role.Uuid,
-                AssignedCount = 0,
-                Status = STATUS.ACTIVE,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                DeletedAt = null,
-            }).ToArray();
-
-            var partnerRole = newPartnerRoles.First(role => role.RoleUuid == ownerRoleUuid);
-            partnerRole.AssignedCount = 1;
-
-            var newAvatar = credentials.Member.Avatar == null ? null : new ClsImageEntity
-            {
-                Id = credentials.Member.Avatar.Id,
-                Url = credentials.Member.Avatar.Url,
-            };
-
-            var hashedPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Member.Password);
-            var newMember = new ClsMemberEntity
-            {
-                Uuid = credentials.Member.Uuid,
-                PartnerUuid = newPartner.Uuid,
-                RoleUuid = partnerRole.Uuid,
-                BranchUuid = newBranch.Uuid,
-                AvatarId = newAvatar?.Id,
-                Username = credentials.Member.Username,
-                Email = credentials.Member.Email,
-                Password = hashedPassword,
-                Status = STATUS.ACTIVE,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                DeletedAt = null,
-            };
-
-            var refreshToken = _RefreshTokenHelper.Generate();
-            var hashedRefreshToken = _RefreshTokenHelper.Hash(refreshToken);
-            var newRefreshToken = new ClsRefreshTokenEntity
-            {
-                Uuid = Guid.NewGuid(),
-                RefreshToken = hashedRefreshToken,
-                IsRevoked = false,
-                ExpiresAt = credentials.RememberMe ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(1),
-                CreatedAt = DateTime.UtcNow,
-            };
-
-            var newMemberRefreshToken = new ClsMemberRefreshTokenEntity
-            {
-                Uuid = Guid.NewGuid(),
-                MemberUuid = credentials.Uuid,
-                RefreshTokenUuid = newRefreshToken.Uuid,
-            };
-
-            if (newLogo != null) _AppDBContext.Images.Add(newLogo);
-            if (newBanner != null) _AppDBContext.Images.Add(newBanner);
-            _AppDBContext.Partners.Add(newPartner);
-
-            _AppDBContext.Locations.Add(newLocation);
-            _AppDBContext.Branches.Add(newBranch);
-
-            _AppDBContext.PartnerRoles.AddRange(newPartnerRoles);
-
-            if (newAvatar != null) _AppDBContext.Images.Add(newAvatar);
-            _AppDBContext.Members.Add(newMember);
-
-            _AppDBContext.RefreshTokens.Add(newRefreshToken);
-            _AppDBContext.MemberRefreshTokens.Add(newMemberRefreshToken);
-
-            await _AppDBContext.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            var accountModel = new ClsMemberAccountModel
-            {
-                Uuid = newMember.Uuid,
-                Partner = new ClsMemberAccountModel.ClsPartnerModel
+                Uuid = newMemberEntity.Partner.Uuid,
+                Logo = newPartnerEntity.Logo == null ? null : new ClsImageModel
                 {
-                    Uuid = newMember.Partner.Uuid,
-                    Logo = newPartner.Logo == null ? null : new ClsImageModel
-                    {
-                        Id = newPartner.Logo.Id,
-                        Url = newPartner.Logo.Url,
-                    },
-                    Banner = newPartner.Banner == null ? null : new ClsImageModel
-                    {
-                        Id = newPartner.Banner.Id,
-                        Url = newPartner.Banner.Url,
-                    },
-                    Handle = newPartner.Handle,
-                    OrganizationName = newPartner.OrganizationName,
-                    PhoneNumber = newPartner.PhoneNumber,
-                    Email = newPartner.Email,
+                    Id = newPartnerEntity.Logo.Id,
+                    Url = newPartnerEntity.Logo.Url,
                 },
-                Role =
+                Banner = newPartnerEntity.Banner == null ? null : new ClsImageModel
                 {
-                    Name = newMember.Role.Role.Name,
+                    Id = newPartnerEntity.Banner.Id,
+                    Url = newPartnerEntity.Banner.Url,
+                },
+                Handle = newPartnerEntity.Handle,
+                OrganizationName = newPartnerEntity.OrganizationName,
+                PhoneNumber = newPartnerEntity.PhoneNumber,
+                Email = newPartnerEntity.Email,
+            },
+            Role =
+                {
+                    Name = newMemberEntity.Role.Role.Name,
                     Permissions = await _AppDBContext.RolePermissions
                     .AsNoTracking()
-                    .Where(rolePermission => rolePermission.RoleUuid == newMember.Role.RoleUuid)
+                    .Where(rolePermission => rolePermission.RoleUuid == newMemberEntity.Role.RoleUuid)
                     .Select(rolePermission => rolePermission.Permission.Type)
                     .ToArrayAsync()
                 },
-                Avatar = newMember.Avatar == null ? null : new ClsImageModel
-                {
-                    Id = newMember.Avatar.Id,
-                    Url = newMember.Avatar.Url,
-                },
-                Branch = new ClsMemberAccountModel.ClsBranchModel
-                {
-                    Location = new ClsMemberAccountModel.ClsBranchModel.ClsLocationModel
-                    {
-                        Country = newLocation.Country,
-                        City = newLocation.City,
-                        Street = newLocation.Street,
-                        Latitude = newLocation.Latitude,
-                        Longitude = newLocation.Longitude,
-                    },
-                    Name = newBranch.Name,
-                    PhoneNumber = newBranch.PhoneNumber,
-                    Email = newBranch.Email,
-                },
-                Username = newMember.Username,
-                Email = newMember.Email,
-
-            };
-            return new ClsAccountModel<ClsMemberAccountModel>
+            Avatar = newMemberEntity.Avatar == null ? null : new ClsImageModel
             {
-                Account = accountModel,
-                RefreshToken = refreshToken
+                Id = newMemberEntity.Avatar.Id,
+                Url = newMemberEntity.Avatar.Url,
+            },
+            Branch = new ClsMemberAccountModel.ClsBranchModel
+            {
+                Location = new ClsMemberAccountModel.ClsBranchModel.ClsLocationModel
+                {
+                    Country = newLocationEntity.Country,
+                    City = newLocationEntity.City,
+                    Street = newLocationEntity.Street,
+                    Latitude = newLocationEntity.Latitude,
+                    Longitude = newLocationEntity.Longitude,
+                },
+                Name = newBranchEntity.Name,
+                PhoneNumber = newBranchEntity.PhoneNumber,
+                Email = newBranchEntity.Email,
+            },
+            Username = newMemberEntity.Username,
+            Email = newMemberEntity.Email,
+
+        };
+
+        var claims = new List<Claim>
+            {
+                new Claim("Uuid", accountModel.Uuid.ToString()),
+                new Claim("PartnerUuid", accountModel.Partner.Uuid.ToString())
             };
-        }
-        catch
+        claims.AddRange(accountModel.Role.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
+
+        var accessToken = _AccessTokenHelper.Generate(claims);
+
+        return new ClsAccountModel<ClsMemberAccountModel>
         {
-            await transaction.RollbackAsync();
-            throw;
-        }
+            Account = accountModel,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        };
     }
     public async Task<ClsAccountModel<ClsMemberAccountModel>> LoginAsync(ClsLoginCredentialsInput credentials)
     {
-        var transaction = await _AppDBContext.Database.BeginTransactionAsync();
-        try
+        var member = await _AppDBContext.Members
+        .AsNoTracking()
+        .Where(member =>
+            member.Email == credentials.Email &&
+            member.Status == STATUS.ACTIVE &&
+            !member.IsDeleted
+        )
+        .Select(member => new
         {
-            var member = await _AppDBContext.Members
-          .AsNoTracking()
-          .Include(member => member.Partner)
-          .Include(member => member.Role).ThenInclude(partnerRole => partnerRole.Role)
-          .Include(member => member.Branch).ThenInclude(branch => branch.Location)
-          .Where(member =>
-              member.Email == credentials.Email &&
-              member.Status == STATUS.ACTIVE &&
-             !member.IsDeleted
-          )
-          .FirstAsync();
-
-            var isValidPassword = new PasswordHasher<object?>().VerifyHashedPassword(null, member.Password, credentials.Password);
-            if (isValidPassword == PasswordVerificationResult.Failed) throw new ArgumentException("Invalid password");
-            if (isValidPassword == PasswordVerificationResult.SuccessRehashNeeded)
-            {
-                var trackedMember = await _AppDBContext.Members
-                .Where(member => member.Email == credentials.Email)
-                .FirstAsync();
-
-                var hashedPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Password);
-                trackedMember.Password = hashedPassword;
-
-                await _AppDBContext.SaveChangesAsync();
-            }
-
-            var refreshToken = _RefreshTokenHelper.Generate();
-            var hashedRefreshToken = _RefreshTokenHelper.Hash(refreshToken);
-            var newRefreshToken = new ClsRefreshTokenEntity
-            {
-                Uuid = Guid.NewGuid(),
-                RefreshToken = hashedRefreshToken,
-                IsRevoked = false,
-                ExpiresAt = credentials.RememberMe ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(1),
-                CreatedAt = DateTime.UtcNow,
-            };
-
-            var newMemberRefreshToken = new ClsMemberRefreshTokenEntity
-            {
-                Uuid = Guid.NewGuid(),
-                MemberUuid = member.Uuid,
-                RefreshTokenUuid = newRefreshToken.Uuid,
-            };
-
-            _AppDBContext.RefreshTokens.Add(newRefreshToken);
-            _AppDBContext.MemberRefreshTokens.Add(newMemberRefreshToken);
-
-            await _AppDBContext.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            var accountModel = new ClsMemberAccountModel
+            Account = new ClsMemberAccountModel
             {
                 Uuid = member.Uuid,
                 Partner = new ClsMemberAccountModel.ClsPartnerModel
@@ -315,11 +284,11 @@ public class ClsAuthenticationRepository
                 Role = new ClsMemberAccountModel.ClsRoleModel
                 {
                     Name = member.Role.Role.Name,
-                    Permissions = await _AppDBContext.RolePermissions
+                    Permissions = _AppDBContext.RolePermissions
                     .AsNoTracking()
                     .Where(rolePermission => rolePermission.RoleUuid == member.Role.RoleUuid)
                     .Select(rolePermission => rolePermission.Permission.Type)
-                    .ToArrayAsync()
+                    .ToArray()
                 },
                 Avatar = member.Avatar == null ? null : new ClsImageModel
                 {
@@ -342,68 +311,149 @@ public class ClsAuthenticationRepository
                 },
                 Username = member.Username,
                 Email = member.Email,
-            };
-            return new ClsAccountModel<ClsMemberAccountModel>
-            {
-                Account = accountModel,
-                RefreshToken = refreshToken
-            };
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
-    }
+            },
+            Password = member.Password
+        })
+        .FirstAsync();
 
-    public async Task<string> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+        var isValidPassword = new PasswordHasher<object?>().VerifyHashedPassword(null, member.Password, credentials.Password);
+        if (isValidPassword == PasswordVerificationResult.Failed) throw new ArgumentException("Invalid password");
+        if (isValidPassword == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            var hashedPassword = new PasswordHasher<object?>().HashPassword(null, credentials.Password);
+
+            await _AppDBContext.Members
+            .Where(member =>
+                member.Email == credentials.Email &&
+                member.Status == STATUS.ACTIVE &&
+                !member.IsDeleted
+            )
+            .ExecuteUpdateAsync(member => member.SetProperty(member => member.Password, hashedPassword));
+        }
+
+        var refreshToken = _RefreshTokenHelper.Generate();
+        var hashedRefreshToken = _RefreshTokenHelper.Hash(refreshToken);
+
+        var newRefreshTokenEntity = new ClsRefreshTokenEntity
+        {
+            Uuid = Guid.NewGuid(),
+            RefreshToken = hashedRefreshToken,
+            IsRevoked = false,
+            ExpiresAt = credentials.RememberMe ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(1),
+            CreatedAt = DateTime.UtcNow,
+        };
+        var newMemberRefreshTokenEntity = new ClsMemberRefreshTokenEntity
+        {
+            Uuid = Guid.NewGuid(),
+            MemberUuid = member.Account.Uuid,
+            RefreshTokenUuid = newRefreshTokenEntity.Uuid,
+        };
+
+        _AppDBContext.RefreshTokens.Add(newRefreshTokenEntity);
+        _AppDBContext.MemberRefreshTokens.Add(newMemberRefreshTokenEntity);
+
+        await _AppDBContext.SaveChangesAsync();
+
+        var claims = new List<Claim>
+        {
+            new Claim("Uuid", member.Account.Uuid.ToString()),
+            new Claim("PartnerUuid", member.Account.Partner.Uuid.ToString())
+        };
+        claims.AddRange(member.Account.Role.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
+
+        var accessToken = _AccessTokenHelper.Generate(claims);
+
+        return new ClsAccountModel<ClsMemberAccountModel>
+        {
+            Account = member.Account,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        };
+    }
+    public async Task<ClsTokensModel> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
     {
         var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
-            var memberRefreshTokens = await _AppDBContext.MemberRefreshTokens
-            .Include(memberRefreshToken => memberRefreshToken.RefreshToken)
-            .Where(memberRefreshToken =>
-                memberRefreshToken.MemberUuid == credentials.Uuid &&
-                !memberRefreshToken.RefreshToken.IsRevoked &&
-                memberRefreshToken.RefreshToken.ExpiresAt > DateTime.UtcNow
+            var member = await _AppDBContext.Members
+            .Where(member =>
+                member.Uuid == credentials.Uuid &&
+                member.Status == STATUS.ACTIVE &&
+                !member.IsDeleted
             )
-            .ToArrayAsync();
-
-            var memberRefreshToken = memberRefreshTokens
-            .First(memberRefreshToken =>
+            .Select(member => new
             {
-                var isValidRefreshToken = _RefreshTokenHelper.Verify(memberRefreshToken.RefreshToken.RefreshToken, credentials.RefreshToken);
+                Uuid = member.Uuid,
+                PartnerUuid = member.PartnerUuid,
+                Permissions = _AppDBContext.RolePermissions
+                .Where(rolePermission => rolePermission.RoleUuid == member.Role.RoleUuid)
+                .Select(rolePermission => rolePermission.Permission.Type)
+                .ToArray(),
+                RefreshTokens = _AppDBContext.MemberRefreshTokens
+                .Where(memberRefreshToken =>
+                    memberRefreshToken.MemberUuid == credentials.Uuid &&
+                    !memberRefreshToken.RefreshToken.IsRevoked &&
+                    memberRefreshToken.RefreshToken.ExpiresAt > DateTime.UtcNow
+                )
+                .Select(memberRefreshToken => new
+                {
+                    Uuid = memberRefreshToken.RefreshToken.Uuid,
+                    ExpiresAt = memberRefreshToken.RefreshToken.ExpiresAt,
+                    RefreshToken = memberRefreshToken.RefreshToken.RefreshToken
+                })
+                .ToArray(),
+            })
+            .FirstAsync();
+
+            var oldRefreshToken = member.RefreshTokens
+            .First(RefreshToken =>
+            {
+                var isValidRefreshToken = _RefreshTokenHelper.Verify(RefreshToken.RefreshToken, credentials.RefreshToken);
                 return isValidRefreshToken != PasswordVerificationResult.Failed;
             });
 
-            memberRefreshToken.RefreshToken.IsRevoked = true;
+            await _AppDBContext.RefreshTokens
+            .Where(refreshToken => refreshToken.Uuid == oldRefreshToken.Uuid)
+            .ExecuteUpdateAsync(refreshToken => refreshToken.SetProperty(refreshToken => refreshToken.IsRevoked, true));
 
-            var refreshToken = _RefreshTokenHelper.Generate();
-            var hashedRefreshToken = _RefreshTokenHelper.Hash(refreshToken);
-            var newRefreshToken = new ClsRefreshTokenEntity
+            var newRefreshToken = _RefreshTokenHelper.Generate();
+            var hashedRefreshToken = _RefreshTokenHelper.Hash(newRefreshToken);
+
+            var newRefreshTokenEntity = new ClsRefreshTokenEntity
             {
                 Uuid = Guid.NewGuid(),
                 RefreshToken = hashedRefreshToken,
                 IsRevoked = false,
-                ExpiresAt = DateTime.SpecifyKind(memberRefreshToken.RefreshToken.ExpiresAt, DateTimeKind.Utc),
+                ExpiresAt = DateTime.SpecifyKind(oldRefreshToken.ExpiresAt, DateTimeKind.Utc),
                 CreatedAt = DateTime.UtcNow,
             };
-
-            var newMemberRefreshToken = new ClsMemberRefreshTokenEntity
+            var newMemberRefreshTokenEntity = new ClsMemberRefreshTokenEntity
             {
                 Uuid = Guid.NewGuid(),
                 MemberUuid = credentials.Uuid,
-                RefreshTokenUuid = newRefreshToken.Uuid,
+                RefreshTokenUuid = newRefreshTokenEntity.Uuid,
             };
 
-            _AppDBContext.RefreshTokens.Add(newRefreshToken);
-            _AppDBContext.MemberRefreshTokens.Add(newMemberRefreshToken);
+            _AppDBContext.RefreshTokens.Add(newRefreshTokenEntity);
+            _AppDBContext.MemberRefreshTokens.Add(newMemberRefreshTokenEntity);
 
             await _AppDBContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return refreshToken;
+            var claims = new List<Claim>
+            {
+                new Claim("Uuid", member.Uuid.ToString()),
+                new Claim("PartnerUuid", member.PartnerUuid.ToString())
+            };
+            claims.AddRange(member.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
+
+            var accessToken = _AccessTokenHelper.Generate(claims);
+
+            return new ClsTokensModel
+            {
+                AccessToken = accessToken,
+                RefreshToken = newRefreshToken
+            };
         }
         catch
         {
@@ -413,34 +463,28 @@ public class ClsAuthenticationRepository
     }
     public async Task LogoutAsync(ClsLogoutCredentialsInput credentials, ClsMemberContext context)
     {
-        var transaction = await _AppDBContext.Database.BeginTransactionAsync();
-        try
+        var refreshTokens = await _AppDBContext.MemberRefreshTokens
+        .Where(memberRefreshToken =>
+            memberRefreshToken.MemberUuid == context.Uuid &&
+            !memberRefreshToken.RefreshToken.IsRevoked &&
+            memberRefreshToken.RefreshToken.ExpiresAt > DateTime.UtcNow
+        )
+        .Select(memberRefreshToken => new
         {
-            var memberRefreshTokens = await _AppDBContext.MemberRefreshTokens
-            .Include(memberRefreshToken => memberRefreshToken.RefreshToken)
-            .Where(memberRefreshToken =>
-                memberRefreshToken.MemberUuid == context.Uuid &&
-                !memberRefreshToken.RefreshToken.IsRevoked &&
-                memberRefreshToken.RefreshToken.ExpiresAt > DateTime.UtcNow
-            )
-            .ToArrayAsync();
+            Uuid = memberRefreshToken.RefreshToken.Uuid,
+            RefreshToken = memberRefreshToken.RefreshToken.RefreshToken
+        })
+        .ToArrayAsync();
 
-            var memberRefreshToken = memberRefreshTokens
-           .First(memberRefreshToken =>
-           {
-               var isValidRefreshToken = _RefreshTokenHelper.Verify(memberRefreshToken.RefreshToken.RefreshToken, credentials.RefreshToken);
-               return isValidRefreshToken != PasswordVerificationResult.Failed;
-           });
+        var oldRefreshToken = refreshTokens
+       .First(refreshToken =>
+       {
+           var isValidRefreshToken = _RefreshTokenHelper.Verify(refreshToken.RefreshToken, credentials.RefreshToken);
+           return isValidRefreshToken != PasswordVerificationResult.Failed;
+       });
 
-            memberRefreshToken.RefreshToken.IsRevoked = true;
-
-            await _AppDBContext.SaveChangesAsync();
-            await transaction.CommitAsync();
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+        await _AppDBContext.RefreshTokens
+        .Where(refreshToken => refreshToken.Uuid == oldRefreshToken.Uuid)
+        .ExecuteUpdateAsync(refreshToken => refreshToken.SetProperty(refreshToken => refreshToken.IsRevoked, true));
     }
 }

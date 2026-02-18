@@ -38,7 +38,7 @@ public class ClsAuthenticationService
             var partnerUuid = Guid.NewGuid();
             var memberUuid = Guid.NewGuid();
 
-            var uploadedImages = await Task.WhenAll([
+            var uploadTasks = await Task.WhenAll([
                 credentials.Logo == null
                 ? Task.FromResult<ClsImagekitIntegration.ClsImagekit?>(null)
                 : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Logo, $"/vheexa/partners/{partnerUuid}"),
@@ -50,15 +50,15 @@ public class ClsAuthenticationService
                 : _ImagekitIntegration.UploadOneAsyncSafe(credentials.Member.Avatar, $"/vheexa/partners/{partnerUuid}/members/{memberUuid}"),
             ]);
 
-            var Logo = uploadedImages[0];
-            var Banner = uploadedImages[1];
-            var Avatar = uploadedImages[2];
+            var Logo = uploadTasks[0];
+            var Banner = uploadTasks[1];
+            var Avatar = uploadTasks[2];
 
             if (Logo != null) imageIds.Add(Logo.Id);
             if (Banner != null) imageIds.Add(Banner.Id);
             if (Avatar != null) imageIds.Add(Avatar.Id);
 
-            var account = await _Repository.RegisterAsync(new Database.Partner.Inputs.ClsRegisterCredentialsInput
+            var memberModel = await _Repository.RegisterAsync(new Database.Partner.Inputs.ClsRegisterCredentialsInput
             {
                 Uuid = partnerUuid,
                 Logo = Logo == null ? null : new Database.Inputs.ClsImageInput
@@ -103,12 +103,11 @@ public class ClsAuthenticationService
                     Password = credentials.Member.Password
                 }
             });
-            return account;
+            return memberModel;
         }
         catch
         {
             if (imageIds.Count > 0) await Task.WhenAll(imageIds.Select(_ImagekitIntegration.DeleteImageAsync));
-
             throw;
         }
     }
@@ -116,24 +115,24 @@ public class ClsAuthenticationService
     {
         await _Guard.LoginAsync(credentials);
 
-        var account = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
+        var memberModel = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
         {
             Email = credentials.Email,
             Password = credentials.Password,
             RememberMe = credentials.RememberMe
         });
-        return account;
+        return memberModel;
     }
-    public async Task<string> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+    public async Task<Database.Models.ClsTokensModel> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
     {
         await _Guard.RefreshTokenAsync(credentials);
 
-        var refreshToken = await _Repository.RefreshTokenAsync(new Database.Partner.Inputs.ClsRefreshTokenCredentialsInput
+        var tokensModel = await _Repository.RefreshTokenAsync(new Database.Partner.Inputs.ClsRefreshTokenCredentialsInput
         {
             Uuid = credentials.Uuid,
             RefreshToken = credentials.RefreshToken,
         });
-        return refreshToken;
+        return tokensModel;
     }
     public async Task LogoutAsync(ClsLogoutCredentialsInput credentials, Database.Partner.Contexts.ClsMemberContext context)
     {

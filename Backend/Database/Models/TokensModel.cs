@@ -1,6 +1,6 @@
-namespace API.Dtos;
+namespace Database.Models;
 
-public class ClsTokensDto
+public class ClsTokensModel
 {
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }

@@ -1,13 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
-using System.Security.Claims;
-
-using API.Partner.Options;
-using API.Helpers;
-
-using API.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using API.Partner.Inputs;
 
 namespace API.Partner.Controllers;
 
@@ -16,80 +8,33 @@ namespace API.Partner.Controllers;
 public class ClsAuthenticationController : Controller
 {
     private readonly Business.Partner.Services.ClsAuthenticationService _AuthenticationService;
-    private readonly ClsJwtHelper<ClsJwtOptions> _JwtHelper;
 
 
-    public ClsAuthenticationController(Business.Partner.Services.ClsAuthenticationService authenticationService, ClsJwtHelper<ClsJwtOptions> jwtHelper)
+    public ClsAuthenticationController(Business.Partner.Services.ClsAuthenticationService authenticationService)
     {
         _AuthenticationService = authenticationService;
-        _JwtHelper = jwtHelper;
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>>> RegisterAsync([FromForm] Business.Partner.Inputs.ClsRegisterCredentialsInput registerCredentials)
+    public async Task<ActionResult<Database.Models.ClsAccountModel<Database.Partner.Models.ClsMemberAccountModel>>> RegisterAsync([FromForm] Business.Partner.Inputs.ClsRegisterCredentialsInput credentials)
     {
-        var memberAccount = await _AuthenticationService.RegisterAsync(registerCredentials);
-        var claims = new List<Claim>
-        {
-            new Claim("Uuid", memberAccount.Account.Uuid.ToString()),
-            new Claim("PartnerUuid", memberAccount.Account.Partner.Uuid.ToString()),
-        };
-        claims.AddRange(memberAccount.Account.Role.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
+        var memberModel = await _AuthenticationService.RegisterAsync(credentials);
 
-        var accessToken = _JwtHelper.Generate(claims);
-        var account = new ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>
-        {
-            Account = memberAccount.Account,
-            AccessToken = accessToken,
-            RefreshToken = memberAccount.RefreshToken
-        };
-
-        return Created(string.Empty, account);
+        return Created(string.Empty, memberModel);
     }
     [HttpPost("login")]
-    public async Task<ActionResult<ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>>> LoginAsync([FromBody] Business.Inputs.ClsLoginCredentialsInput loginCredentials)
+    public async Task<ActionResult<Database.Models.ClsAccountModel<Database.Partner.Models.ClsMemberAccountModel>>> LoginAsync([FromBody] Business.Inputs.ClsLoginCredentialsInput credentials)
     {
-        var memberAccount = await _AuthenticationService.LoginAsync(loginCredentials);
+        var memberModel = await _AuthenticationService.LoginAsync(credentials);
 
-        var claims = new List<Claim>
-        {
-            new Claim("Uuid", memberAccount.Account.Uuid.ToString()),
-            new Claim("PartnerUuid", memberAccount.Account.Partner.Uuid.ToString()),
-        };
-        claims.AddRange(memberAccount.Account.Role.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
-
-        var accessToken = _JwtHelper.Generate(claims);
-        var account = new ClsAccountDto<Database.Partner.Models.ClsMemberAccountModel>
-        {
-            Account = memberAccount.Account,
-            AccessToken = accessToken,
-            RefreshToken = memberAccount.RefreshToken
-        };
-
-        return Ok(account);
+        return Ok(memberModel);
     }
     [HttpPost("refresh-token")]
-    public async Task<ActionResult<ClsTokensDto>> RefreshTokenAsync([FromBody] ClsRefreshTokenCredentialsInput credentials)
+    public async Task<ActionResult<Database.Models.ClsTokensModel>> RefreshTokenAsync([FromBody] Business.Partner.Inputs.ClsRefreshTokenCredentialsInput credentials)
     {
-        var refreshToken = await _AuthenticationService.RefreshTokenAsync(new Business.Partner.Inputs.ClsRefreshTokenCredentialsInput
-        {
-            Uuid = credentials.Uuid,
-            RefreshToken = credentials.RefreshToken
-        });
+        var tokensModel = await _AuthenticationService.RefreshTokenAsync(credentials);
 
-        var claims = new List<Claim>
-        {
-            new Claim("Uuid", credentials.Uuid.ToString()),
-            new Claim("PartnerUuid", credentials.PartnerUuid.ToString()),
-        };
-        claims.AddRange(credentials.Permissions.Select(permission => new Claim("Permissions", permission.ToString())));
-
-        var tokensDto = new ClsTokensDto
-        {
-            AccessToken = _JwtHelper.Generate(claims),
-            RefreshToken = refreshToken
-        };
-        return Ok(tokensDto);
+        return Ok(tokensModel);
     }
     [HttpPost("logout")]
     [Authorize(AuthenticationSchemes = "Partners")]
@@ -101,6 +46,6 @@ public class ClsAuthenticationController : Controller
             PartnerUuid = new Guid(User.FindFirst("PartnerUuid")!.Value),
         });
 
-        return Ok();
+        return NoContent();
     }
 }

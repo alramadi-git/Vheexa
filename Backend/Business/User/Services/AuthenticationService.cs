@@ -23,23 +23,23 @@ public class ClsAuthenticationService
         _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>> RegisterAsync(ClsRegisterCredentialsInput registerCredentials)
+    public async Task<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
         string? avatarId = null;
 
         try
         {
-            await _Guard.RegisterAsync(registerCredentials);
+            await _Guard.RegisterAsync(credentials);
 
             var userUuid = Guid.NewGuid();
 
-            var avatar = registerCredentials.Avatar == null
+            var avatar = credentials.Avatar == null
             ? null
-            : await _ImagekitIntegration.UploadOneAsyncSafe(registerCredentials.Avatar, $"/vheexa/users/{userUuid}");
+            : await _ImagekitIntegration.UploadOneAsyncSafe(credentials.Avatar, $"/vheexa/users/{userUuid}");
 
             avatarId = avatar?.Id;
 
-            var account = await _Repository.RegisterAsync(new Database.User.Inputs.ClsRegisterCredentialsInput
+            var userModel = await _Repository.RegisterAsync(new Database.User.Inputs.ClsRegisterCredentialsInput
             {
                 Uuid = userUuid,
                 Avatar = avatar == null ? null : new Database.Inputs.ClsImageInput
@@ -49,20 +49,20 @@ public class ClsAuthenticationService
                 },
                 Location = new Database.Inputs.ClsLocationInput
                 {
-                    Country = registerCredentials.Location.Country,
-                    City = registerCredentials.Location.City,
-                    Street = registerCredentials.Location.Street,
-                    Latitude = registerCredentials.Location.Latitude,
-                    Longitude = registerCredentials.Location.Longitude
+                    Country = credentials.Location.Country,
+                    City = credentials.Location.City,
+                    Street = credentials.Location.Street,
+                    Latitude = credentials.Location.Latitude,
+                    Longitude = credentials.Location.Longitude
                 },
-                Username = registerCredentials.Username,
-                Birthday = registerCredentials.Birthday,
-                PhoneNumber = registerCredentials.PhoneNumber,
-                Email = registerCredentials.Email,
-                Password = registerCredentials.Password,
-                RememberMe = registerCredentials.RememberMe
+                Username = credentials.Username,
+                Birthday = credentials.Birthday,
+                PhoneNumber = credentials.PhoneNumber,
+                Email = credentials.Email,
+                Password = credentials.Password,
+                RememberMe = credentials.RememberMe
             });
-            return account;
+            return userModel;
         }
         catch
         {
@@ -70,28 +70,28 @@ public class ClsAuthenticationService
             throw;
         }
     }
-    public async Task<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>> LoginAsync(ClsLoginCredentialsInput loginCredentials)
+    public async Task<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>> LoginAsync(ClsLoginCredentialsInput credentials)
     {
-        await _Guard.LoginAsync(loginCredentials);
+        await _Guard.LoginAsync(credentials);
 
-        var account = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
+        var userModel = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
         {
-            Email = loginCredentials.Email,
-            Password = loginCredentials.Password,
-            RememberMe = loginCredentials.RememberMe
+            Email = credentials.Email,
+            Password = credentials.Password,
+            RememberMe = credentials.RememberMe
         });
-        return account;
+        return userModel;
     }
-    public async Task<string> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+    public async Task<Database.Models.ClsTokensModel> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
     {
         await _Guard.RefreshTokenAsync(credentials);
 
-        var refreshToken = await _Repository.RefreshTokenAsync(new Database.User.Inputs.ClsRefreshTokenCredentialsInput
+        var tokensModel = await _Repository.RefreshTokenAsync(new Database.User.Inputs.ClsRefreshTokenCredentialsInput
         {
             Uuid = credentials.Uuid,
             RefreshToken = credentials.RefreshToken
         });
-        return refreshToken;
+        return tokensModel;
     }
     public async Task LogoutAsync(ClsLogoutCredentialsInput credentials, Database.User.Contexts.ClsUserContext context)
     {
