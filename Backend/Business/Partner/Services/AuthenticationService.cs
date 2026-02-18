@@ -23,7 +23,7 @@ public class ClsAuthenticationService
         _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task<Database.Partner.Models.ClsMemberAccountModel> RegisterAsync(ClsRegisterCredentialsInput credentials)
+    public async Task<Database.Models.ClsAccountModel<Database.Partner.Models.ClsMemberAccountModel>> RegisterAsync(ClsRegisterCredentialsInput credentials)
     {
         var imageIds = new List<string>(
             (credentials.Logo == null ? 0 : 1) +
@@ -75,6 +75,7 @@ public class ClsAuthenticationService
                 OrganizationName = credentials.OrganizationName,
                 PhoneNumber = credentials.PhoneNumber,
                 Email = credentials.Email,
+                RememberMe = credentials.RememberMe,
                 Branch = new Database.Partner.Inputs.ClsRegisterCredentialsInput.ClsBranchInput
                 {
                     Location = new Database.Inputs.ClsLocationInput
@@ -102,7 +103,6 @@ public class ClsAuthenticationService
                     Password = credentials.Member.Password
                 }
             });
-
             return account;
         }
         catch
@@ -112,16 +112,36 @@ public class ClsAuthenticationService
             throw;
         }
     }
-    public async Task<Database.Partner.Models.ClsMemberAccountModel> LoginAsync(ClsLoginCredentialsInput credentials)
+    public async Task<Database.Models.ClsAccountModel<Database.Partner.Models.ClsMemberAccountModel>> LoginAsync(ClsLoginCredentialsInput credentials)
     {
         await _Guard.LoginAsync(credentials);
 
         var account = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
         {
             Email = credentials.Email,
-            Password = credentials.Password
+            Password = credentials.Password,
+            RememberMe = credentials.RememberMe
         });
-
         return account;
+    }
+    public async Task<string> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+    {
+        await _Guard.RefreshTokenAsync(credentials);
+
+        var refreshToken = await _Repository.RefreshTokenAsync(new Database.Partner.Inputs.ClsRefreshTokenCredentialsInput
+        {
+            Uuid = credentials.Uuid,
+            RefreshToken = credentials.RefreshToken,
+        });
+        return refreshToken;
+    }
+    public async Task LogoutAsync(ClsLogoutCredentialsInput credentials, Database.Partner.Contexts.ClsMemberContext context)
+    {
+        await _Guard.LogoutAsync(credentials);
+
+        await _Repository.LogoutAsync(new Database.Partner.Inputs.ClsLogoutCredentialsInput
+        {
+            RefreshToken = credentials.RefreshToken
+        }, context);
     }
 }

@@ -1,8 +1,7 @@
 namespace API.Dtos;
 
-public class ClsAccountDto<TAccount>
+public class ClsTokensDto
 {
-    public TAccount Account { get; set; }
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }
 }

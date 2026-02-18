@@ -26,6 +26,7 @@ public class ClsRegisterCredentialsInput
     public required string OrganizationName { get => field.Trim(); set; }
     public required string PhoneNumber { get; set; }
     public required string Email { get; set; }
+    public required bool RememberMe { get; set; }
     public required ClsBranchInput Branch { get; set; }
     public required ClsMemberInput Member { get; set; }
 }

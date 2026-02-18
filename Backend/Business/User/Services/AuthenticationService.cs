@@ -23,7 +23,7 @@ public class ClsAuthenticationService
         _ImagekitIntegration = imagekitIntegration;
     }
 
-    public async Task<Database.User.Models.ClsUserAccountModel> RegisterAsync(ClsRegisterCredentialsInput registerCredentials)
+    public async Task<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>> RegisterAsync(ClsRegisterCredentialsInput registerCredentials)
     {
         string? avatarId = null;
 
@@ -59,9 +59,9 @@ public class ClsAuthenticationService
                 Birthday = registerCredentials.Birthday,
                 PhoneNumber = registerCredentials.PhoneNumber,
                 Email = registerCredentials.Email,
-                Password = registerCredentials.Password
+                Password = registerCredentials.Password,
+                RememberMe = registerCredentials.RememberMe
             });
-
             return account;
         }
         catch
@@ -70,16 +70,36 @@ public class ClsAuthenticationService
             throw;
         }
     }
-    public async Task<Database.User.Models.ClsUserAccountModel> LoginAsync(ClsLoginCredentialsInput loginCredentials)
+    public async Task<Database.Models.ClsAccountModel<Database.User.Models.ClsUserAccountModel>> LoginAsync(ClsLoginCredentialsInput loginCredentials)
     {
         await _Guard.LoginAsync(loginCredentials);
 
         var account = await _Repository.LoginAsync(new Database.Inputs.ClsLoginCredentialsInput
         {
             Email = loginCredentials.Email,
-            Password = loginCredentials.Password
+            Password = loginCredentials.Password,
+            RememberMe = loginCredentials.RememberMe
         });
-
         return account;
+    }
+    public async Task<string> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+    {
+        await _Guard.RefreshTokenAsync(credentials);
+
+        var refreshToken = await _Repository.RefreshTokenAsync(new Database.User.Inputs.ClsRefreshTokenCredentialsInput
+        {
+            Uuid = credentials.Uuid,
+            RefreshToken = credentials.RefreshToken
+        });
+        return refreshToken;
+    }
+    public async Task LogoutAsync(ClsLogoutCredentialsInput credentials, Database.User.Contexts.ClsUserContext context)
+    {
+        await _Guard.LogoutAsync(credentials);
+
+        await _Repository.LogoutAsync(new Database.User.Inputs.ClsLogoutCredentialsInput
+        {
+            RefreshToken = credentials.RefreshToken
+        }, context);
     }
 }

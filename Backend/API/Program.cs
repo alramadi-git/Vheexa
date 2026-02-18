@@ -34,17 +34,24 @@ public class Program
 
         // Helpers
         builder.Services.AddScoped(typeof(ClsJwtHelper<>));
+        builder.Services.AddScoped<Database.Helpers.ClsRefreshTokenHelper>();
 
         // Register database
         builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSql")));
 
         // Register business layer 
         // Validators
-        builder.Services.AddScoped<Business.Validations.Validators.ClsLoginValidator>();
-        builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationFilterValidator>();
+        builder.Services.AddScoped<Business.Validations.Validators.ClsLoginCredentialsValidator>();
         builder.Services.AddScoped<Business.Validations.Validators.ClsLocationValidator>();
+        builder.Services.AddScoped<Business.Validations.Validators.ClsPaginationFilterValidator>();
+
+        builder.Services.AddScoped<Business.User.Validations.Validators.ClsRegisterCredentialsValidator>();
+        builder.Services.AddScoped<Business.User.Validations.Validators.ClsRefreshTokenCredentialsValidator>();
+        builder.Services.AddScoped<Business.User.Validations.Validators.ClsLogoutCredentialsValidator>();
 
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRegisterCredentialsValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRefreshTokenCredentialsValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsLogoutCredentialsValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleFilterValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsBranchInputValidator>();
@@ -56,16 +63,14 @@ public class Program
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelInputValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsVehicleModelFilterValidator>();
 
-        builder.Services.AddScoped<Business.User.Validations.Validators.ClsRegisterCredentialsValidator>();
-
         // Guards
+        builder.Services.AddScoped<Business.User.Validations.Guards.ClsAuthenticationGuard>();
+
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsAuthenticationGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsRoleGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsBranchGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsMemberGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsVehicleModelGuard>();
-
-        builder.Services.AddScoped<Business.User.Validations.Guards.ClsAuthenticationGuard>();
 
         // Integrations
         builder.Services.AddScoped<Business.Integrations.ClsImagekitIntegration>();
@@ -122,6 +127,7 @@ public class Program
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = partnersJwtOptions.Issuer,
                 ValidAudience = partnersJwtOptions.Audience,
+                ClockSkew = TimeSpan.Zero, // TO_REMOVE
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(partnersJwtOptions.SecretKey))
             };
         });

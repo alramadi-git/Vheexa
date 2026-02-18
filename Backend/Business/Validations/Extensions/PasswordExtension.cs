@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Business.Validations.Extensions;
 
-public static class AuthenticationExtension
+public static class PasswordExtension
 {
     public static IRuleBuilderOptions<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder)
     {

@@ -6,9 +6,9 @@ using Business.Inputs;
 
 namespace Business.Validations.Validators;
 
-public class ClsLoginValidator : AbstractValidator<ClsLoginCredentialsInput>
+public class ClsLoginCredentialsValidator : AbstractValidator<ClsLoginCredentialsInput>
 {
-    public ClsLoginValidator()
+    public ClsLoginCredentialsValidator()
     {
         RuleFor(loginCredentials => loginCredentials.Email).EmailAddress();
         RuleFor(loginCredentials => loginCredentials.Password).Password();

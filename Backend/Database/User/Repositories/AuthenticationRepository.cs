@@ -140,7 +140,7 @@ public class ClsAuthenticationRepository
             .FirstAsync();
 
             var isValidPassword = new PasswordHasher<object?>().VerifyHashedPassword(null, user.Password, credentials.Password);
-            if (isValidPassword != PasswordVerificationResult.Success) throw new ArgumentException("Invalid password");
+            if (isValidPassword == PasswordVerificationResult.Failed) throw new ArgumentException("Invalid password");
             if (isValidPassword == PasswordVerificationResult.SuccessRehashNeeded)
             {
                 var trackedUser = await _AppDBContext.Users
@@ -210,43 +210,55 @@ public class ClsAuthenticationRepository
             throw;
         }
     }
-    public async Task RefreshTokenAsync(ClsRefreshTokenInput refreshToken, ClsUserContext context)
+    public async Task<string> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
     {
         var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try
         {
             var userRefreshTokens = await _AppDBContext.UserRefreshTokens
+            .Include(userRefreshToken => userRefreshToken.RefreshToken)
             .Where(userRefreshToken =>
-                userRefreshToken.UserUuid == context.Uuid &&
+                userRefreshToken.UserUuid == credentials.Uuid &&
                 !userRefreshToken.RefreshToken.IsRevoked &&
                 userRefreshToken.RefreshToken.ExpiresAt > DateTime.UtcNow
             )
             .ToArrayAsync();
 
-            var userRefreshToken = userRefreshTokens.FirstOrDefault(userRefreshToken => 
-                userRefreshToken.RefreshToken.RefreshToken == refreshToken.RefreshToken
+            var userRefreshToken = userRefreshTokens
+            .First(userRefreshToken =>
+              {
+                  var isValidRefreshToken = _RefreshTokenHelper.Verify(userRefreshToken.RefreshToken.RefreshToken, credentials.RefreshToken);
+                  return isValidRefreshToken != PasswordVerificationResult.Failed;
+              }
             );
-            foreach (var userRefreshToken in userRefreshTokens)
-            {
-                var isValidRefreshToken = _RefreshTokenHelper.Verify(userRefreshToken.RefreshToken.RefreshToken, refreshToken.RefreshToken);
-                if (isValidRefreshToken != PasswordVerificationResult.Success) throw new ArgumentException("Invalid refresh token");
 
-                userRefreshToken.RefreshToken.IsRevoked = true;
-                break;
-            }
+            userRefreshToken.RefreshToken.IsRevoked = true;
 
+            var refreshToken = _RefreshTokenHelper.Generate();
+            var hashedRefreshToken = _RefreshTokenHelper.Hash(refreshToken);
             var newRefreshToken = new ClsRefreshTokenEntity
             {
                 Uuid = Guid.NewGuid(),
-                RefreshToken = _RefreshTokenHelper.Hash(refreshToken.RefreshToken),
+                RefreshToken = hashedRefreshToken,
                 IsRevoked = false,
-                ExpiresAt = ,
+                ExpiresAt = DateTime.SpecifyKind(userRefreshToken.RefreshToken.ExpiresAt, DateTimeKind.Utc),
                 CreatedAt = DateTime.UtcNow,
             };
 
+            var newUserRefreshToken = new ClsUserRefreshTokenEntity
+            {
+                Uuid = Guid.NewGuid(),
+                UserUuid = credentials.Uuid,
+                RefreshTokenUuid = newRefreshToken.Uuid,
+            };
+
+            _AppDBContext.RefreshTokens.Add(newRefreshToken);
+            _AppDBContext.UserRefreshTokens.Add(newUserRefreshToken);
 
             await _AppDBContext.SaveChangesAsync();
             await transaction.CommitAsync();
+
+            return refreshToken;
         }
         catch
         {
@@ -260,6 +272,7 @@ public class ClsAuthenticationRepository
         try
         {
             var userRefreshTokens = await _AppDBContext.UserRefreshTokens
+            .Include(userRefreshToken => userRefreshToken.RefreshToken)
             .Where(userRefreshToken =>
                 userRefreshToken.UserUuid == context.Uuid &&
                 !userRefreshToken.RefreshToken.IsRevoked &&
@@ -267,14 +280,16 @@ public class ClsAuthenticationRepository
             )
             .ToArrayAsync();
 
-            foreach (var userRefreshToken in userRefreshTokens)
-            {
-                var isValidRefreshToken = _RefreshTokenHelper.Verify(userRefreshToken.RefreshToken.RefreshToken, credentials.RefreshToken);
-                if (isValidRefreshToken != PasswordVerificationResult.Success) throw new ArgumentException("Invalid refresh token");
 
-                userRefreshToken.RefreshToken.IsRevoked = true;
-                break;
-            }
+            var userRefreshToken = userRefreshTokens
+            .First(userRefreshToken =>
+                {
+                    var isValidRefreshToken = _RefreshTokenHelper.Verify(userRefreshToken.RefreshToken.RefreshToken, credentials.RefreshToken);
+                    return isValidRefreshToken != PasswordVerificationResult.Failed;
+                }
+            );
+
+            userRefreshToken.RefreshToken.IsRevoked = true;
 
             await _AppDBContext.SaveChangesAsync();
             await transaction.CommitAsync();

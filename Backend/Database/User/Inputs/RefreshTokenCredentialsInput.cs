@@ -1,6 +1,7 @@
 namespace Database.User.Inputs;
 
-public class ClsRefreshTokenInput
+public class ClsRefreshTokenCredentialsInput
 {
+    public required Guid Uuid { get; set; }
     public required string RefreshToken { get; set; }
 }
