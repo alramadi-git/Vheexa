@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using Database.Entities;
-using Database.Enums;
-using Database.Partner.Enums;
 
 namespace Database;
 
@@ -14,12 +12,15 @@ public class AppDBContext : DbContext
     public DbSet<ClsPermissionEntity> Permissions { get; set; }
     public DbSet<ClsRolePermissionEntity> RolePermissions { get; set; }
     public DbSet<ClsHistoryEntity> Histories { get; set; }
+    public DbSet<ClsRefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<ClsUserEntity> Users { get; set; }
+    public DbSet<ClsUserRefreshTokenEntity> UserRefreshTokens { get; set; }
     public DbSet<ClsPartnerEntity> Partners { get; set; }
     public DbSet<ClsPartnerRoleEntity> PartnerRoles { get; set; }
     public DbSet<ClsBranchEntity> Branches { get; set; }
     public DbSet<ClsMemberEntity> Members { get; set; }
     public DbSet<ClsMemberHistoryEntity> MemberHistories { get; set; }
+    public DbSet<ClsMemberRefreshTokenEntity> MemberRefreshTokens { get; set; }
     public DbSet<ClsVehicleModelEntity> VehicleModels { get; set; }
     public DbSet<ClsVehicleModelGalleryEntity> VehicleModelGalleries { get; set; }
 
