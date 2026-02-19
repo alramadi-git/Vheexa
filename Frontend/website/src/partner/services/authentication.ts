@@ -1,7 +1,6 @@
 "use client";
 
-import useToken from "@/partner/hooks/token";
-import usePartnerService from "./use-partner-service";
+import useService from "@/services/use-service";
 
 import {
   tRegisterCredentials,
@@ -16,13 +15,22 @@ import {
 import { tAccountModel } from "@/models/account";
 import { tMemberAccountModel } from "@/partner/models/member-account";
 
-import { ClsErrorService, tErrorService } from "@/services/error";
+import { tErrorService } from "@/services/error";
 
 import { tSuccessService } from "@/services/success";
+import { tTokensModel } from "@/models/tokens";
+import {
+  tRefreshTokenCredentials,
+  zRefreshTokenCredentials,
+} from "@/validators/refresh-token-credentials";
+import { zAccessToken } from "@/validators/tokens";
+import {
+  tLogoutCredentials,
+  zLogoutCredentials,
+} from "@/validators/logout-credentials";
 
 export default function useAuthenticationService() {
-  const { token } = useToken();
-  const service = usePartnerService();
+  const service = useService();
 
   async function register(
     credentials: tRegisterCredentials,
@@ -86,7 +94,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(await response.text());
       }
 
       const result: tAccountModel<tMemberAccountModel> = await response.json();
@@ -111,7 +119,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(await response.text());
       }
 
       const result: tAccountModel<tMemberAccountModel> = await response.json();
@@ -122,23 +130,47 @@ export default function useAuthenticationService() {
       };
     });
   }
-  async function logout(): Promise<tSuccessService<null> | tErrorService> {
-    return service.catch<null>(async () => {
-      if (true === true) {
-        return {
-          isSuccess: true,
-          data: null,
-        };
-      }
-
+  async function refreshTokens(
+    credentials: tRefreshTokenCredentials,
+  ): Promise<tSuccessService<tTokensModel> | tErrorService> {
+    return service.catch(async () => {
+      zRefreshTokenCredentials.parse(credentials);
+      
       const response = await service.fetch.post(
-        "/api/partner/authentication/logout",
-        undefined,
-        token ?? undefined,
+        "/api/partner/authentication/refresh-tokens",
+        JSON.stringify(credentials),
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(await response.text());
+      }
+      
+      const result: tTokensModel = await response.json();
+
+      return {
+        isSuccess: true,
+        data: result,
+      };
+    });
+  }
+  async function logout(
+    credentials: tLogoutCredentials,
+    accessToken: string,
+  ): Promise<tSuccessService<null> | tErrorService> {
+    return service.catch<null>(async () => {
+      zLogoutCredentials.parse(credentials);
+      zAccessToken.parse(accessToken);
+
+      const response = await service.fetch.post(
+        "/api/partner/authentication/logout",
+        JSON.stringify(credentials),
+        accessToken,
+      );
+
+      if (!response.ok) {
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       return {
@@ -151,6 +183,7 @@ export default function useAuthenticationService() {
   return {
     register,
     login,
+    refreshTokens,
     logout,
   };
 }

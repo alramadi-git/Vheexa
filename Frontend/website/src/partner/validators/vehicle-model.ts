@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { eVehicleModelCategoryService } from "./enums/vehicle-model";
+import { eVehicleModelCategoryService } from "./enums/vehicle-model-category";
 import { eStatusService } from "./enums/status";
 
 const zVehicleModelCreate = z

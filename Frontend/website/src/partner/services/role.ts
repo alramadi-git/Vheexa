@@ -2,8 +2,8 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
-import useToken from "@/partner/hooks/token";
-import usePartnerService from "./use-partner-service";
+import useToken from "@/partner/hooks/tokens";
+import useService from "@/services/use-service";
 
 import { tUuid, zUuid } from "@/validators/uuid";
 
@@ -20,16 +20,17 @@ import { ClsQuery } from "@/libraries/query";
 
 import { tRoleModel } from "@/partner/models/role";
 
-import { ClsErrorService, tErrorService } from "@/services/error";
+import { tErrorService } from "@/services/error";
 
 import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedService } from "@/services/success";
+import useAccount from "../hooks/account";
 
 export default function useRoleService() {
   const queryClient = useQueryClient();
 
-  const { token } = useToken();
-  const service = usePartnerService();
+  const { accessToken, refreshTokens } = useAccount();
+  const service = useService();
 
   async function create(
     role: tRoleCreate,
@@ -40,11 +41,13 @@ export default function useRoleService() {
       const response = await service.fetch.post(
         "/api/partner/dashboard/roles",
         JSON.stringify(role),
-        token,
+        accessToken,
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       await Promise.all([
@@ -56,7 +59,7 @@ export default function useRoleService() {
         }),
         queryClient.invalidateQueries({ queryKey: ["members"] }),
       ]);
-      
+
       return {
         isSuccess: true,
         data: null,
@@ -71,11 +74,13 @@ export default function useRoleService() {
 
       const response = await service.fetch.delete(
         `/api/partner/dashboard/roles/${uuid}`,
-        token,
+        accessToken,
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       await Promise.all([
@@ -99,6 +104,8 @@ export default function useRoleService() {
     pagination: tPagination,
   ): Promise<tPaginatedService<tRoleModel> | tErrorService> {
     return await service.catch<tRoleModel>(async () => {
+      console.log("accessToken: ", accessToken);
+
       zRoleFilter.parse(filter);
       zPagination.parse(pagination);
 
@@ -118,11 +125,15 @@ export default function useRoleService() {
 
       const response = await service.fetch.get(
         `/api/partner/dashboard/roles${clsQuery.toString()}`,
-        token,
+        accessToken,
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        if (response.status === 401) await refreshTokens();
+
+        throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tPaginatedModel<tRoleModel> = await response.json();

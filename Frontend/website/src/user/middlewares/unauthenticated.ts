@@ -8,12 +8,11 @@ export default function unauthenticatedMiddleware(
   }
 
   const accessToken = request.cookies.get("user-access-token")?.value;
+  const refreshToken = request.cookies.get("user-refresh-token")?.value;
   const account = request.cookies.get("user-account")?.value;
 
-  if (accessToken && account) {
-    return NextResponse.redirect(
-      new URL("/", request.nextUrl.origin),
-    );
+  if (accessToken && refreshToken && account) {
+    return NextResponse.redirect(new URL("/", request.nextUrl.origin));
   }
 
   return NextResponse.next();

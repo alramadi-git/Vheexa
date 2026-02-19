@@ -32,24 +32,29 @@ import {
   ProgressValue,
 } from "@/components/shadcn/progress";
 import { Skeleton } from "@/components/shadcn/skeleton";
+import useAccount from "@/partner/hooks/account";
 
 export default function Overview() {
-  const [run, setRun] = useState(false);
+  const account = useAccount();
+  console.log(account);
+  // const [run, setRun] = useState(false);
 
-  const overview = useOverview();
-  const {
-    isEnabled,
-    isLoading,
-    data: result,
-  } = useQuery({
-    enabled: run,
-    queryKey: ["overview"],
-    queryFn: () => overview.read(),
-  });
+  // const overview = useOverview();
+  // const {
+  //   isEnabled,
+  //   isLoading,
+  //   data: result,
+  // } = useQuery({
+  //   enabled: run,
+  //   queryKey: ["overview"],
+  //   queryFn: () => overview.read(),
+  // });
 
-  useEffect(() => {
-    setRun(true);
-  }, []);
+  // useEffect(() => {
+  //   setRun(true);
+  // }, []);
+
+  return "";
 
   return (
     <Section className="size-full space-y-6">

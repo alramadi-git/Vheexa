@@ -123,11 +123,11 @@ public class ClsAuthenticationService
         });
         return memberModel;
     }
-    public async Task<Database.Models.ClsTokensModel> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+    public async Task<Database.Models.ClsTokensModel> RefreshTokensAsync(ClsRefreshTokenCredentialsInput credentials)
     {
         await _Guard.RefreshTokenAsync(credentials);
 
-        var tokensModel = await _Repository.RefreshTokenAsync(new Database.Partner.Inputs.ClsRefreshTokenCredentialsInput
+        var tokensModel = await _Repository.RefreshTokensAsync(new Database.Partner.Inputs.ClsRefreshTokenCredentialsInput
         {
             Uuid = credentials.Uuid,
             RefreshToken = credentials.RefreshToken,

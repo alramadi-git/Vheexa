@@ -1,145 +1,115 @@
 "use client";
 
-import { useMemo } from "react";
-
-import useToken from "./token";
-
 import {
   useSetCookie,
   useGetCookie,
   useDeleteCookie,
 } from "cookies-next/client";
 
+import { useState, useEffect } from "react";
+
 import useAuthenticationService from "@/partner/services/authentication";
 
-import {
-  tMemberAccount,
-  zMemberAccount,
-} from "@/partner/validators/member-account";
-
-import { tRegisterCredentials } from "@/partner/validators/authentication";
-import { tLoginCredentials } from "@/validators/authentication";
-
-import { tNullable } from "@/types/nullish";
-
 import { eDuration } from "@/enums/duration";
-import { tSuccessService } from "@/services/success";
-import { tErrorService } from "@/services/error";
+
+import { tMemberAccountModel } from "../models/member-account";
+import { tTokensModel } from "@/models/tokens";
+
+import { tAccountModel } from "@/models/account";
 
 export default function useAccount() {
-  const { setToken, removeToken } = useToken();
-
   const setCookie = useSetCookie();
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const authenticationService = useAuthenticationService();
+  const [account, setAccount] = useState<tAccountModel<tMemberAccountModel>>();
 
-  const account: tNullable<tMemberAccount> = useMemo(() => {
-    try {
-      return zMemberAccount.parse(
-        JSON.parse(getCookie("member-account") ?? "null"),
-      );
-    } catch {
-      return null;
+  useEffect(() => {
+    const account = getCookie("member-account");
+    const accessToken = getCookie("member-access-token");
+    const refreshToken = getCookie("member-refresh-token");
+
+    if (account && accessToken && refreshToken) {
+      setAccount({
+        account: JSON.parse(account),
+        refreshToken: refreshToken,
+        accessToken: accessToken,
+      });
     }
   }, [getCookie]);
 
-  function setAccount(
-    account: tMemberAccount,
-    token: string,
-    rememberMe: boolean,
-  ): boolean {
-    removeAccount();
-
-    if (!setToken(token, rememberMe)) {
-      return false;
-    }
-
-    const parsedAccount = zMemberAccount.safeParse(account);
-    if (!parsedAccount.success) {
-      removeToken();
-      return false;
-    }
-
-    setCookie("member-account", JSON.stringify(account), {
+  function onRefreshToken(tokens: tTokensModel): void {
+    setCookie("member-access-token", tokens.accessToken, {
       secure: true,
       priority: "high",
       sameSite: "strict",
-      maxAge: rememberMe ? eDuration.month : eDuration.day,
+      maxAge: eDuration.day * 7,
     });
 
-    return true;
+    setCookie("member-refresh-token", tokens.refreshToken, {
+      secure: true,
+      priority: "high",
+      sameSite: "strict",
+      maxAge: eDuration.day * 7,
+    });
+
+    setAccount((prev) => {
+      if (prev === undefined) return undefined;
+
+      return {
+        account: prev.account,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+    });
   }
 
-  function removeAccount() {
-    removeToken();
+  function onLogout(): void {
     deleteCookie("member-account");
+    deleteCookie("member-access-token");
+    deleteCookie("member-refresh-token");
+
+    setAccount(undefined);
   }
 
-  async function register(
-    credentials: tRegisterCredentials,
-  ): Promise<tSuccessService<null> | tErrorService> {
-    const response = await authenticationService.register(credentials);
+  const authenticationService = useAuthenticationService();
+  async function refreshTokens(): Promise<void> {
+    if (account === undefined) return;
+
+    const response = await authenticationService.refreshTokens({
+      uuid: account.account.uuid,
+      refreshToken: account.refreshToken,
+    });
+
     if (!response.isSuccess) {
-      return response;
+      return;
     }
 
-    const { account, token } = response.data;
-
-    if (!setAccount(account, token, credentials.rememberMe)) {
-      return {
-        isSuccess: false,
-        message: "Account or token is invalid.",
-      };
-    }
-
-    return {
-      isSuccess: true,
-      data: null,
-    };
+    onRefreshToken(response.data);
   }
 
-  async function login(
-    credentials: tLoginCredentials,
-  ): Promise<tSuccessService<null> | tErrorService> {
-    const response = await authenticationService.login(credentials);
+  async function logout(): Promise<void> {
+    if (account === undefined) return;
+
+    const response = await authenticationService.logout(
+      {
+        refreshToken: account.refreshToken,
+      },
+      account.accessToken,
+    );
+
     if (!response.isSuccess) {
-      return response;
+      return;
     }
 
-    const { account, token } = response.data;
-
-    if (!setAccount(account, token, credentials.rememberMe)) {
-      return {
-        isSuccess: false,
-        message: "Account or token is invalid.",
-      };
-    }
-
-    return {
-      isSuccess: true,
-      data: null,
-    };
+    onLogout();
   }
 
-  async function logout(): Promise<tSuccessService<null> | tErrorService> {
-    const response = await authenticationService.logout();
-    if (!response.isSuccess) {
-      return response;
-    }
-
-    removeAccount();
-    return {
-      isSuccess: true,
-      data: null,
-    };
-  }
+  if (account === undefined) return undefined;
 
   return {
-    account: account ?? null,
-    register,
-    login,
+    account: account,
+    refreshTokens,
     logout,
   };
 }

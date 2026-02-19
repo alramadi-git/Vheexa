@@ -88,7 +88,7 @@ export default function useAccount() {
       return response;
     }
 
-    const { account, token } = response.data;
+    const { account, accessToken: token } = response.data;
 
     if (!setAccount(account, token, credentials.rememberMe)) {
       return {
@@ -111,7 +111,7 @@ export default function useAccount() {
       return response;
     }
 
-    const { account, token } = response.data;
+    const { account, accessToken: token } = response.data;
 
     if (!setAccount(account, token, credentials.rememberMe)) {
       return {

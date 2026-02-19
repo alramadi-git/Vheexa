@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { zJwt } from "@/validators/jwt";
-import { zMemberAccount } from "@/partner/validators/member-account";
-
 export default function authenticatedMiddleware(
   request: NextRequest,
 ): NextResponse {
@@ -10,27 +7,21 @@ export default function authenticatedMiddleware(
     return NextResponse.next();
   }
 
+  const account = request.cookies.get("member-account")?.value;
   const accessToken = request.cookies.get("member-access-token")?.value;
-  if (!zJwt.safeParse(accessToken).success) {
+  const refreshToken = request.cookies.get("member-refresh-token")?.value;
+
+  if (
+    account === undefined ||
+    accessToken === undefined ||
+    refreshToken === undefined
+  ) {
     const response = NextResponse.redirect(
       new URL("/partner/authentication/login", request.nextUrl.origin),
     );
 
     response.cookies.delete("member-access-token");
-    response.cookies.delete("member-account");
-
-    return response;
-  }
-
-  const account = request.cookies.get("member-account")?.value ?? "null";
-  try {
-    zMemberAccount.parse(JSON.parse(account));
-  } catch {
-    const response = NextResponse.redirect(
-      new URL("/partner/authentication/login", request.nextUrl.origin),
-    );
-
-    response.cookies.delete("member-access-token");
+    response.cookies.delete("member-refresh-token");
     response.cookies.delete("member-account");
 
     return response;

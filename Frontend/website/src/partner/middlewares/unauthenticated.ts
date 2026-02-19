@@ -7,10 +7,15 @@ export default function unauthenticatedMiddleware(
     return NextResponse.next();
   }
 
-  const accessToken = request.cookies.get("member-access-token")?.value;
   const account = request.cookies.get("member-account")?.value;
+  const accessToken = request.cookies.get("member-access-token")?.value;
+  const refreshToken = request.cookies.get("member-refresh-token")?.value;
 
-  if (accessToken && account) {
+  if (
+    account !== undefined &&
+    accessToken !== undefined &&
+    refreshToken !== undefined
+  ) {
     return NextResponse.redirect(
       new URL("/partner/dashboard", request.nextUrl.origin),
     );

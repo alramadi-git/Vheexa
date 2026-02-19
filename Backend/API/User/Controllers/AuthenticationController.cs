@@ -28,10 +28,10 @@ public class ClsAuthenticationController : Controller
 
         return Ok(userModel);
     }
-    [HttpPost("refresh-token")]
-    public async Task<ActionResult<Database.Models.ClsTokensModel>> RefreshTokenAsync([FromBody] Business.User.Inputs.ClsRefreshTokenCredentialsInput credentials)
+    [HttpPost("refresh-tokens")]
+    public async Task<ActionResult<Database.Models.ClsTokensModel>> RefreshTokensAsync([FromBody] Business.User.Inputs.ClsRefreshTokenCredentialsInput credentials)
     {
-        var tokensModel = await _AuthenticationService.RefreshTokenAsync(credentials);
+        var tokensModel = await _AuthenticationService.RefreshTokensAsync(credentials);
 
         return Ok(tokensModel);
     }

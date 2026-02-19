@@ -1,6 +1,7 @@
 type tAccountModel<tAccount> = {
   account: tAccount;
-  token: string;
+  accessToken: string;
+  refreshToken: string,
 };
 
 export type { tAccountModel };

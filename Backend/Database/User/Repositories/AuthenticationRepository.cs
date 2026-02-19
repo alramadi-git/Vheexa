@@ -212,7 +212,7 @@ public class ClsAuthenticationRepository
             RefreshToken = refreshToken
         };
     }
-    public async Task<ClsTokensModel> RefreshTokenAsync(ClsRefreshTokenCredentialsInput credentials)
+    public async Task<ClsTokensModel> RefreshTokensAsync(ClsRefreshTokenCredentialsInput credentials)
     {
         var transaction = await _AppDBContext.Database.BeginTransactionAsync();
         try

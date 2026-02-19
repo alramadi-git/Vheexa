@@ -1,17 +1,17 @@
 "use client";
 
-import useToken from "@/partner/hooks/token";
-import usePartnerService from "./use-partner-service";
+import useToken from "@/partner/hooks/tokens";
+import useService from "@/services/use-service";
 
 import { tOverviewModel } from "@/partner/models/overview";
 
-import { ClsErrorService, tErrorService } from "@/services/error";
+import { tErrorService } from "@/services/error";
 
 import { tSuccessService } from "@/services/success";
 
 export default function useOverview() {
-  const { token } = useToken();
-  const service = usePartnerService();
+  const { accessToken: token } = useToken();
+  const service = useService();
 
   async function read(): Promise<
     tSuccessService<tOverviewModel> | tErrorService
@@ -24,7 +24,9 @@ export default function useOverview() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tOverviewModel = await response.json();

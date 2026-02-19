@@ -1,7 +1,7 @@
 "use client";
 
 import useToken from "@/user/hooks/token";
-import useUserService from "../../user/services/use-user-service";
+import useService from "@/services/use-service";
 
 import {
   tRegisterCredentials,
@@ -16,13 +16,13 @@ import {
 import { tAccountModel } from "@/models/account";
 import { tUserAccountModel } from "@/user/models/user-account";
 
-import { ClsErrorService, tErrorService } from "@/services/error";
+import { tErrorService } from "@/services/error";
 
 import { tSuccessService } from "@/services/success";
 
 export default function useAuthenticationService() {
   const { token } = useToken();
-  const service = useUserService();
+  const service = useService();
 
   async function register(
     credentials: tRegisterCredentials,
@@ -69,7 +69,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(await response.text());
       }
 
       const result: tAccountModel<tUserAccountModel> = await response.json();
@@ -94,7 +94,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(await response.text());
       }
 
       const result: tAccountModel<tUserAccountModel> = await response.json();
@@ -121,7 +121,7 @@ export default function useAuthenticationService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+        throw new Error(await response.text());
       }
 
       return {

@@ -2,8 +2,8 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
-import useToken from "@/partner/hooks/token";
-import usePartnerService from "./use-partner-service";
+import useToken from "@/partner/hooks/tokens";
+import useService from "@/services/use-service";
 
 import { tUuid, zUuid } from "@/validators/uuid";
 
@@ -28,7 +28,7 @@ import { ClsQuery } from "@/libraries/query";
 import { tMemberModel } from "@/partner/models/member";
 import { tOptionModel } from "@/partner/models/option";
 
-import { ClsErrorService, tErrorService } from "@/services/error";
+import { tErrorService } from "@/services/error";
 
 import { tPaginatedModel } from "@/models/success";
 import { tSuccessService, tPaginatedService } from "@/services/success";
@@ -36,8 +36,8 @@ import { tSuccessService, tPaginatedService } from "@/services/success";
 export default function useMemberService() {
   const queryClient = useQueryClient();
 
-  const { token } = useToken();
-  const service = usePartnerService();
+  const { accessToken: token } = useToken();
+  const service = useService();
 
   async function create(
     member: tMemberCreate,
@@ -65,7 +65,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       await Promise.all([
@@ -97,7 +99,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tOptionModel[] = await response.json();
@@ -123,7 +127,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tOptionModel[] = await response.json();
@@ -145,7 +151,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       await Promise.all([
@@ -180,7 +188,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tPaginatedModel<tOptionModel> = await response.json();
@@ -209,7 +219,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tPaginatedModel<tOptionModel> = await response.json();
@@ -246,7 +258,9 @@ export default function useMemberService() {
       );
 
       if (!response.ok) {
-        throw new ClsErrorService(await response.text(), response.status);
+           throw new Error(
+          response.status === 401 ? "Unauthorized" : await response.text(),
+        );
       }
 
       const result: tPaginatedModel<tMemberModel> = await response.json();
