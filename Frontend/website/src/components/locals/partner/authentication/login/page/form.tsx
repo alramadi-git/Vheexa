@@ -39,17 +39,16 @@ import { Checkbox } from "@/components/shadcn/checkbox";
 
 import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
+import useAuthentication from "@/user/hooks/authentication";
 
 export default function Form() {
-  const id = useId();
-
   const tForm = useTranslations("app.partner.authentication.login.page.form");
+
+  const id = useId();
+  const router = useRouter();
 
   const emailRef = useRef<tFieldEmailRef>(null);
   const passwordRef = useRef<tFieldPasswordRef>(null);
-
-  const router = useRouter();
-  const { login } = useAccount();
 
   const {
     formState,
@@ -72,8 +71,9 @@ export default function Form() {
     passwordRef.current?.reset();
   }
 
+  const { login } = useAuthentication();
   async function submit(credentials: tLoginCredentials) {
-    const { isSuccess } = await login(credentials);
+    const isSuccess = await login(credentials);
 
     if (!isSuccess) {
       toast.custom(() => (
@@ -87,7 +87,7 @@ export default function Form() {
       <Toast variant="success" label={tForm("actions.when-success")} />
     ));
 
-    router.push("/partner/dashboard");
+    // router.push("/partner/dashboard");
   }
 
   return (

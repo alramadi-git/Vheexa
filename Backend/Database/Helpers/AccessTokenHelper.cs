@@ -28,7 +28,7 @@ public class ClsAccessTokenHelper<TJwtOptions> where TJwtOptions : ClsAbstractAc
             claims,
             null,
             // DateTime.UtcNow.AddMinutes(_Options.Expires),
-            DateTime.UtcNow.AddSeconds(30), // TO_REMOVE
+            DateTime.UtcNow.AddSeconds(5), // TO_REMOVE
             signingCredentials
         );
 

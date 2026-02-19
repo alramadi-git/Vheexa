@@ -1,8 +1,8 @@
 import Account from "./account";
 import Languages from "@/components/locals/blocks/languages";
 
-import NavigationMenu from "@/components/locals/user/layout/header/navigation-menu";
-import MobileNavigationMenu from "@/components/locals/user/layout/header/mobile-navigation-menu";
+import NavigationMenu from "@/components/templates/user/layout/header/navigation-menu";
+import MobileNavigationMenu from "@/components/templates/user/layout/header/mobile-navigation-menu";
 
 import { Container } from "@/components/locals/blocks/typography";
 import { Link } from "@/components/locals/blocks/links";

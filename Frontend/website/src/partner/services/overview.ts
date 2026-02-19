@@ -1,7 +1,7 @@
 "use client";
 
 import useToken from "@/partner/hooks/tokens";
-import useService from "@/services/use-service";
+import useService from "@/services/use";
 
 import { tOverviewModel } from "@/partner/models/overview";
 
@@ -16,8 +16,7 @@ export default function useOverview() {
   async function read(): Promise<
     tSuccessService<tOverviewModel> | tErrorService
   > {
-    console.log("Reading overview data...");
-    return await service.catch<tOverviewModel>(async () => {
+    return await service.globalCatch<tOverviewModel>(async () => {
       const response = await service.fetch.get(
         "/api/partner/dashboard/overview",
         token,

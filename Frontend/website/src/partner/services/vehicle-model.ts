@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 
 import useToken from "@/partner/hooks/tokens";
-import useService from "@/services/use-service";
+import useService from "@/services/use";
 
 import { tUuid, zUuid } from "@/validators/uuid";
 
@@ -34,7 +34,7 @@ export default function useVehicleModelService() {
   async function create(
     vehicleModel: tVehicleModelCreate,
   ): Promise<tSuccessService<null> | tErrorService> {
-    return await service.catch<null>(async () => {
+    return await service.globalCatch<null>(async () => {
       zVehicleModelCreate.parse(vehicleModel);
 
       const formData = new FormData();
@@ -95,7 +95,7 @@ export default function useVehicleModelService() {
   async function _delete(
     uuid: tUuid,
   ): Promise<tSuccessService<null> | tErrorService> {
-    return await service.catch<null>(async () => {
+    return await service.globalCatch<null>(async () => {
       zUuid.parse(uuid);
 
       const response = await service.fetch.delete(
@@ -124,7 +124,7 @@ export default function useVehicleModelService() {
     filter: tVehicleModelFilter,
     pagination: tPagination,
   ): Promise<tPaginatedService<tVehicleModelModel> | tErrorService> {
-    return await service.catch<tVehicleModelModel>(async () => {
+    return await service.globalCatch<tVehicleModelModel>(async () => {
       zVehicleModelFilter.parse(filter);
       zPagination.parse(pagination);
 

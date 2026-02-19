@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
-import { useId, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
+import { useId, useRef } from "react";
 
 import {
   tRegisterCredentials,
@@ -13,9 +13,16 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import useAccount from "@/user/hooks/account";
+import useAuthentication from "@/user/hooks/authentication";
 
 import { LuEarth, LuLoader } from "react-icons/lu";
+
+import { GiMountainRoad } from "react-icons/gi";
+
+import { FaMountainCity } from "react-icons/fa6";
+
+import { toast } from "sonner";
+import { Toast } from "@/components/locals/blocks/toasts";
 
 import {
   FieldGroup,
@@ -37,19 +44,15 @@ import {
   FieldIconInput,
 } from "@/components/locals/blocks/fields";
 
-import { Checkbox } from "@/components/shadcn/checkbox";
-
-import { toast } from "sonner";
-import { Toast } from "@/components/locals/blocks/toasts";
-
-import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
 import {
   FieldFileUpload,
   tFieldFileUploadRef,
 } from "@/components/locals/blocks/file-uploads";
-import { GiMountainRoad } from "react-icons/gi";
-import { FaMountainCity } from "react-icons/fa6";
+
+import { Checkbox } from "@/components/shadcn/checkbox";
+
+import { Button } from "@/components/shadcn/button";
+import { Link } from "@/components/locals/blocks/links";
 
 export default function Form() {
   const id = useId();
@@ -62,7 +65,7 @@ export default function Form() {
   const passwordRef = useRef<tFieldPasswordRef>(null);
 
   const router = useRouter();
-  const { register } = useAccount();
+  const { register } = useAuthentication();
 
   const {
     formState,
@@ -97,7 +100,7 @@ export default function Form() {
   }
 
   async function submit(credentials: tRegisterCredentials) {
-    const { isSuccess } = await register(credentials);
+    const isSuccess = await register(credentials);
 
     if (!isSuccess) {
       toast.custom(() => (
@@ -116,7 +119,7 @@ export default function Form() {
 
   return (
     <form className="space-y-3" onReset={reset} onSubmit={handleSubmit(submit)}>
-      <FieldGroup className="sm:grid-cols-2 gap-3">
+      <FieldGroup className="gap-3 sm:grid-cols-2">
         <Controller
           control={control}
           name="avatar"

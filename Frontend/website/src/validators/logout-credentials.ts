@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { zRefreshToken } from "./tokens";
+import { zRefreshToken } from "./refresh-token";
 
 const zLogoutCredentials = z
   .object({

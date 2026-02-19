@@ -65,6 +65,7 @@ public class Program
 
         // Guards
         builder.Services.AddScoped<Business.User.Validations.Guards.ClsAuthenticationGuard>();
+        builder.Services.AddScoped<Business.User.Validations.Guards.ClsAccountGuard>();
 
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsAuthenticationGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsRoleGuard>();
@@ -76,6 +77,9 @@ public class Program
         builder.Services.AddScoped<Business.Integrations.ClsImagekitIntegration>();
 
         // Services
+        builder.Services.AddScoped<Business.User.Services.ClsAuthenticationService>();
+        builder.Services.AddScoped<Business.User.Services.ClsAccountService>();
+
         builder.Services.AddScoped<Business.Partner.Services.ClsAuthenticationService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsOverviewService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsRoleService>();
@@ -83,18 +87,17 @@ public class Program
         builder.Services.AddScoped<Business.Partner.Services.ClsMemberService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsVehicleModelService>();
 
-        builder.Services.AddScoped<Business.User.Services.ClsAuthenticationService>();
-
         // Register database layer 
         // Repositories 
+        builder.Services.AddScoped<Database.User.Repositories.ClsAuthenticationRepository>();
+        builder.Services.AddScoped<Database.User.Repositories.ClsAccountRepository>();
+
         builder.Services.AddScoped<Database.Partner.Repositories.ClsAuthenticationRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsOverviewRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsRoleRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsBranchRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsMemberRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsVehicleModelRepository>();
-
-        builder.Services.AddScoped<Database.User.Repositories.ClsAuthenticationRepository>();
 
         // Register Exception
         builder.Services.AddProblemDetails();
@@ -116,7 +119,40 @@ public class Program
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = usersJwtOptions.Issuer,
                 ValidAudience = usersJwtOptions.Audience,
+                ClockSkew = TimeSpan.Zero, // TO_REMOVE
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(usersJwtOptions.SecretKey))
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnChallenge = async context =>
+                {
+                    context.HandleResponse();
+
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "text/plain";
+
+                    if (context.AuthenticateFailure == null)
+                    {
+                        await context.Response.WriteAsync("Missing access token");
+                    }
+                    else if (context.AuthenticateFailure is SecurityTokenExpiredException)
+                    {
+                        await context.Response.WriteAsync("Expired access token");
+                    }
+                    else
+                    {
+                        await context.Response.WriteAsync("Invalid access token");
+                    }
+                },
+                OnForbidden = async context =>
+                  {
+                      context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+                      context.Response.ContentType = "text/plain";
+
+                      await context.Response.WriteAsync("Forbidden");
+                  }
             };
         })
         .AddJwtBearer("Partners", options =>
@@ -131,6 +167,38 @@ public class Program
                 ValidAudience = partnersJwtOptions.Audience,
                 ClockSkew = TimeSpan.Zero, // TO_REMOVE
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(partnersJwtOptions.SecretKey))
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnChallenge = async context =>
+                {
+                    context.HandleResponse();
+
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "text/plain";
+
+                    if (context.AuthenticateFailure == null)
+                    {
+                        await context.Response.WriteAsync("Missing access token");
+                    }
+                    else if (context.AuthenticateFailure is SecurityTokenExpiredException)
+                    {
+                        await context.Response.WriteAsync("Expired access token");
+                    }
+                    else
+                    {
+                        await context.Response.WriteAsync("Invalid access token");
+                    }
+                },
+                OnForbidden = async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+                    context.Response.ContentType = "text/plain";
+
+                    await context.Response.WriteAsync("Forbidden");
+                }
             };
         });
 
@@ -209,6 +277,7 @@ public class Program
 
         app.UseCors("VheexaPolicy");
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

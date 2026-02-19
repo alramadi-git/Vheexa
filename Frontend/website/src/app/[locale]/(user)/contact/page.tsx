@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 import { getTranslations } from "next-intl/server";
 
-import Contact from "@/components/locals/user/contact/page/contact/contact";
+import Contact from "@/components/templates/user/contact/page/contact/contact";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {

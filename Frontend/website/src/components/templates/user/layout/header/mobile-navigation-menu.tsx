@@ -4,7 +4,7 @@ import { LuMenu, LuX } from "react-icons/lu";
 
 import { Container } from "@/components/locals/blocks/typography";
 
-import Languages from "../../../blocks/languages";
+import Languages from "../../../../locals/blocks/languages";
 import Account from "./account";
 
 import {

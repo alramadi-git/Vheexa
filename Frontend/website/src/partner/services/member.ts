@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 
 import useToken from "@/partner/hooks/tokens";
-import useService from "@/services/use-service";
+import useService from "@/services/use";
 
 import { tUuid, zUuid } from "@/validators/uuid";
 
@@ -42,7 +42,7 @@ export default function useMemberService() {
   async function create(
     member: tMemberCreate,
   ): Promise<tSuccessService<null> | tErrorService> {
-    return await service.catch<null>(async () => {
+    return await service.globalCatch<null>(async () => {
       zMemberCreate.parse(member);
 
       const formData = new FormData();
@@ -86,7 +86,7 @@ export default function useMemberService() {
   async function readRoles(
     uuids: tUuid[],
   ): Promise<tSuccessService<tOptionModel[]> | tErrorService> {
-    return await service.catch<tOptionModel[]>(async () => {
+    return await service.globalCatch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
       const clsQuery = new ClsQuery();
@@ -114,7 +114,7 @@ export default function useMemberService() {
   async function readBranches(
     uuids: tUuid[],
   ): Promise<tSuccessService<tOptionModel[]> | tErrorService> {
-    return await service.catch<tOptionModel[]>(async () => {
+    return await service.globalCatch<tOptionModel[]>(async () => {
       zUuid.array().parse(uuids);
 
       const clsQuery = new ClsQuery();
@@ -142,7 +142,7 @@ export default function useMemberService() {
   async function _delete(
     uuid: tUuid,
   ): Promise<tSuccessService<null> | tErrorService> {
-    return await service.catch<null>(async () => {
+    return await service.globalCatch<null>(async () => {
       zUuid.parse(uuid);
 
       const response = await service.fetch.delete(
@@ -173,7 +173,7 @@ export default function useMemberService() {
     filter: tOptionFilter,
     pagination: tOptionPagination,
   ): Promise<tPaginatedService<tOptionModel> | tErrorService> {
-    return await service.catch<tOptionModel>(async () => {
+    return await service.globalCatch<tOptionModel>(async () => {
       zOptionFilter.parse(filter);
       zOptionPagination.parse(pagination);
 
@@ -204,7 +204,7 @@ export default function useMemberService() {
     filter: tOptionFilter,
     pagination: tOptionPagination,
   ): Promise<tPaginatedService<tOptionModel> | tErrorService> {
-    return await service.catch<tOptionModel>(async () => {
+    return await service.globalCatch<tOptionModel>(async () => {
       zOptionFilter.parse(filter);
       zOptionPagination.parse(pagination);
 
@@ -235,7 +235,7 @@ export default function useMemberService() {
     filter: tMemberFilter,
     pagination: tPagination,
   ): Promise<tPaginatedService<tMemberModel> | tErrorService> {
-    return await service.catch<tMemberModel>(async () => {
+    return await service.globalCatch<tMemberModel>(async () => {
       zMemberFilter.parse(filter);
       zPagination.parse(pagination);
 

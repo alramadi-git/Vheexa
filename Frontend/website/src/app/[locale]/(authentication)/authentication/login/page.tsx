@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Fragment } from "react";
 
-import Form from "@/components/locals/user/authentication/login/page/form";
+import Form from "@/components/templates/user/authentication/login/page/form";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {

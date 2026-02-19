@@ -2,147 +2,114 @@
 
 import { useEffect, useState } from "react";
 
-import useToken from "./token";
-
 import {
   useSetCookie,
   useGetCookie,
   useDeleteCookie,
 } from "cookies-next/client";
 
-import useAuthenticationService from "@/user/services/authentication";
-
-import { tUserAccount, zUserAccount } from "@/user/validators/user-account";
-
-import { tRegisterCredentials } from "@/user/validators/authentication";
-import { tLoginCredentials } from "@/validators/authentication";
-
-import { tNullable } from "@/types/nullish";
+import useAccountService from "../services/account";
 
 import { eDuration } from "@/enums/duration";
-import { tSuccessService } from "@/services/success";
-import { tErrorService } from "@/services/error";
+
+import { tAccountModel } from "@/models/account";
+import { tUserAccountModel } from "../models/user-account";
+
+import { tTokensModel } from "@/models/tokens";
 
 export default function useAccount() {
-  const { setToken, removeToken } = useToken();
-
   const setCookie = useSetCookie();
   const getCookie = useGetCookie();
   const deleteCookie = useDeleteCookie();
 
-  const [account, setA] = useState<tNullable<tUserAccount>>(null);
+  const [account, setAccount] = useState<tAccountModel<tUserAccountModel>>();
 
   useEffect(() => {
-    try {
-      const user: tNullable<unknown> = JSON.parse(
-        getCookie("user-account") ?? "null",
-      );
+    const account = getCookie("user-account");
+    const accessToken = getCookie("user-access-token");
+    const refreshToken = getCookie("user-refresh-token");
 
-      setA(zUserAccount.parse(user));
-    } catch {}
+    if (account && accessToken && refreshToken) {
+      setAccount({
+        account: JSON.parse(account),
+        refreshToken: refreshToken,
+        accessToken: accessToken,
+      });
+    }
   }, [getCookie]);
 
-  function setAccount(
-    account: tUserAccount,
-    token: string,
-    rememberMe: boolean,
-  ): boolean {
-    removeAccount();
-
-    if (!setToken(token, rememberMe)) {
-      return false;
-    }
-
-    const parsedAccount = zUserAccount.safeParse(account);
-    if (!parsedAccount.success) {
-      removeToken();
-      return false;
-    }
-
-    setCookie("user-account", JSON.stringify(account), {
+  function onRefreshToken(tokens: tTokensModel): void {
+    setCookie("user-access-token", tokens.accessToken, {
       secure: true,
       priority: "high",
       sameSite: "strict",
-      maxAge: rememberMe ? eDuration.month : eDuration.day,
+      maxAge: eDuration.day * 7,
     });
 
-    setA(account);
+    setCookie("user-refresh-token", tokens.refreshToken, {
+      secure: true,
+      priority: "high",
+      sameSite: "strict",
+      maxAge: eDuration.day * 7,
+    });
 
-    return true;
+    setAccount((prev) => {
+      return {
+        account: prev!.account,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+    });
   }
 
-  function removeAccount() {
-    removeToken();
+  function onLogout(): void {
     deleteCookie("user-account");
+    deleteCookie("user-access-token");
+    deleteCookie("user-refresh-token");
 
-    setA(null);
+    setAccount(undefined);
   }
 
-  const authenticationService = useAuthenticationService();
+  const accountService = useAccountService();
+  async function refreshTokens(): Promise<tTokensModel | null> {
+    const response = await accountService.refreshTokens({
+      uuid: account!.account.uuid,
+      refreshToken: account!.refreshToken,
+    });
 
-  async function register(
-    credentials: tRegisterCredentials,
-  ): Promise<tSuccessService<null> | tErrorService> {
-    const response = await authenticationService.register(credentials);
     if (!response.isSuccess) {
-      return response;
+      return null;
     }
 
-    const { account, accessToken: token } = response.data;
-
-    if (!setAccount(account, token, credentials.rememberMe)) {
-      return {
-        isSuccess: false,
-        message: "Account or token is invalid.",
-      };
-    }
-
-    return {
-      isSuccess: true,
-      data: null,
-    };
+    onRefreshToken(response.data);
+    return response.data;
   }
 
-  async function login(
-    credentials: tLoginCredentials,
-  ): Promise<tSuccessService<null> | tErrorService> {
-    const response = await authenticationService.login(credentials);
-    if (!response.isSuccess) {
-      return response;
+  async function logout(): Promise<void> {
+    const response = await accountService.logout(
+      {
+        refreshToken: account!.refreshToken,
+      },
+      account!.accessToken,
+    );
+
+    if (!response.isSuccess && response.message === "Expired access token") {
+      const tokens = await refreshTokens();
+      await accountService.logout(
+        {
+          refreshToken: tokens!.refreshToken,
+        },
+        tokens!.accessToken,
+      );
     }
 
-    const { account, accessToken: token } = response.data;
-
-    if (!setAccount(account, token, credentials.rememberMe)) {
-      return {
-        isSuccess: false,
-        message: "Account or token is invalid.",
-      };
-    }
-
-    return {
-      isSuccess: true,
-      data: null,
-    };
+    onLogout();
   }
 
-  async function logout(): Promise<tSuccessService<null> | tErrorService> {
-    const response = await authenticationService.logout();
-    if (!response.isSuccess) {
-      return response;
-    }
-
-    removeAccount();
-    return {
-      isSuccess: true,
-      data: null,
-    };
-  }
-
+  if (account === undefined) return undefined;
   return {
-    account,
-    register,
-    login,
+    account: account,
+    refreshTokens,
     logout,
   };
 }

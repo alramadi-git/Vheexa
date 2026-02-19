@@ -36,7 +36,6 @@ import useAccount from "@/partner/hooks/account";
 
 export default function Overview() {
   const account = useAccount();
-  console.log(account);
   // const [run, setRun] = useState(false);
 
   // const overview = useOverview();

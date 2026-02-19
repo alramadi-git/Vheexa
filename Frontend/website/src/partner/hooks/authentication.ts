@@ -1,6 +1,5 @@
 "use client";
 
-import { eDuration } from "@/enums/duration";
 
 import { useSetCookie } from "cookies-next/client";
 
@@ -8,6 +7,8 @@ import useAuthenticationService from "@/partner/services/authentication";
 
 import { tRegisterCredentials } from "@/partner/validators/authentication";
 import { tLoginCredentials } from "@/validators/authentication";
+
+import { eDuration } from "@/enums/duration";
 
 import { tAccountModel } from "@/models/account";
 import { tMemberAccountModel } from "../models/member-account";

@@ -13,7 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 
-import useAccount from "@/user/hooks/account";
+import useAuthentication from "@/user/hooks/authentication";
 
 import { LuLoader } from "react-icons/lu";
 
@@ -49,7 +49,7 @@ export default function Form() {
   const passwordRef = useRef<tFieldPasswordRef>(null);
 
   const router = useRouter();
-  const { login } = useAccount();
+  const { login } = useAuthentication();
 
   const {
     formState,
@@ -73,7 +73,7 @@ export default function Form() {
   }
 
   async function submit(credentials: tLoginCredentials) {
-    const { isSuccess } = await login(credentials);
+    const isSuccess = await login(credentials);
 
     if (!isSuccess) {
       toast.custom(() => (

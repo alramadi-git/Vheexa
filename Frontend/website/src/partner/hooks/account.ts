@@ -1,21 +1,21 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
 import {
   useSetCookie,
   useGetCookie,
   useDeleteCookie,
 } from "cookies-next/client";
 
-import { useState, useEffect } from "react";
-
-import useAuthenticationService from "@/partner/services/authentication";
+import useAccountService from "@/partner/services/account";
 
 import { eDuration } from "@/enums/duration";
 
-import { tMemberAccountModel } from "../models/member-account";
-import { tTokensModel } from "@/models/tokens";
-
 import { tAccountModel } from "@/models/account";
+import { tMemberAccountModel } from "../models/member-account";
+
+import { tTokensModel } from "@/models/tokens";
 
 export default function useAccount() {
   const setCookie = useSetCookie();
@@ -54,10 +54,8 @@ export default function useAccount() {
     });
 
     setAccount((prev) => {
-      if (prev === undefined) return undefined;
-
       return {
-        account: prev.account,
+        account: prev!.account,
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
       };
@@ -72,41 +70,43 @@ export default function useAccount() {
     setAccount(undefined);
   }
 
-  const authenticationService = useAuthenticationService();
-  async function refreshTokens(): Promise<void> {
-    if (account === undefined) return;
-
-    const response = await authenticationService.refreshTokens({
-      uuid: account.account.uuid,
-      refreshToken: account.refreshToken,
+  const accountService = useAccountService();
+  async function refreshTokens(): Promise<tTokensModel | null> {
+    const response = await accountService.refreshTokens({
+      uuid: account!.account.uuid,
+      refreshToken: account!.refreshToken,
     });
 
     if (!response.isSuccess) {
-      return;
+      return null;
     }
 
     onRefreshToken(response.data);
+    return response.data;
   }
 
   async function logout(): Promise<void> {
-    if (account === undefined) return;
-
-    const response = await authenticationService.logout(
+    const response = await accountService.logout(
       {
-        refreshToken: account.refreshToken,
+        refreshToken: account!.refreshToken,
       },
-      account.accessToken,
+      account!.accessToken,
     );
 
-    if (!response.isSuccess) {
-      return;
+    if (!response.isSuccess && response.message === "Expired access token") {
+      const tokens = await refreshTokens();
+      await accountService.logout(
+        {
+          refreshToken: tokens!.refreshToken,
+        },
+        tokens!.accessToken,
+      );
     }
 
     onLogout();
   }
 
   if (account === undefined) return undefined;
-
   return {
     account: account,
     refreshTokens,

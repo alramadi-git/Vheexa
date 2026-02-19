@@ -24,11 +24,11 @@ import { Button } from "@/components/shadcn/button";
 import { Link } from "@/components/locals/blocks/links";
 
 export default function Account() {
-  const { account, logout } = useAccount();
-
   const tAccount = useTranslations("app.user.layout.header.account");
 
-  if (account === null) {
+  const account = useAccount();
+
+  if (account === undefined) {
     return (
       <Button asChild className="max-md:grow">
         <Link href="/authentication/login">
@@ -44,8 +44,8 @@ export default function Account() {
         <Button variant="ghost" className="border p-2.5 hover:bg-transparent">
           <Avatar className="size-6 items-center justify-center rounded">
             <AvatarImage
-              src={account.avatar?.url}
-              alt={account.username}
+              src={account.account.account.avatar?.url}
+              alt={account.account.account.username}
               className="rounded bg-transparent"
             />
             <AvatarFallback className="rounded bg-transparent">
@@ -57,14 +57,14 @@ export default function Account() {
       <DropdownMenuContent align="end" className="max-w-64">
         <div>
           <p className="text-foreground text-sm font-medium">
-            {account.username}
+            {account.account.account.username}
           </p>
           <p className="text-muted-foreground truncate text-xs font-normal">
-            {account.email}
+            {account.account.account.email}
           </p>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild variant="destructive" onClick={logout}>
+        <DropdownMenuItem asChild variant="destructive" onClick={account.logout}>
           <button className="w-full">
             <LuLogOut className="size-4" />
             {tAccount("when-authenticated.logout")}

@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 
 import useToken from "@/partner/hooks/tokens";
-import useService from "@/services/use-service";
+import useService from "@/services/use";
 
 import { tUuid, zUuid } from "@/validators/uuid";
 
@@ -34,7 +34,7 @@ export default function useBranchService() {
   async function create(
     branch: tBranchCreate,
   ): Promise<tSuccessService<null> | tErrorService> {
-    return await service.catch<null>(async () => {
+    return await service.globalCatch<null>(async () => {
       zBranchCreate.parse(branch);
 
       const response = await service.fetch.post(
@@ -69,7 +69,7 @@ export default function useBranchService() {
   async function _delete(
     uuid: tUuid,
   ): Promise<tSuccessService<null> | tErrorService> {
-    return await service.catch<null>(async () => {
+    return await service.globalCatch<null>(async () => {
       zUuid.parse(uuid);
 
       const response = await service.fetch.delete(
@@ -104,7 +104,7 @@ export default function useBranchService() {
     filter: tBranchFilter,
     pagination: tPagination,
   ): Promise<tPaginatedService<tBranchModel>> {
-    return await service.catch<tBranchModel>(async () => {
+    return await service.globalCatch<tBranchModel>(async () => {
       zBranchFilter.parse(filter);
       zPagination.parse(pagination);
 

@@ -1,7 +1,6 @@
 "use client";
 
-import useToken from "@/user/hooks/token";
-import useService from "@/services/use-service";
+import useService from "@/services/use";
 
 import {
   tRegisterCredentials,
@@ -13,15 +12,17 @@ import {
   zLoginCredentials,
 } from "@/validators/authentication";
 
+import { backendApi } from "@/libraries/backend-api";
+
+import { eHttpStatusCode } from "@/enums/http-status-code";
+
 import { tAccountModel } from "@/models/account";
 import { tUserAccountModel } from "@/user/models/user-account";
 
+import { tSuccessService } from "@/services/success";
 import { tErrorService } from "@/services/error";
 
-import { tSuccessService } from "@/services/success";
-
 export default function useAuthenticationService() {
-  const { token } = useToken();
   const service = useService();
 
   async function register(
@@ -29,7 +30,7 @@ export default function useAuthenticationService() {
   ): Promise<
     tSuccessService<tAccountModel<tUserAccountModel>> | tErrorService
   > {
-    return service.catch<tAccountModel<tUserAccountModel>>(async () => {
+    return service.globalCatch(async () => {
       zRegisterCredentials.parse(credentials);
 
       const formData = new FormData();
@@ -63,17 +64,16 @@ export default function useAuthenticationService() {
 
       formData.append("rememberMe", credentials.rememberMe.toString());
 
-      const response = await service.fetch.post(
-        "/authentication/register",
+      const response = await backendApi.post(
+        "/api/user/authentication/register",
         formData,
       );
 
-      if (!response.ok) {
-        throw new Error(await response.text());
+      if (response.status !== eHttpStatusCode.created) {
+        throw new Error(response.data);
       }
 
-      const result: tAccountModel<tUserAccountModel> = await response.json();
-
+      const result: tAccountModel<tUserAccountModel> = response.data;
       return {
         isSuccess: true,
         data: result,
@@ -85,48 +85,22 @@ export default function useAuthenticationService() {
   ): Promise<
     tSuccessService<tAccountModel<tUserAccountModel>> | tErrorService
   > {
-    return service.catch<tAccountModel<tUserAccountModel>>(async () => {
+    return service.globalCatch(async () => {
       zLoginCredentials.parse(credentials);
 
-      const response = await service.fetch.post(
-        "/authentication/login",
-        JSON.stringify(credentials),
+      const response = await backendApi.post(
+        "/api/user/authentication/login",
+        credentials,
       );
 
-      if (!response.ok) {
-        throw new Error(await response.text());
+      if (response.status !== eHttpStatusCode.ok) {
+        throw new Error(response.data);
       }
 
-      const result: tAccountModel<tUserAccountModel> = await response.json();
-
+      const result: tAccountModel<tUserAccountModel> = response.data;
       return {
         isSuccess: true,
         data: result,
-      };
-    });
-  }
-  async function logout(): Promise<tSuccessService<null> | tErrorService> {
-    return service.catch<null>(async () => {
-      if (true === true) {
-        return {
-          isSuccess: true,
-          data: null,
-        };
-      }
-
-      const response = await service.fetch.post(
-        "/authentication/logout",
-        undefined,
-        token ?? undefined,
-      );
-
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-
-      return {
-        isSuccess: true,
-        data: null,
       };
     });
   }
@@ -134,6 +108,5 @@ export default function useAuthenticationService() {
   return {
     register,
     login,
-    logout,
   };
 }
