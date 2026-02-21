@@ -9,7 +9,7 @@ import { tErrorService } from "@/services/error";
 
 import { tSuccessService } from "@/services/success";
 
-export default function useOverview() {
+export default function useOverviewService() {
   const { accessToken: token } = useToken();
   const service = useService();
 

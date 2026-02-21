@@ -1,23 +1,18 @@
 "use client";
 
 import { ZodError } from "zod";
-
-import { tErrorService } from "@/services/error";
-
-import { tSuccessService, tPaginatedService } from "@/services/success";
 import { AxiosError } from "axios";
 
+import { tSuccessService, tPaginatedService } from "@/services/success";
+import { tErrorService } from "@/services/error";
+
 export default function useService() {
-  async function globalCatch<tData>(
-    callback: () => Promise<tSuccessService<tData>>,
-  ): Promise<tSuccessService<tData>>;
-  async function globalCatch<tData>(
-    callback: () => Promise<tPaginatedService<tData>>,
-  ): Promise<tPaginatedService<tData>>;
-  async function globalCatch<tData>(
-    callback: () => Promise<tSuccessService<tData> | tPaginatedService<tData>>,
+  async function globalCatch<gtData>(
+    callback: () => Promise<
+      tSuccessService<gtData> | tPaginatedService<gtData>
+    >,
   ): Promise<
-    tSuccessService<tData> | tPaginatedService<tData> | tErrorService
+    tSuccessService<gtData> | tPaginatedService<gtData> | tErrorService
   > {
     try {
       return await callback();
@@ -25,14 +20,14 @@ export default function useService() {
       if (error instanceof ZodError) {
         return {
           isSuccess: false,
-          message: "Validation error. Please check your input and try again."
+          message: "Validation error. Please check your input and try again.",
         };
       }
 
       if (error instanceof AxiosError) {
         return {
           isSuccess: false,
-          message: error.message 
+          message: error.message,
         };
       }
 

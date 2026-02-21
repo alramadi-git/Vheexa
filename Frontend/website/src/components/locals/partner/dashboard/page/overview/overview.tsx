@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { eLocale } from "@/i18n/routing";
 import { ClsMonyFormatter, eCurrency } from "@/libraries/mony-formatter";
 
-import useOverview from "@/partner/services/overview";
+import useOverviewService from "@/partner/services/overview";
 import { useQuery } from "@tanstack/react-query";
 
 import { tOverviewModel } from "@/partner/models/overview";
