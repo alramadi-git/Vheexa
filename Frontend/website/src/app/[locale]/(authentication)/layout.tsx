@@ -5,8 +5,8 @@ import { getTranslations } from "next-intl/server";
 
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 
-import { Container } from "@/components/locals/blocks/typography";
-import { Placeholder, Logo } from "@/components/locals/blocks/images";
+import { Container } from "@/components/blocks/typography";
+import { Placeholder, Logo } from "@/components/blocks/images";
 
 export const dynamic = "force-static";
 export async function generateMetadata(): Promise<Metadata> {

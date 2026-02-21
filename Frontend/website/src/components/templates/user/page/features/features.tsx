@@ -8,9 +8,9 @@ import {
   Intro,
   Title,
   Description,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
-import { Placeholder as PlaceholderBlock } from "@/components/locals/blocks/images";
+import { Placeholder as PlaceholderBlock } from "@/components/blocks/images";
 
 export default async function Features() {
   const tFeatures = await getTranslations("app.user.page.features");

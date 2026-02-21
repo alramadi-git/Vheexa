@@ -6,13 +6,13 @@ import {
   Intro,
   Title,
   Description,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
-import { FullHDImage } from "@/components/locals/blocks/images";
+import { FullHDImage } from "@/components/blocks/images";
 
 import { Separator } from "@/components/shadcn/separator";
 
-import { Blockquote } from "@/components/locals/blocks/typography";
+import { Blockquote } from "@/components/blocks/typography";
 
 type tItem = {
   label: string;

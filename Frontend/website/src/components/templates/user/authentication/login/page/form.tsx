@@ -30,15 +30,15 @@ import {
   tFieldPasswordRef,
   FieldEmail,
   FieldPassword,
-} from "@/components/locals/blocks/fields";
+} from "@/components/blocks/fields";
 
 import { Checkbox } from "@/components/shadcn/checkbox";
 
 import { toast } from "sonner";
-import { Toast } from "@/components/locals/blocks/toasts";
+import { Toast } from "@/components/blocks/toasts";
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 export default function Form() {
   const id = useId();
@@ -49,7 +49,6 @@ export default function Form() {
   const passwordRef = useRef<tFieldPasswordRef>(null);
 
   const router = useRouter();
-  const { login } = useAuthentication();
 
   const {
     formState,
@@ -72,6 +71,7 @@ export default function Form() {
     passwordRef.current?.reset();
   }
 
+  const { login } = useAuthentication();
   async function submit(credentials: tLoginCredentials) {
     const isSuccess = await login(credentials);
 

@@ -6,12 +6,12 @@ import {
   Intro,
   Title,
   Description,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
-import { Logo } from "@/components/locals/blocks/images";
+import { Logo } from "@/components/blocks/images";
 
 import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";

@@ -8,6 +8,12 @@ import { tErrorService } from "@/services/error";
 
 export default function useService() {
   async function globalCatch<gtData>(
+    callback: () => Promise<tSuccessService<gtData>>,
+  ): Promise<tSuccessService<gtData> | tErrorService>;
+  async function globalCatch<gtData>(
+    callback: () => Promise<tPaginatedService<gtData>>,
+  ): Promise<tPaginatedService<gtData> | tErrorService>;
+  async function globalCatch<gtData>(
     callback: () => Promise<
       tSuccessService<gtData> | tPaginatedService<gtData>
     >,

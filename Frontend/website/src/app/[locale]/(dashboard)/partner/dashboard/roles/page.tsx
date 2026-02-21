@@ -1,6 +1,6 @@
 "use client";
 
-import Roles from "@/components/locals/partner/dashboard/roles/page/roles/roles";
+import Roles from "@/components/templates/partner/dashboard/roles/page/roles/roles";
 
 export default function Page() {
   return (

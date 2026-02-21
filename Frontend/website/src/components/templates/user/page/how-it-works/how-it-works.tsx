@@ -6,7 +6,7 @@ import {
   Intro,
   Title,
   Description,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
 import {
   Card,
@@ -16,7 +16,7 @@ import {
   CardContent,
 } from "@/components/shadcn/card";
 
-import { Placeholder } from "@/components/locals/blocks/images";
+import { Placeholder } from "@/components/blocks/images";
 
 export default async function HowItWorks() {
   const tHowItWorks = await getTranslations("app.user.page.how-it-works");

@@ -1,6 +1,6 @@
 "use client";
 
-import Branches from "@/components/locals/partner/dashboard/branches/page/branches/branches";
+import Branches from "@/components/templates/partner/dashboard/branches/page/branches/branches";
 
 export default function Page() {
   return (

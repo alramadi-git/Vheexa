@@ -6,7 +6,7 @@ import {
   Intro,
   Title,
   Description,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
 import {
   Accordion,
@@ -15,7 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/shadcn/accordion";
 
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 type tQuestion = {
   question: string;

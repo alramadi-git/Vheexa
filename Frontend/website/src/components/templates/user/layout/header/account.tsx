@@ -21,7 +21,7 @@ import {
 } from "@/components/shadcn/avatar";
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 export default function Account() {
   const tAccount = useTranslations("app.user.layout.header.account");

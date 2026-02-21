@@ -22,7 +22,7 @@ import { GiMountainRoad } from "react-icons/gi";
 import { FaMountainCity } from "react-icons/fa6";
 
 import { toast } from "sonner";
-import { Toast } from "@/components/locals/blocks/toasts";
+import { Toast } from "@/components/blocks/toasts";
 
 import {
   FieldGroup,
@@ -42,17 +42,17 @@ import {
   FieldDatePicker,
   FieldNumber,
   FieldIconInput,
-} from "@/components/locals/blocks/fields";
+} from "@/components/blocks/fields";
 
 import {
   FieldFileUpload,
   tFieldFileUploadRef,
-} from "@/components/locals/blocks/file-uploads";
+} from "@/components/blocks/file-uploads";
 
 import { Checkbox } from "@/components/shadcn/checkbox";
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 export default function Form() {
   const id = useId();
@@ -65,7 +65,6 @@ export default function Form() {
   const passwordRef = useRef<tFieldPasswordRef>(null);
 
   const router = useRouter();
-  const { register } = useAuthentication();
 
   const {
     formState,
@@ -99,6 +98,7 @@ export default function Form() {
     passwordRef.current?.reset();
   }
 
+  const { register } = useAuthentication();
   async function submit(credentials: tRegisterCredentials) {
     const isSuccess = await register(credentials);
 

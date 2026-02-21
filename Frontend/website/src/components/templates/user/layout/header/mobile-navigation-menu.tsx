@@ -2,9 +2,9 @@ import { getTranslations } from "next-intl/server";
 
 import { LuMenu, LuX } from "react-icons/lu";
 
-import { Container } from "@/components/locals/blocks/typography";
+import { Container } from "@/components/blocks/typography";
 
-import Languages from "../../../../locals/blocks/languages";
+import Languages from "../../../../blocks/languages";
 import Account from "./account";
 
 import {
@@ -20,7 +20,7 @@ import {
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 type tLink = {
   url: string;

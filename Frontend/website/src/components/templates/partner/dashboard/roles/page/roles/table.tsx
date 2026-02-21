@@ -1,0 +1,342 @@
+"use client";
+
+import { eLocale } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
+import { ClsDateFormatter } from "@/libraries/date-formatter";
+
+import useRoleService from "@/partner/services/role";
+
+import { tRoleModel } from "@/partner/models/role";
+
+import { toast } from "sonner";
+import { Toast } from "@/components/blocks/toasts";
+
+import {
+  LuHash,
+  LuShield,
+  LuUsers,
+  LuCalendar,
+  LuShieldAlert,
+  LuShieldX,
+  LuCheck,
+  LuCircleCheck,
+  LuCircleX,
+  LuEllipsisVertical,
+  LuBookOpenText,
+  LuPenLine,
+  LuTrash2,
+} from "react-icons/lu";
+import { GrInsecure } from "react-icons/gr";
+
+import BlockTable from "@/components/templates/partner/dashboard/blocks/table";
+
+import {
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/shadcn/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/shadcn/dropdown-menu";
+
+import { Skeleton } from "@/components/shadcn/skeleton";
+
+import { Button } from "@/components/shadcn/button";
+import { Badge } from "@/components/blocks/typography";
+import { eStatusModel } from "@/partner/models/enums/status";
+
+type tTableProps = {
+  isLoading: boolean;
+  isSuccess: boolean;
+  data: tRoleModel[];
+};
+export default function Table({ isLoading, isSuccess, data }: tTableProps) {
+  const locale = useLocale() as eLocale;
+  const clsDateFormatter = new ClsDateFormatter(locale);
+
+  const tTable = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table",
+  );
+
+  return (
+    <BlockTable<tRoleModel>
+      isLoading={isLoading}
+      isSuccess={isSuccess}
+      data={data}
+      header={
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuHash className="size-4" />
+                {tTable("uuid.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuShield className="size-4" />
+                {tTable("role-name.header")}
+              </div>
+            </TableHead>
+            <TableHead className="w-79">
+              <div className="flex items-center gap-1.5">
+                <GrInsecure className="size-4" />
+                {tTable("permissions.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuUsers className="size-4" />
+                {tTable("members.header")}
+              </div>
+            </TableHead>
+            <TableHead>{tTable("status.header")}</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("updated-at.header")}
+              </div>
+            </TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1.5">
+                <LuCalendar className="size-4" />
+                {tTable("created-at.header")}
+              </div>
+            </TableHead>
+            <TableHead className="text-end">
+              {tTable("actions.header")}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+      }
+      bodyRowRender={(role) => (
+        <TableRow key={role.uuid}>
+          <TableCell>
+            <Badge variant="muted">{role.uuid.slice(0, 8)}</Badge>
+          </TableCell>
+          <TableCell>{role.name}</TableCell>
+          <TableCell>
+            <Permissions permissions={role.permissions} />
+          </TableCell>
+          <TableCell>
+            {tTable("members.cell", {
+              count: role.assignedCount,
+            })}
+          </TableCell>
+          <TableCell>
+            <Badge
+              variant={
+                role.status === eStatusModel.active ? "success" : "muted"
+              }
+              className="flex items-center gap-1"
+            >
+              {role.status === eStatusModel.active ? (
+                <LuCircleCheck />
+              ) : (
+                <LuCircleX />
+              )}
+              {tTable("status.cell", {
+                status: role.status,
+              })}
+            </Badge>
+          </TableCell>
+          <TableCell>
+            {clsDateFormatter.format(new Date(role.updatedAt))}
+          </TableCell>
+          <TableCell>
+            {clsDateFormatter.format(new Date(role.createdAt))}
+          </TableCell>
+          <TableCell>
+            <div className="flex justify-end">
+              <Actions role={role} />
+            </div>
+          </TableCell>
+        </TableRow>
+      )}
+      loadingRender={<Loading />}
+      emptyRender={<Empty />}
+      errorRender={<Error />}
+    />
+  );
+}
+
+function Loading() {
+  return (
+    <TableRow>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="block h-8 w-full" />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function Empty() {
+  const tEmpty = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.when-empty",
+  );
+
+  return (
+    <TableRow>
+      <TableCell colSpan={8} className="py-12">
+        <div className="flex flex-col items-center gap-3">
+          <LuShieldAlert size={32} />
+          <h3 className="text-lg">{tEmpty("title")}</h3>
+          <p className="text-muted-foreground">{tEmpty("description")}</p>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+function Error() {
+  const tError = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.when-error",
+  );
+
+  return (
+    <TableRow>
+      <TableCell colSpan={8} className="py-12">
+        <div className="flex flex-col items-center gap-3">
+          <LuShieldX size={32} />
+          <h3 className="text-lg">{tError("title")}</h3>
+          <p className="text-muted-foreground">{tError("description")}</p>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+
+type tPermissionProps = {
+  permissions: tRoleModel["permissions"];
+};
+function Permissions({ permissions }: tPermissionProps) {
+  const tPermissions = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.permissions",
+  );
+
+  const visiblePermissions = permissions.slice(0, 3);
+  const remainingPermissions = permissions.length - visiblePermissions.length;
+
+  return (
+    <ul className="flex flex-wrap items-center gap-1">
+      {visiblePermissions.map((permission) => (
+        <li key={permission}>
+          <Badge variant="muted" className="flex items-center gap-1">
+            <LuCheck className="size-4" />
+            {tPermissions("cell.permission", {
+              permission: permission,
+            })}
+          </Badge>
+        </li>
+      ))}
+      {remainingPermissions > 0 && (
+        <li>
+          <Badge variant="muted" className="flex items-center gap-1">
+            {tPermissions("cell.more", {
+              count: remainingPermissions,
+            })}
+          </Badge>
+        </li>
+      )}
+    </ul>
+  );
+}
+
+type tActionsProps = {
+  role: tRoleModel;
+};
+function Actions({ role }: tActionsProps) {
+  const roleService = useRoleService();
+
+  const tAction = useTranslations(
+    "app.partner.dashboard.roles.page.roles.table.actions.cell",
+  );
+
+  function view() {
+    toast.custom(() => <Toast variant="info" label={tAction("view.info")} />);
+  }
+  function edit() {
+    toast.custom(() => <Toast variant="info" label={tAction("edit.info")} />);
+  }
+
+  async function remove() {
+    const result = await roleService.delete(role.uuid);
+
+    if (!result.isSuccess) {
+      toast.custom(() => (
+        <Toast
+          variant="destructive"
+          label={tAction("remove.toasts.when-error")}
+        />
+      ));
+      return;
+    }
+
+    toast.custom(() => (
+      <Toast
+        variant="success"
+        label={tAction("remove.toasts.when-success")}
+      ></Toast>
+    ));
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <LuEllipsisVertical />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <button type="button" className="size-full" onClick={() => view()}>
+            <LuBookOpenText />
+            {tAction("view.label")}
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <button
+            type="button"
+            className="size-full text-sky-500! hover:bg-sky-500/10!"
+            onClick={() => edit()}
+          >
+            <LuPenLine className="text-sky-500" />
+            {tAction("edit.label")}
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild variant="destructive">
+          <button type="button" className="size-full" onClick={() => remove()}>
+            <LuTrash2 />
+            {tAction("remove.label")}
+          </button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

@@ -15,10 +15,10 @@ import {
 import {
   sectionClassName,
   Container,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
-import { Link } from "@/components/locals/blocks/links";
-import { Logo } from "@/components/locals/blocks/images";
+import { Link } from "@/components/blocks/links";
+import { Logo } from "@/components/blocks/images";
 
 type tLink = {
   url: string;

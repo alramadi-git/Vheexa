@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace API.Partner.Controllers;
 
@@ -28,24 +27,5 @@ public class ClsAuthenticationController : Controller
         var memberModel = await _AuthenticationService.LoginAsync(credentials);
 
         return Ok(memberModel);
-    }
-    [HttpPost("refresh-tokens")]
-    public async Task<ActionResult<Database.Models.ClsTokensModel>> RefreshTokensAsync([FromBody] Business.Partner.Inputs.ClsRefreshTokenCredentialsInput credentials)
-    {
-        var tokensModel = await _AuthenticationService.RefreshTokensAsync(credentials);
-
-        return Ok(tokensModel);
-    }
-    [HttpPost("logout")]
-    [Authorize(AuthenticationSchemes = "Partners")]
-    public async Task<ActionResult> LogoutAsync([FromBody] Business.Partner.Inputs.ClsLogoutCredentialsInput credentials)
-    {
-        await _AuthenticationService.LogoutAsync(credentials, new Database.Partner.Contexts.ClsMemberContext
-        {
-            Uuid = new Guid(User.FindFirst("Uuid")!.Value),
-            PartnerUuid = new Guid(User.FindFirst("PartnerUuid")!.Value),
-        });
-
-        return NoContent();
     }
 }

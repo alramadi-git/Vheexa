@@ -9,9 +9,9 @@ import { cn } from "@/utilities/cn";
 import { routing } from "@/i18n/routing";
 import { getTranslations, getMessages } from "next-intl/server";
 
-import ThemeProvider from "@/components/locals/providers/theme";
+import ThemeProvider from "@/components/providers/theme";
 import { NextIntlClientProvider } from "next-intl";
-import ReactQueryProvider from "@/components/locals/providers/react-query";
+import ReactQueryProvider from "@/components/providers/react-query";
 import { TooltipProvider } from "@/components/shadcn/tooltip";
 import { Toaster } from "@/components/shadcn/sonner";
 import Script from "next/script";

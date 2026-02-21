@@ -10,11 +10,11 @@ import {
   Container,
   Title,
   Description,
-} from "@/components/locals/blocks/typography";
+} from "@/components/blocks/typography";
 
-import { Placeholder } from "@/components/locals/blocks/images";
+import { Placeholder } from "@/components/blocks/images";
 
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 export default async function Contact() {
   const tContact = await getTranslations("app.user.contact.page.contact");

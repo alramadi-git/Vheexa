@@ -11,7 +11,7 @@ import {
   NavigationMenuLink,
 } from "@/components/shadcn/navigation-menu";
 
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 type tLink = {
   url: string;

@@ -2,10 +2,10 @@
 
 import { useTranslations } from "next-intl";
 
-import { Section } from "@/components/locals/blocks/typography";
+import { Section } from "@/components/blocks/typography";
 
 import { Button } from "@/components/shadcn/button";
-import { Link } from "@/components/locals/blocks/links";
+import { Link } from "@/components/blocks/links";
 
 export default function NotFound() {
   const tNotFound = useTranslations("app.user.authentication.not-found");

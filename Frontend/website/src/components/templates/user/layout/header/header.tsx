@@ -1,13 +1,13 @@
 import Account from "./account";
-import Languages from "@/components/locals/blocks/languages";
+import Languages from "@/components/blocks/languages";
 
 import NavigationMenu from "@/components/templates/user/layout/header/navigation-menu";
 import MobileNavigationMenu from "@/components/templates/user/layout/header/mobile-navigation-menu";
 
-import { Container } from "@/components/locals/blocks/typography";
-import { Link } from "@/components/locals/blocks/links";
+import { Container } from "@/components/blocks/typography";
+import { Link } from "@/components/blocks/links";
 
-import { Logo } from "@/components/locals/blocks/images";
+import { Logo } from "@/components/blocks/images";
 
 export default async function Header() {
   return (

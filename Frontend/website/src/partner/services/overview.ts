@@ -1,39 +1,49 @@
 "use client";
 
-import useToken from "@/partner/hooks/tokens";
-import useService from "@/services/use";
+import useAuthenticatedService from "./authenticated";
+
+import { backendApi } from "@/libraries/backend-api";
+
+import { eHttpStatusCode } from "@/enums/http-status-code";
 
 import { tOverviewModel } from "@/partner/models/overview";
 
+import { tSuccessService } from "@/services/success";
 import { tErrorService } from "@/services/error";
 
-import { tSuccessService } from "@/services/success";
-
 export default function useOverviewService() {
-  const { accessToken: token } = useToken();
-  const service = useService();
+  const authenticatedService = useAuthenticatedService();
 
   async function read(): Promise<
     tSuccessService<tOverviewModel> | tErrorService
   > {
-    return await service.globalCatch<tOverviewModel>(async () => {
-      const response = await service.fetch.get(
-        "/api/partner/dashboard/overview",
-        token,
-      );
-
-      if (!response.ok) {
-           throw new Error(
-          response.status === 401 ? "Unauthorized" : await response.text(),
+    return await authenticatedService!.wrapper<tOverviewModel>(
+      async (token) => {
+        const response = await backendApi.get(
+          "/api/partner/dashboard/overview",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
-      }
+        console.log(response);
 
-      const result: tOverviewModel = await response.json();
-      return {
-        isSuccess: true,
-        data: result,
-      };
-    });
+        if (response.status !== eHttpStatusCode.ok) {
+          throw new Error(response.data);
+        }
+
+        const result: tOverviewModel = await response.data;
+        return {
+          isSuccess: true,
+          data: result,
+        };
+      },
+    );
+  }
+
+  if (authenticatedService === undefined) {
+    return undefined;
   }
 
   return {

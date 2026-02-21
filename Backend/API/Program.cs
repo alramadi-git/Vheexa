@@ -32,12 +32,12 @@ public class Program
           builder.Configuration.GetSection("Options:ImagekitOptions")
         );
 
+        // Register database
+        builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSql")));
+
         // Helpers
         builder.Services.AddScoped(typeof(Database.Helpers.ClsAccessTokenHelper<>));
         builder.Services.AddScoped<Database.Helpers.ClsRefreshTokenHelper>();
-
-        // Register database
-        builder.Services.AddDbContext<Database.AppDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSql")));
 
         // Register business layer 
         // Validators
@@ -50,6 +50,8 @@ public class Program
         builder.Services.AddScoped<Business.User.Validations.Validators.ClsLogoutCredentialsValidator>();
 
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRegisterCredentialsValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRefreshTokenCredentialsValidator>();
+        builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsLogoutCredentialsValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRefreshTokenCredentialsValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsLogoutCredentialsValidator>();
         builder.Services.AddScoped<Business.Partner.Validations.Validators.ClsRoleInputValidator>();
@@ -68,6 +70,7 @@ public class Program
         builder.Services.AddScoped<Business.User.Validations.Guards.ClsAccountGuard>();
 
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsAuthenticationGuard>();
+        builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsAccountGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsRoleGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsBranchGuard>();
         builder.Services.AddScoped<Business.Partner.Validations.Guards.ClsMemberGuard>();
@@ -81,6 +84,7 @@ public class Program
         builder.Services.AddScoped<Business.User.Services.ClsAccountService>();
 
         builder.Services.AddScoped<Business.Partner.Services.ClsAuthenticationService>();
+        builder.Services.AddScoped<Business.Partner.Services.ClsAccountService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsOverviewService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsRoleService>();
         builder.Services.AddScoped<Business.Partner.Services.ClsBranchService>();
@@ -93,6 +97,7 @@ public class Program
         builder.Services.AddScoped<Database.User.Repositories.ClsAccountRepository>();
 
         builder.Services.AddScoped<Database.Partner.Repositories.ClsAuthenticationRepository>();
+        builder.Services.AddScoped<Database.Partner.Repositories.ClsAccountRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsOverviewRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsRoleRepository>();
         builder.Services.AddScoped<Database.Partner.Repositories.ClsBranchRepository>();
